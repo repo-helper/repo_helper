@@ -49,7 +49,7 @@ __copyright__ = """
 __version__ = "0.0.1"
 
 modname = "git_helper"
-pypi_name = "git_helper"
+pypi_name = "domdf_git_helper"
 import_name = "git_helper"
 py_modules = []
 entry_points = {

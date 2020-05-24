@@ -28,7 +28,7 @@ author = "{{ rtfd_author }}"
 project = "{{ modname }}"
 slug = re.sub(r'\W+', '-', project.lower())
 release = version = __version__
-copyright =
+copyright = "{{ copyright_years }} {{ author }}"
 language = 'en'
 package_root = "{{ import_name.replace('.', '/') }}"
 

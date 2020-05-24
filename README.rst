@@ -33,20 +33,20 @@ git_helper
 	:target: https://www.codefactor.io/repository/github/domdfcoding/git_helper
 	:alt: CodeFactor Grade
 
-.. |pypi-version| image:: https://img.shields.io/pypi/v/git_helper.svg
-	:target: https://pypi.org/project/git_helper/
+.. |pypi-version| image:: https://img.shields.io/pypi/v/domdf_git_helper.svg
+	:target: https://pypi.org/project/domdf_git_helper/
 	:alt: PyPI - Package Version
 
-.. |supported-versions| image:: https://img.shields.io/pypi/pyversions/git_helper.svg
-	:target: https://pypi.org/project/git_helper/
+.. |supported-versions| image:: https://img.shields.io/pypi/pyversions/domdf_git_helper.svg
+	:target: https://pypi.org/project/domdf_git_helper/
 	:alt: PyPI - Supported Python Versions
 
-.. |supported-implementations| image:: https://img.shields.io/pypi/implementation/git_helper
-	:target: https://pypi.org/project/git_helper/
+.. |supported-implementations| image:: https://img.shields.io/pypi/implementation/domdf_git_helper
+	:target: https://pypi.org/project/domdf_git_helper/
 	:alt: PyPI - Supported Implementations
 
-.. |wheel| image:: https://img.shields.io/pypi/wheel/git_helper
-	:target: https://pypi.org/project/git_helper/
+.. |wheel| image:: https://img.shields.io/pypi/wheel/domdf_git_helper
+	:target: https://pypi.org/project/domdf_git_helper/
 	:alt: PyPI - Wheel
 
 .. |license| image:: https://img.shields.io/github/license/domdfcoding/git_helper
