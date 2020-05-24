@@ -1,0 +1,50 @@
+# This file is managed by `git_helper`. Don't edit it directly
+
+language: python
+dist: xenial
+python:
+  - '3.6'
+
+install:
+
+  - pip install pip  --upgrade
+  - pip install tox tox-travis
+
+
+script:
+  - tox
+
+
+stages:
+  - test
+  - deploy_pypi
+
+  - deploy_releases
+
+jobs:
+  include:
+    - stage: deploy_pypi
+      python: "3.6"
+      script: skip
+      deploy:
+        on:
+          tags: true
+          repo: domdfcoding/git_helper
+        provider: pypi
+        user: "DomDF"
+        password:
+          secure: None
+        distributions: "sdist bdist_wheel"
+        skip_existing: true
+
+
+    - stage: deploy_releases
+      python: "3.6"
+      install:
+        - pip install PyGithub requests
+      script: skip
+      deploy:
+        on:
+          repo: domdfcoding/git_helper
+        provider: script
+        script: python .ci/copy_pypi_2_github.py || travis_terminate 1

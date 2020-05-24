@@ -1,0 +1,42 @@
+modname: git_helper
+copyright_years: "2020"
+author: "Dominic Davis-Foster"
+email: "dominic@davis-foster.co.uk"
+version: "0.0.1"
+username: "domdfcoding"
+license: 'LGPLv3+'
+short_desc: 'Update multiple configuration files, build scripts etc. from a single location'
+
+enable_tests: False
+enable_conda: False
+
+additional_ignore:
+  - Tokens
+
+console_scripts:
+  - "git_helper = git_helper.__main__:main"
+  - "git-helper = git_helper.__main__:main"
+
+sphinx_html_theme: alabaster
+
+python_deploy_version: 3.6
+
+# Versions to run tests for
+python_versions:
+  - '3.6'
+
+# travis secure password for PyPI
+#travis_pypi_secure:
+
+# additional lines for MANIFEST.in
+manifest_additional:
+  - "recursive-include git_helper/templates *"
+
+classifiers:
+  - 'Development Status :: 4 - Beta'
+#  - "Development Status :: 5 - Production/Stable"
+#  - "Development Status :: 6 - Mature"
+#  - "Development Status :: 7 - Inactive"
+  - 'Intended Audience :: Developers'
+  - 'Operating System :: OS Independent'
+  - 'Topic :: Utilities'

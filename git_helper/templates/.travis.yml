@@ -1,0 +1,69 @@
+# This file is managed by `git_helper`. Don't edit it directly
+
+language: python
+dist: xenial
+python:
+  {% for version in python_versions %}- '{{ version }}'
+  {% endfor %}
+install:
+  {% for line in travis_extra_install_pre %}- {{ line }}
+  {% endfor %}
+  - pip install pip {% for req in travis_additional_requirements %}{{ req }} {% endfor %} --upgrade
+  - pip install tox tox-travis
+  {% if enable_tests %}- pip install coveralls{% endif %}
+  {% for line in travis_extra_install_post %}- {{ line }}
+  {% endfor %}
+script:
+  - tox
+{% if enable_tests %}after_success:
+  - coveralls
+{% endif %}
+
+stages:
+  - test
+  - deploy_pypi
+{% if enable_conda %}  - deploy_conda{% endif %}
+{% if enable_releases %}  - deploy_releases{% endif %}
+
+jobs:
+  include:
+    - stage: deploy_pypi
+      python: "{{ python_deploy_version }}"
+      script: skip
+      deploy:
+        on:
+          tags: true
+          repo: {{ username }}/{{ repo_name }}
+        provider: pypi
+        user: "DomDF"
+        password:
+          secure: {{ travis_pypi_secure }}
+        distributions: "sdist bdist_wheel"
+        skip_existing: true
+{% if enable_conda %}    - stage: deploy_conda
+      python: "{{ python_deploy_version }}"
+      addons:
+        apt:
+          update: true
+      install:
+        - pip install rst2txt yolk3k
+        - wget https://repo.continuum.io/miniconda/Miniconda3-latest-Linux-x86_64.sh -O miniconda.sh
+        - bash miniconda.sh -b -p $HOME/miniconda
+        - chmod +x .ci/travis_deploy_conda.sh
+      script: skip
+      deploy:
+        on:
+          repo: {{ username }}/{{ repo_name }}
+        provider: script
+        script: .ci/travis_deploy_conda.sh || travis_terminate 1{% endif %}
+
+{% if enable_releases %}    - stage: deploy_releases
+      python: "{{ python_deploy_version }}"
+      install:
+        - pip install PyGithub requests
+      script: skip
+      deploy:
+        on:
+          repo: {{ username }}/{{ repo_name }}
+        provider: script
+        script: python .ci/copy_pypi_2_github.py || travis_terminate 1{% endif %}
