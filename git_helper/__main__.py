@@ -22,52 +22,44 @@
 #
 
 
+import argparse
 import pathlib
+import sys
 
 from git_helper.core import GitHelper
-from git_helper.utils import get_git_status
-
-repos_dir = pathlib.Path("/media/VIDEO/Syncthing/Python/01 GitHub Repos").absolute()
-
-
-with open("status.rst", "w") as fp:
-
-	for repo in [
-			"domdf_python_tools",
-			"domdf_wxpython_tools",
-			"domdf_spreadsheet_tools",
-			"chemistry_tools",
-			"mathematical",
-			"cawdrey",
-			"singledispatch-json",
-			"git_helper",
-			# "pyms-github",
-			# "msp2lib",
-			"extras_require",
-			# "notebook2script",
-			]:
-
-		# status, lines = check_git_status(repo_path)
-		# if not status:
-		# 	print("Git working directory is not clean:\n{}".format(
-		# 			b"\n".join(lines).decode("UTF-8")), file=sys.stderr)
-		# 	print(f"Skipping {repo_path}", file=sys.stderr)
-		# 	continue
-
-		line = '='*len(repo)
-		fp.write(f"\n{line}\n{repo}\n{line}\n")
-		print(f"\n{line}\n{repo}\n{line}")
-
-		repo_path = repos_dir / repo
-
-		status = get_git_status(repo_path)
-		print(status)
-		fp.write(status)
-
-		gh = GitHelper(repos_dir / repo)
-		gh.run()
-		# input(">")
+from git_helper.init_repo import init_repo
+from git_helper.utils import check_git_status
 
 
 def main():
-	print("This is the main function of git_helper")
+	parser = argparse.ArgumentParser(
+			description='Update files in the given repository, based on settings in `git_helper.yml`')
+	parser.add_argument(
+			'path', type=pathlib.Path, nargs='?',
+			help='The path to the repository')
+	parser.add_argument(
+			'--initialise', action='store_true',
+			help='Initialise the repository with some boilerplate files.')
+
+	args = parser.parse_args()
+
+	if not args.path:
+		args.path = pathlib.Path.cwd()
+
+	gh = GitHelper(args.path)
+
+	status, lines = check_git_status(gh.target_repo)
+	if not status:
+		print("Git working directory is not clean:\n{}".format(
+				b"\n".join(lines).decode("UTF-8")), file=sys.stderr)
+
+		sys.exit(1)
+
+	if args.initialise:
+		init_repo(gh.target_repo, gh.templates)
+
+	gh.run()
+
+
+if __name__ == '__main__':
+	main()

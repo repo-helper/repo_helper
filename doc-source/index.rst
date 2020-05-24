@@ -6,7 +6,7 @@
 
 .. code-block:: bash
 
-		$ pip install |pkgname|
+		$ pip install domdf_git_helper
 
 
 `Browse the Source Code <_modules/index.html>`__.
@@ -18,5 +18,29 @@
 	:hidden:
 
 	config
+
+.. toctree::
+	:maxdepth: 3
+	:caption: API Reference
+
+	api/bots
+	api/ci_cd
+	api/core
+	api/docs
+	api/gitignore
+	api/init_repo
+	api/linting
+	api/packaging
+	api/readme
+	api/templates
+	api/testing
+	api/utils
+	api/yaml_parser
+
+
+.. toctree::
+	:maxdepth: 3
+	:caption: Documentation
+
 	Source
 	Building

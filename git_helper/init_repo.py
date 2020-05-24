@@ -28,43 +28,45 @@ import shutil
 import jinja2
 from domdf_python_tools.paths import maybe_make
 
-from git_helper.core import GitHelper
 from git_helper.templates import init_repo_template_dir
 from git_helper.utils import clean_writer
 
-repo_path = pathlib.Path("/home/domdf/test_repo")
 
-gh = GitHelper(repo_path)
+def init_repo(repo_path, templates):
+	"""
 
-init_repo_templates = jinja2.Environment(loader=jinja2.FileSystemLoader(str(init_repo_template_dir)))
-init_repo_templates.globals.update(gh.templates.globals)
+	:param repo_path: Path to the repository root
+	:type repo_path: pathlib.Path
+	:param templates:
+	:type templates: jinja2.Environment
+	"""
 
+	init_repo_templates = jinja2.Environment(loader=jinja2.FileSystemLoader(str(init_repo_template_dir)))
+	init_repo_templates.globals.update(templates.globals)
 
-# package
-maybe_make(repo_path / gh.templates.globals["import_name"])
+	# package
+	maybe_make(repo_path / templates.globals["import_name"])
 
-__init__ = init_repo_templates.get_template("__init__.py")
-with (repo_path / gh.templates.globals["import_name"] / "__init__.py").open("w") as fp:
-	clean_writer(__init__.render(), fp)
+	__init__ = init_repo_templates.get_template("__init__.py")
+	with (repo_path / templates.globals["import_name"] / "__init__.py").open("w") as fp:
+		clean_writer(__init__.render(), fp)
 
-# tests
-maybe_make(repo_path / gh.templates.globals["tests_dir"])
-(repo_path / gh.templates.globals["tests_dir"] / "__init__.py").open("w").close()
+	# tests
+	maybe_make(repo_path / templates.globals["tests_dir"])
+	(repo_path / templates.globals["tests_dir"] / "__init__.py").open("w").close()
 
-# doc-source
-maybe_make(repo_path / "doc-source")
+	# doc-source
+	maybe_make(repo_path / "doc-source")
 
-for filename in {"Source.rst", "docs.rst", "index.rst", "Building.rst"}:
-	template = init_repo_templates.get_template(filename)
-	with (repo_path / "doc-source" / filename).open("w") as fp:
-		clean_writer(template.render(), fp)
+	for filename in {"Source.rst", "docs.rst", "index.rst", "Building.rst"}:
+		template = init_repo_templates.get_template(filename)
+		with (repo_path / "doc-source" / filename).open("w") as fp:
+			clean_writer(template.render(), fp)
 
-shutil.copy2(init_repo_template_dir / "git_download.png", repo_path / "doc-source" / "git_download.png")
+	shutil.copy2(init_repo_template_dir / "git_download.png", repo_path / "doc-source" / "git_download.png")
 
-# other
-for filename in {"LICENSE", "README.rst"}:
-	template = init_repo_templates.get_template(filename)
-	with (repo_path / filename).open("w") as fp:
-		clean_writer(template.render(), fp)
-
-gh.run()
+	# other
+	for filename in {"LICENSE", "README.rst"}:
+		template = init_repo_templates.get_template(filename)
+		with (repo_path / filename).open("w") as fp:
+			clean_writer(template.render(), fp)

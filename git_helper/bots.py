@@ -33,6 +33,7 @@ from .utils import clean_writer
 def make_stale_bot(repo_path, templates):
 	"""
 	Add configuration for ``stale`` to the desired repo
+
 	https://probot.github.io/apps/stale/
 
 	:param repo_path: Path to the repository root
@@ -49,6 +50,7 @@ def make_stale_bot(repo_path, templates):
 def make_auto_assign_action(repo_path, templates):
 	"""
 	Add configuration for ``auto-assign`` to the desired repo
+
 	https://github.com/kentaro-m/auto-assign
 
 	:param repo_path: Path to the repository root
@@ -112,6 +114,7 @@ numberOfReviewers: 0
 def make_dependabot(repo_path, templates):
 	"""
 	Add configuration for ``dependabot`` to the desired repo
+
 	https://dependabot.com/
 
 	:param repo_path: Path to the repository root

@@ -40,7 +40,7 @@ def parse_yaml(repo_path):
 	config_vars = {}
 
 	# load user settings from git_helper.yml
-	with open(repo_path / "git_helper.yml") as file:
+	with (repo_path / "git_helper.yml").open() as file:
 		# The FullLoader parameter handles the conversion from YAML
 		#   scalar values to Python the dictionary format
 		raw_config_vars = yaml.load(file, Loader=yaml.FullLoader)

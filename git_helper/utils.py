@@ -86,7 +86,7 @@ def check_git_status(repo_path):
 			if not line.strip().startswith(b"??")
 			]
 
-	print(lines)
+	# print(lines)
 
 	os.chdir(oldwd)
 
