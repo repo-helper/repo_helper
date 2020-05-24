@@ -1,4 +1,29 @@
+#  !/usr/bin/env python
+#   -*- coding: utf-8 -*-
+#
+#  yaml_parser.py
+#
+#  Copyright © 2020 Dominic Davis-Foster <dominic@davis-foster.co.uk>
+#
+#  This program is free software; you can redistribute it and/or modify
+#  it under the terms of the GNU Lesser General Public License as published by
+#  the Free Software Foundation; either version 3 of the License, or
+#  (at your option) any later version.
+#
+#  This program is distributed in the hope that it will be useful,
+#  but WITHOUT ANY WARRANTY; without even the implied warranty of
+#  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#  GNU Lesser General Public License for more details.
+#
+#  You should have received a copy of the GNU Lesser General Public License
+#  along with this program; if not, write to the Free Software
+#  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
+#  MA 02110-1301, USA.
+#
+
+
 import yaml
+
 from .utils import strtobool
 
 
@@ -53,18 +78,25 @@ def parse_yaml(repo_path):
 	config_vars["tox_py_versions"] = tox_py_versions
 
 	for var_name in {
-			"conda_channels", "additional_ignore", "exclude_files"
+			"conda_channels", "additional_ignore", "exclude_files",
 			"travis_additional_requirements", "travis_extra_install_pre", "travis_extra_install_post",
 			"tox_requirements", "tox_build_requirements",
 			"classifiers", "keywords",
 			"extra_sphinx_extensions", "intersphinx_mapping",
 			"manifest_additional", "py_modules", "console_scripts", "pkginfo_extra",
-			"html_theme_options", "html_context", "sphinx_conf_preamble",
+			"sphinx_conf_preamble", "sphinx_conf_epilogue",
 			}:
 		config_vars[var_name] = raw_config_vars.get(var_name, [])
 
-	for var_name in {"short_desc", "tox_testenv_extras", "sphinx_html_theme"}:
+	for var_name in {
+			"html_theme_options", "html_context",
+			}:
+		config_vars[var_name] = raw_config_vars.get(var_name, {})
+
+	for var_name in {"short_desc", "tox_testenv_extras"}:
 		config_vars[var_name] = raw_config_vars.get(var_name, "")
+
+	config_vars["sphinx_html_theme"] = raw_config_vars.get("sphinx_html_theme", "sphinx_rtd_theme")
 
 	config_vars["conda_description"] = raw_config_vars.get("conda_description", config_vars["short_desc"])
 

@@ -7,9 +7,6 @@ import os
 import re
 import sys
 
-from docutils import nodes
-from sphinx import addnodes
-
 sys.path.append(os.path.abspath('.'))
 sys.path.append(os.path.abspath('..'))
 
@@ -44,6 +41,7 @@ extensions = [
 		"sphinx.ext.todo",
 		"sphinxemoji.sphinxemoji",
 		"sphinx_autodoc_typehints",
+		'tox_conf_directive',
 		]
 
 sphinxemoji_style = 'twemoji'
@@ -70,33 +68,26 @@ intersphinx_mapping = {
 		"Django": ('https://docs.djangoproject.com/en/dev/', 'https://docs.djangoproject.com/en/dev/_objects/'),
 		"sarge": ('https://sarge.readthedocs.io/en/latest/', None),
 		"attrs": ('https://www.attrs.org/en/stable/', None),
-
 		}
 
 html_theme = 'alabaster'
 html_theme_options = {
-		'logo_only': False,  # True will show just the logo
-		# "logo": "img/tox.png",
-		"github_user": "domdfcoding",
-		"github_repo": "git_helper",
-		"description": 'Update multiple configuration files, build scripts etc. from a single location',
-		"github_banner": "true",
-		"github_type": "star",
-		"travis_button": "false",
-		"badge_branch": "master",
-		"fixed_sidebar": "True",
+		'page_width': '1200px',
+		'logo_name': 'true',
+		'github_user': 'domdfcoding',
+		'github_repo': 'git_helper',
+		'description': 'Update multiple configuration files, build scripts etc. from a single location',
+		'github_banner': 'true',
+		'github_type': 'star',
+		'travis_button': 'true',
+		'badge_branch': 'master',
+		'fixed_sidebar': 'false',
 		}
 html_theme_path = ["../.."]
 # html_logo = "logo/pyms.png"
 html_show_sourcelink = False  # True will show link to source
 
 html_context = {
-		# Github Settings
-		"display_github": True,  # Integrate GitHub
-		"github_user": "domdfcoding",  # Username
-		"github_repo": "git_helper",  # Repo name
-		"github_version": "master",  # Version
-		"conf_py_path": "/",  # Path in the checkout to the docs root
 		}
 
 htmlhelp_basename = slug
@@ -139,29 +130,4 @@ def setup(app):
 							names=('default',),
 							),
 					]
-			)
-
-	# from https://github.com/tox-dev/tox/blob/master/docs/conf.py
-	def parse_node(env, text, node):
-		args = text.split("^")
-		name = args[0].strip()
-
-		node += addnodes.literal_strong(name, name)
-
-		if len(args) > 2:
-			default = "={}".format(args[2].strip())
-			node += nodes.literal(text=default)
-
-		if len(args) > 1:
-			content = "({})".format(args[1].strip())
-			node += addnodes.compact_paragraph(text=content)
-
-		return name  # this will be the link
-
-	app.add_object_type(
-			directivename="conf",
-			rolename="conf",
-			objname="configuration value",
-			indextemplate="pair: %s; configuration value",
-			parse_node=parse_node,
 			)

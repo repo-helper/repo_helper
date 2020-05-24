@@ -63,18 +63,14 @@ class GitHelper:
 	def repo_name(self):
 		return self.templates.globals["repo_name"]
 
-	@classmethod
-	def run(cls, target_repo):
-		gh = cls(target_repo)
+	def run(self):
 
-		if not gh.templates.globals["preserve_custom_theme"]:
-			copy_docs_styling(gh.target_repo, gh.templates)
+		if not self.templates.globals["preserve_custom_theme"]:
+			copy_docs_styling(self.target_repo, self.templates)
 
 		for function_, exclude_name, other_requirements in files:
-			if exclude_name not in gh.exclude_files and all([gh.templates.globals[req] for req in other_requirements]):
-				function_(gh.target_repo, gh.templates)
-
-		return cls
+			if exclude_name not in self.exclude_files and all([self.templates.globals[req] for req in other_requirements]):
+				function_(self.target_repo, self.templates)
 
 
 def ensure_bumpversion(repo_path, templates):

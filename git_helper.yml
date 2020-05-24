@@ -40,3 +40,6 @@ classifiers:
   - 'Intended Audience :: Developers'
   - 'Operating System :: OS Independent'
   - 'Topic :: Utilities'
+
+extra_sphinx_extensions:
+  - tox_conf_directive

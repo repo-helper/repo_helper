@@ -28,7 +28,7 @@ author = "{{ rtfd_author }}"
 project = "{{ modname }}"
 slug = re.sub(r'\W+', '-', project.lower())
 release = version = __version__
-copyright = "{{ copyright_years }} {{ author }}"
+copyright =
 language = 'en'
 package_root = "{{ import_name.replace('.', '/') }}"
 
@@ -42,7 +42,7 @@ extensions = [
 		"sphinx.ext.todo",
 		"sphinxemoji.sphinxemoji",
 		"sphinx_autodoc_typehints",
-		{% for extension in extra_sphinx_extensions %}'{{ extension }}',{{ '\n' }}{% endfor %}]
+		{% for extension in extra_sphinx_extensions %}'{{ extension }}',{{ '\n' }}		{% endfor %}]
 
 sphinxemoji_style = 'twemoji'
 todo_include_todos = bool(os.environ.get("SHOW_TODOS", False))
@@ -68,30 +68,22 @@ intersphinx_mapping = {
 		"Django": ('https://docs.djangoproject.com/en/dev/', 'https://docs.djangoproject.com/en/dev/_objects/'),
 		"sarge": ('https://sarge.readthedocs.io/en/latest/', None),
 		"attrs": ('https://www.attrs.org/en/stable/', None),
-		{% for mapping in intersphinx_mapping %}{{ mapping }},{{ '\n' }}{% endfor %}}
+		{% for mapping in intersphinx_mapping %}{{ mapping }},{{ '\n' }}		{% endfor %}}
 
 html_theme = '{{ sphinx_html_theme }}'
 html_theme_options = {
-		'logo_only': False,  # True will show just the logo
-		{% for option in html_theme_options %}{{option}},{{ '\n' }}{% endfor %}}
+		{% for option, value in html_theme_options.items() %}'{{ option }}': '{{ value }}',{{ '\n' }}		{% endfor %}}
 html_theme_path = ["../.."]
 # html_logo = "logo/pyms.png"
 html_show_sourcelink = False  # True will show link to source
 
 html_context = {
-		# Github Settings
-		"display_github": True,  # Integrate GitHub
-		"github_user": "{{ username }}",  # Username
-		"github_repo": "{{ repo_name }}",  # Repo name
-		"github_version": "master",  # Version
-		"conf_py_path": "/",  # Path in the checkout to the docs root
-		{% for option in html_theme_options %}{{html_context}},{{ '\n' }}{% endfor %}}
-		}
+		{% for option, value in html_context.items() %}'{{ option }}': '{{ value }}',{{ '\n' }}		{% endfor %}}
 
 htmlhelp_basename = slug
 
 latex_documents = [
-		('index', '{0}.tex'.format(slug), project, author, 'manual'),
+		('index', f'{slug}.tex', project, author, 'manual'),
 		]
 
 man_pages = [
@@ -129,3 +121,6 @@ def setup(app):
 							),
 					]
 			)
+
+{% for line in sphinx_conf_epilogue %}{{ line }}
+{% endfor %}

@@ -425,6 +425,11 @@ Documentation
 		  - "print(f'Starting building docs at {strftime}.')
 
 
+.. conf:: sphinx_conf_epilogue
+
+	Like :conf:`sphinx_conf_preamble`, but the lines are inserted at the end of the file. Intent lines with a single tab to form part of the ``setup`` function.
+
+
 .. conf:: html_theme_options
 
 	A dictionary of configuration values for the documentation HTML theme. String values must be encased in quotes.

@@ -1,3 +1,27 @@
+#  !/usr/bin/env python
+#   -*- coding: utf-8 -*-
+#
+#  docs.py
+#
+#  Copyright © 2020 Dominic Davis-Foster <dominic@davis-foster.co.uk>
+#
+#  This program is free software; you can redistribute it and/or modify
+#  it under the terms of the GNU Lesser General Public License as published by
+#  the Free Software Foundation; either version 3 of the License, or
+#  (at your option) any later version.
+#
+#  This program is distributed in the hope that it will be useful,
+#  but WITHOUT ANY WARRANTY; without even the implied warranty of
+#  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#  GNU Lesser General Public License for more details.
+#
+#  You should have received a copy of the GNU Lesser General Public License
+#  along with this program; if not, write to the Free Software
+#  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
+#  MA 02110-1301, USA.
+#
+
+
 from .utils import clean_writer, ensure_requirements
 
 
@@ -89,14 +113,14 @@ def make_conf(repo_path, templates):
 				"github_repo": repo_name,  # Repo name
 				"github_version": "master",  # Version
 				"conf_py_path": "/",  # Path in the checkout to the docs root
-				}:
+				}.items():
 			if key not in templates.globals["html_context"]:
 				templates.globals["html_context"][key] = val
 
 		for key, val in {
 				# 'logo': 'logo.png',
 				'logo_only': False,  # True will show just the logo
-				}:
+				}.items():
 			if key not in templates.globals["html_theme_options"]:
 				templates.globals["html_theme_options"][key] = val
 
@@ -115,7 +139,7 @@ def make_conf(repo_path, templates):
 				"travis_button": "true",
 				"badge_branch": "master",
 				"fixed_sidebar": "false",
-				}:
+				}.items():
 			if key not in templates.globals["html_theme_options"]:
 				templates.globals["html_theme_options"][key] = val
 
