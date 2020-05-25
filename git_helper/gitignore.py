@@ -22,7 +22,14 @@
 #
 
 
+# this package
 from .utils import clean_writer
+
+__all__ = [
+		"ignores",
+		"make_gitignore",
+		]
+
 
 ignores = [
 		# Byte-compiled / optimized / DLL files

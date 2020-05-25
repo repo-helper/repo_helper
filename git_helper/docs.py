@@ -22,7 +22,15 @@
 #
 
 
+# this package
 from .utils import clean_writer, ensure_requirements
+
+__all__ = [
+		"ensure_doc_requirements",
+		"make_rtfd",
+		"make_conf",
+		"copy_docs_styling",
+		]
 
 
 def ensure_doc_requirements(repo_path, templates):

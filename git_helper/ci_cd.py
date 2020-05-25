@@ -21,12 +21,21 @@
 #  MA 02110-1301, USA.
 #
 
+
+# stdlib
 import shutil
 
+# 3rd party
 from domdf_python_tools.paths import maybe_make
 
+# this package
 from .templates import template_dir
 from .utils import clean_writer, make_executable
+
+__all__ = [
+		"make_travis", "make_copy_pypi_2_github",
+		"make_make_conda_recipe", "make_travis_deploy_conda",
+		]
 
 
 def make_travis(repo_path, templates):

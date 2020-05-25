@@ -61,7 +61,6 @@ def main():
 		else:
 			sys.exit(1)
 
-
 	if args.initialise:
 		init_repo(gh.target_repo, gh.templates)
 

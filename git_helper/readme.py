@@ -22,12 +22,20 @@
 #
 
 
+# stdlib
 import re
 
+# 3rd party
 from jinja2 import BaseLoader, Environment
 
+__all__ = [
+		"shields_block_template",
+		"create_shields_block",
+		"rewrite_readme",
+		]
 
-rtemplate = Environment(loader=BaseLoader).from_string("""\
+
+shields_block_template = Environment(loader=BaseLoader).from_string("""\
 .. start shields
 
 .. list-table::
@@ -113,7 +121,7 @@ rtemplate = Environment(loader=BaseLoader).from_string("""\
 
 def create_shields_block(
 		username, repo_name, version, conda=True, tests=True, travis_site="com", pypi_name=None):
-	return rtemplate.render(
+	return shields_block_template.render(
 			username=username, repo_name=repo_name, tests=tests, conda=conda,
 			travis_site=travis_site, pypi_name=pypi_name, version=version)
 

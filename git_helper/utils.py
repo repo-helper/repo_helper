@@ -22,13 +22,29 @@
 #
 
 
+# stdlib
 import os
 import stat
 import subprocess
+import sys
 from numbers import Number
 
+# 3rd party
 import requirements
+import trove_classifiers
+from colorama import Fore
 from domdf_python_tools.paths import maybe_make
+
+__all__ = [
+		"clean_writer",
+		"make_executable",
+		"check_git_status",
+		"get_git_status",
+		"ensure_requirements",
+		"strtobool",
+		"enquote_value",
+		"validate_classifiers",
+		]
 
 
 def clean_writer(string, fp):
@@ -189,3 +205,24 @@ def enquote_value(value):
 	else:
 		return f"'{value}'"
 
+
+def stderr_writer(*args, **kwargs):
+	"""
+	Write to stderr, flushing stdout beforehand and stderr afterwards.
+	"""
+
+	sys.stdout.flush()
+	kwargs["file"] = sys.stderr
+	print(*args, **kwargs)
+	sys.stderr.flush()
+
+
+def validate_classifiers(classifiers):
+	for classifier in classifiers:
+		if classifier in trove_classifiers.deprecated_classifiers:
+			stderr_writer(f"{Fore.YELLOW}Classifier '{classifier}' is deprecated!")
+			stderr_writer(Fore.RESET, end='', file=sys.stderr)
+
+		elif classifier not in trove_classifiers.classifiers:
+			stderr_writer(f"{Fore.RED}Unknown Classifier '{classifier}'!")
+			stderr_writer(Fore.RESET, end='', file=sys.stderr)

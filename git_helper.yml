@@ -8,7 +8,7 @@ username: "domdfcoding"
 license: 'LGPLv3+'
 short_desc: 'Update multiple configuration files, build scripts etc. from a single location'
 
-enable_tests: False
+#enable_tests: False
 enable_conda: False
 
 additional_ignore:

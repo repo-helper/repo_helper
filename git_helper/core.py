@@ -22,8 +22,6 @@
 #
 
 
-# stdlib
-
 # 3rd party
 import jinja2
 from domdf_python_tools.paths import maybe_make
@@ -40,6 +38,13 @@ from .templates import template_dir
 from .testing import ensure_tests_requirements, make_tox
 from .utils import clean_writer, enquote_value
 from .yaml_parser import parse_yaml
+
+__all__ = [
+		"GitHelper",
+		"ensure_bumpversion",
+		"make_issue_templates",
+		"files",
+		]
 
 
 class GitHelper:

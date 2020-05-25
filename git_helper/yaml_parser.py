@@ -22,9 +22,20 @@
 #
 
 
+# 3rd party
 import yaml
 
-from .utils import strtobool
+# this package
+from .utils import strtobool, validate_classifiers
+
+__all__ = [
+		"parse_yaml",
+		"parse_python_versions",
+		"get_tox_python_versions",
+		"get_version_classifiers",
+		"parse_extras",
+		"parse_license",
+		]
 
 
 def parse_yaml(repo_path):
@@ -123,6 +134,8 @@ def parse_yaml(repo_path):
 	config_vars["license"] = license
 	if license_classifier:
 		add_classifier(license_classifier)
+
+	validate_classifiers(config_vars["classifiers"])
 
 	return config_vars
 

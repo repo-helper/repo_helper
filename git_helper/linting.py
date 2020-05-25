@@ -21,11 +21,21 @@
 #  MA 02110-1301, USA.
 #
 
-
+# stdlib
 import shutil
 
+# this package
 from .templates import template_dir
 from .utils import clean_writer, make_executable
+
+__all__ = [
+		"lint_fix_list",
+		"lint_belligerent_list",
+		"lint_warn_list",
+		"make_pylintrc",
+		"make_lint_roller",
+		]
+
 
 lint_fix_list = [
 		'E301', 'E303', 'E304', 'E305', 'E306', 'E502',

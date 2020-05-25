@@ -22,9 +22,17 @@
 #
 
 
+# stdlib
 import pathlib
 
+# this package
 from .utils import clean_writer
+
+__all__ = [
+		"make_manifest",
+		"make_setup",
+		"make_pkginfo",
+		]
 
 
 def make_manifest(repo_path, templates):

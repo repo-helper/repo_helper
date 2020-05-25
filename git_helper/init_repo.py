@@ -22,14 +22,19 @@
 #
 
 
+# stdlib
 import pathlib
 import shutil
 
+# 3rd party
 import jinja2
 from domdf_python_tools.paths import maybe_make
 
+# this package
 from git_helper.templates import init_repo_template_dir
 from git_helper.utils import clean_writer
+
+__all__ = ["init_repo"]
 
 
 def init_repo(repo_path, templates):
