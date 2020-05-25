@@ -40,6 +40,9 @@ def main():
 	parser.add_argument(
 			'--initialise', action='store_true',
 			help='Initialise the repository with some boilerplate files.')
+	parser.add_argument(
+			"-f", '--force', action='store_true',
+			help="Run 'git_helper' even when the git working directory is not clean.")
 
 	args = parser.parse_args()
 
@@ -53,7 +56,8 @@ def main():
 		print("Git working directory is not clean:\n{}".format(
 				b"\n".join(lines).decode("UTF-8")), file=sys.stderr)
 
-		sys.exit(1)
+		if not args.force:
+			sys.exit(1)
 
 	if args.initialise:
 		init_repo(gh.target_repo, gh.templates)
