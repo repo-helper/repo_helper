@@ -56,8 +56,11 @@ def main():
 		print("Git working directory is not clean:\n{}".format(
 				b"\n".join(lines).decode("UTF-8")), file=sys.stderr)
 
-		if not args.force:
+		if args.force:
+			print("Proceeding anyway", file=sys.stderr)
+		else:
 			sys.exit(1)
+
 
 	if args.initialise:
 		init_repo(gh.target_repo, gh.templates)
