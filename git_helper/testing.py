@@ -60,7 +60,7 @@ def ensure_tests_requirements(repo_path, templates):
 			("pytest", "5.1.1"),
 			("pytest-cov", "2.8.1"),
 			("pytest-randomly", "3.3.1"),
-			("pytest-rerunfailures", None),
+			("pytest-rerunfailures", "9.0"),
 			}
 
 	test_req_file = repo_path / templates.globals["tests_dir"] / "requirements.txt"
