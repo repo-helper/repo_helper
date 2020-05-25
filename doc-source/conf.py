@@ -79,7 +79,6 @@ html_theme_options = {
 		'description': 'Update multiple configuration files, build scripts etc. from a single location',
 		'github_banner': 'true',
 		'github_type': 'star',
-		# 'travis_button': 'true',
 		'badge_branch': 'master',
 		'fixed_sidebar': 'false',
 		}
