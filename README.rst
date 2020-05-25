@@ -11,7 +11,7 @@ git_helper
 	* - Docs
 	  - |docs|
 	* - Tests
-	  - |travis| |requires| |codefactor|
+	  - |travis| |requires| |coveralls| |codefactor|
 	* - PyPI
 	  - |pypi-version| |supported-versions| |supported-implementations| |wheel|
 	* - Other
@@ -28,6 +28,10 @@ git_helper
 .. |requires| image:: https://requires.io/github/domdfcoding/git_helper/requirements.svg?branch=master
 	:target: https://requires.io/github/domdfcoding/git_helper/requirements/?branch=master
 	:alt: Requirements Status
+
+.. |coveralls| image:: https://coveralls.io/repos/github/domdfcoding/git_helper/badge.svg?branch=master
+	:target: https://coveralls.io/github/domdfcoding/git_helper?branch=master
+	:alt: Coverage
 
 .. |codefactor| image:: https://img.shields.io/codefactor/grade/github/domdfcoding/git_helper
 	:target: https://www.codefactor.io/repository/github/domdfcoding/git_helper

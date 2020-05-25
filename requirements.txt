@@ -1,6 +1,6 @@
-jinja2
-requirements-parser
-pyyaml
-domdf-python-tools
+jinja2 >=2.11.2
+requirements-parser >=0.2.0
+pyyaml >=5.3.1
+domdf-python-tools >=0.3.3
 trove_classifiers >=2020.5.21
 colorama >=0.4.3

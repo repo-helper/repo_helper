@@ -10,10 +10,12 @@ install:
 
   - pip install pip  --upgrade
   - pip install tox tox-travis
-
+  - pip install coveralls
 
 script:
   - tox
+after_success:
+  - coveralls
 
 
 stages:
