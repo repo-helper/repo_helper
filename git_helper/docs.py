@@ -35,7 +35,7 @@ __all__ = [
 
 def ensure_doc_requirements(repo_path, templates):
 	"""
-	Ensure ``doc-source/requirements.txt`` contains the required entries.
+	Ensure ``<docs_dir>/requirements.txt`` contains the required entries.
 
 	:param repo_path: Path to the repository root
 	:type repo_path: pathlib.Path
@@ -54,7 +54,7 @@ def ensure_doc_requirements(repo_path, templates):
 			("sphinx-autodoc-typehints", "1.10.3"),
 			}
 
-	test_req_file = repo_path / "doc-source" / "requirements.txt"
+	test_req_file = repo_path / templates.globals["docs_dir"] / "requirements.txt"
 
 	ensure_requirements(target_requirements, test_req_file)
 
@@ -83,7 +83,7 @@ version: 2
 # Build documentation in the docs/ directory with Sphinx
 sphinx:
   builder: html
-  configuration: doc-source/conf.py
+  configuration: {templates.globals["docs_dir"]}/conf.py
 
 # Optionally build your docs in additional formats such as PDF and ePub
 formats: all
@@ -93,7 +93,7 @@ python:
   version: {templates.globals["python_deploy_version"]}
   install:
     - requirements: requirements.txt
-    - requirements: doc-source/requirements.txt
+    - requirements: {templates.globals["docs_dir"]}/requirements.txt
 """, fp)
 		for file in templates.globals["additional_requirements_files"]:
 			clean_writer(f"    - requirements: { file }", fp)
@@ -151,7 +151,7 @@ def make_conf(repo_path, templates):
 			if key not in templates.globals["html_theme_options"]:
 				templates.globals["html_theme_options"][key] = val
 
-	with (repo_path / "doc-source" / "conf.py").open("w") as fp:
+	with (repo_path / templates.globals["docs_dir"] / "conf.py").open("w") as fp:
 		clean_writer(conf.render(), fp)
 		clean_writer("\n", fp)
 
@@ -166,8 +166,8 @@ def copy_docs_styling(repo_path, templates):
 	:type templates: jinja2.Environment
 	"""
 
-	dest__static_dir = repo_path / "doc-source/_static"
-	dest__templates_dir = repo_path / "doc-source/_templates"
+	dest__static_dir = repo_path / templates.globals["docs_dir"] / "_static"
+	dest__templates_dir = repo_path / templates.globals["docs_dir"] / "_templates"
 
 	for directory in [dest__static_dir, dest__templates_dir]:
 		if not directory.is_dir():

@@ -79,7 +79,7 @@ about:
 extra:
   maintainers:
     - {author}
-    - github.com/domdfcoding
+    - github.com/{github_username}
 
 """)
 

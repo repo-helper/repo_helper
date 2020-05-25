@@ -122,6 +122,7 @@ def parse_yaml(repo_path):
 
 	config_vars["travis_pypi_secure"] = raw_config_vars.get("travis_pypi_secure")
 	config_vars["tests_dir"] = raw_config_vars.get("tests_dir", "tests")
+	config_vars["docs_dir"] = raw_config_vars.get("docs_dir", "doc-source")
 
 	config_vars["additional_setup_args"] = "\n".join(
 			["\t\t{}={},".format(*x) for x in raw_config_vars.get("additional_setup_args", {}).items()])
@@ -142,7 +143,7 @@ def parse_yaml(repo_path):
 
 def parse_python_versions(raw_config_vars):
 
-	python_deploy_version = raw_config_vars.get("python_deploy_version", 3.6)
+	python_deploy_version = str(raw_config_vars.get("python_deploy_version", 3.6))
 
 	python_versions = raw_config_vars.get("python_versions", [python_deploy_version])
 	python_versions = [version for version in python_versions if version]

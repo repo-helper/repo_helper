@@ -2,7 +2,7 @@
 git_helper
 **********************
 
-.. start shields
+.. start shields 
 
 .. list-table::
 	:stub-columns: 1

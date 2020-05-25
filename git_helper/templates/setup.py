@@ -18,7 +18,7 @@ setup(
 		license=__license__,
 		long_description=long_description,
 		name=pypi_name,
-		packages=find_packages(exclude=("{{ tests_dir }}", "doc-source")),
+		packages=find_packages(exclude=("{{ tests_dir }}", "{{ docs_dir}}")),
 		project_urls=project_urls,
 		py_modules=py_modules,
 		python_requires=">={{ min_py_version }}",

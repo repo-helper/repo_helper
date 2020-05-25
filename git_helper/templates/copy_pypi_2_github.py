@@ -133,7 +133,7 @@ if __name__ == '__main__':
 	remaining_requests = rate.core.remaining
 	print(rate)
 
-	github_username = "domdfcoding"
+	github_username = "{{ username }}"
 
 	copy_pypi_2_github(g, "{{ repo_name }}", "{{ username }}", pypi_name="{{ pypi_name }}")
 
