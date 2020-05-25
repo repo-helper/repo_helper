@@ -2,6 +2,7 @@
 
 language: python
 dist: xenial
+cache: pip
 python:
   {% for version in python_versions %}- '{{ version }}'
   {% endfor %}

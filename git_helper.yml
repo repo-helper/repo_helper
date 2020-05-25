@@ -32,6 +32,7 @@ python_versions:
 # additional lines for MANIFEST.in
 manifest_additional:
   - "recursive-include git_helper/templates *"
+  - "recursive-include git_helper/init_repo_files *"
 
 classifiers:
   - 'Development Status :: 4 - Beta'

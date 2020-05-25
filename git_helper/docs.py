@@ -136,7 +136,7 @@ def make_conf(repo_path, templates):
 				"description": templates.globals["short_desc"],
 				"github_banner": "true",
 				"github_type": "star",
-				"travis_button": "true",
+				# "travis_button": "true",
 				"badge_branch": "master",
 				"fixed_sidebar": "false",
 				}.items():

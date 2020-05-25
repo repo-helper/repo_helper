@@ -382,7 +382,7 @@ Documentation
 
 		sphinx_html_theme: alabaster
 
-	Currently the supported themes are `sphinx_rtd_theme <https://sphinx-rtd-theme.readthedocs.io/en/stable/>`_ and
+	Currently the supported themes are `sphinx_rtd_theme <https://sphinx-rtd-theme.readthedocs.io/en/stable/>`_ and `alabaster <https://alabaster.readthedocs.io>`_ .
 
 .. conf:: extra_sphinx_extensions
 
