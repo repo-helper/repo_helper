@@ -72,13 +72,13 @@ intersphinx_mapping = {
 
 html_theme = '{{ sphinx_html_theme }}'
 html_theme_options = {
-		{% for option, value in html_theme_options.items() %}'{{ option }}': '{{ value }}',{{ '\n' }}		{% endfor %}}
+		{% for option, value in html_theme_options.items() %}'{{ option }}': {{ enquote_value(value) }},{{ '\n' }}		{% endfor %}}
 html_theme_path = ["../.."]
 # html_logo = "logo/pyms.png"
 html_show_sourcelink = False  # True will show link to source
 
 html_context = {
-		{% for option, value in html_context.items() %}'{{ option }}': '{{ value }}',{{ '\n' }}		{% endfor %}}
+		{% for option, value in html_context.items() %}'{{ option }}': {{ enquote_value(value) }},{{ '\n' }}		{% endfor %}}
 
 htmlhelp_basename = slug
 

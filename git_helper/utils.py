@@ -25,6 +25,7 @@
 import os
 import stat
 import subprocess
+from numbers import Number
 
 import requirements
 from domdf_python_tools.paths import maybe_make
@@ -138,7 +139,7 @@ def ensure_requirements(requirements_list, requirements_file):
 
 	maybe_make(requirements_file.parent, parents=True)
 
-	with open(requirements_file, "w") as fp:
+	with requirements_file.open("w") as fp:
 		for req in test_requirements:
 			if req.name not in target_packages:
 				if req.specs:
@@ -178,3 +179,13 @@ def strtobool(val):
 		return 0
 	else:
 		raise ValueError(f"invalid truth value {val!r}")
+
+
+def enquote_value(value):
+	if value in {"True", "False", "None", True, False, None}:
+		return value
+	elif isinstance(value, Number):
+		return value
+	else:
+		return f"'{value}'"
+

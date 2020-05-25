@@ -38,7 +38,7 @@ from .packaging import make_manifest, make_pkginfo, make_setup
 from .readme import rewrite_readme
 from .templates import template_dir
 from .testing import ensure_tests_requirements, make_tox
-from .utils import clean_writer
+from .utils import clean_writer, enquote_value
 from .yaml_parser import parse_yaml
 
 
@@ -54,6 +54,7 @@ class GitHelper:
 		self.templates.globals["lint_fix_list"] = lint_fix_list
 		self.templates.globals["lint_belligerent_list"] = lint_belligerent_list
 		self.templates.globals["lint_warn_list"] = lint_warn_list
+		self.templates.globals["enquote_value"] = enquote_value
 
 	@property
 	def exclude_files(self):
