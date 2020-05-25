@@ -166,7 +166,7 @@ files = [
 		(make_rtfd, "rtfd", []),
 		(make_travis, "travis", []),
 		(make_tox, "tox", []),
-		(ensure_tests_requirements, "test_requirements", []),
+		(ensure_tests_requirements, "test_requirements", ["enable_tests"]),
 		(make_dependabot, "dependabot", []),
 		(make_travis_deploy_conda, "travis_deploy_conda", ["enable_conda"]),
 		(make_make_conda_recipe, "make_conda_recipe", ["enable_conda"]),
