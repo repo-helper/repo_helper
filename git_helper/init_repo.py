@@ -58,7 +58,7 @@ def init_repo(repo_path, templates):
 
 	# tests
 	maybe_make(repo_path / templates.globals["tests_dir"])
-	(repo_path / templates.globals["tests_dir"] / "__init__.py").open("w").close()
+	(repo_path / templates.globals["tests_dir"] / "__init__.py").open("a").close()
 
 	# doc-source
 	maybe_make(repo_path / templates.globals["docs_dir"])
@@ -75,3 +75,6 @@ def init_repo(repo_path, templates):
 		template = init_repo_templates.get_template(filename)
 		with (repo_path / filename).open("w") as fp:
 			clean_writer(template.render(), fp)
+
+	(repo_path / "requirements.txt").open("a").close()
+

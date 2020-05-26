@@ -69,7 +69,7 @@ def parse_yaml(repo_path):
 	config_vars["modname"] = raw_config_vars.get("modname")
 	config_vars["repo_name"] = raw_config_vars.get("repo_name", config_vars["modname"])
 	config_vars["pypi_name"] = raw_config_vars.get("pypi_name", config_vars["modname"])
-	config_vars["import_name"] = raw_config_vars.get("import_name", config_vars["modname"])
+	config_vars["import_name"] = raw_config_vars.get("import_name", config_vars["modname"].replace("-", "_"))
 
 	# config_vars["lint_fix_list"] = lint_fix_list
 	# config_vars["lint_belligerent_list"] = lint_belligerent_list
@@ -82,11 +82,14 @@ def parse_yaml(repo_path):
 
 	python_versions, python_deploy_version, min_py_version = parse_python_versions(raw_config_vars)
 	tox_py_versions = get_tox_python_versions(python_versions)
+	tox_travis_versions = get_tox_travis_python_versions(python_versions, tox_py_versions)
+	tox_travis_versions[python_deploy_version] += ", docs"
 
 	config_vars["python_deploy_version"] = python_deploy_version
 	config_vars["python_versions"] = python_versions
 	config_vars["min_py_version"] = min_py_version
 	config_vars["tox_py_versions"] = tox_py_versions
+	config_vars["tox_travis_versions"] = tox_travis_versions
 
 	for var_name in {
 			"conda_channels", "additional_ignore", "exclude_files",
@@ -108,6 +111,7 @@ def parse_yaml(repo_path):
 		config_vars[var_name] = raw_config_vars.get(var_name, "")
 
 	config_vars["sphinx_html_theme"] = raw_config_vars.get("sphinx_html_theme", "sphinx_rtd_theme")
+	config_vars["travis_ubuntu_version"] = raw_config_vars.get("travis_ubuntu_version", "xenial")
 
 	config_vars["conda_description"] = raw_config_vars.get("conda_description", config_vars["short_desc"])
 
@@ -164,6 +168,15 @@ def get_tox_python_versions(python_versions):
 		tox_py_versions.append(py_version)
 
 	return tox_py_versions
+
+
+def get_tox_travis_python_versions(python_versions, tox_py_versions):
+	tox_travis_matrix = {}
+
+	for py_version, tox_py_version in zip(python_versions, tox_py_versions):
+		tox_travis_matrix[py_version] = tox_py_version
+
+	return tox_travis_matrix
 
 
 def get_version_classifiers(python_versions):

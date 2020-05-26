@@ -48,7 +48,7 @@ def ensure_doc_requirements(repo_path, templates):
 	target_requirements = {
 			("extras_require", None),
 			("sphinx", "3.0.3"),
-			("sphinx_rtd_theme", "0.4.3"),
+			(templates.globals["sphinx_html_theme"], None),
 			("sphinxcontrib-httpdomain", "1.7.0"),
 			("sphinxemoji", "0.1.5"),
 			("sphinx-autodoc-typehints", "1.10.3"),

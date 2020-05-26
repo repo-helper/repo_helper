@@ -4,7 +4,7 @@ API Reference
 
 .. contents:: Table of Contents
 
-.. automodule:: {{ modname }}
+.. automodule:: {{ import_name }}
     :members:
     :private-members:
     :special-members:
@@ -12,11 +12,11 @@ API Reference
     :undoc-members:
 
 ===================================
-:mod:`{{ modname }}.__init__`
+:mod:`{{ import_name }}.__init__`
 ===================================
 
 
-.. automodule:: {{ modname }}.__init__
+.. automodule:: {{ import_name }}.__init__
     :members:
     :private-members:
     :special-members:

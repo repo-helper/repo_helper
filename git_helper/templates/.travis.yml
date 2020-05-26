@@ -1,7 +1,7 @@
 # This file is managed by `git_helper`. Don't edit it directly
 
 language: python
-dist: xenial
+dist: {{ travis_ubuntu_version }}
 cache: pip
 python:
   {% for version in python_versions %}- '{{ version }}'
