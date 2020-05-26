@@ -107,6 +107,8 @@ def check_git_status(repo_path):
 
 	os.chdir(oldwd)
 
+	lines = [line.decode("UTF-8") for line in lines]
+
 	return not bool(lines), lines
 
 

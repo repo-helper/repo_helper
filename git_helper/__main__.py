@@ -52,14 +52,18 @@ def main():
 	gh = GitHelper(args.path)
 
 	status, lines = check_git_status(gh.target_repo)
-	if not status:
-		print("Git working directory is not clean:\n{}".format(
-				b"\n".join(lines).decode("UTF-8")), file=sys.stderr)
 
-		if args.force:
-			print("Proceeding anyway", file=sys.stderr)
+	if not status:
+		if lines in (["M git_helper/docs.py"], ["A git_helper/docs.py"]):
+			pass
 		else:
-			sys.exit(1)
+			print("Git working directory is not clean:", file=sys.stderr)
+			print("\n".join(lines), file=sys.stderr)
+
+			if args.force:
+				print("Proceeding anyway", file=sys.stderr)
+			else:
+				sys.exit(1)
 
 	if args.initialise:
 		init_repo(gh.target_repo, gh.templates)
