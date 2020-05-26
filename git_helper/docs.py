@@ -50,7 +50,7 @@ def ensure_doc_requirements(repo_path, templates):
 			("sphinx", "3.0.3"),
 			(templates.globals["sphinx_html_theme"], None),
 			("sphinxcontrib-httpdomain", "1.7.0"),
-			("sphinxemoji", "0.1.5"),
+			("sphinxemoji", "0.1.6"),
 			("sphinx-autodoc-typehints", "1.10.3"),
 			}
 
