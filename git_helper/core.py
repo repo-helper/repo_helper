@@ -74,6 +74,7 @@ class GitHelper:
 		if not self.templates.globals["preserve_custom_theme"]:
 			copy_docs_styling(self.target_repo, self.templates)
 
+		# TODO: this isn't respecting "enable_docs"
 		for function_, exclude_name, other_requirements in files:
 			if exclude_name not in self.exclude_files and all([self.templates.globals[req] for req in other_requirements]):
 				function_(self.target_repo, self.templates)
@@ -156,14 +157,14 @@ files = [
 		(make_stale_bot, "stale_bot", []),
 		(make_auto_assign_action, "auto_assign", []),
 		(rewrite_readme, "readme", []),
-		(ensure_doc_requirements, "doc_requirements", []),
+		(ensure_doc_requirements, "doc_requirements", ["enable_docs"]),
 		(make_pylintrc, "pylintrc", []),
 		(make_manifest, "manifest", []),
 		(make_setup, "setup", []),
 		(make_pkginfo, "pkginfo", []),
-		(make_conf, "conf", []),
+		(make_conf, "conf", ["enable_docs"]),
 		(make_gitignore, "gitignore", []),
-		(make_rtfd, "rtfd", []),
+		(make_rtfd, "rtfd", ["enable_docs"]),
 		(make_travis, "travis", []),
 		(make_tox, "tox", []),
 		(ensure_tests_requirements, "test_requirements", ["enable_tests"]),

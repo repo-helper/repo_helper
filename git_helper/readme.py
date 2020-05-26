@@ -42,9 +42,9 @@ shields_block_template = Environment(loader=BaseLoader).from_string("""\
 	:stub-columns: 1
 	:widths: 10 90
 
-	* - Docs
+	{% if docs %}* - Docs
 	  - |docs{{ unique_name }}|
-	* - Tests
+	{% endif %}* - Tests
 	  - |travis{{ unique_name }}| |requires{{ unique_name }}| {% if tests %}|coveralls{{ unique_name }}| {% endif %}|codefactor{{ unique_name }}|
 	* - PyPI
 	  - |pypi-version{{ unique_name }}| |supported-versions{{ unique_name }}| |supported-implementations{{ unique_name }}| |wheel{{ unique_name }}|
@@ -53,9 +53,9 @@ shields_block_template = Environment(loader=BaseLoader).from_string("""\
 	{% endif %}* - Other
 	  - |license{{ unique_name }}| |language{{ unique_name }}| |commits-since{{ unique_name }}| |commits-latest{{ unique_name }}| |maintained{{ unique_name }}| 
 	
-.. |docs{{ unique_name }}| image:: https://readthedocs.org/projects/{{ repo_name.lower() }}/badge/?version=latest
+{% if docs %}.. |docs{{ unique_name }}| image:: https://readthedocs.org/projects/{{ repo_name.lower() }}/badge/?version=latest
 	:target: https://{{ repo_name.lower() }}.readthedocs.io/en/latest/?badge=latest
-	:alt: Documentation Status
+	:alt: Documentation Status{% endif %}
 
 .. |travis{{ unique_name }}| image:: https://img.shields.io/travis/{{ 'com/' if travis_site == "com" else '' }}{{ username }}/{{ repo_name }}/master?logo=travis
 	:target: https://travis-ci.{{ travis_site }}/{{ username }}/{{ repo_name }}
@@ -120,11 +120,11 @@ shields_block_template = Environment(loader=BaseLoader).from_string("""\
 
 
 def create_shields_block(
-		username, repo_name, version, conda=True, tests=True, travis_site="com", pypi_name=None, unique_name=''):
+		username, repo_name, version, conda=True, tests=True, docs=True, travis_site="com", pypi_name=None, unique_name=''):
 	if unique_name:
 		unique_name = f"_{unique_name}"
 	return shields_block_template.render(
-			username=username, repo_name=repo_name, tests=tests, conda=conda,
+			username=username, repo_name=repo_name, tests=tests, conda=conda, docs=docs,
 			travis_site=travis_site, pypi_name=pypi_name, version=version, unique_name=unique_name)
 
 
@@ -146,6 +146,7 @@ def rewrite_readme(repo_path, templates):
 			templates.globals["version"],
 			templates.globals["enable_conda"],
 			templates.globals["enable_tests"],
+			templates.globals["enable_docs"],
 			templates.globals["travis_site"],
 			templates.globals["pypi_name"],
 			)

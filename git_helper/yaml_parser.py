@@ -77,6 +77,7 @@ def parse_yaml(repo_path):
 
 	config_vars["enable_tests"] = strtobool(raw_config_vars.get("enable_tests", "True"))
 	config_vars["enable_conda"] = strtobool(raw_config_vars.get("enable_conda", "True"))
+	config_vars["enable_docs"] = strtobool(raw_config_vars.get("enable_docs", "True"))
 	config_vars["enable_releases"] = strtobool(raw_config_vars.get("enable_releases", "True"))
 	config_vars["preserve_custom_theme"] = strtobool(raw_config_vars.get("preserve_custom_theme", "False"))
 

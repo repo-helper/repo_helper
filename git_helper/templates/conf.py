@@ -41,7 +41,6 @@ extensions = [
 		"sphinxcontrib.extras_require",
 		"sphinx.ext.todo",
 		"sphinxemoji.sphinxemoji",
-		"sphinx_autodoc_typehints",
 		{% for extension in extra_sphinx_extensions %}'{{ extension }}',{{ '\n' }}		{% endfor %}]
 
 sphinxemoji_style = 'twemoji'

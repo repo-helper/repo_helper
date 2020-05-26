@@ -60,15 +60,16 @@ def init_repo(repo_path, templates):
 	maybe_make(repo_path / templates.globals["tests_dir"])
 	(repo_path / templates.globals["tests_dir"] / "__init__.py").open("a").close()
 
-	# doc-source
-	maybe_make(repo_path / templates.globals["docs_dir"])
+	if templates.globals["enable_docs"]:
+		# doc-source
+		maybe_make(repo_path / templates.globals["docs_dir"])
 
-	for filename in {"Source.rst", "docs.rst", "index.rst", "Building.rst"}:
-		template = init_repo_templates.get_template(filename)
-		with (repo_path / templates.globals["docs_dir"] / filename).open("w") as fp:
-			clean_writer(template.render(), fp)
+		for filename in {"Source.rst", "docs.rst", "index.rst", "Building.rst"}:
+			template = init_repo_templates.get_template(filename)
+			with (repo_path / templates.globals["docs_dir"] / filename).open("w") as fp:
+				clean_writer(template.render(), fp)
 
-	shutil.copy2(init_repo_template_dir / "git_download.png", repo_path / templates.globals["docs_dir"] / "git_download.png")
+		shutil.copy2(init_repo_template_dir / "git_download.png", repo_path / templates.globals["docs_dir"] / "git_download.png")
 
 	# other
 	for filename in {"LICENSE", "README.rst"}:

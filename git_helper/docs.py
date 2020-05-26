@@ -51,7 +51,7 @@ def ensure_doc_requirements(repo_path, templates):
 			(templates.globals["sphinx_html_theme"], None),
 			("sphinxcontrib-httpdomain", "1.7.0"),
 			("sphinxemoji", "0.1.6"),
-			("sphinx-autodoc-typehints", "1.10.3"),
+			# ("sphinx-autodoc-typehints", "1.10.3"),
 			}
 
 	test_req_file = repo_path / templates.globals["docs_dir"] / "requirements.txt"
