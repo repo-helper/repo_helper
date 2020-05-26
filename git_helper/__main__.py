@@ -54,7 +54,7 @@ def main():
 	status, lines = check_git_status(gh.target_repo)
 
 	if not status:
-		if lines in (["M git_helper/docs.py"], ["A git_helper/docs.py"]):
+		if lines in (["M git_helper.yml"], ["A git_helper.yml"]):
 			pass
 		else:
 			print("Git working directory is not clean:", file=sys.stderr)
