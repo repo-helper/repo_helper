@@ -40,7 +40,6 @@ extensions = [
 		"sphinxcontrib.extras_require",
 		"sphinx.ext.todo",
 		"sphinxemoji.sphinxemoji",
-		"sphinx_autodoc_typehints",
 		'tox_conf_directive',
 		]
 

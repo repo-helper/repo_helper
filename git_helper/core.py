@@ -35,7 +35,7 @@ from .linting import lint_belligerent_list, lint_fix_list, lint_warn_list, make_
 from .packaging import make_manifest, make_pkginfo, make_setup
 from .readme import rewrite_readme
 from .templates import template_dir
-from .testing import ensure_tests_requirements, make_tox
+from .testing import ensure_tests_requirements, make_tox, make_yapf
 from .utils import clean_writer, enquote_value
 from .yaml_parser import parse_yaml
 
@@ -167,6 +167,7 @@ files = [
 		(make_rtfd, "rtfd", ["enable_docs"]),
 		(make_travis, "travis", []),
 		(make_tox, "tox", []),
+		(make_yapf, "yapf", []),
 		(ensure_tests_requirements, "test_requirements", ["enable_tests"]),
 		(make_dependabot, "dependabot", []),
 		(make_travis_deploy_conda, "travis_deploy_conda", ["enable_conda"]),

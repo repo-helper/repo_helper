@@ -25,12 +25,13 @@
 # this package
 from .utils import clean_writer, ensure_requirements
 
-__all__ = ["make_tox", "ensure_tests_requirements"]
+__all__ = ["make_tox", "make_yapf", "ensure_tests_requirements"]
 
 
 def make_tox(repo_path, templates):
 	"""
 	Add configuration for ``Tox``
+
 	https://tox.readthedocs.io
 
 	:param repo_path: Path to the repository root
@@ -43,6 +44,24 @@ def make_tox(repo_path, templates):
 
 	with (repo_path / "tox.ini").open("w") as fp:
 		clean_writer(tox.render(), fp)
+
+
+def make_yapf(repo_path, templates):
+	"""
+	Add configuration for ``yapf``
+
+	https://github.com/google/yapf
+
+	:param repo_path: Path to the repository root
+	:type repo_path: pathlib.Path
+	:param templates:
+	:type templates: jinja2.Environment
+	"""
+
+	yapf = templates.get_template("style.yapf")
+
+	with (repo_path / ".style.yapf").open("w") as fp:
+		clean_writer(yapf.render(), fp)
 
 
 def ensure_tests_requirements(repo_path, templates):

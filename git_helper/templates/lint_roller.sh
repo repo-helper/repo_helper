@@ -17,17 +17,12 @@ if [ -z "$(git status --porcelain --untracked-files=no)" ] || [ "$1" == "-f" ]; 
 {% if py_modules %}{% for file in py_modules %}
   autopep8 --in-place --select "$errors" -a {{ file }}.py
   autopep8 --in-place --select "$belligerent" -a -a -a {{ file }}.py
-  >&2 flake8 --select "$errors$belligerent" {{ file }}.py
 {% endfor %}{% else %}
   autopep8 --in-place --select "$errors" -a --recursive {{ import_name }}/
   autopep8 --in-place --select "$belligerent" -a -a -a -a -a --recursive {{ import_name }}/
-  >&2 flake8 --select "$errors$belligerent" {{ import_name }}/
-
-{% endif %}
+{% endif %}{% if enable_tests %}
   autopep8 --in-place --select "$errors" -a --recursive {{ tests_dir }}/
-  autopep8 --in-place --select "$belligerent" -a -a -a -a -a --recursive {{ tests_dir }}/
-  >&2 flake8 --select "$warnings" {{ tests_dir }}/
-
+  autopep8 --in-place --select "$belligerent" -a -a -a -a -a --recursive {{ tests_dir }}/{% endif %}
 
   echo "Running flake8"
 {% if py_modules %}{% for file in py_modules %}
