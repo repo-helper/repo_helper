@@ -21,7 +21,6 @@
 #  MA 02110-1301, USA.
 #
 
-
 # 3rd party
 import yaml
 
@@ -93,18 +92,30 @@ def parse_yaml(repo_path):
 	config_vars["tox_travis_versions"] = tox_travis_versions
 
 	for var_name in {
-			"conda_channels", "additional_ignore", "exclude_files",
-			"travis_additional_requirements", "travis_extra_install_pre", "travis_extra_install_post",
-			"tox_requirements", "tox_build_requirements",
-			"classifiers", "keywords",
-			"extra_sphinx_extensions", "intersphinx_mapping",
-			"manifest_additional", "py_modules", "console_scripts", "pkginfo_extra",
-			"sphinx_conf_preamble", "sphinx_conf_epilogue",
+			"conda_channels",
+			"additional_ignore",
+			"exclude_files",
+			"travis_additional_requirements",
+			"travis_extra_install_pre",
+			"travis_extra_install_post",
+			"tox_requirements",
+			"tox_build_requirements",
+			"classifiers",
+			"keywords",
+			"extra_sphinx_extensions",
+			"intersphinx_mapping",
+			"manifest_additional",
+			"py_modules",
+			"console_scripts",
+			"pkginfo_extra",
+			"sphinx_conf_preamble",
+			"sphinx_conf_epilogue",
 			}:
 		config_vars[var_name] = raw_config_vars.get(var_name, [])
 
 	for var_name in {
-			"html_theme_options", "html_context",
+			"html_theme_options",
+			"html_context",
 			}:
 		config_vars[var_name] = raw_config_vars.get(var_name, {})
 
@@ -129,8 +140,9 @@ def parse_yaml(repo_path):
 	config_vars["tests_dir"] = raw_config_vars.get("tests_dir", "tests")
 	config_vars["docs_dir"] = raw_config_vars.get("docs_dir", "doc-source")
 
-	config_vars["additional_setup_args"] = "\n".join(
-			["\t\t{}={},".format(*x) for x in raw_config_vars.get("additional_setup_args", {}).items()])
+	config_vars["additional_setup_args"] = "\n".join([
+			"\t\t{}={},".format(*x) for x in raw_config_vars.get("additional_setup_args", {}).items()
+			])
 
 	extras_require, additional_requirements_files = parse_extras(raw_config_vars, repo_path)
 	config_vars["extras_require"] = extras_require

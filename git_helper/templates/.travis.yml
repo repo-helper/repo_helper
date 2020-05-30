@@ -56,7 +56,7 @@ jobs:
         on:
           repo: {{ username }}/{{ repo_name }}
         provider: script
-        script: .ci/travis_deploy_conda.sh || travis_terminate 1{% endif %}
+        script: .ci/travis_deploy_conda.sh || return 1;{% endif %}
 
 {% if enable_releases %}    - stage: deploy_releases
       python: "{{ python_deploy_version }}"
@@ -67,4 +67,4 @@ jobs:
         on:
           repo: {{ username }}/{{ repo_name }}
         provider: script
-        script: python .ci/copy_pypi_2_github.py || travis_terminate 1{% endif %}
+        script: python .ci/copy_pypi_2_github.py || return 1;{% endif %}

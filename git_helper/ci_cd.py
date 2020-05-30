@@ -21,7 +21,6 @@
 #  MA 02110-1301, USA.
 #
 
-
 # stdlib
 import shutil
 
@@ -33,8 +32,10 @@ from .templates import template_dir
 from .utils import clean_writer, make_executable
 
 __all__ = [
-		"make_travis", "make_copy_pypi_2_github",
-		"make_make_conda_recipe", "make_travis_deploy_conda",
+		"make_travis",
+		"make_copy_pypi_2_github",
+		"make_make_conda_recipe",
+		"make_travis_deploy_conda",
 		]
 
 
@@ -53,6 +54,8 @@ def make_travis(repo_path, templates):
 
 	with (repo_path / ".travis.yml").open("w") as fp:
 		clean_writer(travis.render(), fp)
+
+	return [".travis.yml"]
 
 
 def make_copy_pypi_2_github(repo_path, templates):
@@ -75,6 +78,8 @@ def make_copy_pypi_2_github(repo_path, templates):
 
 	make_executable(ci_dir / "copy_pypi_2_github.py")
 
+	return [".ci/copy_pypi_2_github.py"]
+
 
 def make_make_conda_recipe(repo_path, templates):
 	"""
@@ -87,6 +92,8 @@ def make_make_conda_recipe(repo_path, templates):
 	"""
 
 	shutil.copy2(template_dir / "make_conda_recipe.py", repo_path / "make_conda_recipe.py")
+
+	return ["make_conda_recipe.py"]
 
 
 def make_travis_deploy_conda(repo_path, templates):
@@ -108,3 +115,5 @@ def make_travis_deploy_conda(repo_path, templates):
 		clean_writer(travis_deploy_conda.render(), fp)
 
 	make_executable(ci_dir / "travis_deploy_conda.sh")
+
+	return [".ci/travis_deploy_conda.sh"]

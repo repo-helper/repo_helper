@@ -21,12 +21,10 @@
 #  MA 02110-1301, USA.
 #
 
-
 # stdlib
 import pathlib
 
 __all__ = ["template_dir", "init_repo_template_dir"]
-
 
 template_dir = (pathlib.Path(__file__).parent / "templates").absolute()
 init_repo_template_dir = (pathlib.Path(__file__).parent / "init_repo_files").absolute()

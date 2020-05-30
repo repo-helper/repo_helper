@@ -21,7 +21,6 @@
 #  MA 02110-1301, USA.
 #
 
-
 # stdlib
 import shutil
 
@@ -50,6 +49,8 @@ def make_stale_bot(repo_path, templates):
 	dot_github = repo_path / ".github"
 	maybe_make(dot_github)
 	shutil.copy2(template_dir / "stale_bot.yaml", dot_github / "stale.yml")
+
+	return [".github/stale.yml"]
 
 
 def make_auto_assign_action(repo_path, templates):

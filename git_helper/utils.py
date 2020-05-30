@@ -21,7 +21,6 @@
 #  MA 02110-1301, USA.
 #
 
-
 # stdlib
 import os
 import stat
@@ -44,6 +43,7 @@ __all__ = [
 		"strtobool",
 		"enquote_value",
 		"validate_classifiers",
+		"stderr_writer",
 		]
 
 
@@ -97,9 +97,8 @@ def check_git_status(repo_path):
 	os.chdir(str(repo_path))
 
 	lines = [
-			line.strip() for line in
-			subprocess.check_output(
-					["git", "status", "--porcelain"]).splitlines()
+			line.strip()
+			for line in subprocess.check_output(["git", "status", "--porcelain"]).splitlines()
 			if not line.strip().startswith(b"??")
 			]
 
@@ -223,8 +222,8 @@ def validate_classifiers(classifiers):
 	for classifier in classifiers:
 		if classifier in trove_classifiers.deprecated_classifiers:
 			stderr_writer(f"{Fore.YELLOW}Classifier '{classifier}' is deprecated!")
-			stderr_writer(Fore.RESET, end='', file=sys.stderr)
+			stderr_writer(Fore.RESET, end='')
 
 		elif classifier not in trove_classifiers.classifiers:
 			stderr_writer(f"{Fore.RED}Unknown Classifier '{classifier}'!")
-			stderr_writer(Fore.RESET, end='', file=sys.stderr)
+			stderr_writer(Fore.RESET, end='')

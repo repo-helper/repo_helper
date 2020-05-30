@@ -21,28 +21,35 @@
 #  MA 02110-1301, USA.
 #
 
-
+# stdlib
 import argparse
 import pathlib
 import sys
 
+# 3rd party
+from colorama import Fore
+from dulwich import repo
+
+# this package
 from git_helper.core import GitHelper
 from git_helper.init_repo import init_repo
-from git_helper.utils import check_git_status
+from git_helper.utils import check_git_status, stderr_writer
 
 
 def main():
 	parser = argparse.ArgumentParser(
-			description='Update files in the given repository, based on settings in `git_helper.yml`')
+			description='Update files in the given repository, based on settings in `git_helper.yml`'
+			)
+	parser.add_argument('path', type=pathlib.Path, nargs='?', help='The path to the repository')
 	parser.add_argument(
-			'path', type=pathlib.Path, nargs='?',
-			help='The path to the repository')
+			'--initialise', action='store_true', help='Initialise the repository with some boilerplate files.'
+			)
 	parser.add_argument(
-			'--initialise', action='store_true',
-			help='Initialise the repository with some boilerplate files.')
-	parser.add_argument(
-			"-f", '--force', action='store_true',
-			help="Run 'git_helper' even when the git working directory is not clean.")
+			"-f",
+			'--force',
+			action='store_true',
+			help="Run 'git_helper' even when the git working directory is not clean."
+			)
 
 	args = parser.parse_args()
 
@@ -57,18 +64,25 @@ def main():
 		if lines in (["M git_helper.yml"], ["A git_helper.yml"]):
 			pass
 		else:
-			print("Git working directory is not clean:", file=sys.stderr)
-			print("\n".join(lines), file=sys.stderr)
+			stderr_writer(f"{Fore.RED}Git working directory is not clean:")
+			for line in lines:
+				stderr_writer(f"  {line}")
+			stderr_writer(Fore.RESET)
 
 			if args.force:
-				print("Proceeding anyway", file=sys.stderr)
+				stderr_writer(f"{Fore.RED}Proceeding anyway{Fore.RESET}")
 			else:
 				sys.exit(1)
 
 	if args.initialise:
-		init_repo(gh.target_repo, gh.templates)
+		r = repo.Repo(".")
+
+		for filename in init_repo(gh.target_repo, gh.templates):
+			r.stage(filename)
 
 	gh.run()
+
+	# Find files that have been modified
 
 
 if __name__ == '__main__':

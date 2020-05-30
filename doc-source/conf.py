@@ -40,6 +40,9 @@ extensions = [
 		"sphinxcontrib.extras_require",
 		"sphinx.ext.todo",
 		"sphinxemoji.sphinxemoji",
+		"notfound.extension",
+		"sphinx_tabs.tabs",
+		"sphinx-prompt",
 		'tox_conf_directive',
 		]
 

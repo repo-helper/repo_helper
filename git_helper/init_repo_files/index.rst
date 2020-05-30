@@ -1,27 +1,28 @@
-.. include:: ../README.rst
+===========================
+{{ modname }}
+===========================
 
+.. start short_desc
+.. end short_desc
 
-``{{ modname }}`` can be installed with pip:
+.. start shields
+.. end shields
 
-
-.. parsed-literal::
-
-        $ pip install {{ modname }}
-
-
-`Browse the Source Code <_modules/index.html>`__.
-
-|browse_github|
+.. start installation
+.. end installation
 
 .. toctree::
-    :hidden:
+	:hidden:
 
-    Home<self>
+	Home<self>
 
 .. toctree::
-    :maxdepth: 3
-    :caption: Documentation
+	:maxdepth: 3
+	:caption: Documentation
 
-    API Reference<docs>
-    Source
-    Building
+	API Reference<docs>
+	Source
+	Building
+
+.. start links
+.. end links

@@ -21,8 +21,8 @@
 #  MA 02110-1301, USA.
 #
 
-
 # stdlib
+import os.path
 import pathlib
 import shutil
 
@@ -69,7 +69,10 @@ def init_repo(repo_path, templates):
 			with (repo_path / templates.globals["docs_dir"] / filename).open("w") as fp:
 				clean_writer(template.render(), fp)
 
-		shutil.copy2(init_repo_template_dir / "git_download.png", repo_path / templates.globals["docs_dir"] / "git_download.png")
+		shutil.copy2(
+				init_repo_template_dir / "git_download.png",
+				repo_path / templates.globals["docs_dir"] / "git_download.png"
+				)
 
 	# other
 	for filename in {"LICENSE", "README.rst"}:
@@ -79,3 +82,12 @@ def init_repo(repo_path, templates):
 
 	(repo_path / "requirements.txt").open("a").close()
 
+	return [
+			os.path.join(templates.globals["import_name"], "__init__.py"),
+			os.path.join(templates.globals["tests_dir"], "__init__.py"),
+			os.path.join(templates.globals["docs_dir"], "git_download.png"),
+			os.path.join(templates.globals["docs_dir"], "Source.rst"),
+			os.path.join(templates.globals["docs_dir"], "docs.rst"),
+			os.path.join(templates.globals["docs_dir"], "index.rst"),
+			os.path.join(templates.globals["docs_dir"], "Building.rst"),
+			]

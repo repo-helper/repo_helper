@@ -21,7 +21,6 @@
 #  MA 02110-1301, USA.
 #
 
-
 # stdlib
 import pathlib
 
@@ -45,12 +44,15 @@ def make_manifest(repo_path, templates):
 	"""
 
 	with (repo_path / "MANIFEST.in").open("w") as fp:
-		clean_writer("""\
+		clean_writer(
+				"""\
 include __pkginfo__.py
 include LICENSE
 include requirements.txt
 recursive-exclude **/__pycache__ *
-""", fp)
+""",
+				fp
+				)
 
 		for item in templates.globals["manifest_additional"]:
 			clean_writer(item, fp)
@@ -58,6 +60,8 @@ recursive-exclude **/__pycache__ *
 		for item in templates.globals["additional_requirements_files"]:
 			file = pathlib.Path(item)
 			clean_writer(f"{file.parent}/ {file.name}", fp)
+
+	return ["MANIFEST.in"]
 
 
 def make_setup(repo_path, templates):
@@ -73,6 +77,8 @@ def make_setup(repo_path, templates):
 	with (repo_path / "setup.py").open("w") as fp:
 		clean_writer(setup.render(), fp)
 
+	return ["setup.py"]
+
 
 def make_pkginfo(repo_path, templates):
 	"""
@@ -86,3 +92,5 @@ def make_pkginfo(repo_path, templates):
 
 	with (repo_path / "__pkginfo__.py").open("w") as fp:
 		clean_writer(__pkginfo__.render(), fp)
+
+	return ["__pkginfo__.py"]

@@ -21,7 +21,6 @@
 #  MA 02110-1301, USA.
 #
 
-
 # this package
 from .utils import clean_writer
 
@@ -29,7 +28,6 @@ __all__ = [
 		"ignores",
 		"make_gitignore",
 		]
-
 
 ignores = [
 		# Byte-compiled / optimized / DLL files
@@ -140,7 +138,6 @@ ignores = [
 		# mypy
 		".mypy_cache/",
 
-
 		# Covers JetBrains IDEs: IntelliJ, RubyMine, PhpStorm, AppCode, PyCharm, CLion, Android Studio, WebStorm and Rider
 		# Reference: https://intellij-support.jetbrains.com/hc/en-us/articles/206544839
 
@@ -168,7 +165,6 @@ ignores = [
 		"crashlytics.properties",
 		"crashlytics-build.properties",
 		"fabric.properties",
-
 		".idea",
 		"build",
 		"*.egg-info",
@@ -196,3 +192,4 @@ def make_gitignore(repo_path, templates):
 		for ignore in templates.globals["additional_ignore"]:
 			clean_writer(ignore, fp)
 
+	return [".gitignore"]
