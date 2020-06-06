@@ -1,10 +1,10 @@
 alabaster
 extras_require
 sphinx >=3.0.3
-sphinx-autodoc-typehints >=1.10.3
 sphinx-notfound-page
 sphinx-prompt >=1.2.0
 sphinx-tabs >=1.1.13
+sphinx_autodoc_typehints >=1.10.3
 sphinxcontrib-httpdomain >=1.7.0
 sphinxcontrib.autoprogram
 sphinxemoji >=0.1.6

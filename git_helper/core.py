@@ -24,24 +24,23 @@
 # stdlib
 import os.path
 import pathlib
+from typing import List
 
-# 3rd party
 import jinja2
-from domdf_python_tools.paths import maybe_make
-from dulwich import porcelain, repo
-
-# this package
 from .bots import make_auto_assign_action, make_dependabot, make_stale_bot
 from .ci_cd import make_copy_pypi_2_github, make_make_conda_recipe, make_travis, make_travis_deploy_conda
-from .docs import copy_docs_styling, ensure_doc_requirements, make_404_page, make_conf, make_rtfd, rewrite_docs_index
+from .docs import (
+		copy_docs_styling, ensure_doc_requirements, make_404_page, make_conf, make_rtfd, rewrite_docs_index
+		)
 from .gitignore import make_gitignore
 from .linting import lint_belligerent_list, lint_fix_list, lint_warn_list, make_lint_roller, make_pylintrc
 from .packaging import make_manifest, make_pkginfo, make_setup
 from .readme import rewrite_readme
 from .templates import template_dir
-from .testing import ensure_tests_requirements, make_tox, make_yapf
+from .testing import ensure_tests_requirements, make_isort, make_tox, make_yapf
 from .utils import clean_writer, enquote_value
 from .yaml_parser import parse_yaml
+from domdf_python_tools.paths import maybe_make
 
 __all__ = [
 		"GitHelper",
@@ -75,8 +74,6 @@ class GitHelper:
 		return self.templates.globals["repo_name"]
 
 	def run(self):
-		r = repo.Repo(".")
-
 		if not self.templates.globals["preserve_custom_theme"]:
 			all_managed_files = copy_docs_styling(self.target_repo, self.templates)
 		else:
@@ -92,32 +89,12 @@ class GitHelper:
 				for filename in output_filenames:
 					all_managed_files.append(str(filename))
 
-		status = porcelain.status(r)
-		unstaged_changes = status.unstaged
-		untracked_files = status.untracked
+		all_managed_files.append("git_helper.yml")
 
-		staged_files = []
-
-		for filename in all_managed_files:
-			if filename.encode("UTF-8") in unstaged_changes or filename in untracked_files:
-				r.stage(filename)
-				staged_files.append(filename)
-
-		if staged_files:
-			print("The following files will be committed:")
-			for filename in staged_files:
-				print(f"  {filename}")
-
-			res = input("Commit? [Y/n] ").lower()
-			if (res and res.startswith("y")) or not res:
-				r.do_commit(message=b"Updated files with `git_helper."),  # TODO: better message
-			else:
-				print("Changed files were staged but not committed.")
-		else:
-			print("Nothing to commit")
+		return all_managed_files
 
 
-def ensure_bumpversion(repo_path, templates):
+def ensure_bumpversion(repo_path: pathlib.Path, templates: jinja2.Environment) -> List[str]:
 	"""
 	Add configuration for ``bumpversion`` to the desired repo
 	https://pypi.org/project/bumpversion/
@@ -132,13 +109,15 @@ def ensure_bumpversion(repo_path, templates):
 
 	if not bumpversion_file.is_file():
 		with bumpversion_file.open("w") as fp:
-			fp.write(f"""\
+			fp.write(
+					f"""\
 [bumpversion]
 current_version = {templates.globals["version"]}
 commit = True
 tag = True
 
-""")
+"""
+					)
 
 	bumpversion_contents = bumpversion_file.read_text()
 
@@ -150,6 +129,7 @@ tag = True
 			"[bumpversion:file:git_helper.yml]",
 			"[bumpversion:file:__pkginfo__.py]",
 			"[bumpversion:file:README.rst]",
+			"[bumpversion:file:doc-source/index.rst]",
 			]
 
 	if templates.globals["py_modules"]:
@@ -167,7 +147,7 @@ tag = True
 	return [".bumpversion.cfg"]
 
 
-def make_issue_templates(repo_path, templates):
+def make_issue_templates(repo_path: pathlib.Path, templates: jinja2.Environment) -> List[str]:
 	"""
 	Add issue templates for GitHubto the desired repo
 
@@ -220,4 +200,5 @@ files = [
 		(ensure_bumpversion, "bumpversion", []),
 		(make_issue_templates, "issue_templates", []),
 		(make_404_page, "404", ["enable_docs"]),
+		(make_isort, "isort", []),  # Must always run last
 		]

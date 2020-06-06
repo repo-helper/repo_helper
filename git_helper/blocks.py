@@ -23,6 +23,7 @@
 
 # stdlib
 import re
+from typing import Optional, Sequence, Union
 
 # 3rd party
 from jinja2 import BaseLoader, Environment
@@ -135,15 +136,15 @@ shields_block_template = Environment(loader=BaseLoader).from_string(
 
 
 def create_shields_block(
-		username,
-		repo_name,
-		version,
-		conda=True,
-		tests=True,
-		docs=True,
-		travis_site="com",
-		pypi_name=None,
-		unique_name=''
+		username: str,
+		repo_name: str,
+		version: Union[str, int],
+		conda: bool = True,
+		tests: bool = True,
+		docs: bool = True,
+		travis_site: str = "com",
+		pypi_name: Optional[str] = None,
+		unique_name: str = '',
 		):
 	if unique_name:
 		unique_name = f"_{unique_name}"
@@ -195,7 +196,12 @@ To install with ``conda``:
 		)
 
 
-def create_readme_install_block(modname, conda=True, pypi_name=None, conda_channels=None):
+def create_readme_install_block(
+		modname: str,
+		conda: bool = True,
+		pypi_name: Optional[str] = None,
+		conda_channels: Optional[Sequence[str]] = None,
+		) -> str:
 	if not conda_channels and conda:
 		raise ValueError("Please supply a list of 'conda_channels' if Conda builds are supported")
 
@@ -210,7 +216,7 @@ def create_readme_install_block(modname, conda=True, pypi_name=None, conda_chann
 			)
 
 
-def create_short_desc_block(short_desc):
+def create_short_desc_block(short_desc: str) -> str:
 	return f"""\
 .. start short_desc
 
@@ -256,7 +262,12 @@ docs_installation_block_template = Environment(loader=BaseLoader).from_string(
 		)
 
 
-def create_docs_install_block(repo_name, conda=True, pypi_name=None, conda_channels=None):
+def create_docs_install_block(
+		repo_name: str,
+		conda: bool = True,
+		pypi_name: Optional[str] = None,
+		conda_channels: Optional[Sequence[str]] = None,
+		):
 	if not conda_channels and conda:
 		raise ValueError("Please supply a list of 'conda_channels' if Conda builds are supported")
 
@@ -264,7 +275,10 @@ def create_docs_install_block(repo_name, conda=True, pypi_name=None, conda_chann
 		pypi_name = repo_name
 
 	return docs_installation_block_template.render(
-			repo_name=repo_name, conda=conda, pypi_name=pypi_name, conda_channels=conda_channels
+			repo_name=repo_name,
+			conda=conda,
+			pypi_name=pypi_name,
+			conda_channels=conda_channels,
 			)
 
 
@@ -281,5 +295,5 @@ View the :ref:`Function Index <genindex>` or browse the `Source Code <_modules/i
 		)
 
 
-def create_docs_links_block(username, repo_name):
+def create_docs_links_block(username: str, repo_name: str) -> str:
 	return docs_links_block_template.render(username=username, repo_name=repo_name)

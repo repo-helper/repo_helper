@@ -22,11 +22,13 @@
 #
 
 # stdlib
+import pathlib
 import shutil
+from typing import List
 
-# this package
 from .templates import template_dir
 from .utils import clean_writer, make_executable
+from pandas.io.formats.style import jinja2
 
 __all__ = [
 		"lint_fix_list",
@@ -98,7 +100,7 @@ lint_warn_list = [
 # TODO: E302 results in tabs being converted to spaces. File bug report for autopep8
 
 
-def make_pylintrc(repo_path, templates):
+def make_pylintrc(repo_path: pathlib.Path, templates: jinja2.Environment) -> List[str]:
 	"""
 	Copy .pylintrc into the desired repository
 
@@ -113,7 +115,7 @@ def make_pylintrc(repo_path, templates):
 	return [".pylintrc"]
 
 
-def make_lint_roller(repo_path, templates):
+def make_lint_roller(repo_path: pathlib.Path, templates: jinja2.Environment) -> List[str]:
 	"""
 	Add the lint_roller.sh script to the desired repo
 

@@ -52,4 +52,4 @@ jobs:
         on:
           repo: domdfcoding/git_helper
         provider: script
-        script: python .ci/copy_pypi_2_github.py || travis_terminate 1
+        script: python .ci/copy_pypi_2_github.py || return 1;

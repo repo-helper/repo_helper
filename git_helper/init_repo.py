@@ -25,19 +25,18 @@
 import os.path
 import pathlib
 import shutil
-
-# 3rd party
-import jinja2
-from domdf_python_tools.paths import maybe_make
+from typing import List
 
 # this package
 from git_helper.templates import init_repo_template_dir
 from git_helper.utils import clean_writer
+import jinja2
+from domdf_python_tools.paths import maybe_make
 
 __all__ = ["init_repo"]
 
 
-def init_repo(repo_path, templates):
+def init_repo(repo_path: pathlib.Path, templates: jinja2.Environment) -> List[str]:
 	"""
 
 	:param repo_path: Path to the repository root
@@ -59,6 +58,7 @@ def init_repo(repo_path, templates):
 	# tests
 	maybe_make(repo_path / templates.globals["tests_dir"])
 	(repo_path / templates.globals["tests_dir"] / "__init__.py").open("a").close()
+	(repo_path / templates.globals["tests_dir"] / "requirements.txt").open("a").close()
 
 	if templates.globals["enable_docs"]:
 		# doc-source

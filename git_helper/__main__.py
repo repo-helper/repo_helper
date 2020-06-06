@@ -28,7 +28,7 @@ import sys
 
 # 3rd party
 from colorama import Fore
-from dulwich import repo
+from dulwich import repo, porcelain
 
 # this package
 from git_helper.core import GitHelper
@@ -50,6 +50,10 @@ def main():
 			action='store_true',
 			help="Run 'git_helper' even when the git working directory is not clean."
 			)
+	parser.add_argument(
+			"-n", dest="commit", action='store_false', help="Do not commit any changed files", default=None
+			)
+	parser.add_argument("-y", dest="commit", action='store_true', help="Commit any changed files")
 
 	args = parser.parse_args()
 
@@ -61,7 +65,7 @@ def main():
 	status, lines = check_git_status(gh.target_repo)
 
 	if not status:
-		if lines in (["M git_helper.yml"], ["A git_helper.yml"]):
+		if lines in (["M git_helper.yml"], ["A git_helper.yml"], ["AM git_helper.yml"]):
 			pass
 		else:
 			stderr_writer(f"{Fore.RED}Git working directory is not clean:")
@@ -80,7 +84,37 @@ def main():
 		for filename in init_repo(gh.target_repo, gh.templates):
 			r.stage(filename)
 
-	gh.run()
+	managed_files = gh.run()
+
+	r = repo.Repo(str(gh.target_repo))
+
+	status = porcelain.status(r)
+	unstaged_changes = status.unstaged
+	untracked_files = status.untracked
+
+	staged_files = []
+
+	for filename in managed_files:
+		if filename.encode("UTF-8") in unstaged_changes or filename in untracked_files:
+			r.stage(filename)
+			staged_files.append(filename)
+
+	if staged_files:
+		print("The following files will be committed:")
+		for filename in staged_files:
+			print(f"  {filename}")
+
+		if args.commit is None:
+			res = input("Commit? [Y/n] ").lower()
+			args.commit = ((res and res.startswith("y")) or not res)
+
+		if args.commit:
+			commit_id = r.do_commit(message=b"Updated files with `git_helper`.")  # TODO: better message
+			print(f"Committed as {commit_id.decode('UTF-8')}")
+		else:
+			print("Changed files were staged but not committed.")
+	else:
+		print("Nothing to commit")
 
 	# Find files that have been modified
 

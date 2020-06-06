@@ -3,14 +3,20 @@
 
 # This file is managed by `git_helper`. Don't edit it directly
 
+# stdlib
 import os
 import re
 import sys
+import warnings
+from sphinx.locale import _
+
+# Suppress warnings from sphinx_autodoc_typehints
+# TODO: Remove once the following issues is resolved:
+# https://github.com/agronholm/sphinx-autodoc-typehints/issues/133
+warnings.filterwarnings('ignore', message='sphinx.util.inspect.Signature\(\) is deprecated')
 
 sys.path.append(os.path.abspath('.'))
 sys.path.append(os.path.abspath('..'))
-
-from sphinx.locale import _
 
 from __pkginfo__ import __version__
 
@@ -28,7 +34,7 @@ author = "{{ rtfd_author }}"
 project = "{{ modname }}"
 slug = re.sub(r'\W+', '-', project.lower())
 release = version = __version__
-copyright = "{{ copyright_years }} {{ author }}"
+copyright = "{{ copyright_years }} {{ author }}"  # pylint: disable=redefined-builtin
 language = 'en'
 package_root = "{{ import_name.replace('.', '/') }}"
 
@@ -44,6 +50,7 @@ extensions = [
 		"notfound.extension",
 		"sphinx_tabs.tabs",
 		"sphinx-prompt",
+		"sphinx_autodoc_typehints",
 		{% for extension in extra_sphinx_extensions %}'{{ extension }}',{{ '\n' }}		{% endfor %}]
 
 sphinxemoji_style = 'twemoji'

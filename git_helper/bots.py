@@ -22,19 +22,19 @@
 #
 
 # stdlib
+import pathlib
 import shutil
+from typing import List
 
-# 3rd party
-from domdf_python_tools.paths import maybe_make
-
-# this package
+import jinja2
 from .templates import template_dir
 from .utils import clean_writer
+from domdf_python_tools.paths import maybe_make
 
 __all__ = ["make_dependabot", "make_auto_assign_action", "make_stale_bot"]
 
 
-def make_stale_bot(repo_path, templates):
+def make_stale_bot(repo_path: pathlib.Path, templates: jinja2.Environment) -> List[str]:
 	"""
 	Add configuration for ``stale`` to the desired repo
 
@@ -53,7 +53,7 @@ def make_stale_bot(repo_path, templates):
 	return [".github/stale.yml"]
 
 
-def make_auto_assign_action(repo_path, templates):
+def make_auto_assign_action(repo_path: pathlib.Path, templates: jinja2.Environment) -> List[str]:
 	"""
 	Add configuration for ``auto-assign`` to the desired repo
 
@@ -69,7 +69,8 @@ def make_auto_assign_action(repo_path, templates):
 	maybe_make(dot_github / "workflow", parents=True)
 
 	with (dot_github / "workflow" / "assign.yml").open("w") as fp:
-		clean_writer("""# This file is managed by `git_helper`. Don't edit it directly
+		clean_writer(
+				"""# This file is managed by `git_helper`. Don't edit it directly
 
 name: 'Auto Assign'
 on: pull_request
@@ -81,10 +82,13 @@ jobs:
       - uses: kentaro-m/auto-assign-action@v1.1.0
         with:
           repo-token: "${{ secrets.GITHUB_TOKEN }}"
-""", fp)
+""",
+				fp
+				)
 
 	with (dot_github / "auto_assign.yml").open("w") as fp:
-		clean_writer(f"""# This file is managed by `git_helper`. Don't edit it directly
+		clean_writer(
+				f"""# This file is managed by `git_helper`. Don't edit it directly
 
 # Set to true to add reviewers to pull requests
 addReviewers: true
@@ -114,10 +118,14 @@ numberOfReviewers: 0
 #   - wip
 
 # more settings at https://github.com/marketplace/actions/auto-assign-action
-""", fp)
+""",
+				fp
+				)
+
+	return [".github/workflow/assign.yml", ".github/auto_assign.yml"]
 
 
-def make_dependabot(repo_path, templates):
+def make_dependabot(repo_path: pathlib.Path, templates: jinja2.Environment) -> List[str]:
 	"""
 	Add configuration for ``dependabot`` to the desired repo
 
@@ -133,7 +141,8 @@ def make_dependabot(repo_path, templates):
 	maybe_make(dependabot_dir)
 
 	with (dependabot_dir / "config.yml").open("w") as fp:
-		clean_writer(f"""# This file is managed by `git_helper`. Don't edit it directly
+		clean_writer(
+				f"""# This file is managed by `git_helper`. Don't edit it directly
 
 version: 1
 update_configs:
@@ -142,4 +151,8 @@ update_configs:
     update_schedule: "weekly"
     default_reviewers:
       - "{templates.globals['username']}"
-""", fp)
+""",
+				fp
+				)
+
+	return [".dependabot/config.yml"]

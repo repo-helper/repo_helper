@@ -21,10 +21,7 @@
 #  MA 02110-1301, USA.
 #
 
-# 3rd party
 import yaml
-
-# this package
 from .utils import strtobool, validate_classifiers
 
 __all__ = [
@@ -83,7 +80,7 @@ def parse_yaml(repo_path):
 	python_versions, python_deploy_version, min_py_version = parse_python_versions(raw_config_vars)
 	tox_py_versions = get_tox_python_versions(python_versions)
 	tox_travis_versions = get_tox_travis_python_versions(python_versions, tox_py_versions)
-	tox_travis_versions[python_deploy_version] += ", docs"
+	tox_travis_versions[python_deploy_version] += ", docs, mypy"
 
 	config_vars["python_deploy_version"] = python_deploy_version
 	config_vars["python_versions"] = python_versions
@@ -197,6 +194,7 @@ def get_version_classifiers(python_versions):
 
 	for py_version in python_versions:
 		if py_version.startswith("3"):
+			py_version = py_version.replace("-dev", '')
 			for classifier in (
 					f'Programming Language :: Python :: {py_version}',
 					"Programming Language :: Python :: Implementation :: CPython",

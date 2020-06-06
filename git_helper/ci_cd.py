@@ -22,14 +22,14 @@
 #
 
 # stdlib
+import pathlib
 import shutil
+from typing import List
 
-# 3rd party
-from domdf_python_tools.paths import maybe_make
-
-# this package
 from .templates import template_dir
 from .utils import clean_writer, make_executable
+from domdf_python_tools.paths import maybe_make
+from pandas.io.formats.style import jinja2
 
 __all__ = [
 		"make_travis",
@@ -39,7 +39,7 @@ __all__ = [
 		]
 
 
-def make_travis(repo_path, templates):
+def make_travis(repo_path: pathlib.Path, templates: jinja2.Environment) -> List[str]:
 	"""
 	Add configuration for ``Travis-CI`` to the desired repo
 	https://travis-ci.com/
@@ -58,7 +58,7 @@ def make_travis(repo_path, templates):
 	return [".travis.yml"]
 
 
-def make_copy_pypi_2_github(repo_path, templates):
+def make_copy_pypi_2_github(repo_path: pathlib.Path, templates: jinja2.Environment) -> List[str]:
 	"""
 	Add script to copy files from PyPI to GitHub Releases
 
@@ -81,7 +81,7 @@ def make_copy_pypi_2_github(repo_path, templates):
 	return [".ci/copy_pypi_2_github.py"]
 
 
-def make_make_conda_recipe(repo_path, templates):
+def make_make_conda_recipe(repo_path: pathlib.Path, templates: jinja2.Environment) -> List[str]:
 	"""
 	Add script to create a Conda recipe for the package
 
@@ -96,7 +96,7 @@ def make_make_conda_recipe(repo_path, templates):
 	return ["make_conda_recipe.py"]
 
 
-def make_travis_deploy_conda(repo_path, templates):
+def make_travis_deploy_conda(repo_path: pathlib.Path, templates: jinja2.Environment) -> List[str]:
 	"""
 	Add script to build Conda package and deploy to Anaconda
 

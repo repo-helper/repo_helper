@@ -23,9 +23,10 @@
 
 # stdlib
 import pathlib
+from typing import List
 
-# this package
 from .utils import clean_writer
+from pandas.io.formats.style import jinja2
 
 __all__ = [
 		"make_manifest",
@@ -34,7 +35,7 @@ __all__ = [
 		]
 
 
-def make_manifest(repo_path, templates):
+def make_manifest(repo_path: pathlib.Path, templates: jinja2.Environment) -> List[str]:
 	"""
 
 	:param repo_path: Path to the repository root
@@ -61,10 +62,13 @@ recursive-exclude **/__pycache__ *
 			file = pathlib.Path(item)
 			clean_writer(f"{file.parent}/ {file.name}", fp)
 
+		clean_writer(f"recursive-include {templates.globals['import_name']}/ *.pyi", fp)
+		clean_writer(f"recursive-include {templates.globals['import_name']}/ py.typed", fp)
+
 	return ["MANIFEST.in"]
 
 
-def make_setup(repo_path, templates):
+def make_setup(repo_path: pathlib.Path, templates: jinja2.Environment) -> List[str]:
 	"""
 	:param repo_path: Path to the repository root
 	:type repo_path: pathlib.Path
@@ -80,7 +84,7 @@ def make_setup(repo_path, templates):
 	return ["setup.py"]
 
 
-def make_pkginfo(repo_path, templates):
+def make_pkginfo(repo_path: pathlib.Path, templates: jinja2.Environment) -> List[str]:
 	"""
 	:param repo_path: Path to the repository root
 	:type repo_path: pathlib.Path

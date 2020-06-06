@@ -16,7 +16,7 @@ git_helper
 	  - |pypi-version| |supported-versions| |supported-implementations| |wheel|
 	* - Other
 	  - |license| |language| |commits-since| |commits-latest| |maintained| 
-	
+
 .. |docs| image:: https://readthedocs.org/projects/git_helper/badge/?version=latest
 	:target: https://git_helper.readthedocs.io/en/latest/?badge=latest
 	:alt: Documentation Status
@@ -24,7 +24,7 @@ git_helper
 .. |travis| image:: https://img.shields.io/travis/com/domdfcoding/git_helper/master?logo=travis
 	:target: https://travis-ci.com/domdfcoding/git_helper
 	:alt: Travis Build Status
-	
+
 .. |requires| image:: https://requires.io/github/domdfcoding/git_helper/requirements.svg?branch=master
 	:target: https://requires.io/github/domdfcoding/git_helper/requirements/?branch=master
 	:alt: Requirements Status

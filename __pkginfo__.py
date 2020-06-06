@@ -1,20 +1,15 @@
-# This file is managed by `git_helper`. Don't edit it directly
-# Copyright (C) 2020 Dominic Davis-Foster <dominic@davis-foster.co.uk>
+#  This file is managed by `git_helper`. Don't edit it directly
+#  Copyright (C) 2020 Dominic Davis-Foster <dominic@davis-foster.co.uk>
 #
-#  This program is free software: you can redistribute it and/or modify
-#  it under the terms of the GNU General Public License as published by
-#  the Free Software Foundation, either version 3 of the License, or
-#  (at your option) any later version.
+#  This file is distributed under the same license terms as the program it came with.
+#  There will probably be a file called LICEN[S/C]E in the same directory as this file.
 #
-#  This program is distributed in the hope that it will be useful,
+#  In any case, this program is distributed in the hope that it will be useful,
 #  but WITHOUT ANY WARRANTY; without even the implied warranty of
-#  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-#  GNU General Public License for more details.
+#  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 #
-#  You should have received a copy of the GNU General Public License
-#  along with this program.  If not, see <http://www.gnu.org/licenses/>.
-
 # This script based on https://github.com/rocky/python-uncompyle6/blob/master/__pkginfo__.py
+#
 
 import pathlib
 
@@ -65,7 +60,7 @@ author_email = "dominic@davis-foster.co.uk"
 github_username = "domdfcoding"
 web = github_url = f"https://github.com/domdfcoding/git_helper"
 project_urls = {
-		"Documentation": f"https://git_helper.readthedocs.io",  # TODO: Make this link match the package version
+		"Documentation": f"https://git_helper.readthedocs.io",
 		"Issue Tracker": f"{github_url}/issues",
 		"Source Code": github_url,
 		}

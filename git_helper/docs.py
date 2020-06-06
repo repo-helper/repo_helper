@@ -23,7 +23,9 @@
 
 # stdlib
 import os.path
+import pathlib
 import shutil
+from typing import List
 
 # this package
 from git_helper.blocks import (
@@ -34,9 +36,10 @@ from git_helper.blocks import (
 		installation_regex,
 		links_regex,
 		shields_regex,
-		short_desc_regex,
+		short_desc_regex
 		)
 from git_helper.utils import clean_writer, ensure_requirements
+import jinja2
 from .templates import template_dir
 
 __all__ = [
@@ -49,7 +52,7 @@ __all__ = [
 		]
 
 
-def ensure_doc_requirements(repo_path, templates):
+def ensure_doc_requirements(repo_path: pathlib.Path, templates: jinja2.Environment) -> List[str]:
 	"""
 	Ensure ``<docs_dir>/requirements.txt`` contains the required entries.
 
@@ -69,7 +72,8 @@ def ensure_doc_requirements(repo_path, templates):
 			("sphinxemoji", "0.1.6"),
 			("sphinx-notfound-page", None),
 			("sphinx-tabs", "1.1.13"),
-			("sphinx-prompt", "1.2.0"),  # ("sphinx-autodoc-typehints", "1.10.3"),
+			("sphinx_autodoc_typehints", "1.10.3"),
+			("sphinx-prompt", "1.2.0"),
 			}
 
 	test_req_file = repo_path / templates.globals["docs_dir"] / "requirements.txt"
@@ -79,7 +83,7 @@ def ensure_doc_requirements(repo_path, templates):
 	return [os.path.join(templates.globals["docs_dir"], "requirements.txt")]
 
 
-def make_rtfd(repo_path, templates):
+def make_rtfd(repo_path: pathlib.Path, templates: jinja2.Environment) -> List[str]:
 	"""
 	Add configuration for ``ReadTheDocs``
 	https://readthedocs.org/
@@ -91,7 +95,8 @@ def make_rtfd(repo_path, templates):
 	"""
 
 	with (repo_path / ".readthedocs.yml").open("w") as fp:
-		clean_writer(f"""# This file is managed by `git_helper`. Don't edit it directly
+		clean_writer(
+				f"""# This file is managed by `git_helper`. Don't edit it directly
 
 # .readthedocs.yml
 # Read the Docs configuration file
@@ -114,14 +119,16 @@ python:
   install:
     - requirements: requirements.txt
     - requirements: {templates.globals["docs_dir"]}/requirements.txt
-""", fp)
+""",
+				fp
+				)
 		for file in templates.globals["additional_requirements_files"]:
 			clean_writer(f"    - requirements: { file }", fp)
 
 	return [".readthedocs.yml"]
 
 
-def make_conf(repo_path, templates):
+def make_conf(repo_path: pathlib.Path, templates: jinja2.Environment) -> List[str]:
 	"""
 	Add ``conf.py`` configuration file for ``Sphinx``
 
@@ -180,7 +187,7 @@ def make_conf(repo_path, templates):
 	return [os.path.join(templates.globals["docs_dir"], "conf.py")]
 
 
-def copy_docs_styling(repo_path, templates):
+def copy_docs_styling(repo_path: pathlib.Path, templates: jinja2.Environment) -> List[str]:
 	"""
 	Copy custom styling for documentation to the desired repository
 
@@ -198,20 +205,26 @@ def copy_docs_styling(repo_path, templates):
 			directory.mkdir(parents=True)
 
 	with (dest__static_dir / "style.css").open("w") as fp:
-		clean_writer("""/* This file is managed by `git_helper`. Don't edit it directly */
+		clean_writer(
+				"""/* This file is managed by `git_helper`. Don't edit it directly */
 
 .wy-nav-content {max-width: 900px !important;}
 
 li p:last-child { margin-bottom: 12px !important;}
-""", fp)
+""",
+				fp
+				)
 
 	with (dest__templates_dir / "layout.html").open("w") as fp:
-		clean_writer("""<!--- This file is managed by `git_helper`. Don't edit it directly --->
+		clean_writer(
+				"""<!--- This file is managed by `git_helper`. Don't edit it directly --->
 {% extends "!layout.html" %}
 {% block extrahead %}
 	<link href="{{ pathto("_static/style.css", True) }}" rel="stylesheet" type="text/css">
 {% endblock %}
-""", fp)
+""",
+				fp
+				)
 
 	return [
 			os.path.join(templates.globals["docs_dir"], "_static", "style.css"),
@@ -219,7 +232,7 @@ li p:last-child { margin-bottom: 12px !important;}
 			]
 
 
-def rewrite_docs_index(repo_path, templates):
+def rewrite_docs_index(repo_path: pathlib.Path, templates: jinja2.Environment) -> List[str]:
 	"""
 
 	:param repo_path: Path to the repository root
@@ -278,7 +291,7 @@ def rewrite_docs_index(repo_path, templates):
 	return [os.path.join(templates.globals["docs_dir"], "index.rst")]
 
 
-def make_404_page(repo_path, templates):
+def make_404_page(repo_path: pathlib.Path, templates: jinja2.Environment) -> List[str]:
 	"""
 
 	:param repo_path: Path to the repository root

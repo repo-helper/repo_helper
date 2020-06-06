@@ -21,6 +21,10 @@
 #  MA 02110-1301, USA.
 #
 
+# stdlib
+import pathlib
+from typing import List
+
 # this package
 from git_helper.blocks import (
 		create_readme_install_block,
@@ -28,13 +32,14 @@ from git_helper.blocks import (
 		create_short_desc_block,
 		installation_regex,
 		shields_regex,
-		short_desc_regex,
+		short_desc_regex
 		)
+from pandas.io.formats.style import jinja2
 
 __all__ = ["rewrite_readme"]
 
 
-def rewrite_readme(repo_path, templates):
+def rewrite_readme(repo_path: pathlib.Path, templates: jinja2.Environment) -> List[str]:
 	"""
 
 	:param repo_path: Path to the repository root

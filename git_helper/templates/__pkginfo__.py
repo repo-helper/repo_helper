@@ -11,6 +11,7 @@
 # This script based on https://github.com/rocky/python-uncompyle6/blob/master/__pkginfo__.py
 #
 
+# stdlib
 import pathlib
 
 __all__ = [

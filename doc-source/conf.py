@@ -27,7 +27,7 @@ author = "Dominic Davis-Foster"
 project = "git_helper"
 slug = re.sub(r'\W+', '-', project.lower())
 release = version = __version__
-copyright = "2020 Dominic Davis-Foster"
+copyright = "2020 Dominic Davis-Foster"  # pylint: disable=redefined-builtin
 language = 'en'
 package_root = "git_helper"
 
@@ -43,6 +43,7 @@ extensions = [
 		"notfound.extension",
 		"sphinx_tabs.tabs",
 		"sphinx-prompt",
+		"sphinx_autodoc_typehints",
 		'tox_conf_directive',
 		]
 

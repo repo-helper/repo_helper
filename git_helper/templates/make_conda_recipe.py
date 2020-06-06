@@ -2,13 +2,14 @@
 
 # This file is managed by `git_helper`. Don't edit it directly
 
-import platform
-import rst2txt
+# stdlib
 import sys
-from docutils.core import publish_file
+import platform
 from io import StringIO
 
-from __pkginfo__ import *
+import rst2txt
+from __pkginfo__ import *  # pylint: disable=wildcard-import
+from docutils.core import publish_file
 
 recipe_dir = repo_root / "conda"
 
