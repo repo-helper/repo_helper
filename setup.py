@@ -2,9 +2,10 @@
 # This file is managed by `git_helper`. Don't edit it directly
 """Setup script"""
 
-from __pkginfo__ import *  # pylint: disable=wildcard-import
+# 3rd party
+from setuptools import find_packages, setup
 
-from setuptools import setup, find_packages
+from __pkginfo__ import *  # pylint: disable=wildcard-import
 
 setup(
 		author=author,
@@ -25,5 +26,6 @@ setup(
 		url=web,
 		version=__version__,
 		keywords=keywords,
+		zip_safe=False,
 
 		)

@@ -4,3 +4,5 @@ include requirements.txt
 recursive-exclude **/__pycache__ *
 recursive-include git_helper/templates *
 recursive-include git_helper/init_repo_files *
+recursive-include git_helper/ *.pyi
+recursive-include git_helper/ py.typed
