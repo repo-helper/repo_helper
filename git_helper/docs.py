@@ -27,6 +27,9 @@ import pathlib
 import shutil
 from typing import List
 
+# 3rd party
+import jinja2
+
 # this package
 from git_helper.blocks import (
 		create_docs_install_block,
@@ -39,7 +42,8 @@ from git_helper.blocks import (
 		short_desc_regex
 		)
 from git_helper.utils import clean_writer, ensure_requirements
-import jinja2
+
+# this package
 from .templates import template_dir
 
 __all__ = [

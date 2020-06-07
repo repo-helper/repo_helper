@@ -24,9 +24,12 @@
 # stdlib
 import os.path
 import pathlib
-from typing import List
+from typing import Callable, List, Sequence, Tuple, Union
 
+# 3rd party
 import jinja2
+
+# this package
 from .bots import make_auto_assign_action, make_dependabot, make_stale_bot
 from .ci_cd import make_copy_pypi_2_github, make_make_conda_recipe, make_travis, make_travis_deploy_conda
 from .docs import (
@@ -52,12 +55,22 @@ __all__ = [
 
 class GitHelper:
 
-	def __init__(self, target_repo):
-		self.target_repo = target_repo
+	def __init__(self, target_repo: Union[str, pathlib.Path, os.PathLike]):
+		"""
+
+		:param target_repo:
+		:type target_repo:
+		"""
+
+		self.target_repo = pathlib.Path(target_repo)
 		self.templates = jinja2.Environment(loader=jinja2.FileSystemLoader(str(template_dir)))
 		self.load_settings()
 
-	def load_settings(self):
+	def load_settings(self) -> None:
+		"""
+		Load settings from the ``git_helper.yml`` file in the repository.
+		"""
+
 		config_vars = parse_yaml(self.target_repo)
 		self.templates.globals.update(config_vars)
 		self.templates.globals["lint_fix_list"] = lint_fix_list
@@ -66,14 +79,14 @@ class GitHelper:
 		self.templates.globals["enquote_value"] = enquote_value
 
 	@property
-	def exclude_files(self):
+	def exclude_files(self) -> List[str]:
 		return self.templates.globals["exclude_files"]
 
 	@property
-	def repo_name(self):
+	def repo_name(self) -> str:
 		return self.templates.globals["repo_name"]
 
-	def run(self):
+	def run(self) -> List[str]:
 		if not self.templates.globals["preserve_custom_theme"]:
 			all_managed_files = copy_docs_styling(self.target_repo, self.templates)
 		else:
@@ -175,7 +188,7 @@ def make_issue_templates(repo_path: pathlib.Path, templates: jinja2.Environment)
 			]
 
 
-files = [
+files: List[Tuple[Callable, str, Sequence[str]]] = [
 		(make_copy_pypi_2_github, "copy_pypi_2_github", ["enable_releases"]),
 		(make_lint_roller, "lint_roller", []),
 		(make_stale_bot, "stale_bot", []),

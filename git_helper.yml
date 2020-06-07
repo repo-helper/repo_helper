@@ -11,6 +11,9 @@ short_desc: 'Update multiple configuration files, build scripts etc. from a sing
 #enable_tests: False
 enable_conda: False
 
+exclude_files:
+  - tox
+
 additional_ignore:
   - Tokens
 
@@ -35,6 +38,7 @@ python_versions:
 manifest_additional:
   - "recursive-include git_helper/templates *"
   - "recursive-include git_helper/init_repo_files *"
+  - "include git_helper git_helper_schema.json"
 
 classifiers:
   - 'Development Status :: 4 - Beta'

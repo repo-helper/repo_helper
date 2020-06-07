@@ -27,10 +27,14 @@ import pathlib
 import shutil
 from typing import List
 
+# 3rd party
+import jinja2
+
 # this package
 from git_helper.templates import init_repo_template_dir
 from git_helper.utils import clean_writer
-import jinja2
+
+# this package
 from domdf_python_tools.paths import maybe_make
 
 __all__ = ["init_repo"]

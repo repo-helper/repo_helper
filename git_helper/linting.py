@@ -26,9 +26,12 @@ import pathlib
 import shutil
 from typing import List
 
+# 3rd party
+import jinja2
+
+# this package
 from .templates import template_dir
 from .utils import clean_writer, make_executable
-from pandas.io.formats.style import jinja2
 
 __all__ = [
 		"lint_fix_list",
@@ -110,7 +113,7 @@ def make_pylintrc(repo_path: pathlib.Path, templates: jinja2.Environment) -> Lis
 	:type templates: jinja2.Environment
 	"""
 
-	shutil.copy2(template_dir / "pylintrc", repo_path / ".pylintrc")
+	shutil.copy2(str(template_dir / "pylintrc"), str(repo_path / ".pylintrc"))
 
 	return [".pylintrc"]
 

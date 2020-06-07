@@ -26,7 +26,10 @@ import pathlib
 import shutil
 from typing import List
 
+# 3rd party
 import jinja2
+
+# this package
 from .templates import template_dir
 from .utils import clean_writer
 from domdf_python_tools.paths import maybe_make
@@ -48,7 +51,7 @@ def make_stale_bot(repo_path: pathlib.Path, templates: jinja2.Environment) -> Li
 
 	dot_github = repo_path / ".github"
 	maybe_make(dot_github)
-	shutil.copy2(template_dir / "stale_bot.yaml", dot_github / "stale.yml")
+	shutil.copy2(str(template_dir / "stale_bot.yaml"), str(dot_github / "stale.yml"))
 
 	return [".github/stale.yml"]
 

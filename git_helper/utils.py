@@ -23,15 +23,19 @@
 
 # stdlib
 import os
+import pathlib
 import stat
 import subprocess
 import sys
 from numbers import Number
+from typing import IO, Any, Iterable, List, Optional, Tuple, Union
 
 # 3rd party
-import requirements
-import trove_classifiers
-from colorama import Fore
+import trove_classifiers  # type: ignore
+from colorama import Fore  # type: ignore
+
+# this package
+import requirements  # type: ignore
 from domdf_python_tools.paths import maybe_make
 
 __all__ = [
@@ -47,7 +51,7 @@ __all__ = [
 		]
 
 
-def clean_writer(string, fp):
+def clean_writer(string: str, fp: IO[str]):
 	"""
 	Write string to fp without trailing spaces
 
@@ -82,7 +86,7 @@ def make_executable(filename):
 	os.chmod(str(filename), st.st_mode | stat.S_IXUSR | stat.S_IXGRP | stat.S_IXOTH)
 
 
-def check_git_status(repo_path):
+def check_git_status(repo_path: pathlib.Path) -> Tuple[bool, List[str]]:
 	"""
 	Check the ``git`` status of the given repository
 
@@ -106,12 +110,12 @@ def check_git_status(repo_path):
 
 	os.chdir(oldwd)
 
-	lines = [line.decode("UTF-8") for line in lines]
+	str_lines = [line.decode("UTF-8") for line in lines]
 
-	return not bool(lines), lines
+	return not bool(str_lines), str_lines
 
 
-def get_git_status(repo_path):
+def get_git_status(repo_path: pathlib.Path) -> str:
 	"""
 	Returns the output of ``git status``
 
@@ -131,7 +135,7 @@ def get_git_status(repo_path):
 	return status
 
 
-def ensure_requirements(requirements_list, requirements_file):
+def ensure_requirements(requirements_list: Iterable[Tuple[str, Optional[str]]], requirements_file: pathlib.Path):
 	"""
 	Ensure the given requirements file contains the required entries.
 
@@ -146,7 +150,7 @@ def ensure_requirements(requirements_list, requirements_file):
 	target_packages = [req[0] for req in requirements_list]
 
 	if requirements_file.is_file():
-		with open(requirements_file) as fp:
+		with requirements_file.open() as fp:
 			test_requirements = list(requirements.parse(fp))
 
 	else:
@@ -173,9 +177,9 @@ def ensure_requirements(requirements_list, requirements_file):
 		clean_writer("\n".join(sorted(output_buffer)), fp)
 
 
-def strtobool(val):
+def strtobool(val: Union[str, bool]) -> bool:
 	"""
-	Convert a string representation of truth to ``True`` (1) or ``False`` (0).
+	Convert a string representation of truth to ``True`` or ``False``.
 
 	If val is an integer then its boolean representation is returned. If val is a boolean it is returned as-is.
 
@@ -191,14 +195,14 @@ def strtobool(val):
 
 	val = val.lower()
 	if val in ('y', 'yes', 't', 'true', 'on', '1'):
-		return 1
+		return True
 	elif val in ('n', 'no', 'f', 'false', 'off', '0'):
-		return 0
+		return False
 	else:
 		raise ValueError(f"invalid truth value {val!r}")
 
 
-def enquote_value(value):
+def enquote_value(value: Any) -> Union[str, bool, Number]:
 	if value in {"True", "False", "None", True, False, None}:
 		return value
 	elif isinstance(value, Number):
@@ -218,7 +222,7 @@ def stderr_writer(*args, **kwargs):
 	sys.stderr.flush()
 
 
-def validate_classifiers(classifiers):
+def validate_classifiers(classifiers: Iterable[str]):
 	for classifier in classifiers:
 		if classifier in trove_classifiers.deprecated_classifiers:
 			stderr_writer(f"{Fore.YELLOW}Classifier '{classifier}' is deprecated!")

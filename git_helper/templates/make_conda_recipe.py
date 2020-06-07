@@ -3,10 +3,11 @@
 # This file is managed by `git_helper`. Don't edit it directly
 
 # stdlib
-import sys
 import platform
+import sys
 from io import StringIO
 
+# this package
 import rst2txt
 from __pkginfo__ import *  # pylint: disable=wildcard-import
 from docutils.core import publish_file

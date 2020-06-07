@@ -27,8 +27,8 @@ import pathlib
 import sys
 
 # 3rd party
-from colorama import Fore
-from dulwich import repo, porcelain
+from colorama import Fore  # type: ignore
+from dulwich import porcelain, repo  # type: ignore
 
 # this package
 from git_helper.core import GitHelper
@@ -40,20 +40,36 @@ def main():
 	parser = argparse.ArgumentParser(
 			description='Update files in the given repository, based on settings in `git_helper.yml`'
 			)
-	parser.add_argument('path', type=pathlib.Path, nargs='?', help='The path to the repository')
 	parser.add_argument(
-			'--initialise', action='store_true', help='Initialise the repository with some boilerplate files.'
+			'path',
+			type=pathlib.Path,
+			nargs='?',
+			help='The path to the repository',
+			)
+	parser.add_argument(
+			'--initialise',
+			action='store_true',
+			help='Initialise the repository with some boilerplate files.',
 			)
 	parser.add_argument(
 			"-f",
 			'--force',
 			action='store_true',
-			help="Run 'git_helper' even when the git working directory is not clean."
+			help="Run 'git_helper' even when the git working directory is not clean.",
 			)
 	parser.add_argument(
-			"-n", dest="commit", action='store_false', help="Do not commit any changed files", default=None
+			"-n",
+			dest="commit",
+			action='store_false',
+			help="Do not commit any changed files",
+			default=None,
 			)
-	parser.add_argument("-y", dest="commit", action='store_true', help="Commit any changed files")
+	parser.add_argument(
+			"-y",
+			dest="commit",
+			action='store_true',
+			help="Commit any changed files",
+			)
 
 	args = parser.parse_args()
 
@@ -115,8 +131,6 @@ def main():
 			print("Changed files were staged but not committed.")
 	else:
 		print("Nothing to commit")
-
-	# Find files that have been modified
 
 
 if __name__ == '__main__':

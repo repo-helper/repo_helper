@@ -27,11 +27,13 @@ import pathlib
 import textwrap
 from typing import List
 
-import requirements
-from .utils import clean_writer, ensure_requirements
-from pandas.io.formats.style import jinja2
+# 3rd party
+import jinja2
+from configupdater import ConfigUpdater  # type: ignore
 
-from configupdater import ConfigUpdater  # isort:skip
+# this package
+import requirements  # type: ignore
+from .utils import clean_writer, ensure_requirements
 
 __all__ = ["make_tox", "make_yapf", "make_isort", "ensure_tests_requirements"]
 
@@ -264,12 +266,36 @@ def make_isort(repo_path: pathlib.Path, templates: jinja2.Environment) -> List[s
 		all_requirements.add(req.name)
 
 	all_requirements.discard(templates.globals["import_name"])
-	known_third_party = textwrap.indent("\n".join(sorted(all_requirements)), "    ")
-
-	isort = templates.get_template("isort.cfg")
 
 	with (repo_path / ".isort.cfg").open("w") as fp:
-		clean_writer(isort.render(known_third_party=known_third_party), fp)
+		clean_writer(
+				"""
+[settings]
+line_length=115
+force_to_top=True
+indent=Tab
+multi_line_output=3
+import_heading_stdlib=stdlib
+import_heading_thirdparty=3rd party
+import_heading_firstparty=this package
+import_heading_localfolder=this package
+balanced_wrapping=False
+lines_between_types=0
+use_parentheses=True
+default_section=THIRDPARTY
+;no_lines_before=LOCALFOLDER
+known_third_party=
+    github
+    requests
+""",
+				fp
+				)
+
+		for package in sorted(all_requirements):
+			clean_writer(textwrap.indent(package, "    "), fp)
+
+		clean_writer(f"""known_first_party=
+{textwrap.indent(templates.globals["import_name"], '    ')}""", fp)
 
 	return [".isort.cfg"]
 
@@ -292,8 +318,7 @@ def ensure_tests_requirements(repo_path: pathlib.Path, templates: jinja2.Environ
 			("pytest-rerunfailures", "9.0"),
 			}
 
-	test_req_file = repo_path / templates.globals["tests_dir"] / "requirements.txt"
+	test_req_file = os.path.join(templates.globals["tests_dir"], "requirements.txt")
+	ensure_requirements(target_requirements, repo_path / test_req_file)
 
-	ensure_requirements(target_requirements, test_req_file)
-
-	return [os.path.join(templates.globals["tests_dir"], "requirements.txt")]
+	return [test_req_file]

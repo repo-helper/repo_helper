@@ -20,9 +20,18 @@
 #  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
 #  MA 02110-1301, USA.
 #
+# stdlib
+import pathlib
+from typing import Any, Dict, Iterable, List, Optional, Tuple, Union
 
+# this package
+import git_helper
+
+# this package
+import importlib_resources  # type: ignore
 import yaml
 from .utils import strtobool, validate_classifiers
+from ytools import validate  # type: ignore  # TODO
 
 __all__ = [
 		"parse_yaml",
@@ -34,7 +43,7 @@ __all__ = [
 		]
 
 
-def parse_yaml(repo_path):
+def parse_yaml(repo_path: pathlib.Path):
 	"""
 
 	:param repo_path: Path to the repository root
@@ -43,6 +52,9 @@ def parse_yaml(repo_path):
 	:return:
 	:rtype: dict
 	"""
+
+	with importlib_resources.path(git_helper, "git_helper_schema.json") as schema:
+		validate(str(schema), [repo_path / "git_helper.yml"])
 
 	config_vars = {}
 
@@ -54,57 +66,52 @@ def parse_yaml(repo_path):
 
 	# --------------------------------------
 
+	# Metadata
 	config_vars["author"] = raw_config_vars.get("author")
-	config_vars["rtfd_author"] = raw_config_vars.get("rtfd_author", config_vars["author"])
 	config_vars["email"] = raw_config_vars.get("email")
 	config_vars["username"] = raw_config_vars.get("username")
-
+	config_vars["modname"] = raw_config_vars.get("modname")
 	config_vars["version"] = raw_config_vars.get("version")
 	config_vars["copyright_years"] = raw_config_vars.get("copyright_years")
-
-	config_vars["modname"] = raw_config_vars.get("modname")
 	config_vars["repo_name"] = raw_config_vars.get("repo_name", config_vars["modname"])
 	config_vars["pypi_name"] = raw_config_vars.get("pypi_name", config_vars["modname"])
 	config_vars["import_name"] = raw_config_vars.get("import_name", config_vars["modname"].replace("-", "_"))
+	# classifiers
+	# keywords
+	# license
+	config_vars["short_desc"] = raw_config_vars.get("short_desc", "")
 
-	# config_vars["lint_fix_list"] = lint_fix_list
-	# config_vars["lint_belligerent_list"] = lint_belligerent_list
-	# config_vars["lint_warn_list"] = lint_warn_list
-
+	# Optional Features
 	config_vars["enable_tests"] = strtobool(raw_config_vars.get("enable_tests", "True"))
-	config_vars["enable_conda"] = strtobool(raw_config_vars.get("enable_conda", "True"))
-	config_vars["enable_docs"] = strtobool(raw_config_vars.get("enable_docs", "True"))
 	config_vars["enable_releases"] = strtobool(raw_config_vars.get("enable_releases", "True"))
-	config_vars["preserve_custom_theme"] = strtobool(raw_config_vars.get("preserve_custom_theme", "False"))
 
+	# Python Versions
 	python_versions, python_deploy_version, min_py_version = parse_python_versions(raw_config_vars)
-	tox_py_versions = get_tox_python_versions(python_versions)
-	tox_travis_versions = get_tox_travis_python_versions(python_versions, tox_py_versions)
-	tox_travis_versions[python_deploy_version] += ", docs, mypy"
-
 	config_vars["python_deploy_version"] = python_deploy_version
 	config_vars["python_versions"] = python_versions
 	config_vars["min_py_version"] = min_py_version
-	config_vars["tox_py_versions"] = tox_py_versions
-	config_vars["tox_travis_versions"] = tox_travis_versions
 
+	# Packaging
 	for var_name in {
-			"conda_channels",
-			"additional_ignore",
-			"exclude_files",
-			"travis_additional_requirements",
-			"travis_extra_install_pre",
-			"travis_extra_install_post",
-			"tox_requirements",
-			"tox_build_requirements",
-			"classifiers",
-			"keywords",
-			"extra_sphinx_extensions",
-			"intersphinx_mapping",
 			"manifest_additional",
 			"py_modules",
 			"console_scripts",
-			"pkginfo_extra",
+			}:
+		config_vars[var_name] = raw_config_vars.get(var_name, [])
+	config_vars["additional_setup_args"] = "\n".join([
+			"\t\t{}={},".format(*x) for x in raw_config_vars.get("additional_setup_args", {}).items()
+			])
+	extras_require, additional_requirements_files = parse_extras(raw_config_vars, repo_path)
+	config_vars["extras_require"] = extras_require
+	config_vars["additional_requirements_files"] = additional_requirements_files
+
+	# Documentation
+	config_vars["rtfd_author"] = raw_config_vars.get("rtfd_author", config_vars["author"])
+	config_vars["preserve_custom_theme"] = strtobool(raw_config_vars.get("preserve_custom_theme", "False"))
+	config_vars["sphinx_html_theme"] = raw_config_vars.get("sphinx_html_theme", "sphinx_rtd_theme")
+	for var_name in {
+			"extra_sphinx_extensions",
+			"intersphinx_mapping",
 			"sphinx_conf_preamble",
 			"sphinx_conf_epilogue",
 			}:
@@ -116,15 +123,57 @@ def parse_yaml(repo_path):
 			}:
 		config_vars[var_name] = raw_config_vars.get(var_name, {})
 
-	for var_name in {"short_desc", "tox_testenv_extras"}:
-		config_vars[var_name] = raw_config_vars.get(var_name, "")
+	# Tox
+	tox_py_versions = get_tox_python_versions(python_versions)
+	config_vars["tox_py_versions"] = tox_py_versions
+	for var_name in {
+			"tox_requirements",
+			"tox_build_requirements",
+			}:
+		config_vars[var_name] = raw_config_vars.get(var_name, [])
+	config_vars["tox_testenv_extras"] = raw_config_vars.get("tox_testenv_extras", "")
 
-	config_vars["sphinx_html_theme"] = raw_config_vars.get("sphinx_html_theme", "sphinx_rtd_theme")
-	config_vars["travis_ubuntu_version"] = raw_config_vars.get("travis_ubuntu_version", "xenial")
+	# Travis
+	tox_travis_versions = get_tox_travis_python_versions(python_versions, tox_py_versions)
+	tox_travis_versions[python_deploy_version] += ", docs, mypy"
+	config_vars["tox_travis_versions"] = tox_travis_versions
+	config_vars["travis_site"] = raw_config_vars.get("travis_site", "com")
+	config_vars["travis_pypi_secure"] = raw_config_vars.get("travis_pypi_secure")
+	for var_name in {
+			"travis_extra_install_pre",
+			"travis_extra_install_post",
+			"travis_additional_requirements",
+			}:
+		config_vars[var_name] = raw_config_vars.get(var_name, [])
 
+	# Conda & Anaconda
+	config_vars["enable_conda"] = strtobool(raw_config_vars.get("enable_conda", "True"))
+	config_vars["conda_channels"] = raw_config_vars.get("conda_channels", [])
 	config_vars["conda_description"] = raw_config_vars.get("conda_description", config_vars["short_desc"])
 
-	config_vars["travis_site"] = raw_config_vars.get("travis_site", "com")
+	# Other
+	config_vars["tests_dir"] = raw_config_vars.get("tests_dir", "tests")
+	for var_name in {
+			"additional_ignore",
+			"exclude_files",
+			"pkginfo_extra",
+			}:
+		config_vars[var_name] = raw_config_vars.get(var_name, [])
+
+	# TODO
+	config_vars["enable_docs"] = strtobool(raw_config_vars.get("enable_docs", "True"))
+	config_vars["travis_ubuntu_version"] = raw_config_vars.get("travis_ubuntu_version", "xenial")
+	config_vars["docs_dir"] = raw_config_vars.get("docs_dir", "doc-source")
+
+	# config_vars["lint_fix_list"] = lint_fix_list
+	# config_vars["lint_belligerent_list"] = lint_belligerent_list
+	# config_vars["lint_warn_list"] = lint_warn_list
+
+	for var_name in {
+			"classifiers",
+			"keywords",
+			}:
+		config_vars[var_name] = raw_config_vars.get(var_name, [])
 
 	def add_classifier(classifier):
 		if classifier not in config_vars["classifiers"]:
@@ -132,18 +181,6 @@ def parse_yaml(repo_path):
 
 	for classifier in get_version_classifiers(python_versions):
 		add_classifier(classifier)
-
-	config_vars["travis_pypi_secure"] = raw_config_vars.get("travis_pypi_secure")
-	config_vars["tests_dir"] = raw_config_vars.get("tests_dir", "tests")
-	config_vars["docs_dir"] = raw_config_vars.get("docs_dir", "doc-source")
-
-	config_vars["additional_setup_args"] = "\n".join([
-			"\t\t{}={},".format(*x) for x in raw_config_vars.get("additional_setup_args", {}).items()
-			])
-
-	extras_require, additional_requirements_files = parse_extras(raw_config_vars, repo_path)
-	config_vars["extras_require"] = extras_require
-	config_vars["additional_requirements_files"] = additional_requirements_files
 
 	license, license_classifier = parse_license(raw_config_vars)
 	config_vars["license"] = license
@@ -155,7 +192,9 @@ def parse_yaml(repo_path):
 	return config_vars
 
 
-def parse_python_versions(raw_config_vars):
+def parse_python_versions(
+		raw_config_vars: Dict[str, Any],
+		) -> Tuple[List[str], Union[str, float], Union[str, float]]:
 
 	python_deploy_version = str(raw_config_vars.get("python_deploy_version", 3.6))
 
@@ -167,7 +206,7 @@ def parse_python_versions(raw_config_vars):
 	return python_versions, python_deploy_version, min_py_version
 
 
-def get_tox_python_versions(python_versions):
+def get_tox_python_versions(python_versions: Iterable[str]) -> List[str]:
 
 	tox_py_versions = []
 
@@ -180,8 +219,11 @@ def get_tox_python_versions(python_versions):
 	return tox_py_versions
 
 
-def get_tox_travis_python_versions(python_versions, tox_py_versions):
-	tox_travis_matrix = {}
+def get_tox_travis_python_versions(
+		python_versions: Iterable[str],
+		tox_py_versions: Iterable[str],
+		) -> Dict[Union[str, float], str]:
+	tox_travis_matrix: Dict[Union[str, float], str] = {}
 
 	for py_version, tox_py_version in zip(python_versions, tox_py_versions):
 		tox_travis_matrix[py_version] = tox_py_version
@@ -189,7 +231,7 @@ def get_tox_travis_python_versions(python_versions, tox_py_versions):
 	return tox_travis_matrix
 
 
-def get_version_classifiers(python_versions):
+def get_version_classifiers(python_versions: Iterable[str]) -> List[str]:
 	version_classifiers = []
 
 	for py_version in python_versions:
@@ -211,7 +253,7 @@ def get_version_classifiers(python_versions):
 	return version_classifiers
 
 
-def parse_extras(raw_config_vars, repo_path):
+def parse_extras(raw_config_vars: Dict[str, Any], repo_path: pathlib.Path) -> Tuple[Dict, List[str]]:
 	additional_requirements_files = raw_config_vars.get("additional_requirements_files", [])
 
 	extras_require = raw_config_vars.get("extras_require", {})
@@ -238,7 +280,7 @@ def parse_extras(raw_config_vars, repo_path):
 	return extras_require, additional_requirements_files
 
 
-def parse_license(raw_config_vars):
+def parse_license(raw_config_vars: Dict[str, Any]) -> Tuple[str, Optional[str]]:
 	license = raw_config_vars.get("license", "").replace(" ", '')
 
 	licenses = {
@@ -249,6 +291,8 @@ def parse_license(raw_config_vars):
 			"GPLv2": "GNU General Public License v2 (GPLv2)",
 			"BSD": "BSD License",
 			}
+
+	license_classifier: Optional[str]
 
 	if license in licenses:
 		license = licenses[license]

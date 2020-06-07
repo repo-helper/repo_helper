@@ -26,10 +26,13 @@ import pathlib
 import shutil
 from typing import List
 
+# 3rd party
+import jinja2
+
+# this package
 from .templates import template_dir
 from .utils import clean_writer, make_executable
 from domdf_python_tools.paths import maybe_make
-from pandas.io.formats.style import jinja2
 
 __all__ = [
 		"make_travis",
@@ -91,7 +94,7 @@ def make_make_conda_recipe(repo_path: pathlib.Path, templates: jinja2.Environmen
 	:type templates: jinja2.Environment
 	"""
 
-	shutil.copy2(template_dir / "make_conda_recipe.py", repo_path / "make_conda_recipe.py")
+	shutil.copy2(str(template_dir / "make_conda_recipe.py"), str(repo_path / "make_conda_recipe.py"))
 
 	return ["make_conda_recipe.py"]
 

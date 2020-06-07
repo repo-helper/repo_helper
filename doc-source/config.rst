@@ -370,7 +370,7 @@ Documentation
 
 		preserve_custom_theme: True
 
-	By default this is ``True``.
+	By default this is ``False``.
 
 .. conf:: sphinx_html_theme
 
@@ -393,7 +393,7 @@ Documentation
 	.. code-block:: yaml
 
 		extra_sphinx_extensions:
-		  - "sphinxcontrib.httpdomain
+		  - "sphinxcontrib.httpdomain"
 
 	These must also be listed in ``doc-source/requirements.txt``.
 
@@ -422,7 +422,7 @@ Documentation
 		  - "import datetime"
 		  - "now = datetime.datetime.now()"
 		  - "strftime = now.strftime('%H:%M')"
-		  - "print(f'Starting building docs at {strftime}.')
+		  - "print(f'Starting building docs at {strftime}.')"
 
 
 .. conf:: sphinx_conf_epilogue
@@ -559,7 +559,6 @@ https://travis-ci.com
 	Example:
 
 	.. code-block:: yaml
-
 		travis_additional_requirements:
 		  - pbr
 
@@ -677,4 +676,6 @@ Other
 		make_conda_recipe, ``make_conda_recipe.py``
 		bumpversion, ``.bumpversion.cfg``
 		issue_templates, ``.github/ISSUE_TEMPLATE/bug_report.md`` and ``.github/ISSUE_TEMPLATE/feature_request.md``
+		404, ``<docs_dir>/not-found.png`` and ``<docs_dir>/404.rst``
+		make_isort, ``isort.cfg``
 

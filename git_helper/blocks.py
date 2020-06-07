@@ -49,7 +49,7 @@ shields_regex = re.compile(r'(?s)(\.\. start shields)(.*?)(\.\. end shields)')
 short_desc_regex = re.compile(r'(?s)(\.\. start short_desc)(.*?)(\.\. end short_desc)')
 links_regex = re.compile(r'(?s)(\.\. start links)(.*?)(\.\. end links)')
 
-shields_block_template = Environment(loader=BaseLoader).from_string(
+shields_block_template = Environment(loader=BaseLoader).from_string(  # type: ignore
 		"""\
 .. start shields {{ unique_name.lstrip("_") }}
 
@@ -145,7 +145,8 @@ def create_shields_block(
 		travis_site: str = "com",
 		pypi_name: Optional[str] = None,
 		unique_name: str = '',
-		):
+		) -> str:
+
 	if unique_name:
 		unique_name = f"_{unique_name}"
 
@@ -161,11 +162,11 @@ def create_shields_block(
 			travis_site=travis_site,
 			pypi_name=pypi_name,
 			version=version,
-			unique_name=unique_name
+			unique_name=unique_name,
 			)
 
 
-readme_installation_block_template = Environment(loader=BaseLoader).from_string(
+readme_installation_block_template = Environment(loader=BaseLoader).from_string(  # type: ignore
 		"""\
 .. start installation
 
@@ -202,6 +203,7 @@ def create_readme_install_block(
 		pypi_name: Optional[str] = None,
 		conda_channels: Optional[Sequence[str]] = None,
 		) -> str:
+
 	if not conda_channels and conda:
 		raise ValueError("Please supply a list of 'conda_channels' if Conda builds are supported")
 
@@ -225,7 +227,7 @@ def create_short_desc_block(short_desc: str) -> str:
 .. end short_desc"""
 
 
-docs_installation_block_template = Environment(loader=BaseLoader).from_string(
+docs_installation_block_template = Environment(loader=BaseLoader).from_string(  # type: ignore
 		"""\
 .. start installation
 
@@ -267,7 +269,8 @@ def create_docs_install_block(
 		conda: bool = True,
 		pypi_name: Optional[str] = None,
 		conda_channels: Optional[Sequence[str]] = None,
-		):
+		) -> str:
+
 	if not conda_channels and conda:
 		raise ValueError("Please supply a list of 'conda_channels' if Conda builds are supported")
 
@@ -282,7 +285,7 @@ def create_docs_install_block(
 			)
 
 
-docs_links_block_template = Environment(loader=BaseLoader).from_string(
+docs_links_block_template = Environment(loader=BaseLoader).from_string(  # type: ignore
 		"""\
 .. start links
 

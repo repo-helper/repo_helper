@@ -25,6 +25,9 @@
 import pathlib
 from typing import List
 
+# 3rd party
+import jinja2
+
 # this package
 from git_helper.blocks import (
 		create_readme_install_block,
@@ -34,7 +37,6 @@ from git_helper.blocks import (
 		shields_regex,
 		short_desc_regex
 		)
-from pandas.io.formats.style import jinja2
 
 __all__ = ["rewrite_readme"]
 

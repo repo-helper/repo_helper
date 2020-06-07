@@ -6,3 +6,4 @@ recursive-include git_helper/templates *
 recursive-include git_helper/init_repo_files *
 recursive-include git_helper/ *.pyi
 recursive-include git_helper/ py.typed
+include git_helper/git_helper_schema.json

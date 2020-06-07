@@ -25,8 +25,11 @@
 import pathlib
 from typing import List
 
+# 3rd party
+import jinja2
+
+# this package
 from .utils import clean_writer
-from pandas.io.formats.style import jinja2
 
 __all__ = [
 		"make_manifest",
