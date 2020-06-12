@@ -491,14 +491,16 @@ https://tox.readthedocs.io
 
 .. conf:: tox_testenv_extras
 
-	A list of additional Python requirements for the Tox testenv.
+	The "Extra" requirement to install when installing the package in the Tox testenv.
+
+	See https://setuptools.readthedocs.io/en/latest/setuptools.html#declaring-extras-optional-features-with-their-own-dependencies
 
 	Example:
 
 	.. code-block:: yaml
 
 		tox_testenv_extras:
-		  - pytest
+		  - docs
 
 
 Travis

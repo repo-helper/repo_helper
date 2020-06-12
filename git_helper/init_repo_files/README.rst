@@ -1,6 +1,6 @@
-****************
+{{ '#' * (len(modname)+1) }}
 {{ modname }}
-****************
+{{ '#' * (len(modname)+1) }}
 
 .. start short_desc
 .. end short_desc

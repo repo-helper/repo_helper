@@ -26,7 +26,6 @@ github_url = f"https://github.com/domdfcoding/git_helper"
 rst_prolog = f""".. |pkgname| replace:: git_helper
 .. |pkgname2| replace:: ``git_helper``
 .. |browse_github| replace:: `Browse the GitHub Repository <{github_url}>`__
-.. |ghurl| replace:: {github_url}
 """
 
 author = "Dominic Davis-Foster"

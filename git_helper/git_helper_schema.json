@@ -165,10 +165,7 @@
       }
     },
     "tox_testenv_extras": {
-      "type": "array",
-      "items": {
-        "type": "string"
-      }
+      "type": "string"
     },
     "travis_site": {
       "enum": [

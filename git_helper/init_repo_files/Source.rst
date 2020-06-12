@@ -3,13 +3,13 @@ Downloading source code
 *******************************
 
 ``{{ modname }}`` source code resides on publicly accessible GitHub servers,
-and can be accessed from the following URL: |ghurl|
+and can be accessed from the following URL: https://github.com/{{ username }}/{{ repo_name }}"
 
 If you have ``git`` installed, you can clone the repository with the following command:
 
 .. code-block:: bash
 
-    $ git clone |ghurl|
+    $ git clone https://github.com/{{ username }}/{{ repo_name }}"
     > Cloning into '{{ modname }}'...
     > remote: Enumerating objects: 47, done.
     > remote: Counting objects: 100% (47/47), done.

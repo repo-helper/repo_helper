@@ -30,13 +30,13 @@ import jinja2
 
 # this package
 from git_helper.blocks import (
-		create_readme_install_block,
-		create_shields_block,
-		create_short_desc_block,
-		installation_regex,
-		shields_regex,
-		short_desc_regex
-		)
+	create_readme_install_block,
+	create_shields_block,
+	create_short_desc_block,
+	installation_regex,
+	shields_regex,
+	short_desc_regex
+)
 
 __all__ = ["rewrite_readme"]
 

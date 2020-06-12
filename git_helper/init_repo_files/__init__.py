@@ -3,7 +3,7 @@
 #
 #  __init__.py
 """
-Docstring Goes Here
+{{ short_desc }}
 """
 #
 #  Copyright (c) {{ copyright_years }} {{ author }} <{{ email }}>

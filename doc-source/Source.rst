@@ -3,13 +3,13 @@ Downloading source code
 *******************************
 
 |pkgname2| source code resides on publicly accessible GitHub servers,
-and can be accessed from the following URL: |ghurl|
+and can be accessed from the following URL: https://github.com/domdfcoding/git_helper
 
 If you have ``git`` installed, you can clone the repository with the following command:
 
 .. parsed-literal::
 
-    $ git clone |ghurl|
+    $ git clone https://github.com/domdfcoding/git_helper
     > Cloning into '|pkgname|'...
     > remote: Enumerating objects: 47, done.
     > remote: Counting objects: 100% (47/47), done.

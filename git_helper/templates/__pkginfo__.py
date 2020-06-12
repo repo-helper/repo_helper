@@ -61,7 +61,7 @@ author_email = "{{ email }}"
 github_username = "{{ username }}"
 web = github_url = f"https://github.com/{{ username }}/{{ repo_name }}"
 project_urls = {
-		"Documentation": f"https://{{ repo_name }}.readthedocs.io",  # TODO: Make this link match the package version
+		"Documentation": f"https://{{ repo_name }}.readthedocs.io",  {# TODO: Make this link match the package version#}
 		"Issue Tracker": f"{github_url}/issues",
 		"Source Code": github_url,
 		}

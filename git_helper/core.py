@@ -33,8 +33,13 @@ import jinja2
 from .bots import make_auto_assign_action, make_dependabot, make_stale_bot
 from .ci_cd import make_copy_pypi_2_github, make_make_conda_recipe, make_travis, make_travis_deploy_conda
 from .docs import (
-		copy_docs_styling, ensure_doc_requirements, make_404_page, make_conf, make_rtfd, rewrite_docs_index
-		)
+	copy_docs_styling,
+	ensure_doc_requirements,
+	make_404_page,
+	make_conf,
+	make_rtfd,
+	rewrite_docs_index
+)
 from .gitignore import make_gitignore
 from .linting import lint_belligerent_list, lint_fix_list, lint_warn_list, make_lint_roller, make_pylintrc
 from .packaging import make_manifest, make_pkginfo, make_setup
@@ -77,6 +82,7 @@ class GitHelper:
 		self.templates.globals["lint_belligerent_list"] = lint_belligerent_list
 		self.templates.globals["lint_warn_list"] = lint_warn_list
 		self.templates.globals["enquote_value"] = enquote_value
+		self.templates.globals["len"] = len
 
 	@property
 	def exclude_files(self) -> List[str]:

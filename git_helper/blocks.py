@@ -68,7 +68,7 @@ shields_block_template = Environment(loader=BaseLoader).from_string(  # type: ig
 	{% endif %}* - Other
 	  - |license{{ unique_name }}| |language{{ unique_name }}| |commits-since{{ unique_name }}| |commits-latest{{ unique_name }}| |maintained{{ unique_name }}| 
 
-{% if docs %}.. |docs{{ unique_name }}| image:: https://readthedocs.org/projects/{{ repo_name.lower() }}/badge/?version=latest
+{% if docs %}.. |docs{{ unique_name }}| image:: https://img.shields.io/readthedocs/{{ repo_name.lower() }}/latest?logo=read-the-docs
 	:target: https://{{ repo_name.lower() }}.readthedocs.io/en/latest/?badge=latest
 	:alt: Documentation Status{% endif %}
 
@@ -80,19 +80,19 @@ shields_block_template = Environment(loader=BaseLoader).from_string(  # type: ig
 	:target: https://requires.io/github/{{ username }}/{{ repo_name }}/requirements/?branch=master
 	:alt: Requirements Status
 {% if tests %}
-.. |coveralls{{ unique_name }}| image:: https://coveralls.io/repos/github/{{ username }}/{{ repo_name }}/badge.svg?branch=master
+.. |coveralls{{ unique_name }}| image:: https://shields.io/coveralls/github/{{ username }}/{{ repo_name }}/master?logo=coveralls
 	:target: https://coveralls.io/github/{{ username }}/{{ repo_name }}?branch=master
 	:alt: Coverage
 {% endif %}
-.. |codefactor{{ unique_name }}| image:: https://img.shields.io/codefactor/grade/github/{{ username }}/{{ repo_name }}
+.. |codefactor{{ unique_name }}| image:: https://img.shields.io/codefactor/grade/github/{{ username }}/{{ repo_name }}?logo=codefactor
 	:target: https://www.codefactor.io/repository/github/{{ username }}/{{ repo_name }}
 	:alt: CodeFactor Grade
 
-.. |pypi-version{{ unique_name }}| image:: https://img.shields.io/pypi/v/{{ pypi_name }}.svg
+.. |pypi-version{{ unique_name }}| image:: https://img.shields.io/pypi/v/{{ pypi_name }}
 	:target: https://pypi.org/project/{{ pypi_name }}/
 	:alt: PyPI - Package Version
 
-.. |supported-versions{{ unique_name }}| image:: https://img.shields.io/pypi/pyversions/{{ pypi_name }}.svg
+.. |supported-versions{{ unique_name }}| image:: https://img.shields.io/pypi/pyversions/{{ pypi_name }}
 	:target: https://pypi.org/project/{{ pypi_name }}/
 	:alt: PyPI - Supported Python Versions
 
@@ -104,7 +104,7 @@ shields_block_template = Environment(loader=BaseLoader).from_string(  # type: ig
 	:target: https://pypi.org/project/{{ pypi_name }}/
 	:alt: PyPI - Wheel
 {% if conda %}
-.. |conda-version{{ unique_name }}| image:: https://img.shields.io/conda/v/{{ username }}/{{ pypi_name }}
+.. |conda-version{{ unique_name }}| image:: https://img.shields.io/conda/v/{{ username }}/{{ pypi_name }}?logo=anaconda
 	:alt: Conda - Package Version
 	:target: https://anaconda.org/{{ username }}/{{ pypi_name }}
 

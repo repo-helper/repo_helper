@@ -58,7 +58,7 @@ builder.add_object({"html_context": dict()})  # optional
 # Tox
 builder.add_object({"tox_requirements": ["flake8"]})  # optional
 builder.add_object({"tox_build_requirements": ["setuptools"]})  # optional
-builder.add_object({"tox_testenv_extras": ["pytest"]})  # optional
+builder.add_object({"tox_testenv_extras": "docs"})  # optional
 
 # Travis
 builder.add_object({"travis_site": "com"})  # optional
