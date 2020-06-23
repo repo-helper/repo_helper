@@ -69,9 +69,15 @@ def make_auto_assign_action(repo_path: pathlib.Path, templates: jinja2.Environme
 	"""
 
 	dot_github = repo_path / ".github"
-	maybe_make(dot_github / "workflow", parents=True)
+	maybe_make(dot_github / "workflows", parents=True)
 
-	with (dot_github / "workflow" / "assign.yml").open("w") as fp:
+	if (dot_github / "workflow" / "assign.yml").is_file():
+		(dot_github / "workflow" / "assign.yml").unlink()
+
+	if (dot_github / "workflow").is_dir():
+		(dot_github / "workflow").rmdir()
+
+	with (dot_github / "workflows" / "assign.yml").open("w") as fp:
 		clean_writer(
 				"""# This file is managed by `git_helper`. Don't edit it directly
 
@@ -125,7 +131,7 @@ numberOfReviewers: 0
 				fp
 				)
 
-	return [".github/workflow/assign.yml", ".github/auto_assign.yml"]
+	return [".github/workflows/assign.yml", ".github/workflow/assign.yml", ".github/auto_assign.yml"]
 
 
 def make_dependabot(repo_path: pathlib.Path, templates: jinja2.Environment) -> List[str]:

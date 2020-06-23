@@ -54,14 +54,17 @@ def rewrite_readme(repo_path: pathlib.Path, templates: jinja2.Environment) -> Li
 	readme = readme_file.read_text()
 
 	shields_block = create_shields_block(
-			templates.globals["username"],
-			templates.globals["repo_name"],
-			templates.globals["version"],
-			templates.globals["enable_conda"],
-			templates.globals["enable_tests"],
-			templates.globals["enable_docs"],
-			templates.globals["travis_site"],
-			templates.globals["pypi_name"],
+			username=templates.globals["username"],
+			repo_name=templates.globals["repo_name"],
+			version=templates.globals["version"],
+			conda=templates.globals["enable_conda"],
+			tests=templates.globals["enable_tests"],
+			docs=templates.globals["enable_docs"],
+			travis_site=templates.globals["travis_site"],
+			pypi_name=templates.globals["pypi_name"],
+			docker_shields=templates.globals["docker_shields"],
+			docker_name=templates.globals["docker_name"],
+			platforms=templates.globals["platforms"],
 			)
 
 	if templates.globals["license"] == "GNU General Public License v2 (GPLv2)":
@@ -76,6 +79,7 @@ def rewrite_readme(repo_path: pathlib.Path, templates: jinja2.Environment) -> Li
 
 	install_block = create_readme_install_block(
 			templates.globals["modname"],
+			templates.globals["username"],
 			templates.globals["enable_conda"],
 			templates.globals["pypi_name"],
 			templates.globals["conda_channels"],

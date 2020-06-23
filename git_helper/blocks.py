@@ -23,10 +23,13 @@
 
 # stdlib
 import re
-from typing import Optional, Sequence, Union
+from typing import Optional, Sequence, Set, Union
 
 # 3rd party
 from jinja2 import BaseLoader, Environment
+
+# this package
+from git_helper.shields import *
 
 __all__ = [
 		"installation_regex",
@@ -44,6 +47,7 @@ __all__ = [
 		"create_docs_links_block",
 		]
 
+
 installation_regex = re.compile(r'(?s)(\.\. start installation)(.*?)(\.\. end installation)')
 shields_regex = re.compile(r'(?s)(\.\. start shields)(.*?)(\.\. end shields)')
 short_desc_regex = re.compile(r'(?s)(\.\. start short_desc)(.*?)(\.\. end short_desc)')
@@ -58,81 +62,95 @@ shields_block_template = Environment(loader=BaseLoader).from_string(  # type: ig
 	:widths: 10 90
 
 	{% if docs %}* - Docs
-	  - |docs{{ unique_name }}|
+	  - |docs{{ unique_name }}| |docs_check{{ unique_name }}|
 	{% endif %}* - Tests
-	  - |travis{{ unique_name }}| |requires{{ unique_name }}| {% if tests %}|coveralls{{ unique_name }}| {% endif %}|codefactor{{ unique_name }}|
+	  - |travis{{ unique_name }}| \
+{% if "windows" in platforms %}|actions_windows{{ unique_name }}| {% endif %}\
+{% if "macos" in platforms %}|actions_macos{{ unique_name }}| {% endif %}\
+{% if tests %}|coveralls{{ unique_name }}| {% endif %}\
+|codefactor{{ unique_name }}|
 	* - PyPI
 	  - |pypi-version{{ unique_name }}| |supported-versions{{ unique_name }}| |supported-implementations{{ unique_name }}| |wheel{{ unique_name }}|
 	{% if conda %}* - Anaconda
 	  - |conda-version{{ unique_name }}| |conda-platform{{ unique_name }}|
+	{% endif %}* - Activity
+	  - |commits-latest{{ unique_name }}| |commits-since{{ unique_name }}| |maintained{{ unique_name }}|
+	{% if docker_shields %}* - Docker
+	  - |docker_build{{ unique_name }}| |docker_automated{{ unique_name }}| |docker_size{{ unique_name }}|
 	{% endif %}* - Other
-	  - |license{{ unique_name }}| |language{{ unique_name }}| |commits-since{{ unique_name }}| |commits-latest{{ unique_name }}| |maintained{{ unique_name }}| 
+	  - |license{{ unique_name }}| |language{{ unique_name }}| |requires{{ unique_name }}|
 
-{% if docs %}.. |docs{{ unique_name }}| image:: https://img.shields.io/readthedocs/{{ repo_name.lower() }}/latest?logo=read-the-docs
-	:target: https://{{ repo_name.lower() }}.readthedocs.io/en/latest/?badge=latest
-	:alt: Documentation Status{% endif %}
+{% if docs %}.. |docs{{ unique_name }}| {{ make_rtfd_shield(repo_name)[3:] }}
+	
+.. |docs_check{{ unique_name }}| {{ make_docs_check_shield(repo_name, username)[3:] }}{% endif %}
 
-.. |travis{{ unique_name }}| image:: https://img.shields.io/travis/{{ 'com/' if travis_site == "com" else '' }}{{ username }}/{{ repo_name }}/master?logo=travis
-	:target: https://travis-ci.{{ travis_site }}/{{ username }}/{{ repo_name }}
-	:alt: Travis Build Status
-
-.. |requires{{ unique_name }}| image:: https://requires.io/github/{{ username }}/{{ repo_name }}/requirements.svg?branch=master
-	:target: https://requires.io/github/{{ username }}/{{ repo_name }}/requirements/?branch=master
-	:alt: Requirements Status
+.. |travis{{ unique_name }}| {{ make_travis_shield(repo_name, username, travis_site)[3:] }}
+{% if "windows" in platforms %}
+.. |actions_windows{{ unique_name }}| {{ make_actions_windows_shield(repo_name, username)[3:] }}
+{% endif %}{% if "macos" in platforms %}
+.. |actions_macos{{ unique_name }}| {{ make_actions_macos_shield(repo_name, username)[3:] }}
+{% endif %}
+.. |requires{{ unique_name }}| {{ make_requires_shield(repo_name, username)[3:] }}
 {% if tests %}
-.. |coveralls{{ unique_name }}| image:: https://shields.io/coveralls/github/{{ username }}/{{ repo_name }}/master?logo=coveralls
-	:target: https://coveralls.io/github/{{ username }}/{{ repo_name }}?branch=master
-	:alt: Coverage
+.. |coveralls{{ unique_name }}| {{ make_coveralls_shield(repo_name, username)[3:] }}
 {% endif %}
-.. |codefactor{{ unique_name }}| image:: https://img.shields.io/codefactor/grade/github/{{ username }}/{{ repo_name }}?logo=codefactor
-	:target: https://www.codefactor.io/repository/github/{{ username }}/{{ repo_name }}
-	:alt: CodeFactor Grade
+.. |codefactor{{ unique_name }}| {{ make_codefactor_shield(repo_name, username)[3:] }}
 
-.. |pypi-version{{ unique_name }}| image:: https://img.shields.io/pypi/v/{{ pypi_name }}
-	:target: https://pypi.org/project/{{ pypi_name }}/
-	:alt: PyPI - Package Version
+.. |pypi-version{{ unique_name }}| {{ make_pypi_version_shield(pypi_name)[3:] }}
 
-.. |supported-versions{{ unique_name }}| image:: https://img.shields.io/pypi/pyversions/{{ pypi_name }}
-	:target: https://pypi.org/project/{{ pypi_name }}/
-	:alt: PyPI - Supported Python Versions
+.. |supported-versions{{ unique_name }}| {{ make_python_versions_shield(pypi_name)[3:] }}
 
-.. |supported-implementations{{ unique_name }}| image:: https://img.shields.io/pypi/implementation/{{ pypi_name }}
-	:target: https://pypi.org/project/{{ pypi_name }}/
-	:alt: PyPI - Supported Implementations
+.. |supported-implementations{{ unique_name }}| {{ make_python_implementations_shield(pypi_name)[3:] }}
 
-.. |wheel{{ unique_name }}| image:: https://img.shields.io/pypi/wheel/{{ pypi_name }}
-	:target: https://pypi.org/project/{{ pypi_name }}/
-	:alt: PyPI - Wheel
+.. |wheel{{ unique_name }}| {{ make_wheel_shield(pypi_name)[3:] }}
 {% if conda %}
-.. |conda-version{{ unique_name }}| image:: https://img.shields.io/conda/v/{{ username }}/{{ pypi_name }}?logo=anaconda
-	:alt: Conda - Package Version
-	:target: https://anaconda.org/{{ username }}/{{ pypi_name }}
+.. |conda-version{{ unique_name }}| {{ make_conda_version_shield(pypi_name, username)[3:] }}
 
-.. |conda-platform{{ unique_name }}| image:: https://img.shields.io/conda/pn/{{ username }}/{{ pypi_name }}?label=conda%7Cplatform
-	:alt: Conda - Platform
-	:target: https://anaconda.org/{{ username }}/{{ pypi_name }}
+.. |conda-platform{{ unique_name }}| {{ make_conda_platform_shield(pypi_name, username)[3:] }}
 {% endif %}
-.. |license{{ unique_name }}| image:: https://img.shields.io/github/license/{{ username }}/{{ repo_name }}
-	:alt: License
-	:target: https://github.com/{{ username }}/{{ repo_name }}/blob/master/LICENSE
+.. |license{{ unique_name }}| {{ make_license_shield(repo_name, username)[3:] }}
 
-.. |language{{ unique_name }}| image:: https://img.shields.io/github/languages/top/{{ username }}/{{ repo_name }}
-	:alt: GitHub top language
+.. |language{{ unique_name }}| {{ make_language_shield(repo_name, username)[3:] }}
 
-.. |commits-since{{ unique_name }}| image:: https://img.shields.io/github/commits-since/{{ username }}/{{ repo_name }}/v{{ version }}
-	:target: https://github.com/{{ username }}/{{ repo_name }}/pulse
-	:alt: GitHub commits since tagged version
+.. |commits-since{{ unique_name }}| {{ make_activity_shield(repo_name, username, version)[3:] }}
 
-.. |commits-latest{{ unique_name }}| image:: https://img.shields.io/github/last-commit/{{ username }}/{{ repo_name }}
-	:target: https://github.com/{{ username }}/{{ repo_name }}/commit/master
-	:alt: GitHub last commit
+.. |commits-latest{{ unique_name }}| {{ make_last_commit_shield(repo_name, username)[3:] }}
 
-.. |maintained{{ unique_name }}| image:: https://img.shields.io/maintenance/yes/2020
-	:alt: Maintenance
+.. |maintained{{ unique_name }}| {{ make_maintained_shield()[3:] }}
+{% if docker_shields %}
+.. |docker_build{{ unique_name }}| {{ make_docker_build_status_shield(docker_name, username)[3:] }}
 
+.. |docker_automated{{ unique_name }}| {{ make_docker_automated_build_shield(docker_name, username)[3:] }}
+
+.. |docker_size{{ unique_name }}| {{ make_docker_size_shield(docker_name, username)[3:] }}
+{% endif %}
 .. end shields
 """
 		)
+
+shields_block_template.globals["make_maintained_shield"] = make_maintained_shield
+
+shields_block_template.globals["make_rtfd_shield"] = make_rtfd_shield
+shields_block_template.globals["make_docs_check_shield"] = make_docs_check_shield
+shields_block_template.globals["make_travis_shield"] = make_travis_shield
+shields_block_template.globals["make_actions_windows_shield"] = make_actions_windows_shield
+shields_block_template.globals["make_actions_macos_shield"] = make_actions_macos_shield
+shields_block_template.globals["make_requires_shield"] = make_requires_shield
+shields_block_template.globals["make_coveralls_shield"] = make_coveralls_shield
+shields_block_template.globals["make_codefactor_shield"] = make_codefactor_shield
+shields_block_template.globals["make_pypi_version_shield"] = make_pypi_version_shield
+shields_block_template.globals["make_python_versions_shield"] = make_python_versions_shield
+shields_block_template.globals["make_python_implementations_shield"] = make_python_implementations_shield
+shields_block_template.globals["make_wheel_shield"] = make_wheel_shield
+shields_block_template.globals["make_conda_version_shield"] = make_conda_version_shield
+shields_block_template.globals["make_conda_platform_shield"] = make_conda_platform_shield
+shields_block_template.globals["make_license_shield"] = make_license_shield
+shields_block_template.globals["make_language_shield"] = make_language_shield
+shields_block_template.globals["make_activity_shield"] = make_activity_shield
+shields_block_template.globals["make_last_commit_shield"] = make_last_commit_shield
+shields_block_template.globals["make_docker_build_status_shield"] = make_docker_build_status_shield
+shields_block_template.globals["make_docker_automated_build_shield"] = make_docker_automated_build_shield
+shields_block_template.globals["make_docker_size_shield"] = make_docker_size_shield
 
 
 def create_shields_block(
@@ -145,6 +163,9 @@ def create_shields_block(
 		travis_site: str = "com",
 		pypi_name: Optional[str] = None,
 		unique_name: str = '',
+		docker_shields: bool = False,
+		docker_name: str = '',
+		platforms: Optional[Set[str]] = None,
 		) -> str:
 
 	if unique_name:
@@ -163,6 +184,9 @@ def create_shields_block(
 			pypi_name=pypi_name,
 			version=version,
 			unique_name=unique_name,
+			docker_name=docker_name,
+			docker_shields=docker_shields,
+			platforms=platforms,
 			)
 
 
@@ -199,6 +223,7 @@ To install with ``conda``:
 
 def create_readme_install_block(
 		modname: str,
+		username: str,
 		conda: bool = True,
 		pypi_name: Optional[str] = None,
 		conda_channels: Optional[Sequence[str]] = None,
@@ -212,6 +237,7 @@ def create_readme_install_block(
 
 	return readme_installation_block_template.render(
 			modname=modname,
+			username=username,
 			conda=conda,
 			pypi_name=pypi_name,
 			conda_channels=conda_channels,
@@ -266,6 +292,7 @@ docs_installation_block_template = Environment(loader=BaseLoader).from_string(  
 
 def create_docs_install_block(
 		repo_name: str,
+		username: str,
 		conda: bool = True,
 		pypi_name: Optional[str] = None,
 		conda_channels: Optional[Sequence[str]] = None,
@@ -279,6 +306,7 @@ def create_docs_install_block(
 
 	return docs_installation_block_template.render(
 			repo_name=repo_name,
+			username=username,
 			conda=conda,
 			pypi_name=pypi_name,
 			conda_channels=conda_channels,

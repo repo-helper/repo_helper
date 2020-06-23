@@ -50,6 +50,9 @@
     "short_desc": {
       "type": "string"
     },
+    "source_dir": {
+      "type": "string"
+    },
     "enable_tests": {
       "type": [
         "boolean",
@@ -61,6 +64,15 @@
         "boolean",
         "string"
       ]
+    },
+    "docker_shields": {
+      "type": [
+        "boolean",
+        "string"
+      ]
+    },
+    "docker_name": {
+      "type": "string"
     },
     "python_deploy_version": {
       "type": [
@@ -102,6 +114,18 @@
       "type": "object"
     },
     "additional_requirements_files": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "setup_pre": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "platforms": {
       "type": "array",
       "items": {
         "type": "string"
@@ -152,6 +176,12 @@
     "html_context": {
       "type": "object"
     },
+    "enable_docs": {
+      "type": "boolean"
+    },
+    "docs_dir": {
+      "type": "string"
+    },
     "tox_requirements": {
       "type": "array",
       "items": {
@@ -172,6 +202,9 @@
         "com",
         "org"
       ]
+    },
+    "travis_ubuntu_version": {
+      "type": "string"
     },
     "travis_extra_install_pre": {
       "type": "array",

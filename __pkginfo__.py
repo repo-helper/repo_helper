@@ -24,6 +24,7 @@ __all__ = [
 		"__license__",
 		"short_desc",
 		"author",
+		"__author__",
 		"author_email",
 		"github_username",
 		"web",

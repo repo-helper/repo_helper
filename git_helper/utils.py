@@ -147,7 +147,7 @@ def ensure_requirements(requirements_list: Iterable[Tuple[str, Optional[str]]], 
 
 	# TODO: preserve extras [] options
 
-	target_packages = [req[0] for req in requirements_list]
+	target_packages = [req[0].replace("-", "_") for req in requirements_list]
 
 	if requirements_file.is_file():
 		with requirements_file.open() as fp:
@@ -162,7 +162,7 @@ def ensure_requirements(requirements_list: Iterable[Tuple[str, Optional[str]]], 
 
 	with requirements_file.open("w") as fp:
 		for req in test_requirements:
-			if req.name not in target_packages:
+			if req.name.replace("-", "_") not in target_packages:
 				if req.specs:
 					output_buffer.append(f"{req.name} {','.join([''.join(x) for x in req.specs])}")
 				else:

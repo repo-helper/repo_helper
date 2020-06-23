@@ -85,7 +85,6 @@ ignores = [
 		".hypothesis/",
 		".pytest_cache/",
 		"cover/",
-		".coverage*",
 
   # Translations
 		"*.mo",

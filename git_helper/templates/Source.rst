@@ -2,7 +2,7 @@
 Downloading source code
 *******************************
 
-``{{ modname }}`` source code resides on publicly accessible GitHub servers,
+The ``{{ modname }}`` source code resides on publicly accessible GitHub servers,
 and can be accessed from the following URL: https://github.com/{{ username }}/{{ repo_name }}"
 
 If you have ``git`` installed, you can clone the repository with the following command:
@@ -10,7 +10,7 @@ If you have ``git`` installed, you can clone the repository with the following c
 .. code-block:: bash
 
     $ git clone https://github.com/{{ username }}/{{ repo_name }}"
-    > Cloning into '{{ modname }}'...
+    > Cloning into '{{ repo_name }}'...
     > remote: Enumerating objects: 47, done.
     > remote: Counting objects: 100% (47/47), done.
     > remote: Compressing objects: 100% (41/41), done.

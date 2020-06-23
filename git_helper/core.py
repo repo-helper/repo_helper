@@ -28,27 +28,36 @@ from typing import Callable, List, Sequence, Tuple, Union
 
 # 3rd party
 import jinja2
+from domdf_python_tools.paths import maybe_make
 
 # this package
 from .bots import make_auto_assign_action, make_dependabot, make_stale_bot
-from .ci_cd import make_copy_pypi_2_github, make_make_conda_recipe, make_travis, make_travis_deploy_conda
+from .ci_cd import (
+	make_copy_pypi_2_github,
+	make_github_ci,
+	make_github_docs_test,
+	make_make_conda_recipe,
+	make_travis,
+	make_travis_deploy_conda
+)
 from .docs import (
 	copy_docs_styling,
 	ensure_doc_requirements,
 	make_404_page,
 	make_conf,
+	make_docs_building_rst,
+	make_docs_source_rst,
 	make_rtfd,
 	rewrite_docs_index
 )
 from .gitignore import make_gitignore
-from .linting import lint_belligerent_list, lint_fix_list, lint_warn_list, make_lint_roller, make_pylintrc
+from .linting import lint_belligerent_list, lint_fix_list, lint_warn_list, make_lint_roller, make_pylintrc, code_only_warning
 from .packaging import make_manifest, make_pkginfo, make_setup
 from .readme import rewrite_readme
 from .templates import template_dir
 from .testing import ensure_tests_requirements, make_isort, make_tox, make_yapf
 from .utils import clean_writer, enquote_value
 from .yaml_parser import parse_yaml
-from domdf_python_tools.paths import maybe_make
 
 __all__ = [
 		"GitHelper",
@@ -81,6 +90,7 @@ class GitHelper:
 		self.templates.globals["lint_fix_list"] = lint_fix_list
 		self.templates.globals["lint_belligerent_list"] = lint_belligerent_list
 		self.templates.globals["lint_warn_list"] = lint_warn_list
+		self.templates.globals["code_only_warning"] = code_only_warning
 		self.templates.globals["enquote_value"] = enquote_value
 		self.templates.globals["len"] = len
 
@@ -93,7 +103,7 @@ class GitHelper:
 		return self.templates.globals["repo_name"]
 
 	def run(self) -> List[str]:
-		if not self.templates.globals["preserve_custom_theme"]:
+		if not self.templates.globals["preserve_custom_theme"] and self.templates.globals["enable_docs"] :
 			all_managed_files = copy_docs_styling(self.target_repo, self.templates)
 		else:
 			all_managed_files = []
@@ -148,14 +158,17 @@ tag = True
 			"[bumpversion:file:git_helper.yml]",
 			"[bumpversion:file:__pkginfo__.py]",
 			"[bumpversion:file:README.rst]",
-			"[bumpversion:file:doc-source/index.rst]",
 			]
+
+	if templates.globals["enable_docs"]:
+		required_lines.append("[bumpversion:file:doc-source/index.rst]")
+
 
 	if templates.globals["py_modules"]:
 		for modname in templates.globals["py_modules"]:
-			required_lines.append(f"[bumpversion:file:{modname}.py]")
+			required_lines.append(f"[bumpversion:file:{templates.globals['source_dir']}{modname}.py]")
 	else:
-		required_lines.append(f"[bumpversion:file:{templates.globals['import_name']}/__init__.py]")
+		required_lines.append(f"[bumpversion:file:{templates.globals['source_dir']}{templates.globals['import_name']}/__init__.py]")
 
 	for line in required_lines:
 		if line not in bumpversion_contents:
@@ -168,7 +181,7 @@ tag = True
 
 def make_issue_templates(repo_path: pathlib.Path, templates: jinja2.Environment) -> List[str]:
 	"""
-	Add issue templates for GitHubto the desired repo
+	Add issue templates for GitHub to the desired repo
 
 	:param repo_path: Path to the repository root
 	:type repo_path: pathlib.Path
@@ -194,6 +207,24 @@ def make_issue_templates(repo_path: pathlib.Path, templates: jinja2.Environment)
 			]
 
 
+def make_contributing_md(repo_path: pathlib.Path, templates: jinja2.Environment) -> List[str]:
+	"""
+	Add CONTRIBUTING.md to the desired repo
+
+	:param repo_path: Path to the repository root
+	:type repo_path: pathlib.Path
+	:param templates:
+	:type templates: jinja2.Environment
+	"""
+
+	contributing = templates.get_template("CONTRIBUTING.md")
+
+	with (repo_path / "CONTRIBUTING.md").open("w") as fp:
+		clean_writer(contributing.render(), fp)
+
+	return [os.path.join("CONTRIBUTING.md")]
+
+
 files: List[Tuple[Callable, str, Sequence[str]]] = [
 		(make_copy_pypi_2_github, "copy_pypi_2_github", ["enable_releases"]),
 		(make_lint_roller, "lint_roller", []),
@@ -210,6 +241,7 @@ files: List[Tuple[Callable, str, Sequence[str]]] = [
 		(make_gitignore, "gitignore", []),
 		(make_rtfd, "rtfd", ["enable_docs"]),
 		(make_travis, "travis", []),
+		(make_github_ci, "actions", []),
 		(make_tox, "tox", []),
 		(make_yapf, "yapf", []),
 		(ensure_tests_requirements, "test_requirements", ["enable_tests"]),
@@ -219,5 +251,9 @@ files: List[Tuple[Callable, str, Sequence[str]]] = [
 		(ensure_bumpversion, "bumpversion", []),
 		(make_issue_templates, "issue_templates", []),
 		(make_404_page, "404", ["enable_docs"]),
+		(make_docs_source_rst, "Source_rst", ["enable_docs"]),
+		(make_github_docs_test, "docs_action", ["enable_docs"]),
+		(make_docs_building_rst, "Building_rst", ["enable_docs"]),
+		(make_contributing_md, "contributing", []),
 		(make_isort, "isort", []),  # Must always run last
 		]

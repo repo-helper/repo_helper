@@ -23,12 +23,16 @@ builder.add_object({"classifiers": ["Environment :: Console"]})  # optional
 builder.add_object({"keywords": ["version control", "git", "template"]})  # optional
 builder.add_object({"license": "GPLv3+"})
 builder.add_object({"short_desc": "This is a short description of my project."})
+builder.add_object({"source_dir": "src"})  # optional
 
 # Optional Features
 builder.add_object({"enable_tests": True})  # optional
 builder.add_object({"enable_tests": "False"})  # optional
 builder.add_object({"enable_releases": True})  # optional
 builder.add_object({"enable_releases": "False"})  # optional
+builder.add_object({"docker_shields": "False"})  # optional
+builder.add_object({"docker_shields": True})  # optional
+builder.add_object({"docker_name": "manylinux2014"})  # optional
 
 # Python Versions
 builder.add_object({"python_deploy_version": "3.8"})  # optional
@@ -42,6 +46,8 @@ builder.add_object({"console_scripts": ["git_helper = git_helper.__main__:main"]
 builder.add_object({"additional_setup_args": dict()})  # optional
 builder.add_object({"extras_require": dict()})  # optional
 builder.add_object({"additional_requirements_files": ["submodule/requirements.txt"]})  # optional
+builder.add_object({"setup_pre": [""]})  # optional
+builder.add_object({"platforms": ["Windows", "macOS", "Linux"]})  # optional
 
 # Documentation
 builder.add_object({"rtfd_author": "Dominic Davis-Foster and Joe Bloggs"})  # optional
@@ -54,6 +60,8 @@ builder.add_object({"sphinx_conf_preamble": ["import datetime", "now = datetime.
 builder.add_object({"sphinx_conf_epilogue": ["time_taken = datetime.datetime.now() - now", "strftime = time_taken.strftime('%H:%M')", "print(f'Finished building docs at {strftime}.')"]})  # optional
 builder.add_object({"html_theme_options": dict()})  # optional
 builder.add_object({"html_context": dict()})  # optional
+builder.add_object({"enable_docs": True})  # optional
+builder.add_object({"docs_dir": "doc-source"})  # optional
 
 # Tox
 builder.add_object({"tox_requirements": ["flake8"]})  # optional
@@ -62,6 +70,7 @@ builder.add_object({"tox_testenv_extras": "docs"})  # optional
 
 # Travis
 builder.add_object({"travis_site": "com"})  # optional
+builder.add_object({"travis_ubuntu_version": "xenial"})  # optional
 builder.add_object({"travis_extra_install_pre": [""]})  # optional
 builder.add_object({"travis_extra_install_post": [""]})  # optional
 builder.add_object({"travis_pypi_secure": ""})  # optional

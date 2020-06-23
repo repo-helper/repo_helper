@@ -8,6 +8,8 @@ from setuptools import find_packages, setup
 # this package
 from __pkginfo__ import *  # pylint: disable=wildcard-import
 
+{{ "\n".join(setup_pre) }}
+
 setup(
 		author=author,
 		author_email=author_email,

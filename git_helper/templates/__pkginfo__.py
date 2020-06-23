@@ -22,6 +22,7 @@ __all__ = [
 		"py_modules",
 		"entry_points",
 		"__license__",
+		"__author__",
 		"short_desc",
 		"author",
 		"author_email",
@@ -69,14 +70,14 @@ project_urls = {
 repo_root = pathlib.Path(__file__).parent
 
 # Get info from files; set: long_description
-long_description = (repo_root / "README.rst").read_text().replace("{{ version }}", __version__) + '\n'
+long_description = (repo_root / "README.rst").read_text(encoding="utf-8").replace("{{ version }}", __version__) + '\n'
 {% if enable_conda %}conda_description = """{{ conda_description }}
 
 
 {% if conda_channels %}Before installing please ensure you have added the following channels: {{ ", ".join(conda_channels) }}{% endif %}"""
 __all__.append("conda_description")
 {% endif %}
-install_requires = (repo_root / "requirements.txt").read_text().split('\n')
+install_requires = (repo_root / "requirements.txt").read_text(encoding="utf-8").split('\n')
 extras_require = {{ extras_require }}
 
 classifiers = [

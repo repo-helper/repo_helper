@@ -65,8 +65,8 @@ recursive-exclude **/__pycache__ *
 			file = pathlib.Path(item)
 			clean_writer(f"{file.parent}/ {file.name}", fp)
 
-		clean_writer(f"recursive-include {templates.globals['import_name']}/ *.pyi", fp)
-		clean_writer(f"recursive-include {templates.globals['import_name']}/ py.typed", fp)
+		clean_writer(f"recursive-include {templates.globals['source_dir']}{templates.globals['import_name']}/ *.pyi", fp)
+		clean_writer(f"recursive-include {templates.globals['source_dir']}{templates.globals['import_name']}/ py.typed", fp)
 
 	return ["MANIFEST.in"]
 

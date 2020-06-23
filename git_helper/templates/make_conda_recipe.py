@@ -7,10 +7,12 @@ import platform
 import sys
 from io import StringIO
 
-# this package
+# 3rd party
 import rst2txt
-from __pkginfo__ import *  # pylint: disable=wildcard-import
 from docutils.core import publish_file
+
+# this package
+from __pkginfo__ import *  # pylint: disable=wildcard-import
 
 recipe_dir = repo_root / "conda"
 

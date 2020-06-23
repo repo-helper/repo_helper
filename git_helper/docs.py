@@ -44,7 +44,7 @@ from git_helper.blocks import (
 from git_helper.utils import clean_writer, ensure_requirements
 
 # this package
-from .templates import template_dir
+from .templates import init_repo_template_dir, template_dir
 
 __all__ = [
 		"ensure_doc_requirements",
@@ -53,6 +53,8 @@ __all__ = [
 		"copy_docs_styling",
 		"rewrite_docs_index",
 		"make_404_page",
+		"make_docs_source_rst",
+		"make_docs_building_rst",
 		]
 
 
@@ -76,7 +78,7 @@ def ensure_doc_requirements(repo_path: pathlib.Path, templates: jinja2.Environme
 			("sphinxemoji", "0.1.6"),
 			("sphinx-notfound-page", None),
 			("sphinx-tabs", "1.1.13"),
-			("sphinx_autodoc_typehints", "1.10.3"),
+			("sphinx_autodoc_typehints", "1.11.0"),
 			("sphinx-prompt", "1.2.0"),
 			}
 
@@ -249,14 +251,17 @@ def rewrite_docs_index(repo_path: pathlib.Path, templates: jinja2.Environment) -
 	index_rst = index_rst_file.read_text()
 
 	shields_block = create_shields_block(
-			templates.globals["username"],
-			templates.globals["repo_name"],
-			templates.globals["version"],
-			templates.globals["enable_conda"],
-			templates.globals["enable_tests"],
-			templates.globals["enable_docs"],
-			templates.globals["travis_site"],
-			templates.globals["pypi_name"],
+			username=templates.globals["username"],
+			repo_name=templates.globals["repo_name"],
+			version=templates.globals["version"],
+			conda=templates.globals["enable_conda"],
+			tests=templates.globals["enable_tests"],
+			docs=templates.globals["enable_docs"],
+			travis_site=templates.globals["travis_site"],
+			pypi_name=templates.globals["pypi_name"],
+			docker_shields=templates.globals["docker_shields"],
+			docker_name=templates.globals["docker_name"],
+			platforms=templates.globals["platforms"],
 			)
 
 	if templates.globals["license"] == "GNU General Public License v2 (GPLv2)":
@@ -271,6 +276,7 @@ def rewrite_docs_index(repo_path: pathlib.Path, templates: jinja2.Environment) -
 
 	install_block = create_docs_install_block(
 			templates.globals["repo_name"],
+			templates.globals["username"],
 			templates.globals["enable_conda"],
 			templates.globals["pypi_name"],
 			templates.globals["conda_channels"],
@@ -318,4 +324,52 @@ def make_404_page(repo_path: pathlib.Path, templates: jinja2.Environment) -> Lis
 	return [
 			os.path.join(templates.globals["docs_dir"], "404.rst"),
 			os.path.join(templates.globals["docs_dir"], "not-found.png"),
+			]
+
+
+
+def make_docs_source_rst(repo_path: pathlib.Path, templates: jinja2.Environment) -> List[str]:
+	"""
+
+	:param repo_path: Path to the repository root
+	:type repo_path: pathlib.Path
+	:param templates:
+	:type templates: jinja2.Environment
+	"""
+
+	docs_dir = repo_path / templates.globals["docs_dir"]
+	docs_source_rst = docs_dir / "Source.rst"
+	git_download_png = docs_dir / "git_download.png"
+
+	# if not docs_source_rst.exists():
+	source_template = templates.get_template("Source.rst")
+	docs_source_rst.write_text(source_template.render())
+
+	if not git_download_png.exists():
+		shutil.copy2(init_repo_template_dir / "git_download.png", git_download_png)
+
+	return [
+			os.path.join(templates.globals["docs_dir"], "Source.rst"),
+			os.path.join(templates.globals["docs_dir"], "git_download.png"),
+			]
+
+
+def make_docs_building_rst(repo_path: pathlib.Path, templates: jinja2.Environment) -> List[str]:
+	"""
+
+	:param repo_path: Path to the repository root
+	:type repo_path: pathlib.Path
+	:param templates:
+	:type templates: jinja2.Environment
+	"""
+
+	docs_dir = repo_path / templates.globals["docs_dir"]
+	docs_building_rst = docs_dir / "Building.rst"
+
+	# if not docs_building_rst.exists():
+	building_template = templates.get_template("Building.rst")
+	docs_building_rst.write_text(building_template.render())
+
+	return [
+			os.path.join(templates.globals["docs_dir"], "Building.rst"),
 			]

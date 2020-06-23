@@ -50,10 +50,23 @@ def make_tox(repo_path: pathlib.Path, templates: jinja2.Environment) -> List[str
 	:type templates: jinja2.Environment
 	"""
 
+	source_files = []
+
+	if templates.globals["py_modules"]:
+		source_files += templates.globals["source_dir"]
+
+		for file in templates.globals["py_modules"]:
+			source_files.append(f"{file}.py")
+	else:
+		source_files.append(f"{templates.globals['source_dir']}{templates.globals['import_name'].replace('.', '/')}")
+
+	if templates.globals["enable_tests"]:
+		source_files.append(templates.globals["tests_dir"])
+
 	tox = templates.get_template("tox_template.ini")
 
 	with (repo_path / "tox.ini").open("w") as fp:
-		clean_writer(tox.render(), fp)
+		clean_writer(tox.render(source_files=" ".join(source_files)), fp)
 
 	# tox = ConfigUpdater()
 	# tox.read("tox.ini")

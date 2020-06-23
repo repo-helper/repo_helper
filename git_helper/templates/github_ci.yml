@@ -1,0 +1,38 @@
+---
+name: {{ ci_name }}
+
+on:
+  push:
+    branches: ["master"]
+  pull_request:
+    branches: ["master"]
+
+jobs:
+  tests:
+    name: "Python ${{ "{{" }} matrix.python-version {{ "}}" }}"
+    runs-on: "{{ ci_platform }}"
+    env:
+      USING_COVERAGE: '{{ ",".join(no_dev_versions(python_versions)) }}'
+
+    strategy:
+      fail-fast: False
+      matrix:
+        python-version: ["{{ '","'.join(no_dev_versions(python_versions)) }}"]
+
+
+    steps:
+      - name: Checkout 🛎️
+        uses: "actions/checkout@v2"
+      - name: Setup Python 🐍
+        uses: "actions/setup-python@v1"
+        with:
+          python-version: "${{ "{{" }} matrix.python-version {{ "}}" }}"
+      - name: Install dependencies 🔧
+        run: |
+          python -VV
+          python -m site
+          python -m pip install --upgrade pip setuptools wheel
+          python -m pip install --upgrade tox tox-gh-actions {% for req in travis_additional_requirements %}{{ req }} {% endfor %}
+
+      - name: "Run Tests for Python ${{ "{{" }} matrix.python-version {{ "}}" }}"
+        run: "python -m tox"

@@ -102,7 +102,12 @@ def main():
 
 	managed_files = gh.run()
 
-	r = repo.Repo(str(gh.target_repo))
+	commit_changed_files(gh.target_repo, managed_files, args.commit)
+
+
+def commit_changed_files(repo_path, managed_files, commit=None):
+
+	r = repo.Repo(str(repo_path))
 
 	status = porcelain.status(r)
 	unstaged_changes = status.unstaged
@@ -120,11 +125,11 @@ def main():
 		for filename in staged_files:
 			print(f"  {filename}")
 
-		if args.commit is None:
+		if commit is None:
 			res = input("Commit? [Y/n] ").lower()
-			args.commit = ((res and res.startswith("y")) or not res)
+			commit = ((res and res.startswith("y")) or not res)
 
-		if args.commit:
+		if commit:
 			commit_id = r.do_commit(message=b"Updated files with `git_helper`.")  # TODO: better message
 			print(f"Committed as {commit_id.decode('UTF-8')}")
 		else:

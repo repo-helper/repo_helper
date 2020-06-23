@@ -39,6 +39,7 @@ __all__ = [
 		"make_copy_pypi_2_github",
 		"make_make_conda_recipe",
 		"make_travis_deploy_conda",
+		"make_github_ci",
 		]
 
 
@@ -120,3 +121,60 @@ def make_travis_deploy_conda(repo_path: pathlib.Path, templates: jinja2.Environm
 	make_executable(ci_dir / "travis_deploy_conda.sh")
 
 	return [".ci/travis_deploy_conda.sh"]
+
+
+def make_github_ci(repo_path: pathlib.Path, templates: jinja2.Environment) -> List[str]:
+	"""
+	Add configuration for `Github Actions to the desired repo
+
+	:param repo_path: Path to the repository root
+	:type repo_path: pathlib.Path
+	:param templates:
+	:type templates: jinja2.Environment
+	"""
+
+	actions = templates.get_template("github_ci.yml")
+
+	def no_dev_versions(versions):
+		return [v for v in versions if not v.endswith("dev")]
+
+	dot_github = repo_path / ".github"
+	maybe_make(dot_github / "workflows", parents=True)
+
+	if "windows" in templates.globals["platforms"]:
+		with (dot_github / "workflows" / "python_ci.yml").open("w") as fp:
+			clean_writer(actions.render(no_dev_versions=no_dev_versions, ci_platform="windows-2019", ci_name="Windows Tests"), fp)
+	else:
+		if (dot_github / "workflows" / "python_ci.yml").is_file():
+			(dot_github / "workflows" / "python_ci.yml").unlink()
+
+	if "macos" in templates.globals["platforms"]:
+		with (dot_github / "workflows" / "python_ci_macos.yml").open("w") as fp:
+			clean_writer(actions.render(no_dev_versions=no_dev_versions, ci_platform="macos-latest", ci_name="macOS Tests"), fp)
+	else:
+		if (dot_github / "workflows" / "python_ci_macos.yml").is_file():
+			(dot_github / "workflows" / "python_ci_macos.yml").unlink()
+
+	return [".github/workflows/python_ci.yml", ".github/workflows/python_ci_macos.yml"]
+
+
+def make_github_docs_test(repo_path: pathlib.Path, templates: jinja2.Environment) -> List[str]:
+	"""
+
+	:param repo_path: Path to the repository root
+	:type repo_path: pathlib.Path
+	:param templates:
+	:type templates: jinja2.Environment
+	"""
+
+	actions = templates.get_template("docs_test_action.yml")
+
+	dot_github = repo_path / ".github"
+	maybe_make(dot_github / "workflows", parents=True)
+
+	with (dot_github / "workflows" / "docs_test_action.yml").open("w") as fp:
+		clean_writer(actions.render(), fp)
+
+	return [".github/workflows/docs_test_action.yml"]
+
+

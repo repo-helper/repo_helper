@@ -68,7 +68,7 @@ def init_repo(repo_path: pathlib.Path, templates: jinja2.Environment) -> List[st
 		# doc-source
 		maybe_make(repo_path / templates.globals["docs_dir"])
 
-		for filename in {"Source.rst", "docs.rst", "index.rst", "Building.rst"}:
+		for filename in {"docs.rst", "index.rst"}:
 			template = init_repo_templates.get_template(filename)
 			with (repo_path / templates.globals["docs_dir"] / filename).open("w") as fp:
 				clean_writer(template.render(), fp)
@@ -90,8 +90,6 @@ def init_repo(repo_path: pathlib.Path, templates: jinja2.Environment) -> List[st
 			os.path.join(templates.globals["import_name"], "__init__.py"),
 			os.path.join(templates.globals["tests_dir"], "__init__.py"),
 			os.path.join(templates.globals["docs_dir"], "git_download.png"),
-			os.path.join(templates.globals["docs_dir"], "Source.rst"),
 			os.path.join(templates.globals["docs_dir"], "docs.rst"),
 			os.path.join(templates.globals["docs_dir"], "index.rst"),
-			os.path.join(templates.globals["docs_dir"], "Building.rst"),
 			]

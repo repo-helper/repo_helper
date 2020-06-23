@@ -21,6 +21,7 @@
 #  MA 02110-1301, USA.
 #
 # stdlib
+import os
 import pathlib
 from typing import Any, Dict, Iterable, List, Optional, Tuple, Union
 
@@ -81,10 +82,13 @@ def parse_yaml(repo_path: pathlib.Path):
 	# keywords
 	# license
 	config_vars["short_desc"] = raw_config_vars.get("short_desc", "")
+	config_vars["source_dir"] = os.path.join(raw_config_vars.get("source_dir", ""), "")
 
 	# Optional Features
 	config_vars["enable_tests"] = strtobool(raw_config_vars.get("enable_tests", "True"))
 	config_vars["enable_releases"] = strtobool(raw_config_vars.get("enable_releases", "True"))
+	config_vars["docker_shields"] = strtobool(raw_config_vars.get("docker_shields", "False"))
+	config_vars["docker_name"] = str(raw_config_vars.get("docker_name", ""))
 
 	# Python Versions
 	python_versions, python_deploy_version, min_py_version = parse_python_versions(raw_config_vars)
@@ -97,11 +101,13 @@ def parse_yaml(repo_path: pathlib.Path):
 			"manifest_additional",
 			"py_modules",
 			"console_scripts",
+			"setup_pre",
 			}:
 		config_vars[var_name] = raw_config_vars.get(var_name, [])
 	config_vars["additional_setup_args"] = "\n".join([
 			"\t\t{}={},".format(*x) for x in raw_config_vars.get("additional_setup_args", {}).items()
 			])
+	config_vars["platforms"] = [x.lower() for x in raw_config_vars.get("platforms", ["Windows", "macOS", "Linux"])]
 	extras_require, additional_requirements_files = parse_extras(raw_config_vars, repo_path)
 	config_vars["extras_require"] = extras_require
 	config_vars["additional_requirements_files"] = additional_requirements_files
@@ -136,8 +142,10 @@ def parse_yaml(repo_path: pathlib.Path):
 
 	# Travis
 	tox_travis_versions = get_tox_travis_python_versions(python_versions, tox_py_versions)
-	tox_travis_versions[python_deploy_version] += ", docs, mypy"
+	gh_actions_versions = get_gh_actions_python_versions(python_versions, tox_py_versions)
+	tox_travis_versions["3.6"] += ", mypy"
 	config_vars["tox_travis_versions"] = tox_travis_versions
+	config_vars["gh_actions_versions"] = gh_actions_versions
 	config_vars["travis_site"] = raw_config_vars.get("travis_site", "com")
 	config_vars["travis_pypi_secure"] = raw_config_vars.get("travis_pypi_secure")
 	for var_name in {
@@ -188,6 +196,19 @@ def parse_yaml(repo_path: pathlib.Path):
 	if license_classifier:
 		add_classifier(license_classifier)
 
+	if (repo_path / config_vars["import_name"].replace(".", "/") / "py.typed").is_file():
+		add_classifier("Typing :: Typed")
+
+	if set(config_vars["platforms"]) == {"windows", "macos", "linux"}:
+		add_classifier("Operating System :: OS Independent")
+	else:
+		if "windows" in config_vars["platforms"]:
+			add_classifier("Operating System :: Microsoft :: Windows")
+		if "linux" in config_vars["platforms"]:
+			add_classifier("Operating System :: POSIX :: Linux")
+		if "macos" in config_vars["platforms"]:
+			add_classifier("Operating System :: MacOS")
+
 	validate_classifiers(config_vars["classifiers"])
 
 	return config_vars
@@ -200,7 +221,7 @@ def parse_python_versions(
 	python_deploy_version = str(raw_config_vars.get("python_deploy_version", 3.6))
 
 	python_versions = raw_config_vars.get("python_versions", [python_deploy_version])
-	python_versions = [version for version in python_versions if version]
+	python_versions = [str(version) for version in python_versions if version]
 
 	min_py_version = min(python_versions)
 
@@ -212,7 +233,7 @@ def get_tox_python_versions(python_versions: Iterable[str]) -> List[str]:
 	tox_py_versions = []
 
 	for py_version in python_versions:
-		py_version = py_version.replace(".", '')
+		py_version = str(py_version).replace(".", '')
 		if not py_version.startswith("py"):
 			py_version = f"py{py_version}"
 		tox_py_versions.append(py_version)
@@ -224,10 +245,23 @@ def get_tox_travis_python_versions(
 		python_versions: Iterable[str],
 		tox_py_versions: Iterable[str],
 		) -> Dict[Union[str, float], str]:
-	tox_travis_matrix: Dict[Union[str, float], str] = {}
+	tox_travis_matrix: Dict[Union[str], str] = {}
 
 	for py_version, tox_py_version in zip(python_versions, tox_py_versions):
-		tox_travis_matrix[py_version] = tox_py_version
+		tox_travis_matrix[str(py_version)] = str(tox_py_version)
+
+	return tox_travis_matrix
+
+
+def get_gh_actions_python_versions(
+		python_versions: Iterable[str],
+		tox_py_versions: Iterable[str],
+		) -> Dict[Union[str, float], str]:
+	tox_travis_matrix: Dict[Union[str], str] = {}
+
+	for py_version, tox_py_version in zip(python_versions, tox_py_versions):
+		if tox_py_version != "docs":
+			tox_travis_matrix[str(py_version)] = str(tox_py_version)
 
 	return tox_travis_matrix
 
@@ -236,7 +270,7 @@ def get_version_classifiers(python_versions: Iterable[str]) -> List[str]:
 	version_classifiers = []
 
 	for py_version in python_versions:
-		if py_version.startswith("3"):
+		if str(py_version).startswith("3"):
 			py_version = py_version.replace("-dev", '')
 			for classifier in (
 					f'Programming Language :: Python :: {py_version}',
@@ -287,8 +321,8 @@ def parse_license(raw_config_vars: Dict[str, Any]) -> Tuple[str, Optional[str]]:
 	licenses = {
 			"LGPLv3": "GNU Lesser General Public License v3 (LGPLv3)",
 			"LGPLv3+": "GNU Lesser General Public License v3 or later (LGPLv3+)",
-			"GPLv3": "GNU General Public License v3 (LGPLv3)",
-			"GPLv3+": "GNU General Public License v3 or later (LGPLv3+)",
+			"GPLv3": "GNU General Public License v3 (GPLv3)",
+			"GPLv3+": "GNU General Public License v3 or later (GPLv3+)",
 			"GPLv2": "GNU General Public License v2 (GPLv2)",
 			"BSD": "BSD License",
 			}
