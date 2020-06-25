@@ -9,3 +9,4 @@ configupdater
 importlib_resources
 typing_extensions
 typing_inspect
+requests

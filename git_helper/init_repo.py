@@ -22,15 +22,19 @@
 #
 
 # stdlib
+import datetime
 import os.path
 import pathlib
 import shutil
-from typing import List
+from typing import List, Optional
 
 # 3rd party
 import jinja2
 
 # this package
+import requests
+from jinja2 import BaseLoader, Environment, StrictUndefined
+
 from git_helper.templates import init_repo_template_dir
 from git_helper.utils import clean_writer
 
@@ -63,10 +67,12 @@ def init_repo(repo_path: pathlib.Path, templates: jinja2.Environment) -> List[st
 		clean_writer(__init__.render(), fp)
 
 	# tests
-	maybe_make(repo_path / templates.globals["tests_dir"])
-	(repo_path / templates.globals["tests_dir"] / "__init__.py").open("a").close()
-	(repo_path / templates.globals["tests_dir"] / "requirements.txt").open("a").close()
+	if templates.globals["enable_tests"]:
+		maybe_make(repo_path / templates.globals["tests_dir"])
+		(repo_path / templates.globals["tests_dir"] / "__init__.py").open("a").close()
+		(repo_path / templates.globals["tests_dir"] / "requirements.txt").open("a").close()
 
+	# docs
 	if templates.globals["enable_docs"]:
 		# doc-source
 		maybe_make(repo_path / templates.globals["docs_dir"])
@@ -82,11 +88,57 @@ def init_repo(repo_path: pathlib.Path, templates: jinja2.Environment) -> List[st
 				)
 
 	# other
-	for filename in {"LICENSE", "README.rst"}:
+	for filename in {"README.rst"}:
 		template = init_repo_templates.get_template(filename)
 		with (repo_path / filename).open("w") as fp:
 			clean_writer(template.render(), fp)
 
+	# Licenses from https://github.com/licenses/license-templates/tree/master/templates
+	license_url: Optional[str] = None
+	license_text: str = ''
+
+	base_license_url = "https://raw.githubusercontent.com/licenses/license-templates/master/templates/"
+
+	if templates.globals["license"] in {
+			"GNU Lesser General Public License v3 (LGPLv3)",
+			"GNU Lesser General Public License v3 or later (LGPLv3+)"
+			}:
+		license_url = f"{base_license_url}lgpl.txt"
+
+	if templates.globals["license"] in {
+			"GNU General Public License v3 (GPLv3)",
+			"GNU General Public License v3 or later (GPLv3+)",
+			}:
+		license_url = f"{base_license_url}gpl3.txt"
+
+	if templates.globals["license"] == "GNU General Public License v2 (GPLv2)":
+		license_url = f"{base_license_url}gpl2.txt"
+
+	if templates.globals["license"] == "BSD License":
+		license_url = f"{base_license_url}bsd2.txt"
+
+	if templates.globals["license"] == "MIT License":
+		license_url = f"{base_license_url}mit.txt"
+
+	if license_url:
+		response = requests.get(license_url)
+		if response.status_code == 200:
+			license_text = response.text
+			with (repo_path / "LICENSE").open("w") as fp:
+				clean_writer(response.text, fp)
+
+	with (repo_path / "LICENSE").open("w") as fp:
+		license_template = Environment(
+				loader=BaseLoader,
+				undefined=StrictUndefined,
+				).from_string(license_text)  # type: ignore
+		clean_writer(license_template.render(
+				year=datetime.datetime.today().year,
+				organization=templates.globals["author"],
+				project=templates.globals["modname"],
+				), fp)
+
+	# Touch requirements file
 	(repo_path / "requirements.txt").open("a").close()
 
 	return [
@@ -95,4 +147,9 @@ def init_repo(repo_path: pathlib.Path, templates: jinja2.Environment) -> List[st
 			os.path.join(templates.globals["docs_dir"], "git_download.png"),
 			os.path.join(templates.globals["docs_dir"], "docs.rst"),
 			os.path.join(templates.globals["docs_dir"], "index.rst"),
+			os.path.join(templates.globals["tests_dir"], "__init__.py"),
+			os.path.join(templates.globals["tests_dir"], "requirements.txt"),
+			"requirements.txt",
+			"LICENSE",
+			"README.rst",
 			]

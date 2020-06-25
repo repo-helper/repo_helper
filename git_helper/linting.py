@@ -188,7 +188,7 @@ code_only_warning = [
 		"D102",  # Missing docstring in public method
 		"D103",  # Missing docstring in public function
 		"D104",  # Missing docstring in public package
-		"D105",  # Missing docstring in magic method
+		# "D105",  # Missing docstring in magic method
 		"D106",  # Missing docstring in public nested class
 		"D107",  # Missing docstring in __init__
 		"D201",  # No blank lines allowed before function docstring
