@@ -38,7 +38,7 @@ jobs:
         provider: pypi
         user: "DomDF"
         password:
-          secure: None
+          secure:
         distributions: "sdist bdist_wheel"
         skip_existing: true
 

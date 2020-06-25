@@ -22,9 +22,9 @@ __all__ = [
 		"py_modules",
 		"entry_points",
 		"__license__",
+		"__author__",
 		"short_desc",
 		"author",
-		"__author__",
 		"author_email",
 		"github_username",
 		"web",
@@ -62,7 +62,7 @@ author_email = "dominic@davis-foster.co.uk"
 github_username = "domdfcoding"
 web = github_url = f"https://github.com/domdfcoding/git_helper"
 project_urls = {
-		"Documentation": f"https://git_helper.readthedocs.io",  # TODO: Make this link match the package version
+		"Documentation": f"https://git_helper.readthedocs.io",
 		"Issue Tracker": f"{github_url}/issues",
 		"Source Code": github_url,
 		}
@@ -70,23 +70,23 @@ project_urls = {
 repo_root = pathlib.Path(__file__).parent
 
 # Get info from files; set: long_description
-long_description = (repo_root / "README.rst").read_text().replace("0.0.1", __version__) + '\n'
+long_description = (repo_root / "README.rst").read_text(encoding="utf-8").replace("0.0.1", __version__) + '\n'
 
-install_requires = (repo_root / "requirements.txt").read_text().split('\n')
+install_requires = (repo_root / "requirements.txt").read_text(encoding="utf-8").split('\n')
 extras_require = {'all': []}
 
 classifiers = [
 		'Development Status :: 4 - Beta',
 		'Intended Audience :: Developers',
+		'License :: OSI Approved :: GNU Lesser General Public License v3 or later (LGPLv3+)',
 		'Operating System :: OS Independent',
-		'Topic :: Utilities',
-		'Programming Language :: Python :: 3.6',
-		'Programming Language :: Python :: Implementation :: CPython',
-		'Programming Language :: Python :: 3.7',
-		'Programming Language :: Python :: 3.8',
 		'Programming Language :: Python',
 		'Programming Language :: Python :: 3 :: Only',
-		'License :: OSI Approved :: GNU Lesser General Public License v3 or later (LGPLv3+)',
+		'Programming Language :: Python :: 3.6',
+		'Programming Language :: Python :: 3.7',
+		'Programming Language :: Python :: 3.8',
+		'Programming Language :: Python :: Implementation :: CPython',
+		'Topic :: Utilities',
 
 		]
 

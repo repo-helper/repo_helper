@@ -5,7 +5,10 @@
 # 3rd party
 from setuptools import find_packages, setup
 
+# this package
 from __pkginfo__ import *  # pylint: disable=wildcard-import
+
+
 
 setup(
 		author=author,

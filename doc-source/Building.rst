@@ -2,7 +2,7 @@
 Building from source
 *********************
 
-To build the |pkgname2| package from source using ``setuptools``, run the following command:
+To build the ``git_helper`` package from source using ``setuptools``, run the following command:
 
 .. code-block:: bash
 

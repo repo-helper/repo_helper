@@ -8,17 +8,15 @@ import os
 import re
 import sys
 import warnings
-from sphinx.locale import _
 
-# Suppress warnings from sphinx_autodoc_typehints
-# TODO: Remove once the following issues is resolved:
-# https://github.com/agronholm/sphinx-autodoc-typehints/issues/133
-warnings.filterwarnings('ignore', message='sphinx.util.inspect.Signature\(\) is deprecated')
+# 3rd party
+from sphinx.locale import _
 
 sys.path.append(os.path.abspath('.'))
 sys.path.append(os.path.abspath('..'))
 
 from __pkginfo__ import __version__
+
 
 
 github_url = f"https://github.com/domdfcoding/git_helper"
@@ -49,6 +47,7 @@ extensions = [
 		"sphinx_tabs.tabs",
 		"sphinx-prompt",
 		"sphinx_autodoc_typehints",
+		"sphinx.ext.autosummary",
 		'tox_conf_directive',
 		]
 
@@ -72,7 +71,7 @@ intersphinx_mapping = {
 		"SciPy": ('https://docs.scipy.org/doc/scipy/reference', None),
 		"matplotlib": ('https://matplotlib.org', None),
 		"h5py": ('https://docs.h5py.org/en/latest/', None),
-		"Sphinx": ('https://www.sphinx-doc.org/en/stable/', None),
+		"Sphinx": ('https://www.sphinx-doc.org/en/master/', None),
 		"Django": ('https://docs.djangoproject.com/en/dev/', 'https://docs.djangoproject.com/en/dev/_objects/'),
 		"sarge": ('https://sarge.readthedocs.io/en/latest/', None),
 		"attrs": ('https://www.attrs.org/en/stable/', None),
