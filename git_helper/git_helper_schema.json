@@ -15,12 +15,15 @@
       "type": "string"
     },
     "version": {
-      "type": "string"
+      "type": [
+        "string",
+        "number"
+      ]
     },
     "copyright_years": {
       "type": [
-        "integer",
-        "string"
+        "string",
+        "number"
       ]
     },
     "repo_name": {
@@ -76,16 +79,16 @@
     },
     "python_deploy_version": {
       "type": [
-        "number",
-        "string"
+        "string",
+        "number"
       ]
     },
     "python_versions": {
       "type": "array",
       "items": {
         "type": [
-          "number",
-          "string"
+          "string",
+          "number"
         ]
       }
     },
@@ -128,7 +131,11 @@
     "platforms": {
       "type": "array",
       "items": {
-        "type": "string"
+        "enum": [
+          "Windows",
+          "macOS",
+          "Linux"
+        ]
       }
     },
     "rtfd_author": {
@@ -177,7 +184,10 @@
       "type": "object"
     },
     "enable_docs": {
-      "type": "boolean"
+      "type": [
+        "boolean",
+        "string"
+      ]
     },
     "docs_dir": {
       "type": "string"
@@ -204,7 +214,12 @@
       ]
     },
     "travis_ubuntu_version": {
-      "type": "string"
+      "enum": [
+        "bionic",
+        "xenial",
+        "trusty",
+        "precise"
+      ]
     },
     "travis_extra_install_pre": {
       "type": "array",

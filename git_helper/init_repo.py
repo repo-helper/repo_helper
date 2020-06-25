@@ -49,7 +49,10 @@ def init_repo(repo_path: pathlib.Path, templates: jinja2.Environment) -> List[st
 	:type templates: jinja2.Environment
 	"""
 
-	init_repo_templates = jinja2.Environment(loader=jinja2.FileSystemLoader(str(init_repo_template_dir)))
+	init_repo_templates = jinja2.Environment(
+			loader=jinja2.FileSystemLoader(str(init_repo_template_dir)),
+			undefined=jinja2.StrictUndefined,
+			)
 	init_repo_templates.globals.update(templates.globals)
 
 	# package

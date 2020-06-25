@@ -77,7 +77,10 @@ class GitHelper:
 		"""
 
 		self.target_repo = pathlib.Path(target_repo)
-		self.templates = jinja2.Environment(loader=jinja2.FileSystemLoader(str(template_dir)))
+		self.templates = jinja2.Environment(
+				loader=jinja2.FileSystemLoader(str(template_dir)),
+				undefined=jinja2.StrictUndefined,
+				)
 		self.load_settings()
 
 	def load_settings(self) -> None:

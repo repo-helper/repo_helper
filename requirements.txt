@@ -7,3 +7,5 @@ colorama >=0.4.3
 dulwich
 configupdater
 importlib_resources
+typing_extensions
+typing_inspect

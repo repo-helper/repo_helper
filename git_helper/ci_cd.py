@@ -141,14 +141,14 @@ def make_github_ci(repo_path: pathlib.Path, templates: jinja2.Environment) -> Li
 	dot_github = repo_path / ".github"
 	maybe_make(dot_github / "workflows", parents=True)
 
-	if "windows" in templates.globals["platforms"]:
+	if "Windows" in templates.globals["platforms"]:
 		with (dot_github / "workflows" / "python_ci.yml").open("w") as fp:
 			clean_writer(actions.render(no_dev_versions=no_dev_versions, ci_platform="windows-2019", ci_name="Windows Tests"), fp)
 	else:
 		if (dot_github / "workflows" / "python_ci.yml").is_file():
 			(dot_github / "workflows" / "python_ci.yml").unlink()
 
-	if "macos" in templates.globals["platforms"]:
+	if "macOS" in templates.globals["platforms"]:
 		with (dot_github / "workflows" / "python_ci_macos.yml").open("w") as fp:
 			clean_writer(actions.render(no_dev_versions=no_dev_versions, ci_platform="macos-latest", ci_name="macOS Tests"), fp)
 	else:

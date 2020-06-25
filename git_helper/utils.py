@@ -28,7 +28,7 @@ import stat
 import subprocess
 import sys
 from numbers import Number
-from typing import IO, Any, Iterable, List, Optional, Tuple, Union
+from typing import IO, Any, Iterable, List, Optional, Tuple, Type, Union
 
 # 3rd party
 import trove_classifiers  # type: ignore
@@ -48,7 +48,15 @@ __all__ = [
 		"enquote_value",
 		"validate_classifiers",
 		"stderr_writer",
+		"license_lookup",
+		"check_union",
+		"get_json_type",
+		"json_type_lookup",
 		]
+
+from typing_extensions import Literal
+
+from typing_inspect import get_origin
 
 
 def clean_writer(string: str, fp: IO[str]):
@@ -222,7 +230,9 @@ def stderr_writer(*args, **kwargs):
 	sys.stderr.flush()
 
 
-def validate_classifiers(classifiers: Iterable[str]):
+def validate_classifiers(classifiers: Iterable[str]) -> bool:
+	invalid_classifier = False
+
 	for classifier in classifiers:
 		if classifier in trove_classifiers.deprecated_classifiers:
 			stderr_writer(f"{Fore.YELLOW}Classifier '{classifier}' is deprecated!")
@@ -231,3 +241,52 @@ def validate_classifiers(classifiers: Iterable[str]):
 		elif classifier not in trove_classifiers.classifiers:
 			stderr_writer(f"{Fore.RED}Unknown Classifier '{classifier}'!")
 			stderr_writer(Fore.RESET, end='')
+			invalid_classifier = True
+
+	return invalid_classifier
+
+
+
+license_lookup = {
+			"LGPLv3": "GNU Lesser General Public License v3 (LGPLv3)",
+			"LGPLv3+": "GNU Lesser General Public License v3 or later (LGPLv3+)",
+			"GPLv3": "GNU General Public License v3 (GPLv3)",
+			"GPLv3+": "GNU General Public License v3 or later (GPLv3+)",
+			"GPLv2": "GNU General Public License v2 (GPLv2)",
+			"BSD": "BSD License",
+			"MIT": "MIT License",
+			}
+
+
+
+def check_union(obj: Any, dtype: Type):
+	return isinstance(obj, dtype.__args__)  # type: ignore
+
+
+
+json_type_lookup = {
+		str: "string",
+		int: "number",
+		float: "number",
+		dict: "object",
+		}
+
+
+def get_json_type(type_):
+	if type_ in json_type_lookup:
+		return {"type": json_type_lookup[type_]}
+
+	elif get_origin(type_) is Union:
+		return {"type": [get_json_type(t)["type"] for t in type_.__args__]}
+
+	elif get_origin(type_) is Literal:
+		return {"enum": [x for x in type_.__args__]}
+
+	elif get_origin(type_) is list:
+		return get_json_type(type_.__args__[0])
+
+	elif type_ is bool:
+		return {"type": ["boolean", "string"]}
+
+	elif get_origin(type_) is dict:
+		return {"type": "object"}

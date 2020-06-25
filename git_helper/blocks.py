@@ -26,7 +26,7 @@ import re
 from typing import Optional, Sequence, Set, Union
 
 # 3rd party
-from jinja2 import BaseLoader, Environment
+from jinja2 import BaseLoader, Environment, StrictUndefined
 
 # this package
 from git_helper.shields import *
@@ -53,7 +53,7 @@ shields_regex = re.compile(r'(?s)(\.\. start shields)(.*?)(\.\. end shields)')
 short_desc_regex = re.compile(r'(?s)(\.\. start short_desc)(.*?)(\.\. end short_desc)')
 links_regex = re.compile(r'(?s)(\.\. start links)(.*?)(\.\. end links)')
 
-shields_block_template = Environment(loader=BaseLoader).from_string(  # type: ignore
+shields_block_template = Environment(loader=BaseLoader, undefined=StrictUndefined).from_string(  # type: ignore
 		"""\
 .. start shields {{ unique_name.lstrip("_") }}
 
@@ -65,8 +65,8 @@ shields_block_template = Environment(loader=BaseLoader).from_string(  # type: ig
 	  - |docs{{ unique_name }}| |docs_check{{ unique_name }}|
 	{% endif %}* - Tests
 	  - |travis{{ unique_name }}| \
-{% if "windows" in platforms %}|actions_windows{{ unique_name }}| {% endif %}\
-{% if "macos" in platforms %}|actions_macos{{ unique_name }}| {% endif %}\
+{% if "Windows" in platforms %}|actions_windows{{ unique_name }}| {% endif %}\
+{% if "macOS" in platforms %}|actions_macos{{ unique_name }}| {% endif %}\
 {% if tests %}|coveralls{{ unique_name }}| {% endif %}\
 |codefactor{{ unique_name }}|
 	* - PyPI
@@ -85,9 +85,9 @@ shields_block_template = Environment(loader=BaseLoader).from_string(  # type: ig
 .. |docs_check{{ unique_name }}| {{ make_docs_check_shield(repo_name, username)[3:] }}{% endif %}
 
 .. |travis{{ unique_name }}| {{ make_travis_shield(repo_name, username, travis_site)[3:] }}
-{% if "windows" in platforms %}
+{% if "Windows" in platforms %}
 .. |actions_windows{{ unique_name }}| {{ make_actions_windows_shield(repo_name, username)[3:] }}
-{% endif %}{% if "macos" in platforms %}
+{% endif %}{% if "macOS" in platforms %}
 .. |actions_macos{{ unique_name }}| {{ make_actions_macos_shield(repo_name, username)[3:] }}
 {% endif %}
 .. |requires{{ unique_name }}| {{ make_requires_shield(repo_name, username)[3:] }}
@@ -190,7 +190,7 @@ def create_shields_block(
 			)
 
 
-readme_installation_block_template = Environment(loader=BaseLoader).from_string(  # type: ignore
+readme_installation_block_template = Environment(loader=BaseLoader, undefined=StrictUndefined).from_string(  # type: ignore
 		"""\
 .. start installation
 
@@ -253,7 +253,7 @@ def create_short_desc_block(short_desc: str) -> str:
 .. end short_desc"""
 
 
-docs_installation_block_template = Environment(loader=BaseLoader).from_string(  # type: ignore
+docs_installation_block_template = Environment(loader=BaseLoader, undefined=StrictUndefined).from_string(  # type: ignore
 		"""\
 .. start installation
 
@@ -313,7 +313,7 @@ def create_docs_install_block(
 			)
 
 
-docs_links_block_template = Environment(loader=BaseLoader).from_string(  # type: ignore
+docs_links_block_template = Environment(loader=BaseLoader, undefined=StrictUndefined).from_string(  # type: ignore
 		"""\
 .. start links
 
