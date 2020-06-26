@@ -31,7 +31,7 @@ import jinja2
 from domdf_python_tools.paths import maybe_make
 
 # this package
-from .bots import make_auto_assign_action, make_dependabot, make_stale_bot
+from .bots import make_auto_assign_action, make_dependabot, make_imgbot, make_stale_bot
 from .ci_cd import (
 	make_copy_pypi_2_github,
 	make_github_ci,
@@ -249,6 +249,7 @@ files: List[Tuple[Callable, str, Sequence[str]]] = [
 		(make_yapf, "yapf", []),
 		(ensure_tests_requirements, "test_requirements", ["enable_tests"]),
 		(make_dependabot, "dependabot", []),
+		(make_imgbot, "imgbot", []),
 		(make_travis_deploy_conda, "travis_deploy_conda", ["enable_conda"]),
 		(make_make_conda_recipe, "make_conda_recipe", ["enable_conda"]),
 		(ensure_bumpversion, "bumpversion", []),

@@ -30,11 +30,13 @@ from typing import List
 import jinja2
 
 # this package
+import json
+
 from .templates import template_dir
 from .utils import clean_writer
 from domdf_python_tools.paths import maybe_make
 
-__all__ = ["make_dependabot", "make_auto_assign_action", "make_stale_bot"]
+__all__ = ["make_dependabot", "make_auto_assign_action", "make_stale_bot", "make_imgbot"]
 
 
 def make_stale_bot(repo_path: pathlib.Path, templates: jinja2.Environment) -> List[str]:
@@ -165,3 +167,28 @@ update_configs:
 				)
 
 	return [".dependabot/config.yml"]
+
+
+def make_imgbot(repo_path: pathlib.Path, templates: jinja2.Environment) -> List[str]:
+	"""
+	Add configuration for ``imgbot`` to the desired repo
+
+	https://imgbot.net/
+
+	:param repo_path: Path to the repository root
+	:type repo_path: pathlib.Path
+	:param templates:
+	:type templates: jinja2.Environment
+	"""
+
+	imgbot_file = repo_path / ".imgbotconfig"
+
+	with imgbot_file.open("w") as fp:
+		clean_writer(json.dumps({
+				"schedule": "weekly",
+				"ignoredFiles": ["**/*.svg"]
+				},
+				indent=4,
+				), fp)
+
+	return [imgbot_file.name]
