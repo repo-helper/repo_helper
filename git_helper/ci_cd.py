@@ -178,3 +178,23 @@ def make_github_docs_test(repo_path: pathlib.Path, templates: jinja2.Environment
 	return [".github/workflows/docs_test_action.yml"]
 
 
+def make_github_octocheese(repo_path: pathlib.Path, templates: jinja2.Environment) -> List[str]:
+	"""
+
+	:param repo_path: Path to the repository root
+	:type repo_path: pathlib.Path
+	:param templates:
+	:type templates: jinja2.Environment
+	"""
+
+	actions = templates.get_template("octocheese.yml")
+
+	dot_github = repo_path / ".github"
+	maybe_make(dot_github / "workflows", parents=True)
+
+	with (dot_github / "workflows" / "octocheese.yml").open("w") as fp:
+		clean_writer(actions.render(), fp)
+
+	return [".github/workflows/octocheese.yml"]
+
+

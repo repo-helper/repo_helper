@@ -36,10 +36,10 @@ from .ci_cd import (
 	make_copy_pypi_2_github,
 	make_github_ci,
 	make_github_docs_test,
-	make_make_conda_recipe,
+	make_github_octocheese, make_make_conda_recipe,
 	make_travis,
-	make_travis_deploy_conda
-)
+	make_travis_deploy_conda,
+	)
 from .docs import (
 	copy_docs_styling,
 	ensure_doc_requirements,
@@ -250,6 +250,7 @@ files: List[Tuple[Callable, str, Sequence[str]]] = [
 		(ensure_tests_requirements, "test_requirements", ["enable_tests"]),
 		(make_dependabot, "dependabot", []),
 		(make_imgbot, "imgbot", []),
+		(make_github_octocheese, "octocheese", []),
 		(make_travis_deploy_conda, "travis_deploy_conda", ["enable_conda"]),
 		(make_make_conda_recipe, "make_conda_recipe", ["enable_conda"]),
 		(ensure_bumpversion, "bumpversion", []),

@@ -256,11 +256,11 @@ def make_isort(repo_path: pathlib.Path, templates: jinja2.Environment) -> List[s
 	:type templates: jinja2.Environment
 	"""
 
-	if templates.globals["enable_docs"]:
-		with (repo_path / templates.globals["docs_dir"] / "requirements.txt").open() as fp:
-			doc_requirements = list(requirements.parse(fp))
-	else:
-		doc_requirements = []
+	# if templates.globals["enable_docs"]:
+	# 	with (repo_path / templates.globals["docs_dir"] / "requirements.txt").open() as fp:
+	# 		doc_requirements = list(requirements.parse(fp))
+	# else:
+	# 	doc_requirements = []
 
 	if templates.globals["enable_tests"]:
 		with (repo_path / templates.globals["tests_dir"] / "requirements.txt").open() as fp:
@@ -275,7 +275,7 @@ def make_isort(repo_path: pathlib.Path, templates: jinja2.Environment) -> List[s
 
 	all_requirements = set()
 
-	for req in (*doc_requirements, *test_requirements, *main_requirements):
+	for req in (*test_requirements, *main_requirements):  # *doc_requirements,
 		all_requirements.add(req.name)
 
 	all_requirements.discard(templates.globals["import_name"])

@@ -79,23 +79,26 @@ def make_auto_assign_action(repo_path: pathlib.Path, templates: jinja2.Environme
 	if (dot_github / "workflow").is_dir():
 		(dot_github / "workflow").rmdir()
 
-	with (dot_github / "workflows" / "assign.yml").open("w") as fp:
-		clean_writer(
-				"""# This file is managed by `git_helper`. Don't edit it directly
+	if (dot_github / "workflows" / "assign.yml").is_file():
+		(dot_github / "workflows" / "assign.yml").unlink()
 
-name: 'Auto Assign'
-on: pull_request
-
-jobs:
-  add-reviews:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: kentaro-m/auto-assign-action@v1.1.0
-        with:
-          repo-token: "${{ secrets.GITHUB_TOKEN }}"
-""",
-				fp
-				)
+# 	with (dot_github / "workflows" / "assign.yml").open("w") as fp:
+# 		clean_writer(
+# 				"""# This file is managed by `git_helper`. Don't edit it directly
+#
+# name: 'Auto Assign'
+# on: pull_request
+#
+# jobs:
+#   add-reviews:
+#     runs-on: ubuntu-latest
+#     steps:
+#       - uses: kentaro-m/auto-assign-action@v1.1.0
+#         with:
+#           repo-token: "${{ secrets.GITHUB_TOKEN }}"
+# """,
+# 				fp
+# 				)
 
 	with (dot_github / "auto_assign.yml").open("w") as fp:
 		clean_writer(
@@ -186,7 +189,7 @@ def make_imgbot(repo_path: pathlib.Path, templates: jinja2.Environment) -> List[
 	with imgbot_file.open("w") as fp:
 		clean_writer(json.dumps({
 				"schedule": "weekly",
-				"ignoredFiles": ["**/*.svg"]
+				"ignoredFiles": ["**/*.svg"] + templates.globals["imgbot_ignore"]
 				},
 				indent=4,
 				), fp)

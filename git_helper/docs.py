@@ -84,6 +84,12 @@ def ensure_doc_requirements(repo_path: pathlib.Path, templates: jinja2.Environme
 
 	test_req_file = repo_path / templates.globals["docs_dir"] / "requirements.txt"
 
+	test_req_file.write_text(
+			"\n".join(
+					line for line in test_req_file.read_text().splitlines()
+					if not line.startswith("git+")
+					))
+
 	ensure_requirements(target_requirements, test_req_file)
 
 	return [os.path.join(templates.globals["docs_dir"], "requirements.txt")]

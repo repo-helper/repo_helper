@@ -27,34 +27,15 @@ import pathlib
 from typing import Dict, Iterable, List, Union
 
 # this package
+from git_helper import configuration
+
 import git_helper
 
 # this package
 import importlib_resources  # type: ignore
 import yaml
 
-from git_helper.configuration import (
-	additional_ignore, additional_requirements_files, additional_setup_args, author, classifiers, conda_channels,
-	conda_description,
-	console_scripts,
-	copyright_years, docker_name,
-	docker_shields, docs_dir, email,
-	enable_conda,
-	enable_docs, enable_releases,
-	enable_tests,
-	exclude_files, extra_sphinx_extensions, extras_require, html_context, html_theme_options, import_name,
-	intersphinx_mapping, keywords, manifest_additional, modname,
-	pkginfo_extra, platforms, preserve_custom_theme, py_modules, pypi_name,
-	python_deploy_version, python_versions, repo_name,
-	rtfd_author, setup_pre, short_desc,
-	source_dir, sphinx_conf_epilogue, sphinx_conf_preamble, sphinx_html_theme, tests_dir,
-	travis_additional_requirements,
-	travis_extra_install_post,
-	travis_extra_install_pre,
-	travis_pypi_secure, travis_site,
-	travis_ubuntu_version, username, version,
-	license,
-	)
+from git_helper.configuration import *
 from git_helper.config_vars import make_schema, parse_extras, ConfigVar
 from ytools import validate  # type: ignore  # TODO
 
@@ -131,6 +112,9 @@ def parse_yaml(repo_path: pathlib.Path):
 			html_context,
 			enable_docs,
 			docs_dir,
+
+			# Other
+			imgbot_ignore,
 			]
 
 	for var in metadata_vars:
@@ -248,67 +232,7 @@ def dump_schema():
 	# builder = SchemaBuilder()
 	# builder.add_schema(schema)
 
-	from git_helper.configuration import tox_requirements
-	from git_helper.configuration import tox_build_requirements
-	from git_helper.configuration import tox_testenv_extras
-	schema = make_schema(
-			author,
-			email,
-			username,
-			modname,
-			version,
-			copyright_years,
-			repo_name,
-			pypi_name,
-			import_name,
-			classifiers,
-			keywords,
-			license,
-			short_desc,
-			source_dir,
-			enable_tests,
-			enable_releases,
-			docker_shields,
-			docker_name,
-			python_deploy_version,
-			python_versions,
-			manifest_additional,
-			py_modules,
-			console_scripts,
-			additional_setup_args,
-			extras_require,
-			additional_requirements_files,
-			setup_pre,
-			platforms,
-			rtfd_author,
-			preserve_custom_theme,
-			sphinx_html_theme,
-			extra_sphinx_extensions,
-			intersphinx_mapping,
-			sphinx_conf_preamble,
-			sphinx_conf_epilogue,
-			html_theme_options,
-			html_context,
-			enable_docs,
-			docs_dir,
-			tox_requirements,
-			tox_build_requirements,
-			tox_testenv_extras,
-			travis_site,
-			travis_ubuntu_version,
-			travis_extra_install_pre,
-			travis_extra_install_post,
-			travis_pypi_secure,
-			travis_additional_requirements,
-			enable_conda,
-			enable_conda,
-			conda_channels,
-			conda_description,
-			additional_ignore,
-			tests_dir,
-			pkginfo_extra,
-			exclude_files,
-			)
+	schema = make_schema(*[getattr(configuration, x) for x in configuration.__all__])
 
 	with importlib_resources.path(git_helper, "git_helper_schema.json") as schema_file:
 		pathlib.Path(schema_file).write_text(json.dumps(schema, indent=2))

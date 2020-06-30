@@ -277,6 +277,12 @@
       "items": {
         "type": "string"
       }
+    },
+    "imgbot_ignore": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
     }
   },
   "required": [

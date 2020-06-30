@@ -89,6 +89,7 @@ __all__ = [
 		"tests_dir",
 		"pkginfo_extra",
 		"exclude_files",
+		"imgbot_ignore",
 		]
 
 
@@ -1064,6 +1065,22 @@ class additional_ignore(ConfigVar):  # noqa
 
 		additional_ignore:
 		  - "*.pyc"
+	"""
+
+	dtype = List[str]
+	default = []
+
+
+class imgbot_ignore(ConfigVar):  # noqa
+	"""
+	A list of additional glob ignores for imgbot.
+
+	Example:
+
+	.. code-block:: yaml
+
+		imgbot_ignore:
+		  - "**/*.svg"
 	"""
 
 	dtype = List[str]
