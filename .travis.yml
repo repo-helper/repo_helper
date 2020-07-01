@@ -4,7 +4,6 @@ language: python
 dist: xenial
 cache: pip
 python:
-  - '3.6'
   - '3.7'
   - '3.8'
 
@@ -29,7 +28,7 @@ stages:
 jobs:
   include:
     - stage: deploy_pypi
-      python: "3.6"
+      python: "3.7"
       script: skip
       deploy:
         on:
@@ -44,7 +43,7 @@ jobs:
 
 
     - stage: deploy_releases
-      python: "3.6"
+      python: "3.7"
       install:
         - pip install PyGithub requests
       script: skip

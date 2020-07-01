@@ -146,7 +146,7 @@ def parse_yaml(repo_path: pathlib.Path):
 	# Travis
 	tox_travis_versions = get_tox_travis_python_versions(config_vars["python_versions"], tox_py_versions)
 	gh_actions_versions = get_gh_actions_python_versions(config_vars["python_versions"], tox_py_versions)
-	tox_travis_versions["3.6"] += ", mypy"
+	tox_travis_versions[config_vars["python_deploy_version"]] += ", mypy"
 	config_vars["tox_travis_versions"] = tox_travis_versions
 	config_vars["gh_actions_versions"] = gh_actions_versions
 

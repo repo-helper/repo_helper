@@ -25,7 +25,7 @@ setup(
 		packages=find_packages(exclude=("tests", "doc-source")),
 		project_urls=project_urls,
 		py_modules=py_modules,
-		python_requires=">=3.6",
+		python_requires=">=3.7",
 		url=web,
 		version=__version__,
 		keywords=keywords,
