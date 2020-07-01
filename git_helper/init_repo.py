@@ -2,6 +2,9 @@
 #   -*- coding: utf-8 -*-
 #
 #  init_repo.py
+"""
+Initialise a new repository, creating the necessary files to get started.
+"""
 #
 #  Copyright © 2020 Dominic Davis-Foster <dominic@davis-foster.co.uk>
 #
@@ -46,9 +49,9 @@ __all__ = ["init_repo"]
 
 def init_repo(repo_path: pathlib.Path, templates: jinja2.Environment) -> List[str]:
 	"""
+	Initialise a new repository, creating the necessary files to get started.
 
-	:param repo_path: Path to the repository root
-	:type repo_path: pathlib.Path
+	:param repo_path: Path to the repository root.
 	:param templates:
 	:type templates: jinja2.Environment
 	"""

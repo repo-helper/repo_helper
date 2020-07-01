@@ -2,6 +2,9 @@
 #   -*- coding: utf-8 -*-
 #
 #  __main__.py
+"""
+Entry point for running ``git_helper`` from the command line.
+"""
 #
 #  Copyright © 2020 Dominic Davis-Foster <dominic@davis-foster.co.uk>
 #
@@ -27,13 +30,16 @@ import pathlib
 import sys
 
 # 3rd party
+from typing import Iterable, Optional, Union
+
 from colorama import Fore  # type: ignore
 from dulwich import porcelain, repo  # type: ignore
 
 # this package
 from git_helper.core import GitHelper
 from git_helper.init_repo import init_repo
-from git_helper.utils import check_git_status, stderr_writer
+from git_helper.utils import check_git_status
+from domdf_python_tools.utils import stderr_writer
 
 
 def main():
@@ -105,7 +111,19 @@ def main():
 	commit_changed_files(gh.target_repo, managed_files, args.commit)
 
 
-def commit_changed_files(repo_path, managed_files, commit=None):
+def commit_changed_files(
+		repo_path: Union[str, pathlib.Path],
+		managed_files: Iterable[str],
+		commit: Optional[bool] = None,
+		) -> None:
+	"""
+	Stage and commit any files that have been updated, added or removed.
+
+	:param repo_path: The path to the repository root.
+	:param managed_files: List of files managed by ``git_helper``.
+	:param commit: Whether to commit the changes automatically.
+		:py:obj:`None` (default) indicates the user should be asked.
+	"""
 
 	r = repo.Repo(str(repo_path))
 

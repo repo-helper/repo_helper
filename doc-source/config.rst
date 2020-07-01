@@ -20,6 +20,9 @@ Options are defined like so:
 	short_desc: 'Update multiple configuration files, build scripts etc. from a single location'
 
 
+.. automodule:: git_helper.configuration
+	:members:
+
 Metadata
 ----------
 

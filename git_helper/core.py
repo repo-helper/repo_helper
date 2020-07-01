@@ -2,6 +2,9 @@
 #   -*- coding: utf-8 -*-
 #
 #  core.py
+"""
+Core functionality of ``git_helper``.
+"""
 #
 #  Copyright © 2020 Dominic Davis-Foster <dominic@davis-foster.co.uk>
 #
@@ -56,26 +59,27 @@ from .packaging import make_manifest, make_pkginfo, make_setup
 from .readme import rewrite_readme
 from .templates import template_dir
 from .testing import ensure_tests_requirements, make_isort, make_tox, make_yapf
-from .utils import clean_writer, enquote_value
+from .utils import clean_writer
+from domdf_python_tools.utils import enquote_value
 from .yaml_parser import parse_yaml
 
 __all__ = [
 		"GitHelper",
 		"ensure_bumpversion",
 		"make_issue_templates",
+		"make_contributing_md",
 		"files",
 		]
 
 
 class GitHelper:
+	"""
+	Git Helper: Manage configuration files with ease.
+
+	:param target_repo: The path to the root of the repository to manage files for.
+	"""
 
 	def __init__(self, target_repo: Union[str, pathlib.Path, os.PathLike]):
-		"""
-
-		:param target_repo:
-		:type target_repo:
-		"""
-
 		self.target_repo = pathlib.Path(target_repo)
 		self.templates = jinja2.Environment(
 				loader=jinja2.FileSystemLoader(str(template_dir)),
@@ -99,13 +103,28 @@ class GitHelper:
 
 	@property
 	def exclude_files(self) -> List[str]:
+		"""
+		:return: a list of excluded files that should **NOT** be managed by Git Helper.
+		"""
+
 		return self.templates.globals["exclude_files"]
 
 	@property
 	def repo_name(self) -> str:
+		"""
+		:return: the name of the repository being managed.
+		:rtype: str
+		"""
 		return self.templates.globals["repo_name"]
 
 	def run(self) -> List[str]:
+		"""
+		Run Git Helper for the repository and update all managed files.
+
+		:return: A list of files managed by Git Helper, regardless of whether they were added,
+			removed or modified.
+		"""
+
 		if not self.templates.globals["preserve_custom_theme"] and self.templates.globals["enable_docs"] :
 			all_managed_files = copy_docs_styling(self.target_repo, self.templates)
 		else:
@@ -131,8 +150,7 @@ def ensure_bumpversion(repo_path: pathlib.Path, templates: jinja2.Environment) -
 	Add configuration for ``bumpversion`` to the desired repo
 	https://pypi.org/project/bumpversion/
 
-	:param repo_path: Path to the repository root
-	:type repo_path: pathlib.Path
+	:param repo_path: Path to the repository root.
 	:param templates:
 	:type templates: jinja2.Environment
 	"""
@@ -186,8 +204,7 @@ def make_issue_templates(repo_path: pathlib.Path, templates: jinja2.Environment)
 	"""
 	Add issue templates for GitHub to the desired repo
 
-	:param repo_path: Path to the repository root
-	:type repo_path: pathlib.Path
+	:param repo_path: Path to the repository root.
 	:param templates:
 	:type templates: jinja2.Environment
 	"""
@@ -214,8 +231,7 @@ def make_contributing_md(repo_path: pathlib.Path, templates: jinja2.Environment)
 	"""
 	Add CONTRIBUTING.md to the desired repo
 
-	:param repo_path: Path to the repository root
-	:type repo_path: pathlib.Path
+	:param repo_path: Path to the repository root.
 	:param templates:
 	:type templates: jinja2.Environment
 	"""

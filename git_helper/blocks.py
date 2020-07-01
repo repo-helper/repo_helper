@@ -2,6 +2,9 @@
 #   -*- coding: utf-8 -*-
 #
 #  blocks.py
+"""
+Reusable blocks of reStructuredText.
+"""
 #
 #  Copyright © 2020 Dominic Davis-Foster <dominic@davis-foster.co.uk>
 #
@@ -23,9 +26,10 @@
 
 # stdlib
 import re
-from typing import Optional, Sequence, Set, Union
+from typing import Iterable, Optional, Sequence, Set, Union
 
 # 3rd party
+from typing_extensions import Literal
 from jinja2 import BaseLoader, Environment, StrictUndefined
 
 # this package
@@ -160,13 +164,39 @@ def create_shields_block(
 		conda: bool = True,
 		tests: bool = True,
 		docs: bool = True,
-		travis_site: str = "com",
+		travis_site: Literal["com", "org"] = "com",
 		pypi_name: Optional[str] = None,
 		unique_name: str = '',
 		docker_shields: bool = False,
 		docker_name: str = '',
-		platforms: Optional[Set[str]] = None,
+		platforms: Optional[Iterable[str]] = None,
 		) -> str:
+	"""
+	Create the shields block for insertion into the README, documentation etc.
+
+	:param username: The username of the GitHub account that owns the repository.
+	:type username: str
+	:param repo_name: The name of the repository.
+	:type repo_name: str
+	:param version:
+	:param conda:
+	:type conda: bool
+	:param tests:
+	:type tests: bool
+	:param docs:
+	:type docs: bool
+	:param travis_site:
+	:param pypi_name: The name of the project on PyPI. Defaults to the value of ``repo_name`` if unset.
+	:param unique_name: An optional unique name for the reST substitutions.
+	:type unique_name: str, optional
+	:param docker_shields: Whether to show shields for Docker. Default :py:obj:`False`.
+	:type docker_shields: bool
+	:param docker_name: The name of the Docker image on DockerHub.
+	:type docker_name: str, optional
+	:param platforms: List of supported platforms.
+
+	:return: The shields block created from the above settings.
+	"""
 
 	if unique_name:
 		unique_name = f"_{unique_name}"
@@ -186,7 +216,7 @@ def create_shields_block(
 			unique_name=unique_name,
 			docker_name=docker_name,
 			docker_shields=docker_shields,
-			platforms=platforms,
+			platforms=set(platforms),
 			)
 
 
@@ -228,6 +258,20 @@ def create_readme_install_block(
 		pypi_name: Optional[str] = None,
 		conda_channels: Optional[Sequence[str]] = None,
 		) -> str:
+	"""
+	Create the installation instructions for insertion into the README.
+
+	:param modname: The name of the program / library.
+	:type modname: str
+	:param username: The username of the GitHub account that owns the repository.
+	:type username: str
+	:param conda:
+	:type conda: bool
+	:param pypi_name: The name of the project on PyPI. Defaults to the value of ``repo_name`` if unset.
+	:param conda_channels: List of required Conda channels.
+
+	:return: The installation block created from the above settings.
+	"""
 
 	if not conda_channels and conda:
 		raise ValueError("Please supply a list of 'conda_channels' if Conda builds are supported")
@@ -245,6 +289,15 @@ def create_readme_install_block(
 
 
 def create_short_desc_block(short_desc: str) -> str:
+	"""
+	Creates the short description block insertion into the README, documentation etc.
+
+	:param short_desc: A short description of the program / library.
+	:type short_desc: str
+
+	:return: The short description block created from the above settings.
+	"""
+
 	return f"""\
 .. start short_desc
 
@@ -297,6 +350,20 @@ def create_docs_install_block(
 		pypi_name: Optional[str] = None,
 		conda_channels: Optional[Sequence[str]] = None,
 		) -> str:
+	"""
+	Create the installation instructions for insertion into the documentation.
+
+	:param repo_name: The name of the GitHub repository.
+	:type repo_name: str
+	:param username: The username of the GitHub account that owns the repository.
+	:type username: str
+	:param conda:
+	:type conda: bool
+	:param pypi_name: The name of the project on PyPI. Defaults to the value of ``repo_name`` if unset.
+	:param conda_channels: List of required Conda channels.
+
+	:return: The installation block created from the above settings.
+	"""
 
 	if not conda_channels and conda:
 		raise ValueError("Please supply a list of 'conda_channels' if Conda builds are supported")
@@ -327,4 +394,15 @@ View the :ref:`Function Index <genindex>` or browse the `Source Code <_modules/i
 
 
 def create_docs_links_block(username: str, repo_name: str) -> str:
+	"""
+	Create the documentation links block.
+
+	:param username: The username of the GitHub account that owns the repository.
+	:type username: str
+	:param repo_name: The name of the GitHub repository.
+	:type repo_name: str
+
+	:return: The documentation links block created from the above settings.
+	"""
+
 	return docs_links_block_template.render(username=username, repo_name=repo_name)

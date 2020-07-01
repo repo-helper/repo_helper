@@ -2,6 +2,9 @@
 #   -*- coding: utf-8 -*-
 #
 #  bots.py
+"""
+Manage configuration files for bots.
+"""
 #
 #  Copyright © 2020 Dominic Davis-Foster <dominic@davis-foster.co.uk>
 #
@@ -45,8 +48,7 @@ def make_stale_bot(repo_path: pathlib.Path, templates: jinja2.Environment) -> Li
 
 	https://probot.github.io/apps/stale/
 
-	:param repo_path: Path to the repository root
-	:type repo_path: pathlib.Path
+	:param repo_path: Path to the repository root.
 	:param templates:
 	:type templates: jinja2.Environment
 	"""
@@ -64,8 +66,7 @@ def make_auto_assign_action(repo_path: pathlib.Path, templates: jinja2.Environme
 
 	https://github.com/kentaro-m/auto-assign
 
-	:param repo_path: Path to the repository root
-	:type repo_path: pathlib.Path
+	:param repo_path: Path to the repository root.
 	:param templates:
 	:type templates: jinja2.Environment
 	"""
@@ -145,8 +146,7 @@ def make_dependabot(repo_path: pathlib.Path, templates: jinja2.Environment) -> L
 
 	https://dependabot.com/
 
-	:param repo_path: Path to the repository root
-	:type repo_path: pathlib.Path
+	:param repo_path: Path to the repository root.
 	:param templates:
 	:type templates: jinja2.Environment
 	"""
@@ -178,8 +178,7 @@ def make_imgbot(repo_path: pathlib.Path, templates: jinja2.Environment) -> List[
 
 	https://imgbot.net/
 
-	:param repo_path: Path to the repository root
-	:type repo_path: pathlib.Path
+	:param repo_path: Path to the repository root.
 	:param templates:
 	:type templates: jinja2.Environment
 	"""

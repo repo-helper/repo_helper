@@ -2,6 +2,9 @@
 #   -*- coding: utf-8 -*-
 #
 #  packaging.py
+"""
+Manage configuration for packaging tools.
+"""
 #
 #  Copyright © 2020 Dominic Davis-Foster <dominic@davis-foster.co.uk>
 #
@@ -40,9 +43,9 @@ __all__ = [
 
 def make_manifest(repo_path: pathlib.Path, templates: jinja2.Environment) -> List[str]:
 	"""
+	Update the ``MANIFEST.in`` file for ``setuptools``.
 
-	:param repo_path: Path to the repository root
-	:type repo_path: pathlib.Path
+	:param repo_path: Path to the repository root.
 	:param templates:
 	:type templates: jinja2.Environment
 	"""
@@ -73,8 +76,9 @@ recursive-exclude **/__pycache__ *
 
 def make_setup(repo_path: pathlib.Path, templates: jinja2.Environment) -> List[str]:
 	"""
-	:param repo_path: Path to the repository root
-	:type repo_path: pathlib.Path
+	Update the ``setup.py`` script.
+
+	:param repo_path: Path to the repository root.
 	:param templates:
 	:type templates: jinja2.Environment
 	"""
@@ -89,8 +93,9 @@ def make_setup(repo_path: pathlib.Path, templates: jinja2.Environment) -> List[s
 
 def make_pkginfo(repo_path: pathlib.Path, templates: jinja2.Environment) -> List[str]:
 	"""
-	:param repo_path: Path to the repository root
-	:type repo_path: pathlib.Path
+	Update the ``__pkginfo__.py`` file that contains the configuration used by
+
+	:param repo_path: Path to the repository root.
 	:param templates:
 	:type templates: jinja2.Environment
 	"""

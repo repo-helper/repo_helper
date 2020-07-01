@@ -1,9 +1,11 @@
+import copy
 import pathlib
 from abc import abstractmethod
 from typing import Any, Callable, Dict, Iterable, List, Optional, Tuple, Type, Union
 from typing_inspect import get_origin, is_literal_type
 
-from git_helper.utils import check_union, get_json_type, strtobool
+from git_helper.utils import check_union, get_json_type
+from domdf_python_tools.utils import strtobool
 
 __all__ = [
 		# Functions
@@ -80,38 +82,75 @@ def optional_getter(raw_config_vars: Dict[str, Any], cls: "ConfigVar", required:
 			return raw_config_vars[cls.__name__]
 		else:
 			if isinstance(cls.default, Callable):
-				return cls.default(raw_config_vars)
+				return copy.deepcopy(cls.default(raw_config_vars))
 			else:
-				return cls.default
+				return copy.deepcopy(cls.default)
 
 
 class ConfigVar(metaclass=__ConfigVarMeta):
 	"""
+	Base class for ``YAML`` configuration values.
+
 	The class docstring should be the description of the config var, with an example,
-	and the name of the class should be the variable name
+	and the name of the class should be the variable name.
 	"""
 
-	dtype: Type  # The allowed types in the YAML file
-	rtype: Type  # The variable type passed to Jinja2. If None ``dtype`` is used. Ignored for dtype=bool
-	required: bool
-	default: Any
+	dtype: Type
+	"""
+	The allowed type or types in the ``YAML`` configuration file.
+	"""
 
+	rtype: Type
+	"""
+	The variable type passed to Jinja2. 
+	If ``None`` :attr:`~git_helper.config_vars.ConfigVar.dtype` is used. 
+	Ignored for ``dtype=bool``.
+	"""
+
+	required: bool
+	"""
+	Flag to indicate whether the configuration value is required. Default :py:obj:`False`.
+	"""
+
+	default: Any
+	"""
+	Flag to indicate whether the configuration value is required. Defaults to ``''`` if unset. 
+	"""
+
+	validator: Callable
 	"""
 	Function to call to validate the values. 
+	The callable must have a single required argument (the value). 
 	Should raise :exc:`ValueError` if values are invalid, and return the values if they are valid. 
-	May change the values (e.g. make lowercase) before returning
+	May change the values (e.g. make lowercase) before returning.
 	"""
-	validator: Callable
 
 	def __call__(self, raw_config_vars):
 		return self.get(raw_config_vars)
 
 	@classmethod
 	def get(cls, raw_config_vars: Optional[Dict[str, Any]] = None):
+		"""
+		Returns the value of this :class:`~git_helper.config_vars.ConfigVar`
+
+		:param raw_config_vars: Dictionary to obtain the value from.
+
+		:return:
+		:rtype: See the ``rtype`` attribute.
+		"""
 		return cls.validator(cls.validate(raw_config_vars))
 
 	@classmethod
 	def validate(cls, raw_config_vars: Optional[Dict[str, Any]] = None):
+		"""
+		Validate the value obtained from the ``YAML`` file and coerce into the appropriate return type.
+
+		:param raw_config_vars: Dictionary to obtain the value from.
+
+		:return:
+		:rtype: See the ``rtype`` attribute.
+		"""
+
 		if raw_config_vars is None:
 			raw_config_vars = {}
 
@@ -217,7 +256,15 @@ class ConfigVar(metaclass=__ConfigVarMeta):
 			raise NotImplementedError
 
 
-def make_schema(*configuration_variables: __ConfigVarMeta):
+def make_schema(*configuration_variables: __ConfigVarMeta) -> Dict[str, str]:
+	"""
+	Create a ``JSON`` schema from a list of :class:`~git_helper.config_vars.ConfigVar` classes.
+
+	:param configuration_variables: 
+	:type configuration_variables: list of git_helper.config_vars.ConfigVar.
+
+	:return: Dictionary representation of the ``JSON`` schema.
+	"""
 	schema = {
 			"$schema": "http://json-schema.org/schema#",
 			"type": "object",
@@ -233,6 +280,14 @@ def make_schema(*configuration_variables: __ConfigVarMeta):
 
 
 def get_version_classifiers(python_versions: Iterable[str]) -> List[str]:
+	"""
+	Returns `Trove Classifiers <https://pypi.org/classifiers/>`_ for the supported Python versions and implementations.
+
+	:param python_versions: Iterable of supported Python versions.
+
+	:return: List of `Trove Classifiers <https://pypi.org/classifiers/>`_
+	"""
+
 	version_classifiers = []
 
 	for py_version in python_versions:
@@ -255,6 +310,15 @@ def get_version_classifiers(python_versions: Iterable[str]) -> List[str]:
 
 
 def parse_extras(raw_config_vars: Dict[str, Any], repo_path: pathlib.Path) -> Tuple[Dict, List[str]]:
+	"""
+	Returns parse ``setuptools`` ``extras_require``.
+
+	:param raw_config_vars: Dictionary to obtain the value from.
+	:param repo_path: The path to the repository.
+
+	:return:
+	"""
+
 	additional_requirements_files = raw_config_vars.get("additional_requirements_files", [])
 
 	extras_require = raw_config_vars.get("extras_require", {})

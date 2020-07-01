@@ -2,6 +2,12 @@
 #   -*- coding: utf-8 -*-
 #
 #  linting.py
+"""
+Configuration for various linting tools, such as
+`Flake8 <https://flake8.pycqa.org/en/latest/>`_,
+`Pylint <https://www.pylint.org/>`_, and
+`autopep8 <https://github.com/hhatto/autopep8/>`_,
+"""
 #
 #  Copyright © 2020 Dominic Davis-Foster <dominic@davis-foster.co.uk>
 #
@@ -220,8 +226,7 @@ def make_pylintrc(repo_path: pathlib.Path, templates: jinja2.Environment) -> Lis
 	"""
 	Copy .pylintrc into the desired repository
 
-	:param repo_path: Path to the repository root
-	:type repo_path: pathlib.Path
+	:param repo_path: Path to the repository root.
 	:param templates:
 	:type templates: jinja2.Environment
 	"""
@@ -235,8 +240,7 @@ def make_lint_roller(repo_path: pathlib.Path, templates: jinja2.Environment) -> 
 	"""
 	Add the lint_roller.sh script to the desired repo
 
-	:param repo_path: Path to the repository root
-	:type repo_path: pathlib.Path
+	:param repo_path: Path to the repository root.
 	:param templates:
 	:type templates: jinja2.Environment
 	"""

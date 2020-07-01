@@ -1,7 +1,7 @@
 jinja2 >=2.11.2
 requirements-parser >=0.2.0
 pyyaml >=5.3.1
-domdf-python-tools >=0.3.3
+domdf-python-tools >=0.3.8
 trove_classifiers >=2020.5.21
 colorama >=0.4.3
 dulwich
@@ -10,3 +10,4 @@ importlib_resources
 typing_extensions
 typing_inspect
 requests
+ytools3

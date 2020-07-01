@@ -2,6 +2,10 @@
 #   -*- coding: utf-8 -*-
 #
 #  templates.py
+"""
+Contains the :class:`pathlib.Path` objects representing the templates directory (``template_dir``),
+and the directory representing the files used to initialise a new repository (``init_repo_template_dir``).
+"""
 #
 #  Copyright © 2020 Dominic Davis-Foster <dominic@davis-foster.co.uk>
 #

@@ -2,6 +2,9 @@
 #   -*- coding: utf-8 -*-
 #
 #  testing.py
+"""
+Configuration for testing and code formatting tools.
+"""
 #
 #  Copyright © 2020 Dominic Davis-Foster <dominic@davis-foster.co.uk>
 #
@@ -40,12 +43,11 @@ __all__ = ["make_tox", "make_yapf", "make_isort", "ensure_tests_requirements"]
 
 def make_tox(repo_path: pathlib.Path, templates: jinja2.Environment) -> List[str]:
 	"""
-	Add configuration for ``Tox``
+	Add configuration for ``Tox``.
 
 	https://tox.readthedocs.io
 
-	:param repo_path: Path to the repository root
-	:type repo_path: pathlib.Path
+	:param repo_path: Path to the repository root.
 	:param templates:
 	:type templates: jinja2.Environment
 	"""
@@ -141,7 +143,7 @@ def make_tox(repo_path: pathlib.Path, templates: jinja2.Environment) -> List[str
 	# testenv_commands = ["", "python --version"]
 	# if templates.globals["enable_tests"]:
 	# 	testenv_commands.append(
-	# 			f"python -m pytest --cov={import_name} --reruns 1 --reruns-delay 30 -r aR {tests_dir}/"
+	# 			f"python -m pytest --cov={import_name} -r aR {tests_dir}/"
 	# 			)
 	# tox.set("testenv", "commands", indent_join(testenv_commands, 4))
 	#
@@ -226,12 +228,11 @@ def make_tox(repo_path: pathlib.Path, templates: jinja2.Environment) -> List[str
 
 def make_yapf(repo_path: pathlib.Path, templates: jinja2.Environment) -> List[str]:
 	"""
-	Add configuration for ``yapf``
+	Add configuration for ``yapf``.
 
 	https://github.com/google/yapf
 
-	:param repo_path: Path to the repository root
-	:type repo_path: pathlib.Path
+	:param repo_path: Path to the repository root.
 	:param templates:
 	:type templates: jinja2.Environment
 	"""
@@ -246,12 +247,11 @@ def make_yapf(repo_path: pathlib.Path, templates: jinja2.Environment) -> List[st
 
 def make_isort(repo_path: pathlib.Path, templates: jinja2.Environment) -> List[str]:
 	"""
-	Add configuration for ``isort``
+	Add configuration for ``isort``.
 
 	https://github.com/timothycrosley/isort
 
-	:param repo_path: Path to the repository root
-	:type repo_path: pathlib.Path
+	:param repo_path: Path to the repository root.
 	:param templates:
 	:type templates: jinja2.Environment
 	"""
@@ -317,8 +317,7 @@ def ensure_tests_requirements(repo_path: pathlib.Path, templates: jinja2.Environ
 	"""
 	Ensure ``tests/requirements.txt`` contains the required entries.
 
-	:param repo_path: Path to the repository root
-	:type repo_path: pathlib.Path
+	:param repo_path: Path to the repository root.
 	:param templates:
 	:type templates: jinja2.Environment
 	"""

@@ -2,6 +2,9 @@
 #   -*- coding: utf-8 -*-
 #
 #  shields.py
+"""
+Create a variety of shields, most powered by https://shields.io/.
+"""
 #
 #  Copyright © 2020 Dominic Davis-Foster <dominic@davis-foster.co.uk>
 #
@@ -49,8 +52,20 @@ __all__ = [
 		"make_docker_size_shield",
 		]
 
+from typing_extensions import Literal
+
 
 def make_rtfd_shield(repo_name: str) -> str:
+	"""
+	Create a shield for the ReadTheDocs documentation build status.
+
+	:param repo_name: The name of the repository.
+	:type repo_name: str
+
+	:return: The shield.
+	:rtype: str
+	"""
+
 	return f"""\
 .. image:: https://img.shields.io/readthedocs/{repo_name.lower()}/latest?logo=read-the-docs
 	:target: https://{repo_name.lower()}.readthedocs.io/en/latest/?badge=latest
@@ -58,13 +73,38 @@ def make_rtfd_shield(repo_name: str) -> str:
 
 
 def make_docs_check_shield(repo_name: str, username: str) -> str:
+	"""
+	Create a shield for the GitHub Actions "Docs Check" status.
+
+	:param repo_name: The name of the repository.
+	:type repo_name: str
+	:param username: The username of the GitHub account that owns the repository.
+	:type username: str
+
+	:return: The shield.
+	:rtype: str
+	"""
+
 	return f"""\
 .. image:: https://github.com/{username}/{repo_name}/workflows/Docs%20Check/badge.svg
 	:target: https://github.com/{username}/{repo_name}/actions?query=workflow%3A%22Docs+Check%22
 	:alt: Docs Check Status"""
 
 
-def make_travis_shield(repo_name: str, username: str, travis_site: str = "com") -> str:
+def make_travis_shield(repo_name: str, username: str, travis_site: Literal["com", "org"] = "com") -> str:
+	"""
+	Create a shield to show the Travis test and build status.
+
+	:param repo_name: The name of the repository.
+	:type repo_name: str
+	:param username: The username of the GitHub account that owns the repository.
+	:type username: str
+	:param travis_site:
+
+	:return: The shield.
+	:rtype: str
+	"""
+
 	return f"""\
 .. image:: https://img.shields.io/travis/{'com/' if travis_site == "com" else ''}{username}/{repo_name}/master?logo=travis
 	:target: https://travis-ci.{travis_site}/{username}/{repo_name}
@@ -72,6 +112,18 @@ def make_travis_shield(repo_name: str, username: str, travis_site: str = "com") 
 
 
 def make_actions_windows_shield(repo_name: str, username: str) -> str:
+	"""
+	Create a shield to indicate the status of the tests on Windows.
+
+	:param repo_name: The name of the repository.
+	:type repo_name: str
+	:param username: The username of the GitHub account that owns the repository.
+	:type username: str
+
+	:return: The shield.
+	:rtype: str
+	"""
+
 	return f"""\
 .. image:: https://github.com/{ username }/{ repo_name }/workflows/Windows%20Tests/badge.svg
 	:target: https://github.com/{ username }/{ repo_name }/actions?query=workflow%3A%22Windows+Tests%22
@@ -79,6 +131,18 @@ def make_actions_windows_shield(repo_name: str, username: str) -> str:
 
 
 def make_actions_macos_shield(repo_name: str, username: str) -> str:
+	"""
+	Create a shield to indicate the status of the tests on macOS.
+
+	:param repo_name: The name of the repository.
+	:type repo_name: str
+	:param username: The username of the GitHub account that owns the repository.
+	:type username: str
+
+	:return: The shield.
+	:rtype: str
+	"""
+
 	return f"""\
 .. image:: https://github.com/{ username }/{ repo_name }/workflows/macOS%20Tests/badge.svg
 	:target: https://github.com/{ username }/{ repo_name }/actions?query=workflow%3A%22macOS+Tests%22
@@ -86,6 +150,18 @@ def make_actions_macos_shield(repo_name: str, username: str) -> str:
 
 
 def make_requires_shield(repo_name: str, username: str) -> str:
+	"""
+	Create a shield to show the `requires.io <https://requires.io/>`_ requirements status.
+
+	:param repo_name: The name of the repository.
+	:type repo_name: str
+	:param username: The username of the GitHub account that owns the repository.
+	:type username: str
+
+	:return: The shield.
+	:rtype: str
+	"""
+
 	return f"""\
 .. image:: https://requires.io/github/{ username }/{ repo_name }/requirements.svg?branch=master
 	:target: https://requires.io/github/{ username }/{ repo_name }/requirements/?branch=master
@@ -93,6 +169,18 @@ def make_requires_shield(repo_name: str, username: str) -> str:
 
 
 def make_coveralls_shield(repo_name: str, username: str) -> str:
+	"""
+	Create a shield to show the code coverage from `Coveralls <https://coveralls.io/>`_
+
+	:param repo_name: The name of the repository.
+	:type repo_name: str
+	:param username: The username of the GitHub account that owns the repository.
+	:type username: str
+
+	:return: The shield.
+	:rtype: str
+	"""
+
 	return f"""\
 .. image:: https://img.shields.io/coveralls/github/{ username }/{ repo_name }/master?logo=coveralls
 	:target: https://coveralls.io/github/{ username }/{ repo_name }?branch=master
@@ -100,6 +188,18 @@ def make_coveralls_shield(repo_name: str, username: str) -> str:
 
 
 def make_codefactor_shield(repo_name: str, username: str) -> str:
+	"""
+	Create a shield to show the `Codefactor <https://www.codefactor.io/>`_ code quality grade.
+
+	:param repo_name: The name of the repository.
+	:type repo_name: str
+	:param username: The username of the GitHub account that owns the repository.
+	:type username: str
+
+	:return: The shield.
+	:rtype: str
+	"""
+
 	return f"""\
 .. image:: https://img.shields.io/codefactor/grade/github/{ username }/{ repo_name }?logo=codefactor
 	:target: https://www.codefactor.io/repository/github/{ username }/{ repo_name }
@@ -107,6 +207,16 @@ def make_codefactor_shield(repo_name: str, username: str) -> str:
 
 
 def make_pypi_version_shield(pypi_name: str) -> str:
+	"""
+	Create a shield to show the version on PyPI.
+
+	:param pypi_name: The name of the project on PyPI.
+	:type pypi_name: str
+
+	:return: The shield.
+	:rtype: str
+	"""
+
 	return f"""\
 .. image:: https://img.shields.io/pypi/v/{ pypi_name }
 	:target: https://pypi.org/project/{ pypi_name }/
@@ -114,6 +224,16 @@ def make_pypi_version_shield(pypi_name: str) -> str:
 
 
 def make_python_versions_shield(pypi_name: str) -> str:
+	"""
+	Create a shield to show the supported Python versions for the library.
+
+	:param pypi_name: The name of the project on PyPI.
+	:type pypi_name: str
+
+	:return: The shield.
+	:rtype: str
+	"""
+
 	return f"""\
 .. image:: https://img.shields.io/pypi/pyversions/{ pypi_name }
 	:target: https://pypi.org/project/{ pypi_name }/
@@ -121,6 +241,16 @@ def make_python_versions_shield(pypi_name: str) -> str:
 
 
 def make_python_implementations_shield(pypi_name: str) -> str:
+	"""
+	Create a shield to show the supported Python implementations for the library.
+
+	:param pypi_name: The name of the project on PyPI.
+	:type pypi_name: str
+
+	:return: The shield.
+	:rtype: str
+	"""
+
 	return f"""\
 .. image:: https://img.shields.io/pypi/implementation/{ pypi_name }
 	:target: https://pypi.org/project/{ pypi_name }/
@@ -128,6 +258,16 @@ def make_python_implementations_shield(pypi_name: str) -> str:
 
 
 def make_wheel_shield(pypi_name: str) -> str:
+	"""
+	Create a shield to show whether the library has a wheel on PyPI.
+
+	:param pypi_name: The name of the project on PyPI.
+	:type pypi_name: str
+
+	:return: The shield.
+	:rtype: str
+	"""
+
 	return f"""\
 .. image:: https://img.shields.io/pypi/wheel/{ pypi_name }
 	:target: https://pypi.org/project/{ pypi_name }/
@@ -135,6 +275,18 @@ def make_wheel_shield(pypi_name: str) -> str:
 
 
 def make_conda_version_shield(pypi_name: str, username: str) -> str:
+	"""
+	Create a shield to show the version on Conda.
+
+	:param pypi_name: The name of the project on PyPI.
+	:type pypi_name: str
+	:param username: The username of the GitHub account that owns the repository.
+	:type username: str
+
+	:return: The shield.
+	:rtype: str
+	"""
+
 	return f"""\
 .. image:: https://img.shields.io/conda/v/{ username }/{ pypi_name }?logo=anaconda
 	:alt: Conda - Package Version
@@ -142,6 +294,18 @@ def make_conda_version_shield(pypi_name: str, username: str) -> str:
 
 
 def make_conda_platform_shield(pypi_name: str, username: str) -> str:
+	"""
+	Create a shield to show the supported Conda platforms.
+
+	:param pypi_name: The name of the project on PyPI.
+	:type pypi_name: str
+	:param username: The username of the GitHub account that owns the repository.
+	:type username: str
+
+	:return: The shield.
+	:rtype: str
+	"""
+
 	return f"""\
 .. image:: https://img.shields.io/conda/pn/{ username }/{ pypi_name }?label=conda%7Cplatform
 	:alt: Conda - Platform
@@ -149,6 +313,18 @@ def make_conda_platform_shield(pypi_name: str, username: str) -> str:
 
 
 def make_license_shield(repo_name: str, username: str) -> str:
+	"""
+	Create a shield to show the license of the GitHub repository.
+
+	:param repo_name: The name of the repository.
+	:type repo_name: str
+	:param username: The username of the GitHub account that owns the repository.
+	:type username: str
+
+	:return: The shield.
+	:rtype: str
+	"""
+
 	return f"""\
 .. image:: https://img.shields.io/github/license/{ username }/{ repo_name }
 	:alt: License
@@ -156,12 +332,38 @@ def make_license_shield(repo_name: str, username: str) -> str:
 
 
 def make_language_shield(repo_name: str, username: str) -> str:
+	"""
+	Create a shield to show the primary language of the GitHub repository.
+
+	:param repo_name: The name of the repository.
+	:type repo_name: str
+	:param username: The username of the GitHub account that owns the repository.
+	:type username: str
+
+	:return: The shield.
+	:rtype: str
+	"""
+
 	return f"""\
 .. image:: https://img.shields.io/github/languages/top/{ username }/{ repo_name }
 	:alt: GitHub top language"""
 
 
 def make_activity_shield(repo_name: str, username: str, version: str) -> str:
+	"""
+	Create a shield to show the number of commits to the GitHub repository since the last release.
+
+	:param repo_name: The name of the repository.
+	:type repo_name: str
+	:param username: The username of the GitHub account that owns the repository.
+	:type username: str
+	:param version:
+	:type version:
+
+	:return: The shield.
+	:rtype: str
+	"""
+
 	return f"""\
 .. image:: https://img.shields.io/github/commits-since/{ username }/{ repo_name }/v{ version }
 	:target: https://github.com/{ username }/{ repo_name }/pulse
@@ -169,6 +371,18 @@ def make_activity_shield(repo_name: str, username: str, version: str) -> str:
 
 
 def make_last_commit_shield(repo_name: str, username: str) -> str:
+	"""
+	Create a shield to indicate when the last commit to the GitHub repository occurred.
+
+	:param repo_name: The name of the repository.
+	:type repo_name: str
+	:param username: The username of the GitHub account that owns the repository.
+	:type username: str
+
+	:return: The shield.
+	:rtype: str
+	"""
+
 	return f"""\
 .. image:: https://img.shields.io/github/last-commit/{ username }/{ repo_name }
 	:target: https://github.com/{ username }/{ repo_name }/commit/master
@@ -176,12 +390,31 @@ def make_last_commit_shield(repo_name: str, username: str) -> str:
 
 
 def make_maintained_shield() -> str:
+	"""
+	Create a shield to indicate that the project is maintained.
+
+	:return: The shield.
+	:rtype: str
+	"""
+
 	return f"""\
 .. image:: https://img.shields.io/maintenance/yes/{datetime.datetime.today().year}
 	:alt: Maintenance"""
 
 
 def make_docker_build_status_shield(docker_name: str, username: str) -> str:
+	"""
+	Create a shield to indicate the Docker image build status.
+
+	:param docker_name:
+	:type docker_name:
+	:param username: The username of the GitHub account that owns the repository.
+	:type username: str
+
+	:return: The shield.
+	:rtype: str
+	"""
+
 	return f"""\
 .. image:: https://img.shields.io/docker/cloud/build/{username}/{docker_name}?label=build&logo=docker
 	:target: https://hub.docker.com/r/domdfcoding/{docker_name}
@@ -189,6 +422,18 @@ def make_docker_build_status_shield(docker_name: str, username: str) -> str:
 
 
 def make_docker_automated_build_shield(docker_name: str, username: str) -> str:
+	"""
+	Create a shield to indicate the Docker automated build status.
+
+	:param docker_name:
+	:type docker_name:
+	:param username: The username of the GitHub account that owns the repository.
+	:type username: str
+
+	:return: The shield.
+	:rtype: str
+	"""
+
 	return f"""\
 .. image:: https://img.shields.io/docker/cloud/automated/{username}/{docker_name}?label=build&logo=docker
 	:target: https://hub.docker.com/r/{username}/{docker_name}/builds
@@ -196,7 +441,32 @@ def make_docker_automated_build_shield(docker_name: str, username: str) -> str:
 
 
 def make_docker_size_shield(docker_name: str, username: str) -> str:
+	"""
+	Create a shield to indicate the size of a docker image.
+
+	:param docker_name: The name of the Docker image on DockerHub.
+	:type docker_name:
+	:param username: The username of the GitHub account that owns the repository.
+	:type username: str
+
+	:return: The shield.
+	:rtype: str
+	"""
+
 	return f"""\
 .. image:: https://img.shields.io/docker/image-size/{username}/{docker_name}?label=image%20size&logo=docker
 	:target: https://hub.docker.com/r/{username}/{docker_name}
 	:alt: Docker Image Size"""
+
+
+def make_typing_shield() -> str:
+	"""
+	Create a shield to show that a library has :pep`484` Type Hints / Annotations/
+
+	:return: The shield.
+	:rtype: str
+	"""
+
+	return f"""\
+.. image:: https://img.shields.io/badge/Typing-Typed-brightgreen
+	:alt: Typing :: Typed"""

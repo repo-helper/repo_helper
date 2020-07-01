@@ -1,7 +1,7 @@
 **************************
-:mod:`git_helper.bots`
+:mod:`git_helper.shields`
 **************************
 
-.. automodule:: git_helper.bots
+.. automodule:: git_helper.shields
 	:members:
 	:autosummary:

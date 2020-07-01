@@ -2,6 +2,9 @@
 #   -*- coding: utf-8 -*-
 #
 #  yaml_parser.py
+"""
+Parse configuration values from a ``YAML`` file.
+"""
 #
 #  Copyright © 2020 Dominic Davis-Foster <dominic@davis-foster.co.uk>
 #
@@ -24,11 +27,10 @@
 # stdlib
 import json
 import pathlib
-from typing import Dict, Iterable, List, Union
+from typing import Any, Dict, Iterable, List, Union
 
 # this package
 from git_helper import configuration
-
 import git_helper
 
 # this package
@@ -48,8 +50,9 @@ __all__ = [
 
 def parse_yaml(repo_path: pathlib.Path):
 	"""
+	Parse configuration values from a ``YAML`` file.
 
-	:param repo_path: Path to the repository root
+	:param repo_path: Path to the repository root.
 	:type repo_path: pathlib.Path
 
 	:return:
@@ -190,6 +193,12 @@ def parse_yaml(repo_path: pathlib.Path):
 
 
 def get_tox_python_versions(python_versions: Iterable[str]) -> List[str]:
+	"""
+
+	:param python_versions:
+
+	:return:
+	"""
 
 	tox_py_versions = []
 
@@ -206,6 +215,14 @@ def get_tox_travis_python_versions(
 		python_versions: Iterable[str],
 		tox_py_versions: Iterable[str],
 		) -> Dict[Union[str, float], str]:
+	"""
+
+	:param python_versions:
+	:param tox_py_versions:
+
+	:return:
+	"""
+
 	tox_travis_matrix: Dict[Union[str], str] = {}
 
 	for py_version, tox_py_version in zip(python_versions, tox_py_versions):
@@ -218,6 +235,14 @@ def get_gh_actions_python_versions(
 		python_versions: Iterable[str],
 		tox_py_versions: Iterable[str],
 		) -> Dict[Union[str, float], str]:
+	"""
+
+	:param python_versions:
+	:param tox_py_versions:
+
+	:return:
+	"""
+
 	tox_travis_matrix: Dict[Union[str], str] = {}
 
 	for py_version, tox_py_version in zip(python_versions, tox_py_versions):
@@ -227,7 +252,12 @@ def get_gh_actions_python_versions(
 	return tox_travis_matrix
 
 
-def dump_schema():
+def dump_schema() -> Dict[str, Any]:
+	"""
+
+	:return:
+	:rtype: str
+	"""
 	# from genson import SchemaBuilder
 	# builder = SchemaBuilder()
 	# builder.add_schema(schema)

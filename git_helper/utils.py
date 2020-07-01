@@ -2,6 +2,9 @@
 #   -*- coding: utf-8 -*-
 #
 #  utils.py
+"""
+General utilities.
+"""
 #
 #  Copyright © 2020 Dominic Davis-Foster <dominic@davis-foster.co.uk>
 #
@@ -26,17 +29,19 @@ import os
 import pathlib
 import stat
 import subprocess
-import sys
-from numbers import Number
 from typing import IO, Any, Iterable, List, Optional, Tuple, Type, Union
 
 # 3rd party
 import trove_classifiers  # type: ignore
-from colorama import Fore  # type: ignore
+from domdf_python_tools.terminal_colours import Fore
+from typing_extensions import Literal
+from typing_inspect import get_origin
+from domdf_python_tools.utils import stderr_writer
 
 # this package
 import requirements  # type: ignore
 from domdf_python_tools.paths import maybe_make
+
 
 __all__ = [
 		"clean_writer",
@@ -44,8 +49,6 @@ __all__ = [
 		"check_git_status",
 		"get_git_status",
 		"ensure_requirements",
-		"strtobool",
-		"enquote_value",
 		"validate_classifiers",
 		"stderr_writer",
 		"license_lookup",
@@ -53,10 +56,6 @@ __all__ = [
 		"get_json_type",
 		"json_type_lookup",
 		]
-
-from typing_extensions import Literal
-
-from typing_inspect import get_origin
 
 
 def clean_writer(string: str, fp: IO[str]):
@@ -98,7 +97,7 @@ def check_git_status(repo_path: pathlib.Path) -> Tuple[bool, List[str]]:
 	"""
 	Check the ``git`` status of the given repository
 
-	:param repo_path: Path to the repository root
+	:param repo_path: Path to the repository root.
 	:type repo_path: pathlib.Path
 
 	:return: Whether the git working directory is clean, and the list of uncommitted files if it isn't
@@ -127,7 +126,7 @@ def get_git_status(repo_path: pathlib.Path) -> str:
 	"""
 	Returns the output of ``git status``
 
-	:param repo_path: Path to the repository root
+	:param repo_path: Path to the repository root.
 	:type repo_path: pathlib.Path
 
 	:rtype: str
@@ -185,66 +184,27 @@ def ensure_requirements(requirements_list: Iterable[Tuple[str, Optional[str]]], 
 		clean_writer("\n".join(sorted(output_buffer)), fp)
 
 
-def strtobool(val: Union[str, bool]) -> bool:
-	"""
-	Convert a string representation of truth to ``True`` or ``False``.
-
-	If val is an integer then its boolean representation is returned. If val is a boolean it is returned as-is.
-
-	True values are 'y', 'yes', 't', 'true', 'on', and '1'; false values
-	are 'n', 'no', 'f', 'false', 'off', and '0'.  Raises ValueError if
-	'val' is anything else.
-
-	Based on distutils
-	"""
-
-	if isinstance(val, int):
-		return bool(val)
-
-	val = val.lower()
-	if val in ('y', 'yes', 't', 'true', 'on', '1'):
-		return True
-	elif val in ('n', 'no', 'f', 'false', 'off', '0'):
-		return False
-	else:
-		raise ValueError(f"invalid truth value {val!r}")
-
-
-def enquote_value(value: Any) -> Union[str, bool, Number]:
-	if value in {"True", "False", "None", True, False, None}:
-		return value
-	elif isinstance(value, Number):
-		return value
-	else:
-		return f"'{value}'"
-
-
-def stderr_writer(*args, **kwargs):
-	"""
-	Write to stderr, flushing stdout beforehand and stderr afterwards.
-	"""
-
-	sys.stdout.flush()
-	kwargs["file"] = sys.stderr
-	print(*args, **kwargs)
-	sys.stderr.flush()
-
-
 def validate_classifiers(classifiers: Iterable[str]) -> bool:
+	"""
+	Validate a list of `Trove Classifiers <https://pypi.org/classifiers/>`_.
+
+	:param classifiers:
+
+	:return:
+	:rtype:
+	"""
+
 	invalid_classifier = False
 
 	for classifier in classifiers:
 		if classifier in trove_classifiers.deprecated_classifiers:
-			stderr_writer(f"{Fore.YELLOW}Classifier '{classifier}' is deprecated!")
-			stderr_writer(Fore.RESET, end='')
+			stderr_writer(Fore.YELLOW(f"Classifier '{classifier}' is deprecated!"))
 
 		elif classifier not in trove_classifiers.classifiers:
-			stderr_writer(f"{Fore.RED}Unknown Classifier '{classifier}'!")
-			stderr_writer(Fore.RESET, end='')
+			stderr_writer(Fore.RED(f"Unknown Classifier '{classifier}'!"))
 			invalid_classifier = True
 
 	return invalid_classifier
-
 
 
 license_lookup = {
@@ -258,10 +218,20 @@ license_lookup = {
 			}
 
 
-
 def check_union(obj: Any, dtype: Type):
-	return isinstance(obj, dtype.__args__)  # type: ignore
+	"""
+	Check if the object is a :class:`typing.Union`.
 
+	:param obj:
+	:type obj:
+	:param dtype:
+	:type dtype:
+
+	:return:
+	:rtype:
+	"""
+
+	return isinstance(obj, dtype.__args__)  # type: ignore
 
 
 json_type_lookup = {
@@ -273,6 +243,16 @@ json_type_lookup = {
 
 
 def get_json_type(type_):
+	"""
+	Get the type for the JSON schema that corresponds to the given Python type.
+
+	:param type_:
+	:type type_:
+
+	:return:
+	:rtype:
+	"""
+
 	if type_ in json_type_lookup:
 		return {"type": json_type_lookup[type_]}
 

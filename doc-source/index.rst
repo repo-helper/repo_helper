@@ -22,20 +22,9 @@
 .. toctree::
 	:maxdepth: 3
 	:caption: API Reference
+	:glob:
 
-	api/bots
-	api/ci_cd
-	api/core
-	api/docs
-	api/gitignore
-	api/init_repo
-	api/linting
-	api/packaging
-	api/readme
-	api/templates
-	api/testing
-	api/utils
-	api/yaml_parser
+	api/*
 
 
 .. toctree::

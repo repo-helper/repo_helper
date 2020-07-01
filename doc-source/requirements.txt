@@ -8,3 +8,4 @@ sphinx_autodoc_typehints >=1.11.0
 sphinxcontrib-httpdomain >=1.7.0
 sphinxcontrib.autoprogram
 sphinxemoji >=0.1.6
+autodocsumm

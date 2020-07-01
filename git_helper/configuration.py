@@ -993,6 +993,7 @@ class travis_additional_requirements(ConfigVar):  # noqa
 	Example:
 
 	.. code-block:: yaml
+
 		travis_additional_requirements:
 		  - pbr
 	"""

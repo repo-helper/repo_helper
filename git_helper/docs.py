@@ -2,6 +2,11 @@
 #   -*- coding: utf-8 -*-
 #
 #  docs.py
+"""
+Configuration for documentation with
+`Sphinx <https://www.sphinx-doc.org/en/master/>`_ and
+`ReadTheDocs <https://readthedocs.org/>`_.
+"""
 #
 #  Copyright © 2020 Dominic Davis-Foster <dominic@davis-foster.co.uk>
 #
@@ -62,8 +67,7 @@ def ensure_doc_requirements(repo_path: pathlib.Path, templates: jinja2.Environme
 	"""
 	Ensure ``<docs_dir>/requirements.txt`` contains the required entries.
 
-	:param repo_path: Path to the repository root
-	:type repo_path: pathlib.Path
+	:param repo_path: Path to the repository root.
 	:param templates:
 	:type templates: jinja2.Environment
 	"""
@@ -80,6 +84,7 @@ def ensure_doc_requirements(repo_path: pathlib.Path, templates: jinja2.Environme
 			("sphinx-tabs", "1.1.13"),
 			("sphinx_autodoc_typehints", "1.11.0"),
 			("sphinx-prompt", "1.2.0"),
+			# ("git+https://github.com/ScriptAutomate/sphinx-tabs-expanded.git", None)
 			}
 
 	test_req_file = repo_path / templates.globals["docs_dir"] / "requirements.txt"
@@ -87,10 +92,16 @@ def ensure_doc_requirements(repo_path: pathlib.Path, templates: jinja2.Environme
 	test_req_file.write_text(
 			"\n".join(
 					line for line in test_req_file.read_text().splitlines()
-					if not line.startswith("git+")
+					if not line.startswith("git+")  # FIXME
 					))
 
 	ensure_requirements(target_requirements, test_req_file)
+
+	# test_req_file.write_text(
+	# 		"\n".join(
+	# 				line for line in test_req_file.read_text().splitlines()
+	# 				if not line.startswith("sphinx-tabs")
+	# 				))
 
 	return [os.path.join(templates.globals["docs_dir"], "requirements.txt")]
 
@@ -98,10 +109,10 @@ def ensure_doc_requirements(repo_path: pathlib.Path, templates: jinja2.Environme
 def make_rtfd(repo_path: pathlib.Path, templates: jinja2.Environment) -> List[str]:
 	"""
 	Add configuration for ``ReadTheDocs``
+
 	https://readthedocs.org/
 
-	:param repo_path: Path to the repository root
-	:type repo_path: pathlib.Path
+	:param repo_path: Path to the repository root.
 	:param templates:
 	:type templates: jinja2.Environment
 	"""
@@ -144,8 +155,9 @@ def make_conf(repo_path: pathlib.Path, templates: jinja2.Environment) -> List[st
 	"""
 	Add ``conf.py`` configuration file for ``Sphinx``
 
-	:param repo_path: Path to the repository root
-	:type repo_path: pathlib.Path
+	https://www.sphinx-doc.org/en/master/index.html
+
+	:param repo_path: Path to the repository root.
 	:param templates:
 	:type templates: jinja2.Environment
 	"""
@@ -203,8 +215,7 @@ def copy_docs_styling(repo_path: pathlib.Path, templates: jinja2.Environment) ->
 	"""
 	Copy custom styling for documentation to the desired repository
 
-	:param repo_path: Path to the repository root
-	:type repo_path: pathlib.Path
+	:param repo_path: Path to the repository root.
 	:param templates:
 	:type templates: jinja2.Environment
 	"""
@@ -246,9 +257,9 @@ li p:last-child { margin-bottom: 12px !important;}
 
 def rewrite_docs_index(repo_path: pathlib.Path, templates: jinja2.Environment) -> List[str]:
 	"""
+	Update blocks in the documentation ``index.rst`` file.
 
-	:param repo_path: Path to the repository root
-	:type repo_path: pathlib.Path
+	:param repo_path: Path to the repository root.
 	:param templates:
 	:type templates: jinja2.Environment
 	"""
@@ -310,8 +321,7 @@ def rewrite_docs_index(repo_path: pathlib.Path, templates: jinja2.Environment) -
 def make_404_page(repo_path: pathlib.Path, templates: jinja2.Environment) -> List[str]:
 	"""
 
-	:param repo_path: Path to the repository root
-	:type repo_path: pathlib.Path
+	:param repo_path: Path to the repository root.
 	:param templates:
 	:type templates: jinja2.Environment
 	"""
@@ -333,12 +343,11 @@ def make_404_page(repo_path: pathlib.Path, templates: jinja2.Environment) -> Lis
 			]
 
 
-
 def make_docs_source_rst(repo_path: pathlib.Path, templates: jinja2.Environment) -> List[str]:
 	"""
+	Create the "Source" page in the documentation, and add the associated image.
 
-	:param repo_path: Path to the repository root
-	:type repo_path: pathlib.Path
+	:param repo_path: Path to the repository root.
 	:param templates:
 	:type templates: jinja2.Environment
 	"""
@@ -362,10 +371,9 @@ def make_docs_source_rst(repo_path: pathlib.Path, templates: jinja2.Environment)
 
 def make_docs_building_rst(repo_path: pathlib.Path, templates: jinja2.Environment) -> List[str]:
 	"""
+	Create the "Building" page in the documentation
 
-	:param repo_path: Path to the repository root
-	:type repo_path: pathlib.Path
-	:param templates:
+	:param repo_path: Path to the repository root.
 	:type templates: jinja2.Environment
 	"""
 
@@ -376,6 +384,4 @@ def make_docs_building_rst(repo_path: pathlib.Path, templates: jinja2.Environmen
 	building_template = templates.get_template("Building.rst")
 	docs_building_rst.write_text(building_template.render())
 
-	return [
-			os.path.join(templates.globals["docs_dir"], "Building.rst"),
-			]
+	return [os.path.join(templates.globals["docs_dir"], "Building.rst")]

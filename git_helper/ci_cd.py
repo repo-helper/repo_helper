@@ -2,6 +2,9 @@
 #   -*- coding: utf-8 -*-
 #
 #  ci_cd.py
+"""
+Manage configuration files for continuous integration / continuous deployment.
+"""
 #
 #  Copyright © 2020 Dominic Davis-Foster <dominic@davis-foster.co.uk>
 #
@@ -40,16 +43,18 @@ __all__ = [
 		"make_make_conda_recipe",
 		"make_travis_deploy_conda",
 		"make_github_ci",
+		"make_github_docs_test",
+		"make_github_octocheese",
 		]
 
 
 def make_travis(repo_path: pathlib.Path, templates: jinja2.Environment) -> List[str]:
 	"""
-	Add configuration for ``Travis-CI`` to the desired repo
+	Add configuration for ``Travis-CI`` to the desired repo.
+
 	https://travis-ci.com/
 
-	:param repo_path: Path to the repository root
-	:type repo_path: pathlib.Path
+	:param repo_path: Path to the repository root.
 	:param templates:
 	:type templates: jinja2.Environment
 	"""
@@ -64,10 +69,9 @@ def make_travis(repo_path: pathlib.Path, templates: jinja2.Environment) -> List[
 
 def make_copy_pypi_2_github(repo_path: pathlib.Path, templates: jinja2.Environment) -> List[str]:
 	"""
-	Add script to copy files from PyPI to GitHub Releases
+	Add script to copy files from PyPI to GitHub Releases.
 
-	:param repo_path: Path to the repository root
-	:type repo_path: pathlib.Path
+	:param repo_path: Path to the repository root.
 	:param templates:
 	:type templates: jinja2.Environment
 	"""
@@ -87,10 +91,9 @@ def make_copy_pypi_2_github(repo_path: pathlib.Path, templates: jinja2.Environme
 
 def make_make_conda_recipe(repo_path: pathlib.Path, templates: jinja2.Environment) -> List[str]:
 	"""
-	Add script to create a Conda recipe for the package
+	Add script to create a Conda recipe for the package.
 
-	:param repo_path: Path to the repository root
-	:type repo_path: pathlib.Path
+	:param repo_path: Path to the repository root.
 	:param templates:
 	:type templates: jinja2.Environment
 	"""
@@ -102,10 +105,9 @@ def make_make_conda_recipe(repo_path: pathlib.Path, templates: jinja2.Environmen
 
 def make_travis_deploy_conda(repo_path: pathlib.Path, templates: jinja2.Environment) -> List[str]:
 	"""
-	Add script to build Conda package and deploy to Anaconda
+	Add script to build Conda package and deploy to Anaconda.
 
-	:param repo_path: Path to the repository root
-	:type repo_path: pathlib.Path
+	:param repo_path: Path to the repository root.
 	:param templates:
 	:type templates: jinja2.Environment
 	"""
@@ -125,10 +127,9 @@ def make_travis_deploy_conda(repo_path: pathlib.Path, templates: jinja2.Environm
 
 def make_github_ci(repo_path: pathlib.Path, templates: jinja2.Environment) -> List[str]:
 	"""
-	Add configuration for `Github Actions to the desired repo
+	Add configuration for `Github Actions` to the desired repo.
 
-	:param repo_path: Path to the repository root
-	:type repo_path: pathlib.Path
+	:param repo_path: Path to the repository root.
 	:param templates:
 	:type templates: jinja2.Environment
 	"""
@@ -160,9 +161,9 @@ def make_github_ci(repo_path: pathlib.Path, templates: jinja2.Environment) -> Li
 
 def make_github_docs_test(repo_path: pathlib.Path, templates: jinja2.Environment) -> List[str]:
 	"""
+	Add configuration for `Github Actions` documentation check to the desired repo.
 
-	:param repo_path: Path to the repository root
-	:type repo_path: pathlib.Path
+	:param repo_path: Path to the repository root.
 	:param templates:
 	:type templates: jinja2.Environment
 	"""
@@ -180,9 +181,9 @@ def make_github_docs_test(repo_path: pathlib.Path, templates: jinja2.Environment
 
 def make_github_octocheese(repo_path: pathlib.Path, templates: jinja2.Environment) -> List[str]:
 	"""
+	Add configuration for the OctoCheese `Github Action`.
 
-	:param repo_path: Path to the repository root
-	:type repo_path: pathlib.Path
+	:param repo_path: Path to the repository root.
 	:param templates:
 	:type templates: jinja2.Environment
 	"""
@@ -196,5 +197,3 @@ def make_github_octocheese(repo_path: pathlib.Path, templates: jinja2.Environmen
 		clean_writer(actions.render(), fp)
 
 	return [".github/workflows/octocheese.yml"]
-
-

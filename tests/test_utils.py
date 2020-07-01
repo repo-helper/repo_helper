@@ -1,5 +1,6 @@
 # this package
 from git_helper.utils import validate_classifiers
+from domdf_python_tools.terminal_colours import Fore
 
 
 def test_errors(capsys):
@@ -7,9 +8,9 @@ def test_errors(capsys):
 	captured = capsys.readouterr()
 
 	stderr = captured.err.split("\n")
-	assert stderr[0].endswith("Unknown Classifier 'Foo :: Bar'!")
-	assert stderr[1].endswith("Unknown Classifier 'Foo :: Bar :: Baz'!")
-	assert stderr[2].endswith("Unknown Classifier 'Fuzzy :: Wuzzy :: Was :: A :: Bear'!")
+	assert stderr[0].endswith(f"Unknown Classifier 'Foo :: Bar'!{Fore.RESET}")
+	assert stderr[1].endswith(f"Unknown Classifier 'Foo :: Bar :: Baz'!{Fore.RESET}")
+	assert stderr[2].endswith(f"Unknown Classifier 'Fuzzy :: Wuzzy :: Was :: A :: Bear'!{Fore.RESET}")
 	assert not captured.out
 
 
@@ -18,7 +19,7 @@ def test_deprecated(capsys):
 	captured = capsys.readouterr()
 
 	stderr = captured.err.split("\n")
-	assert stderr[0].endswith("Classifier 'Natural Language :: Ukranian' is deprecated!")
+	assert stderr[0].endswith(f"Classifier 'Natural Language :: Ukranian' is deprecated!{Fore.RESET}")
 	assert not captured.out
 
 
