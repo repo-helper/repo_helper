@@ -227,16 +227,155 @@ def copy_docs_styling(repo_path: pathlib.Path, templates: jinja2.Environment) ->
 		if not directory.is_dir():
 			directory.mkdir(parents=True)
 
-	with (dest__static_dir / "style.css").open("w") as fp:
-		clean_writer(
-				"""/* This file is managed by `git_helper`. Don't edit it directly */
+	if templates.globals["sphinx_html_theme"] == "sphinx_rtd_theme":
+		with (dest__static_dir / "style.css").open("w") as fp:
+			clean_writer(
+					"""/* This file is managed by `git_helper`. Don't edit it directly */
+	
+	.wy-nav-content {max-width: 900px !important;}
+	
+	li p:last-child { margin-bottom: 12px !important;}
+	""",
+					fp
+					)
 
-.wy-nav-content {max-width: 900px !important;}
+	elif templates.globals["sphinx_html_theme"] == "alabaster":
+		with (dest__static_dir / "style.css").open("w") as fp:
+			clean_writer(
+					"""/* This file is managed by `git_helper`. Don't edit it directly */
 
 li p:last-child { margin-bottom: 12px !important;}
-""",
-				fp
-				)
+
+dl.class {
+    padding: 3px 3px 3px 5px;
+    margin-top: 7px !important;
+    margin-bottom: 17px !important;
+    border-color: rgba(240, 128, 128, 0.5);
+    border-style: solid;
+}
+
+dl.function {
+    padding: 3px 3px 3px 5px;
+    margin-top: 7px !important;
+    margin-bottom: 17px !important;
+    border-color: lightskyblue;
+    border-style: solid;
+}
+
+dl.function dt{
+    margin-bottom: 10px !important;
+}
+
+dl.attribute {
+    padding: 3px 3px 3px 5px;
+    margin-bottom: 17px !important;
+    border-color: rgba(119, 136, 153, 0.5);
+    border-style: solid;
+}
+
+dl.method {
+    padding: 3px 3px 3px 5px;
+    margin-bottom: 17px !important;
+    border-color: rgba(32, 178, 170, 0.5);
+    border-style: solid;
+}
+
+
+div.sphinxsidebar {
+    width: 250px;
+    font-size: 14px;
+    line-height: 1.5;
+}
+
+div.sphinxsidebar h3 {
+    font-weight: bold;
+}
+
+div.sphinxsidebar p.caption {
+    font-size: 20px;
+}
+
+div.sphinxsidebar div.sphinxsidebarwrapper {
+    padding-right: 20px !important;
+}
+
+table.longtable {
+    margin-bottom: 20px !important;
+    margin-top: -15px !important;
+}
+
+/*
+Following styling from Tox's documentation
+
+https://github.com/tox-dev/tox/blob/master/docs/_static/custom.css
+
+MIT Licensed
+*/
+
+div.document {
+    width: 100%;
+    max-width: 1400px;
+}
+
+div.body {
+    max-width: 1100px;
+}
+
+div.body p, ol > li, div.body td {
+    /*text-align: justify;*/
+    hyphens: none;
+}
+
+img, div.figure {
+    margin: 0 !important
+}
+
+ul > li {
+    text-align: justify;
+}
+
+ul > li > p {
+    margin-bottom: 0;
+}
+
+ol > li > p {
+    margin-bottom: 0;
+}
+
+div.body code.descclassname {
+    display: none
+}
+
+.wy-table-responsive table td {
+    white-space: normal !important;
+}
+
+.wy-table-responsive {
+    overflow: visible !important;
+}
+
+div.toctree-wrapper.compound > ul > li {
+    margin: 0;
+    padding: 0
+}
+
+code.docutils.literal {
+    background-color: #ECF0F3;
+    padding: 0 1px;
+}
+
+div#changelog-history h3{
+    margin-top: 10px;
+}
+
+div#changelog-history h2{
+    font-style: italic;
+    font-weight: bold;
+}
+
+	""",
+					fp
+					)
 
 	with (dest__templates_dir / "layout.html").open("w") as fp:
 		clean_writer(

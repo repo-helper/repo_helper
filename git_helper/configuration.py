@@ -86,6 +86,7 @@ __all__ = [
 		"conda_channels",
 		"conda_description",
 		"additional_ignore",
+		"yapf_exclude",
 		"tests_dir",
 		"pkginfo_extra",
 		"exclude_files",
@@ -1066,6 +1067,22 @@ class additional_ignore(ConfigVar):  # noqa
 
 		additional_ignore:
 		  - "*.pyc"
+	"""
+
+	dtype = List[str]
+	default: List[str] = []
+
+
+class yapf_exclude(ConfigVar):  # noqa
+	"""
+	A list of additional files or directories to exclude from ``yapf`` autoformatting.
+
+	Example:
+
+	.. code-block:: yaml
+
+		yapf_exclude:
+		  - "**/templates/"
 	"""
 
 	dtype = List[str]

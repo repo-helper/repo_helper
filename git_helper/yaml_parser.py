@@ -171,6 +171,7 @@ def parse_yaml(repo_path: pathlib.Path):
 			# Other
 			tests_dir,
 			additional_ignore,
+			yapf_exclude,
 			exclude_files,
 			pkginfo_extra,
 			]

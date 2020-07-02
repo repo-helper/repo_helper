@@ -8,11 +8,7 @@ username: "domdfcoding"
 license: 'LGPLv3+'
 short_desc: 'Update multiple configuration files, build scripts etc. from a single location'
 
-#enable_tests: False
 enable_conda: False
-
-exclude_files:
-  - tox
 
 additional_ignore:
   - Tokens
@@ -55,4 +51,5 @@ extra_sphinx_extensions:
 intersphinx_mapping:
   - "'jinja2': ('https://jinja.palletsprojects.com/en/2.11.x/', None)"
 
-preserve_custom_theme: true
+yapf_exclude:
+  - "**/templates/"

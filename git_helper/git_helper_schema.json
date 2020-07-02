@@ -263,6 +263,12 @@
         "type": "string"
       }
     },
+    "yapf_exclude": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
     "tests_dir": {
       "type": "string"
     },
