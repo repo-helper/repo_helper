@@ -1,5 +1,4 @@
 #  !/usr/bin/env python
-#   -*- coding: utf-8 -*-
 #
 #  linting.py
 """
@@ -72,8 +71,7 @@ lint_warn_list = [
 		'E112',
 		'E113',
 		'E121',
-		'E122',
-		# 'E124',
+		'E122',  # 'E124',
 		'E125',
 		'E127',
 		'E128',
@@ -106,7 +104,7 @@ lint_warn_list = [
 		'W504',
 		"E302",
 
-		# flake8_2020
+  # flake8_2020
 		"YTT101",  # sys.version[:3] referenced (python3.10)
 		"YTT102",  # sys.version[2] referenced (python3.10)
 		"YTT103",  # sys.version compared to string (python3.10)
@@ -185,7 +183,6 @@ lint_warn_list = [
 		"Q002",  # Remove bad quotes from docstring
 		"Q003",  # Change outer quotes to avoid escaping inner quotes
 		]
-
 
 code_only_warning = [
 		# pydocstyle

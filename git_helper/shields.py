@@ -1,5 +1,4 @@
 #  !/usr/bin/env python
-#   -*- coding: utf-8 -*-
 #
 #  shields.py
 """
@@ -52,6 +51,7 @@ __all__ = [
 		"make_docker_size_shield",
 		]
 
+# 3rd party
 from typing_extensions import Literal
 
 

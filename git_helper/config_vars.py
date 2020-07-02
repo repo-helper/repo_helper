@@ -1,11 +1,16 @@
+# stdlib
 import copy
 import pathlib
 from abc import abstractmethod
 from textwrap import dedent, indent
 from typing import Any, Callable, Dict, Iterable, List, Optional, Tuple, Type, Union
-from typing_inspect import get_origin, is_literal_type
-from git_helper.utils import check_union, get_json_type
+
+# 3rd party
 from domdf_python_tools.utils import strtobool
+from typing_inspect import get_origin, is_literal_type
+
+# this package
+from git_helper.utils import check_union, get_json_type
 
 __all__ = [
 		# Functions
@@ -13,7 +18,7 @@ __all__ = [
 		"get_version_classifiers",
 		"parse_extras",
 
-		# metaclass
+  # metaclass
 		"__ConfigVarMeta",
 		"ConfigVar",
 		]
@@ -200,7 +205,9 @@ class ConfigVar(metaclass=__ConfigVarMeta):
 					# if isinstance(obj, str):
 					# 	obj = obj.lower()
 					if obj not in cls.dtype.__args__[0].__args__:
-						raise ValueError(f"Elements of '{cls.__name__}' must be one of {cls.dtype.__args__[0].__args__}") from None
+						raise ValueError(
+								f"Elements of '{cls.__name__}' must be one of {cls.dtype.__args__[0].__args__}"
+								) from None
 			else:
 				for obj in data:
 					if not check_union(obj, cls.dtype):  # type: ignore
@@ -307,7 +314,6 @@ class ConfigVar(metaclass=__ConfigVarMeta):
 
 tab = "\t"
 
-
 yaml_type_lookup = {
 		str: "String",
 		int: "Integer",
@@ -330,7 +336,7 @@ def type_to_yaml(type_: Type) -> str:
 		dtype = " to ".join(type_to_yaml(x) for x in type_.__args__)
 		return f"Mapping of {dtype}"
 	elif is_literal_type(type_):
-		types = set(type(y) for y in type_.__args__)
+		types = {type(y) for y in type_.__args__}
 		return " or ".join(type_to_yaml(x) for x in types)
 	else:
 		return str(type_)
@@ -426,6 +432,7 @@ def parse_extras(raw_config_vars: Dict[str, Any], repo_path: pathlib.Path) -> Tu
 
 
 if __name__ == '__main__':
+	# this package
 	import git_helper.configuration
 	from git_helper.configuration import __all__
 
@@ -444,9 +451,9 @@ if __name__ == '__main__':
 			docs[var_obj.category.lower()] = []
 		docs[var_obj.category.lower()].append(var_obj.make_documentation())
 
-
 	with config_index.open("w") as index_fp:
-		index_fp.write("""\
+		index_fp.write(
+				"""\
 =======================================
 Configuration
 =======================================
@@ -469,7 +476,8 @@ Options are defined like so:
 .. toctree::
 	:caption: Categories
 	
-""")
+"""
+				)
 
 		for category, docstrings in docs.items():
 			index_fp.write(tab)
@@ -482,7 +490,7 @@ Options are defined like so:
 				fp.write("\n")
 				fp.write(category.capitalize())
 				fp.write("\n=")
-				fp.write("="*len(category))
+				fp.write("=" * len(category))
 				fp.write("\n")
 				fp.write("\n\n".join(docstrings))
 				fp.write("\n\n")

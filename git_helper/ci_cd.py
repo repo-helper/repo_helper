@@ -1,5 +1,4 @@
 #  !/usr/bin/env python
-#   -*- coding: utf-8 -*-
 #
 #  ci_cd.py
 """
@@ -31,11 +30,11 @@ from typing import List
 
 # 3rd party
 import jinja2
+from domdf_python_tools.paths import maybe_make
 
 # this package
 from .templates import template_dir
 from .utils import clean_writer, make_executable
-from domdf_python_tools.paths import maybe_make
 
 __all__ = [
 		"make_travis",
@@ -144,14 +143,28 @@ def make_github_ci(repo_path: pathlib.Path, templates: jinja2.Environment) -> Li
 
 	if "Windows" in templates.globals["platforms"]:
 		with (dot_github / "workflows" / "python_ci.yml").open("w") as fp:
-			clean_writer(actions.render(no_dev_versions=no_dev_versions, ci_platform="windows-2019", ci_name="Windows Tests"), fp)
+			clean_writer(
+					actions.render(
+							no_dev_versions=no_dev_versions,
+							ci_platform="windows-2019",
+							ci_name="Windows Tests",
+							),
+					fp
+					)
 	else:
 		if (dot_github / "workflows" / "python_ci.yml").is_file():
 			(dot_github / "workflows" / "python_ci.yml").unlink()
 
 	if "macOS" in templates.globals["platforms"]:
 		with (dot_github / "workflows" / "python_ci_macos.yml").open("w") as fp:
-			clean_writer(actions.render(no_dev_versions=no_dev_versions, ci_platform="macos-latest", ci_name="macOS Tests"), fp)
+			clean_writer(
+					actions.render(
+							no_dev_versions=no_dev_versions,
+							ci_platform="macos-latest",
+							ci_name="macOS Tests",
+							),
+					fp
+					)
 	else:
 		if (dot_github / "workflows" / "python_ci_macos.yml").is_file():
 			(dot_github / "workflows" / "python_ci_macos.yml").unlink()

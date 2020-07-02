@@ -1,9 +1,11 @@
+# stdlib
 from typing import Any, Dict, List, Type
 
+# 3rd party
 import pytest  # type: ignore
 
+# this package
 from git_helper.config_vars import ConfigVar
-
 
 test_list_int = [1, 2, 3, 4]
 test_list_str = ["a", "b", "c", "d"]
@@ -146,7 +148,7 @@ class RequiredStringTest:
 				{self.config_var.__name__: True},
 				{self.config_var.__name__: test_list_int},
 				{self.config_var.__name__: test_list_str},
-				{}
+				{},
 				]:
 			with pytest.raises(ValueError):
 				self.config_var.get(wrong_value)
@@ -199,7 +201,6 @@ class EnumTest(RequiredStringTest):
 				self.config_var.get(wrong_value)
 
 
-
 class DictTest:
 	config_var: Type[ConfigVar]
 	test_value: Dict[str, Any]
@@ -227,4 +228,3 @@ class DictTest:
 	def test_error_list_int(self):
 		with pytest.raises(ValueError):
 			self.config_var.get({self.config_var.__name__: test_list_int})
-

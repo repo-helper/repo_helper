@@ -1,5 +1,4 @@
 #  !/usr/bin/env python
-#   -*- coding: utf-8 -*-
 #
 #  yaml_parser.py
 """
@@ -29,18 +28,16 @@ import json
 import pathlib
 from typing import Any, Dict, Iterable, List, Type, Union
 
-# this package
-from git_helper import configuration
-import git_helper
-
-# this package
+# 3rd party
 import importlib_resources  # type: ignore
 import yaml
-
-from git_helper.configuration import *
-from git_helper.config_vars import make_schema, parse_extras, ConfigVar
 from ytools import validate  # type: ignore  # TODO
 
+# this package
+import git_helper
+from git_helper import configuration
+from git_helper.config_vars import ConfigVar, make_schema, parse_extras
+from git_helper.configuration import *
 
 __all__ = [
 		"parse_yaml",
@@ -89,13 +86,13 @@ def parse_yaml(repo_path: pathlib.Path):
 			short_desc,
 			source_dir,
 
-			# Optional Features
+  # Optional Features
 			enable_tests,
 			enable_releases,
 			docker_shields,
 			docker_name,
 
-			# Packaging
+  # Packaging
 			manifest_additional,
 			py_modules,
 			console_scripts,
@@ -103,7 +100,7 @@ def parse_yaml(repo_path: pathlib.Path):
 			additional_setup_args,
 			platforms,
 
-			# Documentation
+  # Documentation
 			rtfd_author,
 			preserve_custom_theme,
 			sphinx_html_theme,
@@ -116,7 +113,7 @@ def parse_yaml(repo_path: pathlib.Path):
 			enable_docs,
 			docs_dir,
 
-			# Other
+  # Other
 			imgbot_ignore,
 			]
 
@@ -168,7 +165,7 @@ def parse_yaml(repo_path: pathlib.Path):
 			conda_channels,
 			conda_description,
 
-			# Other
+  # Other
 			tests_dir,
 			additional_ignore,
 			yapf_exclude,

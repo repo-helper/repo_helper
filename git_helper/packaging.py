@@ -1,5 +1,4 @@
 #  !/usr/bin/env python
-#   -*- coding: utf-8 -*-
 #
 #  packaging.py
 """
@@ -68,8 +67,11 @@ recursive-exclude **/__pycache__ *
 			file = pathlib.Path(item)
 			clean_writer(f"{file.parent}/ {file.name}", fp)
 
-		clean_writer(f"recursive-include {templates.globals['source_dir']}{templates.globals['import_name']}/ *.pyi", fp)
-		clean_writer(f"recursive-include {templates.globals['source_dir']}{templates.globals['import_name']}/ py.typed", fp)
+		pyi_entry = f"recursive-include {templates.globals['source_dir']}{templates.globals['import_name']}/ *.pyi"
+		clean_writer(pyi_entry, fp)
+
+		py_typed_entry = f"recursive-include {templates.globals['source_dir']}{templates.globals['import_name']}/ py.typed"
+		clean_writer(py_typed_entry, fp)
 
 	return ["MANIFEST.in"]
 

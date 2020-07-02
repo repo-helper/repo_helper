@@ -1,5 +1,4 @@
 #  !/usr/bin/env python
-#   -*- coding: utf-8 -*-
 #
 #  core.py
 """
@@ -32,35 +31,38 @@ from typing import Callable, List, Sequence, Tuple, Union
 # 3rd party
 import jinja2
 from domdf_python_tools.paths import maybe_make
+from domdf_python_tools.utils import enquote_value
 
 # this package
 from .bots import make_auto_assign_action, make_dependabot, make_imgbot, make_stale_bot
 from .ci_cd import (
-	make_copy_pypi_2_github,
-	make_github_ci,
-	make_github_docs_test,
-	make_github_octocheese, make_make_conda_recipe,
-	make_travis,
-	make_travis_deploy_conda,
-	)
+		make_copy_pypi_2_github,
+		make_github_ci,
+		make_github_docs_test,
+		make_github_octocheese,
+		make_make_conda_recipe,
+		make_travis,
+		make_travis_deploy_conda,
+		)
 from .docs import (
-	copy_docs_styling,
-	ensure_doc_requirements,
-	make_404_page,
-	make_conf,
-	make_docs_building_rst,
-	make_docs_source_rst,
-	make_rtfd,
-	rewrite_docs_index
-)
+		copy_docs_styling,
+		ensure_doc_requirements,
+		make_404_page,
+		make_conf,
+		make_docs_building_rst,
+		make_docs_source_rst,
+		make_rtfd,
+		rewrite_docs_index,
+		)
 from .gitignore import make_gitignore
-from .linting import lint_belligerent_list, lint_fix_list, lint_warn_list, make_lint_roller, make_pylintrc, code_only_warning
+from .linting import (
+		code_only_warning, lint_belligerent_list, lint_fix_list, lint_warn_list, make_lint_roller, make_pylintrc,
+		)
 from .packaging import make_manifest, make_pkginfo, make_setup
 from .readme import rewrite_readme
 from .templates import template_dir
 from .testing import ensure_tests_requirements, make_isort, make_tox, make_yapf
 from .utils import clean_writer
-from domdf_python_tools.utils import enquote_value
 from .yaml_parser import parse_yaml
 
 __all__ = [
@@ -125,7 +127,7 @@ class GitHelper:
 			removed or modified.
 		"""
 
-		if not self.templates.globals["preserve_custom_theme"] and self.templates.globals["enable_docs"] :
+		if not self.templates.globals["preserve_custom_theme"] and self.templates.globals["enable_docs"]:
 			all_managed_files = copy_docs_styling(self.target_repo, self.templates)
 		else:
 			all_managed_files = []
@@ -184,12 +186,13 @@ tag = True
 	if templates.globals["enable_docs"]:
 		required_lines.append("[bumpversion:file:doc-source/index.rst]")
 
-
 	if templates.globals["py_modules"]:
 		for modname in templates.globals["py_modules"]:
 			required_lines.append(f"[bumpversion:file:{templates.globals['source_dir']}{modname}.py]")
 	else:
-		required_lines.append(f"[bumpversion:file:{templates.globals['source_dir']}{templates.globals['import_name']}/__init__.py]")
+		required_lines.append(
+				f"[bumpversion:file:{templates.globals['source_dir']}{templates.globals['import_name']}/__init__.py]"
+				)
 
 	for line in required_lines:
 		if line not in bumpversion_contents:

@@ -1,5 +1,4 @@
 #  !/usr/bin/env python
-#   -*- coding: utf-8 -*-
 #
 #  blocks.py
 """
@@ -29,8 +28,8 @@ import re
 from typing import Iterable, Optional, Sequence, Set, Union
 
 # 3rd party
-from typing_extensions import Literal
 from jinja2 import BaseLoader, Environment, StrictUndefined, Template
+from typing_extensions import Literal
 
 # this package
 from git_helper.shields import *
@@ -51,7 +50,6 @@ __all__ = [
 		"create_docs_links_block",
 		]
 
-
 installation_regex = re.compile(r'(?s)(\.\. start installation)(.*?)(\.\. end installation)')
 shields_regex = re.compile(r'(?s)(\.\. start shields)(.*?)(\.\. end shields)')
 short_desc_regex = re.compile(r'(?s)(\.\. start short_desc)(.*?)(\.\. end short_desc)')
@@ -61,7 +59,7 @@ shields_block_template: Template = Environment(
 		loader=BaseLoader(),
 		undefined=StrictUndefined,
 		).from_string(
-		"""\
+				"""\
 .. start shields {{ unique_name.lstrip("_") }}
 
 .. list-table::
@@ -133,31 +131,31 @@ shields_block_template: Template = Environment(
 {% endif %}
 .. end shields
 """,
-		globals={
-				"make_maintained_shield": make_maintained_shield,
-				"make_rtfd_shield": make_rtfd_shield,
-				"make_docs_check_shield": make_docs_check_shield,
-				"make_travis_shield": make_travis_shield,
-				"make_actions_windows_shield": make_actions_windows_shield,
-				"make_actions_macos_shield": make_actions_macos_shield,
-				"make_requires_shield": make_requires_shield,
-				"make_coveralls_shield": make_coveralls_shield,
-				"make_codefactor_shield": make_codefactor_shield,
-				"make_pypi_version_shield": make_pypi_version_shield,
-				"make_python_versions_shield": make_python_versions_shield,
-				"make_python_implementations_shield": make_python_implementations_shield,
-				"make_wheel_shield": make_wheel_shield,
-				"make_conda_version_shield": make_conda_version_shield,
-				"make_conda_platform_shield": make_conda_platform_shield,
-				"make_license_shield": make_license_shield,
-				"make_language_shield": make_language_shield,
-				"make_activity_shield": make_activity_shield,
-				"make_last_commit_shield": make_last_commit_shield,
-				"make_docker_build_status_shield": make_docker_build_status_shield,
-				"make_docker_automated_build_shield": make_docker_automated_build_shield,
-				"make_docker_size_shield": make_docker_size_shield,
-				}
-		)
+				globals={
+						"make_maintained_shield": make_maintained_shield,
+						"make_rtfd_shield": make_rtfd_shield,
+						"make_docs_check_shield": make_docs_check_shield,
+						"make_travis_shield": make_travis_shield,
+						"make_actions_windows_shield": make_actions_windows_shield,
+						"make_actions_macos_shield": make_actions_macos_shield,
+						"make_requires_shield": make_requires_shield,
+						"make_coveralls_shield": make_coveralls_shield,
+						"make_codefactor_shield": make_codefactor_shield,
+						"make_pypi_version_shield": make_pypi_version_shield,
+						"make_python_versions_shield": make_python_versions_shield,
+						"make_python_implementations_shield": make_python_implementations_shield,
+						"make_wheel_shield": make_wheel_shield,
+						"make_conda_version_shield": make_conda_version_shield,
+						"make_conda_platform_shield": make_conda_platform_shield,
+						"make_license_shield": make_license_shield,
+						"make_language_shield": make_language_shield,
+						"make_activity_shield": make_activity_shield,
+						"make_last_commit_shield": make_last_commit_shield,
+						"make_docker_build_status_shield": make_docker_build_status_shield,
+						"make_docker_automated_build_shield": make_docker_automated_build_shield,
+						"make_docker_size_shield": make_docker_size_shield,
+						}
+				)
 
 
 def create_shields_block(

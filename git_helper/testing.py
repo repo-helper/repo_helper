@@ -1,5 +1,4 @@
 #  !/usr/bin/env python
-#   -*- coding: utf-8 -*-
 #
 #  testing.py
 """
@@ -32,10 +31,10 @@ from typing import List
 
 # 3rd party
 import jinja2
+import requirements  # type: ignore
 from configupdater import ConfigUpdater  # type: ignore
 
 # this package
-import requirements  # type: ignore
 from .utils import clean_writer, ensure_requirements
 
 __all__ = ["make_tox", "make_yapf", "make_isort", "ensure_tests_requirements"]
@@ -60,7 +59,9 @@ def make_tox(repo_path: pathlib.Path, templates: jinja2.Environment) -> List[str
 		for file in templates.globals["py_modules"]:
 			source_files.append(f"{file}.py")
 	else:
-		source_files.append(f"{templates.globals['source_dir']}{templates.globals['import_name'].replace('.', '/')}")
+		source_files.append(
+				f"{templates.globals['source_dir']}{templates.globals['import_name'].replace('.', '/')}"
+				)
 
 	if templates.globals["enable_tests"]:
 		source_files.append(templates.globals["tests_dir"])

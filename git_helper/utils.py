@@ -1,5 +1,4 @@
 #  !/usr/bin/env python
-#   -*- coding: utf-8 -*-
 #
 #  utils.py
 """
@@ -32,16 +31,13 @@ import subprocess
 from typing import IO, Any, Iterable, List, Optional, Tuple, Type, Union
 
 # 3rd party
+import requirements  # type: ignore
 import trove_classifiers  # type: ignore
+from domdf_python_tools.paths import maybe_make
 from domdf_python_tools.terminal_colours import Fore
+from domdf_python_tools.utils import stderr_writer
 from typing_extensions import Literal
 from typing_inspect import get_origin  # type: ignore
-from domdf_python_tools.utils import stderr_writer
-
-# this package
-import requirements  # type: ignore
-from domdf_python_tools.paths import maybe_make
-
 
 __all__ = [
 		"clean_writer",
@@ -208,14 +204,14 @@ def validate_classifiers(classifiers: Iterable[str]) -> bool:
 
 
 license_lookup = {
-			"LGPLv3": "GNU Lesser General Public License v3 (LGPLv3)",
-			"LGPLv3+": "GNU Lesser General Public License v3 or later (LGPLv3+)",
-			"GPLv3": "GNU General Public License v3 (GPLv3)",
-			"GPLv3+": "GNU General Public License v3 or later (GPLv3+)",
-			"GPLv2": "GNU General Public License v2 (GPLv2)",
-			"BSD": "BSD License",
-			"MIT": "MIT License",
-			}
+		"LGPLv3": "GNU Lesser General Public License v3 (LGPLv3)",
+		"LGPLv3+": "GNU Lesser General Public License v3 or later (LGPLv3+)",
+		"GPLv3": "GNU General Public License v3 (GPLv3)",
+		"GPLv3+": "GNU General Public License v3 or later (GPLv3+)",
+		"GPLv2": "GNU General Public License v2 (GPLv2)",
+		"BSD": "BSD License",
+		"MIT": "MIT License",
+		}
 
 
 def check_union(obj: Any, dtype: Type):

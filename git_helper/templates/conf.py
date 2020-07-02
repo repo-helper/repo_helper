@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 
 # This file is managed by `git_helper`. Don't edit it directly
 
@@ -15,7 +14,6 @@ sys.path.append(os.path.abspath('.'))
 sys.path.append(os.path.abspath('..'))
 
 from __pkginfo__ import __version__
-
 
 {% for line in sphinx_conf_preamble %}{{ line }}
 {% endfor %}

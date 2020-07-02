@@ -1,5 +1,4 @@
 #  !/usr/bin/env python
-#   -*- coding: utf-8 -*-
 #
 #  init_repo.py
 """
@@ -33,16 +32,13 @@ from typing import List, Optional
 
 # 3rd party
 import jinja2
-
-# this package
 import requests
+from domdf_python_tools.paths import maybe_make
 from jinja2 import BaseLoader, Environment, StrictUndefined
 
+# this package
 from git_helper.templates import init_repo_template_dir
 from git_helper.utils import clean_writer
-
-# this package
-from domdf_python_tools.paths import maybe_make
 
 __all__ = ["init_repo"]
 
@@ -135,11 +131,14 @@ def init_repo(repo_path: pathlib.Path, templates: jinja2.Environment) -> List[st
 				loader=BaseLoader(),
 				undefined=StrictUndefined,
 				).from_string(license_text)  # type: ignore
-		clean_writer(license_template.render(
-				year=datetime.datetime.today().year,
-				organization=templates.globals["author"],
-				project=templates.globals["modname"],
-				), fp)
+		clean_writer(
+				license_template.render(
+						year=datetime.datetime.today().year,
+						organization=templates.globals["author"],
+						project=templates.globals["modname"],
+						),
+				fp
+				)
 
 	# Touch requirements file
 	(repo_path / "requirements.txt").open("a").close()

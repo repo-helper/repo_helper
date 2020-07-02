@@ -1,5 +1,4 @@
 #  !/usr/bin/env python
-#   -*- coding: utf-8 -*-
 #
 #  configuration.py
 #
@@ -25,12 +24,12 @@
 import os
 from typing import Any, Dict, Iterable, List, Optional, Union
 
-from git_helper.config_vars import get_version_classifiers, optional_getter
+# 3rd party
 from typing_extensions import Literal
 
 # this package
+from git_helper.config_vars import ConfigVar, get_version_classifiers, optional_getter
 from git_helper.utils import license_lookup, validate_classifiers
-from git_helper.config_vars import ConfigVar
 
 __all__ = [
 		"author",
@@ -287,7 +286,9 @@ class classifiers(ConfigVar):  # noqa
 
 		for classifier in data:
 			if not isinstance(classifier, str):
-				raise ValueError(f"'classifiers' must be a List of {cls.dtype.__args__[0]}") from None  # type: ignore
+				raise ValueError(
+						f"'classifiers' must be a List of {cls.dtype.__args__[0]}"
+						) from None  # type: ignore
 
 		for classifier in data:
 			add_classifier(classifier)
@@ -400,6 +401,7 @@ class source_dir(ConfigVar):  # noqa
 
 # Optional Features
 
+
 class enable_tests(ConfigVar):  # noqa
 	"""
 	Whether tests should be performed with pytest.
@@ -465,6 +467,7 @@ class docker_name(ConfigVar):  # noqa
 
 # Python Versions
 
+
 class python_deploy_version(ConfigVar):  # noqa
 	"""
 	The version of Python to use on Travis when deploying to PyPI, Anaconda and GitHub releases.
@@ -511,6 +514,7 @@ The lowest version of Python given above is used to set the minimum supported ve
 
 
 # Packaging
+
 
 class manifest_additional(ConfigVar):  # noqa
 	"""
@@ -907,6 +911,7 @@ class tox_build_requirements(ConfigVar):  # noqa
 	default: List[str] = []
 	category: str = "tox"
 
+
 class tox_testenv_extras(ConfigVar):  # noqa
 	"""
 	The "Extra" requirement to install when installing the package in the Tox testenv.
@@ -923,6 +928,7 @@ class tox_testenv_extras(ConfigVar):  # noqa
 
 	dtype = str
 	category: str = "tox"
+
 
 # Travis
 # Options for configuring Travis.

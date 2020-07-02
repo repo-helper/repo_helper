@@ -1,5 +1,4 @@
 #  !/usr/bin/env python
-#   -*- coding: utf-8 -*-
 #
 #  bots.py
 """
@@ -25,19 +24,18 @@ Manage configuration files for bots.
 #
 
 # stdlib
+import json
 import pathlib
 import shutil
 from typing import List
 
 # 3rd party
 import jinja2
+from domdf_python_tools.paths import maybe_make
 
 # this package
-import json
-
 from .templates import template_dir
 from .utils import clean_writer
-from domdf_python_tools.paths import maybe_make
 
 __all__ = ["make_dependabot", "make_auto_assign_action", "make_stale_bot", "make_imgbot"]
 
@@ -82,6 +80,7 @@ def make_auto_assign_action(repo_path: pathlib.Path, templates: jinja2.Environme
 
 	if (dot_github / "workflows" / "assign.yml").is_file():
 		(dot_github / "workflows" / "assign.yml").unlink()
+
 
 # 	with (dot_github / "workflows" / "assign.yml").open("w") as fp:
 # 		clean_writer(
@@ -188,9 +187,11 @@ def make_imgbot(repo_path: pathlib.Path, templates: jinja2.Environment) -> List[
 	with imgbot_file.open("w") as fp:
 		clean_writer(json.dumps({
 				"schedule": "weekly",
-				"ignoredFiles": ["**/*.svg"] + templates.globals["imgbot_ignore"]
+				"ignoredFiles": ["**/*.svg"] + templates.globals["imgbot_ignore"],
 				},
 				indent=4,
-				), fp)
+				),
+				fp
+				)
 
 	return [imgbot_file.name]

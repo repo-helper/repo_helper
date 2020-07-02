@@ -1,5 +1,4 @@
 #  !/usr/bin/env python
-#   -*- coding: utf-8 -*-
 #
 #  __main__.py
 """
@@ -28,18 +27,17 @@ Entry point for running ``git_helper`` from the command line.
 import argparse
 import pathlib
 import sys
-
-# 3rd party
 from typing import Iterable, Optional, Union
 
-from colorama import Fore  # type: ignore
+# 3rd party
+from domdf_python_tools.utils import stderr_writer
+from domdf_python_tools.terminal_colours import Fore
 from dulwich import porcelain, repo  # type: ignore
 
 # this package
 from git_helper.core import GitHelper
 from git_helper.init_repo import init_repo
 from git_helper.utils import check_git_status
-from domdf_python_tools.utils import stderr_writer
 
 
 def main():

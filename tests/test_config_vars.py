@@ -1,15 +1,25 @@
+# stdlib
 import os
 from typing import Type
 
+# 3rd party
 import pytest  # type: ignore
+from tests.classes import (
+		BoolFalseTest,
+		BoolTrueTest,
+		DictTest,
+		DirectoryTest,
+		EnumTest,
+		ListTest,
+		OptionalStringTest,
+		RequiredStringTest,
+		test_list_int,
+		test_list_str
+		)
 
+# this package
 from git_helper.config_vars import ConfigVar
 from git_helper.configuration import *
-from tests.classes import (
-	BoolFalseTest, BoolTrueTest, DictTest, DirectoryTest, EnumTest, ListTest, OptionalStringTest, RequiredStringTest,
-	test_list_int,
-	test_list_str,
-	)
 
 
 class Test_author(RequiredStringTest):
@@ -32,7 +42,8 @@ class Test_license(RequiredStringTest):
 	test_value = "GPLv3+"
 
 	def test_success(self):
-		assert self.config_var.get({self.config_var.__name__: self.test_value}) == "GNU General Public License v3 or later (GPLv3+)"
+		assert self.config_var.get({self.config_var.__name__: self.test_value}
+									) == "GNU General Public License v3 or later (GPLv3+)"
 
 
 class Test_short_desc(RequiredStringTest):
@@ -56,25 +67,27 @@ class Test_docker_name(OptionalStringTest):
 
 
 def test_rtfd_author():
-	assert rtfd_author.get(
-			{"rtfd_author": "Dominic Davis-Foster and Joe Bloggs"}) == "Dominic Davis-Foster and Joe Bloggs"
+	assert rtfd_author.get({"rtfd_author": "Dominic Davis-Foster and Joe Bloggs"}
+							) == "Dominic Davis-Foster and Joe Bloggs"
 	assert rtfd_author.get({"author": "Dom"}) == "Dom"
-	assert rtfd_author.get({
-			"author": "Dom", "rtfd_author": "Dominic Davis-Foster and Joe Bloggs"
-			}) == "Dominic Davis-Foster and Joe Bloggs"
+	assert rtfd_author.get({"author": "Dom", "rtfd_author": "Dominic Davis-Foster and Joe Bloggs"}
+							) == "Dominic Davis-Foster and Joe Bloggs"
 
 	with pytest.raises(ValueError):
 		rtfd_author.get()
 
 
-@pytest.mark.parametrize("wrong_value", [
-		{"rtfd_author": 1234},
-		{"rtfd_author": True},
-		{"rtfd_author": test_list_int},
-		{"rtfd_author": test_list_str},
-		{"modname": "git_helper"},
-		{},
-		])
+@pytest.mark.parametrize(
+		"wrong_value",
+		[
+				{"rtfd_author": 1234},
+				{"rtfd_author": True},
+				{"rtfd_author": test_list_int},
+				{"rtfd_author": test_list_str},
+				{"modname": "git_helper"},
+				{},
+				]
+		)
 def test_rtfd_author_errors(wrong_value):
 	with pytest.raises(ValueError):
 		rtfd_author.get(wrong_value)
@@ -87,14 +100,17 @@ def test_modname():
 		modname.get()
 
 
-@pytest.mark.parametrize("wrong_value", [
-		{"modname": 1234},
-		{"modname": True},
-		{"modname": test_list_int},
-		{"modname": test_list_str},
-		{"username": "domdfcoding"},
-		{},
-		])
+@pytest.mark.parametrize(
+		"wrong_value",
+		[
+				{"modname": 1234},
+				{"modname": True},
+				{"modname": test_list_int},
+				{"modname": test_list_str},
+				{"username": "domdfcoding"},
+				{},
+				]
+		)
 def test_modname_errors(wrong_value):
 	with pytest.raises(ValueError):
 		modname.get(wrong_value)
@@ -108,41 +124,45 @@ def test_version():
 		version.get()
 
 
-@pytest.mark.parametrize("wrong_value", [
-		{"version": True},
-		{"version": test_list_int},
-		{"version": test_list_str},
-		{"username": "domdfcoding"},
-		{},
-		])
+@pytest.mark.parametrize(
+		"wrong_value",
+		[
+				{"version": True},
+				{"version": test_list_int},
+				{"version": test_list_str},
+				{"username": "domdfcoding"},
+				{},
+				]
+		)
 def test_version_errors(wrong_value):
 	with pytest.raises(ValueError):
 		version.get(wrong_value)
 
 
 def test_conda_description():
-	assert conda_description.get(
-			{"conda_description": "This is a short description of my project."},
-			) == "This is a short description of my project."
-	assert conda_description.get(
-			{"short_desc": "This is a short description of my project."},
-			) == "This is a short description of my project."
-	assert conda_description.get(
-			{"short_desc": "A short description", "conda_description": "This is a short description of my project."},
-			) == "This is a short description of my project."
+	assert conda_description.get({"conda_description": "This is a short description of my project."
+									}, ) == "This is a short description of my project."
+	assert conda_description.get({"short_desc": "This is a short description of my project."
+									}, ) == "This is a short description of my project."
+	assert conda_description.get({
+			"short_desc": "A short description", "conda_description": "This is a short description of my project."
+			}, ) == "This is a short description of my project."
 
 	with pytest.raises(ValueError):
 		conda_description.get()
 
 
-@pytest.mark.parametrize("wrong_value", [
-		{"conda_description": 1234},
-		{"conda_description": True},
-		{"conda_description": test_list_int},
-		{"conda_description": test_list_str},
-		{"username": "domdfcoding"},
-		{},
-		])
+@pytest.mark.parametrize(
+		"wrong_value",
+		[
+				{"conda_description": 1234},
+				{"conda_description": True},
+				{"conda_description": test_list_int},
+				{"conda_description": test_list_str},
+				{"username": "domdfcoding"},
+				{},
+				]
+		)
 def test_conda_description_errors(wrong_value):
 	with pytest.raises(ValueError):
 		conda_description.get(wrong_value)
@@ -156,12 +176,14 @@ def test_copyright_years():
 		copyright_years.get()
 
 
-@pytest.mark.parametrize("wrong_value", [
-		{"copyright_years": test_list_int},
-		{"copyright_years": test_list_str},
-		{"username": "domdfcoding"},
-		{},
-		])
+@pytest.mark.parametrize(
+		"wrong_value", [
+				{"copyright_years": test_list_int},
+				{"copyright_years": test_list_str},
+				{"username": "domdfcoding"},
+				{},
+				]
+		)
 def test_copyright_years_errors(wrong_value):
 	with pytest.raises(ValueError):
 		copyright_years.get(wrong_value)
@@ -177,14 +199,17 @@ def test_repo_name():
 		repo_name.get()
 
 
-@pytest.mark.parametrize("wrong_value", [
-		{"repo_name": 1234},
-		{"repo_name": True},
-		{"repo_name": test_list_int},
-		{"repo_name": test_list_str},
-		{"username": "domdfcoding"},
-		{},
-		])
+@pytest.mark.parametrize(
+		"wrong_value",
+		[
+				{"repo_name": 1234},
+				{"repo_name": True},
+				{"repo_name": test_list_int},
+				{"repo_name": test_list_str},
+				{"username": "domdfcoding"},
+				{},
+				]
+		)
 def test_repo_name_errors(wrong_value):
 	with pytest.raises(ValueError):
 		repo_name.get(wrong_value)
@@ -200,13 +225,15 @@ def test_pypi_name():
 		pypi_name.get()
 
 
-@pytest.mark.parametrize("wrong_value", [
-		{"pypi_name": 1234},
-		{"pypi_name": True},
-		{"pypi_name": test_list_int},
-		{"pypi_name": test_list_str},
-		{},
-		])
+@pytest.mark.parametrize(
+		"wrong_value", [
+				{"pypi_name": 1234},
+				{"pypi_name": True},
+				{"pypi_name": test_list_int},
+				{"pypi_name": test_list_str},
+				{},
+				]
+		)
 def test_pypi_name_errors(wrong_value):
 	with pytest.raises(ValueError):
 		pypi_name.get(wrong_value)
@@ -224,13 +251,16 @@ def test_import_name():
 		import_name.get()
 
 
-@pytest.mark.parametrize("wrong_value", [
-		{"import_name": 1234},
-		{"import_name": True},
-		{"import_name": test_list_int},
-		{"import_name": test_list_str},
-		{},
-		])
+@pytest.mark.parametrize(
+		"wrong_value",
+		[
+				{"import_name": 1234},
+				{"import_name": True},
+				{"import_name": test_list_int},
+				{"import_name": test_list_str},
+				{},
+				]
+		)
 def test_import_name_errors(wrong_value):
 	with pytest.raises(ValueError):
 		import_name.get(wrong_value)
@@ -254,35 +284,38 @@ def test_classifiers():
 			"classifiers": ["Environment :: Console"],
 			"python_versions": [3.6, 3.7, 3.8],
 			}) == [
-			"Environment :: Console",
-			'Operating System :: OS Independent',
-			'Programming Language :: Python',
-			'Programming Language :: Python :: 3 :: Only',
-			'Programming Language :: Python :: 3.6',
-			'Programming Language :: Python :: 3.7',
-			'Programming Language :: Python :: 3.8',
-			'Programming Language :: Python :: Implementation :: CPython',
-			]
+					"Environment :: Console",
+					'Operating System :: OS Independent',
+					'Programming Language :: Python',
+					'Programming Language :: Python :: 3 :: Only',
+					'Programming Language :: Python :: 3.6',
+					'Programming Language :: Python :: 3.7',
+					'Programming Language :: Python :: 3.8',
+					'Programming Language :: Python :: Implementation :: CPython',
+					]
 	assert classifiers.get({
 			"classifiers": ["Environment :: Console"],
 			"license": "MIT",
 			}) == [
-			"Environment :: Console",
-			"License :: OSI Approved :: MIT License",
-			*default_classifiers,
-			]
+					"Environment :: Console",
+					"License :: OSI Approved :: MIT License",
+					*default_classifiers,
+					]
 	assert classifiers.get({"classifiers": []}) == default_classifiers
 	assert classifiers.get({"username": "domdfcoding"}) == default_classifiers
 	assert classifiers.get() == default_classifiers
 	assert classifiers.get({}) == default_classifiers
 
 
-@pytest.mark.parametrize("wrong_value", [
-		{"classifiers": "a string"},
-		{"classifiers": 1234},
-		{"classifiers": True},
-		{"classifiers": test_list_int},
-		])
+@pytest.mark.parametrize(
+		"wrong_value",
+		[
+				{"classifiers": "a string"},
+				{"classifiers": 1234},
+				{"classifiers": True},
+				{"classifiers": test_list_int},
+				]
+		)
 def test_classifiers_errors(wrong_value):
 	with pytest.raises(ValueError):
 		classifiers.get(wrong_value)
@@ -393,16 +426,21 @@ class Test_intersphinx_mapping(ListTest):
 
 class Test_sphinx_conf_preamble(ListTest):
 	config_var = sphinx_conf_preamble
-	test_value = ["import datetime", "now = datetime.datetime.now()",
-				  "strftime = now.strftime('%H:%M')",
-				  "print(f'Starting building docs at {strftime}.')"]
+	test_value = [
+			"import datetime",
+			"now = datetime.datetime.now()",
+			"strftime = now.strftime('%H:%M')",
+			"print(f'Starting building docs at {strftime}.')"
+			]
 
 
 class Test_sphinx_conf_epilogue(ListTest):
 	config_var = sphinx_conf_epilogue
-	test_value = ["time_taken = datetime.datetime.now() - now",
-				  "strftime = time_taken.strftime('%H:%M')",
-				  "print(f'Finished building docs at {strftime}.')"]
+	test_value = [
+			"time_taken = datetime.datetime.now() - now",
+			"strftime = time_taken.strftime('%H:%M')",
+			"print(f'Finished building docs at {strftime}.')"
+			]
 
 
 class Test_manifest_additional(ListTest):
@@ -537,7 +575,6 @@ class Test_additional_setup_args(DictTest):
 		assert self.config_var.get({}) == ''
 
 
-
 class Test_extras_require(DictTest):
 	config_var = extras_require
 	test_value = dict(key2="value2")
@@ -551,4 +588,3 @@ class Test_html_theme_options(DictTest):
 class Test_html_context(DictTest):
 	config_var = html_context
 	test_value = dict(key4="value4")
-

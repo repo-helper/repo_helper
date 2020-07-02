@@ -1,5 +1,4 @@
 #  !/usr/bin/env python
-#   -*- coding: utf-8 -*-
 #
 #  gitignore.py
 """
@@ -73,11 +72,11 @@ ignores = [
 		"*.manifest",
 		"*.spec",
 
-		# Installer logs
+  # Installer logs
 		"pip-log.txt",
 		"pip-delete-this-directory.txt",
 
-		# Unit test / coverage reports
+  # Unit test / coverage reports
 		"htmlcov/",
 		".tox/",
 		".coverage",
@@ -90,42 +89,42 @@ ignores = [
 		".pytest_cache/",
 		"cover/",
 
-		# Translations
+  # Translations
 		"*.mo",
 		"*.pot",
 
-		# Django stuff:
+  # Django stuff:
 		"*.log",
 		"local_settings.py",
 		"db.sqlite3",
 
-		# Flask stuff:
+  # Flask stuff:
 		"instance/",
 		".webassets-cache",
 
-		# Scrapy stuff:
+  # Scrapy stuff:
 		".scrapy",
 
-		# Sphinx documentation
+  # Sphinx documentation
 		"docs/_build/",
 		"doc/build",
 
-		# PyBuilder
+  # PyBuilder
 		"target/",
 
-		# Jupyter Notebook
+  # Jupyter Notebook
 		".ipynb_checkpoints",
 
-		# pyenv
+  # pyenv
 		".python-version",
 
-		# celery beat schedule file
+  # celery beat schedule file
 		"celerybeat-schedule",
 
-		# SageMath parsed files
+  # SageMath parsed files
 		"*.sage.py",
 
-		# Environments
+  # Environments
 		".env",
 		".venv",
 		"env/",
@@ -134,17 +133,17 @@ ignores = [
 		"env.bak/",
 		"venv.bak/",
 
-		# Spyder project settings
+  # Spyder project settings
 		".spyderproject",
 		".spyproject",
 
-		# Rope project settings
+  # Rope project settings
 		".ropeproject",
 
-		# mkdocs documentation
+  # mkdocs documentation
 		"/site",
 
-		# mypy
+  # mypy
 		".mypy_cache/",
 
 		# Covers JetBrains IDEs: IntelliJ, RubyMine, PhpStorm, AppCode, PyCharm, CLion, Android Studio, WebStorm and Rider
@@ -154,22 +153,22 @@ ignores = [
 		"*.iml",
 		"*.ipr",
 
-		# CMake
+  # CMake
 		"cmake-build-*/",
 
-		# Mongo Explorer plugin
+  # Mongo Explorer plugin
 		".idea/**/mongoSettings.xml",
 
-		# File-based project format
+  # File-based project format
 		"*.iws",
 
-		# IntelliJ
+  # IntelliJ
 		"out/",
 
-		# JIRA plugin
+  # JIRA plugin
 		"atlassian-ide-plugin.xml",
 
-		# Crashlytics plugin (for Android Studio and IntelliJ)
+  # Crashlytics plugin (for Android Studio and IntelliJ)
 		"com_crashlytics_export_strings.xml",
 		"crashlytics.properties",
 		"crashlytics-build.properties",

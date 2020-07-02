@@ -1,6 +1,8 @@
+# 3rd party
+from domdf_python_tools.terminal_colours import Fore
+
 # this package
 from git_helper.utils import validate_classifiers
-from domdf_python_tools.terminal_colours import Fore
 
 
 def test_errors(capsys):

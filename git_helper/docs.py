@@ -1,5 +1,4 @@
 #  !/usr/bin/env python
-#   -*- coding: utf-8 -*-
 #
 #  docs.py
 """
@@ -37,15 +36,15 @@ import jinja2
 
 # this package
 from git_helper.blocks import (
-	create_docs_install_block,
-	create_docs_links_block,
-	create_shields_block,
-	create_short_desc_block,
-	installation_regex,
-	links_regex,
-	shields_regex,
-	short_desc_regex
-)
+		create_docs_install_block,
+		create_docs_links_block,
+		create_shields_block,
+		create_short_desc_block,
+		installation_regex,
+		links_regex,
+		shields_regex,
+		short_desc_regex
+		)
 from git_helper.utils import clean_writer, ensure_requirements
 
 # this package
@@ -83,17 +82,16 @@ def ensure_doc_requirements(repo_path: pathlib.Path, templates: jinja2.Environme
 			("sphinx-notfound-page", None),
 			("sphinx-tabs", "1.1.13"),
 			("sphinx_autodoc_typehints", "1.11.0"),
-			("sphinx-prompt", "1.2.0"),
-			# ("git+https://github.com/ScriptAutomate/sphinx-tabs-expanded.git", None)
+			("sphinx-prompt", "1.2.0"),  # ("git+https://github.com/ScriptAutomate/sphinx-tabs-expanded.git", None)
 			}
 
 	test_req_file = repo_path / templates.globals["docs_dir"] / "requirements.txt"
 
 	test_req_file.write_text(
 			"\n".join(
-					line for line in test_req_file.read_text().splitlines()
-					if not line.startswith("git+")  # FIXME
-					))
+					line for line in test_req_file.read_text().splitlines() if not line.startswith("git+")  # FIXME
+					)
+			)
 
 	ensure_requirements(target_requirements, test_req_file)
 
