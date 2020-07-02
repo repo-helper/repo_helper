@@ -27,7 +27,7 @@ Parse configuration values from a ``YAML`` file.
 # stdlib
 import json
 import pathlib
-from typing import Any, Dict, Iterable, List, Union
+from typing import Any, Dict, Iterable, List, Type, Union
 
 # this package
 from git_helper import configuration
@@ -72,7 +72,7 @@ def parse_yaml(repo_path: pathlib.Path):
 
 	# --------------------------------------
 
-	metadata_vars: List[ConfigVar] = [
+	metadata_vars: List[Type[ConfigVar]] = [
 			# Metadata
 			author,
 			email,
@@ -150,7 +150,7 @@ def parse_yaml(repo_path: pathlib.Path):
 	config_vars["tox_travis_versions"] = tox_travis_versions
 	config_vars["gh_actions_versions"] = gh_actions_versions
 
-	travis_vars: List[ConfigVar] = [
+	travis_vars: List[Type[ConfigVar]] = [
 			travis_site,
 			travis_pypi_secure,
 			travis_extra_install_pre,
@@ -162,7 +162,7 @@ def parse_yaml(repo_path: pathlib.Path):
 	for var in travis_vars:
 		config_vars[var.__name__] = var.get(raw_config_vars)
 
-	other_vars: List[ConfigVar] = [
+	other_vars: List[Type[ConfigVar]] = [
 			# Conda & Anaconda
 			enable_conda,
 			conda_channels,
@@ -214,7 +214,7 @@ def get_tox_python_versions(python_versions: Iterable[str]) -> List[str]:
 def get_tox_travis_python_versions(
 		python_versions: Iterable[str],
 		tox_py_versions: Iterable[str],
-		) -> Dict[Union[str, float], str]:
+		) -> Dict[str, str]:
 	"""
 
 	:param python_versions:
@@ -223,7 +223,7 @@ def get_tox_travis_python_versions(
 	:return:
 	"""
 
-	tox_travis_matrix: Dict[Union[str], str] = {}
+	tox_travis_matrix: Dict[str, str] = {}
 
 	for py_version, tox_py_version in zip(python_versions, tox_py_versions):
 		tox_travis_matrix[str(py_version)] = str(tox_py_version)
@@ -234,7 +234,7 @@ def get_tox_travis_python_versions(
 def get_gh_actions_python_versions(
 		python_versions: Iterable[str],
 		tox_py_versions: Iterable[str],
-		) -> Dict[Union[str, float], str]:
+		) -> Dict[str, str]:
 	"""
 
 	:param python_versions:
@@ -243,7 +243,7 @@ def get_gh_actions_python_versions(
 	:return:
 	"""
 
-	tox_travis_matrix: Dict[Union[str], str] = {}
+	tox_travis_matrix: Dict[str, str] = {}
 
 	for py_version, tox_py_version in zip(python_versions, tox_py_versions):
 		if tox_py_version != "docs":

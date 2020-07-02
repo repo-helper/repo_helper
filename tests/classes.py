@@ -1,7 +1,6 @@
-import os
-from typing import Any, Dict, List
+from typing import Any, Dict, List, Type
 
-import pytest
+import pytest  # type: ignore
 
 from git_helper.config_vars import ConfigVar
 
@@ -11,7 +10,7 @@ test_list_str = ["a", "b", "c", "d"]
 
 
 class ListTest:
-	config_var: ConfigVar
+	config_var: Type[ConfigVar]
 	test_value: List[str]
 	default_value: List[str] = []
 
@@ -40,7 +39,7 @@ class ListTest:
 
 
 class DirectoryTest:
-	config_var: ConfigVar
+	config_var: Type[ConfigVar]
 	test_value: str
 	default_value: str
 
@@ -68,7 +67,7 @@ class DirectoryTest:
 
 
 class BoolTrueTest:
-	config_var: ConfigVar
+	config_var: Type[ConfigVar]
 
 	def test_empty_get(self):
 		assert self.config_var.get()
@@ -104,7 +103,7 @@ class BoolTrueTest:
 
 
 class BoolFalseTest(BoolTrueTest):
-	config_var: ConfigVar
+	config_var: Type[ConfigVar]
 
 	def test_empty_get(self):
 		assert not self.config_var.get()
@@ -131,7 +130,7 @@ class BoolFalseTest(BoolTrueTest):
 
 
 class RequiredStringTest:
-	config_var: ConfigVar
+	config_var: Type[ConfigVar]
 	test_value: str
 
 	def test_empty_get(self):
@@ -202,7 +201,7 @@ class EnumTest(RequiredStringTest):
 
 
 class DictTest:
-	config_var: ConfigVar
+	config_var: Type[ConfigVar]
 	test_value: Dict[str, Any]
 	default_value: Dict[str, Any] = {}
 

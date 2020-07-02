@@ -48,6 +48,7 @@ extensions = [
 		"sphinx_autodoc_typehints",
 		"sphinx.ext.autosummary",
 		'tox_conf_directive',
+		'autodocsumm',
 		]
 
 sphinxemoji_style = 'twemoji'
@@ -74,6 +75,7 @@ intersphinx_mapping = {
 		"Django": ('https://docs.djangoproject.com/en/dev/', 'https://docs.djangoproject.com/en/dev/_objects/'),
 		"sarge": ('https://sarge.readthedocs.io/en/latest/', None),
 		"attrs": ('https://www.attrs.org/en/stable/', None),
+		'jinja2': ('https://jinja.palletsprojects.com/en/2.11.x/', None),
 		}
 
 html_theme = 'alabaster'

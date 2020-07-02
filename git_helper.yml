@@ -50,3 +50,9 @@ classifiers:
 
 extra_sphinx_extensions:
   - tox_conf_directive
+  - autodocsumm
+
+intersphinx_mapping:
+  - "'jinja2': ('https://jinja.palletsprojects.com/en/2.11.x/', None)"
+
+preserve_custom_theme: true

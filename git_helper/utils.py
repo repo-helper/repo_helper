@@ -35,7 +35,7 @@ from typing import IO, Any, Iterable, List, Optional, Tuple, Type, Union
 import trove_classifiers  # type: ignore
 from domdf_python_tools.terminal_colours import Fore
 from typing_extensions import Literal
-from typing_inspect import get_origin
+from typing_inspect import get_origin  # type: ignore
 from domdf_python_tools.utils import stderr_writer
 
 # this package

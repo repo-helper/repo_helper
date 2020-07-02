@@ -1,7 +1,9 @@
 import os
+from typing import Type
 
-import pytest
+import pytest  # type: ignore
 
+from git_helper.config_vars import ConfigVar
 from git_helper.configuration import *
 from tests.classes import (
 	BoolFalseTest, BoolTrueTest, DictTest, DirectoryTest, EnumTest, ListTest, OptionalStringTest, RequiredStringTest,
@@ -28,6 +30,9 @@ class Test_username(RequiredStringTest):
 class Test_license(RequiredStringTest):
 	config_var = license
 	test_value = "GPLv3+"
+
+	def test_success(self):
+		assert self.config_var.get({self.config_var.__name__: self.test_value}) == "GNU General Public License v3 or later (GPLv3+)"
 
 
 class Test_short_desc(RequiredStringTest):
@@ -451,8 +456,8 @@ class Test_travis_ubuntu_version(EnumTest):
 	non_enum_values = ["groovy", "wiley", "18.04", 18.04, "a string"]
 
 
-class Test_platforms(EnumTest):
-	config_var = platforms
+class Test_platforms:
+	config_var: Type[ConfigVar] = platforms
 	test_value = ["Windows", "macOS", "Linux"]
 	default_value = ["Windows", "macOS", "Linux"]
 	non_enum_values = [
@@ -463,18 +468,22 @@ class Test_platforms(EnumTest):
 			["a string"],
 			]
 
+	def test_empty_get(self):
+		assert self.config_var.get() == self.default_value
+		assert self.config_var.get({}) == self.default_value
+
+	def test_non_enum(self):
+		for non_enum in self.non_enum_values:
+			with pytest.raises(ValueError):
+				self.config_var.get({self.config_var.__name__: non_enum})
+
 	def test_success(self):
 		assert self.config_var.get({"platforms": ["Windows"]}) == ["Windows"]
 		assert self.config_var.get({"platforms": ["macOS"]}) == ["macOS"]
 		assert self.config_var.get({"platforms": ["Linux"]}) == ["Linux"]
-		assert self.config_var.get({"platforms": ["windows"]}) == ["Windows"]
-		assert self.config_var.get({"platforms": ["macos"]}) == ["macOS"]
-		assert self.config_var.get({"platforms": ["linux"]}) == ["Linux"]
-		assert self.config_var.get({"platforms": ["linux", "windows"]}) == ["linux", "windows"]
-		assert self.config_var.get({"platforms": ["linux", "macOS"]}) == ["linux", "macos"]
-		assert self.config_var.get({"platforms": ["macos", "windows"]}) == ["macos", "windows"]
-		assert self.config_var.get({"platforms": ["Windows", "macOS", "Linux"]}) == ["windows", "macos", "linux"]
-		assert self.config_var.get({"platforms": ["windows", "macos", "linux"]}) == ["windows", "macos", "linux"]
+		assert self.config_var.get({"platforms": ["Linux", "macOS"]}) == ["Linux", "macOS"]
+		assert self.config_var.get({"platforms": ["macOS", "Windows"]}) == ["macOS", "Windows"]
+		assert self.config_var.get({"platforms": ["Windows", "macOS", "Linux"]}) == ["Windows", "macOS", "Linux"]
 
 	def test_errors(self):
 		for wrong_value in [

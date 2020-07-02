@@ -259,7 +259,7 @@ class classifiers(ConfigVar):  # noqa
 	"""
 
 	dtype = List[str]
-	default = []
+	default: List[str] = []
 
 	@classmethod
 	def validate(cls, raw_config_vars: Optional[Dict[str, Any]] = None):
@@ -278,11 +278,11 @@ class classifiers(ConfigVar):  # noqa
 
 		data = optional_getter(raw_config_vars, cls, cls.required)
 		if isinstance(data, str) or not isinstance(data, Iterable):
-			raise ValueError(f"'classifiers' must be a List of {cls.dtype.__args__[0]}") from None
+			raise ValueError(f"'classifiers' must be a List of {cls.dtype.__args__[0]}") from None  # type: ignore
 
 		for classifier in data:
 			if not isinstance(classifier, str):
-				raise ValueError(f"'classifiers' must be a List of {cls.dtype.__args__[0]}") from None
+				raise ValueError(f"'classifiers' must be a List of {cls.dtype.__args__[0]}") from None  # type: ignore
 
 		for classifier in data:
 			add_classifier(classifier)
@@ -293,17 +293,17 @@ class classifiers(ConfigVar):  # noqa
 			lic = license_lookup[lic]
 			add_classifier(f"License :: OSI Approved :: {lic}")
 
-		for c in get_version_classifiers(python_versions(raw_config_vars)):
+		for c in get_version_classifiers(python_versions.get(raw_config_vars)):
 			add_classifier(c)
 
-		if set(platforms(raw_config_vars)) == {"Windows", "macOS", "Linux"}:
+		if set(platforms.get(raw_config_vars)) == {"Windows", "macOS", "Linux"}:
 			add_classifier("Operating System :: OS Independent")
 		else:
-			if "Windows" in platforms(raw_config_vars):
+			if "Windows" in platforms.get(raw_config_vars):
 				add_classifier("Operating System :: Microsoft :: Windows")
-			if "Linux" in platforms(raw_config_vars):
+			if "Linux" in platforms.get(raw_config_vars):
 				add_classifier("Operating System :: POSIX :: Linux")
-			if "macOS" in platforms(raw_config_vars):
+			if "macOS" in platforms.get(raw_config_vars):
 				add_classifier("Operating System :: MacOS")
 
 		validate_classifiers(classifier_list)
@@ -326,7 +326,7 @@ class keywords(ConfigVar):  # noqa
 	"""
 
 	dtype = List[str]
-	default = []
+	default: List[str] = []
 
 
 class license(ConfigVar):  # noqa
@@ -518,7 +518,7 @@ class manifest_additional(ConfigVar):  # noqa
 	"""
 
 	dtype = List[str]
-	default = []
+	default: List[str] = []
 
 
 class py_modules(ConfigVar):  # noqa
@@ -534,7 +534,7 @@ class py_modules(ConfigVar):  # noqa
 	"""
 
 	dtype = List[str]
-	default = []
+	default: List[str] = []
 
 
 class console_scripts(ConfigVar):  # noqa
@@ -551,7 +551,7 @@ class console_scripts(ConfigVar):  # noqa
 	"""
 
 	dtype = List[str]
-	default = []
+	default: List[str] = []
 
 
 def parse_additional_setup_args(setup_args):
@@ -572,7 +572,7 @@ class additional_setup_args(ConfigVar):  # noqa
 	"""
 
 	dtype = Dict[str, str]
-	default = {}
+	default: Dict[str, str] = {}
 	validator = parse_additional_setup_args
 
 
@@ -604,7 +604,7 @@ class extras_require(ConfigVar):  # noqa
 	"""
 
 	dtype = Dict[str, str]
-	default = {}
+	default: Dict[str, str] = {}
 
 
 class additional_requirements_files(ConfigVar):  # noqa
@@ -624,7 +624,7 @@ class additional_requirements_files(ConfigVar):  # noqa
 	"""
 
 	dtype = List[str]
-	default = []
+	default: List[str] = []
 
 
 class setup_pre(ConfigVar):  # noqa
@@ -641,7 +641,7 @@ class setup_pre(ConfigVar):  # noqa
 	"""
 
 	dtype = List[str]
-	default = []
+	default: List[str] = []
 
 
 class platforms(ConfigVar):  # noqa
@@ -664,7 +664,7 @@ class platforms(ConfigVar):  # noqa
 	"""
 
 	dtype = List[Literal["Windows", "macOS", "Linux"]]
-	default = ["Windows", "macOS", "Linux"]
+	default: List[str] = ["Windows", "macOS", "Linux"]
 
 	# @staticmethod
 	# def validator(value):
@@ -703,7 +703,7 @@ class preserve_custom_theme(ConfigVar):  # noqa
 	"""
 
 	dtype = bool
-	default = False
+	default: bool = False
 
 
 class sphinx_html_theme(ConfigVar):  # noqa
@@ -738,7 +738,7 @@ class extra_sphinx_extensions(ConfigVar):  # noqa
 	"""
 
 	dtype = List[str]
-	default = []
+	default: List[str] = []
 
 
 class intersphinx_mapping(ConfigVar):  # noqa
@@ -754,7 +754,7 @@ class intersphinx_mapping(ConfigVar):  # noqa
 	"""
 
 	dtype = List[str]
-	default = []
+	default: List[str] = []
 
 
 class sphinx_conf_preamble(ConfigVar):  # noqa
@@ -773,7 +773,7 @@ class sphinx_conf_preamble(ConfigVar):  # noqa
 	"""
 
 	dtype = List[str]
-	default = []
+	default: List[str] = []
 
 
 class sphinx_conf_epilogue(ConfigVar):  # noqa
@@ -782,7 +782,7 @@ class sphinx_conf_epilogue(ConfigVar):  # noqa
 	"""
 
 	dtype = List[str]
-	default = []
+	default: List[str] = []
 
 
 class html_theme_options(ConfigVar):  # noqa
@@ -800,7 +800,7 @@ class html_theme_options(ConfigVar):  # noqa
 	"""
 
 	dtype = Dict[str, Any]
-	default = {}
+	default: Dict[str, Any] = {}
 
 
 class html_context(ConfigVar):  # noqa
@@ -817,7 +817,7 @@ class html_context(ConfigVar):  # noqa
 	"""
 
 	dtype = Dict[str, Any]
-	default = {}
+	default: Dict[str, Any] = {}
 
 
 class enable_docs(ConfigVar):  # noqa
@@ -871,7 +871,7 @@ class tox_requirements(ConfigVar):  # noqa
 	"""
 
 	dtype = List[str]
-	default = []
+	default: List[str] = []
 
 
 class tox_build_requirements(ConfigVar):  # noqa
@@ -887,7 +887,7 @@ class tox_build_requirements(ConfigVar):  # noqa
 	"""
 
 	dtype = List[str]
-	default = []
+	default: List[str] = []
 
 
 class tox_testenv_extras(ConfigVar):  # noqa
@@ -950,7 +950,7 @@ class travis_extra_install_pre(ConfigVar):  # noqa
 	"""
 
 	dtype = List[str]
-	default = []
+	default: List[str] = []
 
 
 class travis_extra_install_post(ConfigVar):  # noqa
@@ -961,7 +961,7 @@ class travis_extra_install_post(ConfigVar):  # noqa
 	"""
 
 	dtype = List[str]
-	default = []
+	default: List[str] = []
 
 
 class travis_pypi_secure(ConfigVar):  # noqa
@@ -999,7 +999,7 @@ class travis_additional_requirements(ConfigVar):  # noqa
 	"""
 
 	dtype = List[str]
-	default = []
+	default: List[str] = []
 
 
 # Conda & Anaconda
@@ -1017,7 +1017,7 @@ class enable_conda(ConfigVar):  # noqa
 	"""
 
 	dtype = bool
-	default = True
+	default: bool = True
 
 
 class conda_channels(ConfigVar):  # noqa
@@ -1035,7 +1035,7 @@ class conda_channels(ConfigVar):  # noqa
 	"""
 
 	dtype = List[str]
-	default = []
+	default: List[str] = []
 
 
 class conda_description(ConfigVar):  # noqa
@@ -1069,7 +1069,7 @@ class additional_ignore(ConfigVar):  # noqa
 	"""
 
 	dtype = List[str]
-	default = []
+	default: List[str] = []
 
 
 class imgbot_ignore(ConfigVar):  # noqa
@@ -1085,7 +1085,7 @@ class imgbot_ignore(ConfigVar):  # noqa
 	"""
 
 	dtype = List[str]
-	default = []
+	default: List[str] = []
 
 
 class tests_dir(ConfigVar):  # noqa
@@ -1115,7 +1115,7 @@ class pkginfo_extra(ConfigVar):  # noqa
 	"""
 
 	dtype = List[str]
-	default = []
+	default: List[str] = []
 
 
 class exclude_files(ConfigVar):  # noqa
@@ -1160,4 +1160,4 @@ class exclude_files(ConfigVar):  # noqa
 	"""
 
 	dtype = List[str]
-	default = []
+	default: List[str] = []

@@ -37,7 +37,7 @@ class __ConfigVarMeta(type):
 
 		return x
 
-	def get_schema_entry(cls, schema: Optional[Dict] = None):
+	def get_schema_entry(cls, schema: Optional[Dict] = None) -> Dict[str, Any]:
 		if schema is None:
 			schema = {
 					"$schema": "http://json-schema.org/schema#",
@@ -59,10 +59,10 @@ class __ConfigVarMeta(type):
 		return schema
 
 	@property
-	def schema_entry(cls):
+	def schema_entry(cls) -> Dict[str, Any]:
 		return cls.get_schema_entry()
 
-	def __call__(self, raw_config_vars):
+	def __call__(self, raw_config_vars: Dict[str, Any]) -> Any:
 		return self.get(raw_config_vars)
 
 	@abstractmethod
@@ -70,7 +70,7 @@ class __ConfigVarMeta(type):
 		return None
 
 
-def optional_getter(raw_config_vars: Dict[str, Any], cls: "ConfigVar", required: bool) -> Any:
+def optional_getter(raw_config_vars: Dict[str, Any], cls: Type["ConfigVar"], required: bool) -> Any:
 	if required:
 		try:
 			return raw_config_vars[cls.__name__]
@@ -125,11 +125,11 @@ class ConfigVar(metaclass=__ConfigVarMeta):
 	May change the values (e.g. make lowercase) before returning.
 	"""
 
-	def __call__(self, raw_config_vars):
+	def __call__(self, raw_config_vars: Dict[str, Any]) -> Any:
 		return self.get(raw_config_vars)
 
 	@classmethod
-	def get(cls, raw_config_vars: Optional[Dict[str, Any]] = None):
+	def get(cls, raw_config_vars: Optional[Dict[str, Any]] = None) -> Any:
 		"""
 		Returns the value of this :class:`~git_helper.config_vars.ConfigVar`
 
@@ -141,7 +141,7 @@ class ConfigVar(metaclass=__ConfigVarMeta):
 		return cls.validator(cls.validate(raw_config_vars))
 
 	@classmethod
-	def validate(cls, raw_config_vars: Optional[Dict[str, Any]] = None):
+	def validate(cls, raw_config_vars: Optional[Dict[str, Any]] = None) -> Any:
 		"""
 		Validate the value obtained from the ``YAML`` file and coerce into the appropriate return type.
 

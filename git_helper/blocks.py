@@ -30,7 +30,7 @@ from typing import Iterable, Optional, Sequence, Set, Union
 
 # 3rd party
 from typing_extensions import Literal
-from jinja2 import BaseLoader, Environment, StrictUndefined
+from jinja2 import BaseLoader, Environment, StrictUndefined, Template
 
 # this package
 from git_helper.shields import *
@@ -57,7 +57,10 @@ shields_regex = re.compile(r'(?s)(\.\. start shields)(.*?)(\.\. end shields)')
 short_desc_regex = re.compile(r'(?s)(\.\. start short_desc)(.*?)(\.\. end short_desc)')
 links_regex = re.compile(r'(?s)(\.\. start links)(.*?)(\.\. end links)')
 
-shields_block_template = Environment(loader=BaseLoader, undefined=StrictUndefined).from_string(  # type: ignore
+shields_block_template: Template = Environment(
+		loader=BaseLoader(),
+		undefined=StrictUndefined,
+		).from_string(
 		"""\
 .. start shields {{ unique_name.lstrip("_") }}
 
@@ -129,32 +132,32 @@ shields_block_template = Environment(loader=BaseLoader, undefined=StrictUndefine
 .. |docker_size{{ unique_name }}| {{ make_docker_size_shield(docker_name, username)[3:] }}
 {% endif %}
 .. end shields
-"""
+""",
+		globals={
+				"make_maintained_shield": make_maintained_shield,
+				"make_rtfd_shield": make_rtfd_shield,
+				"make_docs_check_shield": make_docs_check_shield,
+				"make_travis_shield": make_travis_shield,
+				"make_actions_windows_shield": make_actions_windows_shield,
+				"make_actions_macos_shield": make_actions_macos_shield,
+				"make_requires_shield": make_requires_shield,
+				"make_coveralls_shield": make_coveralls_shield,
+				"make_codefactor_shield": make_codefactor_shield,
+				"make_pypi_version_shield": make_pypi_version_shield,
+				"make_python_versions_shield": make_python_versions_shield,
+				"make_python_implementations_shield": make_python_implementations_shield,
+				"make_wheel_shield": make_wheel_shield,
+				"make_conda_version_shield": make_conda_version_shield,
+				"make_conda_platform_shield": make_conda_platform_shield,
+				"make_license_shield": make_license_shield,
+				"make_language_shield": make_language_shield,
+				"make_activity_shield": make_activity_shield,
+				"make_last_commit_shield": make_last_commit_shield,
+				"make_docker_build_status_shield": make_docker_build_status_shield,
+				"make_docker_automated_build_shield": make_docker_automated_build_shield,
+				"make_docker_size_shield": make_docker_size_shield,
+				}
 		)
-
-shields_block_template.globals["make_maintained_shield"] = make_maintained_shield
-
-shields_block_template.globals["make_rtfd_shield"] = make_rtfd_shield
-shields_block_template.globals["make_docs_check_shield"] = make_docs_check_shield
-shields_block_template.globals["make_travis_shield"] = make_travis_shield
-shields_block_template.globals["make_actions_windows_shield"] = make_actions_windows_shield
-shields_block_template.globals["make_actions_macos_shield"] = make_actions_macos_shield
-shields_block_template.globals["make_requires_shield"] = make_requires_shield
-shields_block_template.globals["make_coveralls_shield"] = make_coveralls_shield
-shields_block_template.globals["make_codefactor_shield"] = make_codefactor_shield
-shields_block_template.globals["make_pypi_version_shield"] = make_pypi_version_shield
-shields_block_template.globals["make_python_versions_shield"] = make_python_versions_shield
-shields_block_template.globals["make_python_implementations_shield"] = make_python_implementations_shield
-shields_block_template.globals["make_wheel_shield"] = make_wheel_shield
-shields_block_template.globals["make_conda_version_shield"] = make_conda_version_shield
-shields_block_template.globals["make_conda_platform_shield"] = make_conda_platform_shield
-shields_block_template.globals["make_license_shield"] = make_license_shield
-shields_block_template.globals["make_language_shield"] = make_language_shield
-shields_block_template.globals["make_activity_shield"] = make_activity_shield
-shields_block_template.globals["make_last_commit_shield"] = make_last_commit_shield
-shields_block_template.globals["make_docker_build_status_shield"] = make_docker_build_status_shield
-shields_block_template.globals["make_docker_automated_build_shield"] = make_docker_automated_build_shield
-shields_block_template.globals["make_docker_size_shield"] = make_docker_size_shield
 
 
 def create_shields_block(
@@ -204,6 +207,9 @@ def create_shields_block(
 	if not pypi_name:
 		pypi_name = repo_name
 
+	if platforms:
+		platforms = set(platforms)
+
 	return shields_block_template.render(
 			username=username,
 			repo_name=repo_name,
@@ -216,7 +222,7 @@ def create_shields_block(
 			unique_name=unique_name,
 			docker_name=docker_name,
 			docker_shields=docker_shields,
-			platforms=set(platforms),
+			platforms=platforms,
 			)
 
 

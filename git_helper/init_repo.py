@@ -132,7 +132,7 @@ def init_repo(repo_path: pathlib.Path, templates: jinja2.Environment) -> List[st
 
 	with (repo_path / "LICENSE").open("w") as fp:
 		license_template = Environment(
-				loader=BaseLoader,
+				loader=BaseLoader(),
 				undefined=StrictUndefined,
 				).from_string(license_text)  # type: ignore
 		clean_writer(license_template.render(
