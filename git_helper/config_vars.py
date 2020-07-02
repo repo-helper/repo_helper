@@ -1,9 +1,9 @@
 import copy
 import pathlib
 from abc import abstractmethod
+from textwrap import dedent, indent
 from typing import Any, Callable, Dict, Iterable, List, Optional, Tuple, Type, Union
 from typing_inspect import get_origin, is_literal_type
-
 from git_helper.utils import check_union, get_json_type
 from domdf_python_tools.utils import strtobool
 
@@ -34,6 +34,7 @@ class __ConfigVarMeta(type):
 		x.required = dct.get("required", False)
 		x.default = dct.get("default", '')
 		x.validator = dct.get("validator", lambda y: y)
+		x.category = dct.get("category", "other")
 
 		return x
 
@@ -123,6 +124,11 @@ class ConfigVar(metaclass=__ConfigVarMeta):
 	The callable must have a single required argument (the value). 
 	Should raise :exc:`ValueError` if values are invalid, and return the values if they are valid. 
 	May change the values (e.g. make lowercase) before returning.
+	"""
+
+	category: str
+	"""
+	The category the :class:`~git_helper.config_vars.ConfigVar` is listed under in the documentation. 
 	"""
 
 	def __call__(self, raw_config_vars: Dict[str, Any]) -> Any:
@@ -255,6 +261,80 @@ class ConfigVar(metaclass=__ConfigVarMeta):
 			print(get_origin(cls.dtype))
 			raise NotImplementedError
 
+	@classmethod
+	def make_documentation(cls):
+		docstring = (indent(dedent(cls.__doc__), tab))
+		if not docstring.startswith("\n"):
+			docstring = "\n" + docstring
+
+		buf = f"""
+.. conf:: {cls.__name__}
+{docstring}
+
+	**Required**: {'yes' if cls.required else 'no'}
+
+"""
+
+		if not cls.required:
+			if cls.default == []:
+				buf += "\t**Default**: [ ]\n\n"
+			elif cls.default == {}:
+				buf += "\t**Default**: { }\n\n"
+			elif isinstance(cls.default, Callable):
+				buf += f"\t**Default**: The value of :conf:`{cls.default.__name__}`\n\n"
+			# TODO: source dir repo root
+			elif isinstance(cls.default, bool):
+				buf += f"\t**Default**: :py:obj:`{cls.default}`\n\n"
+			elif isinstance(cls.default, str):
+				if cls.default == '':
+					buf += "\t**Default**: <blank>\n\n"
+				else:
+					buf += f"\t**Default**: ``{cls.default}``\n\n"
+			else:
+				buf += f"\t**Default**: {cls.default}\n\n"
+
+		buf += f"\t**Type**: {type_to_yaml(cls.dtype)}"
+
+		if is_literal_type(cls.dtype):
+			valid_values = ", ".join(f"``{x}``" for x in cls.dtype.__args__)
+			buf += f"\n\n\t**Allowed values**: {valid_values}"
+		elif hasattr(cls.dtype, "__args__") and is_literal_type(cls.dtype.__args__[0]):
+			valid_values = ", ".join(f"``{x}``" for x in cls.dtype.__args__[0].__args__)
+			buf += f"\n\n\t**Allowed values**: {valid_values}"
+
+		return buf
+
+
+tab = "\t"
+
+
+yaml_type_lookup = {
+		str: "String",
+		int: "Integer",
+		float: "Float",
+		bool: "Boolean",
+		Any: "anything",
+		}
+
+
+def type_to_yaml(type_: Type) -> str:
+	if type_ in yaml_type_lookup:
+		return yaml_type_lookup[type_]
+	elif get_origin(type_) is Union:
+		dtype = " or ".join(yaml_type_lookup[x] for x in type_.__args__)
+		return dtype
+	elif get_origin(type_) in {list, List}:
+		dtype = " or ".join(type_to_yaml(x) for x in type_.__args__)
+		return f"Sequence of {dtype}"
+	elif get_origin(type_) in {dict, Dict}:
+		dtype = " to ".join(type_to_yaml(x) for x in type_.__args__)
+		return f"Mapping of {dtype}"
+	elif is_literal_type(type_):
+		types = set(type(y) for y in type_.__args__)
+		return " or ".join(type_to_yaml(x) for x in types)
+	else:
+		return str(type_)
+
 
 def make_schema(*configuration_variables: __ConfigVarMeta) -> Dict[str, str]:
 	"""
@@ -343,3 +423,66 @@ def parse_extras(raw_config_vars: Dict[str, Any], repo_path: pathlib.Path) -> Tu
 	extras_require["all"] = all_extras
 
 	return extras_require, additional_requirements_files
+
+
+if __name__ == '__main__':
+	import git_helper.configuration
+	from git_helper.configuration import __all__
+
+	config_directory = pathlib.Path("../doc-source/config/")
+
+	if not config_directory.is_dir():
+		config_directory.mkdir(parents=True)
+
+	config_index = config_directory / "index.rst"
+
+	docs: Dict[str, List[str]] = {}
+
+	for var_name in __all__:
+		var_obj = getattr(git_helper.configuration, var_name)
+		if var_obj.category.lower() not in docs:
+			docs[var_obj.category.lower()] = []
+		docs[var_obj.category.lower()].append(var_obj.make_documentation())
+
+
+	with config_index.open("w") as index_fp:
+		index_fp.write("""\
+=======================================
+Configuration
+=======================================
+
+Place configuration options in a file called ``git_helper.yml`` in the  repository root.
+
+Options are defined like so:
+
+.. code-block:: yaml
+
+	modname: git_helper
+	copyright_years: "2020"
+	author: "Dominic Davis-Foster"
+	email: "dominic@example.com"
+	version: "0.0.1"
+	username: "domdfcoding"
+	license: 'LGPLv3+'
+	short_desc: 'Update multiple configuration files, build scripts etc. from a single location'
+
+.. toctree::
+	:caption: Categories
+	
+""")
+
+		for category, docstrings in docs.items():
+			index_fp.write(tab)
+			index_fp.write(category)
+			index_fp.write("\n")
+
+			with (config_directory / f"{category}.rst").open("w") as fp:
+				fp.write("\n\n=")
+				fp.write("=" * len(category))
+				fp.write("\n")
+				fp.write(category.capitalize())
+				fp.write("\n=")
+				fp.write("="*len(category))
+				fp.write("\n")
+				fp.write("\n\n".join(docstrings))
+				fp.write("\n\n")

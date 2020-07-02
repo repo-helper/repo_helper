@@ -108,6 +108,7 @@ class author(ConfigVar):  # noqa
 
 	dtype = str
 	required = True
+	category: str = "metadata"
 
 
 class email(ConfigVar):  # noqa
@@ -123,6 +124,7 @@ class email(ConfigVar):  # noqa
 
 	dtype = str
 	required = True
+	category: str = "metadata"
 
 
 class username(ConfigVar):  # noqa
@@ -138,6 +140,7 @@ class username(ConfigVar):  # noqa
 
 	dtype = str
 	required = True
+	category: str = "metadata"
 
 
 class modname(ConfigVar):  # noqa
@@ -153,6 +156,7 @@ class modname(ConfigVar):  # noqa
 
 	dtype = str
 	required = True
+	category: str = "metadata"
 
 
 class version(ConfigVar):  # noqa
@@ -169,6 +173,7 @@ class version(ConfigVar):  # noqa
 	dtype = Union[str, float]
 	rtype = str
 	required = True
+	category: str = "metadata"
 
 
 class copyright_years(ConfigVar):  # noqa
@@ -191,6 +196,7 @@ class copyright_years(ConfigVar):  # noqa
 	dtype = Union[str, int]
 	rtype = str
 	required = True
+	category: str = "metadata"
 
 
 class repo_name(ConfigVar):  # noqa
@@ -202,12 +208,11 @@ class repo_name(ConfigVar):  # noqa
 	.. code-block:: yaml
 
 		repo_name: git_helper
-
-	By default the value for :conf:`modname` is used.
 	"""
 
 	dtype = str
 	default = modname
+	category: str = "metadata"
 
 
 class pypi_name(ConfigVar):  # noqa
@@ -219,12 +224,11 @@ class pypi_name(ConfigVar):  # noqa
 	.. code-block:: yaml
 
 		pypi_name: git-helper
-
-	By default the value for :conf:`modname` is used.
 	"""
 
 	dtype = str
 	default = modname
+	category: str = "metadata"
 
 
 class import_name(ConfigVar):  # noqa
@@ -236,13 +240,12 @@ class import_name(ConfigVar):  # noqa
 	.. code-block:: yaml
 
 		import_name: git_helper
-
-	By default the value for :conf:`modname` is used.
 	"""
 
 	dtype = str
 	default = modname
 	validator = lambda x: x.replace("-", "_")  # replace hyphens with underscores
+	category: str = "metadata"
 
 
 class classifiers(ConfigVar):  # noqa
@@ -256,11 +259,12 @@ class classifiers(ConfigVar):  # noqa
 		classifiers:
 		  - "Environment :: Console"
 
-	Classifiers are automatically populated for the supported Python versions and implementations, and for most licenses.
+	Classifiers are automatically added for the supported Python versions and implementations, and for most licenses.
 	"""
 
 	dtype = List[str]
 	default: List[str] = []
+	category: str = "metadata"
 
 	@classmethod
 	def validate(cls, raw_config_vars: Optional[Dict[str, Any]] = None):
@@ -328,6 +332,7 @@ class keywords(ConfigVar):  # noqa
 
 	dtype = List[str]
 	default: List[str] = []
+	category: str = "metadata"
 
 
 class license(ConfigVar):  # noqa
@@ -345,6 +350,7 @@ class license(ConfigVar):  # noqa
 
 	dtype = str
 	required = True
+	category: str = "metadata"
 
 	@staticmethod
 	def validator(value):
@@ -369,6 +375,7 @@ class short_desc(ConfigVar):  # noqa
 
 	dtype = str
 	required = True
+	category: str = "metadata"
 
 
 class source_dir(ConfigVar):  # noqa
@@ -388,6 +395,7 @@ class source_dir(ConfigVar):  # noqa
 	required = False
 	default = ""
 	validator = lambda x: os.path.join(x, '')
+	category: str = "metadata"
 
 
 # Optional Features
@@ -401,12 +409,11 @@ class enable_tests(ConfigVar):  # noqa
 	.. code-block:: yaml
 
 		enable_tests: True
-
-	By default this is ``True``.
 	"""
 
 	dtype = bool
 	default = True
+	category: str = "optional features"
 
 
 class enable_releases(ConfigVar):  # noqa
@@ -418,12 +425,11 @@ class enable_releases(ConfigVar):  # noqa
 	.. code-block:: yaml
 
 		enable_releases: True
-
-	By default this is ``True``.
 	"""
 
 	dtype = bool
 	default = True
+	category: str = "optional features"
 
 
 class docker_shields(ConfigVar):  # noqa
@@ -435,12 +441,11 @@ class docker_shields(ConfigVar):  # noqa
 	.. code-block:: yaml
 
 		docker_shields: True
-
-	By default this is ``False``.
 	"""
 
 	dtype = bool
 	default = False
+	category: str = "optional features"
 
 
 class docker_name(ConfigVar):  # noqa
@@ -455,6 +460,7 @@ class docker_name(ConfigVar):  # noqa
 	"""
 
 	dtype = str
+	category: str = "optional features"
 
 
 # Python Versions
@@ -468,13 +474,12 @@ class python_deploy_version(ConfigVar):  # noqa
 	.. code-block:: yaml
 
 		python_deploy_version: 3.8
-
-	By default this is ``3.6``.
 	"""
 
 	dtype = Union[str, float]
 	rtype = str
 	default = 3.6
+	category: str = "python versions"
 
 
 def default_python_versions(raw_config_vars):
@@ -502,6 +507,7 @@ The lowest version of Python given above is used to set the minimum supported ve
 	rtype = List[str]
 	default = default_python_versions
 	validator = lambda x: [str(ver) for ver in x if ver]
+	category: str = "python versions"
 
 
 # Packaging
@@ -520,6 +526,7 @@ class manifest_additional(ConfigVar):  # noqa
 
 	dtype = List[str]
 	default: List[str] = []
+	category: str = "packaging"
 
 
 class py_modules(ConfigVar):  # noqa
@@ -536,6 +543,7 @@ class py_modules(ConfigVar):  # noqa
 
 	dtype = List[str]
 	default: List[str] = []
+	category: str = "packaging"
 
 
 class console_scripts(ConfigVar):  # noqa
@@ -553,6 +561,7 @@ class console_scripts(ConfigVar):  # noqa
 
 	dtype = List[str]
 	default: List[str] = []
+	category: str = "packaging"
 
 
 def parse_additional_setup_args(setup_args):
@@ -575,6 +584,7 @@ class additional_setup_args(ConfigVar):  # noqa
 	dtype = Dict[str, str]
 	default: Dict[str, str] = {}
 	validator = parse_additional_setup_args
+	category: str = "packaging"
 
 
 class extras_require(ConfigVar):  # noqa
@@ -606,6 +616,7 @@ class extras_require(ConfigVar):  # noqa
 
 	dtype = Dict[str, str]
 	default: Dict[str, str] = {}
+	category: str = "packaging"
 
 
 class additional_requirements_files(ConfigVar):  # noqa
@@ -626,6 +637,7 @@ class additional_requirements_files(ConfigVar):  # noqa
 
 	dtype = List[str]
 	default: List[str] = []
+	category: str = "packaging"
 
 
 class setup_pre(ConfigVar):  # noqa
@@ -643,6 +655,7 @@ class setup_pre(ConfigVar):  # noqa
 
 	dtype = List[str]
 	default: List[str] = []
+	category: str = "packaging"
 
 
 class platforms(ConfigVar):  # noqa
@@ -658,14 +671,13 @@ class platforms(ConfigVar):  # noqa
 		  - macOS
 		  - Linux
 
-	Currently only ``Windows``, ``macOS`` and ``Linux`` are supported.
-
 	These values determine the GitHub test workflows to enable,
 	and the Trove classifiers used on PyPI.
 	"""
 
 	dtype = List[Literal["Windows", "macOS", "Linux"]]
 	default: List[str] = ["Windows", "macOS", "Linux"]
+	category: str = "packaging"
 
 	# @staticmethod
 	# def validator(value):
@@ -682,12 +694,11 @@ class rtfd_author(ConfigVar):  # noqa
 	.. code-block:: yaml
 
 		rtfd_author: Dominic Davis-Foster and Joe Bloggs
-
-	By default the value for :conf:`author` is used.
 	"""
 
 	dtype = str
 	default = author
+	category: str = "documentation"
 
 
 class preserve_custom_theme(ConfigVar):  # noqa
@@ -699,12 +710,11 @@ class preserve_custom_theme(ConfigVar):  # noqa
 	.. code-block:: yaml
 
 		preserve_custom_theme: True
-
-	By default this is ``False``.
 	"""
 
 	dtype = bool
 	default: bool = False
+	category: str = "documentation"
 
 
 class sphinx_html_theme(ConfigVar):  # noqa
@@ -722,6 +732,7 @@ class sphinx_html_theme(ConfigVar):  # noqa
 
 	dtype = Literal["sphinx_rtd_theme", "alabaster"]
 	default = "sphinx_rtd_theme"
+	category: str = "documentation"
 
 
 class extra_sphinx_extensions(ConfigVar):  # noqa
@@ -740,6 +751,7 @@ class extra_sphinx_extensions(ConfigVar):  # noqa
 
 	dtype = List[str]
 	default: List[str] = []
+	category: str = "documentation"
 
 
 class intersphinx_mapping(ConfigVar):  # noqa
@@ -756,6 +768,7 @@ class intersphinx_mapping(ConfigVar):  # noqa
 
 	dtype = List[str]
 	default: List[str] = []
+	category: str = "documentation"
 
 
 class sphinx_conf_preamble(ConfigVar):  # noqa
@@ -775,6 +788,7 @@ class sphinx_conf_preamble(ConfigVar):  # noqa
 
 	dtype = List[str]
 	default: List[str] = []
+	category: str = "documentation"
 
 
 class sphinx_conf_epilogue(ConfigVar):  # noqa
@@ -784,6 +798,7 @@ class sphinx_conf_epilogue(ConfigVar):  # noqa
 
 	dtype = List[str]
 	default: List[str] = []
+	category: str = "documentation"
 
 
 class html_theme_options(ConfigVar):  # noqa
@@ -802,6 +817,7 @@ class html_theme_options(ConfigVar):  # noqa
 
 	dtype = Dict[str, Any]
 	default: Dict[str, Any] = {}
+	category: str = "documentation"
 
 
 class html_context(ConfigVar):  # noqa
@@ -819,6 +835,7 @@ class html_context(ConfigVar):  # noqa
 
 	dtype = Dict[str, Any]
 	default: Dict[str, Any] = {}
+	category: str = "documentation"
 
 
 class enable_docs(ConfigVar):  # noqa
@@ -830,12 +847,11 @@ class enable_docs(ConfigVar):  # noqa
 	.. code-block:: yaml
 
 		enable_docs: True
-
-	By default this is ``True``.
 	"""
 
 	dtype = bool
 	default = True
+	category: str = "documentation"
 
 
 class docs_dir(ConfigVar):  # noqa
@@ -847,13 +863,12 @@ class docs_dir(ConfigVar):  # noqa
 	.. code-block:: yaml
 
 		docs_dir: docs
-
-	By default this is ``"doc-source"``
 	"""
 
 	dtype = str
 	required = False
 	default = "doc-source"
+	category: str = "documentation"
 
 
 # Tox
@@ -873,6 +888,7 @@ class tox_requirements(ConfigVar):  # noqa
 
 	dtype = List[str]
 	default: List[str] = []
+	category: str = "tox"
 
 
 class tox_build_requirements(ConfigVar):  # noqa
@@ -889,7 +905,7 @@ class tox_build_requirements(ConfigVar):  # noqa
 
 	dtype = List[str]
 	default: List[str] = []
-
+	category: str = "tox"
 
 class tox_testenv_extras(ConfigVar):  # noqa
 	"""
@@ -906,14 +922,14 @@ class tox_testenv_extras(ConfigVar):  # noqa
 	"""
 
 	dtype = str
-
+	category: str = "tox"
 
 # Travis
 # Options for configuring Travis.
 # https://travis-ci.com
 class travis_site(ConfigVar):  # noqa
 	"""
-	The Travis site. Either ``com`` (default) or ``org``.
+	The Travis site.
 
 	Example:
 
@@ -924,43 +940,56 @@ class travis_site(ConfigVar):  # noqa
 
 	dtype = Literal["com", "org"]
 	default = "com"
+	category: str = "travis"
 
 
 class travis_ubuntu_version(ConfigVar):  # noqa
 	"""
-	The Travis Ubuntu version..
+	The Travis Ubuntu version.
 
 	Example:
 
 	.. code-block:: yaml
 
 		travis_ubuntu_version: "xenial"
-
-	Default ``xenial``
 	"""
 
 	dtype = Literal["bionic", "xenial", "trusty", "precise"]
 	default = "xenial"
+	category: str = "travis"
 
 
 class travis_extra_install_pre(ConfigVar):  # noqa
 	"""
+	Additional steps to run in Travis before installing dependencies.
+
+	Example:
+
 	.. code-block:: yaml
 
 		travis_extra_install_pre:
+		  - sudo apt update
+		  - sudo apt install python3-gi
 	"""
 
 	dtype = List[str]
 	default: List[str] = []
+	category: str = "travis"
 
 
 class travis_extra_install_post(ConfigVar):  # noqa
 	"""
+	Additional steps to run in Travis after installing dependencies.
+
+	Example:
+
 	.. code-block:: yaml
 
 		travis_extra_install_post:
+		  - echo "Installation Complete!"
 	"""
 
+	category: str = "travis"
 	dtype = List[str]
 	default: List[str] = []
 
@@ -985,6 +1014,7 @@ class travis_pypi_secure(ConfigVar):  # noqa
 	"""
 
 	dtype = str
+	category: str = "travis"
 
 
 class travis_additional_requirements(ConfigVar):  # noqa
@@ -1001,6 +1031,7 @@ class travis_additional_requirements(ConfigVar):  # noqa
 
 	dtype = List[str]
 	default: List[str] = []
+	category: str = "travis"
 
 
 # Conda & Anaconda
@@ -1013,12 +1044,11 @@ class enable_conda(ConfigVar):  # noqa
 	.. code-block:: yaml
 
 		enable_conda: True
-
-	By default this is ``True``.
 	"""
 
 	dtype = bool
 	default: bool = True
+	category: str = "conda & anaconda"
 
 
 class conda_channels(ConfigVar):  # noqa
@@ -1037,6 +1067,7 @@ class conda_channels(ConfigVar):  # noqa
 
 	dtype = List[str]
 	default: List[str] = []
+	category: str = "conda & anaconda"
 
 
 class conda_description(ConfigVar):  # noqa
@@ -1049,11 +1080,12 @@ class conda_description(ConfigVar):  # noqa
 
 		conda_description: This is a short description of my project.
 
-	If undefined the value of :conf:`short_desc` is used. A list of required Anaconda channels is automatically appended.
+	A list of required Anaconda channels is automatically appended.
 	"""
 
 	dtype = str
 	default = short_desc
+	category: str = "conda & anaconda"
 
 
 # Other

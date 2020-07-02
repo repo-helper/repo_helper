@@ -58,7 +58,7 @@ __all__ = [
 		]
 
 
-def clean_writer(string: str, fp: IO[str]):
+def clean_writer(string: str, fp: IO):
 	"""
 	Write string to fp without trailing spaces
 
@@ -220,7 +220,7 @@ license_lookup = {
 
 def check_union(obj: Any, dtype: Type):
 	"""
-	Check if the object is a :class:`typing.Union`.
+	Check if the object is in the :class:`typing.Union`.
 
 	:param obj:
 	:type obj:

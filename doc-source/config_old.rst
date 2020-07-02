@@ -20,6 +20,24 @@ Options are defined like so:
 	short_desc: 'Update multiple configuration files, build scripts etc. from a single location'
 
 
+.. conf:: extra_sphinx_extensions
+
+	A list of additional extensions to enable for Sphinx.
+
+	Example:
+
+	.. code-block:: yaml
+
+		extra_sphinx_extensions:
+		  - "sphinxcontrib.httpdomain"
+
+	These must also be listed in ``doc-source/requirements.txt``.
+
+
+	**Default**: []
+
+	**dtype**: typing.List[str]
+
 .. automodule:: git_helper.configuration
 	:members:
 

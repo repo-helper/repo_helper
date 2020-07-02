@@ -10,6 +10,14 @@ dl.class {
     border-style: solid;
 }
 
+dl.conf {
+    padding: 3px 3px 7px 5px;
+    margin-top: 7px !important;
+    margin-bottom: 13px !important;
+    border-color: rgba(180, 128, 240, 0.5);
+    border-style: solid;
+}
+
 dl.function {
     padding: 3px 3px 3px 5px;
     margin-top: 7px !important;

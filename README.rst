@@ -1,6 +1,12 @@
-**********************
+==============
 git_helper
-**********************
+==============
+
+.. start short_desc
+
+**Update multiple configuration files, build scripts etc. from a single location**
+
+.. end short_desc
 
 .. start shields 
 
@@ -87,4 +93,17 @@ git_helper
 
 .. end shields
 
+Installation
+----------------
 
+.. start installation
+
+``git_helper`` can be installed from PyPI.
+
+To install with ``pip``:
+
+.. code-block:: bash
+
+	$ python -m pip install domdf_git_helper
+
+.. end installation
