@@ -61,14 +61,14 @@ def init_repo(repo_path: pathlib.Path, templates: jinja2.Environment) -> List[st
 	maybe_make(repo_path / templates.globals["import_name"])
 
 	__init__ = init_repo_templates.get_template("__init__.py")
-	with (repo_path / templates.globals["import_name"] / "__init__.py").open("w") as fp:
+	with (repo_path / templates.globals["import_name"] / "__init__.py").open('w') as fp:
 		clean_writer(__init__.render(), fp)
 
 	# tests
 	if templates.globals["enable_tests"]:
 		maybe_make(repo_path / templates.globals["tests_dir"])
-		(repo_path / templates.globals["tests_dir"] / "__init__.py").open("a").close()
-		(repo_path / templates.globals["tests_dir"] / "requirements.txt").open("a").close()
+		(repo_path / templates.globals["tests_dir"] / "__init__.py").open('a').close()
+		(repo_path / templates.globals["tests_dir"] / "requirements.txt").open('a').close()
 
 	# docs
 	if templates.globals["enable_docs"]:
@@ -77,7 +77,7 @@ def init_repo(repo_path: pathlib.Path, templates: jinja2.Environment) -> List[st
 
 		for filename in {"docs.rst", "index.rst"}:
 			template = init_repo_templates.get_template(filename)
-			with (repo_path / templates.globals["docs_dir"] / filename).open("w") as fp:
+			with (repo_path / templates.globals["docs_dir"] / filename).open('w') as fp:
 				clean_writer(template.render(), fp)
 
 		shutil.copy2(
@@ -88,7 +88,7 @@ def init_repo(repo_path: pathlib.Path, templates: jinja2.Environment) -> List[st
 	# other
 	for filename in {"README.rst"}:
 		template = init_repo_templates.get_template(filename)
-		with (repo_path / filename).open("w") as fp:
+		with (repo_path / filename).open('w') as fp:
 			clean_writer(template.render(), fp)
 
 	# Licenses from https://github.com/licenses/license-templates/tree/master/templates
@@ -122,10 +122,10 @@ def init_repo(repo_path: pathlib.Path, templates: jinja2.Environment) -> List[st
 		response = requests.get(license_url)
 		if response.status_code == 200:
 			license_text = response.text
-			with (repo_path / "LICENSE").open("w") as fp:
+			with (repo_path / "LICENSE").open('w') as fp:
 				clean_writer(response.text, fp)
 
-	with (repo_path / "LICENSE").open("w") as fp:
+	with (repo_path / "LICENSE").open('w') as fp:
 		license_template = Environment(
 				loader=BaseLoader(),
 				undefined=StrictUndefined,
@@ -140,7 +140,7 @@ def init_repo(repo_path: pathlib.Path, templates: jinja2.Environment) -> List[st
 				)
 
 	# Touch requirements file
-	(repo_path / "requirements.txt").open("a").close()
+	(repo_path / "requirements.txt").open('a').close()
 
 	return [
 			os.path.join(templates.globals["import_name"], "__init__.py"),

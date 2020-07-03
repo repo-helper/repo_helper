@@ -471,7 +471,7 @@ if __name__ == '__main__':
 			docs[var_obj.category.lower()] = []
 		docs[var_obj.category.lower()].append(var_obj.make_documentation())
 
-	with config_index.open("w") as index_fp:
+	with config_index.open('w') as index_fp:
 		index_fp.write(
 				"""\
 =======================================
@@ -504,7 +504,7 @@ Options are defined like so:
 			index_fp.write(category)
 			index_fp.write("\n")
 
-			with (config_directory / f"{category}.rst").open("w") as fp:
+			with (config_directory / f"{category}.rst").open('w') as fp:
 				fp.write("\n\n=")
 				fp.write("=" * len(category))
 				fp.write("\n")

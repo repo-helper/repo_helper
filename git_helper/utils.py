@@ -125,7 +125,7 @@ def ensure_requirements(requirements_list: Iterable[Tuple[str, Optional[str]]], 
 
 	maybe_make(requirements_file.parent, parents=True)
 
-	with requirements_file.open("w") as fp:
+	with requirements_file.open('w') as fp:
 		for req in test_requirements:
 			if req.name.replace("-", "_") not in target_packages:
 				if req.specs:

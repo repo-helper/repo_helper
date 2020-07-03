@@ -69,7 +69,7 @@ def make_tox(repo_path: pathlib.Path, templates: jinja2.Environment) -> List[str
 
 	tox = templates.get_template("tox_template.ini")
 
-	with (repo_path / "tox.ini").open("w") as fp:
+	with (repo_path / "tox.ini").open('w') as fp:
 		clean_writer(tox.render(source_files=" ".join(source_files)), fp)
 
 	# tox = ConfigUpdater()
@@ -222,7 +222,7 @@ def make_tox(repo_path: pathlib.Path, templates: jinja2.Environment) -> List[str
 	# 	for option, val in options.items():
 	# 		tox.set(section, option, val)
 	#
-	# with (repo_path / "tox.ini").open("w") as fp:
+	# with (repo_path / "tox.ini").open('w') as fp:
 	# 	tox.write(fp)
 
 	return ["tox.ini"]
@@ -241,7 +241,7 @@ def make_yapf(repo_path: pathlib.Path, templates: jinja2.Environment) -> List[st
 
 	yapf = templates.get_template("style.yapf")
 
-	with (repo_path / ".style.yapf").open("w") as fp:
+	with (repo_path / ".style.yapf").open('w') as fp:
 		clean_writer(yapf.render(), fp)
 
 	return [".style.yapf"]
@@ -282,7 +282,7 @@ def make_isort(repo_path: pathlib.Path, templates: jinja2.Environment) -> List[s
 
 	all_requirements.discard(templates.globals["import_name"])
 
-	with (repo_path / ".isort.cfg").open("w") as fp:
+	with (repo_path / ".isort.cfg").open('w') as fp:
 		clean_writer(
 				"""\
 [settings]

@@ -115,7 +115,7 @@ def make_rtfd(repo_path: pathlib.Path, templates: jinja2.Environment) -> List[st
 	:type templates: jinja2.Environment
 	"""
 
-	with (repo_path / ".readthedocs.yml").open("w") as fp:
+	with (repo_path / ".readthedocs.yml").open('w') as fp:
 		clean_writer(
 				f"""\
 # This file is managed by `git_helper`. Don't edit it directly
@@ -161,7 +161,7 @@ def make_conf(repo_path: pathlib.Path, templates: jinja2.Environment) -> List[st
 	:type templates: jinja2.Environment
 	"""
 
-	conf = templates.get_template("conf.py_")
+	conf = templates.get_template("conf._py")
 
 	username = templates.globals["username"]
 	repo_name = templates.globals["repo_name"]
@@ -203,7 +203,7 @@ def make_conf(repo_path: pathlib.Path, templates: jinja2.Environment) -> List[st
 			if key not in templates.globals["html_theme_options"]:
 				templates.globals["html_theme_options"][key] = val
 
-	with (repo_path / templates.globals["docs_dir"] / "conf.py").open("w") as fp:
+	with (repo_path / templates.globals["docs_dir"] / "conf.py").open('w') as fp:
 		clean_writer(conf.render(), fp)
 		clean_writer("\n", fp)
 
@@ -227,7 +227,7 @@ def copy_docs_styling(repo_path: pathlib.Path, templates: jinja2.Environment) ->
 			directory.mkdir(parents=True)
 
 	if templates.globals["sphinx_html_theme"] == "sphinx_rtd_theme":
-		with (dest__static_dir / "style.css").open("w") as fp:
+		with (dest__static_dir / "style.css").open('w') as fp:
 			clean_writer(
 					"""/* This file is managed by `git_helper`. Don't edit it directly */
 	
@@ -239,7 +239,7 @@ def copy_docs_styling(repo_path: pathlib.Path, templates: jinja2.Environment) ->
 					)
 
 	elif templates.globals["sphinx_html_theme"] == "alabaster":
-		with (dest__static_dir / "style.css").open("w") as fp:
+		with (dest__static_dir / "style.css").open('w') as fp:
 			clean_writer(
 					"""/* This file is managed by `git_helper`. Don't edit it directly */
 
@@ -376,7 +376,7 @@ div#changelog-history h2{
 					fp
 					)
 
-	with (dest__templates_dir / "layout.html").open("w") as fp:
+	with (dest__templates_dir / "layout.html").open('w') as fp:
 		clean_writer(
 				"""<!--- This file is managed by `git_helper`. Don't edit it directly --->
 {% extends "!layout.html" %}
@@ -450,7 +450,7 @@ def rewrite_docs_index(repo_path: pathlib.Path, templates: jinja2.Environment) -
 
 	index_rst = short_desc_regex.sub(short_desc_block, index_rst)
 
-	with index_rst_file.open("w") as fp:
+	with index_rst_file.open('w') as fp:
 		fp.write(index_rst)
 
 	return [os.path.join(templates.globals["docs_dir"], "index.rst")]

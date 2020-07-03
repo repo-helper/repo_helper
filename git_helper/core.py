@@ -159,7 +159,7 @@ def ensure_bumpversion(repo_path: pathlib.Path, templates: jinja2.Environment) -
 	bumpversion_file = repo_path / ".bumpversion.cfg"
 
 	if not bumpversion_file.is_file():
-		with bumpversion_file.open("w") as fp:
+		with bumpversion_file.open('w') as fp:
 			fp.write(
 					f"""\
 [bumpversion]
@@ -173,7 +173,7 @@ tag = True
 	bumpversion_contents = bumpversion_file.read_text()
 
 	if not bumpversion_contents.endswith("\n\n"):
-		with bumpversion_file.open("a") as fp:
+		with bumpversion_file.open('a') as fp:
 			fp.write("\n")
 
 	required_lines = [
@@ -195,7 +195,7 @@ tag = True
 
 	for line in required_lines:
 		if line not in bumpversion_contents:
-			with bumpversion_file.open("a") as fp:
+			with bumpversion_file.open('a') as fp:
 				fp.write(line)
 				fp.write("\n\n")
 
@@ -217,10 +217,10 @@ def make_issue_templates(repo_path: pathlib.Path, templates: jinja2.Environment)
 	issue_template_dir = repo_path / ".github" / "ISSUE_TEMPLATE"
 	maybe_make(issue_template_dir, parents=True)
 
-	with (issue_template_dir / "bug_report.md").open("w") as fp:
+	with (issue_template_dir / "bug_report.md").open('w') as fp:
 		clean_writer(bug_report.render(), fp)
 
-	with (issue_template_dir / "feature_request.md").open("w") as fp:
+	with (issue_template_dir / "feature_request.md").open('w') as fp:
 		clean_writer(feature_request.render(), fp)
 
 	return [
@@ -240,7 +240,7 @@ def make_contributing_md(repo_path: pathlib.Path, templates: jinja2.Environment)
 
 	contributing = templates.get_template("CONTRIBUTING.md")
 
-	with (repo_path / "CONTRIBUTING.md").open("w") as fp:
+	with (repo_path / "CONTRIBUTING.md").open('w') as fp:
 		clean_writer(contributing.render(), fp)
 
 	return [os.path.join("CONTRIBUTING.md")]

@@ -164,7 +164,7 @@ sphinxcontrib-httpdomain >=1.7.0
 sphinxemoji >=0.1.6
 """
 
-		with (tmpdir_p / managed_files[0]).open("a") as fp:
+		with (tmpdir_p / managed_files[0]).open('a') as fp:
 			fp.write("lorem>=0.1.1")
 
 		managed_files = ensure_doc_requirements(tmpdir_p, demo_environment)

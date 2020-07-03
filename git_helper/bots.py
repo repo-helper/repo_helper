@@ -81,7 +81,7 @@ def make_auto_assign_action(repo_path: pathlib.Path, templates: jinja2.Environme
 		(dot_github / "workflows" / "assign.yml").unlink()
 
 
-# 	with (dot_github / "workflows" / "assign.yml").open("w") as fp:
+# 	with (dot_github / "workflows" / "assign.yml").open('w') as fp:
 # 		clean_writer(
 # 				"""# This file is managed by `git_helper`. Don't edit it directly
 #
@@ -99,7 +99,7 @@ def make_auto_assign_action(repo_path: pathlib.Path, templates: jinja2.Environme
 # 				fp
 # 				)
 
-	with (dot_github / "auto_assign.yml").open("w") as fp:
+	with (dot_github / "auto_assign.yml").open('w') as fp:
 		clean_writer(
 				f"""# This file is managed by `git_helper`. Don't edit it directly
 
@@ -152,7 +152,7 @@ def make_dependabot(repo_path: pathlib.Path, templates: jinja2.Environment) -> L
 	dependabot_dir = repo_path / ".dependabot"
 	maybe_make(dependabot_dir)
 
-	with (dependabot_dir / "config.yml").open("w") as fp:
+	with (dependabot_dir / "config.yml").open('w') as fp:
 		clean_writer(
 				f"""# This file is managed by `git_helper`. Don't edit it directly
 
@@ -188,7 +188,7 @@ def make_imgbot(repo_path: pathlib.Path, templates: jinja2.Environment) -> List[
 			"ignoredFiles": ["**/*.svg"] + templates.globals["imgbot_ignore"],
 			}
 
-	with imgbot_file.open("w") as fp:
+	with imgbot_file.open('w') as fp:
 		clean_writer(json.dumps(imgbot_config, indent=4), fp)
 
 	return [imgbot_file.name]

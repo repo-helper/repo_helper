@@ -188,7 +188,7 @@ def make_gitignore(repo_path: pathlib.Path, templates: jinja2.Environment) -> Li
 	:type templates: jinja2.Environment
 	"""
 
-	with (repo_path / ".gitignore").open("w") as fp:
+	with (repo_path / ".gitignore").open('w') as fp:
 		clean_writer("# This file is managed by `git_helper`. Don't edit it directly", fp)
 
 		for ignore in ignores:

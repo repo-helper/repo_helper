@@ -33,7 +33,7 @@ from git_helper.utils import check_union, validate_classifiers
 class TestValidateClassifiers:
 
 	def test_errors(self, capsys):
-		validate_classifiers(["Foo :: Bar", "Foo :: Bar :: Baz", 'Fuzzy :: Wuzzy :: Was :: A :: Bear'])
+		validate_classifiers(["Foo :: Bar", "Foo :: Bar :: Baz", "Fuzzy :: Wuzzy :: Was :: A :: Bear"])
 		captured = capsys.readouterr()
 
 		stderr = captured.err.split("\n")
@@ -43,7 +43,7 @@ class TestValidateClassifiers:
 		assert not captured.out
 
 	def test_deprecated(self, capsys):
-		validate_classifiers(['Natural Language :: Ukranian'])
+		validate_classifiers(["Natural Language :: Ukranian"])
 		captured = capsys.readouterr()
 
 		stderr = captured.err.split("\n")
@@ -51,7 +51,7 @@ class TestValidateClassifiers:
 		assert not captured.out
 
 	def test_valid(self, capsys):
-		validate_classifiers(['Natural Language :: Ukrainian', 'License :: OSI Approved'])
+		validate_classifiers(["Natural Language :: Ukrainian", "License :: OSI Approved"])
 		captured = capsys.readouterr()
 		assert not captured.out
 		assert not captured.err

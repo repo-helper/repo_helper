@@ -60,7 +60,7 @@ shields_block_template: Template = Environment(
 		undefined=StrictUndefined,
 		).from_string(
 				"""\
-.. start shields {{ unique_name.lstrip("_") }}
+.. start shields{% if unique_name %} {{ unique_name.lstrip("_") }}{% endif %}
 
 .. list-table::
 	:stub-columns: 1
@@ -86,7 +86,7 @@ shields_block_template: Template = Environment(
 	  - |license{{ unique_name }}| |language{{ unique_name }}| |requires{{ unique_name }}|
 
 {% if docs %}.. |docs{{ unique_name }}| {{ make_rtfd_shield(repo_name)[3:] }}
-	
+
 .. |docs_check{{ unique_name }}| {{ make_docs_check_shield(repo_name, username)[3:] }}{% endif %}
 
 .. |travis{{ unique_name }}| {{ make_travis_shield(repo_name, username, travis_site)[3:] }}
