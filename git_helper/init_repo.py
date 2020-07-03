@@ -38,7 +38,7 @@ from jinja2 import BaseLoader, Environment, StrictUndefined
 
 # this package
 from git_helper.templates import init_repo_template_dir
-from git_helper.utils import clean_writer
+from domdf_python_tools.paths import clean_writer
 
 __all__ = ["init_repo"]
 

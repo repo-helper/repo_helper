@@ -62,7 +62,7 @@ from .packaging import make_manifest, make_pkginfo, make_setup
 from .readme import rewrite_readme
 from .templates import template_dir
 from .testing import ensure_tests_requirements, make_isort, make_tox, make_yapf
-from .utils import clean_writer
+from domdf_python_tools.paths import clean_writer
 from .yaml_parser import parse_yaml
 
 __all__ = [

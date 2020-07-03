@@ -26,9 +26,8 @@ General utilities.
 # stdlib
 import os
 import pathlib
-import stat
 import subprocess
-from typing import IO, Any, Iterable, List, Optional, Tuple, Type, Union
+from typing import Any, Iterable, List, Optional, Tuple, Type, Union
 
 # 3rd party
 import requirements  # type: ignore
@@ -38,10 +37,9 @@ from domdf_python_tools.terminal_colours import Fore
 from domdf_python_tools.utils import stderr_writer
 from typing_extensions import Literal
 from typing_inspect import get_origin  # type: ignore
+from domdf_python_tools.paths import clean_writer
 
 __all__ = [
-		"clean_writer",
-		"make_executable",
 		"check_git_status",
 		"get_git_status",
 		"ensure_requirements",
@@ -52,41 +50,6 @@ __all__ = [
 		"get_json_type",
 		"json_type_lookup",
 		]
-
-
-def clean_writer(string: str, fp: IO):
-	"""
-	Write string to fp without trailing spaces
-
-	:param string:
-	:type string:
-	:param fp:
-	:type fp:
-	"""
-
-	buffer = []
-
-	for line in string.split("\n"):
-		buffer.append(line.rstrip())
-
-	while buffer[-1:] == [""]:
-		buffer = buffer[:-1]
-
-	for line in buffer:
-		fp.write(line)
-		fp.write("\n")
-
-
-def make_executable(filename):
-	"""
-	Make the given file executable
-
-	:param filename:
-	:type filename: str or pathlib.Path
-	"""
-
-	st = os.stat(str(filename))
-	os.chmod(str(filename), st.st_mode | stat.S_IXUSR | stat.S_IXGRP | stat.S_IXOTH)
 
 
 def check_git_status(repo_path: pathlib.Path) -> Tuple[bool, List[str]]:

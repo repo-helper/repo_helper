@@ -36,7 +36,7 @@ import jinja2
 
 # this package
 from .templates import template_dir
-from .utils import clean_writer, make_executable
+from domdf_python_tools.paths import make_executable, clean_writer
 
 __all__ = [
 		"lint_fix_list",

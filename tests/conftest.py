@@ -4,6 +4,7 @@ import pytest  # type: ignore
 from git_helper.linting import lint_belligerent_list, lint_fix_list, lint_warn_list
 from git_helper.templates import template_dir
 
+
 @pytest.fixture()
 def demo_environment():
 	templates = jinja2.Environment(
@@ -24,6 +25,8 @@ def demo_environment():
 			enable_conda=True,
 			enable_releases=True,
 			python_deploy_version="3.6",
+			min_py_version="3.6",
+			modname="hello-world",
 			repo_name="hello-world",
 			import_name="hello_world",
 			travis_pypi_secure="1234abcd",
@@ -33,8 +36,15 @@ def demo_environment():
 			lint_warn_list=lint_warn_list,
 			lint_belligerent_list=lint_belligerent_list,
 			py_modules=[],
+			manifest_additional=[],
+			additional_requirements_files=[],
 			source_dir='',
 			tests_dir='tests',
+			additional_setup_args='',
+			setup_pre=[],
+			docs_dir="doc-source",
+			sphinx_html_theme="alabaster",
+			additional_ignore=["foo", "bar", "fuzz"],
 			))
 
 	return templates

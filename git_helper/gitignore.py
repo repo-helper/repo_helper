@@ -31,7 +31,7 @@ from typing import List
 import jinja2
 
 # this package
-from .utils import clean_writer
+from domdf_python_tools.paths import clean_writer
 
 __all__ = [
 		"ignores",

@@ -339,6 +339,20 @@ jobs:
       - name: "Run Tests for Python ${{ matrix.python-version }}"
         run: "python -m tox"
 """
+		# This time the files should be removed
+		demo_environment.globals.update(dict(
+				platforms=[],
+				))
+
+		assert (tmpdir_p / managed_files[0]).is_file()
+		assert (tmpdir_p / managed_files[1]).is_file()
+
+		managed_files = make_github_ci(tmpdir_p, demo_environment)
+		assert managed_files == [".github/workflows/python_ci.yml", ".github/workflows/python_ci_macos.yml"]
+
+		assert not (tmpdir_p / managed_files[0]).is_file()
+		assert not (tmpdir_p / managed_files[1]).is_file()
+
 		# Reset
 		demo_environment.globals.update(dict(
 				travis_additional_requirements=["isort", "black"],

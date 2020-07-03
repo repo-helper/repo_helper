@@ -45,7 +45,8 @@ from git_helper.blocks import (
 		shields_regex,
 		short_desc_regex
 		)
-from git_helper.utils import clean_writer, ensure_requirements
+from git_helper.utils import ensure_requirements
+from domdf_python_tools.paths import clean_writer
 
 # this package
 from .templates import init_repo_template_dir, template_dir
@@ -85,15 +86,15 @@ def ensure_doc_requirements(repo_path: pathlib.Path, templates: jinja2.Environme
 			("sphinx-prompt", "1.2.0"),  # ("git+https://github.com/ScriptAutomate/sphinx-tabs-expanded.git", None)
 			}
 
-	test_req_file = repo_path / templates.globals["docs_dir"] / "requirements.txt"
+	req_file = repo_path / templates.globals["docs_dir"] / "requirements.txt"
 
-	test_req_file.write_text(
+	req_file.write_text(
 			"\n".join(
-					line for line in test_req_file.read_text().splitlines() if not line.startswith("git+")  # FIXME
+					line for line in req_file.read_text().splitlines() if not line.startswith("git+")  # FIXME
 					)
 			)
 
-	ensure_requirements(target_requirements, test_req_file)
+	ensure_requirements(target_requirements, req_file)
 
 	# test_req_file.write_text(
 	# 		"\n".join(
@@ -117,7 +118,8 @@ def make_rtfd(repo_path: pathlib.Path, templates: jinja2.Environment) -> List[st
 
 	with (repo_path / ".readthedocs.yml").open("w") as fp:
 		clean_writer(
-				f"""# This file is managed by `git_helper`. Don't edit it directly
+				f"""\
+# This file is managed by `git_helper`. Don't edit it directly
 
 # .readthedocs.yml
 # Read the Docs configuration file

@@ -35,7 +35,8 @@ import requirements  # type: ignore
 from configupdater import ConfigUpdater  # type: ignore
 
 # this package
-from .utils import clean_writer, ensure_requirements
+from .utils import ensure_requirements
+from domdf_python_tools.paths import clean_writer
 
 __all__ = ["make_tox", "make_yapf", "make_isort", "ensure_tests_requirements"]
 
@@ -283,7 +284,7 @@ def make_isort(repo_path: pathlib.Path, templates: jinja2.Environment) -> List[s
 
 	with (repo_path / ".isort.cfg").open("w") as fp:
 		clean_writer(
-				"""
+				"""\
 [settings]
 line_length=115
 force_to_top=True
@@ -331,7 +332,15 @@ def ensure_tests_requirements(repo_path: pathlib.Path, templates: jinja2.Environ
 			("pytest-rerunfailures", "9.0"),
 			}
 
-	test_req_file = os.path.join(templates.globals["tests_dir"], "requirements.txt")
-	ensure_requirements(target_requirements, repo_path / test_req_file)
+	test_req_file = repo_path / templates.globals["tests_dir"] / "requirements.txt"
 
-	return [test_req_file]
+	test_req_file.write_text(
+			"\n".join(
+					line for line in test_req_file.read_text().splitlines() if not line.startswith("git+")  # FIXME
+					)
+			)
+
+	ensure_requirements(target_requirements, test_req_file)
+
+	return [os.path.join(templates.globals["tests_dir"], "requirements.txt")]
+

@@ -31,7 +31,7 @@ from typing import List
 import jinja2
 
 # this package
-from .utils import clean_writer
+from domdf_python_tools.paths import clean_writer
 
 __all__ = [
 		"make_manifest",
@@ -65,12 +65,12 @@ recursive-exclude **/__pycache__ *
 
 		for item in templates.globals["additional_requirements_files"]:
 			file = pathlib.Path(item)
-			clean_writer(f"{file.parent}/ {file.name}", fp)
+			clean_writer(f"include {file.parent}/{file.name}", fp)
 
 		pyi_entry = f"recursive-include {templates.globals['source_dir']}{templates.globals['import_name']}/ *.pyi"
 		clean_writer(pyi_entry, fp)
 
-		py_typed_entry = f"recursive-include {templates.globals['source_dir']}{templates.globals['import_name']}/ py.typed"
+		py_typed_entry = f"include {templates.globals['source_dir']}{templates.globals['import_name']}/py.typed"
 		clean_writer(py_typed_entry, fp)
 
 	return ["MANIFEST.in"]

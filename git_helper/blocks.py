@@ -199,7 +199,7 @@ def create_shields_block(
 	:return: The shields block created from the above settings.
 	"""
 
-	if unique_name:
+	if unique_name and not unique_name.startswith("_"):
 		unique_name = f"_{unique_name}"
 
 	if not pypi_name:
@@ -320,7 +320,7 @@ docs_installation_block_template = Environment(loader=BaseLoader, undefined=Stri
 
 		.. prompt:: bash
 
-			pip install {{ pypi_name }}
+			python3 -m pip install {{ pypi_name }} --user
 
 {% if conda %}	.. tab:: from Anaconda
 
@@ -340,7 +340,7 @@ docs_installation_block_template = Environment(loader=BaseLoader, undefined=Stri
 
 		.. prompt:: bash
 
-			pip install git+https://github.com/{{ username }}/{{ repo_name }}@master
+			python3 -m pip install git+https://github.com/{{ username }}/{{ repo_name }}@master --user
 
 .. end installation
 """

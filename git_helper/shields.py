@@ -52,6 +52,8 @@ __all__ = [
 		]
 
 # 3rd party
+from typing import Union
+
 from typing_extensions import Literal
 
 
@@ -289,8 +291,8 @@ def make_conda_version_shield(pypi_name: str, username: str) -> str:
 
 	return f"""\
 .. image:: https://img.shields.io/conda/v/{ username }/{ pypi_name }?logo=anaconda
-	:alt: Conda - Package Version
-	:target: https://anaconda.org/{ username }/{ pypi_name }"""
+	:target: https://anaconda.org/{ username }/{ pypi_name }
+	:alt: Conda - Package Version"""
 
 
 def make_conda_platform_shield(pypi_name: str, username: str) -> str:
@@ -308,8 +310,8 @@ def make_conda_platform_shield(pypi_name: str, username: str) -> str:
 
 	return f"""\
 .. image:: https://img.shields.io/conda/pn/{ username }/{ pypi_name }?label=conda%7Cplatform
-	:alt: Conda - Platform
-	:target: https://anaconda.org/{ username }/{ pypi_name }"""
+	:target: https://anaconda.org/{ username }/{ pypi_name }
+	:alt: Conda - Platform"""
 
 
 def make_license_shield(repo_name: str, username: str) -> str:
@@ -327,8 +329,8 @@ def make_license_shield(repo_name: str, username: str) -> str:
 
 	return f"""\
 .. image:: https://img.shields.io/github/license/{ username }/{ repo_name }
-	:alt: License
-	:target: https://github.com/{ username }/{ repo_name }/blob/master/LICENSE"""
+	:target: https://github.com/{ username }/{ repo_name }/blob/master/LICENSE
+	:alt: License"""
 
 
 def make_language_shield(repo_name: str, username: str) -> str:
@@ -349,7 +351,7 @@ def make_language_shield(repo_name: str, username: str) -> str:
 	:alt: GitHub top language"""
 
 
-def make_activity_shield(repo_name: str, username: str, version: str) -> str:
+def make_activity_shield(repo_name: str, username: str, version: Union[str, float]) -> str:
 	"""
 	Create a shield to show the number of commits to the GitHub repository since the last release.
 
@@ -417,8 +419,8 @@ def make_docker_build_status_shield(docker_name: str, username: str) -> str:
 
 	return f"""\
 .. image:: https://img.shields.io/docker/cloud/build/{username}/{docker_name}?label=build&logo=docker
-	:target: https://hub.docker.com/r/domdfcoding/{docker_name}
-	:alt: Docker Cloud Build Status"""
+	:target: https://hub.docker.com/r/{username}/{docker_name}
+	:alt: Docker Hub Build Status"""
 
 
 def make_docker_automated_build_shield(docker_name: str, username: str) -> str:
@@ -437,7 +439,7 @@ def make_docker_automated_build_shield(docker_name: str, username: str) -> str:
 	return f"""\
 .. image:: https://img.shields.io/docker/cloud/automated/{username}/{docker_name}?label=build&logo=docker
 	:target: https://hub.docker.com/r/{username}/{docker_name}/builds
-	:alt: Docker Cloud Automated build"""
+	:alt: Docker Hub Automated build"""
 
 
 def make_docker_size_shield(docker_name: str, username: str) -> str:
