@@ -287,8 +287,8 @@ class classifiers(ConfigVar):  # noqa
 		for classifier in data:
 			if not isinstance(classifier, str):
 				raise ValueError(
-						f"'classifiers' must be a List of {cls.dtype.__args__[0]}"
-						) from None  # type: ignore
+						f"'classifiers' must be a List of {cls.dtype.__args__[0]}"  # type: ignore
+						) from None
 
 		for classifier in data:
 			add_classifier(classifier)

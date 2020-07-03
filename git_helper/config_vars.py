@@ -13,12 +13,9 @@ from typing_inspect import get_origin, is_literal_type
 from git_helper.utils import check_union, get_json_type
 
 __all__ = [
-		# Functions
 		"make_schema",
 		"get_version_classifiers",
 		"parse_extras",
-
-  # metaclass
 		"__ConfigVarMeta",
 		"ConfigVar",
 		]

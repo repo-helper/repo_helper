@@ -1,6 +1,6 @@
 # stdlib
 import os
-from typing import Type
+from typing import Any, Dict, Type
 
 # 3rd party
 import pytest  # type: ignore
@@ -66,31 +66,33 @@ class Test_docker_name(OptionalStringTest):
 	test_value = "manylinux2014"
 
 
-def test_rtfd_author():
-	assert rtfd_author.get({"rtfd_author": "Dominic Davis-Foster and Joe Bloggs"}
-							) == "Dominic Davis-Foster and Joe Bloggs"
-	assert rtfd_author.get({"author": "Dom"}) == "Dom"
-	assert rtfd_author.get({"author": "Dom", "rtfd_author": "Dominic Davis-Foster and Joe Bloggs"}
-							) == "Dominic Davis-Foster and Joe Bloggs"
+class Test_rtfd_author:
+	@pytest.mark.parametrize("value, expects", [
+			({"rtfd_author": "Dominic Davis-Foster and Joe Bloggs"}, "Dominic Davis-Foster and Joe Bloggs"),
+			({"author": "Dom"}, "Dom"),
+			({"author": "Dom", "rtfd_author": "Dominic Davis-Foster and Joe Bloggs"}, "Dominic Davis-Foster and Joe Bloggs"),
+			])
+	def test_success(self, value: Dict[str, str], expects: str):
+		assert rtfd_author.get(value) == expects
 
-	with pytest.raises(ValueError):
-		rtfd_author.get()
+	def test_no_value(self):
+		with pytest.raises(ValueError):
+			rtfd_author.get()
 
-
-@pytest.mark.parametrize(
-		"wrong_value",
-		[
-				{"rtfd_author": 1234},
-				{"rtfd_author": True},
-				{"rtfd_author": test_list_int},
-				{"rtfd_author": test_list_str},
-				{"modname": "git_helper"},
-				{},
-				]
-		)
-def test_rtfd_author_errors(wrong_value):
-	with pytest.raises(ValueError):
-		rtfd_author.get(wrong_value)
+	@pytest.mark.parametrize(
+			"wrong_value",
+			[
+					{"rtfd_author": 1234},
+					{"rtfd_author": True},
+					{"rtfd_author": test_list_int},
+					{"rtfd_author": test_list_str},
+					{"modname": "git_helper"},
+					{},
+					]
+			)
+	def test_errors(self, wrong_value: Dict[str, Any]):
+		with pytest.raises(ValueError):
+			rtfd_author.get(wrong_value)
 
 
 def test_modname():
@@ -139,33 +141,45 @@ def test_version_errors(wrong_value):
 		version.get(wrong_value)
 
 
-def test_conda_description():
-	assert conda_description.get({"conda_description": "This is a short description of my project."
-									}, ) == "This is a short description of my project."
-	assert conda_description.get({"short_desc": "This is a short description of my project."
-									}, ) == "This is a short description of my project."
-	assert conda_description.get({
-			"short_desc": "A short description", "conda_description": "This is a short description of my project."
-			}, ) == "This is a short description of my project."
+class Test_conda_description:
+	@pytest.mark.parametrize("value, expects", [
+			(
+					{"conda_description": "This is a short description of my project."},
+					"This is a short description of my project.",
+					),
+			(
+					{"short_desc": "This is a short description of my project."},
+					"This is a short description of my project.",
+					),
+			(
+					{
+							"short_desc": "A short description",
+							"conda_description": "This is a short description of my project.",
+							},
+					"This is a short description of my project."
+					),
+			])
+	def test_success(self, value: Dict[str, str], expects: str):
+		assert conda_description.get(value) == expects
 
-	with pytest.raises(ValueError):
-		conda_description.get()
+	def test_no_value(self):
+		with pytest.raises(ValueError):
+			conda_description.get()
 
-
-@pytest.mark.parametrize(
-		"wrong_value",
-		[
-				{"conda_description": 1234},
-				{"conda_description": True},
-				{"conda_description": test_list_int},
-				{"conda_description": test_list_str},
-				{"username": "domdfcoding"},
-				{},
-				]
-		)
-def test_conda_description_errors(wrong_value):
-	with pytest.raises(ValueError):
-		conda_description.get(wrong_value)
+	@pytest.mark.parametrize(
+			"wrong_value",
+			[
+					{"conda_description": 1234},
+					{"conda_description": True},
+					{"conda_description": test_list_int},
+					{"conda_description": test_list_str},
+					{"modname": "git_helper"},
+					{},
+					]
+			)
+	def test_errors(self, wrong_value: Dict[str, Any]):
+		with pytest.raises(ValueError):
+			conda_description.get(wrong_value)
 
 
 def test_copyright_years():

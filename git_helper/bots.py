@@ -184,14 +184,12 @@ def make_imgbot(repo_path: pathlib.Path, templates: jinja2.Environment) -> List[
 
 	imgbot_file = repo_path / ".imgbotconfig"
 
+	imgbot_config = {
+			"schedule": "weekly",
+			"ignoredFiles": ["**/*.svg"] + templates.globals["imgbot_ignore"],
+			}
+
 	with imgbot_file.open("w") as fp:
-		clean_writer(json.dumps({
-				"schedule": "weekly",
-				"ignoredFiles": ["**/*.svg"] + templates.globals["imgbot_ignore"],
-				},
-				indent=4,
-				),
-				fp
-				)
+		clean_writer(json.dumps(imgbot_config, indent=4), fp)
 
 	return [imgbot_file.name]

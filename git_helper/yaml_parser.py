@@ -26,7 +26,7 @@ Parse configuration values from a ``YAML`` file.
 # stdlib
 import json
 import pathlib
-from typing import Any, Dict, Iterable, List, Type, Union
+from typing import Any, Dict, Iterable, List, Type
 
 # 3rd party
 import importlib_resources  # type: ignore

@@ -216,7 +216,7 @@ license_lookup = {
 
 def check_union(obj: Any, dtype: Type):
 	"""
-	Check if the object is in the :class:`typing.Union`.
+	Check if the type of ``obj`` is one of the types in a :class:`typing.Union` or a :class:`typing.List``.
 
 	:param obj:
 	:type obj:
