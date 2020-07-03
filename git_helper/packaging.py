@@ -83,7 +83,7 @@ def make_setup(repo_path: pathlib.Path, templates: jinja2.Environment) -> List[s
 	:type templates: jinja2.Environment
 	"""
 
-	setup = templates.get_template("setup.py")
+	setup = templates.get_template("setup.py_")
 
 	with (repo_path / "setup.py").open("w") as fp:
 		clean_writer(setup.render(), fp)
@@ -100,7 +100,7 @@ def make_pkginfo(repo_path: pathlib.Path, templates: jinja2.Environment) -> List
 	:type templates: jinja2.Environment
 	"""
 
-	__pkginfo__ = templates.get_template("__pkginfo__.py")
+	__pkginfo__ = templates.get_template("__pkginfo__.py_")
 
 	with (repo_path / "__pkginfo__.py").open("w") as fp:
 		clean_writer(__pkginfo__.render(), fp)

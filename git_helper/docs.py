@@ -161,7 +161,7 @@ def make_conf(repo_path: pathlib.Path, templates: jinja2.Environment) -> List[st
 	:type templates: jinja2.Environment
 	"""
 
-	conf = templates.get_template("conf.py")
+	conf = templates.get_template("conf.py_")
 
 	username = templates.globals["username"]
 	repo_name = templates.globals["repo_name"]
