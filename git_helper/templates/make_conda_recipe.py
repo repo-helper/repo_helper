@@ -9,10 +9,8 @@ from io import StringIO
 
 # 3rd party
 import rst2txt
-from docutils.core import publish_file
-
-# this package
 from __pkginfo__ import *  # pylint: disable=wildcard-import
+from docutils.core import publish_file
 
 recipe_dir = repo_root / "conda"
 

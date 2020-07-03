@@ -429,6 +429,7 @@ def parse_extras(raw_config_vars: Dict[str, Any], repo_path: pathlib.Path) -> Tu
 
 
 if __name__ == '__main__':
+
 	# this package
 	import git_helper.configuration
 	from git_helper.configuration import __all__

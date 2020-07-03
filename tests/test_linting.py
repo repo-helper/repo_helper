@@ -1,6 +1,8 @@
+# stdlib
 import pathlib
 import tempfile
 
+# this package
 from git_helper.linting import make_lint_roller, make_pylintrc
 
 
@@ -465,11 +467,13 @@ else
 fi
 """
 
-		demo_environment.globals.update(dict(
-				py_modules=["hello_world_cli"],
-				source_dir='src/',
-				tests_dir='testing',
-				))
+		demo_environment.globals.update(
+				dict(
+						py_modules=["hello_world_cli"],
+						source_dir='src/',
+						tests_dir='testing',
+						)
+				)
 
 		managed_files = make_lint_roller(tmpdir_p, demo_environment)
 		assert managed_files == ["lint_roller.sh"]
@@ -519,4 +523,3 @@ fi
 			source_dir='',
 			tests_dir='tests',
 			))
-

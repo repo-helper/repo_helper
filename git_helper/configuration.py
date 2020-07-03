@@ -394,7 +394,7 @@ class source_dir(ConfigVar):  # noqa
 
 	dtype = str
 	required = False
-	default = ""
+	default = ''
 	validator = lambda x: os.path.join(x, '')
 	category: str = "metadata"
 

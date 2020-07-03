@@ -1,15 +1,11 @@
+# stdlib
 import pathlib
 import tempfile
 
-import pytest  # type: ignore
-
+# this package
 from git_helper.docs import (
-	ensure_doc_requirements, make_404_page, make_docs_building_rst, make_docs_source_rst,
-	make_rtfd,
-	)
-from git_helper.packaging import make_manifest, make_setup
-
-from git_helper.testing import ensure_tests_requirements, make_isort, make_yapf
+		ensure_doc_requirements, make_404_page, make_docs_building_rst, make_docs_source_rst, make_rtfd
+		)
 
 
 def test_make_rtfd(demo_environment):
@@ -44,13 +40,13 @@ python:
     - requirements: doc-source/requirements.txt
 """
 
-		demo_environment.globals.update(dict(
-				additional_requirements_files=[
-						"hello_world/submodule/requirements.txt"
-						],
-				python_deploy_version="3.8",
-				docs_dir="userguide",
-				))
+		demo_environment.globals.update(
+				dict(
+						additional_requirements_files=["hello_world/submodule/requirements.txt"],
+						python_deploy_version="3.8",
+						docs_dir="userguide",
+						)
+				)
 
 		managed_files = make_rtfd(tmpdir_p, demo_environment)
 		assert managed_files == [".readthedocs.yml"]
@@ -82,12 +78,13 @@ python:
 """
 
 		# Reset
-		demo_environment.globals.update(dict(
-				additional_requirements_files=[],
-
-				python_deploy_version="3.6",
-				docs_dir="doc-source",
-				))
+		demo_environment.globals.update(
+				dict(
+						additional_requirements_files=[],
+						python_deploy_version="3.6",
+						docs_dir="doc-source",
+						)
+				)
 
 
 def test_make_404_page(demo_environment):
@@ -163,4 +160,3 @@ sphinx_autodoc_typehints >=1.11.0
 sphinxcontrib-httpdomain >=1.7.0
 sphinxemoji >=0.1.6
 """
-

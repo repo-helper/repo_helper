@@ -1,6 +1,7 @@
-# 3rd party
+# stdlib
 from typing import List, Union
 
+# 3rd party
 from domdf_python_tools.terminal_colours import Fore
 
 # this package

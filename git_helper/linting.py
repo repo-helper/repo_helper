@@ -33,10 +33,10 @@ from typing import List
 
 # 3rd party
 import jinja2
+from domdf_python_tools.paths import clean_writer, make_executable
 
 # this package
 from .templates import template_dir
-from domdf_python_tools.paths import make_executable, clean_writer
 
 __all__ = [
 		"lint_fix_list",

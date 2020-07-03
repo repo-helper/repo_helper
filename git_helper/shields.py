@@ -51,9 +51,10 @@ __all__ = [
 		"make_docker_size_shield",
 		]
 
-# 3rd party
+# stdlib
 from typing import Union
 
+# 3rd party
 from typing_extensions import Literal
 
 

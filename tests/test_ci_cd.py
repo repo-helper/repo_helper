@@ -1,6 +1,8 @@
+# stdlib
 import pathlib
 import tempfile
 
+# this package
 from git_helper.ci_cd import make_github_ci, make_travis, make_travis_deploy_conda
 
 
@@ -82,15 +84,17 @@ jobs:
         script: python .ci/copy_pypi_2_github.py || return 1;
 """
 
-		demo_environment.globals.update(dict(
-				travis_ubuntu_version="bionic",
-				travis_extra_install_pre=["sudo apt update"],
-				travis_extra_install_post=["sudo apt install python3-gi"],
-				travis_additional_requirements=["isort", "black"],
-				enable_tests=False,
-				enable_conda=False,
-				enable_releases=False,
-				))
+		demo_environment.globals.update(
+				dict(
+						travis_ubuntu_version="bionic",
+						travis_extra_install_pre=["sudo apt update"],
+						travis_extra_install_post=["sudo apt install python3-gi"],
+						travis_additional_requirements=["isort", "black"],
+						enable_tests=False,
+						enable_conda=False,
+						enable_releases=False,
+						)
+				)
 
 		managed_files = make_travis(tmpdir_p, demo_environment)
 		assert managed_files == [".travis.yml"]
@@ -147,7 +151,6 @@ jobs:
 			))
 
 
-
 def test_travis_deploy_conda(demo_environment):
 	with tempfile.TemporaryDirectory() as tmpdir:
 		tmpdir_p = pathlib.Path(tmpdir)
@@ -199,6 +202,7 @@ fi
 exit 0
 """
 
+
 def test_github_ci(demo_environment):
 	with tempfile.TemporaryDirectory() as tmpdir:
 		tmpdir_p = pathlib.Path(tmpdir)
@@ -248,10 +252,12 @@ jobs:
       - name: "Run Tests for Python ${{ matrix.python-version }}"
         run: "python -m tox"
 """
-		demo_environment.globals.update(dict(
-				travis_additional_requirements=["isort", "black"],
-				platforms=["Windows", "macOS"],
-				))
+		demo_environment.globals.update(
+				dict(
+						travis_additional_requirements=["isort", "black"],
+						platforms=["Windows", "macOS"],
+						)
+				)
 
 		managed_files = make_github_ci(tmpdir_p, demo_environment)
 		assert managed_files == [".github/workflows/python_ci.yml", ".github/workflows/python_ci_macos.yml"]
@@ -340,9 +346,7 @@ jobs:
         run: "python -m tox"
 """
 		# This time the files should be removed
-		demo_environment.globals.update(dict(
-				platforms=[],
-				))
+		demo_environment.globals.update(dict(platforms=[], ))
 
 		assert (tmpdir_p / managed_files[0]).is_file()
 		assert (tmpdir_p / managed_files[1]).is_file()
@@ -354,8 +358,9 @@ jobs:
 		assert not (tmpdir_p / managed_files[1]).is_file()
 
 		# Reset
-		demo_environment.globals.update(dict(
-				travis_additional_requirements=["isort", "black"],
-				platforms=["Windows", "macOS"],
-				))
-
+		demo_environment.globals.update(
+				dict(
+						travis_additional_requirements=["isort", "black"],
+						platforms=["Windows", "macOS"],
+						)
+				)

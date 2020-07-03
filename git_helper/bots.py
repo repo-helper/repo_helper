@@ -31,11 +31,10 @@ from typing import List
 
 # 3rd party
 import jinja2
-from domdf_python_tools.paths import maybe_make
+from domdf_python_tools.paths import clean_writer, maybe_make
 
 # this package
 from .templates import template_dir
-from domdf_python_tools.paths import clean_writer
 
 __all__ = ["make_dependabot", "make_auto_assign_action", "make_stale_bot", "make_imgbot"]
 

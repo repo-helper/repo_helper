@@ -1,6 +1,8 @@
+# stdlib
 import pathlib
 import tempfile
 
+# this package
 from git_helper.bots import make_auto_assign_action, make_dependabot, make_imgbot, make_stale_bot
 
 
@@ -89,7 +91,9 @@ def test_auto_assign_action(demo_environment):
 		assert old_file.is_file()
 
 		managed_files = make_auto_assign_action(tmpdir_p, demo_environment)
-		assert managed_files == [".github/workflows/assign.yml", ".github/workflow/assign.yml", ".github/auto_assign.yml"]
+		assert managed_files == [
+				".github/workflows/assign.yml", ".github/workflow/assign.yml", ".github/auto_assign.yml"
+				]
 
 		assert (tmpdir_p / managed_files[-1]).read_text() == """\
 # This file is managed by `git_helper`. Don't edit it directly

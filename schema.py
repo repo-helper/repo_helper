@@ -46,7 +46,7 @@ builder.add_object({"console_scripts": ["git_helper = git_helper.__main__:main"]
 builder.add_object({"additional_setup_args": dict()})  # optional
 builder.add_object({"extras_require": dict()})  # optional
 builder.add_object({"additional_requirements_files": ["submodule/requirements.txt"]})  # optional
-builder.add_object({"setup_pre": [""]})  # optional
+builder.add_object({"setup_pre": ['']})  # optional
 builder.add_object({"platforms": ["Windows", "macOS", "Linux"]})  # optional
 
 # Documentation
@@ -71,9 +71,9 @@ builder.add_object({"tox_testenv_extras": "docs"})  # optional
 # Travis
 builder.add_object({"travis_site": "com"})  # optional
 builder.add_object({"travis_ubuntu_version": "xenial"})  # optional
-builder.add_object({"travis_extra_install_pre": [""]})  # optional
-builder.add_object({"travis_extra_install_post": [""]})  # optional
-builder.add_object({"travis_pypi_secure": ""})  # optional
+builder.add_object({"travis_extra_install_pre": ['']})  # optional
+builder.add_object({"travis_extra_install_post": ['']})  # optional
+builder.add_object({"travis_pypi_secure": ''})  # optional
 builder.add_object({"travis_additional_requirements": ["pbr"]})  # optional
 
 # Conda & Anaconda
@@ -85,7 +85,7 @@ builder.add_object({"conda_description": "This is a short description of my proj
 # Other
 builder.add_object({"additional_ignore": ["*.pyc"]})  # optional
 builder.add_object({"tests_dir": "tests"})  # optional
-builder.add_object({"pkginfo_extra": [""]})  # optional
+builder.add_object({"pkginfo_extra": ['']})  # optional
 builder.add_object({"exclude_files": ["conf", "tox"]})  # optional
 
 

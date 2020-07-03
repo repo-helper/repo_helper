@@ -30,8 +30,8 @@ import sys
 from typing import Iterable, Optional, Union
 
 # 3rd party
-from domdf_python_tools.utils import stderr_writer
 from domdf_python_tools.terminal_colours import Fore
+from domdf_python_tools.utils import stderr_writer
 from dulwich import porcelain, repo  # type: ignore
 
 # this package

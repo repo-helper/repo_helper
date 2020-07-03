@@ -30,7 +30,7 @@ from typing import Callable, List, Sequence, Tuple, Union
 
 # 3rd party
 import jinja2
-from domdf_python_tools.paths import maybe_make
+from domdf_python_tools.paths import clean_writer, maybe_make
 from domdf_python_tools.utils import enquote_value
 
 # this package
@@ -42,7 +42,7 @@ from .ci_cd import (
 		make_github_octocheese,
 		make_make_conda_recipe,
 		make_travis,
-		make_travis_deploy_conda,
+		make_travis_deploy_conda
 		)
 from .docs import (
 		copy_docs_styling,
@@ -52,17 +52,16 @@ from .docs import (
 		make_docs_building_rst,
 		make_docs_source_rst,
 		make_rtfd,
-		rewrite_docs_index,
+		rewrite_docs_index
 		)
 from .gitignore import make_gitignore
 from .linting import (
-		code_only_warning, lint_belligerent_list, lint_fix_list, lint_warn_list, make_lint_roller, make_pylintrc,
+		code_only_warning, lint_belligerent_list, lint_fix_list, lint_warn_list, make_lint_roller, make_pylintrc
 		)
 from .packaging import make_manifest, make_pkginfo, make_setup
 from .readme import rewrite_readme
 from .templates import template_dir
 from .testing import ensure_tests_requirements, make_isort, make_tox, make_yapf
-from domdf_python_tools.paths import clean_writer
 from .yaml_parser import parse_yaml
 
 __all__ = [

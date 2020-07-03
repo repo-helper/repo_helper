@@ -1,10 +1,9 @@
+# stdlib
 import pathlib
 import tempfile
 
-import pytest  # type: ignore
+# this package
 from git_helper.packaging import make_manifest, make_setup
-
-from git_helper.testing import ensure_tests_requirements, make_isort, make_yapf
 
 
 def test_make_manifest(demo_environment):
@@ -22,14 +21,14 @@ recursive-include hello_world/ *.pyi
 include hello_world/py.typed
 """
 
-		demo_environment.globals.update(dict(
-				manifest_additional=[
-						"recursive-include hello_world/templates/ *",
-						],
-				additional_requirements_files=[
-						"hello_world/submodule/requirements.txt"
-						],
-				))
+		demo_environment.globals.update(
+				dict(
+						manifest_additional=[
+								"recursive-include hello_world/templates/ *",
+								],
+						additional_requirements_files=["hello_world/submodule/requirements.txt"],
+						)
+				)
 
 		managed_files = make_manifest(tmpdir_p, demo_environment)
 		assert managed_files == ["MANIFEST.in"]
@@ -46,9 +45,9 @@ include hello_world/py.typed
 
 		# Reset
 		demo_environment.globals.update(dict(
-			manifest_additional=[],
-			additional_requirements_files=[],
-			))
+				manifest_additional=[],
+				additional_requirements_files=[],
+				))
 
 
 def test_make_setup(demo_environment):
@@ -94,19 +93,18 @@ setup(
 		)
 """
 
-		demo_environment.globals.update(dict(
-				min_py_version="3.8",
-				additional_setup_args="""\
+		demo_environment.globals.update(
+				dict(
+						min_py_version="3.8",
+						additional_setup_args="""\
 		foo="bar",
 		alice="19",
 		bob=22,""",
-				setup_pre=[
-						"import datetime",
-						"print('datetime.datetime.now')"
-						],
-				docs_dir="userguide",
-				tests_dir="testing",
-				))
+						setup_pre=["import datetime", "print('datetime.datetime.now')"],
+						docs_dir="userguide",
+						tests_dir="testing",
+						)
+				)
 
 		managed_files = make_setup(tmpdir_p, demo_environment)
 		assert managed_files == ["setup.py"]
@@ -151,11 +149,12 @@ setup(
 """
 
 		# Reset
-		demo_environment.globals.update(dict(
-			min_py_version="3.6",
-			additional_setup_args='',
-			setup_pre=[],
-			docs_dir="doc-source",
-			tests_dir='tests',
-
-				))
+		demo_environment.globals.update(
+				dict(
+						min_py_version="3.6",
+						additional_setup_args='',
+						setup_pre=[],
+						docs_dir="doc-source",
+						tests_dir="tests",
+						)
+				)

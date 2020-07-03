@@ -33,6 +33,7 @@ from typing import List
 
 # 3rd party
 import jinja2
+from domdf_python_tools.paths import clean_writer
 
 # this package
 from git_helper.blocks import (
@@ -46,7 +47,6 @@ from git_helper.blocks import (
 		short_desc_regex
 		)
 from git_helper.utils import ensure_requirements
-from domdf_python_tools.paths import clean_writer
 
 # this package
 from .templates import init_repo_template_dir, template_dir
@@ -89,9 +89,8 @@ def ensure_doc_requirements(repo_path: pathlib.Path, templates: jinja2.Environme
 	req_file = repo_path / templates.globals["docs_dir"] / "requirements.txt"
 
 	req_file.write_text(
-			"\n".join(
-					line for line in req_file.read_text().splitlines() if not line.startswith("git+")  # FIXME
-					)
+			"\n".join(line for line in req_file.read_text().splitlines() if not line.startswith("git+")  # FIXME
+						)
 			)
 
 	ensure_requirements(target_requirements, req_file)

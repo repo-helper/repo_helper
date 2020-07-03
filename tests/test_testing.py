@@ -1,8 +1,8 @@
+# stdlib
 import pathlib
 import tempfile
 
-import pytest  # type: ignore
-
+# this package
 from git_helper.testing import ensure_tests_requirements, make_isort, make_yapf
 
 

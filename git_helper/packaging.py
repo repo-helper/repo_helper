@@ -29,8 +29,6 @@ from typing import List
 
 # 3rd party
 import jinja2
-
-# this package
 from domdf_python_tools.paths import clean_writer
 
 __all__ = [

@@ -67,11 +67,17 @@ class Test_docker_name(OptionalStringTest):
 
 
 class Test_rtfd_author:
-	@pytest.mark.parametrize("value, expects", [
-			({"rtfd_author": "Dominic Davis-Foster and Joe Bloggs"}, "Dominic Davis-Foster and Joe Bloggs"),
-			({"author": "Dom"}, "Dom"),
-			({"author": "Dom", "rtfd_author": "Dominic Davis-Foster and Joe Bloggs"}, "Dominic Davis-Foster and Joe Bloggs"),
-			])
+
+	@pytest.mark.parametrize(
+			"value, expects",
+			[
+					({"rtfd_author": "Dominic Davis-Foster and Joe Bloggs"
+						}, "Dominic Davis-Foster and Joe Bloggs"),
+					({"author": "Dom"}, "Dom"),
+					({"author": "Dom", "rtfd_author": "Dominic Davis-Foster and Joe Bloggs"},
+						"Dominic Davis-Foster and Joe Bloggs"),
+					]
+			)
 	def test_success(self, value: Dict[str, str], expects: str):
 		assert rtfd_author.get(value) == expects
 
@@ -142,23 +148,25 @@ def test_version_errors(wrong_value):
 
 
 class Test_conda_description:
-	@pytest.mark.parametrize("value, expects", [
-			(
-					{"conda_description": "This is a short description of my project."},
-					"This is a short description of my project.",
-					),
-			(
-					{"short_desc": "This is a short description of my project."},
-					"This is a short description of my project.",
-					),
-			(
-					{
+
+	@pytest.mark.parametrize(
+			"value, expects",
+			[
+					(
+							{"conda_description": "This is a short description of my project."},
+							"This is a short description of my project.",
+							),
+					(
+							{"short_desc": "This is a short description of my project."},
+							"This is a short description of my project.",
+							),
+					({
 							"short_desc": "A short description",
 							"conda_description": "This is a short description of my project.",
 							},
-					"This is a short description of my project."
-					),
-			])
+						"This is a short description of my project."),
+					]
+			)
 	def test_success(self, value: Dict[str, str], expects: str):
 		assert conda_description.get(value) == expects
 
@@ -283,11 +291,11 @@ def test_import_name_errors(wrong_value):
 def test_classifiers():
 
 	default_classifiers = [
-			'Operating System :: OS Independent',
-			'Programming Language :: Python',
-			'Programming Language :: Python :: 3 :: Only',
-			'Programming Language :: Python :: 3.6',
-			'Programming Language :: Python :: Implementation :: CPython',
+			"Operating System :: OS Independent",
+			"Programming Language :: Python",
+			"Programming Language :: Python :: 3 :: Only",
+			"Programming Language :: Python :: 3.6",
+			"Programming Language :: Python :: Implementation :: CPython",
 			]
 
 	assert classifiers.get({"classifiers": ["Environment :: Console"]}) == [
@@ -299,13 +307,13 @@ def test_classifiers():
 			"python_versions": [3.6, 3.7, 3.8],
 			}) == [
 					"Environment :: Console",
-					'Operating System :: OS Independent',
-					'Programming Language :: Python',
-					'Programming Language :: Python :: 3 :: Only',
-					'Programming Language :: Python :: 3.6',
-					'Programming Language :: Python :: 3.7',
-					'Programming Language :: Python :: 3.8',
-					'Programming Language :: Python :: Implementation :: CPython',
+					"Operating System :: OS Independent",
+					"Programming Language :: Python",
+					"Programming Language :: Python :: 3 :: Only",
+					"Programming Language :: Python :: 3.6",
+					"Programming Language :: Python :: 3.7",
+					"Programming Language :: Python :: 3.8",
+					"Programming Language :: Python :: Implementation :: CPython",
 					]
 	assert classifiers.get({
 			"classifiers": ["Environment :: Console"],
@@ -362,7 +370,7 @@ class Test_preserve_custom_theme(BoolFalseTest):
 class Test_source_dir(DirectoryTest):
 	config_var = source_dir
 	test_value = "src"
-	default_value = ""
+	default_value = ''
 
 	def test_success(self):
 		assert self.config_var.get({self.config_var.__name__: self.test_value}) == self.test_value + os.sep

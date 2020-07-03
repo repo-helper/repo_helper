@@ -1,9 +1,8 @@
-import datetime
+# stdlib
 import pathlib
 import tempfile
 
-from git_helper import shields
-from git_helper.ci_cd import make_travis
+# this package
 from git_helper.gitignore import make_gitignore
 
 

@@ -33,10 +33,10 @@ from typing import List
 import jinja2
 import requirements  # type: ignore
 from configupdater import ConfigUpdater  # type: ignore
+from domdf_python_tools.paths import clean_writer
 
 # this package
 from .utils import ensure_requirements
-from domdf_python_tools.paths import clean_writer
 
 __all__ = ["make_tox", "make_yapf", "make_isort", "ensure_tests_requirements"]
 
@@ -114,7 +114,7 @@ def make_tox(repo_path: pathlib.Path, templates: jinja2.Environment) -> List[str
 	#
 	# tox.set(
 	# 		"travis", "python",
-	# 		"".join(
+	# 		''.join(
 	# 				f"\n    {py_ver}: {tox_py_ver}"
 	# 				for py_ver, tox_py_ver in templates.globals["tox_travis_versions"].items()
 	# 			))
@@ -142,7 +142,7 @@ def make_tox(repo_path: pathlib.Path, templates: jinja2.Environment) -> List[str
 	# else:
 	# 	tox.remove_option("testenv", "extras")
 	#
-	# testenv_commands = ["", "python --version"]
+	# testenv_commands = ['', "python --version"]
 	# if templates.globals["enable_tests"]:
 	# 	testenv_commands.append(
 	# 			f"python -m pytest --cov={import_name} -r aR {tests_dir}/"
@@ -343,4 +343,3 @@ def ensure_tests_requirements(repo_path: pathlib.Path, templates: jinja2.Environ
 	ensure_requirements(target_requirements, test_req_file)
 
 	return [os.path.join(templates.globals["tests_dir"], "requirements.txt")]
-

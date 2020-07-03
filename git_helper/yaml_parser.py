@@ -138,7 +138,7 @@ def parse_yaml(repo_path: pathlib.Path):
 			"tox_build_requirements",
 			}:
 		config_vars[var_name] = raw_config_vars.get(var_name, [])
-	config_vars["tox_testenv_extras"] = raw_config_vars.get("tox_testenv_extras", "")
+	config_vars["tox_testenv_extras"] = raw_config_vars.get("tox_testenv_extras", '')
 
 	# Travis
 	tox_travis_versions = get_tox_travis_python_versions(config_vars["python_versions"], tox_py_versions)

@@ -8,7 +8,7 @@ import pytest  # type: ignore
 from git_helper.config_vars import ConfigVar
 
 test_list_int = [1, 2, 3, 4]
-test_list_str = ["a", "b", "c", "d"]
+test_list_str = ['a', 'b', 'c', 'd']
 
 
 class ListTest:
@@ -162,7 +162,7 @@ class OptionalStringTest(RequiredStringTest):
 		assert self.config_var.get({}) == self.default_value
 
 	def test_success(self):
-		assert self.config_var.get({self.config_var.__name__: ""}) == ""
+		assert self.config_var.get({self.config_var.__name__: ''}) == ''
 		assert self.config_var.get({"sphinx_html_theme": "alabaster"}) == self.default_value
 		super().test_success()
 

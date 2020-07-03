@@ -1,46 +1,56 @@
+# stdlib
 import datetime
 
-from git_helper.blocks import (
-	create_docs_install_block, create_docs_links_block, create_readme_install_block, create_shields_block,
-	create_short_desc_block,
-	installation_regex, short_desc_regex,
-	links_regex, shields_regex,
-	)
+# 3rd party
 import lorem  # type: ignore
 import pytest  # type: ignore
 
+# this package
+from git_helper.blocks import (
+		create_docs_install_block,
+		create_docs_links_block,
+		create_readme_install_block,
+		create_shields_block,
+		create_short_desc_block,
+		installation_regex,
+		links_regex,
+		shields_regex,
+		short_desc_regex
+		)
 
-@pytest.mark.parametrize("value", [
-		".. start installation\n\n..end installation",
-		f".. start installation\n{lorem.paragraph()}\n..end installation"
-		])
+
+@pytest.mark.parametrize(
+		"value",
+		[
+				".. start installation\n\n..end installation",
+				f".. start installation\n{lorem.paragraph()}\n..end installation"
+				]
+		)
 def test_installation_regex(value):
 	m = installation_regex.sub(value, "hello world")
 	assert m == "hello world"
 
 
-@pytest.mark.parametrize("value", [
-		".. start links\n\n..end links",
-		f".. start links\n{lorem.paragraph()}\n..end links"
-		])
+@pytest.mark.parametrize(
+		"value", [".. start links\n\n..end links", f".. start links\n{lorem.paragraph()}\n..end links"]
+		)
 def test_links_regex(value):
 	m = links_regex.sub(value, "hello world")
 	assert m == "hello world"
 
 
-@pytest.mark.parametrize("value", [
-		".. start shields\n\n..end shields",
-		f".. start shields\n{lorem.paragraph()}\n..end shields"
-		])
+@pytest.mark.parametrize(
+		"value", [".. start shields\n\n..end shields", f".. start shields\n{lorem.paragraph()}\n..end shields"]
+		)
 def test_shields_regex(value):
 	m = shields_regex.sub(value, "hello world")
 	assert m == "hello world"
 
 
-@pytest.mark.parametrize("value", [
-		".. start short_desc\n\n..end short_desc",
-		f".. start short_desc\n{lorem.paragraph()}\n..end short_desc"
-		])
+@pytest.mark.parametrize(
+		"value",
+		[".. start short_desc\n\n..end short_desc", f".. start short_desc\n{lorem.paragraph()}\n..end short_desc"]
+		)
 def test_short_desc_regex(value):
 	m = short_desc_regex.sub(value, "hello world")
 	assert m == "hello world"
@@ -443,11 +453,7 @@ To install with ``conda``:
 
 .. end installation"""
 
-	result = create_readme_install_block(
-			modname="hello_world",
-			username="octocat",
-			conda=False
-			)
+	result = create_readme_install_block(modname="hello_world", username="octocat", conda=False)
 
 	assert result == """\
 .. start installation
@@ -481,7 +487,7 @@ def test_create_short_desc_block():
 
 
 def test_create_docs_links_block():
-	result = create_docs_links_block(username="octocat", repo_name = "hello_world")
+	result = create_docs_links_block(username="octocat", repo_name="hello_world")
 
 	assert result == """\
 .. start links
