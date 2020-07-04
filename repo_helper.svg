@@ -75,13 +75,17 @@
        height="29.503546"
        x="10.562134"
        y="254.76538"
-       ry="14.751773" />
+       ry="14.751773"
+       inkscape:export-xdpi="600"
+       inkscape:export-ydpi="600" />
     <text
        xml:space="preserve"
        style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:10.58333302px;line-height:1.25;font-family:'Open Sans Condensed';-inkscape-font-specification:'Open Sans Condensed, ';letter-spacing:0px;word-spacing:0px;fill:#ffd43b;fill-opacity:1;stroke:#646464;stroke-width:0.26458332;stroke-opacity:1"
        x="14.882429"
        y="272.81616"
-       id="text817"><tspan
+       id="text817"
+       inkscape:export-xdpi="600"
+       inkscape:export-ydpi="600"><tspan
          sodipodi:role="line"
          id="tspan815"
          x="14.882429"
