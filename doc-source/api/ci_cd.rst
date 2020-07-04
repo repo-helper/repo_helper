@@ -1,7 +1,7 @@
 **************************
-:mod:`git_helper.ci_cd`
+:mod:`repo_helper.ci_cd`
 **************************
 
-.. automodule:: git_helper.ci_cd
+.. automodule:: repo_helper.ci_cd
 	:members:
 	:autosummary:

@@ -24,7 +24,7 @@
 import datetime
 
 # this package
-from git_helper import shields
+from repo_helper import shields
 
 
 def test_make_rtfd_shield():

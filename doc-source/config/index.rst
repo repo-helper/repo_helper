@@ -2,13 +2,13 @@
 Configuration
 ================
 
-Place configuration options in a file called ``git_helper.yml`` in the  repository root.
+Place configuration options in a file called ``repo_helper.yml`` in the  repository root.
 
 Options are defined like so:
 
 .. code-block:: yaml
 
-	modname: git_helper
+	modname: repo_helper
 	copyright_years: "2020"
 	author: "Dominic Davis-Foster"
 	email: "dominic@example.com"

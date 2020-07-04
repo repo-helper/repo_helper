@@ -1,7 +1,7 @@
 **************************
-:mod:`git_helper.bots`
+:mod:`repo_helper.bots`
 **************************
 
-.. automodule:: git_helper.bots
+.. automodule:: repo_helper.bots
 	:members:
 	:autosummary:

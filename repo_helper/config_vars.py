@@ -32,7 +32,7 @@ from domdf_python_tools.utils import strtobool
 from typing_inspect import get_origin, is_literal_type
 
 # this package
-from git_helper.utils import check_union, get_json_type
+from repo_helper.utils import check_union, get_json_type
 
 __all__ = [
 		"make_schema",
@@ -128,7 +128,7 @@ class ConfigVar(metaclass=__ConfigVarMeta):
 	rtype: Type
 	"""
 	The variable type passed to Jinja2. 
-	If ``None`` :attr:`~git_helper.config_vars.ConfigVar.dtype` is used. 
+	If ``None`` :attr:`~repo_helper.config_vars.ConfigVar.dtype` is used. 
 	Ignored for ``dtype=bool``.
 	"""
 
@@ -152,7 +152,7 @@ class ConfigVar(metaclass=__ConfigVarMeta):
 
 	category: str
 	"""
-	The category the :class:`~git_helper.config_vars.ConfigVar` is listed under in the documentation. 
+	The category the :class:`~repo_helper.config_vars.ConfigVar` is listed under in the documentation. 
 	"""
 
 	def __call__(self, raw_config_vars: Dict[str, Any]) -> Any:
@@ -161,7 +161,7 @@ class ConfigVar(metaclass=__ConfigVarMeta):
 	@classmethod
 	def get(cls, raw_config_vars: Optional[Dict[str, Any]] = None) -> Any:
 		"""
-		Returns the value of this :class:`~git_helper.config_vars.ConfigVar`
+		Returns the value of this :class:`~repo_helper.config_vars.ConfigVar`
 
 		:param raw_config_vars: Dictionary to obtain the value from.
 
@@ -363,10 +363,10 @@ def type_to_yaml(type_: Type) -> str:
 
 def make_schema(*configuration_variables: __ConfigVarMeta) -> Dict[str, str]:
 	"""
-	Create a ``JSON`` schema from a list of :class:`~git_helper.config_vars.ConfigVar` classes.
+	Create a ``JSON`` schema from a list of :class:`~repo_helper.config_vars.ConfigVar` classes.
 
 	:param configuration_variables: 
-	:type configuration_variables: list of git_helper.config_vars.ConfigVar.
+	:type configuration_variables: list of repo_helper.config_vars.ConfigVar.
 
 	:return: Dictionary representation of the ``JSON`` schema.
 	"""
@@ -453,8 +453,8 @@ def parse_extras(raw_config_vars: Dict[str, Any], repo_path: pathlib.Path) -> Tu
 if __name__ == '__main__':
 
 	# this package
-	import git_helper.configuration
-	from git_helper.configuration import __all__
+	import repo_helper.configuration
+	from repo_helper.configuration import __all__
 
 	config_directory = pathlib.Path("../doc-source/config/")
 
@@ -466,7 +466,7 @@ if __name__ == '__main__':
 	docs: Dict[str, List[str]] = {}
 
 	for var_name in __all__:
-		var_obj = getattr(git_helper.configuration, var_name)
+		var_obj = getattr(repo_helper.configuration, var_name)
 		if var_obj.category.lower() not in docs:
 			docs[var_obj.category.lower()] = []
 		docs[var_obj.category.lower()].append(var_obj.make_documentation())
@@ -478,13 +478,13 @@ if __name__ == '__main__':
 Configuration
 =======================================
 
-Place configuration options in a file called ``git_helper.yml`` in the  repository root.
+Place configuration options in a file called ``repo_helper.yml`` in the  repository root.
 
 Options are defined like so:
 
 .. code-block:: yaml
 
-	modname: git_helper
+	modname: repo_helper
 	copyright_years: "2020"
 	author: "Dominic Davis-Foster"
 	email: "dominic@example.com"

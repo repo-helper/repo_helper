@@ -1,10 +1,12 @@
 #!/bin/bash
-# This file is managed by `git_helper`. Don't edit it directly
+# This file is managed by `repo_helper`. Don't edit it directly
 
 set -e -x
 
 if [ $TRAVIS_PYTHON_VERSION == {{ python_deploy_version }} ]; then
-  if [ -z "$TRAVIS_TAG" ] && [ "$TRAVIS_COMMIT_MESSAGE" != "Bump Version*" ]; then
+  if [ -z "$TRAVIS_TAG" ] && [ "$TRAVIS_COMMIT_MESSAGE" == "Bump Version*" ]; then
+    echo "Deferring building conda package because this is release"
+  else
 
     python3 ./make_conda_recipe.py || exit 1
 
@@ -31,11 +33,10 @@ if [ $TRAVIS_PYTHON_VERSION == {{ python_deploy_version }} ]; then
       echo "Successfully deployed to Anaconda.org."
     done
 
-  else
-    echo "Deferring building conda package because this is a tagged commit or a release"
   fi
+
 else
-  echo "Skipping building conda package because this is not the required runtime"
+  echo "Skipping deploying conda package because this is not the required runtime"
 fi
 
 exit 0

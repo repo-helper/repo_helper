@@ -37,7 +37,7 @@ from domdf_python_tools.paths import clean_writer, maybe_make
 from jinja2 import BaseLoader, Environment, StrictUndefined
 
 # this package
-from git_helper.templates import init_repo_template_dir
+from repo_helper.templates import init_repo_template_dir
 
 __all__ = ["init_repo"]
 

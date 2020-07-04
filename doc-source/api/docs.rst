@@ -1,7 +1,7 @@
 **************************
-:mod:`git_helper.docs`
+:mod:`repo_helper.docs`
 **************************
 
-.. automodule:: git_helper.docs
+.. automodule:: repo_helper.docs
 	:members:
 	:autosummary:

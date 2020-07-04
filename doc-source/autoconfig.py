@@ -63,7 +63,7 @@ from sphinx.ext.autodoc.importer import import_object
 from sphinx.util.docutils import SphinxDirective
 
 # this package
-from git_helper.config_vars import ConfigVar
+from repo_helper.config_vars import ConfigVar
 
 __version__ = "0.1.0"
 

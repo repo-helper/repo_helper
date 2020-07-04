@@ -37,7 +37,7 @@ INSUFFICIENT INFO WILL GET THE ISSUE CLOSED. IT WILL ONLY BE REOPENED AFTER SUFF
 
   * Operating System:
   * Python:
-  * git_helper:
+  * repo_helper:
 
 ## Installation source
 <!-- e.g. Github repository, Github Releases, PyPI/pip, Anaconda/conda -->

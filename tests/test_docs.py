@@ -25,7 +25,7 @@ import pathlib
 import tempfile
 
 # this package
-from git_helper.docs import (
+from repo_helper.docs import (
 		ensure_doc_requirements, make_404_page, make_docs_building_rst, make_docs_source_rst, make_rtfd
 		)
 
@@ -37,7 +37,7 @@ def test_make_rtfd(demo_environment):
 		managed_files = make_rtfd(tmpdir_p, demo_environment)
 		assert managed_files == [".readthedocs.yml"]
 		assert (tmpdir_p / managed_files[0]).read_text() == f"""\
-# This file is managed by `git_helper`. Don't edit it directly
+# This file is managed by `repo_helper`. Don't edit it directly
 
 # .readthedocs.yml
 # Read the Docs configuration file
@@ -73,7 +73,7 @@ python:
 		managed_files = make_rtfd(tmpdir_p, demo_environment)
 		assert managed_files == [".readthedocs.yml"]
 		assert (tmpdir_p / managed_files[0]).read_text() == f"""\
-# This file is managed by `git_helper`. Don't edit it directly
+# This file is managed by `repo_helper`. Don't edit it directly
 
 # .readthedocs.yml
 # Read the Docs configuration file

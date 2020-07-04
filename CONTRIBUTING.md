@@ -1,13 +1,13 @@
 <!--- This file based on https://github.com/PyGithub/PyGithub/blob/master/CONTRIBUTING.md --->
 # Contributing
 
-`git_helper` uses `tox` to automate testing, autoformatting and packaging.
+`repo_helper` uses `tox` to automate testing, autoformatting and packaging.
 
 For more information on installing `tox` see https://tox.readthedocs.io/en/latest/install.html
 
 ## Coding style
 
-`git_helper` uses `yapf` for code formatting and `isort` to sort imports.
+`repo_helper` uses `yapf` for code formatting and `isort` to sort imports.
 
 `yapf` and `isort` can be run via `tox`:
 ```bash

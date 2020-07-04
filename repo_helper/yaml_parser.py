@@ -34,10 +34,10 @@ import yaml
 from ytools import validate  # type: ignore  # TODO
 
 # this package
-import git_helper
-from git_helper import configuration
-from git_helper.config_vars import ConfigVar, make_schema, parse_extras
-from git_helper.configuration import *
+import repo_helper
+from repo_helper import configuration
+from repo_helper.config_vars import ConfigVar, make_schema, parse_extras
+from repo_helper.configuration import *
 
 __all__ = [
 		"parse_yaml",
@@ -56,13 +56,13 @@ def parse_yaml(repo_path: pathlib.Path):
 	:rtype: dict
 	"""
 
-	with importlib_resources.path(git_helper, "git_helper_schema.json") as schema:
-		validate(str(schema), [repo_path / "git_helper.yml"])
+	with importlib_resources.path(repo_helper, "repo_helper_schema.json") as schema:
+		validate(str(schema), [repo_path / "repo_helper.yml"])
 
 	config_vars = {}
 
-	# load user settings from git_helper.yml
-	with (repo_path / "git_helper.yml").open() as file:
+	# load user settings from repo_helper.yml
+	with (repo_path / "repo_helper.yml").open() as file:
 		# The FullLoader parameter handles the conversion from YAML
 		#   scalar values to Python the dictionary format
 		raw_config_vars = yaml.load(file, Loader=yaml.FullLoader)
@@ -262,7 +262,7 @@ def dump_schema() -> Dict[str, Any]:
 
 	schema = make_schema(*[getattr(configuration, x) for x in configuration.__all__])
 
-	with importlib_resources.path(git_helper, "git_helper_schema.json") as schema_file:
+	with importlib_resources.path(repo_helper, "repo_helper_schema.json") as schema_file:
 		pathlib.Path(schema_file).write_text(json.dumps(schema, indent=2))
 
 	return schema

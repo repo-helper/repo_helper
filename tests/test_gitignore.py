@@ -25,7 +25,7 @@ import pathlib
 import tempfile
 
 # this package
-from git_helper.gitignore import make_gitignore
+from repo_helper.gitignore import make_gitignore
 
 
 def test_make_gitignore(demo_environment):
@@ -37,7 +37,7 @@ def test_make_gitignore(demo_environment):
 		assert managed_files == [".gitignore"]
 
 		assert (tmpdir_p / managed_files[0]).read_text() == """\
-# This file is managed by `git_helper`. Don't edit it directly
+# This file is managed by `repo_helper`. Don't edit it directly
 __pycache__/
 *.py[cod]
 *$py.class

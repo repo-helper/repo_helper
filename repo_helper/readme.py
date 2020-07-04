@@ -28,7 +28,7 @@ from typing import List
 import jinja2
 
 # this package
-from git_helper.blocks import (
+from repo_helper.blocks import (
 		create_readme_install_block,
 		create_shields_block,
 		create_short_desc_block,

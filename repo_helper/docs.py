@@ -36,7 +36,7 @@ import jinja2
 from domdf_python_tools.paths import clean_writer
 
 # this package
-from git_helper.blocks import (
+from repo_helper.blocks import (
 		create_docs_install_block,
 		create_docs_links_block,
 		create_shields_block,
@@ -46,7 +46,7 @@ from git_helper.blocks import (
 		shields_regex,
 		short_desc_regex
 		)
-from git_helper.utils import ensure_requirements
+from repo_helper.utils import ensure_requirements
 
 # this package
 from .templates import init_repo_template_dir, template_dir
@@ -118,7 +118,7 @@ def make_rtfd(repo_path: pathlib.Path, templates: jinja2.Environment) -> List[st
 	with (repo_path / ".readthedocs.yml").open('w') as fp:
 		clean_writer(
 				f"""\
-# This file is managed by `git_helper`. Don't edit it directly
+# This file is managed by `repo_helper`. Don't edit it directly
 
 # .readthedocs.yml
 # Read the Docs configuration file
@@ -229,7 +229,7 @@ def copy_docs_styling(repo_path: pathlib.Path, templates: jinja2.Environment) ->
 	if templates.globals["sphinx_html_theme"] == "sphinx_rtd_theme":
 		with (dest__static_dir / "style.css").open('w') as fp:
 			clean_writer(
-					"""/* This file is managed by `git_helper`. Don't edit it directly */
+					"""/* This file is managed by `repo_helper`. Don't edit it directly */
 	
 .wy-nav-content {max-width: 900px !important;}
 
@@ -241,7 +241,7 @@ li p:last-child { margin-bottom: 12px !important;}
 	elif templates.globals["sphinx_html_theme"] == "alabaster":
 		with (dest__static_dir / "style.css").open('w') as fp:
 			clean_writer(
-					"""/* This file is managed by `git_helper`. Don't edit it directly */
+					"""/* This file is managed by `repo_helper`. Don't edit it directly */
 
 li p:last-child { margin-bottom: 12px !important;}
 
@@ -378,7 +378,7 @@ div#changelog-history h2{
 
 	with (dest__templates_dir / "layout.html").open('w') as fp:
 		clean_writer(
-				"""<!--- This file is managed by `git_helper`. Don't edit it directly --->
+				"""<!--- This file is managed by `repo_helper`. Don't edit it directly --->
 {% extends "!layout.html" %}
 {% block extrahead %}
 	<link href="{{ pathto("_static/style.css", True) }}" rel="stylesheet" type="text/css">

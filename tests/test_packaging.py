@@ -25,7 +25,7 @@ import pathlib
 import tempfile
 
 # this package
-from git_helper.packaging import make_manifest, make_setup
+from repo_helper.packaging import make_manifest, make_setup
 
 
 def test_make_manifest(demo_environment):
@@ -80,7 +80,7 @@ def test_make_setup(demo_environment):
 		assert managed_files == ["setup.py"]
 		assert (tmpdir_p / managed_files[0]).read_text() == """\
 #!/usr/bin/env python
-# This file is managed by `git_helper`. Don't edit it directly
+# This file is managed by `repo_helper`. Don't edit it directly
 \"\"\"Setup script\"\"\"
 
 # 3rd party
@@ -132,7 +132,7 @@ setup(
 		assert managed_files == ["setup.py"]
 		assert (tmpdir_p / managed_files[0]).read_text() == """\
 #!/usr/bin/env python
-# This file is managed by `git_helper`. Don't edit it directly
+# This file is managed by `repo_helper`. Don't edit it directly
 \"\"\"Setup script\"\"\"
 
 # 3rd party

@@ -6,5 +6,5 @@ Options for configuring Tox.
 
 https://tox.readthedocs.io
 
-.. autoconfig:: git_helper.configuration
+.. autoconfig:: repo_helper.configuration
 	:category: tox

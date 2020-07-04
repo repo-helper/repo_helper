@@ -1,7 +1,7 @@
 **************************
-:mod:`git_helper.readme`
+:mod:`repo_helper.readme`
 **************************
 
-.. automodule:: git_helper.readme
+.. automodule:: repo_helper.readme
 	:members:
 	:autosummary:

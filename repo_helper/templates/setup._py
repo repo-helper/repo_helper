@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-# This file is managed by `git_helper`. Don't edit it directly
+# This file is managed by `repo_helper`. Don't edit it directly
 """Setup script"""
 
 # 3rd party

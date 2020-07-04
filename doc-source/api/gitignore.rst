@@ -1,7 +1,7 @@
 ****************************
-:mod:`git_helper.gitignore`
+:mod:`repo_helper.gitignore`
 ****************************
 
-.. automodule:: git_helper.gitignore
+.. automodule:: repo_helper.gitignore
 	:members:
 	:autosummary:

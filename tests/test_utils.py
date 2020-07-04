@@ -27,7 +27,7 @@ from typing import List, Union
 from domdf_python_tools.terminal_colours import Fore
 
 # this package
-from git_helper.utils import check_union, validate_classifiers
+from repo_helper.utils import check_union, validate_classifiers
 
 
 class TestValidateClassifiers:

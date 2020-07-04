@@ -25,7 +25,7 @@ import pathlib
 import tempfile
 
 # this package
-from git_helper.testing import ensure_tests_requirements, make_isort, make_yapf
+from repo_helper.testing import ensure_tests_requirements, make_isort, make_yapf
 
 
 def test_ensure_tests_requirements(demo_environment):

@@ -25,7 +25,7 @@ import pathlib
 import tempfile
 
 # this package
-from git_helper.linting import make_lint_roller, make_pylintrc
+from repo_helper.linting import make_lint_roller, make_pylintrc
 
 
 def test_pylintrc(demo_environment):

@@ -40,8 +40,8 @@ from tests.classes import (
 		)
 
 # this package
-from git_helper.config_vars import ConfigVar
-from git_helper.configuration import *
+from repo_helper.config_vars import ConfigVar
+from repo_helper.configuration import *
 
 
 class Test_author(RequiredStringTest):
@@ -114,7 +114,7 @@ class Test_rtfd_author:
 					{"rtfd_author": True},
 					{"rtfd_author": test_list_int},
 					{"rtfd_author": test_list_str},
-					{"modname": "git_helper"},
+					{"modname": "repo_helper"},
 					{},
 					]
 			)
@@ -124,7 +124,7 @@ class Test_rtfd_author:
 
 
 def test_modname():
-	assert modname.get({"modname": "git_helper"}) == "git_helper"
+	assert modname.get({"modname": "repo_helper"}) == "repo_helper"
 
 	with pytest.raises(ValueError):
 		modname.get()
@@ -203,7 +203,7 @@ class Test_conda_description:
 					{"conda_description": True},
 					{"conda_description": test_list_int},
 					{"conda_description": test_list_str},
-					{"modname": "git_helper"},
+					{"modname": "repo_helper"},
 					{},
 					]
 			)
@@ -234,10 +234,10 @@ def test_copyright_years_errors(wrong_value):
 
 
 def test_repo_name():
-	assert repo_name.get({"repo_name": "git_helper"}) == "git_helper"
-	assert repo_name.get({"modname": "git_helper"}) == "git_helper"
+	assert repo_name.get({"repo_name": "repo_helper"}) == "repo_helper"
+	assert repo_name.get({"modname": "repo_helper"}) == "repo_helper"
 	assert repo_name.get({"modname": "the modname"}) == "the modname"
-	assert repo_name.get({"modname": "the modname", "repo_name": "git_helper"}) == "git_helper"
+	assert repo_name.get({"modname": "the modname", "repo_name": "repo_helper"}) == "repo_helper"
 
 	with pytest.raises(ValueError):
 		repo_name.get()
@@ -260,10 +260,10 @@ def test_repo_name_errors(wrong_value):
 
 
 def test_pypi_name():
-	assert pypi_name.get({"pypi_name": "git_helper"}) == "git_helper"
-	assert pypi_name.get({"modname": "git_helper"}) == "git_helper"
+	assert pypi_name.get({"pypi_name": "repo_helper"}) == "repo_helper"
+	assert pypi_name.get({"modname": "repo_helper"}) == "repo_helper"
 	assert pypi_name.get({"modname": "the modname"}) == "the modname"
-	assert pypi_name.get({"modname": "the modname", "pypi_name": "git_helper"}) == "git_helper"
+	assert pypi_name.get({"modname": "the modname", "pypi_name": "repo_helper"}) == "repo_helper"
 
 	with pytest.raises(ValueError):
 		pypi_name.get()
@@ -284,12 +284,12 @@ def test_pypi_name_errors(wrong_value):
 
 
 def test_import_name():
-	assert import_name.get({"import_name": "git_helper"}) == "git_helper"
-	assert import_name.get({"modname": "git_helper"}) == "git_helper"
-	assert import_name.get({"modname": "git-helper"}) == "git_helper"
-	assert import_name.get({"import_name": "git-helper"}) == "git_helper"
+	assert import_name.get({"import_name": "repo_helper"}) == "repo_helper"
+	assert import_name.get({"modname": "repo_helper"}) == "repo_helper"
+	assert import_name.get({"modname": "git-helper"}) == "repo_helper"
+	assert import_name.get({"import_name": "git-helper"}) == "repo_helper"
 	assert import_name.get({"modname": "the modname"}) == "the modname"
-	assert import_name.get({"modname": "the modname", "import_name": "git_helper"}) == "git_helper"
+	assert import_name.get({"modname": "the modname", "import_name": "repo_helper"}) == "repo_helper"
 
 	with pytest.raises(ValueError):
 		import_name.get()
@@ -489,7 +489,7 @@ class Test_sphinx_conf_epilogue(ListTest):
 
 class Test_manifest_additional(ListTest):
 	config_var = manifest_additional
-	test_value = ["recursive-include: git_helper/templates *"]
+	test_value = ["recursive-include: repo_helper/templates *"]
 
 
 class Test_tox_requirements(ListTest):
@@ -509,7 +509,7 @@ class Test_py_modules(ListTest):
 
 class Test_console_scripts(ListTest):
 	config_var = console_scripts
-	test_value = ["git_helper = git_helper.__main__:main"]
+	test_value = ["repo_helper = repo_helper.__main__:main"]
 
 
 class Test_additional_requirements_files(ListTest):

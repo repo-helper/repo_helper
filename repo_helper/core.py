@@ -2,7 +2,7 @@
 #
 #  core.py
 """
-Core functionality of ``git_helper``.
+Core functionality of ``repo_helper``.
 """
 #
 #  Copyright © 2020 Dominic Davis-Foster <dominic@davis-foster.co.uk>
@@ -90,7 +90,7 @@ class GitHelper:
 
 	def load_settings(self) -> None:
 		"""
-		Load settings from the ``git_helper.yml`` file in the repository.
+		Load settings from the ``repo_helper.yml`` file in the repository.
 		"""
 
 		config_vars = parse_yaml(self.target_repo)
@@ -141,7 +141,7 @@ class GitHelper:
 				for filename in output_filenames:
 					all_managed_files.append(str(filename))
 
-		all_managed_files.append("git_helper.yml")
+		all_managed_files.append("repo_helper.yml")
 
 		return all_managed_files
 
@@ -177,7 +177,7 @@ tag = True
 			fp.write("\n")
 
 	required_lines = [
-			"[bumpversion:file:git_helper.yml]",
+			"[bumpversion:file:repo_helper.yml]",
 			"[bumpversion:file:__pkginfo__.py]",
 			"[bumpversion:file:README.rst]",
 			]

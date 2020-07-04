@@ -28,8 +28,8 @@ from typing import Any, Dict, Iterable, List, Optional, Union
 from typing_extensions import Literal
 
 # this package
-from git_helper.config_vars import ConfigVar, get_version_classifiers, optional_getter
-from git_helper.utils import license_lookup, validate_classifiers
+from repo_helper.config_vars import ConfigVar, get_version_classifiers, optional_getter
+from repo_helper.utils import license_lookup, validate_classifiers
 
 __all__ = [
 		"author",
@@ -150,7 +150,7 @@ class modname(ConfigVar):  # noqa
 
 	.. code-block:: yaml
 
-		modname: git_helper
+		modname: repo_helper
 	"""
 
 	dtype = str
@@ -206,7 +206,7 @@ class repo_name(ConfigVar):  # noqa
 
 	.. code-block:: yaml
 
-		repo_name: git_helper
+		repo_name: repo_helper
 	"""
 
 	dtype = str
@@ -238,7 +238,7 @@ class import_name(ConfigVar):  # noqa
 
 	.. code-block:: yaml
 
-		import_name: git_helper
+		import_name: repo_helper
 	"""
 
 	dtype = str
@@ -525,7 +525,7 @@ class manifest_additional(ConfigVar):  # noqa
 	.. code-block:: yaml
 
 		manifest_additional:
-		  - "recursive-include: git_helper/templates *"
+		  - "recursive-include: repo_helper/templates *"
 	"""
 
 	dtype = List[str]
@@ -559,8 +559,8 @@ class console_scripts(ConfigVar):  # noqa
 	.. code-block:: yaml
 
 		console_scripts:
-		  - "git_helper = git_helper.__main__:main"
-		  - "git-helper = git_helper.__main__:main"
+		  - "repo_helper = repo_helper.__main__:main"
+		  - "git-helper = repo_helper.__main__:main"
 	"""
 
 	dtype = List[str]
@@ -1175,7 +1175,7 @@ class pkginfo_extra(ConfigVar):  # noqa
 
 class exclude_files(ConfigVar):  # noqa
 	"""
-	A list of files not to manage with `git_helper`.
+	A list of files not to manage with `repo_helper`.
 
 	.. code-block:: yaml
 

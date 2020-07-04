@@ -1,7 +1,7 @@
 **************************
-:mod:`git_helper.testing`
+:mod:`repo_helper.testing`
 **************************
 
-.. automodule:: git_helper.testing
+.. automodule:: repo_helper.testing
 	:members:
 	:autosummary:

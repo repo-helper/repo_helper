@@ -28,7 +28,7 @@ import lorem  # type: ignore
 import pytest  # type: ignore
 
 # this package
-from git_helper.blocks import (
+from repo_helper.blocks import (
 		create_docs_install_block,
 		create_docs_links_block,
 		create_readme_install_block,

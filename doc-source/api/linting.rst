@@ -1,7 +1,7 @@
 **************************
-:mod:`git_helper.linting`
+:mod:`repo_helper.linting`
 **************************
 
-.. automodule:: git_helper.linting
+.. automodule:: repo_helper.linting
 	:members:
 	:autosummary:

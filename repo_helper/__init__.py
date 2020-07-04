@@ -24,4 +24,4 @@ Git Helper: Manage configuration files with ease.
 #
 
 # this package
-from git_helper.core import GitHelper
+from repo_helper.core import GitHelper

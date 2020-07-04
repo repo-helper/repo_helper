@@ -1,4 +1,4 @@
-#  This file is managed by `git_helper`. Don't edit it directly
+#  This file is managed by `repo_helper`. Don't edit it directly
 #  Copyright (C) 2020 Dominic Davis-Foster <dominic@davis-foster.co.uk>
 #
 #  This file is distributed under the same license terms as the program it came with.
@@ -45,12 +45,12 @@ __copyright__ = """
 
 __version__ = "0.0.1"
 
-modname = "git_helper"
-pypi_name = "domdf_git_helper"
-import_name = "git_helper"
+modname = "repo_helper"
+pypi_name = "domdf_repo_helper"
+import_name = "repo_helper"
 py_modules = []
 entry_points = {
-		"console_scripts": ['git_helper = git_helper.__main__:main', 'git-helper = git_helper.__main__:main']
+		"console_scripts": ['repo_helper = repo_helper.__main__:main', 'git-helper = repo_helper.__main__:main']
 		}
 
 __license__ = "GNU Lesser General Public License v3 or later (LGPLv3+)"
@@ -60,9 +60,9 @@ short_desc = "Update multiple configuration files, build scripts etc. from a sin
 __author__ = author = "Dominic Davis-Foster"
 author_email = "dominic@davis-foster.co.uk"
 github_username = "domdfcoding"
-web = github_url = f"https://github.com/domdfcoding/git_helper"
+web = github_url = f"https://github.com/domdfcoding/repo_helper"
 project_urls = {
-		"Documentation": f"https://git_helper.readthedocs.io",
+		"Documentation": f"https://repo_helper.readthedocs.io",
 		"Issue Tracker": f"{github_url}/issues",
 		"Source Code": github_url,
 		}

@@ -1,5 +1,4 @@
-modname: git_helper
-pypi_name: domdf_git_helper
+modname: repo_helper
 copyright_years: "2020"
 author: "Dominic Davis-Foster"
 email: "dominic@davis-foster.co.uk"
@@ -14,8 +13,8 @@ additional_ignore:
   - Tokens
 
 console_scripts:
-  - "git_helper = git_helper.__main__:main"
-  - "git-helper = git_helper.__main__:main"
+  - "repo_helper = repo_helper.__main__:main"
+  - "repo-helper = repo_helper.__main__:main"
 
 sphinx_html_theme: alabaster
 
@@ -31,9 +30,9 @@ python_versions:
 
 # additional lines for MANIFEST.in
 manifest_additional:
-  - "recursive-include git_helper/templates *"
-  - "recursive-include git_helper/init_repo_files *"
-  - "include git_helper git_helper_schema.json"
+  - "recursive-include repo_helper/templates *"
+  - "recursive-include repo_helper/init_repo_files *"
+  - "include repo_helper repo_helper_schema.json"
 
 classifiers:
   - 'Development Status :: 4 - Beta'

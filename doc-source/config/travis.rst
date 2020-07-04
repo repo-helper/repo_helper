@@ -6,5 +6,5 @@ Options for configuring Travis.
 
 https://travis-ci.com
 
-.. autoconfig:: git_helper.configuration
+.. autoconfig:: repo_helper.configuration
 	:category: travis

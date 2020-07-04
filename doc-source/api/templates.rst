@@ -1,7 +1,7 @@
 ****************************
-:mod:`git_helper.templates`
+:mod:`repo_helper.templates`
 ****************************
 
-.. automodule:: git_helper.templates
+.. automodule:: repo_helper.templates
 	:members:
 	:autosummary:

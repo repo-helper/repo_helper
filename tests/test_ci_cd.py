@@ -25,7 +25,7 @@ import pathlib
 import tempfile
 
 # this package
-from git_helper.ci_cd import make_github_ci, make_travis, make_travis_deploy_conda
+from repo_helper.ci_cd import make_github_ci, make_travis, make_travis_deploy_conda
 
 
 def test_travis(demo_environment):
@@ -35,7 +35,7 @@ def test_travis(demo_environment):
 		managed_files = make_travis(tmpdir_p, demo_environment)
 		assert managed_files == [".travis.yml"]
 		assert (tmpdir_p / managed_files[0]).read_text() == """\
-# This file is managed by `git_helper`. Don't edit it directly
+# This file is managed by `repo_helper`. Don't edit it directly
 
 language: python
 dist: xenial
@@ -121,7 +121,7 @@ jobs:
 		managed_files = make_travis(tmpdir_p, demo_environment)
 		assert managed_files == [".travis.yml"]
 		assert (tmpdir_p / managed_files[0]).read_text() == """\
-# This file is managed by `git_helper`. Don't edit it directly
+# This file is managed by `repo_helper`. Don't edit it directly
 
 language: python
 dist: bionic
@@ -181,7 +181,7 @@ def test_travis_deploy_conda(demo_environment):
 		assert managed_files == [".ci/travis_deploy_conda.sh"]
 		assert (tmpdir_p / managed_files[0]).read_text() == """\
 #!/bin/bash
-# This file is managed by `git_helper`. Don't edit it directly
+# This file is managed by `repo_helper`. Don't edit it directly
 
 set -e -x
 

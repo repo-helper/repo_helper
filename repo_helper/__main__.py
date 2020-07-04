@@ -2,7 +2,7 @@
 #
 #  __main__.py
 """
-Entry point for running ``git_helper`` from the command line.
+Entry point for running ``repo_helper`` from the command line.
 """
 #
 #  Copyright © 2020 Dominic Davis-Foster <dominic@davis-foster.co.uk>
@@ -35,14 +35,14 @@ from domdf_python_tools.utils import stderr_writer
 from dulwich import porcelain, repo  # type: ignore
 
 # this package
-from git_helper.core import GitHelper
-from git_helper.init_repo import init_repo
-from git_helper.utils import check_git_status
+from repo_helper.core import GitHelper
+from repo_helper.init_repo import init_repo
+from repo_helper.utils import check_git_status
 
 
 def main():
 	parser = argparse.ArgumentParser(
-			description='Update files in the given repository, based on settings in `git_helper.yml`'
+			description='Update files in the given repository, based on settings in `repo_helper.yml`'
 			)
 	parser.add_argument(
 			'path',
@@ -59,7 +59,7 @@ def main():
 			"-f",
 			'--force',
 			action='store_true',
-			help="Run 'git_helper' even when the git working directory is not clean.",
+			help="Run 'repo_helper' even when the git working directory is not clean.",
 			)
 	parser.add_argument(
 			"-n",
@@ -85,7 +85,7 @@ def main():
 	status, lines = check_git_status(gh.target_repo)
 
 	if not status:
-		if lines in (["M git_helper.yml"], ["A git_helper.yml"], ["AM git_helper.yml"]):
+		if lines in (["M repo_helper.yml"], ["A repo_helper.yml"], ["AM repo_helper.yml"]):
 			pass
 		else:
 			stderr_writer(f"{Fore.RED}Git working directory is not clean:")
@@ -118,7 +118,7 @@ def commit_changed_files(
 	Stage and commit any files that have been updated, added or removed.
 
 	:param repo_path: The path to the repository root.
-	:param managed_files: List of files managed by ``git_helper``.
+	:param managed_files: List of files managed by ``repo_helper``.
 	:param commit: Whether to commit the changes automatically.
 		:py:obj:`None` (default) indicates the user should be asked.
 	"""
@@ -146,7 +146,7 @@ def commit_changed_files(
 			commit = ((res and res.startswith("y")) or not res)
 
 		if commit:
-			commit_id = r.do_commit(message=b"Updated files with `git_helper`.")  # TODO: better message
+			commit_id = r.do_commit(message=b"Updated files with `repo_helper`.")  # TODO: better message
 			print(f"Committed as {commit_id.decode('UTF-8')}")
 		else:
 			print("Changed files were staged but not committed.")

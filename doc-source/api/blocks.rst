@@ -1,7 +1,7 @@
 **************************
-:mod:`git_helper.blocks`
+:mod:`repo_helper.blocks`
 **************************
 
-.. automodule:: git_helper.blocks
+.. automodule:: repo_helper.blocks
 	:members:
 	:autosummary:

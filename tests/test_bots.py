@@ -25,7 +25,7 @@ import pathlib
 import tempfile
 
 # this package
-from git_helper.bots import make_auto_assign_action, make_dependabot, make_imgbot, make_stale_bot
+from repo_helper.bots import make_auto_assign_action, make_dependabot, make_imgbot, make_stale_bot
 
 
 def test_stale_bot(demo_environment):
@@ -118,7 +118,7 @@ def test_auto_assign_action(demo_environment):
 				]
 
 		assert (tmpdir_p / managed_files[-1]).read_text() == """\
-# This file is managed by `git_helper`. Don't edit it directly
+# This file is managed by `repo_helper`. Don't edit it directly
 
 # Set to true to add reviewers to pull requests
 addReviewers: true
@@ -162,7 +162,7 @@ def test_dependabot(demo_environment):
 		assert managed_files == [".dependabot/config.yml"]
 
 		assert (tmpdir_p / managed_files[0]).read_text() == """\
-# This file is managed by `git_helper`. Don't edit it directly
+# This file is managed by `repo_helper`. Don't edit it directly
 
 version: 1
 update_configs:

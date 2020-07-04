@@ -15,15 +15,15 @@ if [ -z "$(git status --porcelain --untracked-files=no)" ] || [ "$1" == "-f" ]; 
 
   echo "Running autopep8"
 
-  autopep8 --in-place --select "$errors" -a --recursive git_helper/
-  autopep8 --in-place --select "$belligerent" -a -a -a -a -a --recursive git_helper/
+  autopep8 --in-place --select "$errors" -a --recursive repo_helper/
+  autopep8 --in-place --select "$belligerent" -a -a -a -a -a --recursive repo_helper/
 
   autopep8 --in-place --select "$errors" -a --recursive tests/
   autopep8 --in-place --select "$belligerent" -a -a -a -a -a --recursive tests/
 
   echo "Running flake8"
 
-    >&2 flake8 git_helper/
+    >&2 flake8 repo_helper/
 
     >&2 flake8 tests/
 

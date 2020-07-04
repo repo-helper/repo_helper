@@ -1,7 +1,7 @@
 ******************************
-:mod:`git_helper.config_vars`
+:mod:`repo_helper.config_vars`
 ******************************
 
-.. automodule:: git_helper.config_vars
+.. automodule:: repo_helper.config_vars
 	:members:
 	:autosummary:

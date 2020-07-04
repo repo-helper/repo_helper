@@ -2,5 +2,5 @@
 Optional features
 ==================
 
-.. autoconfig:: git_helper.configuration
+.. autoconfig:: repo_helper.configuration
 	:category: optional features

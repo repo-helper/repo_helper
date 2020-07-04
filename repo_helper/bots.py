@@ -83,7 +83,7 @@ def make_auto_assign_action(repo_path: pathlib.Path, templates: jinja2.Environme
 
 # 	with (dot_github / "workflows" / "assign.yml").open('w') as fp:
 # 		clean_writer(
-# 				"""# This file is managed by `git_helper`. Don't edit it directly
+# 				"""# This file is managed by `repo_helper`. Don't edit it directly
 #
 # name: 'Auto Assign'
 # on: pull_request
@@ -101,7 +101,7 @@ def make_auto_assign_action(repo_path: pathlib.Path, templates: jinja2.Environme
 
 	with (dot_github / "auto_assign.yml").open('w') as fp:
 		clean_writer(
-				f"""# This file is managed by `git_helper`. Don't edit it directly
+				f"""# This file is managed by `repo_helper`. Don't edit it directly
 
 # Set to true to add reviewers to pull requests
 addReviewers: true
@@ -154,7 +154,7 @@ def make_dependabot(repo_path: pathlib.Path, templates: jinja2.Environment) -> L
 
 	with (dependabot_dir / "config.yml").open('w') as fp:
 		clean_writer(
-				f"""# This file is managed by `git_helper`. Don't edit it directly
+				f"""# This file is managed by `repo_helper`. Don't edit it directly
 
 version: 1
 update_configs:

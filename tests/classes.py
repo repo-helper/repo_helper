@@ -27,7 +27,7 @@ from typing import Any, Dict, List, Type
 import pytest  # type: ignore
 
 # this package
-from git_helper.config_vars import ConfigVar
+from repo_helper.config_vars import ConfigVar
 
 test_list_int = [1, 2, 3, 4]
 test_list_str = ['a', 'b', 'c', 'd']

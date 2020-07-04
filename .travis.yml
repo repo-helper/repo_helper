@@ -1,4 +1,4 @@
-# This file is managed by `git_helper`. Don't edit it directly
+# This file is managed by `repo_helper`. Don't edit it directly
 
 language: python
 dist: xenial
@@ -33,7 +33,7 @@ jobs:
       deploy:
         on:
           tags: true
-          repo: domdfcoding/git_helper
+          repo: domdfcoding/repo_helper
         provider: pypi
         user: "DomDF"
         password:
@@ -49,6 +49,6 @@ jobs:
       script: skip
       deploy:
         on:
-          repo: domdfcoding/git_helper
+          repo: domdfcoding/repo_helper
         provider: script
         script: python .ci/copy_pypi_2_github.py || return 1;

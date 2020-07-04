@@ -25,8 +25,8 @@ import jinja2
 import pytest  # type: ignore
 
 # this package
-from git_helper.linting import lint_belligerent_list, lint_fix_list, lint_warn_list
-from git_helper.templates import template_dir
+from repo_helper.linting import lint_belligerent_list, lint_fix_list, lint_warn_list
+from repo_helper.templates import template_dir
 
 
 @pytest.fixture()

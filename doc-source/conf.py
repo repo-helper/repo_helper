@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-# This file is managed by `git_helper`. Don't edit it directly
+# This file is managed by `repo_helper`. Don't edit it directly
 
 # stdlib
 import os
@@ -18,20 +18,20 @@ from __pkginfo__ import __version__
 
 
 
-github_url = f"https://github.com/domdfcoding/git_helper"
+github_url = f"https://github.com/domdfcoding/repo_helper"
 
-rst_prolog = f""".. |pkgname| replace:: git_helper
-.. |pkgname2| replace:: ``git_helper``
+rst_prolog = f""".. |pkgname| replace:: repo_helper
+.. |pkgname2| replace:: ``repo_helper``
 .. |browse_github| replace:: `Browse the GitHub Repository <{github_url}>`__
 """
 
 author = "Dominic Davis-Foster"
-project = "git_helper"
+project = "repo_helper"
 slug = re.sub(r'\W+', '-', project.lower())
 release = version = __version__
 copyright = "2020 Dominic Davis-Foster"  # pylint: disable=redefined-builtin
 language = 'en'
-package_root = "git_helper"
+package_root = "repo_helper"
 
 extensions = [
 		'sphinx.ext.intersphinx',
@@ -83,7 +83,7 @@ html_theme_options = {
 		'page_width': '1200px',
 		'logo_name': 'true',
 		'github_user': 'domdfcoding',
-		'github_repo': 'git_helper',
+		'github_repo': 'repo_helper',
 		'description': 'Update multiple configuration files, build scripts etc. from a single location',
 		'github_banner': 'true',
 		'github_type': 'star',

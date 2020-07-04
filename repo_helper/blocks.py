@@ -32,7 +32,7 @@ from jinja2 import BaseLoader, Environment, StrictUndefined, Template
 from typing_extensions import Literal
 
 # this package
-from git_helper.shields import *
+from repo_helper.shields import *
 
 __all__ = [
 		"installation_regex",

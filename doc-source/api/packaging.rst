@@ -1,7 +1,7 @@
 ****************************
-:mod:`git_helper.packaging`
+:mod:`repo_helper.packaging`
 ****************************
 
-.. automodule:: git_helper.packaging
+.. automodule:: repo_helper.packaging
 	:members:
 	:autosummary:

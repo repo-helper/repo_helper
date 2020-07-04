@@ -1,7 +1,7 @@
 **************************
-:mod:`git_helper.utils`
+:mod:`repo_helper.utils`
 **************************
 
-.. automodule:: git_helper.utils
+.. automodule:: repo_helper.utils
 	:members:
 	:autosummary:

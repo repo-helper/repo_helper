@@ -1,7 +1,7 @@
 **************************
-:mod:`git_helper.shields`
+:mod:`repo_helper.shields`
 **************************
 
-.. automodule:: git_helper.shields
+.. automodule:: repo_helper.shields
 	:members:
 	:autosummary:
