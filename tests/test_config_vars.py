@@ -286,8 +286,8 @@ def test_pypi_name_errors(wrong_value):
 def test_import_name():
 	assert import_name.get({"import_name": "repo_helper"}) == "repo_helper"
 	assert import_name.get({"modname": "repo_helper"}) == "repo_helper"
-	assert import_name.get({"modname": "git-helper"}) == "repo_helper"
-	assert import_name.get({"import_name": "git-helper"}) == "repo_helper"
+	assert import_name.get({"modname": "repo-helper"}) == "repo_helper"
+	assert import_name.get({"import_name": "repo-helper"}) == "repo_helper"
 	assert import_name.get({"modname": "the modname"}) == "the modname"
 	assert import_name.get({"modname": "the modname", "import_name": "repo_helper"}) == "repo_helper"
 
