@@ -57,20 +57,20 @@ repo_helper
 	:target: https://www.codefactor.io/repository/github/domdfcoding/repo_helper
 	:alt: CodeFactor Grade
 
-.. |pypi-version| image:: https://img.shields.io/pypi/v/domdf_repo_helper
-	:target: https://pypi.org/project/domdf_repo_helper/
+.. |pypi-version| image:: https://img.shields.io/pypi/v/repo_helper
+	:target: https://pypi.org/project/repo_helper/
 	:alt: PyPI - Package Version
 
-.. |supported-versions| image:: https://img.shields.io/pypi/pyversions/domdf_repo_helper
-	:target: https://pypi.org/project/domdf_repo_helper/
+.. |supported-versions| image:: https://img.shields.io/pypi/pyversions/repo_helper
+	:target: https://pypi.org/project/repo_helper/
 	:alt: PyPI - Supported Python Versions
 
-.. |supported-implementations| image:: https://img.shields.io/pypi/implementation/domdf_repo_helper
-	:target: https://pypi.org/project/domdf_repo_helper/
+.. |supported-implementations| image:: https://img.shields.io/pypi/implementation/repo_helper
+	:target: https://pypi.org/project/repo_helper/
 	:alt: PyPI - Supported Implementations
 
-.. |wheel| image:: https://img.shields.io/pypi/wheel/domdf_repo_helper
-	:target: https://pypi.org/project/domdf_repo_helper/
+.. |wheel| image:: https://img.shields.io/pypi/wheel/repo_helper
+	:target: https://pypi.org/project/repo_helper/
 	:alt: PyPI - Wheel
 
 .. |license| image:: https://img.shields.io/github/license/domdfcoding/repo_helper
@@ -104,7 +104,7 @@ Installation
 
 		.. prompt:: bash
 
-			pip install domdf_repo_helper
+			pip install repo_helper
 
 
 	.. tab:: from GitHub

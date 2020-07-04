@@ -4,6 +4,6 @@ include requirements.txt
 recursive-exclude **/__pycache__ *
 recursive-include repo_helper/templates *
 recursive-include repo_helper/init_repo_files *
-include repo_helper repo_helper_schema.json
+include repo_helper/repo_helper_schema.json
 recursive-include repo_helper/ *.pyi
 recursive-include repo_helper/ py.typed

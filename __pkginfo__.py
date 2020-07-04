@@ -46,7 +46,7 @@ __copyright__ = """
 __version__ = "0.0.1"
 
 modname = "repo_helper"
-pypi_name = "domdf_repo_helper"
+pypi_name = "repo_helper"
 import_name = "repo_helper"
 py_modules = []
 entry_points = {

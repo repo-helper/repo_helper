@@ -10,6 +10,6 @@ jobs:
     steps:
       - uses: domdfcoding/octocheese@master
         with:
-          pypi_name: "domdf_repo_helper"
+          pypi_name: "repo_helper"
         env:
           GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
