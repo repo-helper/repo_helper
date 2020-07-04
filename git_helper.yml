@@ -45,7 +45,7 @@ classifiers:
   - 'Topic :: Utilities'
 
 extra_sphinx_extensions:
-  - tox_conf_directive
+  - autoconfig
   - autodocsumm
 
 intersphinx_mapping:

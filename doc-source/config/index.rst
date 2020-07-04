@@ -1,6 +1,6 @@
-=======================================
+================
 Configuration
-=======================================
+================
 
 Place configuration options in a file called ``git_helper.yml`` in the  repository root.
 

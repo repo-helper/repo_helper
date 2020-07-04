@@ -231,10 +231,10 @@ def copy_docs_styling(repo_path: pathlib.Path, templates: jinja2.Environment) ->
 			clean_writer(
 					"""/* This file is managed by `git_helper`. Don't edit it directly */
 	
-	.wy-nav-content {max-width: 900px !important;}
-	
-	li p:last-child { margin-bottom: 12px !important;}
-	""",
+.wy-nav-content {max-width: 900px !important;}
+
+li p:last-child { margin-bottom: 12px !important;}
+""",
 					fp
 					)
 

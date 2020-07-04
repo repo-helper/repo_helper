@@ -56,6 +56,7 @@ class ConfigVar(metaclass=__ConfigVarMeta):
 	required: bool
 	default: Any
 	validator: Callable
+	category: str
 	__name__: str
 
 	def __call__(self, raw_config_vars: Dict[str, Any]) -> Any: ...

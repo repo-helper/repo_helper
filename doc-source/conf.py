@@ -47,8 +47,8 @@ extensions = [
 		"sphinx-prompt",
 		"sphinx_autodoc_typehints",
 		"sphinx.ext.autosummary",
-		'tox_conf_directive',
 		'autodocsumm',
+		'autoconfig',
 		]
 
 sphinxemoji_style = 'twemoji'
