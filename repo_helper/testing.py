@@ -69,7 +69,7 @@ def make_tox(repo_path: pathlib.Path, templates: jinja2.Environment) -> List[str
 
 	tox = templates.get_template("tox_template.ini")
 
-	with (repo_path / "tox.ini").open('w') as fp:
+	with (repo_path / "tox.ini").open('w', encoding="UTF-8") as fp:
 		clean_writer(tox.render(source_files=" ".join(source_files)), fp)
 
 	# tox = ConfigUpdater()
@@ -222,7 +222,7 @@ def make_tox(repo_path: pathlib.Path, templates: jinja2.Environment) -> List[str
 	# 	for option, val in options.items():
 	# 		tox.set(section, option, val)
 	#
-	# with (repo_path / "tox.ini").open('w') as fp:
+	# with (repo_path / "tox.ini").open('w', encoding="UTF-8") as fp:
 	# 	tox.write(fp)
 
 	return ["tox.ini"]
@@ -241,7 +241,7 @@ def make_yapf(repo_path: pathlib.Path, templates: jinja2.Environment) -> List[st
 
 	yapf = templates.get_template("style.yapf")
 
-	with (repo_path / ".style.yapf").open('w') as fp:
+	with (repo_path / ".style.yapf").open('w', encoding="UTF-8") as fp:
 		clean_writer(yapf.render(), fp)
 
 	return [".style.yapf"]
@@ -259,18 +259,18 @@ def make_isort(repo_path: pathlib.Path, templates: jinja2.Environment) -> List[s
 	"""
 
 	# if templates.globals["enable_docs"]:
-	# 	with (repo_path / templates.globals["docs_dir"] / "requirements.txt").open() as fp:
+	# 	with (repo_path / templates.globals["docs_dir"] / "requirements.txt").open(encoding="UTF-8") as fp:
 	# 		doc_requirements = list(requirements.parse(fp))
 	# else:
 	# 	doc_requirements = []
 
 	if templates.globals["enable_tests"]:
-		with (repo_path / templates.globals["tests_dir"] / "requirements.txt").open() as fp:
+		with (repo_path / templates.globals["tests_dir"] / "requirements.txt").open(encoding="UTF-8") as fp:
 			test_requirements = list(requirements.parse(fp))
 	else:
 		test_requirements = []
 
-	with (repo_path / "requirements.txt").open() as fp:
+	with (repo_path / "requirements.txt").open(encoding="UTF-8") as fp:
 		main_requirements = list(requirements.parse(fp))
 
 	# TODO: extras
@@ -282,7 +282,7 @@ def make_isort(repo_path: pathlib.Path, templates: jinja2.Environment) -> List[s
 
 	all_requirements.discard(templates.globals["import_name"])
 
-	with (repo_path / ".isort.cfg").open('w') as fp:
+	with (repo_path / ".isort.cfg").open('w', encoding="UTF-8") as fp:
 		clean_writer(
 				"""\
 [settings]

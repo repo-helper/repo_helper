@@ -244,7 +244,7 @@ def make_lint_roller(repo_path: pathlib.Path, templates: jinja2.Environment) -> 
 
 	lint_roller = templates.get_template("lint_roller.sh")
 
-	with (repo_path / "lint_roller.sh").open('w') as fp:
+	with (repo_path / "lint_roller.sh").open('w', encoding="UTF-8") as fp:
 		clean_writer(lint_roller.render(), fp)
 
 	make_executable(repo_path / "lint_roller.sh", )

@@ -115,7 +115,7 @@ def ensure_requirements(requirements_list: Iterable[Tuple[str, Optional[str]]], 
 	target_packages = [req[0].replace("-", "_") for req in requirements_list]
 
 	if requirements_file.is_file():
-		with requirements_file.open() as fp:
+		with requirements_file.open(encoding="UTF-8") as fp:
 			test_requirements = list(requirements.parse(fp))
 
 	else:
@@ -125,7 +125,7 @@ def ensure_requirements(requirements_list: Iterable[Tuple[str, Optional[str]]], 
 
 	maybe_make(requirements_file.parent, parents=True)
 
-	with requirements_file.open('w') as fp:
+	with requirements_file.open('w', encoding="UTF-8") as fp:
 		for req in test_requirements:
 			if req.name.replace("-", "_") not in target_packages:
 				if req.specs:

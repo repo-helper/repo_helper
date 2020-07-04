@@ -90,7 +90,7 @@ def rewrite_readme(repo_path: pathlib.Path, templates: jinja2.Environment) -> Li
 
 	readme = short_desc_regex.sub(short_desc_block, readme)
 
-	with readme_file.open('w') as fp:
+	with readme_file.open('w', encoding="UTF-8") as fp:
 		fp.write(readme)
 
 	return ["README.rst"]

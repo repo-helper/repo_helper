@@ -59,7 +59,7 @@ def make_travis(repo_path: pathlib.Path, templates: jinja2.Environment) -> List[
 
 	travis = templates.get_template(".travis.yml")
 
-	with (repo_path / ".travis.yml").open('w') as fp:
+	with (repo_path / ".travis.yml").open('w', encoding="UTF-8") as fp:
 		clean_writer(travis.render(), fp)
 
 	return [".travis.yml"]
@@ -79,7 +79,7 @@ def make_copy_pypi_2_github(repo_path: pathlib.Path, templates: jinja2.Environme
 	ci_dir = repo_path / ".ci"
 	maybe_make(ci_dir)
 
-	with (ci_dir / "copy_pypi_2_github.py").open('w') as fp:
+	with (ci_dir / "copy_pypi_2_github.py").open('w', encoding="UTF-8") as fp:
 		clean_writer(copier.render(), fp)
 
 	make_executable(ci_dir / "copy_pypi_2_github.py")
@@ -115,7 +115,7 @@ def make_travis_deploy_conda(repo_path: pathlib.Path, templates: jinja2.Environm
 	ci_dir = repo_path / ".ci"
 	maybe_make(ci_dir)
 
-	with (ci_dir / "travis_deploy_conda.sh").open('w') as fp:
+	with (ci_dir / "travis_deploy_conda.sh").open('w', encoding="UTF-8") as fp:
 		clean_writer(travis_deploy_conda.render(), fp)
 
 	make_executable(ci_dir / "travis_deploy_conda.sh")
@@ -141,7 +141,7 @@ def make_github_ci(repo_path: pathlib.Path, templates: jinja2.Environment) -> Li
 	maybe_make(dot_github / "workflows", parents=True)
 
 	if "Windows" in templates.globals["platforms"]:
-		with (dot_github / "workflows" / "python_ci.yml").open('w') as fp:
+		with (dot_github / "workflows" / "python_ci.yml").open('w', encoding="UTF-8") as fp:
 			clean_writer(
 					actions.render(
 							no_dev_versions=no_dev_versions,
@@ -155,7 +155,7 @@ def make_github_ci(repo_path: pathlib.Path, templates: jinja2.Environment) -> Li
 			(dot_github / "workflows" / "python_ci.yml").unlink()
 
 	if "macOS" in templates.globals["platforms"]:
-		with (dot_github / "workflows" / "python_ci_macos.yml").open('w') as fp:
+		with (dot_github / "workflows" / "python_ci_macos.yml").open('w', encoding="UTF-8") as fp:
 			clean_writer(
 					actions.render(
 							no_dev_versions=no_dev_versions,
@@ -185,7 +185,7 @@ def make_github_docs_test(repo_path: pathlib.Path, templates: jinja2.Environment
 	dot_github = repo_path / ".github"
 	maybe_make(dot_github / "workflows", parents=True)
 
-	with (dot_github / "workflows" / "docs_test_action.yml").open('w') as fp:
+	with (dot_github / "workflows" / "docs_test_action.yml").open('w', encoding="UTF-8") as fp:
 		clean_writer(actions.render(), fp)
 
 	return [".github/workflows/docs_test_action.yml"]
@@ -205,7 +205,7 @@ def make_github_octocheese(repo_path: pathlib.Path, templates: jinja2.Environmen
 	dot_github = repo_path / ".github"
 	maybe_make(dot_github / "workflows", parents=True)
 
-	with (dot_github / "workflows" / "octocheese.yml").open('w') as fp:
+	with (dot_github / "workflows" / "octocheese.yml").open('w', encoding="UTF-8") as fp:
 		clean_writer(actions.render(), fp)
 
 	return [".github/workflows/octocheese.yml"]

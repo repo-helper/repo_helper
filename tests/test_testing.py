@@ -46,7 +46,7 @@ pytest-randomly >=3.3.1
 pytest-rerunfailures >=9.0
 """
 
-		with (tmpdir_p / managed_files[0]).open('a') as fp:
+		with (tmpdir_p / managed_files[0]).open('a', encoding="UTF-8") as fp:
 			fp.write("lorem>=0.1.1")
 
 		managed_files = ensure_tests_requirements(tmpdir_p, demo_environment)

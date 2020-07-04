@@ -50,7 +50,7 @@ pypi_name = "repo_helper"
 import_name = "repo_helper"
 py_modules = []
 entry_points = {
-		"console_scripts": ['repo_helper = repo_helper.__main__:main', 'git-helper = repo_helper.__main__:main']
+		"console_scripts": ['repo_helper = repo_helper.__main__:main', 'repo-helper = repo_helper.__main__:main']
 		}
 
 __license__ = "GNU Lesser General Public License v3 or later (LGPLv3+)"
@@ -89,4 +89,4 @@ classifiers = [
 
 		]
 
-keywords = ''
+keywords = ""

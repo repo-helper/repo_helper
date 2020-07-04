@@ -8,7 +8,7 @@ repo_helper
 
 .. end short_desc
 
-.. start shields 
+.. start shields
 
 .. list-table::
 	:stub-columns: 1
@@ -28,7 +28,7 @@ repo_helper
 .. |docs| image:: https://img.shields.io/readthedocs/repo_helper/latest?logo=read-the-docs
 	:target: https://repo_helper.readthedocs.io/en/latest/?badge=latest
 	:alt: Documentation Status
-	
+
 .. |docs_check| image:: https://github.com/domdfcoding/repo_helper/workflows/Docs%20Check/badge.svg
 	:target: https://github.com/domdfcoding/repo_helper/actions?query=workflow%3A%22Docs+Check%22
 	:alt: Docs Check Status
@@ -74,8 +74,8 @@ repo_helper
 	:alt: PyPI - Wheel
 
 .. |license| image:: https://img.shields.io/github/license/domdfcoding/repo_helper
-	:alt: License
 	:target: https://github.com/domdfcoding/repo_helper/blob/master/LICENSE
+	:alt: License
 
 .. |language| image:: https://img.shields.io/github/languages/top/domdfcoding/repo_helper
 	:alt: GitHub top language
