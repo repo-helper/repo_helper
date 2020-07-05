@@ -170,7 +170,7 @@ tag = True
 """
 					)
 
-	bumpversion_contents = bumpversion_file.read_text()
+	bumpversion_contents = bumpversion_file.read_text(encoding="UTF-8")
 
 	if not bumpversion_contents.endswith("\n\n"):
 		with bumpversion_file.open('a', encoding="UTF-8") as fp:

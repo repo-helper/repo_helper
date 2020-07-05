@@ -50,7 +50,7 @@ def rewrite_readme(repo_path: pathlib.Path, templates: jinja2.Environment) -> Li
 	"""
 
 	readme_file = repo_path / "README.rst"
-	readme = readme_file.read_text()
+	readme = readme_file.read_text(encoding="UTF-8")
 
 	shields_block = create_shields_block(
 			username=templates.globals["username"],

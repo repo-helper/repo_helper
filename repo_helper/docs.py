@@ -89,7 +89,7 @@ def ensure_doc_requirements(repo_path: pathlib.Path, templates: jinja2.Environme
 	req_file = repo_path / templates.globals["docs_dir"] / "requirements.txt"
 
 	req_file.write_text(
-			"\n".join(line for line in req_file.read_text().splitlines() if not line.startswith("git+")  # FIXME
+			"\n".join(line for line in req_file.read_text(encoding="UTF-8").splitlines() if not line.startswith("git+")  # FIXME
 						)
 			)
 
@@ -97,7 +97,7 @@ def ensure_doc_requirements(repo_path: pathlib.Path, templates: jinja2.Environme
 
 	# test_req_file.write_text(
 	# 		"\n".join(
-	# 				line for line in test_req_file.read_text().splitlines()
+	# 				line for line in test_req_file.read_text(encoding="UTF-8").splitlines()
 	# 				if not line.startswith("sphinx-tabs")
 	# 				))
 
@@ -403,7 +403,7 @@ def rewrite_docs_index(repo_path: pathlib.Path, templates: jinja2.Environment) -
 	"""
 
 	index_rst_file = repo_path / templates.globals["docs_dir"] / "index.rst"
-	index_rst = index_rst_file.read_text()
+	index_rst = index_rst_file.read_text(encoding="UTF-8")
 
 	shields_block = create_shields_block(
 			username=templates.globals["username"],

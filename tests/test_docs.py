@@ -37,7 +37,7 @@ def test_make_rtfd(demo_environment):
 
 		managed_files = make_rtfd(tmpdir_p, demo_environment)
 		assert managed_files == [".readthedocs.yml"]
-		assert (tmpdir_p / managed_files[0]).read_text() == f"""\
+		assert (tmpdir_p / managed_files[0]).read_text(encoding="UTF-8") == f"""\
 # This file is managed by `repo_helper`. Don't edit it directly
 
 # .readthedocs.yml
@@ -73,7 +73,7 @@ python:
 
 		managed_files = make_rtfd(tmpdir_p, demo_environment)
 		assert managed_files == [".readthedocs.yml"]
-		assert (tmpdir_p / managed_files[0]).read_text() == f"""\
+		assert (tmpdir_p / managed_files[0]).read_text(encoding="UTF-8") == f"""\
 # This file is managed by `repo_helper`. Don't edit it directly
 
 # .readthedocs.yml
@@ -153,7 +153,7 @@ def test_ensure_doc_requirements(demo_environment):
 		managed_files = ensure_doc_requirements(tmpdir_p, demo_environment)
 		assert managed_files == [os.path.join("doc-source", "requirements.txt")]
 
-		assert (tmpdir_p / managed_files[0]).read_text() == """\
+		assert (tmpdir_p / managed_files[0]).read_text(encoding="UTF-8") == """\
 alabaster
 extras_require
 sphinx >=3.0.3
@@ -171,7 +171,7 @@ sphinxemoji >=0.1.6
 		managed_files = ensure_doc_requirements(tmpdir_p, demo_environment)
 		assert managed_files == [os.path.join("doc-source", "requirements.txt")]
 
-		assert (tmpdir_p / managed_files[0]).read_text() == """\
+		assert (tmpdir_p / managed_files[0]).read_text(encoding="UTF-8") == """\
 alabaster
 extras_require
 lorem >=0.1.1

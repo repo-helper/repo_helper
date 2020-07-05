@@ -34,7 +34,7 @@ def test_pylintrc(demo_environment):
 		managed_files = make_pylintrc(tmpdir_p, demo_environment)
 		assert managed_files == [".pylintrc"]
 
-		assert (tmpdir_p / managed_files[0]).read_text() == r"""[MASTER]
+		assert (tmpdir_p / managed_files[0]).read_text(encoding="UTF-8") == r"""[MASTER]
 
 # Specify a configuration file.
 #rcfile=
@@ -449,7 +449,7 @@ def test_lint_roller(demo_environment):
 
 		managed_files = make_lint_roller(tmpdir_p, demo_environment)
 		assert managed_files == ["lint_roller.sh"]
-		assert (tmpdir_p / managed_files[0]).read_text() == """\
+		assert (tmpdir_p / managed_files[0]).read_text(encoding="UTF-8") == """\
 #!/bin/bash
 
 # fix these
@@ -495,7 +495,7 @@ fi
 
 		managed_files = make_lint_roller(tmpdir_p, demo_environment)
 		assert managed_files == ["lint_roller.sh"]
-		assert (tmpdir_p / managed_files[0]).read_text() == """\
+		assert (tmpdir_p / managed_files[0]).read_text(encoding="UTF-8") == """\
 #!/bin/bash
 
 # fix these
