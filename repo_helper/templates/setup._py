@@ -11,24 +11,5 @@ from __pkginfo__ import *  # pylint: disable=wildcard-import
 {{ "\n".join(setup_pre) }}
 
 setup(
-		author=author,
-		author_email=author_email,
-		classifiers=classifiers,
-		description=short_desc,
-		entry_points=entry_points,
-		extras_require=extras_require,
-		include_package_data=True,
-		install_requires=install_requires,
-		license=__license__,
-		long_description=long_description,
-		name=pypi_name,
-		packages=find_packages(exclude=("{{ tests_dir }}", "{{ docs_dir}}")),
-		project_urls=project_urls,
-		py_modules=py_modules,
-		python_requires=">={{ min_py_version }}",
-		url=web,
-		version=__version__,
-		keywords=keywords,
-		zip_safe=False,
 {{ additional_setup_args }}
 		)

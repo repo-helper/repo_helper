@@ -24,6 +24,7 @@ Manage configuration for packaging tools.
 #
 
 # stdlib
+import copy
 import pathlib
 from typing import List
 
@@ -74,6 +75,27 @@ recursive-exclude **/__pycache__ *
 	return ["MANIFEST.in"]
 
 
+setup_py_defaults = dict(
+		author="author",
+		author_email="author_email",
+		classifiers="classifiers",
+		description="short_desc",
+		entry_points="entry_points",
+		extras_require="extras_require",
+		include_package_data="True",
+		install_requires="install_requires",
+		license="__license__",
+		long_description="long_description",
+		name="pypi_name",
+		project_urls="project_urls",
+		py_modules="py_modules",
+		url="web",
+		version="__version__",
+		keywords="keywords",
+		zip_safe="False",
+		)
+
+
 def make_setup(repo_path: pathlib.Path, templates: jinja2.Environment) -> List[str]:
 	"""
 	Update the ``setup.py`` script.
@@ -84,6 +106,13 @@ def make_setup(repo_path: pathlib.Path, templates: jinja2.Environment) -> List[s
 	"""
 
 	setup = templates.get_template("setup._py")
+
+	data = copy.deepcopy(setup_py_defaults)
+
+	data["packages"] = f'find_packages(exclude=("{templates.globals["tests_dir"]}", "{templates.globals["docs_dir"]}"))'
+	data["python_requires"] = f'">={templates.globals["min_py_version"]}"'
+
+	templates.globals["additional_setup_args"] = "\n".join(["\t\t{}={},".format(*x) for x in sorted(data.items())]) + "\n" + templates.globals["additional_setup_args"]
 
 	with (repo_path / "setup.py").open('w', encoding="UTF-8") as fp:
 		clean_writer(setup.render(), fp)

@@ -100,6 +100,7 @@ setup(
 		extras_require=extras_require,
 		include_package_data=True,
 		install_requires=install_requires,
+		keywords=keywords,
 		license=__license__,
 		long_description=long_description,
 		name=pypi_name,
@@ -109,7 +110,6 @@ setup(
 		python_requires=">=3.6",
 		url=web,
 		version=__version__,
-		keywords=keywords,
 		zip_safe=False,
 
 		)
@@ -153,6 +153,7 @@ setup(
 		extras_require=extras_require,
 		include_package_data=True,
 		install_requires=install_requires,
+		keywords=keywords,
 		license=__license__,
 		long_description=long_description,
 		name=pypi_name,
@@ -162,7 +163,6 @@ setup(
 		python_requires=">=3.8",
 		url=web,
 		version=__version__,
-		keywords=keywords,
 		zip_safe=False,
 		foo="bar",
 		alice="19",
