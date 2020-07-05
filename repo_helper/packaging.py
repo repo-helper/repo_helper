@@ -63,7 +63,7 @@ recursive-exclude **/__pycache__ *
 			clean_writer(item, fp)
 
 		for item in templates.globals["additional_requirements_files"]:
-			file = pathlib.Path(item)
+			file = pathlib.PurePosixPath(item)
 			clean_writer(f"include {file.parent}/{file.name}", fp)
 
 		pyi_entry = f"recursive-include {templates.globals['source_dir']}{templates.globals['import_name']}/ *.pyi"
