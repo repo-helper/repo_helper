@@ -21,6 +21,7 @@
 #
 
 # stdlib
+import os
 import pathlib
 import tempfile
 
@@ -115,7 +116,7 @@ def test_make_404_page(demo_environment):
 		(tmpdir_p / "doc-source").mkdir()
 
 		managed_files = make_404_page(tmpdir_p, demo_environment)
-		assert managed_files == ["doc-source/404.rst", "doc-source/not-found.png"]
+		assert managed_files == [os.path.join("doc-source", "404.rst"), os.path.join("doc-source", "not-found.png")]
 		for filename in managed_files:
 			assert (tmpdir_p / filename).is_file()
 
@@ -126,7 +127,7 @@ def test_make_docs_building_rst(demo_environment):
 		(tmpdir_p / "doc-source").mkdir()
 
 		managed_files = make_docs_building_rst(tmpdir_p, demo_environment)
-		assert managed_files == ["doc-source/Building.rst"]
+		assert managed_files == [os.path.join("doc-source", "Building.rst")]
 		for filename in managed_files:
 			assert (tmpdir_p / filename).is_file()
 
@@ -137,7 +138,7 @@ def test_make_docs_source_rst(demo_environment):
 		(tmpdir_p / "doc-source").mkdir()
 
 		managed_files = make_docs_source_rst(tmpdir_p, demo_environment)
-		assert managed_files == ["doc-source/Source.rst", "doc-source/git_download.png"]
+		assert managed_files == [os.path.join("doc-source", "Source.rst"), os.path.join("doc-source", "git_download.png")]
 		for filename in managed_files:
 			assert (tmpdir_p / filename).is_file()
 
@@ -150,7 +151,7 @@ def test_ensure_doc_requirements(demo_environment):
 		(tmpdir_p / "doc-source" / "requirements.txt").write_text('')
 
 		managed_files = ensure_doc_requirements(tmpdir_p, demo_environment)
-		assert managed_files == ["doc-source/requirements.txt"]
+		assert managed_files == [os.path.join("doc-source", "requirements.txt")]
 
 		assert (tmpdir_p / managed_files[0]).read_text() == """\
 alabaster
@@ -168,7 +169,7 @@ sphinxemoji >=0.1.6
 			fp.write("lorem>=0.1.1")
 
 		managed_files = ensure_doc_requirements(tmpdir_p, demo_environment)
-		assert managed_files == ["doc-source/requirements.txt"]
+		assert managed_files == [os.path.join("doc-source", "requirements.txt")]
 
 		assert (tmpdir_p / managed_files[0]).read_text() == """\
 alabaster

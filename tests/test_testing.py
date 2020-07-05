@@ -21,6 +21,7 @@
 #
 
 # stdlib
+import os
 import pathlib
 import tempfile
 
@@ -36,7 +37,7 @@ def test_ensure_tests_requirements(demo_environment):
 		(tmpdir_p / "tests" / "requirements.txt").write_text('')
 
 		managed_files = ensure_tests_requirements(tmpdir_p, demo_environment)
-		assert managed_files == ["tests/requirements.txt"]
+		assert managed_files == [os.path.join("tests", "requirements.txt")]
 
 		assert (tmpdir_p / managed_files[0]).read_text() == """\
 coverage >=5.1
@@ -50,7 +51,7 @@ pytest-rerunfailures >=9.0
 			fp.write("lorem>=0.1.1")
 
 		managed_files = ensure_tests_requirements(tmpdir_p, demo_environment)
-		assert managed_files == ["tests/requirements.txt"]
+		assert managed_files == [os.path.join("tests", "requirements.txt")]
 
 		assert (tmpdir_p / managed_files[0]).read_text() == """\
 coverage >=5.1
