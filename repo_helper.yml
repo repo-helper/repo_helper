@@ -54,3 +54,6 @@ yapf_exclude:
   - "**/templates/"
 
 preserve_custom_theme: true
+
+imgbot_ignore:
+  - "repo_helper.png"

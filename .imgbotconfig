@@ -1,6 +1,7 @@
 {
     "schedule": "weekly",
     "ignoredFiles": [
-        "**/*.svg"
+        "**/*.svg",
+        "repo_helper.png"
     ]
 }
