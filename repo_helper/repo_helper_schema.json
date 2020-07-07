@@ -289,6 +289,12 @@
       "items": {
         "type": "string"
       }
+    },
+    "mypy_deps": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
     }
   },
   "required": [

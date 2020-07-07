@@ -173,6 +173,7 @@ license_lookup = {
 		"GPLv2": "GNU General Public License v2 (GPLv2)",
 		"BSD": "BSD License",
 		"MIT": "MIT License",
+		"Apache": "Apache Software License",
 		}
 
 

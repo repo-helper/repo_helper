@@ -90,6 +90,7 @@ __all__ = [
 		"pkginfo_extra",
 		"exclude_files",
 		"imgbot_ignore",
+		"mypy_deps",
 		]
 
 
@@ -1167,6 +1168,22 @@ class pkginfo_extra(ConfigVar):  # noqa
 		pkginfo_extra:
 		  - import datetime
 		  - print(datetim.datetime.today())
+	"""
+
+	dtype = List[str]
+	default: List[str] = []
+
+
+class mypy_deps(ConfigVar):  # noqa
+	"""
+	A list of additional packages to install in Tox when running mypy. Usually type stubs.
+
+	.. code-block:: yaml
+
+		mypy_deps:
+		  - docutils-stubs
+		  - webcolors-stubs
+		  - gi-stubs
 	"""
 
 	dtype = List[str]

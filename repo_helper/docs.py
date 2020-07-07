@@ -88,6 +88,9 @@ def ensure_doc_requirements(repo_path: pathlib.Path, templates: jinja2.Environme
 
 	req_file = repo_path / templates.globals["docs_dir"] / "requirements.txt"
 
+	if not req_file.is_file():
+		req_file.write_text('')
+
 	req_file.write_text(
 			"\n".join(line for line in req_file.read_text(encoding="UTF-8").splitlines() if not line.startswith("git+")  # FIXME
 						)

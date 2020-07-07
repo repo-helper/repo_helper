@@ -118,6 +118,9 @@ def init_repo(repo_path: pathlib.Path, templates: jinja2.Environment) -> List[st
 	if templates.globals["license"] == "MIT License":
 		license_url = f"{base_license_url}mit.txt"
 
+	if templates.globals["license"] == "Apache Software License":
+		license_url = f"{base_license_url}apache.txt"
+
 	if license_url:
 		response = requests.get(license_url)
 		if response.status_code == 200:

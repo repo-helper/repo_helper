@@ -334,6 +334,9 @@ def ensure_tests_requirements(repo_path: pathlib.Path, templates: jinja2.Environ
 
 	test_req_file = repo_path / templates.globals["tests_dir"] / "requirements.txt"
 
+	if not test_req_file.is_file():
+		test_req_file.write_text('')
+
 	test_req_file.write_text(
 			"\n".join(
 					line for line in test_req_file.read_text(encoding="UTF-8").splitlines() if not line.startswith("git+")  # FIXME

@@ -142,6 +142,7 @@ class GitHelper:
 					all_managed_files.append(str(filename))
 
 		all_managed_files.append("repo_helper.yml")
+		all_managed_files.append("git_helper.yml")
 
 		return all_managed_files
 
@@ -170,7 +171,12 @@ tag = True
 """
 					)
 
-	bumpversion_contents = bumpversion_file.read_text(encoding="UTF-8")
+	bumpversion_contents = "\n".join(
+			line
+			for line in bumpversion_file.read_text(encoding="UTF-8").splitlines()
+			if "git_helper.yml" not in line)
+
+	bumpversion_file.write_text(bumpversion_contents, encoding="UTF-8")
 
 	if not bumpversion_contents.endswith("\n\n"):
 		with bumpversion_file.open('a', encoding="UTF-8") as fp:

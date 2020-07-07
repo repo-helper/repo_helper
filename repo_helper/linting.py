@@ -182,6 +182,11 @@ lint_warn_list = [
 		"Q001",  # Remove bad quotes from multiline string
 		"Q002",  # Remove bad quotes from docstring
 		"Q003",  # Change outer quotes to avoid escaping inner quotes
+
+		# flake8-builtins
+		"A001",  # variable "{0}" is shadowing a python builtin
+		"A002",  # argument "{0}" is shadowing a python builtin
+		"A003",  # class attribute "{0}" is shadowing a python builtin
 		]
 
 code_only_warning = [
@@ -193,7 +198,7 @@ code_only_warning = [
 		"D104",  # Missing docstring in public package
 		# "D105",  # Missing docstring in magic method
 		"D106",  # Missing docstring in public nested class
-		"D107",  # Missing docstring in __init__
+		# "D107",  # Missing docstring in __init__
 		"D201",  # No blank lines allowed before function docstring
 		"D204",  # 1 blank line required after class docstring
 		"D207",  # Docstring is under-indented

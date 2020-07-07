@@ -56,6 +56,9 @@ def parse_yaml(repo_path: pathlib.Path):
 	:rtype: dict
 	"""
 
+	if (repo_path / "git_helper.yml").is_file():
+		(repo_path / "git_helper.yml").rename(repo_path / "repo_helper.yml")
+
 	with importlib_resources.path(repo_helper, "repo_helper_schema.json") as schema:
 		validate(str(schema), [repo_path / "repo_helper.yml"])
 
@@ -115,6 +118,7 @@ def parse_yaml(repo_path: pathlib.Path):
 
   # Other
 			imgbot_ignore,
+			mypy_deps,
 			]
 
 	for var in metadata_vars:
