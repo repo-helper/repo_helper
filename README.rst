@@ -61,7 +61,7 @@ repo_helper
 	:target: https://pypi.org/project/repo_helper/
 	:alt: PyPI - Package Version
 
-.. |supported-versions| image:: https://img.shields.io/pypi/pyversions/repo_helper
+.. |supported-versions| image:: https://img.shields.io/pypi/pyversions/repo_helper?logo=python&logoColor=white
 	:target: https://pypi.org/project/repo_helper/
 	:alt: PyPI - Supported Python Versions
 

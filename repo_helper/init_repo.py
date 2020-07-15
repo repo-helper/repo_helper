@@ -74,11 +74,26 @@ def init_repo(repo_path: pathlib.Path, templates: jinja2.Environment) -> List[st
 	if templates.globals["enable_docs"]:
 		# doc-source
 		maybe_make(repo_path / templates.globals["docs_dir"])
+		maybe_make(repo_path / templates.globals["docs_dir"] / "api")
 
-		for filename in {"docs.rst", "index.rst"}:
+		for filename in {"index.rst"}:
 			template = init_repo_templates.get_template(filename)
 			with (repo_path / templates.globals["docs_dir"] / filename).open('w', encoding="UTF-8") as fp:
 				clean_writer(template.render(), fp)
+
+		with (repo_path / templates.globals["docs_dir"] / "api" / templates.globals["modname"]).open('w', encoding="UTF-8") as fp:
+			buf = '='
+			buf += '=' * len(templates.globals["import_name"])
+			buf += f"\n{templates.globals['import_name']}\n"
+			buf += '=' * len(templates.globals["import_name"])
+			buf += """\n\n
+.. automodule:: {{ import_name }}
+	:autosummary:
+	:members:
+	:inherited-members:
+	:undoc-members:
+"""
+			clean_writer(buf, fp)
 
 		shutil.copy2(
 				init_repo_template_dir / "git_download.png",

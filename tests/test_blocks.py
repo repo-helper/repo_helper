@@ -25,7 +25,7 @@ import datetime
 
 # 3rd party
 import lorem  # type: ignore
-import pytest  # type: ignore
+import pytest
 
 # this package
 from repo_helper.blocks import (
@@ -149,7 +149,7 @@ def test_create_shields_block():
 	:target: https://pypi.org/project/PYPI_NAME/
 	:alt: PyPI - Package Version
 
-.. |supported-versions| image:: https://img.shields.io/pypi/pyversions/PYPI_NAME
+.. |supported-versions| image:: https://img.shields.io/pypi/pyversions/PYPI_NAME?logo=python&logoColor=white
 	:target: https://pypi.org/project/PYPI_NAME/
 	:alt: PyPI - Supported Python Versions
 
@@ -240,7 +240,7 @@ def test_create_shields_block():
 	:target: https://pypi.org/project/PYPI_NAME/
 	:alt: PyPI - Package Version
 
-.. |supported-versions_UNIQUE_NAME| image:: https://img.shields.io/pypi/pyversions/PYPI_NAME
+.. |supported-versions_UNIQUE_NAME| image:: https://img.shields.io/pypi/pyversions/PYPI_NAME?logo=python&logoColor=white
 	:target: https://pypi.org/project/PYPI_NAME/
 	:alt: PyPI - Supported Python Versions
 

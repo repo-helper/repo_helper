@@ -2,8 +2,12 @@
 # This file is managed by `repo_helper`. Don't edit it directly
 """Setup script"""
 
+import sys
+
 # 3rd party
 from setuptools import find_packages, setup
+
+sys.path.append(".")
 
 # this package
 from __pkginfo__ import *  # pylint: disable=wildcard-import
@@ -19,6 +23,7 @@ setup(
 		extras_require=extras_require,
 		include_package_data=True,
 		install_requires=install_requires,
+		keywords=keywords,
 		license=__license__,
 		long_description=long_description,
 		name=pypi_name,
@@ -28,7 +33,6 @@ setup(
 		python_requires=">=3.7",
 		url=web,
 		version=__version__,
-		keywords=keywords,
 		zip_safe=False,
 
 		)

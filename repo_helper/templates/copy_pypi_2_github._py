@@ -1,3 +1,4 @@
+#!/usr/bin/env python
 # stdlib
 import json
 import os

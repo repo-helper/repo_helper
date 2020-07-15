@@ -1,0 +1,70 @@
+# This file is managed by `repo_helper`. Don't edit it directly
+---
+name: Build manylinux Wheels
+
+on:
+  push:
+    branches: ["master"]
+  pull_request:
+    branches: ["master"]
+
+jobs:
+  build:
+    name: "manylinux${{ "{{" }} matrix.manylinux {{ "}}" }}"
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout 🛎️
+        uses: actions/checkout@v2
+      - name: Set up Python 🐍
+        uses: actions/setup-python@v1
+        with:
+          python-version: 3.8
+      - name: Install dependencies 🔧
+        run: |
+          python -m pip install --upgrade pip setuptools wheel
+          pip install twine tox
+      - name: Build manylinux1 Python wheels 🎡
+        uses: RalfG/python-wheels-manylinux-build@v0.2.2-manylinux1_x86_64
+        with:
+          python-versions: '{{ " ".join(wheel_py_versions) }}'
+#          build-requirements: 'cython numpy'
+#          system-packages: 'lrzip-devel zlib-devel'
+          package-path: ''
+          pip-wheel-args: '--no-deps'
+      - name: Build manylinux2010 Python wheels 🎡
+        uses: RalfG/python-wheels-manylinux-build@v0.2.2-manylinux2010_x86_64
+        with:
+          python-versions: '{{ " ".join(wheel_py_versions) }}'
+          package-path: ''
+          pip-wheel-args: '--no-deps'
+      - name: Build manylinux2014 Python wheels 🎡
+        uses: RalfG/python-wheels-manylinux-build@v0.2.2-manylinux2014_x86_64
+        with:
+          python-versions: '{{ " ".join(wheel_py_versions) }}'
+          package-path: ''
+          pip-wheel-args: '--no-deps'
+      - name: Upload Artifacts 🚀
+        uses: actions/upload-artifact@v2
+        with:
+          name: wheels
+          path: wheelhouse/
+      - name: "Run Tests"
+        run: |
+          PYVERSIONS=({{ PYVERSIONS }})
+          for PYVERSION in "${PYVERSIONS[@]}"; do
+            for whl in wheelhouse/{{ import_name }}-*-cp${PYVERSION}-cp${PYVERSION}*-manylinux*.whl; do
+              # Test tox with wheels
+              python -m tox -r -e py${PYVERSION} --installpkg "$whl"
+              # TODO: Upload coverage to coveralls
+            done
+          done
+      - name: Upload distribution 📦 to PyPI
+        if: startsWith(github.ref, 'refs/tags/')
+        uses: pypa/gh-action-pypi-publish@master
+        with:
+          user: __token__
+          password: ${{ "{{" }} secrets.pypi_password {{ "}}" }}
+          packages_dir: wheelhouse/
+          skip_existing: true
+

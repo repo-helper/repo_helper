@@ -24,7 +24,7 @@
 from typing import Any, Dict, List, Type
 
 # 3rd party
-import pytest  # type: ignore
+import pytest
 
 # this package
 from repo_helper.config_vars import ConfigVar

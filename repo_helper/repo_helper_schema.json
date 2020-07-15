@@ -68,6 +68,12 @@
         "string"
       ]
     },
+    "enable_pre_commit": {
+      "type": [
+        "boolean",
+        "string"
+      ]
+    },
     "docker_shields": {
       "type": [
         "boolean",
@@ -295,6 +301,18 @@
       "items": {
         "type": "string"
       }
+    },
+    "pure_python": {
+      "type": [
+        "boolean",
+        "string"
+      ]
+    },
+    "stubs_package": {
+      "type": [
+        "boolean",
+        "string"
+      ]
     }
   },
   "required": [

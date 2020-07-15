@@ -48,6 +48,7 @@ __all__ = [
 		"source_dir",
 		"enable_tests",
 		"enable_releases",
+		"enable_pre_commit",
 		"docker_shields",
 		"docker_name",
 		"python_deploy_version",
@@ -91,6 +92,8 @@ __all__ = [
 		"exclude_files",
 		"imgbot_ignore",
 		"mypy_deps",
+		"pure_python",
+		"stubs_package",
 		]
 
 
@@ -400,6 +403,38 @@ class source_dir(ConfigVar):  # noqa
 	category: str = "metadata"
 
 
+class pure_python(ConfigVar):  # noqa
+	"""
+	Flag to indicate the package is pure Python
+
+	Example:
+
+	.. code-block:: yaml
+
+		pure_python: True
+	"""
+
+	dtype = bool
+	default = True
+	category: str = "metadata"
+
+
+class stubs_package(ConfigVar):  # noqa
+	"""
+	Flag to indicate the package is a PEP 561 stubs package.
+
+	Example:
+
+	.. code-block:: yaml
+
+		stubs_package: True
+	"""
+
+	dtype = bool
+	default = False
+	category: str = "metadata"
+
+
 # Optional Features
 
 
@@ -428,6 +463,22 @@ class enable_releases(ConfigVar):  # noqa
 	.. code-block:: yaml
 
 		enable_releases: True
+	"""
+
+	dtype = bool
+	default = True
+	category: str = "optional features"
+
+
+class enable_pre_commit(ConfigVar):  # noqa
+	"""
+	Whether pre-commit should be installed and configured.
+
+	Example:
+
+	.. code-block:: yaml
+
+		enable_pre_commit: True
 	"""
 
 	dtype = bool

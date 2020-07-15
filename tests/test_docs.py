@@ -39,15 +39,12 @@ def test_make_rtfd(demo_environment):
 		assert managed_files == [".readthedocs.yml"]
 		assert (tmpdir_p / managed_files[0]).read_text(encoding="UTF-8") == f"""\
 # This file is managed by `repo_helper`. Don't edit it directly
-
-# .readthedocs.yml
 # Read the Docs configuration file
-# See https://docs.readthedocs.io/en/stable/config-file/v2.html for details
+---
 
 # Required
 version: 2
 
-# Build documentation in the docs/ directory with Sphinx
 sphinx:
   builder: html
   configuration: doc-source/conf.py
@@ -55,7 +52,6 @@ sphinx:
 # Optionally build your docs in additional formats such as PDF and ePub
 formats: all
 
-# Optionally set the version of Python and requirements required to build your docs
 python:
   version: 3.6
   install:
@@ -75,15 +71,12 @@ python:
 		assert managed_files == [".readthedocs.yml"]
 		assert (tmpdir_p / managed_files[0]).read_text(encoding="UTF-8") == f"""\
 # This file is managed by `repo_helper`. Don't edit it directly
-
-# .readthedocs.yml
 # Read the Docs configuration file
-# See https://docs.readthedocs.io/en/stable/config-file/v2.html for details
+---
 
 # Required
 version: 2
 
-# Build documentation in the docs/ directory with Sphinx
 sphinx:
   builder: html
   configuration: userguide/conf.py
@@ -91,7 +84,6 @@ sphinx:
 # Optionally build your docs in additional formats such as PDF and ePub
 formats: all
 
-# Optionally set the version of Python and requirements required to build your docs
 python:
   version: 3.8
   install:
@@ -155,6 +147,7 @@ def test_ensure_doc_requirements(demo_environment):
 
 		assert (tmpdir_p / managed_files[0]).read_text(encoding="UTF-8") == """\
 alabaster
+autodocsumm
 extras_require
 sphinx >=3.0.3
 sphinx-notfound-page
@@ -173,6 +166,7 @@ sphinxemoji >=0.1.6
 
 		assert (tmpdir_p / managed_files[0]).read_text(encoding="UTF-8") == """\
 alabaster
+autodocsumm
 extras_require
 lorem >=0.1.1
 sphinx >=3.0.3

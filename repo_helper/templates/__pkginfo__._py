@@ -19,8 +19,6 @@ __all__ = [
 		"__version__",
 		"modname",
 		"pypi_name",
-		"py_modules",
-		"entry_points",
 		"__license__",
 		"__author__",
 		"short_desc",
@@ -29,13 +27,15 @@ __all__ = [
 		"github_username",
 		"web",
 		"github_url",
-		"project_urls",
 		"repo_root",
-		"long_description",
 		"install_requires",
 		"extras_require",
+		"project_urls",
+		{# "long_description",
+		"py_modules",
 		"classifiers",
 		"keywords",
+		"entry_points", #}
 		"import_name",
 		]
 
@@ -44,47 +44,45 @@ __copyright__ = """
 """
 
 __version__ = "{{ version }}"
-
 modname = "{{ modname }}"
 pypi_name = "{{ pypi_name }}"
 import_name = "{{ import_name }}"
-py_modules = {{ py_modules }}
-entry_points = {
-		"console_scripts": {{ console_scripts }}
-		}
-
 __license__ = "{{ license }}"
-
 short_desc = "{{ short_desc }}"
-
 __author__ = author = "{{ author }}"
 author_email = "{{ email }}"
 github_username = "{{ username }}"
-web = github_url = f"https://github.com/{{ username }}/{{ repo_name }}"
-project_urls = {
-		"Documentation": f"https://{{ repo_name }}.readthedocs.io",  {# TODO: Make this link match the package version#}
-		"Issue Tracker": f"{github_url}/issues",
-		"Source Code": github_url,
-		}
-
+web = github_url = "https://github.com/{{ username }}/{{ repo_name }}"
 repo_root = pathlib.Path(__file__).parent
+install_requires = (repo_root / "requirements.txt").read_text(encoding="utf-8").split('\n')
+extras_require = {{ extras_require }}
 
-# Get info from files; set: long_description
-long_description = (repo_root / "README.rst").read_text(encoding="utf-8").replace("{{ version }}", __version__) + '\n'
-{% if enable_conda %}conda_description = """{{ conda_description }}
+{{ '\n'.join(pkginfo_extra) }}{% if enable_conda %}
+
+conda_description = """{{ conda_description }}
 
 
 {% if conda_channels %}Before installing please ensure you have added the following channels: {{ ", ".join(conda_channels) }}{% endif %}"""
 __all__.append("conda_description")
 {% endif %}
-install_requires = (repo_root / "requirements.txt").read_text(encoding="utf-8").split('\n')
-extras_require = {{ extras_require }}
 
-classifiers = [
+project_urls = {
+		"Documentation": "https://{{ repo_name }}.readthedocs.io",  {# TODO: Make this link match the package version#}
+		"Issue Tracker": f"{github_url}/issues",
+		"Source Code": github_url,
+		}
+
+{# entry_points = {
+		"console_scripts": {{ console_scripts }},
+		} #}
+{# classifiers = [
 		{% for classifier in classifiers %}'{{ classifier }}',
 		{% endfor %}
-		]
+		] #}
 
+{#
 keywords = "{{ ' '.join(keywords) }}"
+py_modules = {{ py_modules }}
+#}
 
-{{ '\n'.join(pkginfo_extra) }}
+{#long_description = (repo_root / "README.rst").read_text(encoding="utf-8").replace("{{ version }}", __version__) + '\n' #}

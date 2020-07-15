@@ -36,6 +36,8 @@ __all__ = [
 		"make_manifest",
 		"make_setup",
 		"make_pkginfo",
+		"make_pyproject",
+		"make_setup_cfg",
 		]
 
 
@@ -66,33 +68,77 @@ recursive-exclude **/__pycache__ *
 			file = pathlib.PurePosixPath(item)
 			clean_writer(f"include {file.parent}/{file.name}", fp)
 
-		pyi_entry = f"recursive-include {templates.globals['source_dir']}{templates.globals['import_name']}/ *.pyi"
-		clean_writer(pyi_entry, fp)
+		if templates.globals["stubs_package"]:
+			pyi_entry = f"recursive-include {templates.globals['source_dir']}{templates.globals['import_name']}-stubs/ *.pyi"
+			py_typed_entry = f"include {templates.globals['source_dir']}{templates.globals['import_name']}-stubs/py.typed"
+		else:
+			pyi_entry = f"recursive-include {templates.globals['source_dir']}{templates.globals['import_name']}/ *.pyi"
+			py_typed_entry = f"include {templates.globals['source_dir']}{templates.globals['import_name']}/py.typed"
 
-		py_typed_entry = f"include {templates.globals['source_dir']}{templates.globals['import_name']}/py.typed"
+		clean_writer(pyi_entry, fp)
 		clean_writer(py_typed_entry, fp)
 
 	return ["MANIFEST.in"]
 
 
+def make_pyproject(repo_path: pathlib.Path, templates: jinja2.Environment) -> List[str]:
+	"""
+	Create the pyproject.toml file for pep517
+
+	:param repo_path: Path to the repository root.
+	:param templates:
+	:type templates: jinja2.Environment
+	"""
+
+	pyproject = templates.get_template("pyproject.toml")
+
+	with (repo_path / "pyproject.toml").open('w', encoding="UTF-8") as fp:
+		clean_writer(pyproject.render(), fp)
+
+# 	with (repo_path / "pyproject.toml").open('w', encoding="UTF-8") as fp:
+# 		buf = """\
+# [build-system]
+# requires = [
+#     "setuptools >= 40.6.0",
+#     "wheel >= 0.34.2",
+# """
+#
+#
+# 		for requirement in templates.globals["tox_build_requirements"]:
+# 			buf += f'    "{requirement}",'
+#
+# 		buf += """\
+#     ]
+# build-backend = "setuptools.build_meta"
+#
+# [tool.flit.metadata]
+#
+# """
+#
+# 		clean_writer(buf, fp)
+
+	return ["pyproject.toml"]
+
+
 setup_py_defaults = dict(
-		author="author",
-		author_email="author_email",
-		classifiers="classifiers",
-		description="short_desc",
-		entry_points="entry_points",
+		# author="author",
+		# author_email="author_email",
+		# classifiers="classifiers",
+		# description="short_desc",
+		# entry_points="entry_points",
 		extras_require="extras_require",
-		include_package_data="True",
+		# include_package_data="True",
 		install_requires="install_requires",
-		license="__license__",
-		long_description="long_description",
-		name="pypi_name",
-		project_urls="project_urls",
-		py_modules="py_modules",
-		url="web",
+		# license="__license__",
+		# long_description="long_description",
+		# name="pypi_name",
+		# project_urls="project_urls",
+		# py_modules="py_modules",
+		# url="web",
 		version="__version__",
-		keywords="keywords",
-		zip_safe="False",
+		# keywords="keywords",
+		# zip_safe="False",
+		# long_description_content_type="'text/x-rst'"
 		)
 
 
@@ -109,8 +155,9 @@ def make_setup(repo_path: pathlib.Path, templates: jinja2.Environment) -> List[s
 
 	data = copy.deepcopy(setup_py_defaults)
 
-	data["packages"] = f'find_packages(exclude=("{templates.globals["tests_dir"]}", "{templates.globals["docs_dir"]}"))'
-	data["python_requires"] = f'">={templates.globals["min_py_version"]}"'
+	# data["packages"] = f'find_packages(exclude=("{templates.globals["tests_dir"]}", "{templates.globals["docs_dir"]}"))'
+	# data["python_requires"] = f'">={templates.globals["min_py_version"]}"'
+	data["py_modules"] = templates.globals["py_modules"]
 
 	templates.globals["additional_setup_args"] = "\n".join(["\t\t{}={},".format(*x) for x in sorted(data.items())]) + "\n" + templates.globals["additional_setup_args"]
 
@@ -118,6 +165,23 @@ def make_setup(repo_path: pathlib.Path, templates: jinja2.Environment) -> List[s
 		clean_writer(setup.render(), fp)
 
 	return ["setup.py"]
+
+
+def make_setup_cfg(repo_path: pathlib.Path, templates: jinja2.Environment) -> List[str]:
+	"""
+	Update the ``setup.py`` script.
+
+	:param repo_path: Path to the repository root.
+	:param templates:
+	:type templates: jinja2.Environment
+	"""
+
+	setup = templates.get_template("setup.cfg")
+
+	with (repo_path / "setup.cfg").open('w', encoding="UTF-8") as fp:
+		clean_writer(setup.render(), fp)
+
+	return ["setup.cfg"]
 
 
 def make_pkginfo(repo_path: pathlib.Path, templates: jinja2.Environment) -> List[str]:

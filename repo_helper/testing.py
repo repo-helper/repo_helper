@@ -26,13 +26,14 @@ Configuration for testing and code formatting tools.
 # stdlib
 import os.path
 import pathlib
+import re
 import textwrap
 from typing import List
 
 # 3rd party
 import jinja2
 import requirements  # type: ignore
-from configupdater import ConfigUpdater  # type: ignore
+from repo_helper.configupdater2 import ConfigUpdater  # type: ignore
 from domdf_python_tools.paths import clean_writer
 
 # this package
@@ -59,6 +60,10 @@ def make_tox(repo_path: pathlib.Path, templates: jinja2.Environment) -> List[str
 
 		for file in templates.globals["py_modules"]:
 			source_files.append(f"{file}.py")
+	elif templates.globals["stubs_package"]:
+		source_files.append(
+				f"{templates.globals['source_dir']}{templates.globals['import_name'].replace('.', '/')}-stubs"
+				)
 	else:
 		source_files.append(
 				f"{templates.globals['source_dir']}{templates.globals['import_name'].replace('.', '/')}"
@@ -201,7 +206,6 @@ def make_tox(repo_path: pathlib.Path, templates: jinja2.Environment) -> List[str
 	# for e in [
 	# 		*templates.globals["lint_fix_list"],
 	# 		*templates.globals["lint_warn_list"],
-	# 		*templates.globals["lint_belligerent_list"],
 	# 		]:
 	# 	flake8_select.append(e)
 	#
@@ -264,6 +268,30 @@ def make_isort(repo_path: pathlib.Path, templates: jinja2.Environment) -> List[s
 	# else:
 	# 	doc_requirements = []
 
+	isort_file = repo_path / ".isort.cfg"
+	if not isort_file.is_file():
+		isort_file.write_text("[settings]\n")
+
+	isort = ConfigUpdater()
+	isort.read(str(isort_file))
+
+	isort["settings"]["line_length"] = 115
+
+	isort["settings"]["force_to_top"] = True
+	isort["settings"]["indent"] = "Tab"
+	isort["settings"]["multi_line_output"] = 3
+	isort["settings"]["import_heading_stdlib"] = "stdlib"
+	isort["settings"]["import_heading_thirdparty"] = "3rd party"
+	isort["settings"]["import_heading_firstparty"] = "this package"
+	isort["settings"]["import_heading_localfolder"] = "this package"
+	isort["settings"]["balanced_wrapping"] = False
+	isort["settings"]["lines_between_types"] = 0
+	isort["settings"]["use_parentheses"] = True
+	isort["settings"]["float_to_top"] = True
+	isort["settings"]["remove_redundant_aliases"] = True
+	isort["settings"]["default_section"] = "THIRDPARTY"
+	# isort["settings"]["no_lines_before"] = "LOCALFOLDER"
+
 	if templates.globals["enable_tests"]:
 		with (repo_path / templates.globals["tests_dir"] / "requirements.txt").open(encoding="UTF-8") as fp:
 			test_requirements = list(requirements.parse(fp))
@@ -275,42 +303,21 @@ def make_isort(repo_path: pathlib.Path, templates: jinja2.Environment) -> List[s
 
 	# TODO: extras
 
-	all_requirements = set()
+	if "known_third_party" in isort["settings"]:
+		all_requirements = set(re.split(r'\n|,\s*', isort["settings"]["known_third_party"].value))
+	else:
+		all_requirements = set()
 
 	for req in (*test_requirements, *main_requirements):  # *doc_requirements,
 		all_requirements.add(req.name)
 
 	all_requirements.discard(templates.globals["import_name"])
 
-	with (repo_path / ".isort.cfg").open('w', encoding="UTF-8") as fp:
-		clean_writer(
-				"""\
-[settings]
-line_length=115
-force_to_top=True
-indent=Tab
-multi_line_output=3
-import_heading_stdlib=stdlib
-import_heading_thirdparty=3rd party
-import_heading_firstparty=this package
-import_heading_localfolder=this package
-balanced_wrapping=False
-lines_between_types=0
-use_parentheses=True
-default_section=THIRDPARTY
-;no_lines_before=LOCALFOLDER
-known_third_party=
-    github
-    requests
-""",
-				fp
-				)
+	isort["settings"]["known_third_party"] = sorted({"github", "requests", *all_requirements})
+	isort["settings"]["known_first_party"] = templates.globals["import_name"]
 
-		for package in sorted(all_requirements):
-			clean_writer(textwrap.indent(package, "    "), fp)
-
-		clean_writer(f"""known_first_party=
-{textwrap.indent(templates.globals["import_name"], '    ')}""", fp)
+	with isort_file.open('w', encoding="UTF-8") as fp:
+		isort.write(fp)
 
 	return [".isort.cfg"]
 
@@ -326,11 +333,14 @@ def ensure_tests_requirements(repo_path: pathlib.Path, templates: jinja2.Environ
 
 	target_requirements = {
 			("coverage", "5.1"),
-			("pytest", "5.1.1"),
+			("pytest", "6.0.0rc1"),
 			("pytest-cov", "2.8.1"),
 			("pytest-randomly", "3.3.1"),
 			("pytest-rerunfailures", "9.0"),
 			}
+
+	if templates.globals["pypi_name"] != "coverage_pyver_pragma":
+		target_requirements.add(("coverage_pyver_pragma", "0.0.1"))
 
 	test_req_file = repo_path / templates.globals["tests_dir"] / "requirements.txt"
 
@@ -346,3 +356,28 @@ def ensure_tests_requirements(repo_path: pathlib.Path, templates: jinja2.Environ
 	ensure_requirements(target_requirements, test_req_file)
 
 	return [os.path.join(templates.globals["tests_dir"], "requirements.txt")]
+
+
+def make_pre_commit(repo_path: pathlib.Path, templates: jinja2.Environment) -> List[str]:
+	"""
+	Add configuration for ``pre-commit``.
+
+	https://github.com/pre-commit/pre-commit
+
+	# See https://pre-commit.com for more information
+	# See https://pre-commit.com/hooks.html for more hooks
+
+	:param repo_path: Path to the repository root.
+	:param templates:
+	:type templates: jinja2.Environment
+	"""
+
+	pre_commit_file = repo_path / ".pre-commit-config.yaml"
+
+	pre_commit = templates.get_template("pre-commit-config.yaml")
+
+	with pre_commit_file.open('w', encoding="UTF-8") as fp:
+		clean_writer(pre_commit.render(), fp)
+
+	return [pre_commit_file.name]
+

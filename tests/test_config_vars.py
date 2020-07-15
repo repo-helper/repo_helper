@@ -25,7 +25,7 @@ import os
 from typing import Any, Dict, Type
 
 # 3rd party
-import pytest  # type: ignore
+import pytest
 from tests.classes import (
 		BoolFalseTest,
 		BoolTrueTest,
@@ -371,6 +371,10 @@ class Test_enable_tests(BoolTrueTest):
 
 class Test_enable_releases(BoolTrueTest):
 	config_var = enable_releases
+
+
+class Test_enable_pre_commit(BoolTrueTest):
+	config_var = enable_pre_commit
 
 
 class Test_enable_docs(BoolTrueTest):

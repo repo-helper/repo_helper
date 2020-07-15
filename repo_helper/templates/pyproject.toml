@@ -1,0 +1,35 @@
+[build-system]
+requires = [
+	"setuptools >= 40.6.0",
+    "wheel >= 0.34.2",
+{% for requirement in tox_build_requirements %}
+    {{requirement}}{% endfor %}
+    ]
+build-backend = "setuptools.build_meta"
+
+{# [tool.flit.metadata]
+module = "{{ pypi_name }}"
+author = "{{ author }}"
+author-email = "{{ email }}"
+home-page = "https://github.com/{{ username }}/{{ repo_name }}"
+description-file = "README.rst"
+requires-python = ">={{ min_py_version }}"
+keywords = "{{ ', '.join(keywords) }}"
+license = "{{ license }}"
+classifiers = [
+    {% for classifier in classifiers %}'{{ classifier }}',
+    {% endfor %}
+    ]
+
+[tool.flit.metadata.urls]
+Documentation = "https://{{ repo_name }}.readthedocs.io"
+Issue_Tracker = "https://github.com/{{ username }}/{{ repo_name }}/issues"
+Source_Code = "https://github.com/{{ username }}/{{ repo_name }}"
+
+[tool.flit.entrypoints.console_scripts]
+{{ "\n".join(console_scripts) }}
+
+[tool.flit.sdist]
+include = ["__pkginfo__.py", "LICENSE", "requirements.txt"]
+exclude = ["**/__pycache__/*"]
+#}

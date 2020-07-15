@@ -245,21 +245,21 @@ def test_make_python_versions_shield():
 	assert shields.make_python_versions_shield(
 			"hello-world"
 			) == f"""\
-.. image:: https://img.shields.io/pypi/pyversions/hello-world
+.. image:: https://img.shields.io/pypi/pyversions/hello-world?logo=python&logoColor=white
 	:target: https://pypi.org/project/hello-world/
 	:alt: PyPI - Supported Python Versions"""
 
 	assert shields.make_python_versions_shield(
 			"HELLO-WORLD"
 			) == f"""\
-.. image:: https://img.shields.io/pypi/pyversions/HELLO-WORLD
+.. image:: https://img.shields.io/pypi/pyversions/HELLO-WORLD?logo=python&logoColor=white
 	:target: https://pypi.org/project/HELLO-WORLD/
 	:alt: PyPI - Supported Python Versions"""
 
 	assert shields.make_python_versions_shield(
 			"hello_world"
 			) == f"""\
-.. image:: https://img.shields.io/pypi/pyversions/hello_world
+.. image:: https://img.shields.io/pypi/pyversions/hello_world?logo=python&logoColor=white
 	:target: https://pypi.org/project/hello_world/
 	:alt: PyPI - Supported Python Versions"""
 

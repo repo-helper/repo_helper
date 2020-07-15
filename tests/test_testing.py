@@ -41,7 +41,7 @@ def test_ensure_tests_requirements(demo_environment):
 
 		assert (tmpdir_p / managed_files[0]).read_text(encoding="UTF-8") == """\
 coverage >=5.1
-pytest >=5.1.1
+pytest >=6.0.0rc1
 pytest-cov >=2.8.1
 pytest-randomly >=3.3.1
 pytest-rerunfailures >=9.0
@@ -56,7 +56,7 @@ pytest-rerunfailures >=9.0
 		assert (tmpdir_p / managed_files[0]).read_text(encoding="UTF-8") == """\
 coverage >=5.1
 lorem >=0.1.1
-pytest >=5.1.1
+pytest >=6.0.0rc1
 pytest-cov >=2.8.1
 pytest-randomly >=3.3.1
 pytest-rerunfailures >=9.0
@@ -84,34 +84,70 @@ setuptools_rust
 
 		assert (tmpdir_p / managed_files[0]).read_text(encoding="UTF-8") == """\
 [settings]
-line_length=115
-force_to_top=True
-indent=Tab
-multi_line_output=3
-import_heading_stdlib=stdlib
-import_heading_thirdparty=3rd party
-import_heading_firstparty=this package
-import_heading_localfolder=this package
-balanced_wrapping=False
-lines_between_types=0
-use_parentheses=True
-default_section=THIRDPARTY
-;no_lines_before=LOCALFOLDER
-known_third_party=
-    github
-    requests
+line_length = 115
+force_to_top = True
+indent = Tab
+multi_line_output = 3
+import_heading_stdlib = stdlib
+import_heading_thirdparty = 3rd party
+import_heading_firstparty = this package
+import_heading_localfolder = this package
+balanced_wrapping = False
+lines_between_types = 0
+use_parentheses = True
+default_section = THIRDPARTY
+known_third_party =
     black
     coverage
+    github
     isort
     pytest
     pytest-cov
     pytest-randomly
     pytest-rerunfailures
+    requests
     setuptools_rust
     tox
     wheel
-known_first_party=
-    hello_world
+known_first_party = hello_world
+"""
+
+		(tmpdir_p / managed_files[0]).write_text("""[settings]
+known_third_party=awesome_package
+""")
+
+		managed_files = make_isort(tmpdir_p, demo_environment)
+		assert managed_files == [".isort.cfg"]
+
+		assert (tmpdir_p / managed_files[0]).read_text(encoding="UTF-8") == """\
+[settings]
+known_third_party =
+    awesome_package
+    black
+    coverage
+    github
+    isort
+    pytest
+    pytest-cov
+    pytest-randomly
+    pytest-rerunfailures
+    requests
+    setuptools_rust
+    tox
+    wheel
+line_length = 115
+force_to_top = True
+indent = Tab
+multi_line_output = 3
+import_heading_stdlib = stdlib
+import_heading_thirdparty = 3rd party
+import_heading_firstparty = this package
+import_heading_localfolder = this package
+balanced_wrapping = False
+lines_between_types = 0
+use_parentheses = True
+default_section = THIRDPARTY
+known_first_party = hello_world
 """
 
 

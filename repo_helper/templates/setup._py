@@ -2,8 +2,13 @@
 # This file is managed by `repo_helper`. Don't edit it directly
 """Setup script"""
 
+# stdlib
+import sys
+
 # 3rd party
-from setuptools import find_packages, setup
+from setuptools import setup
+
+sys.path.append(".")
 
 # this package
 from __pkginfo__ import *  # pylint: disable=wildcard-import

@@ -45,6 +45,7 @@ extensions = [
 		"sphinx-prompt",
 		"sphinx_autodoc_typehints",
 		"sphinx.ext.autosummary",
+		"autodocsumm",
 		'autoconfig',
 		'autodocsumm',
 		]
@@ -90,7 +91,7 @@ html_theme_options = {
 		}
 html_theme_path = ["../.."]
 # html_logo = "logo/pyms.png"
-html_show_sourcelink = False  # True will show link to source
+html_show_sourcelink = True  # True will show link to source
 
 html_context = {
 		}

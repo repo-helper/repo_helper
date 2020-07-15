@@ -50,6 +50,8 @@ __all__ = [
 		"create_docs_links_block",
 		]
 
+from repo_helper.shields import make_pre_commit_shield
+
 installation_regex = re.compile(r'(?s)(\.\. start installation)(.*?)(\.\. end installation)')
 shields_regex = re.compile(r'(?s)(\.\. start shields)(.*?)(\.\. end shields)')
 short_desc_regex = re.compile(r'(?s)(\.\. start short_desc)(.*?)(\.\. end short_desc)')
@@ -83,7 +85,8 @@ shields_block_template: Template = Environment(
 	{% if docker_shields %}* - Docker
 	  - |docker_build{{ unique_name }}| |docker_automated{{ unique_name }}| |docker_size{{ unique_name }}|
 	{% endif %}* - Other
-	  - |license{{ unique_name }}| |language{{ unique_name }}| |requires{{ unique_name }}|
+	  - |license{{ unique_name }}| |language{{ unique_name }}| |requires{{ unique_name }}|\
+{% if pre_commit %} |pre_commit{{ unique_name }}|{% endif %}
 
 {% if docs %}.. |docs{{ unique_name }}| {{ make_rtfd_shield(repo_name)[3:] }}
 
@@ -128,6 +131,8 @@ shields_block_template: Template = Environment(
 .. |docker_automated{{ unique_name }}| {{ make_docker_automated_build_shield(docker_name, username)[3:] }}
 
 .. |docker_size{{ unique_name }}| {{ make_docker_size_shield(docker_name, username)[3:] }}
+{% endif %}{% if pre_commit %}
+.. |pre_commit{{ unique_name }}| {{ make_pre_commit_shield()[3:] }}
 {% endif %}
 .. end shields
 """,
@@ -154,6 +159,7 @@ shields_block_template: Template = Environment(
 						"make_docker_build_status_shield": make_docker_build_status_shield,
 						"make_docker_automated_build_shield": make_docker_automated_build_shield,
 						"make_docker_size_shield": make_docker_size_shield,
+						"make_pre_commit_shield": make_pre_commit_shield,
 						}
 				)
 
@@ -162,6 +168,7 @@ def create_shields_block(
 		username: str,
 		repo_name: str,
 		version: Union[str, int],
+		*,
 		conda: bool = True,
 		tests: bool = True,
 		docs: bool = True,
@@ -171,6 +178,7 @@ def create_shields_block(
 		docker_shields: bool = False,
 		docker_name: str = '',
 		platforms: Optional[Iterable[str]] = None,
+		pre_commit: bool = False,
 		) -> str:
 	"""
 	Create the shields block for insertion into the README, documentation etc.
@@ -195,6 +203,8 @@ def create_shields_block(
 	:param docker_name: The name of the Docker image on DockerHub.
 	:type docker_name: str, optional
 	:param platforms: List of supported platforms.
+	:param pre_commit: Whether to show a shield for pre-commit
+	:tyoe pre_commit: bool
 
 	:return: The shields block created from the above settings.
 	"""
@@ -221,6 +231,7 @@ def create_shields_block(
 			docker_name=docker_name,
 			docker_shields=docker_shields,
 			platforms=platforms,
+			pre_commit=pre_commit,
 			)
 
 

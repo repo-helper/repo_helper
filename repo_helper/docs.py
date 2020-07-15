@@ -75,16 +75,20 @@ def ensure_doc_requirements(repo_path: pathlib.Path, templates: jinja2.Environme
 	# TODO: preserve extras [] options
 
 	target_requirements = {
-			("extras_require", None),
 			("sphinx", "3.0.3"),
 			(templates.globals["sphinx_html_theme"], None),
 			("sphinxcontrib-httpdomain", "1.7.0"),
 			("sphinxemoji", "0.1.6"),
 			("sphinx-notfound-page", None),
 			("sphinx-tabs", "1.1.13"),
+			("autodocsumm", None),
 			("sphinx_autodoc_typehints", "1.11.0"),
+			("sphinx-copybutton", "0.2.12"),  # https://sphinx-copybutton.readthedocs.io/en/latest/
 			("sphinx-prompt", "1.2.0"),  # ("git+https://github.com/ScriptAutomate/sphinx-tabs-expanded.git", None)
 			}
+
+	if templates.globals["pypi_name"] != "extras_require":
+		target_requirements.add(("extras_require", None))
 
 	req_file = repo_path / templates.globals["docs_dir"] / "requirements.txt"
 
@@ -113,6 +117,8 @@ def make_rtfd(repo_path: pathlib.Path, templates: jinja2.Environment) -> List[st
 
 	https://readthedocs.org/
 
+	See https://docs.readthedocs.io/en/stable/config-file/v2.html for details
+
 	:param repo_path: Path to the repository root.
 	:param templates:
 	:type templates: jinja2.Environment
@@ -122,15 +128,12 @@ def make_rtfd(repo_path: pathlib.Path, templates: jinja2.Environment) -> List[st
 		clean_writer(
 				f"""\
 # This file is managed by `repo_helper`. Don't edit it directly
-
-# .readthedocs.yml
 # Read the Docs configuration file
-# See https://docs.readthedocs.io/en/stable/config-file/v2.html for details
+---
 
 # Required
 version: 2
 
-# Build documentation in the docs/ directory with Sphinx
 sphinx:
   builder: html
   configuration: {templates.globals["docs_dir"]}/conf.py
@@ -138,7 +141,6 @@ sphinx:
 # Optionally build your docs in additional formats such as PDF and ePub
 formats: all
 
-# Optionally set the version of Python and requirements required to build your docs
 python:
   version: {templates.globals["python_deploy_version"]}
   install:
@@ -151,6 +153,34 @@ python:
 			clean_writer(f"    - requirements: { file }", fp)
 
 	return [".readthedocs.yml"]
+
+
+def make_docutils_conf(repo_path: pathlib.Path, templates: jinja2.Environment) -> List[str]:
+	"""
+	Add configuration for ``Docutils``
+
+	:param repo_path: Path to the repository root.
+	:param templates:
+	:type templates: jinja2.Environment
+	"""
+
+	# TODO: use configupdater
+
+	docs_dir = repo_path / templates.globals["docs_dir"]
+
+	if not docs_dir.is_dir():
+		docs_dir.mkdir(parents=True)
+
+	with (docs_dir / "docutils.conf").open('w', encoding="UTF-8") as fp:
+		clean_writer(
+				f"""\
+[restructuredtext parser]
+tab_width: 4
+""",
+				fp
+				)
+
+	return [os.path.join(templates.globals["docs_dir"], "docutils.conf")]
 
 
 def make_conf(repo_path: pathlib.Path, templates: jinja2.Environment) -> List[str]:
@@ -175,7 +205,7 @@ def make_conf(repo_path: pathlib.Path, templates: jinja2.Environment) -> List[st
 			"github_user": username,  # Username
 			"github_repo": repo_name,  # Repo name
 			"github_version": "master",  # Version
-			"conf_py_path": "/",  # Path in the checkout to the docs root
+			"conf_py_path": f"/{templates.globals['docs_dir']}/",  # Path in the checkout to the docs root
 			}.items():
 			if key not in templates.globals["html_context"]:
 				templates.globals["html_context"][key] = val
@@ -420,6 +450,7 @@ def rewrite_docs_index(repo_path: pathlib.Path, templates: jinja2.Environment) -
 			docker_shields=templates.globals["docker_shields"],
 			docker_name=templates.globals["docker_name"],
 			platforms=templates.globals["platforms"],
+			pre_commit=templates.globals["enable_pre_commit"],
 			)
 
 	if templates.globals["license"] == "GNU General Public License v2 (GPLv2)":
@@ -499,7 +530,8 @@ def make_docs_source_rst(repo_path: pathlib.Path, templates: jinja2.Environment)
 
 	# if not docs_source_rst.exists():
 	source_template = templates.get_template("Source.rst")
-	docs_source_rst.write_text(source_template.render())
+	with docs_source_rst.open("w", encoding="UTF-8") as fp:
+		clean_writer(source_template.render(), fp)
 
 	if not git_download_png.exists():
 		shutil.copy2(init_repo_template_dir / "git_download.png", git_download_png)
@@ -523,6 +555,7 @@ def make_docs_building_rst(repo_path: pathlib.Path, templates: jinja2.Environmen
 
 	# if not docs_building_rst.exists():
 	building_template = templates.get_template("Building.rst")
-	docs_building_rst.write_text(building_template.render())
+	with docs_building_rst.open("w", encoding="UTF-8") as fp:
+		clean_writer(building_template.render(), fp)
 
 	return [os.path.join(templates.globals["docs_dir"], "Building.rst")]

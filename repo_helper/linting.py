@@ -40,7 +40,6 @@ from .templates import template_dir
 
 __all__ = [
 		"lint_fix_list",
-		"lint_belligerent_list",
 		"lint_warn_list",
 		"make_pylintrc",
 		"make_lint_roller",
@@ -61,9 +60,9 @@ lint_fix_list = [
 		"E225",
 		"E241",
 		"E231",
+		"W292",
+		'E265'
 		]
-
-lint_belligerent_list = ["W292", 'E265']
 
 lint_warn_list = [
 		"E101",
@@ -187,6 +186,9 @@ lint_warn_list = [
 		"A001",  # variable "{0}" is shadowing a python builtin
 		"A002",  # argument "{0}" is shadowing a python builtin
 		"A003",  # class attribute "{0}" is shadowing a python builtin
+
+		# walrus
+		# "ASN001",  # do not use assignment expressions
 		]
 
 code_only_warning = [
@@ -233,7 +235,8 @@ def make_pylintrc(repo_path: pathlib.Path, templates: jinja2.Environment) -> Lis
 	:type templates: jinja2.Environment
 	"""
 
-	shutil.copy2(str(template_dir / "pylintrc"), str(repo_path / ".pylintrc"))
+	with (repo_path / ".pylintrc").open("w", encoding="UTF-8") as fp:
+		clean_writer((template_dir / "pylintrc").read_text(encoding="UTF-8"), fp)
 
 	return [".pylintrc"]
 

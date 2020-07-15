@@ -32,36 +32,37 @@ from typing import Callable, List, Sequence, Tuple, Union
 import jinja2
 from domdf_python_tools.paths import clean_writer, maybe_make
 from domdf_python_tools.utils import enquote_value
+from configupdater import ConfigUpdater  # type: ignore
 
 # this package
 from .bots import make_auto_assign_action, make_dependabot, make_imgbot, make_stale_bot
 from .ci_cd import (
-		make_copy_pypi_2_github,
-		make_github_ci,
-		make_github_docs_test,
-		make_github_octocheese,
-		make_make_conda_recipe,
-		make_travis,
-		make_travis_deploy_conda
-		)
+	make_github_manylinux, remove_copy_pypi_2_github,
+	make_github_ci,
+	make_github_docs_test,
+	make_github_octocheese,
+	make_make_conda_recipe,
+	make_travis,
+	make_travis_deploy_conda,
+	)
 from .docs import (
-		copy_docs_styling,
-		ensure_doc_requirements,
-		make_404_page,
-		make_conf,
-		make_docs_building_rst,
-		make_docs_source_rst,
-		make_rtfd,
-		rewrite_docs_index
-		)
+	copy_docs_styling,
+	ensure_doc_requirements,
+	make_404_page,
+	make_conf,
+	make_docs_building_rst,
+	make_docs_source_rst,
+	make_docutils_conf, make_rtfd,
+	rewrite_docs_index,
+	)
 from .gitignore import make_gitignore
 from .linting import (
-		code_only_warning, lint_belligerent_list, lint_fix_list, lint_warn_list, make_lint_roller, make_pylintrc
+		code_only_warning, lint_fix_list, lint_warn_list, make_lint_roller, make_pylintrc
 		)
-from .packaging import make_manifest, make_pkginfo, make_setup
+from .packaging import make_manifest, make_pkginfo, make_pyproject, make_setup, make_setup_cfg
 from .readme import rewrite_readme
 from .templates import template_dir
-from .testing import ensure_tests_requirements, make_isort, make_tox, make_yapf
+from .testing import ensure_tests_requirements, make_isort, make_pre_commit, make_tox, make_yapf
 from .yaml_parser import parse_yaml
 
 __all__ = [
@@ -69,7 +70,6 @@ __all__ = [
 		"ensure_bumpversion",
 		"make_issue_templates",
 		"make_contributing_md",
-		"files",
 		]
 
 
@@ -88,6 +88,46 @@ class GitHelper:
 				)
 		self.load_settings()
 
+		self.files: List[Tuple[Callable, str, Sequence[str]]] = [
+				(remove_copy_pypi_2_github, "copy_pypi_2_github", ["enable_releases"]),
+				(make_lint_roller, "lint_roller", []),
+				(make_stale_bot, "stale_bot", []),
+				(make_auto_assign_action, "auto_assign", []),
+				(rewrite_readme, "readme", []),
+				(rewrite_docs_index, "index.rst", ["enable_docs"]),
+				(ensure_doc_requirements, "doc_requirements", ["enable_docs"]),
+				(make_pylintrc, "pylintrc", []),
+				(make_manifest, "manifest", []),
+				(make_setup, "setup", []),
+				(make_setup_cfg, "setup_cfg", []),
+				(make_pkginfo, "pkginfo", []),
+				(make_conf, "conf", ["enable_docs"]),
+				(make_gitignore, "gitignore", []),
+				(make_rtfd, "rtfd", ["enable_docs"]),
+				(make_travis, "travis", []),
+				(make_github_ci, "actions", []),
+				(make_github_manylinux, "manylinux", []),
+				(make_tox, "tox", []),
+				(make_yapf, "yapf", []),
+				(ensure_tests_requirements, "test_requirements", ["enable_tests"]),
+				(make_dependabot, "dependabot", []),
+				(make_imgbot, "imgbot", []),
+				(make_github_octocheese, "octocheese", []),
+				(make_travis_deploy_conda, "travis_deploy_conda", ["enable_conda"]),
+				(make_make_conda_recipe, "make_conda_recipe", ["enable_conda"]),
+				(ensure_bumpversion, "bumpversion", []),
+				(make_issue_templates, "issue_templates", []),
+				(make_404_page, "404", ["enable_docs"]),
+				(make_docs_source_rst, "Source_rst", ["enable_docs"]),
+				(make_github_docs_test, "docs_action", ["enable_docs"]),
+				(make_docutils_conf, "docutils_conf", ["enable_docs"]),
+				(make_docs_building_rst, "Building_rst", ["enable_docs"]),
+				(make_contributing_md, "contributing", []),
+				(make_pre_commit, "pre-commit", ["enable_pre_commit"]),
+				(make_pyproject, "pyproject", []),
+				(make_isort, "isort", []),  # Must always run last
+				]
+
 	def load_settings(self) -> None:
 		"""
 		Load settings from the ``repo_helper.yml`` file in the repository.
@@ -96,11 +136,11 @@ class GitHelper:
 		config_vars = parse_yaml(self.target_repo)
 		self.templates.globals.update(config_vars)
 		self.templates.globals["lint_fix_list"] = lint_fix_list
-		self.templates.globals["lint_belligerent_list"] = lint_belligerent_list
 		self.templates.globals["lint_warn_list"] = lint_warn_list
 		self.templates.globals["code_only_warning"] = code_only_warning
 		self.templates.globals["enquote_value"] = enquote_value
 		self.templates.globals["len"] = len
+		self.templates.globals["join_path"] = os.path.join
 
 	@property
 	def exclude_files(self) -> List[str]:
@@ -132,7 +172,7 @@ class GitHelper:
 			all_managed_files = []
 
 		# TODO: this isn't respecting "enable_docs"
-		for function_, exclude_name, other_requirements in files:
+		for function_, exclude_name, other_requirements in self.files:
 			if exclude_name not in self.exclude_files and all([
 					self.templates.globals[req] for req in other_requirements
 					]):
@@ -171,39 +211,42 @@ tag = True
 """
 					)
 
-	bumpversion_contents = "\n".join(
-			line
-			for line in bumpversion_file.read_text(encoding="UTF-8").splitlines()
-			if "git_helper.yml" not in line)
+	bv = ConfigUpdater()
+	bv.read(str(bumpversion_file))
 
-	bumpversion_file.write_text(bumpversion_contents, encoding="UTF-8")
+	old_sections = [
+			"bumpversion:file:git_helper.yml",
+			]
 
-	if not bumpversion_contents.endswith("\n\n"):
-		with bumpversion_file.open('a', encoding="UTF-8") as fp:
-			fp.write("\n")
+	for section in old_sections:
+		if section in bv.sections():
+			bv.remove_section(section)
 
-	required_lines = [
-			"[bumpversion:file:repo_helper.yml]",
-			"[bumpversion:file:__pkginfo__.py]",
-			"[bumpversion:file:README.rst]",
+	required_sections = [
+			"bumpversion:file:repo_helper.yml",
+			"bumpversion:file:__pkginfo__.py",
+			"bumpversion:file:README.rst",
 			]
 
 	if templates.globals["enable_docs"]:
-		required_lines.append("[bumpversion:file:doc-source/index.rst]")
+		required_sections.append("bumpversion:file:doc-source/index.rst")
 
 	if templates.globals["py_modules"]:
 		for modname in templates.globals["py_modules"]:
-			required_lines.append(f"[bumpversion:file:{templates.globals['source_dir']}{modname}.py]")
-	else:
-		required_lines.append(
-				f"[bumpversion:file:{templates.globals['source_dir']}{templates.globals['import_name']}/__init__.py]"
+			required_sections.append(f"bumpversion:file:{templates.globals['source_dir']}{modname}.py")
+	elif not templates.globals["stubs_package"]:
+		required_sections.append(
+				f"bumpversion:file:{templates.globals['source_dir']}{templates.globals['import_name']}/__init__.py"
 				)
 
-	for line in required_lines:
-		if line not in bumpversion_contents:
-			with bumpversion_file.open('a', encoding="UTF-8") as fp:
-				fp.write(line)
-				fp.write("\n\n")
+	for section in required_sections:
+		if section not in bv.sections():
+			bv.add_section(section)
+
+	bv["bumpversion"]["current_version"] = templates.globals["version"]
+
+	with open(str(bumpversion_file), "w") as fp:
+		clean_writer(str(bv), fp)
 
 	return [".bumpversion.cfg"]
 
@@ -250,39 +293,3 @@ def make_contributing_md(repo_path: pathlib.Path, templates: jinja2.Environment)
 		clean_writer(contributing.render(), fp)
 
 	return [os.path.join("CONTRIBUTING.md")]
-
-
-files: List[Tuple[Callable, str, Sequence[str]]] = [
-		(make_copy_pypi_2_github, "copy_pypi_2_github", ["enable_releases"]),
-		(make_lint_roller, "lint_roller", []),
-		(make_stale_bot, "stale_bot", []),
-		(make_auto_assign_action, "auto_assign", []),
-		(rewrite_readme, "readme", []),
-		(rewrite_docs_index, "index.rst", ["enable_docs"]),
-		(ensure_doc_requirements, "doc_requirements", ["enable_docs"]),
-		(make_pylintrc, "pylintrc", []),
-		(make_manifest, "manifest", []),
-		(make_setup, "setup", []),
-		(make_pkginfo, "pkginfo", []),
-		(make_conf, "conf", ["enable_docs"]),
-		(make_gitignore, "gitignore", []),
-		(make_rtfd, "rtfd", ["enable_docs"]),
-		(make_travis, "travis", []),
-		(make_github_ci, "actions", []),
-		(make_tox, "tox", []),
-		(make_yapf, "yapf", []),
-		(ensure_tests_requirements, "test_requirements", ["enable_tests"]),
-		(make_dependabot, "dependabot", []),
-		(make_imgbot, "imgbot", []),
-		(make_github_octocheese, "octocheese", []),
-		(make_travis_deploy_conda, "travis_deploy_conda", ["enable_conda"]),
-		(make_make_conda_recipe, "make_conda_recipe", ["enable_conda"]),
-		(ensure_bumpversion, "bumpversion", []),
-		(make_issue_templates, "issue_templates", []),
-		(make_404_page, "404", ["enable_docs"]),
-		(make_docs_source_rst, "Source_rst", ["enable_docs"]),
-		(make_github_docs_test, "docs_action", ["enable_docs"]),
-		(make_docs_building_rst, "Building_rst", ["enable_docs"]),
-		(make_contributing_md, "contributing", []),
-		(make_isort, "isort", []),  # Must always run last
-		]

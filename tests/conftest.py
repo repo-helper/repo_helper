@@ -21,11 +21,13 @@
 #
 
 # 3rd party
+import os
+
 import jinja2
-import pytest  # type: ignore
+import pytest
 
 # this package
-from repo_helper.linting import lint_belligerent_list, lint_fix_list, lint_warn_list
+from repo_helper.linting import lint_fix_list, lint_warn_list
 from repo_helper.templates import template_dir
 
 
@@ -59,7 +61,6 @@ def demo_environment():
 					pypi_name="hello-world",
 					lint_fix_list=lint_fix_list,
 					lint_warn_list=lint_warn_list,
-					lint_belligerent_list=lint_belligerent_list,
 					py_modules=[],
 					manifest_additional=[],
 					additional_requirements_files=[],
@@ -70,6 +71,7 @@ def demo_environment():
 					docs_dir="doc-source",
 					sphinx_html_theme="alabaster",
 					additional_ignore=["foo", "bar", "fuzz"],
+					join_path=os.path.join
 					)
 			)
 

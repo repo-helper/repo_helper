@@ -37,7 +37,7 @@ from .templates import template_dir
 
 __all__ = [
 		"make_travis",
-		"make_copy_pypi_2_github",
+		"remove_copy_pypi_2_github",
 		"make_make_conda_recipe",
 		"make_travis_deploy_conda",
 		"make_github_ci",
@@ -57,7 +57,10 @@ def make_travis(repo_path: pathlib.Path, templates: jinja2.Environment) -> List[
 	:type templates: jinja2.Environment
 	"""
 
-	travis = templates.get_template(".travis.yml")
+	if templates.globals["pure_python"]:
+		travis = templates.get_template("travis.yml")
+	else:
+		travis = templates.get_template("travis_not_pure_python.yml")
 
 	with (repo_path / ".travis.yml").open('w', encoding="UTF-8") as fp:
 		clean_writer(travis.render(), fp)
@@ -65,24 +68,20 @@ def make_travis(repo_path: pathlib.Path, templates: jinja2.Environment) -> List[
 	return [".travis.yml"]
 
 
-def make_copy_pypi_2_github(repo_path: pathlib.Path, templates: jinja2.Environment) -> List[str]:
+def remove_copy_pypi_2_github(repo_path: pathlib.Path, templates: jinja2.Environment) -> List[str]:
 	"""
-	Add script to copy files from PyPI to GitHub Releases.
+	Remove deprecated copy_pypi_2_github.py script.
+
+	Uue octocheese and its GitHub Action instead.
 
 	:param repo_path: Path to the repository root.
 	:param templates:
 	:type templates: jinja2.Environment
 	"""
 
-	copier = templates.get_template("copy_pypi_2_github._py")
-
-	ci_dir = repo_path / ".ci"
-	maybe_make(ci_dir)
-
-	with (ci_dir / "copy_pypi_2_github.py").open('w', encoding="UTF-8") as fp:
-		clean_writer(copier.render(), fp)
-
-	make_executable(ci_dir / "copy_pypi_2_github.py")
+	copier = repo_path / ".ci" / "copy_pypi_2_github.py"
+	if copier.is_file():
+		copier.unlink()
 
 	return [".ci/copy_pypi_2_github.py"]
 
@@ -96,7 +95,10 @@ def make_make_conda_recipe(repo_path: pathlib.Path, templates: jinja2.Environmen
 	:type templates: jinja2.Environment
 	"""
 
-	shutil.copy2(str(template_dir / "make_conda_recipe._py"), str(repo_path / "make_conda_recipe.py"))
+	script = (template_dir / "make_conda_recipe._py").read_text()
+
+	with (repo_path / "make_conda_recipe.py").open("w", encoding="UTF-8") as fp:
+		clean_writer(script, fp)
 
 	return ["make_conda_recipe.py"]
 
@@ -141,12 +143,17 @@ def make_github_ci(repo_path: pathlib.Path, templates: jinja2.Environment) -> Li
 	maybe_make(dot_github / "workflows", parents=True)
 
 	if "Windows" in templates.globals["platforms"]:
+		py_versions = templates.globals["python_versions"][:]
+		if not templates.globals["pure_python"] and "3.8" in py_versions:
+			py_versions.remove("3.8")  # FIXME: Python 3.8 tests fail on Windows for native wheels.
+
 		with (dot_github / "workflows" / "python_ci.yml").open('w', encoding="UTF-8") as fp:
 			clean_writer(
 					actions.render(
 							no_dev_versions=no_dev_versions,
 							ci_platform="windows-2019",
 							ci_name="Windows Tests",
+							python_versions=py_versions,
 							),
 					fp
 					)
@@ -168,7 +175,62 @@ def make_github_ci(repo_path: pathlib.Path, templates: jinja2.Environment) -> Li
 		if (dot_github / "workflows" / "python_ci_macos.yml").is_file():
 			(dot_github / "workflows" / "python_ci_macos.yml").unlink()
 
+	if "Linux" in templates.globals["platforms"] and not templates.globals["pure_python"]:
+		with (dot_github / "workflows" / "python_ci_linux.yml").open('w', encoding="UTF-8") as fp:
+			clean_writer(
+					actions.render(
+							no_dev_versions=no_dev_versions,
+							ci_platform="ubuntu-18.04",
+							ci_name="Linux Tests",
+							),
+					fp
+					)
+	else:
+		if (dot_github / "workflows" / "python_ci_linux.yml").is_file():
+			(dot_github / "workflows" / "python_ci_linux.yml").unlink()
+
 	return [".github/workflows/python_ci.yml", ".github/workflows/python_ci_macos.yml"]
+
+
+def make_github_manylinux(repo_path: pathlib.Path, templates: jinja2.Environment) -> List[str]:
+	"""
+	Add configuration for `Github Actions` manylinux wheel builds the desired repo.
+
+	:param repo_path: Path to the repository root.
+	:param templates:
+	:type templates: jinja2.Environment
+	"""
+
+	dot_github = repo_path / ".github"
+	maybe_make(dot_github / "workflows", parents=True)
+
+	if not templates.globals["pure_python"] and "Linux" in templates.globals["platforms"]:
+
+		actions = templates.get_template("manylinux_build.yml")
+
+		wheel_py_versions = []
+		PYVERSIONS = []
+
+		for pyver in range(5, 8):
+			if f"3.{pyver}" in templates.globals["python_versions"]:
+				wheel_py_versions.append(f"cp3{pyver}-cp3{pyver}m")
+				PYVERSIONS.append(f'"3{pyver}"')
+
+		for pyver in range(8, 10):
+			if f"3.{pyver}" in templates.globals["python_versions"]:
+				wheel_py_versions.append(f"cp3{pyver}-cp3{pyver}")
+				PYVERSIONS.append(f'"3{pyver}"')
+
+		with (dot_github / "workflows" / "manylinux_build.yml").open('w', encoding="UTF-8") as fp:
+			clean_writer(actions.render(
+					wheel_py_versions=wheel_py_versions,
+					PYVERSIONS=" ".join(PYVERSIONS)
+					), fp)
+	else:
+		if (dot_github / "workflows" / "manylinux_build.yml").is_file():
+			(dot_github / "workflows" / "manylinux_build.yml").unlink()
+
+	return [".github/workflows/manylinux_build.yml"]
 
 
 def make_github_docs_test(repo_path: pathlib.Path, templates: jinja2.Environment) -> List[str]:

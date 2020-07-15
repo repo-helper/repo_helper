@@ -238,7 +238,7 @@ def make_python_versions_shield(pypi_name: str) -> str:
 	"""
 
 	return f"""\
-.. image:: https://img.shields.io/pypi/pyversions/{ pypi_name }
+.. image:: https://img.shields.io/pypi/pyversions/{ pypi_name }?logo=python&logoColor=white
 	:target: https://pypi.org/project/{ pypi_name }/
 	:alt: PyPI - Supported Python Versions"""
 
@@ -464,7 +464,7 @@ def make_docker_size_shield(docker_name: str, username: str) -> str:
 
 def make_typing_shield() -> str:
 	"""
-	Create a shield to show that a library has :pep`484` Type Hints / Annotations/
+	Create a shield to show that a library has :pep`484` Type Hints / Annotations.
 
 	:return: The shield.
 	:rtype: str
@@ -473,3 +473,17 @@ def make_typing_shield() -> str:
 	return f"""\
 .. image:: https://img.shields.io/badge/Typing-Typed-brightgreen
 	:alt: Typing :: Typed"""
+
+
+def make_pre_commit_shield() -> str:
+	"""
+	Create a shield to show that a repository is configured for use with pre-commit.
+
+	:return: The shield.
+	:rtype: str
+	"""
+
+	return f"""\
+.. image:: https://img.shields.io/badge/pre--commit-enabled-brightgreen?logo=pre-commit&logoColor=white
+	:target: https://github.com/pre-commit/pre-commit
+	:alt: pre-commit"""

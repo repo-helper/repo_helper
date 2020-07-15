@@ -88,10 +88,13 @@ def parse_yaml(repo_path: pathlib.Path):
 			license,
 			short_desc,
 			source_dir,
+			pure_python,
+			stubs_package,
 
   # Optional Features
 			enable_tests,
 			enable_releases,
+			enable_pre_commit,
 			docker_shields,
 			docker_name,
 
@@ -180,10 +183,6 @@ def parse_yaml(repo_path: pathlib.Path):
 	for var in other_vars:
 		config_vars[var.__name__] = var.get(raw_config_vars)
 
-	# config_vars["lint_fix_list"] = lint_fix_list
-	# config_vars["lint_belligerent_list"] = lint_belligerent_list
-	# config_vars["lint_warn_list"] = lint_warn_list
-
 	def add_classifier(classifier):
 		if classifier not in config_vars["classifiers"]:
 			config_vars["classifiers"].append(classifier)
@@ -228,7 +227,7 @@ def get_tox_travis_python_versions(
 	tox_travis_matrix: Dict[str, str] = {}
 
 	for py_version, tox_py_version in zip(python_versions, tox_py_versions):
-		tox_travis_matrix[str(py_version)] = str(tox_py_version)
+		tox_travis_matrix[str(py_version)] = f"{tox_py_version}, build"
 
 	return tox_travis_matrix
 
@@ -249,7 +248,7 @@ def get_gh_actions_python_versions(
 
 	for py_version, tox_py_version in zip(python_versions, tox_py_versions):
 		if tox_py_version != "docs":
-			tox_travis_matrix[str(py_version)] = str(tox_py_version)
+			tox_travis_matrix[str(py_version)] = f"{tox_py_version}, build"
 
 	return tox_travis_matrix
 
