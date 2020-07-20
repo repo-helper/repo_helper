@@ -24,6 +24,7 @@ python_deploy_version: 3.7
 python_versions:
   - '3.7'
   - '3.8'
+  - '3.9-dev'
 
 # travis secure password for PyPI
 #travis_pypi_secure:
@@ -49,9 +50,6 @@ extra_sphinx_extensions:
 
 intersphinx_mapping:
   - "'jinja2': ('https://jinja.palletsprojects.com/en/2.11.x/', None)"
-
-yapf_exclude:
-  - "**/templates/"
 
 preserve_custom_theme: true
 
