@@ -133,9 +133,9 @@ class Section:
 
 	def __repr__(self):
 		return f"""{self.__class__.__name__}(
-	lineno={self.lineno}, 
-	name={self.name}, 
-	lineend_comment={self.lineend_comment}, 
+	lineno={self.lineno},
+	name={self.name},
+	lineend_comment={self.lineend_comment},
 	structure=
 {indent(pformat(self.structure), tab*2)},
 	)"""
@@ -180,8 +180,8 @@ class Option:
 
 	def __repr__(self):
 		return f"""{self.__class__.__name__}(
-	lineno={self.lineno}, 
-	name={self.name}, 
+	lineno={self.lineno},
+	name={self.name},
 	structure=
 {indent(pformat(self.structure), tab * 2)},
 	)"""
@@ -400,4 +400,3 @@ def convert_to_option(value, key):
 
 
 tab = "\t"
-

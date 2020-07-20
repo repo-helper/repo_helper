@@ -527,4 +527,3 @@ def make_pre_commit(repo_path: pathlib.Path, templates: jinja2.Environment) -> L
 		clean_writer(pre_commit.render(), fp)
 
 	return [pre_commit_file.name]
-

@@ -127,8 +127,8 @@ class ConfigVar(metaclass=__ConfigVarMeta):
 
 	rtype: Type
 	"""
-	The variable type passed to Jinja2. 
-	If ``None`` :attr:`~repo_helper.config_vars.ConfigVar.dtype` is used. 
+	The variable type passed to Jinja2.
+	If ``None`` :attr:`~repo_helper.config_vars.ConfigVar.dtype` is used.
 	Ignored for ``dtype=bool``.
 	"""
 
@@ -139,20 +139,20 @@ class ConfigVar(metaclass=__ConfigVarMeta):
 
 	default: Any
 	"""
-	Flag to indicate whether the configuration value is required. Defaults to ``''`` if unset. 
+	Flag to indicate whether the configuration value is required. Defaults to ``''`` if unset.
 	"""
 
 	validator: Callable
 	"""
-	Function to call to validate the values. 
-	The callable must have a single required argument (the value). 
-	Should raise :exc:`ValueError` if values are invalid, and return the values if they are valid. 
+	Function to call to validate the values.
+	The callable must have a single required argument (the value).
+	Should raise :exc:`ValueError` if values are invalid, and return the values if they are valid.
 	May change the values (e.g. make lowercase) before returning.
 	"""
 
 	category: str
 	"""
-	The category the :class:`~repo_helper.config_vars.ConfigVar` is listed under in the documentation. 
+	The category the :class:`~repo_helper.config_vars.ConfigVar` is listed under in the documentation.
 	"""
 
 	def __call__(self, raw_config_vars: Dict[str, Any]) -> Any:
@@ -365,7 +365,7 @@ def make_schema(*configuration_variables: __ConfigVarMeta) -> Dict[str, str]:
 	"""
 	Create a ``JSON`` schema from a list of :class:`~repo_helper.config_vars.ConfigVar` classes.
 
-	:param configuration_variables: 
+	:param configuration_variables:
 	:type configuration_variables: list of repo_helper.config_vars.ConfigVar.
 
 	:return: Dictionary representation of the ``JSON`` schema.
@@ -495,7 +495,7 @@ Options are defined like so:
 
 .. toctree::
 	:caption: Categories
-	
+
 """
 				)
 

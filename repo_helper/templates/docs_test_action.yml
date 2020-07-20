@@ -1,3 +1,4 @@
+# {{ managed_message }}
 ---
 name: "Docs Check"
 on:

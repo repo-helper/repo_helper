@@ -269,7 +269,7 @@ def copy_docs_styling(repo_path: pathlib.Path, templates: jinja2.Environment) ->
 			clean_writer(
 					f"""/* {templates.globals['managed_message']} */
 
-/* Body width */	
+/* Body width */
 .wy-nav-content {{max-width: 1200px !important;}}
 
 /* Spacing between list items */
@@ -531,7 +531,8 @@ def make_404_page(repo_path: pathlib.Path, templates: jinja2.Environment) -> Lis
 
 	if not _404_rst.exists():
 		_404_template = templates.get_template("404.rst")
-		_404_rst.write_text(_404_template.render())
+		with _404_rst.open("w", encoding="UTF-8") as fp:
+			clean_writer(_404_template.render(), fp)
 
 	if not not_found_png.exists():
 		shutil.copy2(template_dir / "not-found.png", not_found_png)

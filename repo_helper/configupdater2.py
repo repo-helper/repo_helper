@@ -40,48 +40,48 @@ lines that were parsed will be used to express the block. In case a block,
 e.g. an option, was changed, it is marked as `updated` and its values will
 be transformed into a corresponding string during an update of a
 configuration file.
-
-
-.. note::
-
-   ConfigUpdater was created by starting from Python's ConfigParser source
-   code and changing it according to my needs. Thus this source code
-   is subject to the PSF License in a way but I am not a lawyer.
 """
 
 # stdlib
 import sys
 from collections.abc import MutableMapping
 from configparser import (
-    DuplicateOptionError,
-    DuplicateSectionError,
-    MissingSectionHeaderError,
-    NoOptionError,
-    NoSectionError,
-    ParsingError,
-    )
+	DuplicateOptionError,
+	DuplicateSectionError,
+	MissingSectionHeaderError,
+	NoOptionError,
+	NoSectionError,
+	ParsingError
+)
 from textwrap import indent
 from typing import Iterable, Mapping
 
 # 3rd party
 from configupdater.configupdater import Block, BlockBuilder, Comment  # type: ignore
 from configupdater.configupdater import ConfigUpdater as __BaseConfigUpdater  # type: ignore
-from configupdater.configupdater import Container, NoConfigFileReadError  # type: ignore
+from configupdater.configupdater import Container, NoConfigFileReadError
 from configupdater.configupdater import Option as __BaseOption  # type: ignore
 from configupdater.configupdater import Space  # type: ignore
 
-__all__ = ["NoSectionError", "DuplicateOptionError", "DuplicateSectionError",
-		   "NoOptionError", "NoConfigFileReadError", "ParsingError",
-		   "MissingSectionHeaderError", "ConfigUpdater"]
+__all__ = [
+		"NoSectionError",
+		"DuplicateOptionError",
+		"DuplicateSectionError",
+		"NoOptionError",
+		"NoConfigFileReadError",
+		"ParsingError",
+		"MissingSectionHeaderError",
+		"ConfigUpdater",
+		]
 
 
 class Section(Block, Container, MutableMapping):
 	"""Section block holding options
 
-    Attributes:
-        name (str): name of the section
-        updated (bool): indicates name change or a new section
-    """
+	Attributes:
+		name (str): name of the section
+		updated (bool): indicates name change or a new section
+	"""
 
 	def __init__(self, name, container, **kwargs):
 		self._name = name
@@ -92,22 +92,22 @@ class Section(Block, Container, MutableMapping):
 	def add_option(self, entry):
 		"""Add an Option object to the section
 
-        Used during initial parsing mainly
+		Used during initial parsing mainly
 
-        Args:
-            entry (Option): key value pair as Option object
-        """
+		Args:
+			entry (Option): key value pair as Option object
+		"""
 		self._structure.append(entry)
 		return self
 
 	def add_comment(self, line):
 		"""Add a Comment object to the section
 
-        Used during initial parsing mainly
+		Used during initial parsing mainly
 
-        Args:
-            line (str): one line in the comment
-        """
+		Args:
+			line (str): one line in the comment
+		"""
 		if not isinstance(self.last_item, Comment):
 			comment = Comment(self._structure)
 			self._structure.append(comment)
@@ -117,11 +117,11 @@ class Section(Block, Container, MutableMapping):
 	def add_space(self, line):
 		"""Add a Space object to the section
 
-        Used during initial parsing mainly
+		Used during initial parsing mainly
 
-        Args:
-            line (str): one line that defines the space, maybe whitespaces
-        """
+		Args:
+			line (str): one line that defines the space, maybe whitespaces
+		"""
 		if not isinstance(self.last_item, Space):
 			space = Space(self._structure)
 			self._structure.append(space)
@@ -129,8 +129,9 @@ class Section(Block, Container, MutableMapping):
 		return self
 
 	def _get_option_idx(self, key):
-		idx = [i for i, entry in enumerate(self._structure)
-			   if isinstance(entry, Option) and entry.key == key]
+		idx = [
+				i for i, entry in enumerate(self._structure)
+				if isinstance(entry, Option) and entry.key == key]
 		if idx:
 			return idx[0]
 		else:
@@ -140,13 +141,13 @@ class Section(Block, Container, MutableMapping):
 		if not self.updated:
 			s = super().__str__()
 		else:
-			s = "[{}]\n".format(self._name)
+			s = f"[{self._name}]\n"
 		for entry in self._structure:
 			s += str(entry)
 		return s
 
 	def __repr__(self):
-		return '<Section: {}>'.format(self.name)
+		return f'<Section: {self.name}>'
 
 	def __getitem__(self, key):
 		if key not in self.options():
@@ -190,26 +191,26 @@ class Section(Block, Container, MutableMapping):
 	def option_blocks(self):
 		"""Returns option blocks
 
-        Returns:
-            list: list of :class:`Option` blocks
-        """
+		Returns:
+			list: list of :class:`Option` blocks
+		"""
 		return [entry for entry in self._structure
 				if isinstance(entry, Option)]
 
 	def options(self):
 		"""Returns option names
 
-        Returns:
-            list: list of option names as strings
-        """
+		Returns:
+			list: list of option names as strings
+		"""
 		return [option.key for option in self.option_blocks()]
 
 	def to_dict(self):
 		"""Transform to dictionary
 
-        Returns:
-            dict: dictionary with same content
-        """
+		Returns:
+			dict: dictionary with same content
+		"""
 		return {key: self.__getitem__(key).value for key in self.options()}
 
 	@property
@@ -230,10 +231,10 @@ class Section(Block, Container, MutableMapping):
 	def set(self, option, value=None):
 		"""Set an option for chaining.
 
-        Args:
-            option (str): option name
-            value (str): value, default None
-        """
+		Args:
+			option (str): option name
+			value (str): value, default None
+		"""
 		option = self._container.optionxform(option)
 		if option in self.options():
 			self.__getitem__(option).value = value
@@ -244,20 +245,20 @@ class Section(Block, Container, MutableMapping):
 	def insert_at(self, idx):
 		"""Returns a builder inserting a new block at the given index
 
-        Args:
-            idx (int): index where to insert
-        """
+		Args:
+			idx (int): index where to insert
+		"""
 		return BlockBuilder(self, idx)
 
 
 class Option(__BaseOption):
 	"""Option block holding a key/value pair.
 
-    Attributes:
-        key (str): name of the key
-        value (str): stored value
-        updated (bool): indicates name change or a new section
-    """
+	Attributes:
+		key (str): name of the key
+		value (str): stored value
+		updated (bool): indicates name change or a new section
+	"""
 
 	def __init__(self, key, value, container, delimiter='=',
 				 space_around_delimiters=True, line=None):
@@ -280,38 +281,38 @@ class Option(__BaseOption):
 class ConfigUpdater(__BaseConfigUpdater):
 	"""Parser for updating configuration files.
 
-    ConfigUpdater follows the API of ConfigParser with some differences:
-      * inline comments are treated as part of a key's value,
-      * only a single config file can be updated at a time,
-      * empty lines in values are not valid,
-      * the original case of sections and keys are kept,
-      * control over the position of a new section/key.
+	ConfigUpdater follows the API of ConfigParser with some differences:
+	  * inline comments are treated as part of a key's value,
+	  * only a single config file can be updated at a time,
+	  * empty lines in values are not valid,
+	  * the original case of sections and keys are kept,
+	  * control over the position of a new section/key.
 
-    Following features are **deliberately not** implemented:
+	Following features are **deliberately not** implemented:
 
-      * interpolation of values,
-      * propagation of parameters from the default section,
-      * conversions of values,
-      * passing key/value-pairs with ``default`` argument,
-      * non-strict mode allowing duplicate sections and keys.
-    """
+	  * interpolation of values,
+	  * propagation of parameters from the default section,
+	  * conversions of values,
+	  * passing key/value-pairs with ``default`` argument,
+	  * non-strict mode allowing duplicate sections and keys.
+	"""
 
 	def __init__(self, allow_no_value=False, *, delimiters=('=', ':'),
 				 comment_prefixes=('#', ';'), inline_comment_prefixes=None,
 				 strict=True, space_around_delimiters=True):
 		"""Constructor of ConfigUpdater
 
-        Args:
-            allow_no_value (bool): allow keys without a value, default False
-            delimiters (tuple): delimiters for key/value pairs, default =, :
-            comment_prefixes (tuple): prefix of comments, default # and ;
-            inline_comment_prefixes (tuple): prefix of inline comment,
-                default None
-            strict (bool): each section must be unique as well as every key
-                within a section, default True
-            space_around_delimiters (bool): add a space before and after the
-                delimiter, default True
-        """
+		Args:
+			allow_no_value (bool): allow keys without a value, default False
+			delimiters (tuple): delimiters for key/value pairs, default =, :
+			comment_prefixes (tuple): prefix of comments, default # and ;
+			inline_comment_prefixes (tuple): prefix of inline comment,
+				default None
+			strict (bool): each section must be unique as well as every key
+				within a section, default True
+			space_around_delimiters (bool): add a space before and after the
+				delimiter, default True
+		"""
 		super().__init__(
 				allow_no_value=allow_no_value,
 				delimiters=delimiters,
@@ -345,24 +346,24 @@ class ConfigUpdater(__BaseConfigUpdater):
 	def _read(self, fp, fpname):
 		"""Parse a sectioned configuration file.
 
-        Each section in a configuration file contains a header, indicated by
-        a name in square brackets (`[]`), plus key/value options, indicated by
-        `name` and `value` delimited with a specific substring (`=` or `:` by
-        default).
+		Each section in a configuration file contains a header, indicated by
+		a name in square brackets (`[]`), plus key/value options, indicated by
+		`name` and `value` delimited with a specific substring (`=` or `:` by
+		default).
 
-        Values can span multiple lines, as long as they are indented deeper
-        than the first line of the value. Depending on the parser's mode, blank
-        lines may be treated as parts of multiline values or ignored.
+		Values can span multiple lines, as long as they are indented deeper
+		than the first line of the value. Depending on the parser's mode, blank
+		lines may be treated as parts of multiline values or ignored.
 
-        Configuration files may include comments, prefixed by specific
-        characters (`#` and `;` by default). Comments may appear on their own
-        in an otherwise empty line or may be entered in lines holding values or
-        section names.
+		Configuration files may include comments, prefixed by specific
+		characters (`#` and `;` by default). Comments may appear on their own
+		in an otherwise empty line or may be entered in lines holding values or
+		section names.
 
-        Note: This method was borrowed from ConfigParser and we keep this
-        mess here as close as possible to the original messod (pardon
-        this german pun) for consistency reasons and later upgrades.
-        """
+		Note: This method was borrowed from ConfigParser and we keep this
+		mess here as close as possible to the original messod (pardon
+		this german pun) for consistency reasons and later upgrades.
+		"""
 		self._structure = []
 		elements_added = set()
 		cursect = None  # None, or a dictionary
@@ -480,9 +481,9 @@ class ConfigUpdater(__BaseConfigUpdater):
 	def sections_blocks(self):
 		"""Returns all section blocks
 
-        Returns:
-            list: list of :class:`Section` blocks
-        """
+		Returns:
+			list: list of :class:`Section` blocks
+		"""
 		return [block for block in self._structure
 				if isinstance(block, Section)]
 

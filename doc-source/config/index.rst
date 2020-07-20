@@ -19,7 +19,7 @@ Options are defined like so:
 
 .. toctree::
 	:caption: Categories
-	
+
 	metadata
 	optional features
 	python versions

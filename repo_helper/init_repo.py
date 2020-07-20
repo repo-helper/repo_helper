@@ -95,11 +95,6 @@ def init_repo(repo_path: pathlib.Path, templates: jinja2.Environment) -> List[st
 """
 			clean_writer(buf, fp)
 
-		shutil.copy2(
-				init_repo_template_dir / "git_download.png",
-				repo_path / templates.globals["docs_dir"] / "git_download.png"
-				)
-
 	# other
 	for filename in {"README.rst"}:
 		template = init_repo_templates.get_template(filename)

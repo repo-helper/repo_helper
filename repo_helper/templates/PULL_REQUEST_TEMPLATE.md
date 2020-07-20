@@ -17,15 +17,12 @@ If this Pull Request fixes an open [Issue](../../../issues) please include [auto
 - [ ] I have added tests to cover my changes.
 - [ ] All new and existing tests passed.
 - [ ] `mypy` does not raise any errors.
-- [ ] I have run `tox -e qa` to sort the imports and apply the project's code style. 
+- [ ] I have run `tox -e qa` to sort the imports and apply the project's code style.
 
 
-## Description 
+## Description
 <!--Provide a clear and concise description of the changes you have made.-->
 
 
 ## Other Additional Information:
 <!--Any additional information, related issues, etc.-->
-
-
-
