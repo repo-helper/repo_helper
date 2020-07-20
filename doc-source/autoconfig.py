@@ -82,16 +82,16 @@ class AutoConfigDirective(SphinxDirective):
 			module_all = import_object(module, ["__all__"])[3]
 
 			category = self.options["category"]
-# 			header = f"""\
-# ={'='*len(category)}
-# {category.capitalize()}
-# ={'='*len(category)}
-#
-# """
-# 			content = header.replace("\t", "    ")
-# 			view = ViewList(content.split("\n"))
-# 			config_node = nodes.paragraph(rawsource=content)
-# 			self.state.nested_parse(view, self.content_offset, config_node)
+			# 			header = f"""\
+			# ={'='*len(category)}
+			# {category.capitalize()}
+			# ={'='*len(category)}
+			#
+			# """
+			# 			content = header.replace("\t", "    ")
+			# 			view = ViewList(content.split("\n"))
+			# 			config_node = nodes.paragraph(rawsource=content)
+			# 			self.state.nested_parse(view, self.content_offset, config_node)
 
 			for class_ in module_all:
 				var_obj: ConfigVar = import_object(module, [class_])[3]
@@ -125,11 +125,11 @@ class AutoConfigDirective(SphinxDirective):
 			self.env.all_config_nodes = []  # type: ignore
 
 		self.env.all_config_nodes.append({  # type: ignore
-				"docname": self.env.docname,
-				"lineno": self.lineno,
-				"config_node": config_node.deepcopy(),
-				"target": targetnode,
-				})
+			"docname": self.env.docname,
+			"lineno": self.lineno,
+			"config_node": config_node.deepcopy(),
+			"target": targetnode,
+			})
 
 		return config_node
 

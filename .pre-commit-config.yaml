@@ -42,8 +42,8 @@ repos:
    rev: v0.30.0
    hooks:
     - id: yapf
-      exclude: ^(doc-source/conf|__pkginfo__|make_conda_recipe|setup)\.py$
-      args: [exclude **/templates/]
+      exclude: (doc-source/conf|__pkginfo__|make_conda_recipe|setup)\.py$
+      args: ["-i", "--exclude repo_helper/templates/*"]
 
  - repo: https://github.com/Lucas-C/pre-commit-hooks
    rev: v1.1.7

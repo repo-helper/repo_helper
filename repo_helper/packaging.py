@@ -177,7 +177,7 @@ def make_setup_cfg(repo_path: pathlib.Path, templates: jinja2.Environment) -> Li
 	:type templates: jinja2.Environment
 	"""
 
-	setup = templates.get_template("setup.cfg")
+	setup = templates.get_template("setup_template.cfg")
 
 	with (repo_path / "setup.cfg").open('w', encoding="UTF-8") as fp:
 		clean_writer(setup.render(), fp)
