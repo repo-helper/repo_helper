@@ -41,6 +41,7 @@ def test_ensure_tests_requirements(demo_environment):
 
 		assert (tmpdir_p / managed_files[0]).read_text(encoding="UTF-8") == """\
 coverage >=5.1
+coverage_pyver_pragma >=0.0.1
 pytest >=6.0.0rc1
 pytest-cov >=2.8.1
 pytest-randomly >=3.3.1
@@ -55,6 +56,7 @@ pytest-rerunfailures >=9.0
 
 		assert (tmpdir_p / managed_files[0]).read_text(encoding="UTF-8") == """\
 coverage >=5.1
+coverage_pyver_pragma >=0.0.1
 lorem >=0.1.1
 pytest >=6.0.0rc1
 pytest-cov >=2.8.1
@@ -95,10 +97,13 @@ import_heading_localfolder = this package
 balanced_wrapping = False
 lines_between_types = 0
 use_parentheses = True
+float_to_top = True
+remove_redundant_aliases = True
 default_section = THIRDPARTY
 known_third_party =
     black
     coverage
+    coverage_pyver_pragma
     github
     isort
     pytest
@@ -125,6 +130,7 @@ known_third_party =
     awesome_package
     black
     coverage
+    coverage_pyver_pragma
     github
     isort
     pytest
@@ -146,6 +152,8 @@ import_heading_localfolder = this package
 balanced_wrapping = False
 lines_between_types = 0
 use_parentheses = True
+float_to_top = True
+remove_redundant_aliases = True
 default_section = THIRDPARTY
 known_first_party = hello_world
 """

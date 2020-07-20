@@ -38,7 +38,7 @@ def test_make_rtfd(demo_environment):
 		managed_files = make_rtfd(tmpdir_p, demo_environment)
 		assert managed_files == [".readthedocs.yml"]
 		assert (tmpdir_p / managed_files[0]).read_text(encoding="UTF-8") == f"""\
-# This file is managed by `repo_helper`. Don't edit it directly
+# This file is managed by 'repo_helper'. Don't edit it directly.
 # Read the Docs configuration file
 ---
 
@@ -70,7 +70,7 @@ python:
 		managed_files = make_rtfd(tmpdir_p, demo_environment)
 		assert managed_files == [".readthedocs.yml"]
 		assert (tmpdir_p / managed_files[0]).read_text(encoding="UTF-8") == f"""\
-# This file is managed by `repo_helper`. Don't edit it directly
+# This file is managed by 'repo_helper'. Don't edit it directly.
 # Read the Docs configuration file
 ---
 
@@ -150,6 +150,7 @@ alabaster
 autodocsumm
 extras_require
 sphinx >=3.0.3
+sphinx-copybutton >=0.2.12
 sphinx-notfound-page
 sphinx-prompt >=1.2.0
 sphinx-tabs >=1.1.13
@@ -170,6 +171,7 @@ autodocsumm
 extras_require
 lorem >=0.1.1
 sphinx >=3.0.3
+sphinx-copybutton >=0.2.12
 sphinx-notfound-page
 sphinx-prompt >=1.2.0
 sphinx-tabs >=1.1.13

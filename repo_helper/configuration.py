@@ -26,6 +26,7 @@ from typing import Any, Dict, Iterable, List, Optional, Union
 
 # 3rd party
 from typing_extensions import Literal
+from packaging.version import Version
 
 # this package
 from repo_helper.config_vars import ConfigVar, get_version_classifiers, optional_getter
@@ -162,6 +163,11 @@ class modname(ConfigVar):  # noqa
 	category: str = "metadata"
 
 
+def validate_version(version_string: str) -> str:
+	v = Version(version_string)
+	return str(v)
+
+
 class version(ConfigVar):  # noqa
 	"""
 	The version of the package.
@@ -177,6 +183,7 @@ class version(ConfigVar):  # noqa
 	rtype = str
 	required = True
 	category: str = "metadata"
+	validator = validate_version
 
 
 class copyright_years(ConfigVar):  # noqa

@@ -71,7 +71,10 @@ def demo_environment():
 					docs_dir="doc-source",
 					sphinx_html_theme="alabaster",
 					additional_ignore=["foo", "bar", "fuzz"],
-					join_path=os.path.join
+					join_path=os.path.join,
+					pure_python=True,
+					stubs_package=False,
+					managed_message="This file is managed by 'repo_helper'. Don't edit it directly.",
 					)
 			)
 

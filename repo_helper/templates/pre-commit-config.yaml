@@ -1,4 +1,4 @@
-# This file is managed by `repo_helper`. Don't edit it directly
+# {{ managed_message }}
 ---
 
 repos:
@@ -30,6 +30,11 @@ repos:
    hooks:
     - id: pyupgrade
       args: [--py36-plus]
+
+ - repo: https://github.com/timothycrosley/isort
+   rev: 5.1.4
+   hooks:
+    - id: isort
 
  - repo: https://github.com/pre-commit/mirrors-yapf
    rev: v0.30.0

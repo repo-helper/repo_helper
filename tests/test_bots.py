@@ -35,7 +35,7 @@ def test_stale_bot(demo_environment):
 		assert managed_files == [".github/stale.yml"]
 
 		assert (tmpdir_p / managed_files[0]).read_text(encoding="UTF-8") == """\
-# This file is managed by `repo_helper`. Don't edit it directly
+# This file is managed by 'repo_helper'. Don't edit it directly.
 # Configuration for probot-stale - https://github.com/probot/stale
 ---
 
@@ -121,7 +121,7 @@ def test_auto_assign_action(demo_environment):
 				]
 
 		assert (tmpdir_p / managed_files[-1]).read_text(encoding="UTF-8") == """\
-# This file is managed by `repo_helper`. Don't edit it directly
+# This file is managed by 'repo_helper'. Don't edit it directly.
 ---
 
 addReviewers: true
@@ -159,7 +159,7 @@ def test_dependabot(demo_environment):
 		assert managed_files == [".dependabot/config.yml"]
 
 		assert (tmpdir_p / managed_files[0]).read_text(encoding="UTF-8") == """\
-# This file is managed by `repo_helper`. Don't edit it directly
+# This file is managed by 'repo_helper'. Don't edit it directly.
 ---
 
 version: 1

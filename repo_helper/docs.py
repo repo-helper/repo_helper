@@ -60,6 +60,7 @@ __all__ = [
 		"make_404_page",
 		"make_docs_source_rst",
 		"make_docs_building_rst",
+		"make_docutils_conf",
 		]
 
 
@@ -75,13 +76,14 @@ def ensure_doc_requirements(repo_path: pathlib.Path, templates: jinja2.Environme
 	# TODO: preserve extras [] options
 
 	target_requirements = {
-			("sphinx", "3.0.3"),
 			(templates.globals["sphinx_html_theme"], None),
 			("sphinxcontrib-httpdomain", "1.7.0"),
 			("sphinxemoji", "0.1.6"),
 			("sphinx-notfound-page", None),
 			("sphinx-tabs", "1.1.13"),
 			("autodocsumm", None),
+			# ("sphinx-gitstamp", None),
+			# ("gitpython", None),
 			("sphinx_autodoc_typehints", "1.11.0"),
 			("sphinx-copybutton", "0.2.12"),  # https://sphinx-copybutton.readthedocs.io/en/latest/
 			("sphinx-prompt", "1.2.0"),  # ("git+https://github.com/ScriptAutomate/sphinx-tabs-expanded.git", None)
@@ -89,6 +91,9 @@ def ensure_doc_requirements(repo_path: pathlib.Path, templates: jinja2.Environme
 
 	if templates.globals["pypi_name"] != "extras_require":
 		target_requirements.add(("extras_require", None))
+		target_requirements.add(("sphinx", "3.0.3"))
+
+	# TODO: only require sphinx if not in requirements.txt
 
 	req_file = repo_path / templates.globals["docs_dir"] / "requirements.txt"
 
@@ -127,7 +132,7 @@ def make_rtfd(repo_path: pathlib.Path, templates: jinja2.Environment) -> List[st
 	with (repo_path / ".readthedocs.yml").open('w', encoding="UTF-8") as fp:
 		clean_writer(
 				f"""\
-# This file is managed by `repo_helper`. Don't edit it directly
+# {templates.globals['managed_message']}
 # Read the Docs configuration file
 ---
 
@@ -262,11 +267,18 @@ def copy_docs_styling(repo_path: pathlib.Path, templates: jinja2.Environment) ->
 	if templates.globals["sphinx_html_theme"] == "sphinx_rtd_theme":
 		with (dest__static_dir / "style.css").open('w', encoding="UTF-8") as fp:
 			clean_writer(
-					"""/* This file is managed by `repo_helper`. Don't edit it directly */
-	
-.wy-nav-content {max-width: 900px !important;}
+					f"""/* {templates.globals['managed_message']} */
 
-li p:last-child { margin-bottom: 12px !important;}
+/* Body width */	
+.wy-nav-content {{max-width: 1200px !important;}}
+
+/* Spacing between list items */
+li p:last-child {{ margin-bottom: 12px !important;}}
+
+/* Smooth scrolling between sections */
+html {{
+  scroll-behavior: smooth;
+}}
 """,
 					fp
 					)
@@ -274,67 +286,67 @@ li p:last-child { margin-bottom: 12px !important;}
 	elif templates.globals["sphinx_html_theme"] == "alabaster":
 		with (dest__static_dir / "style.css").open('w', encoding="UTF-8") as fp:
 			clean_writer(
-					"""/* This file is managed by `repo_helper`. Don't edit it directly */
+					f"""/* {templates.globals['managed_message']} */
 
-li p:last-child { margin-bottom: 12px !important;}
+li p:last-child {{ margin-bottom: 12px !important;}}
 
-dl.class {
+dl.class {{
     padding: 3px 3px 3px 5px;
     margin-top: 7px !important;
     margin-bottom: 17px !important;
     border-color: rgba(240, 128, 128, 0.5);
     border-style: solid;
-}
+}}
 
-dl.function {
+dl.function {{
     padding: 3px 3px 3px 5px;
     margin-top: 7px !important;
     margin-bottom: 17px !important;
     border-color: lightskyblue;
     border-style: solid;
-}
+}}
 
-dl.function dt{
+dl.function dt{{
     margin-bottom: 10px !important;
-}
+}}
 
-dl.attribute {
+dl.attribute {{
     padding: 3px 3px 3px 5px;
     margin-bottom: 17px !important;
     border-color: rgba(119, 136, 153, 0.5);
     border-style: solid;
-}
+}}
 
-dl.method {
+dl.method {{
     padding: 3px 3px 3px 5px;
     margin-bottom: 17px !important;
     border-color: rgba(32, 178, 170, 0.5);
     border-style: solid;
-}
+}}
 
 
-div.sphinxsidebar {
+div.sphinxsidebar {{
     width: 250px;
     font-size: 14px;
     line-height: 1.5;
-}
+}}
 
-div.sphinxsidebar h3 {
+div.sphinxsidebar h3 {{
     font-weight: bold;
-}
+}}
 
-div.sphinxsidebar p.caption {
+div.sphinxsidebar p.caption {{
     font-size: 20px;
-}
+}}
 
-div.sphinxsidebar div.sphinxsidebarwrapper {
+div.sphinxsidebar div.sphinxsidebarwrapper {{
     padding-right: 20px !important;
-}
+}}
 
-table.longtable {
+table.longtable {{
     margin-bottom: 20px !important;
     margin-top: -15px !important;
-}
+}}
 
 /*
 Following styling from Tox's documentation
@@ -344,74 +356,74 @@ https://github.com/tox-dev/tox/blob/master/docs/_static/custom.css
 MIT Licensed
 */
 
-div.document {
+div.document {{
     width: 100%;
     max-width: 1400px;
-}
+}}
 
-div.body {
+div.body {{
     max-width: 1100px;
-}
+}}
 
-div.body p, ol > li, div.body td {
+div.body p, ol > li, div.body td {{
     /*text-align: justify;*/
     hyphens: none;
-}
+}}
 
-img, div.figure {
+img, div.figure {{
     margin: 0 !important
-}
+}}
 
-ul > li {
+ul > li {{
     text-align: justify;
-}
+}}
 
-ul > li > p {
+ul > li > p {{
     margin-bottom: 0;
-}
+}}
 
-ol > li > p {
+ol > li > p {{
     margin-bottom: 0;
-}
+}}
 
-div.body code.descclassname {
+div.body code.descclassname {{
     display: none
-}
+}}
 
-.wy-table-responsive table td {
+.wy-table-responsive table td {{
     white-space: normal !important;
-}
+}}
 
-.wy-table-responsive {
+.wy-table-responsive {{
     overflow: visible !important;
-}
+}}
 
-div.toctree-wrapper.compound > ul > li {
+div.toctree-wrapper.compound > ul > li {{
     margin: 0;
     padding: 0
-}
+}}
 
-code.docutils.literal {
+code.docutils.literal {{
     background-color: #ECF0F3;
     padding: 0 1px;
-}
+}}
 
-div#changelog-history h3{
+div#changelog-history h3{{
     margin-top: 10px;
-}
+}}
 
-div#changelog-history h2{
+div#changelog-history h2{{
     font-style: italic;
     font-weight: bold;
-}
+}}
 
-	""",
+""",
 					fp
 					)
 
 	with (dest__templates_dir / "layout.html").open('w', encoding="UTF-8") as fp:
 		clean_writer(
-				"""<!--- This file is managed by `repo_helper`. Don't edit it directly --->
+				"""<!--- This file is managed by 'repo_helper'. Don't edit it directly. --->
 {% extends "!layout.html" %}
 {% block extrahead %}
 	<link href="{{ pathto("_static/style.css", True) }}" rel="stylesheet" type="text/css">
@@ -420,9 +432,24 @@ div#changelog-history h2{
 				fp
 				)
 
+	if (dest__templates_dir / "footer.html").is_file():
+		(dest__templates_dir / "footer.html").unlink()
+
+	# with (dest__templates_dir / "footer.html").open('w', encoding="UTF-8") as fp:
+	# 	clean_writer(
+	# 			"""<!--- This file is managed by 'repo_helper'. Don't edit it directly. --->
+# {% extends "!footer.html" %}
+# {% block extrafooter %}
+# {%- if gitstamp %} Last updated {{ gitstamp }}. {%- endif %}
+# {% endblock %}
+# """,
+# 				fp
+# 				)
+
 	return [
 			os.path.join(templates.globals["docs_dir"], "_static", "style.css"),
 			os.path.join(templates.globals["docs_dir"], "_templates", "layout.html"),
+			os.path.join(templates.globals["docs_dir"], "_templates", "footer.html"),
 			]
 
 

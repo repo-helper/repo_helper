@@ -37,7 +37,7 @@ from dulwich import porcelain, repo  # type: ignore
 import pre_commit.main  # type: ignore
 
 # this package
-from dulwich.errors import CommitError
+from dulwich.errors import CommitError  # type: ignore
 
 from repo_helper.core import GitHelper
 from repo_helper.init_repo import init_repo
@@ -191,8 +191,12 @@ def commit_changed_files(
 			# Ensure the working directory for pre-commit is correct
 			r.hooks["pre-commit"].cwd = str(repo_path.absolute())
 
-			commit_id = r.do_commit(message=message)
-			print(f"Committed as {commit_id.decode('UTF-8')}")
+			try:
+				commit_id = r.do_commit(message=message)
+				print(f"Committed as {commit_id.decode('UTF-8')}")
+			except CommitError as e:
+				stderr_writer(f"Unable to commit: {e}")
+
 		else:
 			print("Changed files were staged but not committed.")
 	else:

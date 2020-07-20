@@ -25,7 +25,6 @@ Manage configuration files for continuous integration / continuous deployment.
 
 # stdlib
 import pathlib
-import shutil
 from typing import List
 
 # 3rd party
@@ -43,6 +42,7 @@ __all__ = [
 		"make_github_ci",
 		"make_github_docs_test",
 		"make_github_octocheese",
+		"make_github_manylinux",
 		]
 
 
@@ -133,6 +133,8 @@ def make_github_ci(repo_path: pathlib.Path, templates: jinja2.Environment) -> Li
 	:param templates:
 	:type templates: jinja2.Environment
 	"""
+
+	# Matrix of OSs: https://youtu.be/KKJL8bM4cis?t=536
 
 	actions = templates.get_template("github_ci.yml")
 

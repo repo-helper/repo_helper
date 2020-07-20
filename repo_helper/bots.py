@@ -52,7 +52,9 @@ def make_stale_bot(repo_path: pathlib.Path, templates: jinja2.Environment) -> Li
 
 	dot_github = repo_path / ".github"
 	maybe_make(dot_github)
-	shutil.copy2(str(template_dir / "stale_bot.yaml"), str(dot_github / "stale.yml"))
+
+	with (dot_github / "stale.yml").open("w", encoding="UTF-8") as fp:
+		clean_writer(templates.get_template("stale_bot.yaml").render(), fp)
 
 	return [".github/stale.yml"]
 
@@ -83,7 +85,7 @@ def make_auto_assign_action(repo_path: pathlib.Path, templates: jinja2.Environme
 	with (dot_github / "auto_assign.yml").open('w', encoding="UTF-8") as fp:
 		clean_writer(
 				f"""\
-# This file is managed by `repo_helper`. Don't edit it directly
+# {templates.globals['managed_message']}
 ---
 
 addReviewers: true
@@ -131,7 +133,7 @@ def make_dependabot(repo_path: pathlib.Path, templates: jinja2.Environment) -> L
 	with (dependabot_dir / "config.yml").open('w', encoding="UTF-8") as fp:
 		clean_writer(
 				f"""\
-# This file is managed by `repo_helper`. Don't edit it directly
+# {templates.globals['managed_message']}
 ---
 
 version: 1

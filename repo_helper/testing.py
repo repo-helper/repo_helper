@@ -28,7 +28,8 @@ import os.path
 import pathlib
 import re
 import textwrap
-from typing import List
+from configparser import ConfigParser
+from typing import Any, Dict, List
 
 # 3rd party
 import jinja2
@@ -37,9 +38,10 @@ from repo_helper.configupdater2 import ConfigUpdater  # type: ignore
 from domdf_python_tools.paths import clean_writer
 
 # this package
+from .linting import code_only_warning, lint_fix_list, lint_warn_list
 from .utils import ensure_requirements
 
-__all__ = ["make_tox", "make_yapf", "make_isort", "ensure_tests_requirements"]
+__all__ = ["make_tox", "make_yapf", "make_isort", "ensure_tests_requirements", "make_pre_commit"]
 
 
 def make_tox(repo_path: pathlib.Path, templates: jinja2.Environment) -> List[str]:
@@ -76,158 +78,303 @@ def make_tox(repo_path: pathlib.Path, templates: jinja2.Environment) -> List[str
 
 	with (repo_path / "tox.ini").open('w', encoding="UTF-8") as fp:
 		clean_writer(tox.render(source_files=" ".join(source_files)), fp)
-
-	# tox = ConfigUpdater()
-	# tox.read("tox.ini")
-
-	# tox_options = {
-	# 		"tox": {"skip_missing_interpreters": True},
-	# 		"travis": {},
-	# 		"build-system": {"build-backend": "setuptools"},
-	# 		"testenv": {},
-	# 		"testenv:docs": {
-	# 				"basepython": "python3.6",
-	# 				"commands": "sphinx-build -M html . ./build",
-	# 				},
-	# 		"testenv:bumpversion": {
-	# 				"skip_install": True,
-	# 				"deps": "bump2version",
-	# 				"commands": "bumpversion --verbose {posargs}",
-	# 				},
-	# 		"testenv:build": {
-	# 				"skip_install": True,
-	# 				"commands": "python setup.py sdist bdist_wheel",
-	# 				},
-	# 		"testenv:lint": {
-	# 				"basepython": "python3.6",
-	# 				"ignore_errors": True,
-	# 				"skip_install": True,
-	# 				},
-	# 		"testenv:yapf": {
-	# 				"basepython": "python3.6",
-	# 				"skip_install": True,
-	# 				"deps": "yapf",
-	# 				},
-	# 		"flake8": {"max-line-length": 120},
-	# 		}
+	#
+	# tox = ConfigParser()
+	# tox.read(repo_path / "tox.ini")
 	#
 	# def indent_join(iterable, indent=0):
-	# 	return f"\n{' '*indent}".join(iterable)
+	# 	l = list(iterable)
+	# 	if len(l) > 1:
+	# 		if not l[0] == '':
+	# 			l.insert(0, '')
+	# 	return f"\n{' '*indent}".join(l)
 	#
-	# tox.set("tox", "envlist", ", ".join([*templates.globals["tox_py_versions"], "docs"]))
-	# tox.set("tox", "requires", indent_join(["pip >= 19.0.0", *templates.globals["tox_requirements"]], 14))
+	# managed_sections = []
 	#
-	# tox.set(
-	# 		"travis", "python",
-	# 		''.join(
-	# 				f"\n    {py_ver}: {tox_py_ver}"
-	# 				for py_ver, tox_py_ver in templates.globals["tox_travis_versions"].items()
-	# 			))
+	# def add_section_dict(section: str, **kwargs: Any):
+	# 	if section in tox.sections():
+	# 		tox.remove_section(section)
+	# 	tox.add_section(section)
+	# 	managed_sections.append(section)
 	#
-	# tox.set(
-	# 		"build-system", "requires",
-	# 		indent_join([
-	# 				"[",
-	# 				"setuptools >= 46.1.3",
-	# 				"wheel >= 0.34.2",
-	# 				*templates.globals["tox_build_requirements"],
-	# 				"]"
-	# 				], 11))
+	# 	for key, value in kwargs.items():
+	# 		if isinstance(value, bool):
+	# 			if value:
+	# 				tox[section][key] = "true"
+	# 			else:
+	# 				tox[section][key] = "false"
 	#
-	# import_name = templates.globals["import_name"]
-	# tests_dir = templates.globals["tests_dir"]
+	# 		else:
+	# 			tox[section][key] = str(value)
+	#
+	# add_section_dict(
+	# 		"tox",
+	# 		envlist=", ".join([*templates.globals["tox_py_versions"], "mypy", "build"]),
+	# 		skip_missing_interpreters=True,
+	# 		requires=indent_join(["pip >= 19.0.0", *templates.globals["tox_requirements"]], 14),
+	# 		)
+	#
+	# add_section_dict(
+	# 		"travis",
+	# 		python=indent_join(
+	# 						f"{py_ver}: {tox_py_ver}"
+	# 						for py_ver, tox_py_ver in templates.globals["tox_travis_versions"].items()
+	# 						)
+	# 		)
+	#
+	# add_section_dict(
+	# 		"gh-actions",
+	# 		python=indent_join(
+	# 						f"{py_ver}: {tox_py_ver}"
+	# 						for py_ver, tox_py_ver in templates.globals["gh_actions_versions"].items()
+	# 						)
+	# 		)
+	#
+	#
+	# add_section_dict("testenv")
 	#
 	# if templates.globals["enable_tests"]:
-	# 	tox.set("testenv", "deps", f"-r{{toxinidir}}/{tests_dir}/requirements.txt")
-	# else:
-	# 	tox.remove_option("testenv", "deps")
+	# 	tox["testenv"]["deps"] = f"-r{{toxinidir}}/{templates.globals['tests_dir']}/requirements.txt"
+	# if templates.globals["tox_testenv_extras"]:
+	# 	tox["testenv"]["extras"] = templates.globals["tox_testenv_extras"]
+	#
+	# testenv_commands = ["python --version"]
+	# if templates.globals["enable_tests"]:
+	# 	testenv_commands.append(f"python -m pytest --cov={templates.globals['import_name']} -r aR {templates.globals['tests_dir']}/ {{posargs}}")
+	# 	# --reruns 1 --reruns-delay 5
+	# 	testenv_commands.insert(0, '')
+	#
+	# tox["testenv"]["commands"] = indent_join(testenv_commands)
+	#
+	# if templates.globals["enable_docs"]:
+	#
+	# 	add_section_dict(
+	# 			"testenv:docs",
+	# 			basepython="python3.8",
+	# 			changedir=f"{{toxinidir}}/{templates.globals['docs_dir']}",
+	# 			deps=indent_join(["-r{toxinidir}/requirements.txt", f"-r{{toxinidir}}/{templates.globals['docs_dir']}/requirements.txt"]),
+	# 			commands="sphinx-build -M html . ./build {posargs}",
+	# 			)
+	#
+	# # Remove old bumpversion section
+	# if "testenv:bumpversion" in tox.sections():
+	# 	tox.remove_section("testenv:bumpversion")
+	#
+	# add_section_dict(
+	# 		"testenv:build",
+	# 		skip_install=True,
+	# 		changedir="{toxinidir}",
+	# 		deps=indent_join([
+	# 				"twine",
+	# 				"pep517",
+	# 				"check-wheel-contents",
+	# 				*templates.globals["tox_build_requirements"]]),
+	# 		commands=indent_join([
+	# 				'python -m pep517.build --source --binary "{toxinidir}"',
+	# 				# python setup.py {posargs} sdist bdist_wheel
+	# 				"twine check dist/*",
+	# 				"check-wheel-contents dist/"
+	# 				]),
+	# 		)
+	#
+	# add_section_dict(
+	# 		"testenv:lint",
+	# 		changedir="{toxinidir}",
+	# 		ignore_errors=True,
+	# 		skip_install=True,
+	# 		deps=indent_join([
+	# 						"autopep8 >=1.5.2",
+	# 						"flake8 >=3.8.2",
+	# 						"flake8-2020 >= 1.6.0",
+	# 						"flake8_strftime",
+	# 						"flake8-pytest-style",
+	# 						"flake8-docstrings",
+	# 						"flake8-typing-imports",
+	# 						"git+https://github.com/domdfcoding/flake8-rst-docstrings.git",
+	# 						"flake8-builtins",
+	# 						# "flake8-walrus",
+	# 						"pygments",
+	# 						"git+https://github.com/domdfcoding/flake8-quotes.git",
+	# 						]),
+	# 		commands=f"flake8 {' '.join(source_files)}",
+	# 		)
+	#
+	# # tox["testenv:lint"]["basepython"] = f"python{ templates.globals['min_py_version']}"
+	#
+	# yapf_commands = [f"yapf -i --recursive {' '.join(source_files)}"]
+	# if templates.globals["yapf_exclude"]:
+	# 	yapf_commands.append("--exclude")
+	#
+	# 	for exclude in templates.globals["yapf_exclude"]:
+	# 		yapf_commands.append(f'"{exclude}"')
+	#
+	# add_section_dict(
+	# 		"testenv:yapf",
+	# 		basepython="python3.7",
+	# 		changedir="{toxinidir}",
+	# 		skip_install=True,
+	# 		ignore_errors=True,
+	# 		deps="yapf",
+	# 		commands=' '.join(yapf_commands),
+	# 		)
+	#
+	# add_section_dict(
+	# 		"testenv:isort",
+	# 		skip_install=True,
+	# 		ignore_errors=True,
+	# 		changedir="{toxinidir}",
+	# 		deps="isort >=5.1.0",
+	# 		commands=f"isort {' '.join(source_files)}",
+	# 		)
+	#
+	# mypy_deps = ["mypy"]
+	# if templates.globals["enable_tests"]:
+	# 	mypy_deps.append(f"-r{{toxinidir}}/{templates.globals['tests_dir']}/requirements.txt")
+	# for dep in templates.globals["mypy_deps"]:
+	# 	mypy_deps.append(dep)
+	#
+	# add_section_dict(
+	# 		"testenv:mypy",
+	# 		ignore_errors=True,
+	# 		changedir="{toxinidir}",
+	# 		deps=indent_join(mypy_deps),
+	# 		commands=f"mypy {' '.join(source_files)}",
+	# 		)
 	#
 	# if templates.globals["tox_testenv_extras"]:
-	# 	tox.set("testenv", "extras", "tox_testenv_extras")
-	# else:
-	# 	tox.remove_option("testenv", "extras")
+	# 	tox["testenv:mypy"]["extras"] = templates.globals["tox_testenv_extras"]
 	#
-	# testenv_commands = ['', "python --version"]
+	# bandit_commands = [f'printf "===== Running Bandit on {templates.globals["import_name"]} ====="']
+	#
+	# if templates.globals["stubs_package"]:
+	# 	bandit_commands.append(f"bandit {os.path.join(templates.globals['source_dir'], templates.globals['import_name'])}-stubs -r")
+	# else:
+	# 	bandit_commands.append(f"bandit {os.path.join(templates.globals['source_dir'], templates.globals['import_name'])} -r")
+	#
 	# if templates.globals["enable_tests"]:
-	# 	testenv_commands.append(
-	# 			f"python -m pytest --cov={import_name} -r aR {tests_dir}/"
+	# 	bandit_commands.append('printf "===== Running Bandit on tests ====="')
+	# 	bandit_commands.append(f"bandit {templates.globals['tests_dir']} -r -s B101")
+	#
+	# add_section_dict(
+	# 		"testenv:bandit",
+	# 		skip_install=True,
+	# 		ignore_errors=True,
+	# 		changedir="{toxinidir}",
+	# 		deps="bandit",
+	# 		whitelist_externals="/usr/bin/printf",
+	# 		commands=indent_join(bandit_commands),
+	# 		)
+	#
+	# add_section_dict(
+	# 		"testenv:pyup",
+	# 		skip_install=True,
+	# 		ignore_errors=True,
+	# 		changedir="{toxinidir}",
+	# 		deps="pyupgrade-directories",
+	# 		commands=f"pyup_dirs {' '.join(source_files)} --py36-plus --recursive",
+	# 		)
+	#
+	# add_section_dict(
+	# 		"testenv:qa",
+	# 		skip_install=True,
+	# 		ignore_errors=True,
+	# 		whitelist_externals="tox",
+	# 		changedir="{toxinidir}",
+	# 		commands="tox -e pyup,isort,yapf,mypy,lint {posargs}",
+	# 		)
+	#
+	# add_section_dict(
+	# 		"testenv:coverage",
+	# 		skip_install=True,
+	# 		ignore_errors=True,
+	# 		whitelist_externals="/bin/bash",
+	# 		changedir="{toxinidir}",
+	# 		deps=indent_join(["coverage", "coverage_pyver_pragma"]),
+	# 		command=indent_join([
+	# 				'/bin/bash -c "rm -rf htmlcov"',
+	# 				"coverage html",
+	# 				"/bin/bash -c \"DISPLAY=:0 firefox 'htmlcov/index.html'\""
+	# 				])
+	# 		)
+	#
+	# add_section_dict("flake8")
+	# tox["flake8"]["max-line-length"] = "120"
+	# tox["flake8"]["select"] = " ".join(str(x) for x in lint_fix_list + lint_warn_list + code_only_warning)
+	# tox["flake8"]["exclude"] = ".git,__pycache__,{{docs_dir}},old,build,dist,make_conda_recipe.py,__pkginfo__.py,setup.py"
+	# tox["flake8"]["rst-roles"] = indent_join([
+	# 		"class",
+	# 		"func",
+	# 		"mod",
+	# 		"py:obj",
+	# 		"py:class",
+	# 		"ref",
+	# 		"meth",
+	# 		"exc",
+	# 		"attr",
+	# 		])
+	# tox["flake8"]["rst-directives"] = indent_join([
+	# 		"envvar",
+	# 		"exception",
+	# 		"seealso",
+	# 		])
+	# tox["flake8"]["per-file-ignores"] = f"{templates.globals['tests_dir']}/*: {' '.join(str(e) for e in code_only_warning)}"
+	# tox["flake8"]["pytest-parametrize-names-type"] = "csv"
+	# tox["flake8"]["inline-quotes"] = '"'
+	# tox["flake8"]["multiline-quotes"] = '"""'
+	# tox["flake8"]["docstring-quotes"] = '"""'
+	#
+	# add_section_dict(
+	# 		"mypy",
+	# 		python_version=3.6,
+	# 		ignore_missing_imports=True,
+	# 		namespace_packages=True,
+	# 		)
+	#
+	# if templates.globals["import_name"] != "coverage_pyver_pragma":
+	# 	add_section_dict(
+	# 			"coverage:run",
+	# 			plugins=indent_join(["coverage_pyver_pragma"]),
 	# 			)
-	# tox.set("testenv", "commands", indent_join(testenv_commands, 4))
 	#
-	# docs_dir = templates.globals["docs_dir"]
-	# tox.set("testenv:docs", "changedir", f"{{toxinidir}}/{docs_dir}")
-	# tox.set("testenv:docs", "deps", f"""-r{{toxinidir}}/requirements.txt
-	#    -r{{toxinidir}}/{docs_dir}/requirements.txt""")
+	# add_section_dict("check-wheel-contents")
 	#
-	# tox_build_requirements = templates.globals["tox_build_requirements"]
-	# tox.set("testenv:build", "deps", indent_join([
-	# 		"setuptools >= 46.1.3",
-	# 		"wheel >= 0.34.2",
-	# 		*tox_build_requirements,
-	# 		], 7))
-	#
-	# tox.set("testenv:lint", "deps", "\n    ".join([
-	# 		'',
-	# 		"autopep8 >=1.5.2",
-	# 		"flake8 >=3.8.2",
-	# 		]))
-	#
-	# lintenv_commands = []
 	# if templates.globals["py_modules"]:
-	# 	for file in templates.globals["py_modules"]:
-	# 		lintenv_commands.append(f"flake8 {file}.py")
+	# 	tox["check-wheel-contents"]["toplevel"] = f"{templates.globals['import_name']}.py"
+	# elif templates.globals["stubs_package"]:
+	# 	tox["check-wheel-contents"]["toplevel"] = f"{templates.globals['import_name']}-stubs"
+	#
+	# 	if templates.globals["pure_python"]:
+	# 		# Don't check contents for packages with binary extensions
+	# 		tox["check-wheel-contents"]["package"] = f"{templates.globals['import_name']}-stubs"
 	# else:
-	# 	lintenv_commands.append(f"flake8 {import_name.replace('.', '/')}")
-	# if templates.globals["enable_tests"]:
-	# 	lintenv_commands.append(f"flake8 {tests_dir}")
-	# tox.set("testenv:lint", "commands", indent_join(lintenv_commands, 11))
+	# 	tox["check-wheel-contents"]["toplevel"] = f"{templates.globals['import_name'].split('.')[0]}"
 	#
-	# # TODO:
-	# # {#    ; Run mypy outside pre-commit because pre-commit runs mypy in a venv#}
-	# # {#    ; that doesn't have dependencies or their type annotations installed.#}
-	# # {#    mypy {{ import_name }} tests#}
-	# # {#[mypy]#}
-	# # {#python_version = 3.6#}
-	# # {#ignore_missing_imports = True#}
-	# # {#namespace_packages = True#}
+	# 	if templates.globals["pure_python"]:
+	# 		# Don't check contents for packages with binary extensions
+	# 		tox["check-wheel-contents"]["package"] = f"{os.path.join(templates.globals['source_dir'], templates.globals['import_name'].split('.')[0])}"
 	#
-	# yapfenv_commands = []
-	# if templates.globals["py_modules"]:
-	# 	for file in templates.globals["py_modules"]:
-	# 		yapfenv_commands.append(f"yapf -i {file}.py")
-	# else:
-	# 	yapfenv_commands.append(f"yapf -i {import_name.replace('.', '/')}")
-	# if templates.globals["enable_tests"]:
-	# 	yapfenv_commands.append(f"yapf -i {tests_dir}")
-	# tox.set("testenv:yapf", "commands", indent_join(yapfenv_commands, 11))
-	#
-	# flake8_select = []
-	#
-	# for e in [
-	# 		*templates.globals["lint_fix_list"],
-	# 		*templates.globals["lint_warn_list"],
-	# 		]:
-	# 	flake8_select.append(e)
-	#
-	# tox.set("flake8", "select", " ".join(flake8_select))
-	# tox.set("flake8", "exclude", ",".join([
-	# 		".git",
-	# 		"__pycache__",
-	# 		templates.globals["docs_dir"],
-	# 		"old",
-	# 		"build",
-	# 		"dist",
-	# 		"make_conda_recipe.py",
-	# 		"__pkginfo__.py",
-	# 		"setup.py",
-	# 		]))
-	#
-	# for section, options in tox_options.items():
-	# 	for option, val in options.items():
-	# 		tox.set(section, option, val)
+	# unmanaged_sections = [s for s in tox.sections() if s not in managed_sections]
 	#
 	# with (repo_path / "tox.ini").open('w', encoding="UTF-8") as fp:
-	# 	tox.write(fp)
+	# 	fp.write("# This file is managed by 'repo_helper'. Don't edit it directly.\n\n")
+	#
+	# 	d = " {} ".format(tox._delimiters[0])
+	# 	if tox._defaults:
+	# 		tox._write_section(fp, tox.default_section,
+	# 							tox._defaults.items(), d)
+	# 		fp.write("\n")
+	# 	for section in managed_sections:
+	# 		tox._write_section(fp, section,
+	# 							tox._sections[section].items(), d)
+	# 		fp.write("\n")
+	# 	for section in unmanaged_sections:
+	# 		tox._write_section(fp, section,
+	# 							tox._sections[section].items(), d)
+	# 		fp.write("\n")
+	#
+	# tox_content = (repo_path / "tox.ini").read_text()
+	# with (repo_path / "tox.ini").open('w', encoding="UTF-8") as fp:
+	# 	clean_writer(tox_content, fp)
 
 	return ["tox.ini"]
 

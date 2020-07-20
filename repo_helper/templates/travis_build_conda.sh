@@ -1,5 +1,5 @@
 #!/bin/bash
-# This file is managed by `repo_helper`. Don't edit it directly
+# {{ managed_message }}
 
 set -e -x
 

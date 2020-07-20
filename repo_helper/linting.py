@@ -187,8 +187,16 @@ lint_warn_list = [
 		"A002",  # argument "{0}" is shadowing a python builtin
 		"A003",  # class attribute "{0}" is shadowing a python builtin
 
-		# walrus
+		# walrus, py38 only
 		# "ASN001",  # do not use assignment expressions
+
+
+		"TYP001",  # guard import by TYPE_CHECKING
+		"TYP002",  # @overload is broken in <3.5.2
+		"TYP003",  # Union[Match, ...] or Union[Pattern, ...] must be quoted in <3.5.2
+		"TYP004",  # NamedTuple does not support methods in 3.6.0
+		"TYP005",  # NamedTuple does not support defaults in 3.6.0
+		"TYP006",  # guard typing attribute by quoting
 		]
 
 code_only_warning = [

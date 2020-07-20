@@ -2,7 +2,7 @@
 #
 #  __init__.py
 """
-Git Helper: Manage configuration files with ease.
+Repo Helper: Manage configuration files with ease.
 """
 #
 #  Copyright © 2020 Dominic Davis-Foster <dominic@davis-foster.co.uk>

@@ -14,3 +14,4 @@ ytools3
 pre-commit
 tox
 bump2version
+packaging >=20.4

@@ -35,7 +35,7 @@ def test_travis(demo_environment):
 		managed_files = make_travis(tmpdir_p, demo_environment)
 		assert managed_files == [".travis.yml"]
 		assert (tmpdir_p / managed_files[0]).read_text(encoding="UTF-8") == """\
-# This file is managed by `repo_helper`. Don't edit it directly
+# This file is managed by 'repo_helper'. Don't edit it directly.
 ---
 
 language: python
@@ -49,7 +49,7 @@ install:
 
   - pip install pip  --upgrade
   - pip install tox tox-travis
-  - pip install coveralls
+  - pip install coveralls coverage_pyver_pragma
 
 script:
   - tox
@@ -61,7 +61,7 @@ stages:
   - test
   - deploy_pypi
   - deploy_conda
-  - deploy_releases
+
 
 jobs:
   include:
@@ -94,17 +94,6 @@ jobs:
           repo: octocat/hello-world
         provider: script
         script: .ci/travis_deploy_conda.sh || return 1;
-
-    - stage: deploy_releases
-      python: "3.6"
-      install:
-        - pip install PyGithub requests
-      script: skip
-      deploy:
-        on:
-          repo: octocat/hello-world
-        provider: script
-        script: python .ci/copy_pypi_2_github.py || return 1;
 """
 
 		demo_environment.globals.update(
@@ -122,7 +111,7 @@ jobs:
 		managed_files = make_travis(tmpdir_p, demo_environment)
 		assert managed_files == [".travis.yml"]
 		assert (tmpdir_p / managed_files[0]).read_text(encoding="UTF-8") == """\
-# This file is managed by `repo_helper`. Don't edit it directly
+# This file is managed by 'repo_helper'. Don't edit it directly.
 ---
 
 language: python
@@ -183,7 +172,7 @@ def test_travis_deploy_conda(demo_environment):
 		assert managed_files == [".ci/travis_deploy_conda.sh"]
 		assert (tmpdir_p / managed_files[0]).read_text(encoding="UTF-8") == """\
 #!/bin/bash
-# This file is managed by `repo_helper`. Don't edit it directly
+# This file is managed by 'repo_helper'. Don't edit it directly.
 
 set -e -x
 
@@ -237,6 +226,7 @@ def test_github_ci(demo_environment):
 		assert not (tmpdir_p / managed_files[1]).is_file()
 
 		assert (tmpdir_p / managed_files[0]).read_text(encoding="UTF-8") == """\
+# This file is managed by 'repo_helper'. Don't edit it directly.
 ---
 name: Windows Tests
 
@@ -271,7 +261,7 @@ jobs:
           python -VV
           python -m site
           python -m pip install --upgrade pip setuptools wheel
-          python -m pip install --upgrade tox tox-gh-actions
+          python -m pip install --upgrade tox tox-gh-actions virtualenv
 
       - name: "Run Tests for Python ${{ matrix.python-version }}"
         run: "python -m tox"
@@ -290,6 +280,7 @@ jobs:
 		assert (tmpdir_p / managed_files[1]).is_file()
 
 		assert (tmpdir_p / managed_files[0]).read_text(encoding="UTF-8") == """\
+# This file is managed by 'repo_helper'. Don't edit it directly.
 ---
 name: Windows Tests
 
@@ -324,12 +315,15 @@ jobs:
           python -VV
           python -m site
           python -m pip install --upgrade pip setuptools wheel
-          python -m pip install --upgrade tox tox-gh-actions isort black
+          python -m pip install --upgrade tox tox-gh-actions virtualenv
+          python -m pip install --upgrade isort black
+
 
       - name: "Run Tests for Python ${{ matrix.python-version }}"
         run: "python -m tox"
 """
 		assert (tmpdir_p / managed_files[1]).read_text(encoding="UTF-8") == """\
+# This file is managed by 'repo_helper'. Don't edit it directly.
 ---
 name: macOS Tests
 
@@ -364,7 +358,9 @@ jobs:
           python -VV
           python -m site
           python -m pip install --upgrade pip setuptools wheel
-          python -m pip install --upgrade tox tox-gh-actions isort black
+          python -m pip install --upgrade tox tox-gh-actions virtualenv
+          python -m pip install --upgrade isort black
+
 
       - name: "Run Tests for Python ${{ matrix.python-version }}"
         run: "python -m tox"

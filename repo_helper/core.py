@@ -69,13 +69,13 @@ __all__ = [
 		"GitHelper",
 		"ensure_bumpversion",
 		"make_issue_templates",
-		"make_contributing_md",
+		"make_contributing",
 		]
 
 
-class GitHelper:
+class RepoHelper:
 	"""
-	Git Helper: Manage configuration files with ease.
+	Repo Helper: Manage configuration files with ease.
 
 	:param target_repo: The path to the root of the repository to manage files for.
 	"""
@@ -94,6 +94,7 @@ class GitHelper:
 				(make_stale_bot, "stale_bot", []),
 				(make_auto_assign_action, "auto_assign", []),
 				(rewrite_readme, "readme", []),
+				(rewrite_docs_index, "index.rst", ["enable_docs"]),
 				(rewrite_docs_index, "index.rst", ["enable_docs"]),
 				(ensure_doc_requirements, "doc_requirements", ["enable_docs"]),
 				(make_pylintrc, "pylintrc", []),
@@ -122,7 +123,8 @@ class GitHelper:
 				(make_github_docs_test, "docs_action", ["enable_docs"]),
 				(make_docutils_conf, "docutils_conf", ["enable_docs"]),
 				(make_docs_building_rst, "Building_rst", ["enable_docs"]),
-				(make_contributing_md, "contributing", []),
+				(make_contributing, "contributing", []),
+				(make_docs_contributing, "contributing", ["enable_docs"]),
 				(make_pre_commit, "pre-commit", ["enable_pre_commit"]),
 				(make_pyproject, "pyproject", []),
 				(make_isort, "isort", []),  # Must always run last
@@ -141,6 +143,7 @@ class GitHelper:
 		self.templates.globals["enquote_value"] = enquote_value
 		self.templates.globals["len"] = len
 		self.templates.globals["join_path"] = os.path.join
+		self.templates.globals["managed_message"] = "This file is managed by 'repo_helper'. Don't edit it directly."
 
 	@property
 	def exclude_files(self) -> List[str]:
@@ -186,6 +189,8 @@ class GitHelper:
 
 		return all_managed_files
 
+
+GitHelper = RepoHelper
 
 def ensure_bumpversion(repo_path: pathlib.Path, templates: jinja2.Environment) -> List[str]:
 	"""
@@ -278,18 +283,64 @@ def make_issue_templates(repo_path: pathlib.Path, templates: jinja2.Environment)
 			]
 
 
-def make_contributing_md(repo_path: pathlib.Path, templates: jinja2.Environment) -> List[str]:
+def github_bash_block(*commands):
+	if not commands:
+		return ''
+
+	buf = f".. code-block:: bash"
+	buf += "\n\n"
+
+	for command in commands:
+		buf += f"	$ {command}\n"
+
+	return buf
+
+
+def sphinx_bash_block(*commands):
+	if not commands:
+		return ''
+
+	buf = f".. prompt:: bash"
+	buf += "\n\n"
+
+	for command in commands:
+		buf += f"	{command}\n"
+
+	return buf
+
+
+def make_contributing(repo_path: pathlib.Path, templates: jinja2.Environment) -> List[str]:
 	"""
-	Add CONTRIBUTING.md to the desired repo
+	Add CONTRIBUTING.rst to the desired repo
 
 	:param repo_path: Path to the repository root.
 	:param templates:
 	:type templates: jinja2.Environment
 	"""
 
-	contributing = templates.get_template("CONTRIBUTING.md")
+	contributing = templates.get_template("CONTRIBUTING.rst")
 
-	with (repo_path / "CONTRIBUTING.md").open('w', encoding="UTF-8") as fp:
-		clean_writer(contributing.render(), fp)
+	with (repo_path / "CONTRIBUTING.rst").open('w', encoding="UTF-8") as fp:
+		clean_writer(contributing.render(bash_block=github_bash_block), fp)
 
-	return [os.path.join("CONTRIBUTING.md")]
+	if (repo_path / "CONTRIBUTING.md").is_file():
+		(repo_path / "CONTRIBUTING.md").unlink()
+
+	return ["CONTRIBUTING.rst", "CONTRIBUTING.md"]
+
+
+def make_docs_contributing(repo_path: pathlib.Path, templates: jinja2.Environment) -> List[str]:
+	"""
+	Add CONTRIBUTING.rst to the documentation directory of the repo
+
+	:param repo_path: Path to the repository root.
+	:param templates:
+	:type templates: jinja2.Environment
+	"""
+
+	contributing = templates.get_template("CONTRIBUTING.rst")
+
+	with (repo_path / templates.globals["docs_dir"] / "contributing.rst").open('w', encoding="UTF-8") as fp:
+		clean_writer(contributing.render(bash_block=sphinx_bash_block), fp)
+
+	return [os.path.join(templates.globals["docs_dir"], "contributing.rst")]

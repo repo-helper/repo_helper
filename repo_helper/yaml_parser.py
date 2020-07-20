@@ -269,8 +269,3 @@ def dump_schema() -> Dict[str, Any]:
 		pathlib.Path(schema_file).write_text(json.dumps(schema, indent=2))
 
 	return schema
-
-
-if __name__ == "__main__":
-	schema = dump_schema()
-	print(json.dumps(schema, indent=2))

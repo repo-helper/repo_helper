@@ -69,11 +69,11 @@ recursive-exclude **/__pycache__ *
 			clean_writer(f"include {file.parent}/{file.name}", fp)
 
 		if templates.globals["stubs_package"]:
-			pyi_entry = f"recursive-include {templates.globals['source_dir']}{templates.globals['import_name']}-stubs/ *.pyi"
+			pyi_entry = f"recursive-include {templates.globals['source_dir']}{templates.globals['import_name']}-stubs *.pyi"
 			py_typed_entry = f"include {templates.globals['source_dir']}{templates.globals['import_name']}-stubs/py.typed"
 		else:
-			pyi_entry = f"recursive-include {templates.globals['source_dir']}{templates.globals['import_name']}/ *.pyi"
-			py_typed_entry = f"include {templates.globals['source_dir']}{templates.globals['import_name']}/py.typed"
+			pyi_entry = f"recursive-include {templates.globals['source_dir']}{templates.globals['import_name'].replace('.', '/')} *.pyi"
+			py_typed_entry = f"include {templates.globals['source_dir']}{templates.globals['import_name'].replace('.', '/')}/py.typed"
 
 		clean_writer(pyi_entry, fp)
 		clean_writer(py_typed_entry, fp)

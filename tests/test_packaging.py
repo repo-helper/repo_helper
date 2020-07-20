@@ -39,14 +39,14 @@ include __pkginfo__.py
 include LICENSE
 include requirements.txt
 recursive-exclude **/__pycache__ *
-recursive-include hello_world/ *.pyi
+recursive-include hello_world *.pyi
 include hello_world/py.typed
 """
 
 		demo_environment.globals.update(
 				dict(
 						manifest_additional=[
-								"recursive-include hello_world/templates/ *",
+								"recursive-include hello_world/templates *",
 								],
 						additional_requirements_files=["hello_world/submodule/requirements.txt"],
 						)
@@ -59,9 +59,9 @@ include __pkginfo__.py
 include LICENSE
 include requirements.txt
 recursive-exclude **/__pycache__ *
-recursive-include hello_world/templates/ *
+recursive-include hello_world/templates *
 include hello_world/submodule/requirements.txt
-recursive-include hello_world/ *.pyi
+recursive-include hello_world *.pyi
 include hello_world/py.typed
 """
 
@@ -80,11 +80,15 @@ def test_make_setup(demo_environment):
 		assert managed_files == ["setup.py"]
 		assert (tmpdir_p / managed_files[0]).read_text(encoding="UTF-8") == """\
 #!/usr/bin/env python
-# This file is managed by `repo_helper`. Don't edit it directly
-\"\"\"Setup script\"\"\"
+# This file is managed by 'repo_helper'. Don't edit it directly.
+
+# stdlib
+import sys
 
 # 3rd party
-from setuptools import find_packages, setup
+from setuptools import setup
+
+sys.path.append('.')
 
 # this package
 from __pkginfo__ import *  # pylint: disable=wildcard-import
@@ -92,25 +96,10 @@ from __pkginfo__ import *  # pylint: disable=wildcard-import
 
 
 setup(
-		author=author,
-		author_email=author_email,
-		classifiers=classifiers,
-		description=short_desc,
-		entry_points=entry_points,
 		extras_require=extras_require,
-		include_package_data=True,
 		install_requires=install_requires,
-		keywords=keywords,
-		license=__license__,
-		long_description=long_description,
-		name=pypi_name,
-		packages=find_packages(exclude=("tests", "doc-source")),
-		project_urls=project_urls,
-		py_modules=py_modules,
-		python_requires=">=3.6",
-		url=web,
+		py_modules=[],
 		version=__version__,
-		zip_safe=False,
 
 		)
 """
@@ -132,11 +121,15 @@ setup(
 		assert managed_files == ["setup.py"]
 		assert (tmpdir_p / managed_files[0]).read_text(encoding="UTF-8") == """\
 #!/usr/bin/env python
-# This file is managed by `repo_helper`. Don't edit it directly
-\"\"\"Setup script\"\"\"
+# This file is managed by 'repo_helper'. Don't edit it directly.
+
+# stdlib
+import sys
 
 # 3rd party
-from setuptools import find_packages, setup
+from setuptools import setup
+
+sys.path.append('.')
 
 # this package
 from __pkginfo__ import *  # pylint: disable=wildcard-import
@@ -145,25 +138,10 @@ import datetime
 print('datetime.datetime.now')
 
 setup(
-		author=author,
-		author_email=author_email,
-		classifiers=classifiers,
-		description=short_desc,
-		entry_points=entry_points,
 		extras_require=extras_require,
-		include_package_data=True,
 		install_requires=install_requires,
-		keywords=keywords,
-		license=__license__,
-		long_description=long_description,
-		name=pypi_name,
-		packages=find_packages(exclude=("testing", "userguide")),
-		project_urls=project_urls,
-		py_modules=py_modules,
-		python_requires=">=3.8",
-		url=web,
+		py_modules=[],
 		version=__version__,
-		zip_safe=False,
 		foo="bar",
 		alice="19",
 		bob=22,
