@@ -35,6 +35,7 @@ repos:
    rev: 5.1.4
    hooks:
     - id: isort
+      exclude: ^({{ join_path(docs_dir, "conf") }}|__pkginfo__|make_conda_recipe|setup)\.py$
 
  - repo: https://github.com/pre-commit/mirrors-yapf
    rev: v0.30.0

@@ -39,7 +39,9 @@ def test_ensure_tests_requirements(demo_environment):
 		managed_files = ensure_tests_requirements(tmpdir_p, demo_environment)
 		assert managed_files == [os.path.join("tests", "requirements.txt")]
 
-		assert (tmpdir_p / managed_files[0]).read_text(encoding="UTF-8") == """\
+		assert (tmpdir_p / managed_files[0]).read_text(
+				encoding="UTF-8"
+				) == """\
 coverage >=5.1
 coverage_pyver_pragma >=0.0.1
 pytest >=6.0.0rc1
@@ -54,7 +56,9 @@ pytest-rerunfailures >=9.0
 		managed_files = ensure_tests_requirements(tmpdir_p, demo_environment)
 		assert managed_files == [os.path.join("tests", "requirements.txt")]
 
-		assert (tmpdir_p / managed_files[0]).read_text(encoding="UTF-8") == """\
+		assert (tmpdir_p / managed_files[0]).read_text(
+				encoding="UTF-8"
+				) == """\
 coverage >=5.1
 coverage_pyver_pragma >=0.0.1
 lorem >=0.1.1
@@ -84,7 +88,9 @@ setuptools_rust
 		managed_files = make_isort(tmpdir_p, demo_environment)
 		assert managed_files == [".isort.cfg"]
 
-		assert (tmpdir_p / managed_files[0]).read_text(encoding="UTF-8") == """\
+		assert (tmpdir_p / managed_files[0]).read_text(
+				encoding="UTF-8"
+				) == """\
 [settings]
 line_length = 115
 force_to_top = True
@@ -124,7 +130,9 @@ known_third_party=awesome_package
 		managed_files = make_isort(tmpdir_p, demo_environment)
 		assert managed_files == [".isort.cfg"]
 
-		assert (tmpdir_p / managed_files[0]).read_text(encoding="UTF-8") == """\
+		assert (tmpdir_p / managed_files[0]).read_text(
+				encoding="UTF-8"
+				) == """\
 [settings]
 known_third_party =
     awesome_package
@@ -166,7 +174,9 @@ def test_make_yapf(demo_environment):
 		managed_files = make_yapf(tmpdir_p, demo_environment)
 		assert managed_files == [".style.yapf"]
 
-		assert (tmpdir_p / managed_files[0]).read_text(encoding="UTF-8") == """\
+		assert (tmpdir_p / managed_files[0]).read_text(
+				encoding="UTF-8"
+				) == """\
 [style]
 # Align closing bracket with visual indentation.
 align_closing_bracket_with_visual_indent=True

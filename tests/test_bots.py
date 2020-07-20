@@ -34,7 +34,9 @@ def test_stale_bot(demo_environment):
 		managed_files = make_stale_bot(tmpdir_p, demo_environment)
 		assert managed_files == [".github/stale.yml"]
 
-		assert (tmpdir_p / managed_files[0]).read_text(encoding="UTF-8") == """\
+		assert (tmpdir_p / managed_files[0]).read_text(
+				encoding="UTF-8"
+				) == """\
 # This file is managed by 'repo_helper'. Don't edit it directly.
 # Configuration for probot-stale - https://github.com/probot/stale
 ---
@@ -120,7 +122,9 @@ def test_auto_assign_action(demo_environment):
 				".github/workflows/assign.yml", ".github/workflow/assign.yml", ".github/auto_assign.yml"
 				]
 
-		assert (tmpdir_p / managed_files[-1]).read_text(encoding="UTF-8") == """\
+		assert (tmpdir_p / managed_files[-1]).read_text(
+				encoding="UTF-8"
+				) == """\
 # This file is managed by 'repo_helper'. Don't edit it directly.
 ---
 
@@ -158,7 +162,9 @@ def test_dependabot(demo_environment):
 		managed_files = make_dependabot(tmpdir_p, demo_environment)
 		assert managed_files == [".dependabot/config.yml"]
 
-		assert (tmpdir_p / managed_files[0]).read_text(encoding="UTF-8") == """\
+		assert (tmpdir_p / managed_files[0]).read_text(
+				encoding="UTF-8"
+				) == """\
 # This file is managed by 'repo_helper'. Don't edit it directly.
 ---
 
@@ -178,7 +184,9 @@ def test_imgbot(demo_environment):
 
 		managed_files = make_imgbot(tmpdir_p, demo_environment)
 		assert managed_files == [".imgbotconfig"]
-		assert (tmpdir_p / managed_files[0]).read_text(encoding="UTF-8") == """\
+		assert (tmpdir_p / managed_files[0]).read_text(
+				encoding="UTF-8"
+				) == """\
 {
     "schedule": "weekly",
     "ignoredFiles": [
@@ -189,7 +197,9 @@ def test_imgbot(demo_environment):
 		demo_environment.globals["imgbot_ignore"] = ["ignore_dir/*", "**/wildcard_dir/*", "*.jpg"]
 		managed_files = make_imgbot(tmpdir_p, demo_environment)
 		assert managed_files == [".imgbotconfig"]
-		assert (tmpdir_p / managed_files[0]).read_text(encoding="UTF-8") == """\
+		assert (tmpdir_p / managed_files[0]).read_text(
+				encoding="UTF-8"
+				) == """\
 {
     "schedule": "weekly",
     "ignoredFiles": [

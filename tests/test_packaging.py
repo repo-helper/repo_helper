@@ -34,7 +34,9 @@ def test_make_manifest(demo_environment):
 
 		managed_files = make_manifest(tmpdir_p, demo_environment)
 		assert managed_files == ["MANIFEST.in"]
-		assert (tmpdir_p / managed_files[0]).read_text(encoding="UTF-8") == """\
+		assert (tmpdir_p / managed_files[0]).read_text(
+				encoding="UTF-8"
+				) == """\
 include __pkginfo__.py
 include LICENSE
 include requirements.txt
@@ -54,7 +56,9 @@ include hello_world/py.typed
 
 		managed_files = make_manifest(tmpdir_p, demo_environment)
 		assert managed_files == ["MANIFEST.in"]
-		assert (tmpdir_p / managed_files[0]).read_text(encoding="UTF-8") == """\
+		assert (tmpdir_p / managed_files[0]).read_text(
+				encoding="UTF-8"
+				) == """\
 include __pkginfo__.py
 include LICENSE
 include requirements.txt
@@ -78,7 +82,9 @@ def test_make_setup(demo_environment):
 
 		managed_files = make_setup(tmpdir_p, demo_environment)
 		assert managed_files == ["setup.py"]
-		assert (tmpdir_p / managed_files[0]).read_text(encoding="UTF-8") == """\
+		assert (tmpdir_p / managed_files[0]).read_text(
+				encoding="UTF-8"
+				) == """\
 #!/usr/bin/env python
 # This file is managed by 'repo_helper'. Don't edit it directly.
 
@@ -119,7 +125,9 @@ setup(
 
 		managed_files = make_setup(tmpdir_p, demo_environment)
 		assert managed_files == ["setup.py"]
-		assert (tmpdir_p / managed_files[0]).read_text(encoding="UTF-8") == """\
+		assert (tmpdir_p / managed_files[0]).read_text(
+				encoding="UTF-8"
+				) == """\
 #!/usr/bin/env python
 # This file is managed by 'repo_helper'. Don't edit it directly.
 

@@ -37,28 +37,28 @@ from configupdater import ConfigUpdater  # type: ignore
 # this package
 from .bots import make_auto_assign_action, make_dependabot, make_imgbot, make_stale_bot
 from .ci_cd import (
-	make_github_manylinux, remove_copy_pypi_2_github,
-	make_github_ci,
-	make_github_docs_test,
-	make_github_octocheese,
-	make_make_conda_recipe,
-	make_travis,
-	make_travis_deploy_conda,
-	)
-from .docs import (
-	copy_docs_styling,
-	ensure_doc_requirements,
-	make_404_page,
-	make_conf,
-	make_docs_building_rst,
-	make_docs_source_rst,
-	make_docutils_conf, make_rtfd,
-	rewrite_docs_index,
-	)
-from .gitignore import make_gitignore
-from .linting import (
-		code_only_warning, lint_fix_list, lint_warn_list, make_lint_roller, make_pylintrc
+		make_github_manylinux,
+		remove_copy_pypi_2_github,
+		make_github_ci,
+		make_github_docs_test,
+		make_github_octocheese,
+		make_make_conda_recipe,
+		make_travis,
+		make_travis_deploy_conda,
 		)
+from .docs import (
+		copy_docs_styling,
+		ensure_doc_requirements,
+		make_404_page,
+		make_conf,
+		make_docs_building_rst,
+		make_docs_source_rst,
+		make_docutils_conf,
+		make_rtfd,
+		rewrite_docs_index,
+		)
+from .gitignore import make_gitignore
+from .linting import (code_only_warning, lint_fix_list, lint_warn_list, make_lint_roller, make_pylintrc)
 from .packaging import make_manifest, make_pkginfo, make_pyproject, make_setup, make_setup_cfg
 from .readme import rewrite_readme
 from .templates import template_dir
@@ -143,7 +143,8 @@ class RepoHelper:
 		self.templates.globals["enquote_value"] = enquote_value
 		self.templates.globals["len"] = len
 		self.templates.globals["join_path"] = os.path.join
-		self.templates.globals["managed_message"] = "This file is managed by 'repo_helper'. Don't edit it directly."
+		self.templates.globals["managed_message"
+								] = "This file is managed by 'repo_helper'. Don't edit it directly."
 
 	@property
 	def exclude_files(self) -> List[str]:
@@ -191,6 +192,7 @@ class RepoHelper:
 
 
 GitHelper = RepoHelper
+
 
 def ensure_bumpversion(repo_path: pathlib.Path, templates: jinja2.Environment) -> List[str]:
 	"""

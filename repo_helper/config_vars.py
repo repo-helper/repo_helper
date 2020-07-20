@@ -434,7 +434,9 @@ def parse_extras(raw_config_vars: Dict[str, Any], repo_path: pathlib.Path) -> Tu
 		if isinstance(requires, str):
 			if (repo_path / requires).is_file():
 				# a path to the requirements file from the repo root
-				extras_require[extra] = [x for x in (repo_path / requires).read_text(encoding="UTF-8").split("\n") if x]
+				extras_require[extra] = [
+						x for x in (repo_path / requires).read_text(encoding="UTF-8").split("\n") if x
+						]
 				if requires not in additional_requirements_files:
 					additional_requirements_files.append(requires)
 			else:

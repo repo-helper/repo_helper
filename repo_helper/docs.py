@@ -101,8 +101,10 @@ def ensure_doc_requirements(repo_path: pathlib.Path, templates: jinja2.Environme
 		req_file.write_text('')
 
 	req_file.write_text(
-			"\n".join(line for line in req_file.read_text(encoding="UTF-8").splitlines() if not line.startswith("git+")  # FIXME
-						)
+			"\n".join(
+					line for line in req_file.read_text(encoding="UTF-8").splitlines()
+					if not line.startswith("git+")  # FIXME
+					)
 			)
 
 	ensure_requirements(target_requirements, req_file)
@@ -177,13 +179,10 @@ def make_docutils_conf(repo_path: pathlib.Path, templates: jinja2.Environment) -
 		docs_dir.mkdir(parents=True)
 
 	with (docs_dir / "docutils.conf").open('w', encoding="UTF-8") as fp:
-		clean_writer(
-				f"""\
+		clean_writer(f"""\
 [restructuredtext parser]
 tab_width: 4
-""",
-				fp
-				)
+""", fp)
 
 	return [os.path.join(templates.globals["docs_dir"], "docutils.conf")]
 
@@ -438,6 +437,8 @@ div#changelog-history h2{{
 	# with (dest__templates_dir / "footer.html").open('w', encoding="UTF-8") as fp:
 	# 	clean_writer(
 	# 			"""<!--- This file is managed by 'repo_helper'. Don't edit it directly. --->
+
+
 # {% extends "!footer.html" %}
 # {% block extrafooter %}
 # {%- if gitstamp %} Last updated {{ gitstamp }}. {%- endif %}

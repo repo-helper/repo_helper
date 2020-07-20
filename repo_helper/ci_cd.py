@@ -224,10 +224,7 @@ def make_github_manylinux(repo_path: pathlib.Path, templates: jinja2.Environment
 				PYVERSIONS.append(f'"3{pyver}"')
 
 		with (dot_github / "workflows" / "manylinux_build.yml").open('w', encoding="UTF-8") as fp:
-			clean_writer(actions.render(
-					wheel_py_versions=wheel_py_versions,
-					PYVERSIONS=" ".join(PYVERSIONS)
-					), fp)
+			clean_writer(actions.render(wheel_py_versions=wheel_py_versions, PYVERSIONS=" ".join(PYVERSIONS)), fp)
 	else:
 		if (dot_github / "workflows" / "manylinux_build.yml").is_file():
 			(dot_github / "workflows" / "manylinux_build.yml").unlink()

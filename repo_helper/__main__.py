@@ -79,7 +79,8 @@ def main():
 			help="Commit any changed files",
 			)
 	parser.add_argument(
-			"-m", "--message",
+			"-m",
+			"--message",
 			dest="message",
 			type=str,
 			default="Updated files with 'repo_helper'.",

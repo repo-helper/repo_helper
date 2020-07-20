@@ -37,7 +37,9 @@ def test_make_rtfd(demo_environment):
 
 		managed_files = make_rtfd(tmpdir_p, demo_environment)
 		assert managed_files == [".readthedocs.yml"]
-		assert (tmpdir_p / managed_files[0]).read_text(encoding="UTF-8") == f"""\
+		assert (tmpdir_p / managed_files[0]).read_text(
+				encoding="UTF-8"
+				) == f"""\
 # This file is managed by 'repo_helper'. Don't edit it directly.
 # Read the Docs configuration file
 ---
@@ -69,7 +71,9 @@ python:
 
 		managed_files = make_rtfd(tmpdir_p, demo_environment)
 		assert managed_files == [".readthedocs.yml"]
-		assert (tmpdir_p / managed_files[0]).read_text(encoding="UTF-8") == f"""\
+		assert (tmpdir_p / managed_files[0]).read_text(
+				encoding="UTF-8"
+				) == f"""\
 # This file is managed by 'repo_helper'. Don't edit it directly.
 # Read the Docs configuration file
 ---
@@ -108,7 +112,9 @@ def test_make_404_page(demo_environment):
 		(tmpdir_p / "doc-source").mkdir()
 
 		managed_files = make_404_page(tmpdir_p, demo_environment)
-		assert managed_files == [os.path.join("doc-source", "404.rst"), os.path.join("doc-source", "not-found.png")]
+		assert managed_files == [
+				os.path.join("doc-source", "404.rst"), os.path.join("doc-source", "not-found.png")
+				]
 		for filename in managed_files:
 			assert (tmpdir_p / filename).is_file()
 
@@ -130,7 +136,9 @@ def test_make_docs_source_rst(demo_environment):
 		(tmpdir_p / "doc-source").mkdir()
 
 		managed_files = make_docs_source_rst(tmpdir_p, demo_environment)
-		assert managed_files == [os.path.join("doc-source", "Source.rst"), os.path.join("doc-source", "git_download.png")]
+		assert managed_files == [
+				os.path.join("doc-source", "Source.rst"), os.path.join("doc-source", "git_download.png")
+				]
 		for filename in managed_files:
 			assert (tmpdir_p / filename).is_file()
 
@@ -145,7 +153,9 @@ def test_ensure_doc_requirements(demo_environment):
 		managed_files = ensure_doc_requirements(tmpdir_p, demo_environment)
 		assert managed_files == [os.path.join("doc-source", "requirements.txt")]
 
-		assert (tmpdir_p / managed_files[0]).read_text(encoding="UTF-8") == """\
+		assert (tmpdir_p / managed_files[0]).read_text(
+				encoding="UTF-8"
+				) == """\
 alabaster
 autodocsumm
 extras_require
@@ -165,7 +175,9 @@ sphinxemoji >=0.1.6
 		managed_files = ensure_doc_requirements(tmpdir_p, demo_environment)
 		assert managed_files == [os.path.join("doc-source", "requirements.txt")]
 
-		assert (tmpdir_p / managed_files[0]).read_text(encoding="UTF-8") == """\
+		assert (tmpdir_p / managed_files[0]).read_text(
+				encoding="UTF-8"
+				) == """\
 alabaster
 autodocsumm
 extras_require

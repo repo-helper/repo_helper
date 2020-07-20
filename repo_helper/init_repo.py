@@ -81,7 +81,8 @@ def init_repo(repo_path: pathlib.Path, templates: jinja2.Environment) -> List[st
 			with (repo_path / templates.globals["docs_dir"] / filename).open('w', encoding="UTF-8") as fp:
 				clean_writer(template.render(), fp)
 
-		with (repo_path / templates.globals["docs_dir"] / "api" / templates.globals["modname"]).open('w', encoding="UTF-8") as fp:
+		with (repo_path / templates.globals["docs_dir"] / "api" / templates.globals["modname"]
+				).open('w', encoding="UTF-8") as fp:
 			buf = '='
 			buf += '=' * len(templates.globals["import_name"])
 			buf += f"\n{templates.globals['import_name']}\n"

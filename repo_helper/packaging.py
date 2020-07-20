@@ -95,6 +95,7 @@ def make_pyproject(repo_path: pathlib.Path, templates: jinja2.Environment) -> Li
 	with (repo_path / "pyproject.toml").open('w', encoding="UTF-8") as fp:
 		clean_writer(pyproject.render(), fp)
 
+
 # 	with (repo_path / "pyproject.toml").open('w', encoding="UTF-8") as fp:
 # 		buf = """\
 # [build-system]
@@ -118,7 +119,6 @@ def make_pyproject(repo_path: pathlib.Path, templates: jinja2.Environment) -> Li
 # 		clean_writer(buf, fp)
 
 	return ["pyproject.toml"]
-
 
 setup_py_defaults = dict(
 		# author="author",
@@ -159,7 +159,8 @@ def make_setup(repo_path: pathlib.Path, templates: jinja2.Environment) -> List[s
 	# data["python_requires"] = f'">={templates.globals["min_py_version"]}"'
 	data["py_modules"] = templates.globals["py_modules"]
 
-	templates.globals["additional_setup_args"] = "\n".join(["\t\t{}={},".format(*x) for x in sorted(data.items())]) + "\n" + templates.globals["additional_setup_args"]
+	templates.globals["additional_setup_args"] = "\n".join(["\t\t{}={},".format(*x) for x in sorted(data.items())]
+															) + "\n" + templates.globals["additional_setup_args"]
 
 	with (repo_path / "setup.py").open('w', encoding="UTF-8") as fp:
 		clean_writer(setup.render(), fp)

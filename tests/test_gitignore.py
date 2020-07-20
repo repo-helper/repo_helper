@@ -36,7 +36,9 @@ def test_make_gitignore(demo_environment):
 
 		assert managed_files == [".gitignore"]
 
-		assert (tmpdir_p / managed_files[0]).read_text(encoding="UTF-8") == """\
+		assert (tmpdir_p / managed_files[0]).read_text(
+				encoding="UTF-8"
+				) == """\
 # This file is managed by 'repo_helper'. Don't edit it directly.
 __pycache__/
 *.py[cod]

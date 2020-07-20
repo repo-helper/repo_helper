@@ -123,7 +123,9 @@ class Section:
 				if element.name == key:
 					new_values = convert_to_value(value, key)
 					element.multiline = True
-					if "\n".join(element.values) == "\n".join(x.content for x in new_values) or ", ".join(element.values) == ", ".join(x.content for x in new_values):
+					if "\n".join(element.values) == "\n".join(x.content for x in new_values) or ", ".join(
+							element.values
+							) == ", ".join(x.content for x in new_values):
 						break
 					element.structure = new_values
 					break
@@ -142,6 +144,7 @@ class Section:
 
 
 class Option:
+
 	def __init__(self, lineno: int, name: str, structure: List, multiline=None):
 
 		self.lineno: int = lineno
@@ -211,6 +214,7 @@ class Value(NamedTuple):
 
 
 class ConfigEditor:
+
 	def __init__(self, filename):
 		with open(filename) as fp:
 			in_section = None
@@ -234,7 +238,9 @@ class ConfigEditor:
 							comment = Comment(lineno, section_match.group(3).lstrip(), section_match.group(2))
 						else:
 							comment = None
-						self.structure.append(Section(lineno, section_match.group(1), structure=[], lineend_comment=comment))
+						self.structure.append(
+								Section(lineno, section_match.group(1), structure=[], lineend_comment=comment)
+								)
 						in_section = self.structure[-1]
 
 				else:
@@ -267,7 +273,9 @@ class ConfigEditor:
 							comment = Comment(lineno, section_match.group(3).lstrip(), section_match.group(2))
 						else:
 							comment = None
-						self.structure.append(Section(lineno, section_match.group(1), structure=[], lineend_comment=comment))
+						self.structure.append(
+								Section(lineno, section_match.group(1), structure=[], lineend_comment=comment)
+								)
 						in_section = self.structure[-1]
 						in_option = None
 
@@ -281,8 +289,13 @@ class ConfigEditor:
 								in_section.structure.append(in_option.structure.pop(-1))
 
 						if option_match.group(2):
-							in_section.structure.append(Option(lineno, option_match.group(1),
-															   structure=[Value(lineno, '', option_match.group(2))]))
+							in_section.structure.append(
+									Option(
+											lineno,
+											option_match.group(1),
+											structure=[Value(lineno, '', option_match.group(2))]
+											)
+									)
 						else:
 							in_section.structure.append(Option(lineno, option_match.group(1), structure=[]))
 						in_option = in_section.structure[-1]
@@ -348,22 +361,16 @@ def convert_to_value(value, key):
 	elif isinstance(value, Mapping):
 		colon_joined_mapping = [f"{k}: {convert_to_string(v, key)}" for k, v in value.items()]
 
-		return [
-				Value(lineno=-1, indent='    ', content=value)
-				for value in colon_joined_mapping
-				]
+		return [Value(lineno=-1, indent='    ', content=value) for value in colon_joined_mapping]
 
 	elif isinstance(value, Iterable):
 		# comma_joined_value = ", ".join(value)
 		# if (len(comma_joined_value) + len(key)) > 75:
-			return [
-					Value(lineno=-1, indent='    ', content=v)
-					for v in value
-					]
-		# else:
-		# 	return [
-		# 			Value(lineno=-1, indent='    ', content=comma_joined_value)
-		# 			]
+		return [Value(lineno=-1, indent='    ', content=v) for v in value]
+	# else:
+	# 	return [
+	# 			Value(lineno=-1, indent='    ', content=comma_joined_value)
+	# 			]
 
 	else:
 		raise TypeError(f"Don't know how to convert {type(value)} to a Value.")
@@ -371,29 +378,27 @@ def convert_to_value(value, key):
 
 def convert_to_option(value, key):
 	if isinstance(value, (str, bool, int, float)):
-		return Option(lineno=-1, name=key, structure=[
-				Value(lineno=-1, indent='    ', content=value)
-				])
+		return Option(lineno=-1, name=key, structure=[Value(lineno=-1, indent='    ', content=value)])
 
 	elif isinstance(value, Mapping):
 		colon_joined_mapping = [f"{k}: {convert_to_string(v, key)}" for k, v in value.items()]
 
-		return Option(lineno=-1, name=key, structure=[
-				Value(lineno=-1, indent='    ', content=value)
-				for value in colon_joined_mapping
-				])
+		return Option(
+				lineno=-1,
+				name=key,
+				structure=[Value(lineno=-1, indent='    ', content=value) for value in colon_joined_mapping]
+				)
 
 	elif isinstance(value, Iterable):
 		comma_joined_value = ", ".join(value)
 		if (len(comma_joined_value) + len(key)) > 75:
-			return Option(lineno=-1, name=key, structure=[
-					Value(lineno=-1, indent='    ', content=v)
-					for v in value
-					])
+			return Option(
+					lineno=-1, name=key, structure=[Value(lineno=-1, indent='    ', content=v) for v in value]
+					)
 		else:
-			return Option(lineno=-1, name=key, structure=[
-					Value(lineno=-1, indent='    ', content=comma_joined_value)
-					])
+			return Option(
+					lineno=-1, name=key, structure=[Value(lineno=-1, indent='    ', content=comma_joined_value)]
+					)
 
 	else:
 		raise TypeError(f"Don't know how to convert {type(value)} to an Option.")

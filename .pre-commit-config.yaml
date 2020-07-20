@@ -14,6 +14,7 @@ repos:
     - id: check-symlinks
     - id: check-vcs-permalinks
     - id: check-yaml
+      exclude: ^repo_helper/templates/.*\.(yml|yaml)$
     - id: detect-private-key
     - id: end-of-file-fixer
     - id: requirements-txt-fixer
@@ -35,6 +36,7 @@ repos:
    rev: 5.1.4
    hooks:
     - id: isort
+      exclude: ^(doc-source/conf|__pkginfo__|make_conda_recipe|setup)\.py$
 
  - repo: https://github.com/pre-commit/mirrors-yapf
    rev: v0.30.0

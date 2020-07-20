@@ -21,7 +21,6 @@
 # SOFTWARE.
 
 # In turn based on Python's configparser module; Distributed under the PSF License.
-
 """Configuration file updater.
 
 A configuration file consists of sections, lead by a "[section]" header,
@@ -46,22 +45,26 @@ configuration file.
 import sys
 from collections.abc import MutableMapping
 from configparser import (
-	DuplicateOptionError,
-	DuplicateSectionError,
-	MissingSectionHeaderError,
-	NoOptionError,
-	NoSectionError,
-	ParsingError
-)
+		DuplicateOptionError,
+		DuplicateSectionError,
+		MissingSectionHeaderError,
+		NoOptionError,
+		NoSectionError,
+		ParsingError
+		)
 from textwrap import indent
 from typing import Iterable, Mapping
 
 # 3rd party
-from configupdater.configupdater import Block, BlockBuilder, Comment  # type: ignore
-from configupdater.configupdater import ConfigUpdater as __BaseConfigUpdater  # type: ignore
-from configupdater.configupdater import Container, NoConfigFileReadError
-from configupdater.configupdater import Option as __BaseOption  # type: ignore
-from configupdater.configupdater import Space  # type: ignore
+from configupdater.configupdater import (  # type: ignore
+		Block,
+		BlockBuilder,
+		Comment,
+		Space,
+		ConfigUpdater as __BaseConfigUpdater,
+		Container, NoConfigFileReadError,
+		Option as __BaseOption,
+		)
 
 __all__ = [
 		"NoSectionError",
@@ -129,9 +132,7 @@ class Section(Block, Container, MutableMapping):
 		return self
 
 	def _get_option_idx(self, key):
-		idx = [
-				i for i, entry in enumerate(self._structure)
-				if isinstance(entry, Option) and entry.key == key]
+		idx = [i for i, entry in enumerate(self._structure) if isinstance(entry, Option) and entry.key == key]
 		if idx:
 			return idx[0]
 		else:
@@ -183,8 +184,7 @@ class Section(Block, Container, MutableMapping):
 
 	def __eq__(self, other):
 		if isinstance(other, self.__class__):
-			return (self.name == other.name and
-					self._structure == other._structure)
+			return self.name == other.name and self._structure == other._structure
 		else:
 			return False
 
@@ -194,8 +194,7 @@ class Section(Block, Container, MutableMapping):
 		Returns:
 			list: list of :class:`Option` blocks
 		"""
-		return [entry for entry in self._structure
-				if isinstance(entry, Option)]
+		return [entry for entry in self._structure if isinstance(entry, Option)]
 
 	def options(self):
 		"""Returns option names
@@ -260,8 +259,7 @@ class Option(__BaseOption):
 		updated (bool): indicates name change or a new section
 	"""
 
-	def __init__(self, key, value, container, delimiter='=',
-				 space_around_delimiters=True, line=None):
+	def __init__(self, key, value, container, delimiter='=', space_around_delimiters=True, line=None):
 		super().__init__(
 				key=key,
 				value=value,
@@ -297,9 +295,16 @@ class ConfigUpdater(__BaseConfigUpdater):
 	  * non-strict mode allowing duplicate sections and keys.
 	"""
 
-	def __init__(self, allow_no_value=False, *, delimiters=('=', ':'),
-				 comment_prefixes=('#', ';'), inline_comment_prefixes=None,
-				 strict=True, space_around_delimiters=True):
+	def __init__(
+			self,
+			allow_no_value=False,
+			*,
+			delimiters=('=', ':'),
+			comment_prefixes=('#', ';'),
+			inline_comment_prefixes=None,
+			strict=True,
+			space_around_delimiters=True
+			):
 		"""Constructor of ConfigUpdater
 
 		Args:
@@ -336,11 +341,13 @@ class ConfigUpdater(__BaseConfigUpdater):
 
 	def _add_option(self, key, vi, value, line):
 		entry = Option(
-				key, value,
+				key,
+				value,
 				delimiter=vi,
 				container=self.last_item,
 				space_around_delimiters=self._space_around_delimiters,
-				line=line)
+				line=line
+				)
 		self.last_item.add_option(entry)
 
 	def _read(self, fp, fpname):
@@ -399,10 +406,10 @@ class ConfigUpdater(__BaseConfigUpdater):
 				if self._empty_lines_in_values:
 					# add empty line to the value, but only if there was no
 					# comment on the line
-					if (comment_start is None and
-							cursect is not None and
-							optname and
-							cursect[optname] is not None):
+					if (
+							comment_start is None and cursect is not None and optname
+							and cursect[optname] is not None
+							):
 						cursect[optname].append('')  # newlines added at join
 						self.last_item.last_item.add_line(line)  # HOOK
 				else:
@@ -415,12 +422,10 @@ class ConfigUpdater(__BaseConfigUpdater):
 			first_nonspace = self.NONSPACECRE.search(line)
 			cur_indent_level = first_nonspace.start() if first_nonspace else 0
 
-			if (cursect is not None and optname and
-					cur_indent_level > indent_level):
+			if (cursect is not None and optname and cur_indent_level > indent_level):
 				cursect[optname].append(value)
 				self.last_item.last_item.add_line(line)  # HOOK
-			elif (cursect is not None and optname and
-				  line[0] in {";", "#"}):
+			elif (cursect is not None and optname and line[0] in {";", "#"}):
 				cursect[optname].append(value)
 				self.last_item.last_item.add_line(line)  # HOOK
 			# a section header or option header?
@@ -432,8 +437,7 @@ class ConfigUpdater(__BaseConfigUpdater):
 					sectname = mo.group('header')
 					if sectname in self._sections:
 						if self._strict and sectname in elements_added:
-							raise DuplicateSectionError(sectname, fpname,
-														lineno)
+							raise DuplicateSectionError(sectname, fpname, lineno)
 						cursect = self._sections[sectname]
 						elements_added.add(sectname)
 					else:
@@ -454,10 +458,8 @@ class ConfigUpdater(__BaseConfigUpdater):
 						if not optname:
 							e = self._handle_error(e, fpname, lineno, line)
 						optname = self.optionxform(optname.rstrip())
-						if (self._strict and
-								(sectname, optname) in elements_added):
-							raise DuplicateOptionError(sectname, optname,
-													   fpname, lineno)
+						if (self._strict and (sectname, optname) in elements_added):
+							raise DuplicateOptionError(sectname, optname, fpname, lineno)
 						elements_added.add((sectname, optname))
 						# This check is fine because the OPTCRE cannot
 						# match if it would set optval to None
@@ -484,8 +486,7 @@ class ConfigUpdater(__BaseConfigUpdater):
 		Returns:
 			list: list of :class:`Section` blocks
 		"""
-		return [block for block in self._structure
-				if isinstance(block, Section)]
+		return [block for block in self._structure if isinstance(block, Section)]
 
 
 def convert_to_string(value, key):

@@ -17,7 +17,7 @@ Configuration for various linting tools, such as
 #
 #  This program is distributed in the hope that it will be useful,
 #  but WITHOUT ANY WARRANTY; without even the implied warranty of
-#  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
 #  GNU Lesser General Public License for more details.
 #
 #  You should have received a copy of the GNU Lesser General Public License
@@ -102,8 +102,10 @@ lint_warn_list = [
 		"E721",
 		"W504",
 		"E302",
+		]
 
-  # flake8_2020
+# flake8_2020
+lint_warn_list += [
 		"YTT101",  # sys.version[:3] referenced (python3.10)
 		"YTT102",  # sys.version[2] referenced (python3.10)
 		"YTT103",  # sys.version compared to string (python3.10)
@@ -114,12 +116,16 @@ lint_warn_list = [
 		"YTT301",  # sys.version[0] referenced (python10)
 		"YTT302",  # sys.version compared to string (python10)
 		"YTT303",  # sys.version[:1] referenced (python10)
+		]
 
-		# flake8_strftime
+# flake8_strftime
+lint_warn_list += [
 		"STRFTIME001",  # Linux-specific strftime code used
 		"STRFTIME002",  # Windows-specific strftime code used
+		]
 
-		# flake8_pytest
+# flake8_pytest
+lint_warn_list += [
 		"PT001",  # use @pytest.fixture() over @pytest.fixture (configurable by pytest-fixture-no-parentheses)
 		"PT002",  # configuration for fixture '{name}' specified via positional args, use kwargs
 		"PT003",  # scope='function' is implied in @pytest.fixture()
@@ -141,8 +147,10 @@ lint_warn_list = [
 		"PT019",  # fixture {name} without value is injected as parameter, use @pytest.mark.usefixtures instead
 		"PT020",  # @pytest.yield_fixture is deprecated, use @pytest.fixture
 		"PT021",  # use yield instead of request.addfinalizer
+		]
 
-		# flake8_rst_docstrings
+# flake8_rst_docstrings
+lint_warn_list += [
 		"RST201",  # Block quote ends without a blank line; unexpected unindent.
 		"RST202",  # Bullet list ends without a blank line; unexpected unindent.
 		"RST203",  # Definition list ends without a blank line; unexpected unindent.
@@ -175,22 +183,30 @@ lint_warn_list = [
 		"RST901",  # Failed to parse file
 		"RST902",  # Failed to parse __all__ entry
 		"RST903",  # Failed to lint docstring (e.g. unicode encoding issue under Python 2)
+		]
 
-		# flake8-quotes
+# flake8-quotes
+lint_warn_list += [
 		"Q000",  # Remove bad quotes
 		"Q001",  # Remove bad quotes from multiline string
 		"Q002",  # Remove bad quotes from docstring
 		"Q003",  # Change outer quotes to avoid escaping inner quotes
+		]
 
-		# flake8-builtins
+# flake8-builtins
+lint_warn_list += [
 		"A001",  # variable "{0}" is shadowing a python builtin
 		"A002",  # argument "{0}" is shadowing a python builtin
 		"A003",  # class attribute "{0}" is shadowing a python builtin
+		]
 
-		# walrus, py38 only
-		# "ASN001",  # do not use assignment expressions
+# walrus, py38 only
+# lint_warn_list += [
+# 		"ASN001",  # do not use assignment expressions
+# 		]
 
-
+# Type checking
+lint_warn_list += [
 		"TYP001",  # guard import by TYPE_CHECKING
 		"TYP002",  # @overload is broken in <3.5.2
 		"TYP003",  # Union[Match, ...] or Union[Pattern, ...] must be quoted in <3.5.2
@@ -199,8 +215,8 @@ lint_warn_list = [
 		"TYP006",  # guard typing attribute by quoting
 		]
 
+# pydocstyle
 code_only_warning = [
-		# pydocstyle
 		"D100",  # Missing docstring in public module
 		"D101",  # Missing docstring in public class
 		"D102",  # Missing docstring in public method

@@ -34,7 +34,9 @@ def test_travis(demo_environment):
 
 		managed_files = make_travis(tmpdir_p, demo_environment)
 		assert managed_files == [".travis.yml"]
-		assert (tmpdir_p / managed_files[0]).read_text(encoding="UTF-8") == """\
+		assert (tmpdir_p / managed_files[0]).read_text(
+				encoding="UTF-8"
+				) == """\
 # This file is managed by 'repo_helper'. Don't edit it directly.
 ---
 
@@ -110,7 +112,9 @@ jobs:
 
 		managed_files = make_travis(tmpdir_p, demo_environment)
 		assert managed_files == [".travis.yml"]
-		assert (tmpdir_p / managed_files[0]).read_text(encoding="UTF-8") == """\
+		assert (tmpdir_p / managed_files[0]).read_text(
+				encoding="UTF-8"
+				) == """\
 # This file is managed by 'repo_helper'. Don't edit it directly.
 ---
 
@@ -170,7 +174,9 @@ def test_travis_deploy_conda(demo_environment):
 
 		managed_files = make_travis_deploy_conda(tmpdir_p, demo_environment)
 		assert managed_files == [".ci/travis_deploy_conda.sh"]
-		assert (tmpdir_p / managed_files[0]).read_text(encoding="UTF-8") == """\
+		assert (tmpdir_p / managed_files[0]).read_text(
+				encoding="UTF-8"
+				) == """\
 #!/bin/bash
 # This file is managed by 'repo_helper'. Don't edit it directly.
 
@@ -225,7 +231,9 @@ def test_github_ci(demo_environment):
 		assert (tmpdir_p / managed_files[0]).is_file()
 		assert not (tmpdir_p / managed_files[1]).is_file()
 
-		assert (tmpdir_p / managed_files[0]).read_text(encoding="UTF-8") == """\
+		assert (tmpdir_p / managed_files[0]).read_text(
+				encoding="UTF-8"
+				) == """\
 # This file is managed by 'repo_helper'. Don't edit it directly.
 ---
 name: Windows Tests
@@ -279,7 +287,9 @@ jobs:
 		assert (tmpdir_p / managed_files[0]).is_file()
 		assert (tmpdir_p / managed_files[1]).is_file()
 
-		assert (tmpdir_p / managed_files[0]).read_text(encoding="UTF-8") == """\
+		assert (tmpdir_p / managed_files[0]).read_text(
+				encoding="UTF-8"
+				) == """\
 # This file is managed by 'repo_helper'. Don't edit it directly.
 ---
 name: Windows Tests
@@ -322,7 +332,9 @@ jobs:
       - name: "Run Tests for Python ${{ matrix.python-version }}"
         run: "python -m tox"
 """
-		assert (tmpdir_p / managed_files[1]).read_text(encoding="UTF-8") == """\
+		assert (tmpdir_p / managed_files[1]).read_text(
+				encoding="UTF-8"
+				) == """\
 # This file is managed by 'repo_helper'. Don't edit it directly.
 ---
 name: macOS Tests

@@ -18,9 +18,9 @@ INSUFFICIENT INFO WILL GET THE ISSUE CLOSED. IT WILL ONLY BE REOPENED AFTER SUFF
 ## Steps to Reproduce
 <!--Please add a series of steps to reproduce the issue-->
 
-   1. 
-   2. 
-   3. 
+   1. {# #}
+   2. {# #}
+   3. {# #}
 
 ## Actual result:
 <!--Please add screenshots if needed and include the Python traceback if present-->
@@ -35,10 +35,10 @@ INSUFFICIENT INFO WILL GET THE ISSUE CLOSED. IT WILL ONLY BE REOPENED AFTER SUFF
 
 ## Version
 
-  * Operating System: 
-  * Python: 
-  * {{ modname }}: 
-  
+  * Operating System: {# #}
+  * Python: {# #}
+  * {{ modname }}: {# #}
+
 ## Installation source
 <!-- e.g. Github repository, Github Releases, PyPI/pip, Anaconda/conda -->
 

@@ -20,9 +20,9 @@ INSUFFICIENT INFO WILL GET THE ISSUE CLOSED. IT WILL ONLY BE REOPENED AFTER SUFF
 
 ## Version
 
-  * Operating System: 
-  * Python: 
-  * {{ modname }}: 
+  * Operating System: {# #}
+  * Python: {# #}
+  * {{ modname }}: {# #}
 
 
 ## Other Additional Information:
