@@ -19,8 +19,6 @@ __all__ = [
 		"__version__",
 		"modname",
 		"pypi_name",
-		"py_modules",
-		"entry_points",
 		"__license__",
 		"__author__",
 		"short_desc",
@@ -29,13 +27,11 @@ __all__ = [
 		"github_username",
 		"web",
 		"github_url",
-		"project_urls",
 		"repo_root",
-		"long_description",
 		"install_requires",
 		"extras_require",
-		"classifiers",
-		"keywords",
+		"project_urls",
+
 		"import_name",
 		]
 
@@ -44,49 +40,23 @@ __copyright__ = """
 """
 
 __version__ = "0.0.1"
-
 modname = "repo_helper"
 pypi_name = "repo_helper"
 import_name = "repo_helper"
-py_modules = []
-entry_points = {
-		"console_scripts": ['repo_helper = repo_helper.__main__:main', 'repo-helper = repo_helper.__main__:main']
-		}
-
 __license__ = "GNU Lesser General Public License v3 or later (LGPLv3+)"
-
 short_desc = "Update multiple configuration files, build scripts etc. from a single location"
-
 __author__ = author = "Dominic Davis-Foster"
 author_email = "dominic@davis-foster.co.uk"
 github_username = "domdfcoding"
-web = github_url = f"https://github.com/domdfcoding/repo_helper"
-project_urls = {
-		"Documentation": f"https://repo_helper.readthedocs.io",
-		"Issue Tracker": f"{github_url}/issues",
-		"Source Code": github_url,
-		}
-
+web = github_url = "https://github.com/domdfcoding/repo_helper"
 repo_root = pathlib.Path(__file__).parent
-
-# Get info from files; set: long_description
-long_description = (repo_root / "README.rst").read_text(encoding="utf-8").replace("0.0.1", __version__) + '\n'
-
 install_requires = (repo_root / "requirements.txt").read_text(encoding="utf-8").split('\n')
 extras_require = {'all': []}
 
-classifiers = [
-		'Development Status :: 4 - Beta',
-		'Intended Audience :: Developers',
-		'License :: OSI Approved :: GNU Lesser General Public License v3 or later (LGPLv3+)',
-		'Operating System :: OS Independent',
-		'Programming Language :: Python',
-		'Programming Language :: Python :: 3 :: Only',
-		'Programming Language :: Python :: 3.7',
-		'Programming Language :: Python :: 3.8',
-		'Programming Language :: Python :: Implementation :: CPython',
-		'Topic :: Utilities',
 
-		]
 
-keywords = ""
+project_urls = {
+		"Documentation": "https://repo_helper.readthedocs.io",
+		"Issue Tracker": f"{github_url}/issues",
+		"Source Code": github_url,
+		}

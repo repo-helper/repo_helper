@@ -15,8 +15,10 @@ sys.path.append(os.path.abspath('..'))
 
 from __pkginfo__ import __version__
 
+# User-configurable lines
+# End of user-configurable lines
 
-github_url = f"https://github.com/domdfcoding/repo_helper"
+github_url = "https://github.com/domdfcoding/repo_helper"
 
 rst_prolog = f""".. |pkgname| replace:: repo_helper
 .. |pkgname2| replace:: ``repo_helper``
@@ -46,12 +48,15 @@ extensions = [
 		"sphinx_autodoc_typehints",
 		"sphinx.ext.autosummary",
 		"autodocsumm",
+		"sphinx_copybutton",
+		# "sphinx_gitstamp",
 		'autoconfig',
 		'autodocsumm',
 		]
 
 sphinxemoji_style = 'twemoji'
 todo_include_todos = bool(os.environ.get("SHOW_TODOS", False))
+gitstamp_fmt = "%d %b %Y"
 
 templates_path = ['_templates']
 html_static_path = ['_static']
@@ -90,7 +95,6 @@ html_theme_options = {
 		'fixed_sidebar': 'false',
 		}
 html_theme_path = ["../.."]
-# html_logo = "logo/pyms.png"
 html_show_sourcelink = True  # True will show link to source
 
 html_context = {
@@ -118,14 +122,14 @@ def setup(app):
 							'type',
 							label=_('Type'),
 							has_arg=False,
-							names=('type',),
-							bodyrolename='class'
+							names=('type', ),
+							bodyrolename='class',
 							),
 					Field(
 							'default',
 							label=_('Default'),
 							has_arg=False,
-							names=('default',),
+							names=('default', ),
 							),
 					]
 			)
