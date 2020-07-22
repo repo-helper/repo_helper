@@ -95,6 +95,7 @@ __all__ = [
 		"mypy_deps",
 		"pure_python",
 		"stubs_package",
+		"on_pypi",
 		]
 
 
@@ -162,6 +163,14 @@ class modname(ConfigVar):  # noqa
 	required = True
 	category: str = "metadata"
 
+	@staticmethod
+	def validator(name: str) -> str:
+		if not name.replace("-", "_").isidentifier():
+			raise ValueError("""\
+'modname' must only contain contains letters, numbers and underscores (_). 
+It cannot cannot start with a number, or contain any spaces.""")
+		return name
+
 
 def validate_version(version_string: str) -> str:
 	v = Version(version_string)
@@ -224,6 +233,14 @@ class repo_name(ConfigVar):  # noqa
 	default = modname
 	category: str = "metadata"
 
+	@staticmethod
+	def validator(name: str) -> str:
+		if not name.replace("-", "_").isidentifier():
+			raise ValueError("""\
+'repo_name' must only contain contains letters, numbers and underscores (_).
+It cannot cannot start with a number, or contain any spaces.""")
+		return name
+
 
 class pypi_name(ConfigVar):  # noqa
 	"""
@@ -240,6 +257,14 @@ class pypi_name(ConfigVar):  # noqa
 	default = modname
 	category: str = "metadata"
 
+	@staticmethod
+	def validator(name: str) -> str:
+		if not name.replace("-", "_").isidentifier():
+			raise ValueError("""\
+'pypi_name' must only contain contains letters, numbers and underscores (_). 
+It cannot cannot start with a number, or contain any spaces.""")
+		return name
+
 
 class import_name(ConfigVar):  # noqa
 	"""
@@ -254,8 +279,16 @@ class import_name(ConfigVar):  # noqa
 
 	dtype = str
 	default = modname
-	validator = lambda x: x.replace("-", "_")  # replace hyphens with underscores
 	category: str = "metadata"
+
+	@staticmethod
+	def validator(name: str) -> str:
+		name = name.replace("-", "_")  # replace hyphens with underscores
+		if not name.isidentifier():
+			raise ValueError("""\
+'import_name' must only contain contains letters, numbers and underscores (_). 
+It cannot cannot start with a number, or contain any spaces.""")
+		return name
 
 
 class classifiers(ConfigVar):  # noqa
@@ -419,6 +452,22 @@ class pure_python(ConfigVar):  # noqa
 	.. code-block:: yaml
 
 		pure_python: True
+	"""
+
+	dtype = bool
+	default = True
+	category: str = "metadata"
+
+
+class on_pypi(ConfigVar):  # noqa
+	"""
+	Flag to indicate the package is available on PyPI
+
+	Example:
+
+	.. code-block:: yaml
+
+		on_pypi: True
 	"""
 
 	dtype = bool
