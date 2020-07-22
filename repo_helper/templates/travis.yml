@@ -23,13 +23,13 @@ script:
 
 stages:
   - test
-  - deploy_pypi
+{% if on_pypi %}  - deploy_pypi{% endif %}
 {% if enable_conda %}  - deploy_conda{% endif %}
 {% if False %}{% if enable_releases %}  - deploy_releases{% endif %}{% endif %}
-
+{% if on_pypi or enable_conda %}
 jobs:
   include:
-    - stage: deploy_pypi
+{% if on_pypi %}    - stage: deploy_pypi
       python: "{{ python_deploy_version }}"
       script: skip
       deploy:
@@ -41,7 +41,7 @@ jobs:
         password:
           secure: {{ travis_pypi_secure }}
         distributions: "sdist bdist_wheel"
-        skip_existing: true
+        skip_existing: true{% endif %}
 {% if enable_conda %}    - stage: deploy_conda
       python: "{{ python_deploy_version }}"
       addons:
@@ -69,3 +69,4 @@ jobs:
           repo: {{ username }}/{{ repo_name }}
         provider: script
         script: python .ci/copy_pypi_2_github.py || return 1;{% endif %}
+{% endif %}

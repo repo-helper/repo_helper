@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 
-# {{ managed_message }}
+# This file is managed by `repo_helper`. Don't edit it directly.
 
 # stdlib
 import platform
