@@ -76,8 +76,8 @@ shields_block_template: Template = Environment(
 {% if "macOS" in platforms %}|actions_macos{{ unique_name }}| {% endif %}\
 {% if tests %}|coveralls{{ unique_name }}| {% endif %}\
 |codefactor{{ unique_name }}|
-	* - PyPI
-	  - |pypi-version{{ unique_name }}| |supported-versions{{ unique_name }}| |supported-implementations{{ unique_name }}| |wheel{{ unique_name }}|
+	{% if on_pypi %}* - PyPI
+	  - |pypi-version{{ unique_name }}| |supported-versions{{ unique_name }}| |supported-implementations{{ unique_name }}| |wheel{{ unique_name }}|{% endif %}
 	{% if conda %}* - Anaconda
 	  - |conda-version{{ unique_name }}| |conda-platform{{ unique_name }}|
 	{% endif %}* - Activity
@@ -179,6 +179,7 @@ def create_shields_block(
 		docker_name: str = '',
 		platforms: Optional[Iterable[str]] = None,
 		pre_commit: bool = False,
+		on_pypi: bool = True,
 		) -> str:
 	"""
 	Create the shields block for insertion into the README, documentation etc.
@@ -204,7 +205,9 @@ def create_shields_block(
 	:type docker_name: str, optional
 	:param platforms: List of supported platforms.
 	:param pre_commit: Whether to show a shield for pre-commit
-	:tyoe pre_commit: bool
+	:type pre_commit: bool
+	:param on_pypi:
+	:type on_pypi: bool
 
 	:return: The shields block created from the above settings.
 	"""
@@ -232,6 +235,7 @@ def create_shields_block(
 			docker_shields=docker_shields,
 			platforms=platforms,
 			pre_commit=pre_commit,
+			on_pypi=on_pypi,
 			)
 
 
@@ -321,7 +325,10 @@ def create_short_desc_block(short_desc: str) -> str:
 .. end short_desc"""
 
 
-docs_installation_block_template = Environment(loader=BaseLoader, undefined=StrictUndefined).from_string(  # type: ignore
+docs_installation_block_template = Environment(
+		loader=BaseLoader,  # type: ignore
+		undefined=StrictUndefined,
+		).from_string(
 		"""\
 .. start installation
 

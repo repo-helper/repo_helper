@@ -29,7 +29,7 @@ from typing import List
 
 # 3rd party
 import jinja2
-from domdf_python_tools.paths import clean_writer
+from domdf_python_tools.paths import PathPlus
 
 __all__ = [
 		"ignores",
@@ -188,13 +188,12 @@ def make_gitignore(repo_path: pathlib.Path, templates: jinja2.Environment) -> Li
 	:type templates: jinja2.Environment
 	"""
 
-	with (repo_path / ".gitignore").open('w', encoding="UTF-8") as fp:
-		clean_writer(f"# {templates.globals['managed_message']}", fp)
+	all_ignores = [
+			f"# {templates.globals['managed_message']}",
+			*ignores,
+			*templates.globals["additional_ignore"],
+			]
 
-		for ignore in ignores:
-			clean_writer(ignore, fp)
-
-		for ignore in templates.globals["additional_ignore"]:
-			clean_writer(ignore, fp)
+	PathPlus(repo_path / ".gitignore").write_clean("\n".join(all_ignores))
 
 	return [".gitignore"]

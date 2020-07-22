@@ -26,15 +26,11 @@ Manage configuration files for bots.
 # stdlib
 import json
 import pathlib
-import shutil
 from typing import List
 
 # 3rd party
 import jinja2
-from domdf_python_tools.paths import clean_writer, maybe_make
-
-# this package
-from .templates import template_dir
+from domdf_python_tools.paths import PathPlus
 
 __all__ = ["make_dependabot", "make_auto_assign_action", "make_stale_bot", "make_imgbot"]
 
@@ -50,11 +46,9 @@ def make_stale_bot(repo_path: pathlib.Path, templates: jinja2.Environment) -> Li
 	:type templates: jinja2.Environment
 	"""
 
-	dot_github = repo_path / ".github"
-	maybe_make(dot_github)
-
-	with (dot_github / "stale.yml").open("w", encoding="UTF-8") as fp:
-		clean_writer(templates.get_template("stale_bot.yaml").render(), fp)
+	dot_github = PathPlus(repo_path / ".github")
+	dot_github.maybe_make()
+	(dot_github / "stale.yml").write_clean(templates.get_template("stale_bot.yaml").render())
 
 	return [".github/stale.yml"]
 
@@ -70,8 +64,8 @@ def make_auto_assign_action(repo_path: pathlib.Path, templates: jinja2.Environme
 	:type templates: jinja2.Environment
 	"""
 
-	dot_github = repo_path / ".github"
-	maybe_make(dot_github / "workflows", parents=True)
+	dot_github = PathPlus(repo_path / ".github")
+	(dot_github / "workflows").maybe_make(parents=True)
 
 	if (dot_github / "workflow" / "assign.yml").is_file():
 		(dot_github / "workflow" / "assign.yml").unlink()
@@ -82,9 +76,8 @@ def make_auto_assign_action(repo_path: pathlib.Path, templates: jinja2.Environme
 	if (dot_github / "workflows" / "assign.yml").is_file():
 		(dot_github / "workflows" / "assign.yml").unlink()
 
-	with (dot_github / "auto_assign.yml").open('w', encoding="UTF-8") as fp:
-		clean_writer(
-				f"""\
+	(dot_github / "auto_assign.yml").write_clean(
+			f"""\
 # {templates.globals['managed_message']}
 ---
 
@@ -109,9 +102,7 @@ numberOfReviewers: 0
 # numberOfAssignees: 2
 
 # more settings at https://github.com/marketplace/actions/auto-assign-action
-""",
-				fp
-				)
+""")
 
 	return [".github/workflows/assign.yml", ".github/workflow/assign.yml", ".github/auto_assign.yml"]
 
@@ -127,12 +118,11 @@ def make_dependabot(repo_path: pathlib.Path, templates: jinja2.Environment) -> L
 	:type templates: jinja2.Environment
 	"""
 
-	dependabot_dir = repo_path / ".dependabot"
-	maybe_make(dependabot_dir)
+	dependabot_dir = PathPlus(repo_path / ".dependabot")
+	dependabot_dir.maybe_make()
 
-	with (dependabot_dir / "config.yml").open('w', encoding="UTF-8") as fp:
-		clean_writer(
-				f"""\
+	(dependabot_dir / "config.yml").write_clean(
+			f"""\
 # {templates.globals['managed_message']}
 ---
 
@@ -143,9 +133,7 @@ update_configs:
     update_schedule: "weekly"
     default_reviewers:
       - "{templates.globals['username']}"
-""",
-				fp
-				)
+""")
 
 	return [".dependabot/config.yml"]
 
@@ -161,14 +149,13 @@ def make_imgbot(repo_path: pathlib.Path, templates: jinja2.Environment) -> List[
 	:type templates: jinja2.Environment
 	"""
 
-	imgbot_file = repo_path / ".imgbotconfig"
+	imgbot_file = PathPlus(repo_path / ".imgbotconfig")
 
 	imgbot_config = {
 			"schedule": "weekly",
 			"ignoredFiles": ["**/*.svg"] + templates.globals["imgbot_ignore"],
 			}
 
-	with imgbot_file.open('w', encoding="UTF-8") as fp:
-		clean_writer(json.dumps(imgbot_config, indent=4), fp)
+	imgbot_file.write_clean(json.dumps(imgbot_config, indent=4))
 
 	return [imgbot_file.name]

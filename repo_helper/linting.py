@@ -28,12 +28,11 @@ Configuration for various linting tools, such as
 
 # stdlib
 import pathlib
-import shutil
 from typing import List
 
 # 3rd party
 import jinja2
-from domdf_python_tools.paths import clean_writer, make_executable
+from domdf_python_tools.paths import PathPlus
 
 # this package
 from .templates import template_dir
@@ -259,8 +258,9 @@ def make_pylintrc(repo_path: pathlib.Path, templates: jinja2.Environment) -> Lis
 	:type templates: jinja2.Environment
 	"""
 
-	with (repo_path / ".pylintrc").open("w", encoding="UTF-8") as fp:
-		clean_writer((template_dir / "pylintrc").read_text(encoding="UTF-8"), fp)
+	PathPlus(repo_path / ".pylintrc").write_clean(
+			PathPlus(template_dir / "pylintrc").read_text(),
+			)
 
 	return [".pylintrc"]
 
@@ -275,10 +275,9 @@ def make_lint_roller(repo_path: pathlib.Path, templates: jinja2.Environment) -> 
 	"""
 
 	lint_roller = templates.get_template("lint_roller.sh")
+	lint_file = PathPlus(repo_path / "lint_roller.sh")
 
-	with (repo_path / "lint_roller.sh").open('w', encoding="UTF-8") as fp:
-		clean_writer(lint_roller.render(), fp)
-
-	make_executable(repo_path / "lint_roller.sh", )
+	lint_file.write_clean(lint_roller.render())
+	lint_file.make_executable()
 
 	return ["lint_roller.sh"]

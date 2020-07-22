@@ -29,7 +29,7 @@ from typing import List
 
 # 3rd party
 import jinja2
-from domdf_python_tools.paths import clean_writer, make_executable, maybe_make
+from domdf_python_tools.paths import PathPlus
 
 # this package
 from .templates import template_dir
@@ -62,8 +62,7 @@ def make_travis(repo_path: pathlib.Path, templates: jinja2.Environment) -> List[
 	else:
 		travis = templates.get_template("travis_not_pure_python.yml")
 
-	with (repo_path / ".travis.yml").open('w', encoding="UTF-8") as fp:
-		clean_writer(travis.render(), fp)
+	PathPlus(repo_path / ".travis.yml").write_clean(travis.render())
 
 	return [".travis.yml"]
 
@@ -96,9 +95,7 @@ def make_make_conda_recipe(repo_path: pathlib.Path, templates: jinja2.Environmen
 	"""
 
 	script = (template_dir / "make_conda_recipe._py").read_text()
-
-	with (repo_path / "make_conda_recipe.py").open("w", encoding="UTF-8") as fp:
-		clean_writer(script, fp)
+	PathPlus(repo_path / "make_conda_recipe.py").write_clean(script)
 
 	return ["make_conda_recipe.py"]
 
@@ -114,13 +111,11 @@ def make_travis_deploy_conda(repo_path: pathlib.Path, templates: jinja2.Environm
 
 	travis_deploy_conda = templates.get_template("travis_deploy_conda.sh")
 
-	ci_dir = repo_path / ".ci"
-	maybe_make(ci_dir)
+	ci_dir = PathPlus(repo_path / ".ci")
+	ci_dir.maybe_make()
 
-	with (ci_dir / "travis_deploy_conda.sh").open('w', encoding="UTF-8") as fp:
-		clean_writer(travis_deploy_conda.render(), fp)
-
-	make_executable(ci_dir / "travis_deploy_conda.sh")
+	(ci_dir / "travis_deploy_conda.sh").write_clean(travis_deploy_conda.render())
+	(ci_dir / "travis_deploy_conda.sh").make_executable()
 
 	return [".ci/travis_deploy_conda.sh"]
 
@@ -141,52 +136,42 @@ def make_github_ci(repo_path: pathlib.Path, templates: jinja2.Environment) -> Li
 	def no_dev_versions(versions):
 		return [v for v in versions if not v.endswith("dev")]
 
-	dot_github = repo_path / ".github"
-	maybe_make(dot_github / "workflows", parents=True)
+	dot_github = PathPlus(repo_path / ".github")
+	(dot_github / "workflows").maybe_make(parents=True)
 
 	if "Windows" in templates.globals["platforms"]:
 		py_versions = templates.globals["python_versions"][:]
 		if not templates.globals["pure_python"] and "3.8" in py_versions:
 			py_versions.remove("3.8")  # FIXME: Python 3.8 tests fail on Windows for native wheels.
 
-		with (dot_github / "workflows" / "python_ci.yml").open('w', encoding="UTF-8") as fp:
-			clean_writer(
-					actions.render(
-							no_dev_versions=no_dev_versions,
-							ci_platform="windows-2019",
-							ci_name="Windows Tests",
-							python_versions=py_versions,
-							),
-					fp
-					)
+		(dot_github / "workflows" / "python_ci.yml").write_clean(
+				actions.render(
+						no_dev_versions=no_dev_versions,
+						ci_platform="windows-2019",
+						ci_name="Windows Tests",
+						python_versions=py_versions,
+						))
 	else:
 		if (dot_github / "workflows" / "python_ci.yml").is_file():
 			(dot_github / "workflows" / "python_ci.yml").unlink()
 
 	if "macOS" in templates.globals["platforms"]:
-		with (dot_github / "workflows" / "python_ci_macos.yml").open('w', encoding="UTF-8") as fp:
-			clean_writer(
-					actions.render(
-							no_dev_versions=no_dev_versions,
-							ci_platform="macos-latest",
-							ci_name="macOS Tests",
-							),
-					fp
-					)
+		(dot_github / "workflows" / "python_ci_macos.yml").write_clean(actions.render(
+				no_dev_versions=no_dev_versions,
+				ci_platform="macos-latest",
+				ci_name="macOS Tests",
+				))
 	else:
 		if (dot_github / "workflows" / "python_ci_macos.yml").is_file():
 			(dot_github / "workflows" / "python_ci_macos.yml").unlink()
 
 	if "Linux" in templates.globals["platforms"] and not templates.globals["pure_python"]:
-		with (dot_github / "workflows" / "python_ci_linux.yml").open('w', encoding="UTF-8") as fp:
-			clean_writer(
-					actions.render(
-							no_dev_versions=no_dev_versions,
-							ci_platform="ubuntu-18.04",
-							ci_name="Linux Tests",
-							),
-					fp
-					)
+		(dot_github / "workflows" / "python_ci_linux.yml").write_clean(
+				actions.render(
+						no_dev_versions=no_dev_versions,
+						ci_platform="ubuntu-18.04",
+						ci_name="Linux Tests",
+						))
 	else:
 		if (dot_github / "workflows" / "python_ci_linux.yml").is_file():
 			(dot_github / "workflows" / "python_ci_linux.yml").unlink()
@@ -203,8 +188,8 @@ def make_github_manylinux(repo_path: pathlib.Path, templates: jinja2.Environment
 	:type templates: jinja2.Environment
 	"""
 
-	dot_github = repo_path / ".github"
-	maybe_make(dot_github / "workflows", parents=True)
+	dot_github = PathPlus(repo_path / ".github")
+	(dot_github / "workflows").maybe_make(parents=True)
 
 	if not templates.globals["pure_python"] and "Linux" in templates.globals["platforms"]:
 
@@ -223,8 +208,8 @@ def make_github_manylinux(repo_path: pathlib.Path, templates: jinja2.Environment
 				wheel_py_versions.append(f"cp3{pyver}-cp3{pyver}")
 				PYVERSIONS.append(f'"3{pyver}"')
 
-		with (dot_github / "workflows" / "manylinux_build.yml").open('w', encoding="UTF-8") as fp:
-			clean_writer(actions.render(wheel_py_versions=wheel_py_versions, PYVERSIONS=" ".join(PYVERSIONS)), fp)
+		(dot_github / "workflows" / "manylinux_build.yml").write_clean(
+				actions.render(wheel_py_versions=wheel_py_versions, PYVERSIONS=" ".join(PYVERSIONS)))
 	else:
 		if (dot_github / "workflows" / "manylinux_build.yml").is_file():
 			(dot_github / "workflows" / "manylinux_build.yml").unlink()
@@ -243,11 +228,9 @@ def make_github_docs_test(repo_path: pathlib.Path, templates: jinja2.Environment
 
 	actions = templates.get_template("docs_test_action.yml")
 
-	dot_github = repo_path / ".github"
-	maybe_make(dot_github / "workflows", parents=True)
-
-	with (dot_github / "workflows" / "docs_test_action.yml").open('w', encoding="UTF-8") as fp:
-		clean_writer(actions.render(), fp)
+	dot_github = PathPlus(repo_path / ".github")
+	(dot_github / "workflows").maybe_make(parents=True)
+	(dot_github / "workflows" / "docs_test_action.yml").write_clean(actions.render())
 
 	return [".github/workflows/docs_test_action.yml"]
 
@@ -263,10 +246,13 @@ def make_github_octocheese(repo_path: pathlib.Path, templates: jinja2.Environmen
 
 	actions = templates.get_template("octocheese.yml")
 
-	dot_github = repo_path / ".github"
-	maybe_make(dot_github / "workflows", parents=True)
+	dot_github = PathPlus(repo_path / ".github")
+	(dot_github / "workflows").maybe_make(parents=True)
 
-	with (dot_github / "workflows" / "octocheese.yml").open('w', encoding="UTF-8") as fp:
-		clean_writer(actions.render(), fp)
+	if templates.globals["on_pypi"]:
+		(dot_github / "workflows" / "octocheese.yml").write_clean(actions.render())
+	else:
+		if (dot_github / "workflows" / "octocheese.yml").is_file():
+			(dot_github / "workflows" / "octocheese.yml").unlink()
 
 	return [".github/workflows/octocheese.yml"]

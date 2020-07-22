@@ -26,12 +26,14 @@ import pathlib
 import tempfile
 
 # this package
+from domdf_python_tools.paths import PathPlus
+
 from repo_helper.testing import ensure_tests_requirements, make_isort, make_yapf
 
 
 def test_ensure_tests_requirements(demo_environment):
 	with tempfile.TemporaryDirectory() as tmpdir:
-		tmpdir_p = pathlib.Path(tmpdir)
+		tmpdir_p = PathPlus(tmpdir)
 
 		(tmpdir_p / "tests").mkdir()
 		(tmpdir_p / "tests" / "requirements.txt").write_text('')
@@ -103,7 +105,6 @@ import_heading_localfolder = this package
 balanced_wrapping = False
 lines_between_types = 0
 use_parentheses = True
-float_to_top = True
 remove_redundant_aliases = True
 default_section = THIRDPARTY
 known_third_party =
@@ -160,7 +161,6 @@ import_heading_localfolder = this package
 balanced_wrapping = False
 lines_between_types = 0
 use_parentheses = True
-float_to_top = True
 remove_redundant_aliases = True
 default_section = THIRDPARTY
 known_first_party = hello_world

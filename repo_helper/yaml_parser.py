@@ -90,6 +90,7 @@ def parse_yaml(repo_path: pathlib.Path):
 			source_dir,
 			pure_python,
 			stubs_package,
+			on_pypi,
 
   # Optional Features
 			enable_tests,

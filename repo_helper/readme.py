@@ -65,6 +65,7 @@ def rewrite_readme(repo_path: pathlib.Path, templates: jinja2.Environment) -> Li
 			docker_name=templates.globals["docker_name"],
 			platforms=templates.globals["platforms"],
 			pre_commit=templates.globals["enable_pre_commit"],
+			on_pypi=templates.globals["on_pypi"],
 			)
 
 	if templates.globals["license"] == "GNU General Public License v2 (GPLv2)":

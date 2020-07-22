@@ -32,7 +32,7 @@ from typing import Any, Iterable, List, Optional, Tuple, Type, Union
 # 3rd party
 import requirements  # type: ignore
 import trove_classifiers  # type: ignore
-from domdf_python_tools.paths import clean_writer, maybe_make
+from domdf_python_tools.paths import maybe_make, PathPlus
 from domdf_python_tools.terminal_colours import Fore
 from domdf_python_tools.utils import stderr_writer
 from typing_extensions import Literal
@@ -114,8 +114,10 @@ def ensure_requirements(requirements_list: Iterable[Tuple[str, Optional[str]]], 
 
 	target_packages = [req[0].replace("-", "_") for req in requirements_list]
 
+	requirements_file = PathPlus(requirements_file)
+
 	if requirements_file.is_file():
-		with requirements_file.open(encoding="UTF-8") as fp:
+		with requirements_file.open() as fp:
 			test_requirements = list(requirements.parse(fp))
 
 	else:
@@ -125,21 +127,20 @@ def ensure_requirements(requirements_list: Iterable[Tuple[str, Optional[str]]], 
 
 	maybe_make(requirements_file.parent, parents=True)
 
-	with requirements_file.open('w', encoding="UTF-8") as fp:
-		for req in test_requirements:
-			if req.name.replace("-", "_") not in target_packages:
-				if req.specs:
-					output_buffer.append(f"{req.name} {','.join([''.join(x) for x in req.specs])}")
-				else:
-					output_buffer.append(req.name)
-
-		for requirement, version in requirements_list:
-			if version:
-				output_buffer.append(f"{requirement} >={version}")
+	for req in test_requirements:
+		if req.name.replace("-", "_") not in target_packages:
+			if req.specs:
+				output_buffer.append(f"{req.name} {','.join([''.join(x) for x in req.specs])}")
 			else:
-				output_buffer.append(f"{requirement}")
+				output_buffer.append(req.name)
 
-		clean_writer("\n".join(sorted(output_buffer)), fp)
+	for requirement, version in requirements_list:
+		if version:
+			output_buffer.append(f"{requirement} >={version}")
+		else:
+			output_buffer.append(f"{requirement}")
+
+	requirements_file.write_clean("\n".join(sorted(output_buffer)))
 
 
 def validate_classifiers(classifiers: Iterable[str]) -> bool:

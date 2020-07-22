@@ -159,14 +159,14 @@ def test_ensure_doc_requirements(demo_environment):
 alabaster
 autodocsumm
 extras_require
-sphinx >=3.0.3
-sphinx-copybutton >=0.2.12
+sphinx>=3.0.3
+sphinx-copybutton>=0.2.12
 sphinx-notfound-page
-sphinx-prompt >=1.2.0
-sphinx-tabs >=1.1.13
-sphinx_autodoc_typehints >=1.11.0
-sphinxcontrib-httpdomain >=1.7.0
-sphinxemoji >=0.1.6
+sphinx-prompt>=1.2.0
+sphinx-tabs>=1.1.13
+sphinx_autodoc_typehints>=1.11.0
+sphinxcontrib-httpdomain>=1.7.0
+sphinxemoji>=0.1.6
 """
 
 		with (tmpdir_p / managed_files[0]).open('a', encoding="UTF-8") as fp:
@@ -181,13 +181,13 @@ sphinxemoji >=0.1.6
 alabaster
 autodocsumm
 extras_require
-lorem >=0.1.1
-sphinx >=3.0.3
-sphinx-copybutton >=0.2.12
+lorem>=0.1.1
+sphinx>=3.0.3
+sphinx-copybutton>=0.2.12
 sphinx-notfound-page
-sphinx-prompt >=1.2.0
-sphinx-tabs >=1.1.13
-sphinx_autodoc_typehints >=1.11.0
-sphinxcontrib-httpdomain >=1.7.0
-sphinxemoji >=0.1.6
+sphinx-prompt>=1.2.0
+sphinx-tabs>=1.1.13
+sphinx_autodoc_typehints>=1.11.0
+sphinxcontrib-httpdomain>=1.7.0
+sphinxemoji>=0.1.6
 """

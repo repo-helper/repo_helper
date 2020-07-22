@@ -102,6 +102,7 @@ from __pkginfo__ import *  # pylint: disable=wildcard-import
 
 
 setup(
+		description="a short description",
 		extras_require=extras_require,
 		install_requires=install_requires,
 		py_modules=[],
@@ -146,6 +147,7 @@ import datetime
 print('datetime.datetime.now')
 
 setup(
+		description="a short description",
 		extras_require=extras_require,
 		install_requires=install_requires,
 		py_modules=[],

@@ -75,6 +75,8 @@ def demo_environment():
 					pure_python=True,
 					stubs_package=False,
 					managed_message="This file is managed by 'repo_helper'. Don't edit it directly.",
+					short_desc="a short description",
+					on_pypi=True,
 					)
 			)
 

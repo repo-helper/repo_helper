@@ -236,8 +236,8 @@ def test_copyright_years_errors(wrong_value):
 def test_repo_name():
 	assert repo_name.get({"repo_name": "repo_helper"}) == "repo_helper"
 	assert repo_name.get({"modname": "repo_helper"}) == "repo_helper"
-	assert repo_name.get({"modname": "the modname"}) == "the modname"
-	assert repo_name.get({"modname": "the modname", "repo_name": "repo_helper"}) == "repo_helper"
+	assert repo_name.get({"modname": "the_modname"}) == "the_modname"
+	assert repo_name.get({"modname": "the_modname", "repo_name": "repo_helper"}) == "repo_helper"
 
 	with pytest.raises(ValueError):
 		repo_name.get()
@@ -262,8 +262,8 @@ def test_repo_name_errors(wrong_value):
 def test_pypi_name():
 	assert pypi_name.get({"pypi_name": "repo_helper"}) == "repo_helper"
 	assert pypi_name.get({"modname": "repo_helper"}) == "repo_helper"
-	assert pypi_name.get({"modname": "the modname"}) == "the modname"
-	assert pypi_name.get({"modname": "the modname", "pypi_name": "repo_helper"}) == "repo_helper"
+	assert pypi_name.get({"modname": "the_modname"}) == "the_modname"
+	assert pypi_name.get({"modname": "the_modname", "pypi_name": "repo_helper"}) == "repo_helper"
 
 	with pytest.raises(ValueError):
 		pypi_name.get()
@@ -288,8 +288,8 @@ def test_import_name():
 	assert import_name.get({"modname": "repo_helper"}) == "repo_helper"
 	assert import_name.get({"modname": "repo-helper"}) == "repo_helper"
 	assert import_name.get({"import_name": "repo-helper"}) == "repo_helper"
-	assert import_name.get({"modname": "the modname"}) == "the modname"
-	assert import_name.get({"modname": "the modname", "import_name": "repo_helper"}) == "repo_helper"
+	assert import_name.get({"modname": "the_modname"}) == "the_modname"
+	assert import_name.get({"modname": "the_modname", "import_name": "repo_helper"}) == "repo_helper"
 
 	with pytest.raises(ValueError):
 		import_name.get()

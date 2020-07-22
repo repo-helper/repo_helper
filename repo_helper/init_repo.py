@@ -27,13 +27,12 @@ Initialise a new repository, creating the necessary files to get started.
 import datetime
 import os.path
 import pathlib
-import shutil
 from typing import List, Optional
 
 # 3rd party
 import jinja2
 import requests
-from domdf_python_tools.paths import clean_writer, maybe_make
+from domdf_python_tools.paths import clean_writer, maybe_make, PathPlus
 from jinja2 import BaseLoader, Environment, StrictUndefined
 
 # this package
@@ -61,8 +60,7 @@ def init_repo(repo_path: pathlib.Path, templates: jinja2.Environment) -> List[st
 	maybe_make(repo_path / templates.globals["import_name"])
 
 	__init__ = init_repo_templates.get_template("__init__.py")
-	with (repo_path / templates.globals["import_name"] / "__init__.py").open('w', encoding="UTF-8") as fp:
-		clean_writer(__init__.render(), fp)
+	PathPlus(repo_path / templates.globals["import_name"] / "__init__.py").write_clean(__init__.render())
 
 	# tests
 	if templates.globals["enable_tests"]:
@@ -78,17 +76,16 @@ def init_repo(repo_path: pathlib.Path, templates: jinja2.Environment) -> List[st
 
 		for filename in {"index.rst"}:
 			template = init_repo_templates.get_template(filename)
-			with (repo_path / templates.globals["docs_dir"] / filename).open('w', encoding="UTF-8") as fp:
-				clean_writer(template.render(), fp)
+			PathPlus(repo_path / templates.globals["docs_dir"] / filename).write_clean(template.render())
 
 		with (repo_path / templates.globals["docs_dir"] / "api" / templates.globals["modname"]
-				).open('w', encoding="UTF-8") as fp:
+				).with_suffix(".rst").open('w', encoding="UTF-8") as fp:
 			buf = '='
 			buf += '=' * len(templates.globals["import_name"])
-			buf += f"\n{templates.globals['import_name']}\n"
+			buf += f"\n{templates.globals['import_name']}\n="
 			buf += '=' * len(templates.globals["import_name"])
-			buf += """\n\n
-.. automodule:: {{ import_name }}
+			buf += f"""\n\n
+.. automodule:: {templates.globals["import_name"]}
 	:autosummary:
 	:members:
 	:inherited-members:
@@ -99,8 +96,7 @@ def init_repo(repo_path: pathlib.Path, templates: jinja2.Environment) -> List[st
 	# other
 	for filename in {"README.rst"}:
 		template = init_repo_templates.get_template(filename)
-		with (repo_path / filename).open('w', encoding="UTF-8") as fp:
-			clean_writer(template.render(), fp)
+		PathPlus(repo_path / filename).write_clean(template.render())
 
 	# Licenses from https://github.com/licenses/license-templates/tree/master/templates
 	license_url: Optional[str] = None
@@ -136,25 +132,21 @@ def init_repo(repo_path: pathlib.Path, templates: jinja2.Environment) -> List[st
 		response = requests.get(license_url)
 		if response.status_code == 200:
 			license_text = response.text
-			with (repo_path / "LICENSE").open('w', encoding="UTF-8") as fp:
-				clean_writer(response.text, fp)
 
-	with (repo_path / "LICENSE").open('w', encoding="UTF-8") as fp:
-		license_template = Environment(
-				loader=BaseLoader(),
-				undefined=StrictUndefined,
-				).from_string(license_text)  # type: ignore
-		clean_writer(
-				license_template.render(
-						year=datetime.datetime.today().year,
-						organization=templates.globals["author"],
-						project=templates.globals["modname"],
-						),
-				fp
-				)
+	license_template = Environment(
+			loader=BaseLoader(),
+			undefined=StrictUndefined,
+			).from_string(license_text)  # type: ignore
+
+	PathPlus(repo_path / "LICENSE").write_clean(
+			license_template.render(
+					year=datetime.datetime.today().year,
+					organization=templates.globals["author"],
+					project=templates.globals["modname"],
+					))
 
 	# Touch requirements file
-	(repo_path / "requirements.txt").open('a', encoding="UTF-8").close()
+	(repo_path / "requirements.txt").touch()
 
 	return [
 			os.path.join(templates.globals["import_name"], "__init__.py"),

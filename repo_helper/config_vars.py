@@ -28,6 +28,7 @@ from textwrap import dedent, indent
 from typing import Any, Callable, Dict, Iterable, List, Optional, Tuple, Type, Union
 
 # 3rd party
+from domdf_python_tools.paths import PathPlus
 from domdf_python_tools.utils import strtobool
 from typing_inspect import get_origin, is_literal_type
 
@@ -458,10 +459,8 @@ if __name__ == '__main__':
 	import repo_helper.configuration
 	from repo_helper.configuration import __all__
 
-	config_directory = pathlib.Path("../doc-source/config/")
-
-	if not config_directory.is_dir():
-		config_directory.mkdir(parents=True)
+	config_directory = PathPlus("../doc-source/config/")
+	config_directory.maybe_make(parents=True)
 
 	config_index = config_directory / "index.rst"
 

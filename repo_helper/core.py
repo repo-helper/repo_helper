@@ -30,7 +30,7 @@ from typing import Callable, List, Sequence, Tuple, Union
 
 # 3rd party
 import jinja2
-from domdf_python_tools.paths import clean_writer, maybe_make
+from domdf_python_tools.paths import clean_writer, PathPlus
 from domdf_python_tools.utils import enquote_value
 from configupdater import ConfigUpdater  # type: ignore
 
@@ -204,7 +204,7 @@ def ensure_bumpversion(repo_path: pathlib.Path, templates: jinja2.Environment) -
 	:type templates: jinja2.Environment
 	"""
 
-	bumpversion_file = repo_path / ".bumpversion.cfg"
+	bumpversion_file = PathPlus(repo_path / ".bumpversion.cfg")
 
 	if not bumpversion_file.is_file():
 		with bumpversion_file.open('w', encoding="UTF-8") as fp:
@@ -252,8 +252,7 @@ tag = True
 
 	bv["bumpversion"]["current_version"] = templates.globals["version"]
 
-	with open(str(bumpversion_file), "w") as fp:
-		clean_writer(str(bv), fp)
+	bumpversion_file.write_clean(str(bv))
 
 	return [".bumpversion.cfg"]
 
@@ -270,14 +269,11 @@ def make_issue_templates(repo_path: pathlib.Path, templates: jinja2.Environment)
 	bug_report = templates.get_template("bug_report.md")
 	feature_request = templates.get_template("feature_request.md")
 
-	issue_template_dir = repo_path / ".github" / "ISSUE_TEMPLATE"
-	maybe_make(issue_template_dir, parents=True)
+	issue_template_dir = PathPlus(repo_path / ".github" / "ISSUE_TEMPLATE")
+	issue_template_dir.maybe_make(parents=True)
 
-	with (issue_template_dir / "bug_report.md").open('w', encoding="UTF-8") as fp:
-		clean_writer(bug_report.render(), fp)
-
-	with (issue_template_dir / "feature_request.md").open('w', encoding="UTF-8") as fp:
-		clean_writer(feature_request.render(), fp)
+	(issue_template_dir / "bug_report.md").write_clean(bug_report.render())
+	(issue_template_dir / "feature_request.md").write_clean(feature_request.render())
 
 	return [
 			os.path.join(".github", "ISSUE_TEMPLATE", "bug_report.md"),
@@ -322,8 +318,8 @@ def make_contributing(repo_path: pathlib.Path, templates: jinja2.Environment) ->
 
 	contributing = templates.get_template("CONTRIBUTING.rst")
 
-	with (repo_path / "CONTRIBUTING.rst").open('w', encoding="UTF-8") as fp:
-		clean_writer(contributing.render(bash_block=github_bash_block), fp)
+	PathPlus(repo_path / "CONTRIBUTING.rst").write_clean(
+			contributing.render(bash_block=github_bash_block))
 
 	if (repo_path / "CONTRIBUTING.md").is_file():
 		(repo_path / "CONTRIBUTING.md").unlink()
@@ -342,7 +338,7 @@ def make_docs_contributing(repo_path: pathlib.Path, templates: jinja2.Environmen
 
 	contributing = templates.get_template("CONTRIBUTING.rst")
 
-	with (repo_path / templates.globals["docs_dir"] / "contributing.rst").open('w', encoding="UTF-8") as fp:
-		clean_writer(contributing.render(bash_block=sphinx_bash_block), fp)
+	PathPlus(repo_path / templates.globals["docs_dir"] / "contributing.rst").write_clean(
+			contributing.render(bash_block=sphinx_bash_block))
 
 	return [os.path.join(templates.globals["docs_dir"], "contributing.rst")]

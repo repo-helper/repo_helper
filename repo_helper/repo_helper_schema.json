@@ -313,6 +313,12 @@
         "boolean",
         "string"
       ]
+    },
+    "on_pypi": {
+      "type": [
+        "boolean",
+        "string"
+      ]
     }
   },
   "required": [

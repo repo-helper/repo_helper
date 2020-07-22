@@ -30,7 +30,7 @@ from typing import List
 
 # 3rd party
 import jinja2
-from domdf_python_tools.paths import clean_writer
+from domdf_python_tools.paths import clean_writer, PathPlus
 
 __all__ = [
 		"make_manifest",
@@ -50,33 +50,30 @@ def make_manifest(repo_path: pathlib.Path, templates: jinja2.Environment) -> Lis
 	:type templates: jinja2.Environment
 	"""
 
-	with (repo_path / "MANIFEST.in").open('w', encoding="UTF-8") as fp:
-		clean_writer(
-				"""\
-include __pkginfo__.py
-include LICENSE
-include requirements.txt
-recursive-exclude **/__pycache__ *
-""",
-				fp
-				)
+	manifest_entries = [
+			"include __pkginfo__.py",
+			"include LICENSE",
+			"include requirements.txt",
+			"recursive-exclude **/__pycache__ *",
+			*templates.globals["manifest_additional"],
+			]
 
-		for item in templates.globals["manifest_additional"]:
-			clean_writer(item, fp)
+	for item in templates.globals["additional_requirements_files"]:
+		file = pathlib.PurePosixPath(item)
+		manifest_entries.append(f"include {file.parent}/{file.name}")
 
-		for item in templates.globals["additional_requirements_files"]:
-			file = pathlib.PurePosixPath(item)
-			clean_writer(f"include {file.parent}/{file.name}", fp)
+	if templates.globals["stubs_package"]:
+		manifest_entries.append(
+				f"recursive-include {templates.globals['source_dir']}{templates.globals['import_name']}-stubs *.pyi")
+		manifest_entries.append(
+				f"include {templates.globals['source_dir']}{templates.globals['import_name']}-stubs/py.typed")
+	else:
+		manifest_entries.append(
+				f"recursive-include {templates.globals['source_dir']}{templates.globals['import_name'].replace('.', '/')} *.pyi")
+		manifest_entries.append(
+				f"include {templates.globals['source_dir']}{templates.globals['import_name'].replace('.', '/')}/py.typed")
 
-		if templates.globals["stubs_package"]:
-			pyi_entry = f"recursive-include {templates.globals['source_dir']}{templates.globals['import_name']}-stubs *.pyi"
-			py_typed_entry = f"include {templates.globals['source_dir']}{templates.globals['import_name']}-stubs/py.typed"
-		else:
-			pyi_entry = f"recursive-include {templates.globals['source_dir']}{templates.globals['import_name'].replace('.', '/')} *.pyi"
-			py_typed_entry = f"include {templates.globals['source_dir']}{templates.globals['import_name'].replace('.', '/')}/py.typed"
-
-		clean_writer(pyi_entry, fp)
-		clean_writer(py_typed_entry, fp)
+	PathPlus(repo_path / "MANIFEST.in").write_clean("\n".join(manifest_entries))
 
 	return ["MANIFEST.in"]
 
@@ -154,16 +151,18 @@ def make_setup(repo_path: pathlib.Path, templates: jinja2.Environment) -> List[s
 	setup = templates.get_template("setup._py")
 
 	data = copy.deepcopy(setup_py_defaults)
+	data["description"] = f'"{templates.globals["short_desc"]}"'
 
 	# data["packages"] = f'find_packages(exclude=("{templates.globals["tests_dir"]}", "{templates.globals["docs_dir"]}"))'
 	# data["python_requires"] = f'">={templates.globals["min_py_version"]}"'
 	data["py_modules"] = templates.globals["py_modules"]
 
-	templates.globals["additional_setup_args"] = "\n".join(["\t\t{}={},".format(*x) for x in sorted(data.items())]
-															) + "\n" + templates.globals["additional_setup_args"]
-
 	with (repo_path / "setup.py").open('w', encoding="UTF-8") as fp:
-		clean_writer(setup.render(), fp)
+		clean_writer(
+				setup.render(
+						additional_setup_args="\n".join(
+								["\t\t{}={},".format(*x) for x in sorted(data.items())]
+								) + "\n" + templates.globals["additional_setup_args"]), fp)
 
 	return ["setup.py"]
 

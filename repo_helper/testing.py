@@ -35,7 +35,7 @@ from typing import Any, Dict, List
 import jinja2
 import requirements  # type: ignore
 from repo_helper.configupdater2 import ConfigUpdater  # type: ignore
-from domdf_python_tools.paths import clean_writer
+from domdf_python_tools.paths import PathPlus
 
 # this package
 from .linting import code_only_warning, lint_fix_list, lint_warn_list
@@ -76,8 +76,7 @@ def make_tox(repo_path: pathlib.Path, templates: jinja2.Environment) -> List[str
 
 	tox = templates.get_template("tox_template.ini")
 
-	with (repo_path / "tox.ini").open('w', encoding="UTF-8") as fp:
-		clean_writer(tox.render(source_files=" ".join(source_files)), fp)
+	PathPlus(repo_path / "tox.ini").write_clean(tox.render(source_files=" ".join(source_files)))
 	#
 	# tox = ConfigParser()
 	# tox.read(repo_path / "tox.ini")
@@ -392,8 +391,7 @@ def make_yapf(repo_path: pathlib.Path, templates: jinja2.Environment) -> List[st
 
 	yapf = templates.get_template("style.yapf")
 
-	with (repo_path / ".style.yapf").open('w', encoding="UTF-8") as fp:
-		clean_writer(yapf.render(), fp)
+	PathPlus(repo_path / ".style.yapf").write_clean(yapf.render())
 
 	return [".style.yapf"]
 
@@ -434,7 +432,7 @@ def make_isort(repo_path: pathlib.Path, templates: jinja2.Environment) -> List[s
 	isort["settings"]["balanced_wrapping"] = False
 	isort["settings"]["lines_between_types"] = 0
 	isort["settings"]["use_parentheses"] = True
-	isort["settings"]["float_to_top"] = True
+	# isort["settings"]["float_to_top"] = True  # TODO: Doesn't work properly; No imports get sorted or floated to the top
 	isort["settings"]["remove_redundant_aliases"] = True
 	isort["settings"]["default_section"] = "THIRDPARTY"
 	# isort["settings"]["no_lines_before"] = "LOCALFOLDER"
@@ -520,11 +518,9 @@ def make_pre_commit(repo_path: pathlib.Path, templates: jinja2.Environment) -> L
 	:type templates: jinja2.Environment
 	"""
 
-	pre_commit_file = repo_path / ".pre-commit-config.yaml"
-
 	pre_commit = templates.get_template("pre-commit-config.yaml")
+	pre_commit_file = PathPlus(repo_path / ".pre-commit-config.yaml")
 
-	with pre_commit_file.open('w', encoding="UTF-8") as fp:
-		clean_writer(pre_commit.render(), fp)
+	pre_commit_file.write_clean(pre_commit.render())
 
 	return [pre_commit_file.name]
