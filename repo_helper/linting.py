@@ -258,9 +258,7 @@ def make_pylintrc(repo_path: pathlib.Path, templates: jinja2.Environment) -> Lis
 	:type templates: jinja2.Environment
 	"""
 
-	PathPlus(repo_path / ".pylintrc").write_clean(
-			PathPlus(template_dir / "pylintrc").read_text(),
-			)
+	PathPlus(repo_path / ".pylintrc").write_clean(PathPlus(template_dir / "pylintrc").read_text(), )
 
 	return [".pylintrc"]
 

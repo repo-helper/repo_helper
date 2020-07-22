@@ -166,9 +166,11 @@ class modname(ConfigVar):  # noqa
 	@staticmethod
 	def validator(name: str) -> str:
 		if not name.replace("-", "_").isidentifier():
-			raise ValueError("""\
-'modname' must only contain contains letters, numbers and underscores (_). 
-It cannot cannot start with a number, or contain any spaces.""")
+			raise ValueError(
+					"""\
+'modname' must only contain contains letters, numbers and underscores (_).
+It cannot cannot start with a number, or contain any spaces."""
+					)
 		return name
 
 
@@ -236,9 +238,11 @@ class repo_name(ConfigVar):  # noqa
 	@staticmethod
 	def validator(name: str) -> str:
 		if not name.replace("-", "_").isidentifier():
-			raise ValueError("""\
+			raise ValueError(
+					"""\
 'repo_name' must only contain contains letters, numbers and underscores (_).
-It cannot cannot start with a number, or contain any spaces.""")
+It cannot cannot start with a number, or contain any spaces."""
+					)
 		return name
 
 
@@ -260,9 +264,11 @@ class pypi_name(ConfigVar):  # noqa
 	@staticmethod
 	def validator(name: str) -> str:
 		if not name.replace("-", "_").isidentifier():
-			raise ValueError("""\
-'pypi_name' must only contain contains letters, numbers and underscores (_). 
-It cannot cannot start with a number, or contain any spaces.""")
+			raise ValueError(
+					"""\
+'pypi_name' must only contain contains letters, numbers and underscores (_).
+It cannot cannot start with a number, or contain any spaces."""
+					)
 		return name
 
 
@@ -285,9 +291,11 @@ class import_name(ConfigVar):  # noqa
 	def validator(name: str) -> str:
 		name = name.replace("-", "_")  # replace hyphens with underscores
 		if not name.isidentifier():
-			raise ValueError("""\
-'import_name' must only contain contains letters, numbers and underscores (_). 
-It cannot cannot start with a number, or contain any spaces.""")
+			raise ValueError(
+					"""\
+'import_name' must only contain contains letters, numbers and underscores (_).
+It cannot cannot start with a number, or contain any spaces."""
+					)
 		return name
 
 

@@ -87,7 +87,8 @@ def ensure_doc_requirements(repo_path: pathlib.Path, templates: jinja2.Environme
 			# Requirement("gitpython"),
 			Requirement("sphinx_autodoc_typehints>=1.11.0"),
 			Requirement("sphinx-copybutton>=0.2.12"),  # https://sphinx-copybutton.readthedocs.io/en/latest/
-			Requirement("sphinx-prompt>=1.2.0"),  # ("git+https://github.com/ScriptAutomate/sphinx-tabs-expanded.git", None)
+			Requirement("sphinx-prompt>=1.2.0"
+						),  # ("git+https://github.com/ScriptAutomate/sphinx-tabs-expanded.git", None)
 			}
 
 	if templates.globals["sphinx_html_theme"] == "sphinx_rtd_theme":
@@ -292,7 +293,8 @@ li p:last-child {{ margin-bottom: 12px !important;}}
 html {{
   scroll-behavior: smooth;
 }}
-""")
+"""
+				)
 
 	elif templates.globals["sphinx_html_theme"] == "alabaster":
 		PathPlus(dest__static_dir / "style.css").write_clean(
@@ -427,7 +429,8 @@ div#changelog-history h2{{
     font-weight: bold;
 }}
 
-""")
+"""
+				)
 
 	PathPlus(dest__templates_dir / "layout.html").write_clean(
 			"""<!--- This file is managed by 'repo_helper'. Don't edit it directly. --->
@@ -435,7 +438,8 @@ div#changelog-history h2{{
 {% block extrahead %}
 	<link href="{{ pathto("_static/style.css", True) }}" rel="stylesheet" type="text/css">
 {% endblock %}
-""")
+"""
+			)
 
 	if (dest__templates_dir / "footer.html").is_file():
 		(dest__templates_dir / "footer.html").unlink()

@@ -329,7 +329,7 @@ docs_installation_block_template = Environment(
 		loader=BaseLoader,  # type: ignore
 		undefined=StrictUndefined,
 		).from_string(
-		"""\
+				"""\
 .. start installation
 
 .. tabs::
@@ -362,7 +362,7 @@ docs_installation_block_template = Environment(
 
 .. end installation
 """
-		)
+				)
 
 
 def create_docs_install_block(

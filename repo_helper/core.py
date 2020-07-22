@@ -318,8 +318,7 @@ def make_contributing(repo_path: pathlib.Path, templates: jinja2.Environment) ->
 
 	contributing = templates.get_template("CONTRIBUTING.rst")
 
-	PathPlus(repo_path / "CONTRIBUTING.rst").write_clean(
-			contributing.render(bash_block=github_bash_block))
+	PathPlus(repo_path / "CONTRIBUTING.rst").write_clean(contributing.render(bash_block=github_bash_block))
 
 	if (repo_path / "CONTRIBUTING.md").is_file():
 		(repo_path / "CONTRIBUTING.md").unlink()
@@ -338,7 +337,7 @@ def make_docs_contributing(repo_path: pathlib.Path, templates: jinja2.Environmen
 
 	contributing = templates.get_template("CONTRIBUTING.rst")
 
-	PathPlus(repo_path / templates.globals["docs_dir"] / "contributing.rst").write_clean(
-			contributing.render(bash_block=sphinx_bash_block))
+	PathPlus(repo_path / templates.globals["docs_dir"] / "contributing.rst"
+				).write_clean(contributing.render(bash_block=sphinx_bash_block))
 
 	return [os.path.join(templates.globals["docs_dir"], "contributing.rst")]

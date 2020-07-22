@@ -150,17 +150,20 @@ def make_github_ci(repo_path: pathlib.Path, templates: jinja2.Environment) -> Li
 						ci_platform="windows-2019",
 						ci_name="Windows Tests",
 						python_versions=py_versions,
-						))
+						)
+				)
 	else:
 		if (dot_github / "workflows" / "python_ci.yml").is_file():
 			(dot_github / "workflows" / "python_ci.yml").unlink()
 
 	if "macOS" in templates.globals["platforms"]:
-		(dot_github / "workflows" / "python_ci_macos.yml").write_clean(actions.render(
-				no_dev_versions=no_dev_versions,
-				ci_platform="macos-latest",
-				ci_name="macOS Tests",
-				))
+		(dot_github / "workflows" / "python_ci_macos.yml").write_clean(
+				actions.render(
+						no_dev_versions=no_dev_versions,
+						ci_platform="macos-latest",
+						ci_name="macOS Tests",
+						)
+				)
 	else:
 		if (dot_github / "workflows" / "python_ci_macos.yml").is_file():
 			(dot_github / "workflows" / "python_ci_macos.yml").unlink()
@@ -171,7 +174,8 @@ def make_github_ci(repo_path: pathlib.Path, templates: jinja2.Environment) -> Li
 						no_dev_versions=no_dev_versions,
 						ci_platform="ubuntu-18.04",
 						ci_name="Linux Tests",
-						))
+						)
+				)
 	else:
 		if (dot_github / "workflows" / "python_ci_linux.yml").is_file():
 			(dot_github / "workflows" / "python_ci_linux.yml").unlink()
@@ -209,7 +213,8 @@ def make_github_manylinux(repo_path: pathlib.Path, templates: jinja2.Environment
 				PYVERSIONS.append(f'"3{pyver}"')
 
 		(dot_github / "workflows" / "manylinux_build.yml").write_clean(
-				actions.render(wheel_py_versions=wheel_py_versions, PYVERSIONS=" ".join(PYVERSIONS)))
+				actions.render(wheel_py_versions=wheel_py_versions, PYVERSIONS=" ".join(PYVERSIONS))
+				)
 	else:
 		if (dot_github / "workflows" / "manylinux_build.yml").is_file():
 			(dot_github / "workflows" / "manylinux_build.yml").unlink()

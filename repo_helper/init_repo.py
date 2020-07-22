@@ -78,8 +78,9 @@ def init_repo(repo_path: pathlib.Path, templates: jinja2.Environment) -> List[st
 			template = init_repo_templates.get_template(filename)
 			PathPlus(repo_path / templates.globals["docs_dir"] / filename).write_clean(template.render())
 
-		with (repo_path / templates.globals["docs_dir"] / "api" / templates.globals["modname"]
-				).with_suffix(".rst").open('w', encoding="UTF-8") as fp:
+		with (repo_path / templates.globals["docs_dir"] / "api"
+				/ templates.globals["modname"]).with_suffix(".rst"
+															).open('w', encoding="UTF-8") as fp:
 			buf = '='
 			buf += '=' * len(templates.globals["import_name"])
 			buf += f"\n{templates.globals['import_name']}\n="
@@ -143,7 +144,8 @@ def init_repo(repo_path: pathlib.Path, templates: jinja2.Environment) -> List[st
 					year=datetime.datetime.today().year,
 					organization=templates.globals["author"],
 					project=templates.globals["modname"],
-					))
+					)
+			)
 
 	# Touch requirements file
 	(repo_path / "requirements.txt").touch()

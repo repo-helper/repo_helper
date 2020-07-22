@@ -102,7 +102,8 @@ numberOfReviewers: 0
 # numberOfAssignees: 2
 
 # more settings at https://github.com/marketplace/actions/auto-assign-action
-""")
+"""
+			)
 
 	return [".github/workflows/assign.yml", ".github/workflow/assign.yml", ".github/auto_assign.yml"]
 
@@ -133,7 +134,8 @@ update_configs:
     update_schedule: "weekly"
     default_reviewers:
       - "{templates.globals['username']}"
-""")
+"""
+			)
 
 	return [".dependabot/config.yml"]
 
