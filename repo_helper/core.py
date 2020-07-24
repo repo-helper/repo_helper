@@ -51,7 +51,6 @@ from .docs import (
 		ensure_doc_requirements,
 		make_404_page,
 		make_conf,
-		make_docs_building_rst,
 		make_docs_source_rst,
 		make_docutils_conf,
 		make_rtfd,
@@ -66,7 +65,7 @@ from .testing import ensure_tests_requirements, make_isort, make_pre_commit, mak
 from .yaml_parser import parse_yaml
 
 __all__ = [
-		"GitHelper",
+		"RepoHelper",
 		"ensure_bumpversion",
 		"make_issue_templates",
 		"make_contributing",
@@ -122,7 +121,6 @@ class RepoHelper:
 				(make_docs_source_rst, "Source_rst", ["enable_docs"]),
 				(make_github_docs_test, "docs_action", ["enable_docs"]),
 				(make_docutils_conf, "docutils_conf", ["enable_docs"]),
-				(make_docs_building_rst, "Building_rst", ["enable_docs"]),
 				(make_contributing, "contributing", []),
 				(make_docs_contributing, "contributing", ["enable_docs"]),
 				(make_pre_commit, "pre-commit", ["enable_pre_commit"]),

@@ -122,24 +122,12 @@ Installation
 
 .. toctree::
 	:maxdepth: 6
-
-	config/index
-
-
-.. toctree::
-	:maxdepth: 3
-	:caption: API Reference
-	:glob:
-
-	api/*
-
-
-.. toctree::
-	:maxdepth: 3
 	:caption: Documentation
 
+	config/index
+	api/index
+	contributing
 	Source
-	Building
 
 
 .. start links

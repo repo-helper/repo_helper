@@ -423,8 +423,10 @@ def make_isort(repo_path: pathlib.Path, templates: jinja2.Environment) -> List[s
 	isort["settings"]["line_length"] = 115
 
 	isort["settings"]["force_to_top"] = True
-	isort["settings"]["indent"] = "Tab"
-	isort["settings"]["multi_line_output"] = 3
+	isort["settings"]["indent"] = '"		"'  # To match what yapf uses
+
+	# Undocumented 8th option with the closing bracket indented
+	isort["settings"]["multi_line_output"] = 8
 	isort["settings"]["import_heading_stdlib"] = "stdlib"
 	isort["settings"]["import_heading_thirdparty"] = "3rd party"
 	isort["settings"]["import_heading_firstparty"] = "this package"
@@ -485,7 +487,7 @@ def ensure_tests_requirements(repo_path: pathlib.Path, templates: jinja2.Environ
 			}
 
 	if templates.globals["pypi_name"] != "coverage_pyver_pragma":
-		target_requirements.add(("coverage_pyver_pragma", "0.0.1"))
+		target_requirements.add(("coverage_pyver_pragma", "0.0.2"))
 
 	test_req_file = repo_path / templates.globals["tests_dir"] / "requirements.txt"
 

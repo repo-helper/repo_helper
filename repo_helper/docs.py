@@ -30,7 +30,10 @@ import os.path
 import pathlib
 import shutil
 from typing import List
+from typing import Dict, Sequence, Union
 
+import cssutils
+from cssutils import css
 # 3rd party
 import jinja2
 from domdf_python_tools.paths import clean_writer, PathPlus
@@ -61,7 +64,6 @@ __all__ = [
 		"rewrite_docs_index",
 		"make_404_page",
 		"make_docs_source_rst",
-		"make_docs_building_rst",
 		"make_docutils_conf",
 		]
 
@@ -254,7 +256,7 @@ def make_conf(repo_path: pathlib.Path, templates: jinja2.Environment) -> List[st
 			"github_type": "star",
 			# "travis_button": "true",
 			"badge_branch": "master",
-			"fixed_sidebar": "false",
+			"fixed_sidebar": "true",
 			}.items():
 			if key not in templates.globals["html_theme_options"]:
 				templates.globals["html_theme_options"][key] = val
@@ -262,6 +264,155 @@ def make_conf(repo_path: pathlib.Path, templates: jinja2.Environment) -> List[st
 	PathPlus(repo_path / templates.globals["docs_dir"] / "conf.py").write_clean(conf.render())
 
 	return [os.path.join(templates.globals["docs_dir"], "conf.py")]
+
+
+def make_alabaster_theming():
+	sheet = css.CSSStyleSheet()
+
+	# Reset CSS Parser to defaults
+	cssutils.ser.prefs.useDefaults()
+
+	# Formatting preferences
+	cssutils.ser.prefs.omitLastSemicolon = False
+	cssutils.ser.prefs.indentClosingBrace = False
+	cssutils.ser.prefs.indent = "	"
+
+	# Helpers
+	important = "important"
+
+	def px(val: Union[int, float, str]) -> str:
+		return f"{val}px"
+
+	# Common options
+	solid_border = {"border-style": "solid"}
+	docs_bottom_margin = {"margin-bottom": (px(17), important)}
+
+	sheet.add(make_style("li p:last-child", {"margin-bottom": (px(12), important)}))
+
+	# Smooth scrolling between sections
+	sheet.add(make_style("html", {"scroll-behavior": "smooth"}))
+
+	# Border around classes
+	sheet.add(make_style("dl.class", {
+			"padding": "3px 3px 3px 5px",
+			"margin-top": ("7px", important),
+			**docs_bottom_margin,
+			"border-color": "rgba(240, 128, 128, 0.5)",
+			**solid_border,
+			}))
+
+	# Border around functions
+	sheet.add(make_style("dl.function", {
+			"padding": "3px 3px 3px 5px",
+			"margin-top": ("7px", important),
+			**docs_bottom_margin,
+			"border-color": "lightskyblue",
+			**solid_border,
+			}))
+
+	sheet.add(make_style("dl.function dt", {
+			"margin-bottom": (px(10), important),
+			}))
+
+	# Border around attributes
+	sheet.add(make_style(
+			"dl.attribute",
+			{
+					"padding": "3px 3px 3px 5px",
+					**docs_bottom_margin,
+					"border-color": "rgba(119, 136, 153, 0.5)",
+					**solid_border
+					}))
+
+	# Border around Methods
+	sheet.add(make_style(
+			"dl.method",
+			{
+					"padding": "3px 3px 3px 5px",
+					**docs_bottom_margin,
+					"border-color": "rgba(32, 178, 170, 0.5)",
+					**solid_border
+					}))
+
+	sheet.add(make_style("div.sphinxsidebar", {"width": px(250), "font-size": px(14), "line-height": "1.5"}))
+	sheet.add(make_style("div.sphinxsidebar h3", {"font-weight": "bold"}))
+	sheet.add(make_style("div.sphinxsidebar p.caption", {"font-size": px(20)}))
+	sheet.add(make_style("div.sphinxsidebar div.sphinxsidebarwrapper", {"padding-right": (px(20), important)}))
+
+	# Margin above and below table
+	sheet.add(make_style("table.longtable", {
+			"margin-bottom": (px(20), "important"),
+			"margin-top": (px(-15), "important"),
+			}))
+
+	# The following styling from Tox's documentation
+	# https://github.com/tox-dev/tox/blob/master/docs/_static/custom.css
+	# MIT Licensed
+
+	# Page width
+	sheet.add(make_style("div.document", {"width": "100%", "max-width": px(1400)}))
+	sheet.add(make_style("div.body", {"max-width": px(1100)}))
+
+	# No end-of-line hyphenation
+	sheet.add(make_style("div.body p, ol > li, div.body td", {"hyphens": None}))
+
+	sheet.add(make_style("img, div.figure", {"margin": ("0", important)}))
+	sheet.add(make_style("ul > li", {"text-align": "justify"}))
+	sheet.add(make_style("ul > li > p", {"margin-bottom": "0"}))
+	sheet.add(make_style("ol > li > p", {"margin-bottom": "0"}))
+	sheet.add(make_style("div.body code.descclassname", {"display": None}))
+	sheet.add(make_style(".wy-table-responsive table td", {"white-space": ("normal", important)}))
+	sheet.add(make_style(".wy-table-responsive", {"overflow": ("visible", important)}))
+	sheet.add(make_style("div.toctree-wrapper.compound > ul > li", {
+			"margin": "0",
+			"padding": "0",
+			}))
+	# TODO
+	# code.docutils.literal {{
+	#     background-color: #ECF0F3;
+	#     padding: 0 1px;
+	# }}
+
+	stylesheet = sheet.cssText.decode("UTF-8").replace("}", "}\n")
+
+	# Reset CSS Parser to defaults
+	cssutils.ser.prefs.useDefaults()
+
+	return stylesheet
+
+
+def make_readthedocs_theming():
+	sheet = css.CSSStyleSheet()
+
+	# Reset CSS Parser to defaults
+	cssutils.ser.prefs.useDefaults()
+
+	# Formatting preferences
+	cssutils.ser.prefs.omitLastSemicolon = False
+	cssutils.ser.prefs.indentClosingBrace = False
+	cssutils.ser.prefs.indent = "	"
+
+	# Helpers
+	important = "important"
+
+	def px(val: Union[int, float, str]) -> str:
+		return f"{val}px"
+
+	# Body width
+	sheet.add(make_style(".wy-nav-content", {"max-width": (px(1200), important)}))
+
+	# Spacing between list items
+	sheet.add(make_style("li p:last-child", {"margin-bottom": (px(12), important)}))
+
+	# Smooth scrolling between sections
+	sheet.add(make_style("html", {"scroll-behavior": "smooth"}))
+
+	stylesheet = sheet.cssText.decode("UTF-8").replace("}", "}\n")
+
+	# Reset CSS Parser to defaults
+	cssutils.ser.prefs.useDefaults()
+
+	return stylesheet
 
 
 def copy_docs_styling(repo_path: pathlib.Path, templates: jinja2.Environment) -> List[str]:
@@ -280,155 +431,18 @@ def copy_docs_styling(repo_path: pathlib.Path, templates: jinja2.Environment) ->
 		directory.maybe_make(parents=True)
 
 	if templates.globals["sphinx_html_theme"] == "sphinx_rtd_theme":
+
 		PathPlus(dest__static_dir / "style.css").write_clean(
 				f"""/* {templates.globals['managed_message']} */
 
-/* Body width */
-.wy-nav-content {{max-width: 1200px !important;}}
-
-/* Spacing between list items */
-li p:last-child {{ margin-bottom: 12px !important;}}
-
-/* Smooth scrolling between sections */
-html {{
-  scroll-behavior: smooth;
-}}
+{make_readthedocs_theming()}
 """
 				)
-
 	elif templates.globals["sphinx_html_theme"] == "alabaster":
 		PathPlus(dest__static_dir / "style.css").write_clean(
 				f"""/* {templates.globals['managed_message']} */
 
-li p:last-child {{ margin-bottom: 12px !important;}}
-
-dl.class {{
-    padding: 3px 3px 3px 5px;
-    margin-top: 7px !important;
-    margin-bottom: 17px !important;
-    border-color: rgba(240, 128, 128, 0.5);
-    border-style: solid;
-}}
-
-dl.function {{
-    padding: 3px 3px 3px 5px;
-    margin-top: 7px !important;
-    margin-bottom: 17px !important;
-    border-color: lightskyblue;
-    border-style: solid;
-}}
-
-dl.function dt{{
-    margin-bottom: 10px !important;
-}}
-
-dl.attribute {{
-    padding: 3px 3px 3px 5px;
-    margin-bottom: 17px !important;
-    border-color: rgba(119, 136, 153, 0.5);
-    border-style: solid;
-}}
-
-dl.method {{
-    padding: 3px 3px 3px 5px;
-    margin-bottom: 17px !important;
-    border-color: rgba(32, 178, 170, 0.5);
-    border-style: solid;
-}}
-
-
-div.sphinxsidebar {{
-    width: 250px;
-    font-size: 14px;
-    line-height: 1.5;
-}}
-
-div.sphinxsidebar h3 {{
-    font-weight: bold;
-}}
-
-div.sphinxsidebar p.caption {{
-    font-size: 20px;
-}}
-
-div.sphinxsidebar div.sphinxsidebarwrapper {{
-    padding-right: 20px !important;
-}}
-
-table.longtable {{
-    margin-bottom: 20px !important;
-    margin-top: -15px !important;
-}}
-
-/*
-Following styling from Tox's documentation
-
-https://github.com/tox-dev/tox/blob/master/docs/_static/custom.css
-
-MIT Licensed
-*/
-
-div.document {{
-    width: 100%;
-    max-width: 1400px;
-}}
-
-div.body {{
-    max-width: 1100px;
-}}
-
-div.body p, ol > li, div.body td {{
-    /*text-align: justify;*/
-    hyphens: none;
-}}
-
-img, div.figure {{
-    margin: 0 !important
-}}
-
-ul > li {{
-    text-align: justify;
-}}
-
-ul > li > p {{
-    margin-bottom: 0;
-}}
-
-ol > li > p {{
-    margin-bottom: 0;
-}}
-
-div.body code.descclassname {{
-    display: none
-}}
-
-.wy-table-responsive table td {{
-    white-space: normal !important;
-}}
-
-.wy-table-responsive {{
-    overflow: visible !important;
-}}
-
-div.toctree-wrapper.compound > ul > li {{
-    margin: 0;
-    padding: 0
-}}
-
-code.docutils.literal {{
-    background-color: #ECF0F3;
-    padding: 0 1px;
-}}
-
-div#changelog-history h3{{
-    margin-top: 10px;
-}}
-
-div#changelog-history h2{{
-    font-style: italic;
-    font-weight: bold;
-}}
-
+{make_alabaster_theming()}
 """
 				)
 
@@ -571,28 +585,37 @@ def make_docs_source_rst(repo_path: pathlib.Path, templates: jinja2.Environment)
 	source_template = templates.get_template("Source.rst")
 	docs_source_rst.write_clean(source_template.render())
 
+	if (docs_dir / "Building.rst").is_file():
+		(docs_dir / "Building.rst").unlink()
+
 	if not git_download_png.exists():
 		shutil.copy2(init_repo_template_dir / "git_download.png", git_download_png)
 
 	return [
 			os.path.join(templates.globals["docs_dir"], "Source.rst"),
+			os.path.join(templates.globals["docs_dir"], "Building.rst"),
 			os.path.join(templates.globals["docs_dir"], "git_download.png"),
 			]
 
 
-def make_docs_building_rst(repo_path: pathlib.Path, templates: jinja2.Environment) -> List[str]:
+def make_style(selector: str, styles: Dict[str, Union[Sequence, str, int, None]]) -> css.CSSStyleRule:
 	"""
-	Create the "Building" page in the documentation
+	Create a CSS Style Rule from a dictionary.
 
-	:param repo_path: Path to the repository root.
-	:type templates: jinja2.Environment
+	:param selector:
+	:type selector: str
+	:param styles:
+
+	:return:
 	"""
 
-	docs_dir = PathPlus(repo_path / templates.globals["docs_dir"])
-	docs_building_rst = docs_dir / "Building.rst"
+	style = css.CSSStyleDeclaration()
 
-	# if not docs_building_rst.exists():
-	building_template = templates.get_template("Building.rst")
-	docs_building_rst.write_clean(building_template.render())
+	for name, properties in styles.items():
+		if isinstance(properties, Sequence) and not isinstance(properties, str):
+			style[name] = tuple(str(x) for x in properties)
+		else:
+			style[name] = str(properties)
 
-	return [os.path.join(templates.globals["docs_dir"], "Building.rst")]
+	return css.CSSStyleRule(selectorText=selector, style=style)
+

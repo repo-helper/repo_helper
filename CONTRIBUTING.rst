@@ -19,7 +19,7 @@ Coding style
 
 `Yapf <https://github.com/google/yapf>`_ is used for code formatting, and `isort <https://timothycrosley.github.io/isort/>`_ is used to sort imports.
 
-``yapf`` and ``isort`` can be run via ``pre-commit``:
+``yapf`` and ``isort`` can be run manually via ``pre-commit``:
 
 .. code-block:: bash
 
@@ -65,7 +65,7 @@ Type annotations are checked using ``mypy``. Run ``mypy`` using ``tox``:
 Build documentation locally
 ------------------------------
 
-Documentation is powered by Sphinx. A local copy of the documentation can be built with ``tox``:
+The documentation is powered by Sphinx. A local copy of the documentation can be built with ``tox``:
 
 .. code-block:: bash
 

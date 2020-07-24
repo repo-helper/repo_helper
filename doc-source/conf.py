@@ -55,7 +55,7 @@ extensions = [
 		]
 
 sphinxemoji_style = 'twemoji'
-todo_include_todos = bool(os.environ.get("SHOW_TODOS", False))
+todo_include_todos = bool(os.environ.get("SHOW_TODOS", 0))
 gitstamp_fmt = "%d %b %Y"
 
 templates_path = ['_templates']
@@ -92,7 +92,7 @@ html_theme_options = {
 		'github_banner': 'true',
 		'github_type': 'star',
 		'badge_branch': 'master',
-		'fixed_sidebar': 'false',
+		'fixed_sidebar': 'true',
 		}
 html_theme_path = ["../.."]
 html_show_sourcelink = True  # True will show link to source

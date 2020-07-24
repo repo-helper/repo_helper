@@ -27,7 +27,7 @@ import tempfile
 
 # this package
 from repo_helper.docs import (
-		ensure_doc_requirements, make_404_page, make_docs_building_rst, make_docs_source_rst, make_rtfd
+		ensure_doc_requirements, make_404_page, make_docs_source_rst, make_rtfd
 		)
 
 
@@ -117,18 +117,6 @@ def test_make_404_page(demo_environment):
 				]
 		for filename in managed_files:
 			assert (tmpdir_p / filename).is_file()
-
-
-def test_make_docs_building_rst(demo_environment):
-	with tempfile.TemporaryDirectory() as tmpdir:
-		tmpdir_p = pathlib.Path(tmpdir)
-		(tmpdir_p / "doc-source").mkdir()
-
-		managed_files = make_docs_building_rst(tmpdir_p, demo_environment)
-		assert managed_files == [os.path.join("doc-source", "Building.rst")]
-		for filename in managed_files:
-			assert (tmpdir_p / filename).is_file()
-
 
 def test_make_docs_source_rst(demo_environment):
 	with tempfile.TemporaryDirectory() as tmpdir:
