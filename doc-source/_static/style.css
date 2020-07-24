@@ -51,9 +51,14 @@ dl.method {
 }
 
 div.sphinxsidebar {
-	width: 250px;
 	font-size: 14px;
 	line-height: 1.5;
+}
+
+@media screen and (min-width: 870px) {
+	div.sphinxsidebar {
+		width: 250px;
+	}
 }
 
 div.sphinxsidebar h3 {

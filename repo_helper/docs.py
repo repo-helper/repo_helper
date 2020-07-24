@@ -353,7 +353,7 @@ def make_alabaster_theming() -> str:
 					}
 			)
 
-	sheet.add_style("div.sphinxsidebar", {"width": px(250), "font-size": px(14), "line-height": "1.5"})
+	sheet.add_style("div.sphinxsidebar", {"font-size": px(14), "line-height": "1.5"})
 	sheet.add_style("div.sphinxsidebar h3", {"font-weight": "bold"})
 	sheet.add_style("div.sphinxsidebar p.caption", {"font-size": px(20)})
 	sheet.add_style("div.sphinxsidebar div.sphinxsidebarwrapper", {"padding-right": (px(20), important)})
@@ -396,7 +396,15 @@ def make_alabaster_theming() -> str:
 	# Reset CSS Parser to defaults
 	cssutils.ser.prefs.useDefaults()
 
-	return stylesheet
+	return f"""\
+{stylesheet}
+
+@media screen and (min-width: 870px) {{
+	div.sphinxsidebar {{
+		width: 250px;
+	}}
+}}
+"""
 
 
 def make_readthedocs_theming() -> str:

@@ -94,7 +94,6 @@ class RepoHelper:
 				(make_auto_assign_action, "auto_assign", []),
 				(rewrite_readme, "readme", []),
 				(rewrite_docs_index, "index.rst", ["enable_docs"]),
-				(rewrite_docs_index, "index.rst", ["enable_docs"]),
 				(ensure_doc_requirements, "doc_requirements", ["enable_docs"]),
 				(make_pylintrc, "pylintrc", []),
 				(make_manifest, "manifest", []),
