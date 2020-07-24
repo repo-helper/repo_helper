@@ -8,6 +8,8 @@ repo_helper
 
 .. end short_desc
 
+This project is in an early stage, and some things might not work correctly or break in a new release.
+
 .. start shields
 
 .. list-table::
