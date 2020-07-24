@@ -60,13 +60,13 @@ def wizard(ctx):
 		r = Repo(path)
 	except NotGitRepository:
 
-		click.echo(
-				Fore.RED(
-						f"""\
+		with Fore.RED:
+			click.echo(
+					f"""\
 The directory {path} is not a git repository.
 You may need to run 'git init' in that directory first."""
-						)
-				)
+					)
+
 		raise click.Abort()
 
 	ret = 0
