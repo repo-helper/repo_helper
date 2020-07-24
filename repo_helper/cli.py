@@ -32,10 +32,10 @@ from typing import Iterable, Optional, Union
 
 # 3rd party
 import click
-import pre_commit.main
+import pre_commit.main  # type: ignore
 from domdf_python_tools.paths import PathPlus
-from dulwich import porcelain, repo
-from dulwich.errors import CommitError
+from dulwich import porcelain, repo  # type: ignore
+from dulwich.errors import CommitError  # type: ignore
 
 CONTEXT_SETTINGS = dict(help_option_names=['-h', '--help'], max_content_width=120)
 click_command = partial(click.command, context_settings=CONTEXT_SETTINGS)
@@ -110,7 +110,16 @@ def cli(ctx, path, initialise, force, commit, message):
 		# print(f"{commit=}")
 		# print(f"{message=}")
 
-		gh = RepoHelper(path)
+		try:
+			gh = RepoHelper(path)
+		except FileNotFoundError as e:
+			with Fore.RED:
+				error_block = textwrap.indent(str(e), "	")
+				print(f"""\
+Unable to run 'repo_helper'.
+The error was:
+{error_block}""")
+				return 1
 
 		status, lines = check_git_status(gh.target_repo)
 

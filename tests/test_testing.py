@@ -45,7 +45,7 @@ def test_ensure_tests_requirements(demo_environment):
 				encoding="UTF-8"
 				) == """\
 coverage >=5.1
-coverage_pyver_pragma >=0.0.1
+coverage_pyver_pragma >=0.0.2
 pytest >=6.0.0rc1
 pytest-cov >=2.8.1
 pytest-randomly >=3.3.1
@@ -62,7 +62,7 @@ pytest-rerunfailures >=9.0
 				encoding="UTF-8"
 				) == """\
 coverage >=5.1
-coverage_pyver_pragma >=0.0.1
+coverage_pyver_pragma >=0.0.2
 lorem >=0.1.1
 pytest >=6.0.0rc1
 pytest-cov >=2.8.1
@@ -96,8 +96,8 @@ setuptools_rust
 [settings]
 line_length = 115
 force_to_top = True
-indent = Tab
-multi_line_output = 3
+indent = "		"
+multi_line_output = 8
 import_heading_stdlib = stdlib
 import_heading_thirdparty = 3rd party
 import_heading_firstparty = this package
@@ -152,8 +152,8 @@ known_third_party =
     wheel
 line_length = 115
 force_to_top = True
-indent = Tab
-multi_line_output = 3
+indent = "		"
+multi_line_output = 8
 import_heading_stdlib = stdlib
 import_heading_thirdparty = 3rd party
 import_heading_firstparty = this package

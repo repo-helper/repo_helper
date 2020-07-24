@@ -49,9 +49,9 @@ def wizard(ctx):
 	# from domdf_python_tools.utils import stderr_writer
 	# 3rd party
 	from domdf_python_tools.terminal_colours import Fore
-	from dulwich.errors import NotGitRepository
-	from dulwich.repo import Repo
-	from email_validator import EmailNotValidError, validate_email
+	from dulwich.errors import NotGitRepository  # type: ignore
+	from dulwich.repo import Repo  # type: ignore
+	from email_validator import EmailNotValidError, validate_email  # type: ignore
 
 	path: PathPlus = ctx.obj["PATH"]
 	config_file = path / 'repo_helper.yml'

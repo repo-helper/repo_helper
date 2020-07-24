@@ -26,14 +26,15 @@ Configuration for documentation with
 #
 
 # stdlib
+import logging
 import os.path
 import pathlib
 import shutil
 from typing import List
 from typing import Dict, Sequence, Union
 
-import cssutils
-from cssutils import css
+import cssutils  # type: ignore
+from cssutils import css  # type: ignore
 # 3rd party
 import jinja2
 from domdf_python_tools.paths import clean_writer, PathPlus
@@ -51,7 +52,6 @@ from repo_helper.blocks import (
 		shields_regex,
 		short_desc_regex
 		)
-from repo_helper.utils import ensure_requirements
 
 # this package
 from .templates import init_repo_template_dir, template_dir
@@ -66,6 +66,11 @@ __all__ = [
 		"make_docs_source_rst",
 		"make_docutils_conf",
 		]
+
+# Disable logging from cssutils
+logging.getLogger("CSSUTILS").addHandler(logging.NullHandler())
+logging.getLogger("CSSUTILS").propagate = False
+logging.getLogger("CSSUTILS").addFilter(lambda record: False)
 
 
 def ensure_doc_requirements(repo_path: pathlib.Path, templates: jinja2.Environment) -> List[str]:

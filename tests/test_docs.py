@@ -124,10 +124,14 @@ def test_make_docs_source_rst(demo_environment):
 
 		managed_files = make_docs_source_rst(tmpdir_p, demo_environment)
 		assert managed_files == [
-				os.path.join("doc-source", "Source.rst"), os.path.join("doc-source", "git_download.png")
+				os.path.join("doc-source", "Source.rst"),
+				os.path.join("doc-source", "Building.rst"),
+				os.path.join("doc-source", "git_download.png")
 				]
-		for filename in managed_files:
+		for filename in [os.path.join("doc-source", "Source.rst"), os.path.join("doc-source", "git_download.png")]:
 			assert (tmpdir_p / filename).is_file()
+
+		assert not (tmpdir_p / "doc-source" / "Building.rst").is_file()
 
 
 def test_ensure_doc_requirements(demo_environment):

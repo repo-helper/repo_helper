@@ -1,19 +1,19 @@
 bump2version
 click
-colorama >=0.4.3
+colorama>=0.4.3
 configupdater
 cssutils
-domdf-python-tools >=0.4.1
+domdf-python-tools>=0.4.1
 dulwich==0.19.16
 importlib_resources
-jinja2 >=2.11.2
-packaging >=20.4
+jinja2>=2.11.2
+packaging>=20.4
 pre-commit
-pyyaml >=5.3.1
+pyyaml>=5.3.1
 requests
-requirements-parser >=0.2.0
+requirements-parser>=0.2.0
 tox
-trove_classifiers >=2020.5.21
+trove_classifiers>=2020.5.21
 typing_extensions
 typing_inspect
 ytools3
