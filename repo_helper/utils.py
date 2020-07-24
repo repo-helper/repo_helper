@@ -262,7 +262,6 @@ license_lookup = {
 		"ZPL-2.0": "Zope Public License",
 		"ZPL-2.1": "Zope Public License",
 		"Zlib": "zlib/libpng License",
-
 		"Proprietary": "Other/Proprietary License",
 		"Other": "Other/Proprietary License",
 		"PD": "Public Domain",

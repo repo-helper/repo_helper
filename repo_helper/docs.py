@@ -266,8 +266,21 @@ def make_conf(repo_path: pathlib.Path, templates: jinja2.Environment) -> List[st
 	return [os.path.join(templates.globals["docs_dir"], "conf.py")]
 
 
-def make_alabaster_theming():
-	sheet = css.CSSStyleSheet()
+class StyleSheet(css.CSSStyleSheet):
+
+	def add_style(self, selector: str, styles: Dict[str, Union[Sequence, str, int, None]]):
+		self.add(make_style(selector, styles))
+
+
+def make_alabaster_theming() -> str:
+	"""
+	Make the custom stylesheet for the alabaster Sphinx theme.
+
+	:return: The custom stylesheet
+	:rtype: str
+	"""
+
+	sheet = StyleSheet()
 
 	# Reset CSS Parser to defaults
 	cssutils.ser.prefs.useDefaults()
@@ -287,86 +300,91 @@ def make_alabaster_theming():
 	solid_border = {"border-style": "solid"}
 	docs_bottom_margin = {"margin-bottom": (px(17), important)}
 
-	sheet.add(make_style("li p:last-child", {"margin-bottom": (px(12), important)}))
+	sheet.add_style("li p:last-child", {"margin-bottom": (px(12), important)})
 
 	# Smooth scrolling between sections
-	sheet.add(make_style("html", {"scroll-behavior": "smooth"}))
+	sheet.add_style("html", {"scroll-behavior": "smooth"})
 
 	# Border around classes
-	sheet.add(make_style("dl.class", {
-			"padding": "3px 3px 3px 5px",
-			"margin-top": ("7px", important),
-			**docs_bottom_margin,
-			"border-color": "rgba(240, 128, 128, 0.5)",
-			**solid_border,
-			}))
+	sheet.add_style(
+			"dl.class",
+			{
+					"padding": "3px 3px 3px 5px",
+					"margin-top": ("7px", important),
+					**docs_bottom_margin,
+					"border-color": "rgba(240, 128, 128, 0.5)",
+					**solid_border,
+					}
+			)
 
 	# Border around functions
-	sheet.add(make_style("dl.function", {
-			"padding": "3px 3px 3px 5px",
-			"margin-top": ("7px", important),
-			**docs_bottom_margin,
-			"border-color": "lightskyblue",
-			**solid_border,
-			}))
+	sheet.add_style(
+			"dl.function",
+			{
+					"padding": "3px 3px 3px 5px",
+					"margin-top": ("7px", important),
+					**docs_bottom_margin,
+					"border-color": "lightskyblue",
+					**solid_border,
+					}
+			)
 
-	sheet.add(make_style("dl.function dt", {
-			"margin-bottom": (px(10), important),
-			}))
+	sheet.add_style("dl.function dt", {"margin-bottom": (px(10), important)})
 
 	# Border around attributes
-	sheet.add(make_style(
+	sheet.add_style(
 			"dl.attribute",
 			{
 					"padding": "3px 3px 3px 5px",
 					**docs_bottom_margin,
 					"border-color": "rgba(119, 136, 153, 0.5)",
 					**solid_border
-					}))
+					}
+			)
 
 	# Border around Methods
-	sheet.add(make_style(
+	sheet.add_style(
 			"dl.method",
 			{
 					"padding": "3px 3px 3px 5px",
 					**docs_bottom_margin,
 					"border-color": "rgba(32, 178, 170, 0.5)",
 					**solid_border
-					}))
+					}
+			)
 
-	sheet.add(make_style("div.sphinxsidebar", {"width": px(250), "font-size": px(14), "line-height": "1.5"}))
-	sheet.add(make_style("div.sphinxsidebar h3", {"font-weight": "bold"}))
-	sheet.add(make_style("div.sphinxsidebar p.caption", {"font-size": px(20)}))
-	sheet.add(make_style("div.sphinxsidebar div.sphinxsidebarwrapper", {"padding-right": (px(20), important)}))
+	sheet.add_style("div.sphinxsidebar", {"width": px(250), "font-size": px(14), "line-height": "1.5"})
+	sheet.add_style("div.sphinxsidebar h3", {"font-weight": "bold"})
+	sheet.add_style("div.sphinxsidebar p.caption", {"font-size": px(20)})
+	sheet.add_style("div.sphinxsidebar div.sphinxsidebarwrapper", {"padding-right": (px(20), important)})
 
 	# Margin above and below table
-	sheet.add(make_style("table.longtable", {
-			"margin-bottom": (px(20), "important"),
-			"margin-top": (px(-15), "important"),
-			}))
+	sheet.add_style(
+			"table.longtable", {"margin-bottom": (px(20), "important"), "margin-top": (px(-15), "important")}
+			)
 
 	# The following styling from Tox's documentation
 	# https://github.com/tox-dev/tox/blob/master/docs/_static/custom.css
 	# MIT Licensed
 
 	# Page width
-	sheet.add(make_style("div.document", {"width": "100%", "max-width": px(1400)}))
-	sheet.add(make_style("div.body", {"max-width": px(1100)}))
+	sheet.add_style("div.document", {"width": "100%", "max-width": px(1400)})
+	sheet.add_style("div.body", {"max-width": px(1100)})
 
 	# No end-of-line hyphenation
-	sheet.add(make_style("div.body p, ol > li, div.body td", {"hyphens": None}))
+	sheet.add_style("div.body p, ol > li, div.body td", {"hyphens": None})
 
-	sheet.add(make_style("img, div.figure", {"margin": ("0", important)}))
-	sheet.add(make_style("ul > li", {"text-align": "justify"}))
-	sheet.add(make_style("ul > li > p", {"margin-bottom": "0"}))
-	sheet.add(make_style("ol > li > p", {"margin-bottom": "0"}))
-	sheet.add(make_style("div.body code.descclassname", {"display": None}))
-	sheet.add(make_style(".wy-table-responsive table td", {"white-space": ("normal", important)}))
-	sheet.add(make_style(".wy-table-responsive", {"overflow": ("visible", important)}))
-	sheet.add(make_style("div.toctree-wrapper.compound > ul > li", {
+	sheet.add_style("img, div.figure", {"margin": ("0", important)})
+	sheet.add_style("ul > li", {"text-align": "justify"})
+	sheet.add_style("ul > li > p", {"margin-bottom": "0"})
+	sheet.add_style("ol > li > p", {"margin-bottom": "0"})
+	sheet.add_style("div.body code.descclassname", {"display": None})
+	sheet.add_style(".wy-table-responsive table td", {"white-space": ("normal", important)})
+	sheet.add_style(".wy-table-responsive", {"overflow": ("visible", important)})
+	sheet.add_style("div.toctree-wrapper.compound > ul > li", {
 			"margin": "0",
 			"padding": "0",
-			}))
+			})
 	# TODO
 	# code.docutils.literal {{
 	#     background-color: #ECF0F3;
@@ -381,8 +399,15 @@ def make_alabaster_theming():
 	return stylesheet
 
 
-def make_readthedocs_theming():
-	sheet = css.CSSStyleSheet()
+def make_readthedocs_theming() -> str:
+	"""
+	Make the custom stylesheet for the readthedocs Sphinx theme.
+
+	:return: The custom stylesheet
+	:rtype: str
+	"""
+
+	sheet = StyleSheet()
 
 	# Reset CSS Parser to defaults
 	cssutils.ser.prefs.useDefaults()
@@ -399,13 +424,13 @@ def make_readthedocs_theming():
 		return f"{val}px"
 
 	# Body width
-	sheet.add(make_style(".wy-nav-content", {"max-width": (px(1200), important)}))
+	sheet.add_style(".wy-nav-content", {"max-width": (px(1200), important)})
 
 	# Spacing between list items
-	sheet.add(make_style("li p:last-child", {"margin-bottom": (px(12), important)}))
+	sheet.add_style("li p:last-child", {"margin-bottom": (px(12), important)})
 
 	# Smooth scrolling between sections
-	sheet.add(make_style("html", {"scroll-behavior": "smooth"}))
+	sheet.add_style("html", {"scroll-behavior": "smooth"})
 
 	stylesheet = sheet.cssText.decode("UTF-8").replace("}", "}\n")
 
@@ -433,18 +458,19 @@ def copy_docs_styling(repo_path: pathlib.Path, templates: jinja2.Environment) ->
 	if templates.globals["sphinx_html_theme"] == "sphinx_rtd_theme":
 
 		PathPlus(dest__static_dir / "style.css").write_clean(
-				f"""/* {templates.globals['managed_message']} */
+				f"""\
+/* {templates.globals['managed_message']} */
 
 {make_readthedocs_theming()}
 """
 				)
 	elif templates.globals["sphinx_html_theme"] == "alabaster":
-		PathPlus(dest__static_dir / "style.css").write_clean(
-				f"""/* {templates.globals['managed_message']} */
+		PathPlus(dest__static_dir / "style.css"
+					).write_clean(f"""\
+/* {templates.globals['managed_message']} */
 
 {make_alabaster_theming()}
-"""
-				)
+""")
 
 	PathPlus(dest__templates_dir / "layout.html").write_clean(
 			"""<!--- This file is managed by 'repo_helper'. Don't edit it directly. --->
@@ -618,4 +644,3 @@ def make_style(selector: str, styles: Dict[str, Union[Sequence, str, int, None]]
 			style[name] = str(properties)
 
 	return css.CSSStyleRule(selectorText=selector, style=style)
-

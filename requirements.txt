@@ -1,6 +1,8 @@
 bump2version
+click
 colorama >=0.4.3
 configupdater
+cssutils
 domdf-python-tools >=0.4.1
 dulwich==0.19.16
 importlib_resources
@@ -15,5 +17,3 @@ trove_classifiers >=2020.5.21
 typing_extensions
 typing_inspect
 ytools3
-cssutils
-click

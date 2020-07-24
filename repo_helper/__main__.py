@@ -30,7 +30,6 @@ import sys
 from repo_helper.cli import cli
 from repo_helper.wizard import wizard
 
-
 wizard = wizard  # to prevent unused import warning
 
 

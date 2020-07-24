@@ -60,9 +60,13 @@ def wizard(ctx):
 		r = Repo(path)
 	except NotGitRepository:
 
-		click.echo(Fore.RED(f"""\
+		click.echo(
+				Fore.RED(
+						f"""\
 The directory {path} is not a git repository.
-You may need to run 'git init' in that directory first."""))
+You may need to run 'git init' in that directory first."""
+						)
+				)
 		raise click.Abort()
 
 	ret = 0
@@ -87,31 +91,28 @@ You may need to run 'git init' in that directory first."""))
 
 	# ---------- name ----------
 	click.echo("""
-The name of the author. 
+The name of the author.
 The author is usually the person who wrote the library.""")
 
 	git_config = r.get_config_stack()
 
 	try:
-		default_author = git_config.get(("user",), "name").decode("UTF-8")
+		default_author = git_config.get(("user", ), "name").decode("UTF-8")
 	except KeyError:
 		default_author = os.environ.get(
-				"GIT_AUTHOR_NAME",
-				default=os.environ.get(
-						"GIT_COMMITTER_NAME",
-						default=getpass.getuser()))
+				"GIT_AUTHOR_NAME", default=os.environ.get("GIT_COMMITTER_NAME", default=getpass.getuser())
+				)
 
 	author = click.prompt("Name", default=default_author)
 
 	# ---------- email ----------
 	try:
-		default_email = git_config.get(("user",), "email").decode("UTF-8")
+		default_email = git_config.get(("user", ), "email").decode("UTF-8")
 	except KeyError:
 		default_email = os.environ.get(
 				"GIT_AUTHOR_EMAIL",
-				default=os.environ.get(
-						"GIT_COMMITTER_EMAIL",
-						default=f"{author}@{socket.gethostname()}"))
+				default=os.environ.get("GIT_COMMITTER_EMAIL", default=f"{author}@{socket.gethostname()}")
+				)
 
 	click.echo("\nThe email address of the author. This will be shown on PyPI, amongst other places.")
 
@@ -123,9 +124,11 @@ The author is usually the person who wrote the library.""")
 			click.echo("That is not a valid email address.")
 
 	# ---------- username ----------
-	click.echo("""
-The username of the author. 
-(repo_helper naïvely assumes that you use the same username on GitHub and other sites.)""")
+	click.echo(
+			"""
+The username of the author.
+(repo_helper naïvely assumes that you use the same username on GitHub and other sites.)"""
+			)
 	username = click.prompt("Username", default=author)
 	# TODO: validate username
 
@@ -138,9 +141,11 @@ The username of the author.
 	copyright_years = click.prompt("Copyright years", default=datetime.today().year)
 
 	# ---------- license_ ----------
-	click.echo("""
+	click.echo(
+			"""
 The SPDX identifier for the license this library is distributed under.
-Not all SPDX identifiers are allowed as not all map to PyPI Trove classifiers.""")
+Not all SPDX identifiers are allowed as not all map to PyPI Trove classifiers."""
+			)
 	while True:
 		try:
 			license_ = license_lookup[click.prompt("License")]
@@ -165,9 +170,11 @@ username: "{username}"
 version: "{version}"
 license: "{license_}"
 short_desc: "{short_desc}"
-""")
+"""
+			)
 
-	click.echo(f"""
+	click.echo(
+			f"""
 The options you provided have been written to the file {config_file}.
 You can configure additional options in that file.
 
@@ -178,7 +185,7 @@ You may be able to configure your code editor to validate your configuration fil
 repo_helper can now be run with the 'repo_helper' command in the repository root.
 
 Be seeing you!
-""")
+"""
+			)
 
 	return ret
-

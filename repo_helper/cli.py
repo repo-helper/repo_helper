@@ -23,16 +23,19 @@ Core CLI tools
 #  MA 02110-1301, USA.
 #
 
+# stdlib
 import os
 import pathlib
 import textwrap
 from functools import partial
 from typing import Iterable, Optional, Union
 
+# 3rd party
 import click
-import pre_commit
+import pre_commit.main
 from domdf_python_tools.paths import PathPlus
 from dulwich import porcelain, repo
+from dulwich.errors import CommitError
 
 CONTEXT_SETTINGS = dict(help_option_names=['-h', '--help'], max_content_width=120)
 click_command = partial(click.command, context_settings=CONTEXT_SETTINGS)
@@ -51,20 +54,23 @@ def get_env_vars(ctx, args, incomplete):
 		is_flag=True,
 		default=False,
 		help="Initialise the repository with some boilerplate files.",
-		autocompletion=get_env_vars)
+		autocompletion=get_env_vars,
+		)
 @click.option(
 		"-f",
 		"--force",
 		is_flag=True,
 		default=False,
 		help="Run 'repo_helper' even when the git working directory is not clean.",
-		autocompletion=get_env_vars)
+		autocompletion=get_env_vars,
+		)
 @click.option(
 		"-y/-n",
 		"--commit/--no-commit",
 		default=None,
 		help="Commit or do not commit any changed files.  [default: Ask first]",
-		autocompletion=get_env_vars)
+		autocompletion=get_env_vars,
+		)
 @click.option(
 		"-m",
 		"--message",
@@ -72,7 +78,8 @@ def get_env_vars(ctx, args, incomplete):
 		default="Updated files with 'repo_helper'.",
 		help='The commit message to use.',
 		show_default=True,
-		autocompletion=get_env_vars)
+		autocompletion=get_env_vars,
+		)
 @click.pass_context
 def cli(ctx, path, initialise, force, commit, message):
 	"""
@@ -86,10 +93,13 @@ def cli(ctx, path, initialise, force, commit, message):
 	if ctx.invoked_subcommand is None:
 		# Import here to save time when the user calls --help or makes an error.
 		# from domdf_python_tools.utils import stderr_writer
+
+		# 3rd party
 		from domdf_python_tools.terminal_colours import Fore
 		from dulwich import repo
 		from dulwich.errors import CommitError
 
+		# this package
 		from repo_helper.core import RepoHelper
 		from repo_helper.init_repo import init_repo
 		from repo_helper.utils import check_git_status
@@ -154,6 +164,7 @@ def cli(ctx, path, initialise, force, commit, message):
 			return 1
 
 	return 0
+
 
 cli_command = partial(cli.command, context_settings=CONTEXT_SETTINGS)
 
@@ -221,7 +232,7 @@ def commit_changed_files(
 				commit_id = r.do_commit(message=message)
 				click.echo(f"Committed as {commit_id.decode('UTF-8')}")
 			except CommitError as e:
-				stderr_writer(f"Unable to commit: {e}")
+				click.echo(f"Unable to commit: {e}", err=True)
 
 		else:
 			click.echo("Changed files were staged but not committed.")
