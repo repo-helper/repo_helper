@@ -1,10 +1,10 @@
 bump2version
 click
-colorama>=0.4.3
 configupdater
 cssutils
 domdf-python-tools>=0.4.1
 dulwich==0.19.16
+email_validator
 importlib_resources
 jinja2>=2.11.2
 packaging>=20.4
