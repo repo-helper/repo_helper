@@ -1,8 +1,8 @@
 #!/usr/bin/env python
 #
-#  __main__.py
+#  __init__.py
 """
-Entry point for running ``repo_helper`` from the command line.
+Functions to create files
 """
 #
 #  Copyright © 2020 Dominic Davis-Foster <dominic@davis-foster.co.uk>
@@ -22,20 +22,3 @@ Entry point for running ``repo_helper`` from the command line.
 #  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
 #  MA 02110-1301, USA.
 #
-
-# stdlib
-import sys
-
-# this package
-from repo_helper.cli import cli
-from repo_helper.wizard import wizard
-
-wizard = wizard  # to prevent unused import warning
-
-
-def main():
-	return cli(obj={})
-
-
-if __name__ == '__main__':
-	sys.exit(main())

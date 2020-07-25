@@ -1,4 +1,4 @@
-#  !/usr/bin/env python
+#!/usr/bin/env python
 #
 #  test_gitignore.py
 #
@@ -25,7 +25,7 @@ import pathlib
 import tempfile
 
 # this package
-from repo_helper.gitignore import make_gitignore
+from repo_helper.files.gitignore import make_gitignore
 
 
 def test_make_gitignore(demo_environment):
@@ -43,7 +43,8 @@ def test_make_gitignore(demo_environment):
 __pycache__/
 *.py[cod]
 *$py.class
-*.so.Python
+*.so
+.Python
 build/
 develop-eggs/
 dist/

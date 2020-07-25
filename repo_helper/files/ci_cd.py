@@ -1,4 +1,4 @@
-#  !/usr/bin/env python
+#!/usr/bin/env python
 #
 #  ci_cd.py
 """
@@ -32,7 +32,7 @@ import jinja2
 from domdf_python_tools.paths import PathPlus
 
 # this package
-from .templates import template_dir
+from repo_helper.templates import template_dir
 
 __all__ = [
 		"make_travis",

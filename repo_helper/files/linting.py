@@ -1,4 +1,4 @@
-#  !/usr/bin/env python
+#!/usr/bin/env python
 #
 #  linting.py
 """
@@ -35,7 +35,7 @@ import jinja2
 from domdf_python_tools.paths import PathPlus
 
 # this package
-from .templates import template_dir
+from repo_helper.templates import template_dir
 
 __all__ = [
 		"lint_fix_list",
@@ -104,7 +104,7 @@ lint_warn_list = [
 		]
 
 # flake8_2020
-lint_warn_list += [
+lint_warn_list.extend((
 		"YTT101",  # sys.version[:3] referenced (python3.10)
 		"YTT102",  # sys.version[2] referenced (python3.10)
 		"YTT103",  # sys.version compared to string (python3.10)
@@ -115,16 +115,16 @@ lint_warn_list += [
 		"YTT301",  # sys.version[0] referenced (python10)
 		"YTT302",  # sys.version compared to string (python10)
 		"YTT303",  # sys.version[:1] referenced (python10)
-		]
+		))
 
 # flake8_strftime
-lint_warn_list += [
+lint_warn_list.extend((
 		"STRFTIME001",  # Linux-specific strftime code used
 		"STRFTIME002",  # Windows-specific strftime code used
-		]
+		))
 
 # flake8_pytest
-lint_warn_list += [
+lint_warn_list.extend((
 		"PT001",  # use @pytest.fixture() over @pytest.fixture (configurable by pytest-fixture-no-parentheses)
 		"PT002",  # configuration for fixture '{name}' specified via positional args, use kwargs
 		"PT003",  # scope='function' is implied in @pytest.fixture()
@@ -146,10 +146,10 @@ lint_warn_list += [
 		"PT019",  # fixture {name} without value is injected as parameter, use @pytest.mark.usefixtures instead
 		"PT020",  # @pytest.yield_fixture is deprecated, use @pytest.fixture
 		"PT021",  # use yield instead of request.addfinalizer
-		]
+		))
 
 # flake8_rst_docstrings
-lint_warn_list += [
+lint_warn_list.extend((
 		"RST201",  # Block quote ends without a blank line; unexpected unindent.
 		"RST202",  # Bullet list ends without a blank line; unexpected unindent.
 		"RST203",  # Definition list ends without a blank line; unexpected unindent.
@@ -182,37 +182,37 @@ lint_warn_list += [
 		"RST901",  # Failed to parse file
 		"RST902",  # Failed to parse __all__ entry
 		"RST903",  # Failed to lint docstring (e.g. unicode encoding issue under Python 2)
-		]
+		))
 
 # flake8-quotes
-lint_warn_list += [
+lint_warn_list.extend((
 		"Q000",  # Remove bad quotes
 		"Q001",  # Remove bad quotes from multiline string
 		"Q002",  # Remove bad quotes from docstring
 		"Q003",  # Change outer quotes to avoid escaping inner quotes
-		]
+		))
 
 # flake8-builtins
-lint_warn_list += [
+lint_warn_list.extend((
 		"A001",  # variable "{0}" is shadowing a python builtin
 		"A002",  # argument "{0}" is shadowing a python builtin
 		"A003",  # class attribute "{0}" is shadowing a python builtin
-		]
+		))
 
 # walrus, py38 only
-# lint_warn_list += [
+# lint_warn_list.extend((
 # 		"ASN001",  # do not use assignment expressions
-# 		]
+# 		))
 
 # Type checking
-lint_warn_list += [
+lint_warn_list.extend((
 		"TYP001",  # guard import by TYPE_CHECKING
 		"TYP002",  # @overload is broken in <3.5.2
 		"TYP003",  # Union[Match, ...] or Union[Pattern, ...] must be quoted in <3.5.2
 		"TYP004",  # NamedTuple does not support methods in 3.6.0
 		"TYP005",  # NamedTuple does not support defaults in 3.6.0
 		"TYP006",  # guard typing attribute by quoting
-		]
+		))
 
 # pydocstyle
 code_only_warning = [

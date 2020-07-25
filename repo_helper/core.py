@@ -1,4 +1,4 @@
-#  !/usr/bin/env python
+#!/usr/bin/env python
 #
 #  core.py
 """
@@ -30,13 +30,13 @@ from typing import Callable, List, Sequence, Tuple, Union
 
 # 3rd party
 import jinja2
-from domdf_python_tools.paths import clean_writer, PathPlus
+from domdf_python_tools.paths import PathPlus
 from domdf_python_tools.utils import enquote_value
 from configupdater import ConfigUpdater  # type: ignore
 
 # this package
-from .bots import make_auto_assign_action, make_dependabot, make_imgbot, make_stale_bot
-from .ci_cd import (
+from repo_helper.files.bots import make_auto_assign_action, make_dependabot, make_imgbot, make_stale_bot
+from repo_helper.files.ci_cd import (
 		make_github_manylinux,
 		remove_copy_pypi_2_github,
 		make_github_ci,
@@ -46,7 +46,7 @@ from .ci_cd import (
 		make_travis,
 		make_travis_deploy_conda,
 		)
-from .docs import (
+from repo_helper.files.docs import (
 		copy_docs_styling,
 		ensure_doc_requirements,
 		make_404_page,
@@ -56,12 +56,14 @@ from .docs import (
 		make_rtfd,
 		rewrite_docs_index,
 		)
-from .gitignore import make_gitignore
-from .linting import (code_only_warning, lint_fix_list, lint_warn_list, make_lint_roller, make_pylintrc)
-from .packaging import make_manifest, make_pkginfo, make_pyproject, make_setup, make_setup_cfg
-from .readme import rewrite_readme
+from repo_helper.files.gitignore import make_gitignore
+from repo_helper.files.linting import (
+		code_only_warning, lint_fix_list, lint_warn_list, make_lint_roller, make_pylintrc
+		)
+from repo_helper.files.packaging import make_manifest, make_pkginfo, make_pyproject, make_setup, make_setup_cfg
+from repo_helper.files.readme import rewrite_readme
 from .templates import template_dir
-from .testing import ensure_tests_requirements, make_isort, make_pre_commit, make_tox, make_yapf
+from repo_helper.files.testing import ensure_tests_requirements, make_isort, make_pre_commit, make_tox, make_yapf
 from .yaml_parser import parse_yaml
 
 __all__ = [

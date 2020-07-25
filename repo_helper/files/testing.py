@@ -1,4 +1,4 @@
-#  !/usr/bin/env python
+#!/usr/bin/env python
 #
 #  testing.py
 """
@@ -38,8 +38,8 @@ from repo_helper.configupdater2 import ConfigUpdater  # type: ignore
 from domdf_python_tools.paths import PathPlus
 
 # this package
-from .linting import code_only_warning, lint_fix_list, lint_warn_list
-from .utils import ensure_requirements
+from repo_helper.files.linting import code_only_warning, lint_fix_list, lint_warn_list
+from repo_helper.utils import ensure_requirements
 
 __all__ = ["make_tox", "make_yapf", "make_isort", "ensure_tests_requirements", "make_pre_commit"]
 

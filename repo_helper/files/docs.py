@@ -1,4 +1,4 @@
-#  !/usr/bin/env python
+#!/usr/bin/env python
 #
 #  docs.py
 """
@@ -54,7 +54,7 @@ from repo_helper.blocks import (
 		)
 
 # this package
-from .templates import init_repo_template_dir, template_dir
+from repo_helper.templates import init_repo_template_dir, template_dir
 
 __all__ = [
 		"ensure_doc_requirements",

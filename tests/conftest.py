@@ -1,4 +1,4 @@
-#  !/usr/bin/env python
+#!/usr/bin/env python
 #
 #  conftest.py
 #
@@ -27,7 +27,7 @@ import jinja2
 import pytest
 
 # this package
-from repo_helper.linting import lint_fix_list, lint_warn_list
+from repo_helper.files.linting import lint_fix_list, lint_warn_list
 from repo_helper.templates import template_dir
 
 

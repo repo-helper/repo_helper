@@ -1,4 +1,4 @@
-#  !/usr/bin/env python
+#!/usr/bin/env python
 #
 #  test_testing.py
 #
@@ -28,7 +28,7 @@ import tempfile
 # this package
 from domdf_python_tools.paths import PathPlus
 
-from repo_helper.testing import ensure_tests_requirements, make_isort, make_yapf
+from repo_helper.files.testing import ensure_tests_requirements, make_isort, make_yapf
 
 
 def test_ensure_tests_requirements(demo_environment):

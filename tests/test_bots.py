@@ -1,4 +1,4 @@
-#  !/usr/bin/env python
+#!/usr/bin/env python
 #
 #  test_bots.py
 #
@@ -25,7 +25,7 @@ import pathlib
 import tempfile
 
 # this package
-from repo_helper.bots import make_auto_assign_action, make_dependabot, make_imgbot, make_stale_bot
+from repo_helper.files.bots import make_auto_assign_action, make_dependabot, make_imgbot, make_stale_bot
 
 
 def test_stale_bot(demo_environment):

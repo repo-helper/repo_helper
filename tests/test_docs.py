@@ -1,4 +1,4 @@
-#  !/usr/bin/env python
+#!/usr/bin/env python
 #
 #  test_docs.py
 #
@@ -26,7 +26,7 @@ import pathlib
 import tempfile
 
 # this package
-from repo_helper.docs import ensure_doc_requirements, make_404_page, make_docs_source_rst, make_rtfd
+from repo_helper.files.docs import ensure_doc_requirements, make_404_page, make_docs_source_rst, make_rtfd
 
 
 def test_make_rtfd(demo_environment):

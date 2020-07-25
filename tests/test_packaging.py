@@ -1,4 +1,4 @@
-#  !/usr/bin/env python
+#!/usr/bin/env python
 #
 #  test_packaging.py
 #
@@ -25,7 +25,7 @@ import pathlib
 import tempfile
 
 # this package
-from repo_helper.packaging import make_manifest, make_setup
+from repo_helper.files.packaging import make_manifest, make_setup
 
 
 def test_make_manifest(demo_environment):

@@ -1,4 +1,4 @@
-#  !/usr/bin/env python
+#!/usr/bin/env python
 #
 #  test_linting.py
 #
@@ -25,7 +25,7 @@ import pathlib
 import tempfile
 
 # this package
-from repo_helper.linting import make_lint_roller, make_pylintrc
+from repo_helper.files.linting import make_lint_roller, make_pylintrc
 
 
 def test_pylintrc(demo_environment):

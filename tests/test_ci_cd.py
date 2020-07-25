@@ -1,4 +1,4 @@
-#  !/usr/bin/env python
+#!/usr/bin/env python
 #
 #  test_ci_cd.py
 #
@@ -25,7 +25,7 @@ import pathlib
 import tempfile
 
 # this package
-from repo_helper.ci_cd import make_github_ci, make_travis, make_travis_deploy_conda
+from repo_helper.files.ci_cd import make_github_ci, make_travis, make_travis_deploy_conda
 
 
 def test_travis(demo_environment):
