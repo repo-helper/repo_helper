@@ -44,12 +44,12 @@ def test_ensure_tests_requirements(demo_environment):
 		assert (tmpdir_p / managed_files[0]).read_text(
 				encoding="UTF-8"
 				) == """\
-coverage >=5.1
-coverage_pyver_pragma >=0.0.2
-pytest >=6.0.0rc1
-pytest-cov >=2.8.1
-pytest-randomly >=3.3.1
-pytest-rerunfailures >=9.0
+coverage>=5.1
+coverage_pyver_pragma>=0.0.2
+pytest>=6.0.0rc1
+pytest-cov>=2.8.1
+pytest-randomly>=3.3.1
+pytest-rerunfailures>=9.0
 """
 
 		with (tmpdir_p / managed_files[0]).open('a', encoding="UTF-8") as fp:
@@ -61,13 +61,13 @@ pytest-rerunfailures >=9.0
 		assert (tmpdir_p / managed_files[0]).read_text(
 				encoding="UTF-8"
 				) == """\
-coverage >=5.1
-coverage_pyver_pragma >=0.0.2
-lorem >=0.1.1
-pytest >=6.0.0rc1
-pytest-cov >=2.8.1
-pytest-randomly >=3.3.1
-pytest-rerunfailures >=9.0
+coverage>=5.1
+coverage_pyver_pragma>=0.0.2
+lorem>=0.1.1
+pytest>=6.0.0rc1
+pytest-cov>=2.8.1
+pytest-randomly>=3.3.1
+pytest-rerunfailures>=9.0
 """
 
 

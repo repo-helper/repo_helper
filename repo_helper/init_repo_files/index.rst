@@ -32,7 +32,6 @@ Installation
 
 	contributing
 	Source
-	Building
 
 .. start links
 .. end links

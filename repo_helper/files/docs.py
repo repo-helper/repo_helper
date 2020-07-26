@@ -82,8 +82,6 @@ def ensure_doc_requirements(repo_path: pathlib.Path, templates: jinja2.Environme
 	:type templates: jinja2.Environment
 	"""
 
-	# TODO: preserve extras [] options
-
 	target_requirements = {
 			Requirement("sphinxcontrib-httpdomain>=1.7.0"),
 			Requirement("sphinxemoji>=0.1.6"),
@@ -105,6 +103,14 @@ def ensure_doc_requirements(repo_path: pathlib.Path, templates: jinja2.Environme
 
 	if templates.globals["pypi_name"] != "extras_require":
 		target_requirements.add(Requirement("extras_require"))
+
+	if templates.globals["pypi_name"] != "default_values":
+		target_requirements.add(Requirement("default_values"))
+
+	if templates.globals["pypi_name"] not in {
+			"extras_require",
+			"default_values",
+			}:
 		target_requirements.add(Requirement("sphinx>=3.0.3"))
 
 	# TODO: only require sphinx if not in requirements.txt

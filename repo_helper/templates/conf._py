@@ -91,6 +91,8 @@ html_context = {
 
 htmlhelp_basename = slug
 
+typehints_fully_qualified = True
+
 latex_documents = [('index', f'{slug}.tex', project, author, 'manual')]
 man_pages = [('index', slug, project, [author], 1)]
 texinfo_documents = [('index', slug, project, author, slug, project, 'Miscellaneous')]

@@ -149,6 +149,7 @@ def test_ensure_doc_requirements(demo_environment):
 				) == """\
 alabaster
 autodocsumm
+default_values
 extras_require
 sphinx>=3.0.3
 sphinx-copybutton>=0.2.12
@@ -171,6 +172,7 @@ sphinxemoji>=0.1.6
 				) == """\
 alabaster
 autodocsumm
+default_values
 extras_require
 lorem>=0.1.1
 sphinx>=3.0.3

@@ -47,7 +47,6 @@ def get_env_vars(ctx, args, incomplete):
 
 
 @click_group(invoke_without_command=True)
-@click.argument("path", type=PathPlus, required=False, autocompletion=get_env_vars)
 @click.option(
 		"--initialise",
 		"--init",
@@ -81,13 +80,12 @@ def get_env_vars(ctx, args, incomplete):
 		autocompletion=get_env_vars,
 		)
 @click.pass_context
-def cli(ctx, path, initialise, force, commit, message):
+def cli(ctx, initialise, force, commit, message):
 	"""
 	Update files in the given repositories, based on settings in 'repo_helper.yml'.
 	"""
 
-	if not path:
-		path = PathPlus.cwd()
+	path = PathPlus.cwd()
 	ctx.obj["PATH"] = path
 
 	if ctx.invoked_subcommand is None:

@@ -118,7 +118,7 @@ The author is usually the person who wrote the library.""")
 
 	while True:
 		try:
-			email = validate_email(click.prompt("Email", default=default_email))
+			email = validate_email(click.prompt("Email", default=default_email)).email
 			break
 		except EmailNotValidError:
 			click.echo("That is not a valid email address.")

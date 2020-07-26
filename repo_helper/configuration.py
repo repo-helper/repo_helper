@@ -290,12 +290,14 @@ class import_name(ConfigVar):  # noqa
 	@staticmethod
 	def validator(name: str) -> str:
 		name = name.replace("-", "_")  # replace hyphens with underscores
-		if not name.isidentifier():
-			raise ValueError(
-					"""\
-'import_name' must only contain contains letters, numbers and underscores (_).
-It cannot cannot start with a number, or contain any spaces."""
-					)
+		name = name.replace("/", ".")
+		for part in name.split("."):
+			if not part.isidentifier():
+				raise ValueError(
+						"""\
+	'import_name' must only contain contains letters, numbers, underscores and fullstops.
+	It cannot cannot start with a number, or contain any spaces."""
+						)
 		return name
 
 

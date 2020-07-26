@@ -34,6 +34,8 @@ from typing import Any, Dict, List
 # 3rd party
 import jinja2
 import requirements  # type: ignore
+from packaging.requirements import InvalidRequirement, Requirement
+
 from repo_helper.configupdater2 import ConfigUpdater  # type: ignore
 from domdf_python_tools.paths import PathPlus
 
@@ -479,29 +481,51 @@ def ensure_tests_requirements(repo_path: pathlib.Path, templates: jinja2.Environ
 	"""
 
 	target_requirements = {
-			("coverage", "5.1"),
-			("pytest", "6.0.0rc1"),
-			("pytest-cov", "2.8.1"),
-			("pytest-randomly", "3.3.1"),
-			("pytest-rerunfailures", "9.0"),
+			Requirement("coverage>=5.1"),
+			Requirement("pytest>=6.0.0rc1"),
+			Requirement("pytest-cov>=2.8.1"),
+			Requirement("pytest-randomly>=3.3.1"),
+			Requirement("pytest-rerunfailures>=9.0"),
 			}
 
 	if templates.globals["pypi_name"] != "coverage_pyver_pragma":
-		target_requirements.add(("coverage_pyver_pragma", "0.0.2"))
+		target_requirements.add(Requirement("coverage_pyver_pragma>=0.0.2"))
 
-	test_req_file = repo_path / templates.globals["tests_dir"] / "requirements.txt"
+	_target_requirement_names: List[str] = [r.name.casefold() for r in target_requirements]
+	_target_requirement_names += [r.replace("-", "_").casefold() for r in _target_requirement_names]
+	_target_requirement_names += [r.replace("_", "-").casefold() for r in _target_requirement_names]
 
-	if not test_req_file.is_file():
-		test_req_file.write_text('')
+	target_requirement_names = set(_target_requirement_names)
 
-	test_req_file.write_text(
-			"\n".join(
-					line for line in test_req_file.read_text(encoding="UTF-8").splitlines()
-					if not line.startswith("git+")  # FIXME
-					)
-			)
+	req_file = PathPlus(repo_path / templates.globals["tests_dir"] / "requirements.txt")
+	req_file.parent.maybe_make(parents=True)
 
-	ensure_requirements(target_requirements, test_req_file)
+	if not req_file.is_file():
+		req_file.touch()
+
+	comments = []
+
+	with req_file.open(encoding="UTF-8") as fp:
+		for line in fp.readlines():
+			if line.startswith("#"):
+				comments.append(line)
+			elif line:
+				try:
+					req = Requirement(line)
+					if req.name.casefold() not in target_requirement_names:
+						target_requirements.add(req)
+				except InvalidRequirement:
+					# TODO: Show warning to user
+					pass
+
+	with req_file.open('w', encoding="UTF-8") as fp:
+		for comment in comments:
+			fp.write(comment)
+			fp.write("\n")
+
+		for req in sorted(target_requirements, key=lambda r: r.name.casefold()):
+			fp.write(str(req))
+			fp.write("\n")
 
 	return [os.path.join(templates.globals["tests_dir"], "requirements.txt")]
 
