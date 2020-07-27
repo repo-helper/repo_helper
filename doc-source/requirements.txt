@@ -1,6 +1,7 @@
-alabaster
 autodocsumm
+default_values
 extras_require
+repo_helper_sphinx_theme
 sphinx>=3.0.3
 sphinx-copybutton>=0.2.12
 sphinx-notfound-page

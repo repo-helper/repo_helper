@@ -1,20 +1,3 @@
-/* This file is managed by 'repo_helper'. Don't edit it directly. */
-
-li p:last-child {
-	margin-bottom: 12px !important;
-}
-
-html {
-	scroll-behavior: smooth;
-}
-
-dl.class {
-	padding: 3px 3px 3px 5px;
-	margin-top: 7px !important;
-	margin-bottom: 17px !important;
-	border-color: rgba(240, 128, 128, 0.5);
-	border-style: solid;
-}
 
 dl.conf {
 	padding: 3px 3px 7px 5px;
@@ -24,102 +7,31 @@ dl.conf {
 	border-style: solid;
 }
 
-dl.function {
-	padding: 3px 3px 3px 5px;
-	margin-top: 7px !important;
-	margin-bottom: 17px !important;
-	border-color: lightskyblue;
-	border-style: solid;
+nav#rellinks {
+    width: 80%;
+    max-width: 1100px;
 }
 
-dl.function dt {
-	margin-bottom: 10px !important;
+nav#rellinks ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+display: flex;
 }
 
-dl.attribute {
-	padding: 3px 3px 3px 5px;
-	margin-bottom: 17px !important;
-	border-color: rgba(119, 136, 153, 0.5);
-	border-style: solid;
+nav#rellinks ul li{
+    flex:1 0 auto;
 }
 
-dl.method {
-	padding: 3px 3px 3px 5px;
-	margin-bottom: 17px !important;
-	border-color: rgba(32, 178, 170, 0.5);
-	border-style: solid;
+nav#rellinks ul li div.rellinks_prev{
+    text-align: left;
+}
+nav#rellinks ul li div.rellinks_next{
+    text-align: right;
 }
 
-div.sphinxsidebar {
-	font-size: 14px;
-	line-height: 1.5;
-}
 
-@media screen and (min-width: 870px) {
-	div.sphinxsidebar {
-		width: 250px;
-	}
-}
-
-div.sphinxsidebar h3 {
-	font-weight: bold;
-}
-
-div.sphinxsidebar p.caption {
-	font-size: 20px;
-}
-
-div.sphinxsidebar div.sphinxsidebarwrapper {
-	padding-right: 20px !important;
-}
-
-table.longtable {
-	margin-bottom: 20px !important;
-	margin-top: -15px !important;
-}
-
-div.document {
-	width: 100%;
-	max-width: 1400px;
-}
-
-div.body {
-	max-width: 1100px;
-}
-
-div.body p, ol > li, div.body td {
-	hyphens: None;
-}
-
-img, div.figure {
-	margin: 0 !important;
-}
-
-ul > li {
-	text-align: justify;
-}
-
-ul > li > p {
-	margin-bottom: 0;
-}
-
-ol > li > p {
-	margin-bottom: 0;
-}
-
-div.body code.descclassname {
-	display: None;
-}
-
-.wy-table-responsive table td {
-	white-space: normal !important;
-}
-
-.wy-table-responsive {
-	overflow: visible !important;
-}
-
-div.toctree-wrapper.compound > ul > li {
-	margin: 0;
-	padding: 0;
+nav#rellinks li + li::before {
+    content: "";
 }

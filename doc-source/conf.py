@@ -49,6 +49,7 @@ extensions = [
 		"sphinx.ext.autosummary",
 		"autodocsumm",
 		"sphinx_copybutton",
+		"sphinxcontrib.default_values",
 		# "sphinx_gitstamp",
 		'autoconfig',
 		'autodocsumm',
@@ -82,7 +83,7 @@ intersphinx_mapping = {
 		'jinja2': ('https://jinja.palletsprojects.com/en/2.11.x/', None),
 		}
 
-html_theme = 'alabaster'
+html_theme = 'repo_helper_sphinx_theme'
 html_theme_options = {
 		'page_width': '1200px',
 		'logo_name': 'true',
@@ -94,7 +95,6 @@ html_theme_options = {
 		'badge_branch': 'master',
 		'fixed_sidebar': 'true',
 		'show_relbar_bottom': 'true',
-		'font_size': '16px',
 		}
 html_theme_path = ["../.."]
 html_show_sourcelink = True  # True will show link to source
