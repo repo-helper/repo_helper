@@ -35,6 +35,7 @@ import trove_classifiers  # type: ignore
 from domdf_python_tools.paths import maybe_make, PathPlus
 from domdf_python_tools.terminal_colours import Fore
 from domdf_python_tools.utils import stderr_writer
+from packaging.requirements import InvalidRequirement, Requirement
 from typing_extensions import Literal
 from typing_inspect import get_origin  # type: ignore
 
@@ -100,47 +101,51 @@ def get_git_status(repo_path: pathlib.Path) -> str:
 	return status
 
 
-def ensure_requirements(requirements_list: Iterable[Tuple[str, Optional[str]]], requirements_file: pathlib.Path):
+def ensure_requirements(requirements_list: Iterable[Requirement], requirements_file: pathlib.Path):
 	"""
 	Ensure the given requirements file contains the required entries.
 
 	:param requirements_list: List of (requirement, version) tuples. Version can be ``None``
-	:type requirements_list: Sequence, Set
 	:param requirements_file: The path to the requirements file
-	:type requirements_file: pathlib.Path
 	"""
 
-	# TODO: preserve extras [] options
+	target_requirements = set(requirements_list)
 
-	target_packages = [req[0].replace("-", "_") for req in requirements_list]
+	_target_requirement_names: List[str] = [r.name.casefold() for r in target_requirements]
+	_target_requirement_names += [r.replace("-", "_").casefold() for r in _target_requirement_names]
+	_target_requirement_names += [r.replace("_", "-").casefold() for r in _target_requirement_names]
 
-	requirements_file = PathPlus(requirements_file)
+	target_requirement_names = set(_target_requirement_names)
 
-	if requirements_file.is_file():
-		with requirements_file.open() as fp:
-			test_requirements = list(requirements.parse(fp))
+	req_file = PathPlus(requirements_file)
+	req_file.parent.maybe_make(parents=True)
 
-	else:
-		test_requirements = []
+	if not req_file.is_file():
+		req_file.touch()
 
-	output_buffer = []
+	comments = []
 
-	maybe_make(requirements_file.parent, parents=True)
+	with req_file.open(encoding="UTF-8") as fp:
+		for line in fp.readlines():
+			if line.startswith("#"):
+				comments.append(line)
+			elif line:
+				try:
+					req = Requirement(line)
+					if req.name.casefold() not in target_requirement_names:
+						target_requirements.add(req)
+				except InvalidRequirement:
+					# TODO: Show warning to user
+					pass
 
-	for req in test_requirements:
-		if req.name.replace("-", "_") not in target_packages:
-			if req.specs:
-				output_buffer.append(f"{req.name} {','.join([''.join(x) for x in req.specs])}")
-			else:
-				output_buffer.append(req.name)
+	with req_file.open('w', encoding="UTF-8") as fp:
+		for comment in comments:
+			fp.write(comment)
+			fp.write("\n")
 
-	for requirement, version in requirements_list:
-		if version:
-			output_buffer.append(f"{requirement} >={version}")
-		else:
-			output_buffer.append(f"{requirement}")
-
-	requirements_file.write_clean("\n".join(sorted(output_buffer)))
+		for req in sorted(target_requirements, key=lambda r: r.name.casefold()):
+			fp.write(str(req))
+			fp.write("\n")
 
 
 def validate_classifiers(classifiers: Iterable[str]) -> bool:

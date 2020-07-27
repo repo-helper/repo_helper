@@ -156,7 +156,8 @@
     "sphinx_html_theme": {
       "enum": [
         "sphinx_rtd_theme",
-        "alabaster"
+        "alabaster",
+        "repo_helper_sphinx_theme"
       ]
     },
     "extra_sphinx_extensions": {

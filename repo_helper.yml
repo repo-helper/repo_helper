@@ -41,7 +41,6 @@ classifiers:
 #  - "Development Status :: 6 - Mature"
 #  - "Development Status :: 7 - Inactive"
   - 'Intended Audience :: Developers'
-  - 'Operating System :: OS Independent'
   - 'Topic :: Utilities'
 
 extra_sphinx_extensions:

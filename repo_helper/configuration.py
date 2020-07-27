@@ -163,16 +163,6 @@ class modname(ConfigVar):  # noqa
 	required = True
 	category: str = "metadata"
 
-	@staticmethod
-	def validator(name: str) -> str:
-		if not name.replace("-", "_").isidentifier():
-			raise ValueError(
-					"""\
-'modname' must only contain contains letters, numbers and underscores (_).
-It cannot cannot start with a number, or contain any spaces."""
-					)
-		return name
-
 
 def validate_version(version_string: str) -> str:
 	v = Version(version_string)
@@ -235,16 +225,6 @@ class repo_name(ConfigVar):  # noqa
 	default = modname
 	category: str = "metadata"
 
-	@staticmethod
-	def validator(name: str) -> str:
-		if not name.replace("-", "_").isidentifier():
-			raise ValueError(
-					"""\
-'repo_name' must only contain contains letters, numbers and underscores (_).
-It cannot cannot start with a number, or contain any spaces."""
-					)
-		return name
-
 
 class pypi_name(ConfigVar):  # noqa
 	"""
@@ -260,16 +240,6 @@ class pypi_name(ConfigVar):  # noqa
 	dtype = str
 	default = modname
 	category: str = "metadata"
-
-	@staticmethod
-	def validator(name: str) -> str:
-		if not name.replace("-", "_").isidentifier():
-			raise ValueError(
-					"""\
-'pypi_name' must only contain contains letters, numbers and underscores (_).
-It cannot cannot start with a number, or contain any spaces."""
-					)
-		return name
 
 
 class import_name(ConfigVar):  # noqa
@@ -852,7 +822,7 @@ class sphinx_html_theme(ConfigVar):  # noqa
 	Currently the supported themes are `sphinx_rtd_theme <https://sphinx-rtd-theme.readthedocs.io/en/stable/>`_ and `alabaster <https://alabaster.readthedocs.io>`_ .
 	"""
 
-	dtype = Literal["sphinx_rtd_theme", "alabaster"]
+	dtype = Literal["sphinx_rtd_theme", "alabaster", "repo_helper_sphinx_theme"]
 	default = "sphinx_rtd_theme"
 	category: str = "documentation"
 

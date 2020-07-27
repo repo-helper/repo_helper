@@ -50,6 +50,7 @@ extensions = [
 		"sphinx.ext.autosummary",
 		"autodocsumm",
 		"sphinx_copybutton",
+		"sphinxcontrib.default_values",
 		# "sphinx_gitstamp",
 		{% for extension in extra_sphinx_extensions %}'{{ extension }}',{{ '\n' }}		{% endfor %}]
 
@@ -90,8 +91,6 @@ html_context = {
 		{% for option, value in html_context.items() %}'{{ option }}': {{ enquote_value(value) }},{{ '\n' }}		{% endfor %}}
 
 htmlhelp_basename = slug
-
-typehints_fully_qualified = True
 
 latex_documents = [('index', f'{slug}.tex', project, author, 'manual')]
 man_pages = [('index', slug, project, [author], 1)]

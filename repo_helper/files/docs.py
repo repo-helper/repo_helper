@@ -253,7 +253,7 @@ def make_conf(repo_path: pathlib.Path, templates: jinja2.Environment) -> List[st
 			if key not in templates.globals["html_theme_options"]:
 				templates.globals["html_theme_options"][key] = val
 
-	elif templates.globals["sphinx_html_theme"] == "alabaster":
+	elif templates.globals["sphinx_html_theme"] in {"alabaster", "repo_helper_sphinx_theme"}:
 		# See https://github.com/bitprophet/alabaster/blob/master/alabaster/theme.conf
 		# and https://alabaster.readthedocs.io/en/latest/customization.html
 		for key, val in {
@@ -311,7 +311,7 @@ def make_alabaster_theming() -> str:
 	solid_border = {"border-style": "solid"}
 	docs_bottom_margin = {"margin-bottom": (px(17), important)}
 
-	sheet.add_style("li p:last-child", {"margin-bottom": (px(12), important)})
+	sheet.add_style("li p:last-child", {"margin-bottom": px(12)})
 
 	# Smooth scrolling between sections
 	sheet.add_style("html", {"scroll-behavior": "smooth"})

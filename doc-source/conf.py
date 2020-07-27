@@ -93,6 +93,8 @@ html_theme_options = {
 		'github_type': 'star',
 		'badge_branch': 'master',
 		'fixed_sidebar': 'true',
+		'show_relbar_bottom': 'true',
+		'font_size': '16px',
 		}
 html_theme_path = ["../.."]
 html_show_sourcelink = True  # True will show link to source
