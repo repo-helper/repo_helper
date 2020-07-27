@@ -105,7 +105,7 @@ def ensure_doc_requirements(repo_path: pathlib.Path, templates: jinja2.Environme
 		target_requirements.add(Requirement("extras_require"))
 
 	if templates.globals["pypi_name"] != "default_values":
-		target_requirements.add(Requirement("default_values"))
+		target_requirements.add(Requirement("default_values>=0.0.4"))
 
 	if templates.globals["pypi_name"] not in {
 			"extras_require",
