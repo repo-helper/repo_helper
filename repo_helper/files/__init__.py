@@ -22,3 +22,83 @@ Functions to create files
 #  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
 #  MA 02110-1301, USA.
 #
+
+# stdlib
+import inspect
+from typing import Callable, List, Optional, Sequence, Tuple
+
+# this package
+from repo_helper.files import (
+		bots,
+		ci_cd,
+		contributing,
+		docs,
+		gitignore,
+		linting,
+		packaging,
+		readme,
+		testing,
+		)
+
+
+class Management(list):
+	"""
+	Class to store functions that manage files.
+
+	The syntax of each entry is:
+
+	* the function,
+	* a string to use in 'exclude_files' to disable this function,
+	* a list of strings representing config values that must be true to call the function.
+
+	"""
+
+	def __init__(self, *args, **kwargs):
+		super().__init__(*args, **kwargs)
+
+	def register(
+			self: List[Tuple[Callable, str, Sequence[str]]],
+			exclude_name: str,
+			exclude_unless_true: Sequence[str] = (),
+			*,
+			name: Optional[str] = None
+			) -> Callable:
+		"""
+		Decorator to register a function.
+
+		The function must have the following signature:
+
+		.. code-block:: python
+
+			def function(
+				repo_path: pathlib.Path,
+				templates: jinja2.Environment,
+				) -> List[str]: ...
+
+		:param exclude_name:
+		:param exclude_unless_true:
+
+		:return: The registered function.
+
+		:raises: :exc:`SyntaxError` if the decorated function does not take the correct arguments.
+		"""
+
+		def _decorator(function: Callable) -> Callable:
+			signature = inspect.signature(function)
+
+			if list(signature.parameters.keys()) != ["repo_path", "templates"]:
+				raise SyntaxError(
+						"The decorated function must take only the following arguments: 'repo_path' and 'templates'"
+						)
+
+			self.append((function, exclude_name, exclude_unless_true))
+
+			if name:
+				function.__name__ = name
+
+			return function
+
+		return _decorator
+
+
+management = Management()

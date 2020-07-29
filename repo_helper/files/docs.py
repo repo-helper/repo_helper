@@ -41,6 +41,7 @@ from domdf_python_tools.paths import clean_writer, PathPlus
 
 # this package
 from packaging.requirements import InvalidRequirement, Requirement
+from repo_helper.files import management
 
 from repo_helper.blocks import (
 		create_docs_install_block,
@@ -73,6 +74,7 @@ logging.getLogger("CSSUTILS").propagate = False
 logging.getLogger("CSSUTILS").addFilter(lambda record: False)
 
 
+@management.register("doc_requirements", ["enable_docs"])
 def ensure_doc_requirements(repo_path: pathlib.Path, templates: jinja2.Environment) -> List[str]:
 	"""
 	Ensure ``<docs_dir>/requirements.txt`` contains the required entries.
@@ -98,6 +100,8 @@ def ensure_doc_requirements(repo_path: pathlib.Path, templates: jinja2.Environme
 
 	if templates.globals["sphinx_html_theme"] == "sphinx_rtd_theme":
 		target_requirements.add(Requirement("sphinx_rtd_theme<0.5"))
+	elif templates.globals["sphinx_html_theme"] == "domdf_sphinx_theme":
+		target_requirements.add(Requirement("domdf_sphinx_theme>=0.0.10"))
 	else:
 		target_requirements.add(Requirement(templates.globals['sphinx_html_theme']))
 
@@ -105,11 +109,15 @@ def ensure_doc_requirements(repo_path: pathlib.Path, templates: jinja2.Environme
 		target_requirements.add(Requirement("extras_require"))
 
 	if templates.globals["pypi_name"] != "default_values":
-		target_requirements.add(Requirement("default_values>=0.0.4"))
+		target_requirements.add(Requirement("default_values>=0.0.6"))
+
+	if templates.globals["pypi_name"] != "toctree_plus":
+		target_requirements.add(Requirement("toctree_plus>=0.0.1"))
 
 	if templates.globals["pypi_name"] not in {
 			"extras_require",
 			"default_values",
+			"toctree_plus",
 			}:
 		target_requirements.add(Requirement("sphinx>=3.0.3"))
 
@@ -154,6 +162,7 @@ def ensure_doc_requirements(repo_path: pathlib.Path, templates: jinja2.Environme
 	return [os.path.join(templates.globals["docs_dir"], "requirements.txt")]
 
 
+@management.register("rtfd", ["enable_docs"])
 def make_rtfd(repo_path: pathlib.Path, templates: jinja2.Environment) -> List[str]:
 	"""
 	Add configuration for ``ReadTheDocs``
@@ -198,6 +207,7 @@ python:
 	return [".readthedocs.yml"]
 
 
+@management.register("docutils_conf", ["enable_docs"])
 def make_docutils_conf(repo_path: pathlib.Path, templates: jinja2.Environment) -> List[str]:
 	"""
 	Add configuration for ``Docutils``
@@ -219,6 +229,7 @@ tab_width: 4
 	return [os.path.join(templates.globals["docs_dir"], "docutils.conf")]
 
 
+@management.register("conf", ["enable_docs"])
 def make_conf(repo_path: pathlib.Path, templates: jinja2.Environment) -> List[str]:
 	"""
 	Add ``conf.py`` configuration file for ``Sphinx``
@@ -235,7 +246,7 @@ def make_conf(repo_path: pathlib.Path, templates: jinja2.Environment) -> List[st
 	username = templates.globals["username"]
 	repo_name = templates.globals["repo_name"]
 
-	if templates.globals["sphinx_html_theme"] == "sphinx_rtd_theme":
+	if templates.globals["sphinx_html_theme"] in {"sphinx_rtd_theme", "domdf_sphinx_theme"}:
 		for key, val in {
 			"display_github": True,  # Integrate GitHub
 			"github_user": username,  # Username
@@ -491,6 +502,9 @@ def copy_docs_styling(repo_path: pathlib.Path, templates: jinja2.Environment) ->
 {make_alabaster_theming()}
 """)
 
+	else:
+		PathPlus(dest__static_dir / "style.css").write_clean('')
+
 	PathPlus(dest__templates_dir / "layout.html").write_clean(
 			"""<!--- This file is managed by 'repo_helper'. Don't edit it directly. --->
 {% extends "!layout.html" %}
@@ -523,6 +537,7 @@ def copy_docs_styling(repo_path: pathlib.Path, templates: jinja2.Environment) ->
 			]
 
 
+@management.register("index.rst", ["enable_docs"])
 def rewrite_docs_index(repo_path: pathlib.Path, templates: jinja2.Environment) -> List[str]:
 	"""
 	Update blocks in the documentation ``index.rst`` file.
@@ -588,6 +603,7 @@ def rewrite_docs_index(repo_path: pathlib.Path, templates: jinja2.Environment) -
 	return [os.path.join(templates.globals["docs_dir"], "index.rst")]
 
 
+@management.register("404", ["enable_docs"])
 def make_404_page(repo_path: pathlib.Path, templates: jinja2.Environment) -> List[str]:
 	"""
 
@@ -613,6 +629,7 @@ def make_404_page(repo_path: pathlib.Path, templates: jinja2.Environment) -> Lis
 			]
 
 
+@management.register("Source_rst", ["enable_docs"])
 def make_docs_source_rst(repo_path: pathlib.Path, templates: jinja2.Environment) -> List[str]:
 	"""
 	Create the "Source" page in the documentation, and add the associated image.

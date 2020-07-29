@@ -35,6 +35,7 @@ import jinja2
 from domdf_python_tools.paths import PathPlus
 
 # this package
+from repo_helper.files import management
 from repo_helper.templates import template_dir
 
 __all__ = [
@@ -249,6 +250,7 @@ code_only_warning = [
 # TODO: E302 results in tabs being converted to spaces. File bug report for autopep8
 
 
+@management.register("pylintrc")
 def make_pylintrc(repo_path: pathlib.Path, templates: jinja2.Environment) -> List[str]:
 	"""
 	Copy .pylintrc into the desired repository
@@ -263,6 +265,7 @@ def make_pylintrc(repo_path: pathlib.Path, templates: jinja2.Environment) -> Lis
 	return [".pylintrc"]
 
 
+@management.register("lint_roller")
 def make_lint_roller(repo_path: pathlib.Path, templates: jinja2.Environment) -> List[str]:
 	"""
 	Add the lint_roller.sh script to the desired repo

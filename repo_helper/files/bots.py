@@ -31,10 +31,12 @@ from typing import List
 # 3rd party
 import jinja2
 from domdf_python_tools.paths import PathPlus
+from repo_helper.files import management
 
 __all__ = ["make_dependabot", "make_auto_assign_action", "make_stale_bot", "make_imgbot"]
 
 
+@management.register("stale_bot")
 def make_stale_bot(repo_path: pathlib.Path, templates: jinja2.Environment) -> List[str]:
 	"""
 	Add configuration for ``stale`` to the desired repo
@@ -53,6 +55,7 @@ def make_stale_bot(repo_path: pathlib.Path, templates: jinja2.Environment) -> Li
 	return [".github/stale.yml"]
 
 
+@management.register("auto_assign")
 def make_auto_assign_action(repo_path: pathlib.Path, templates: jinja2.Environment) -> List[str]:
 	"""
 	Add configuration for ``auto-assign`` to the desired repo
@@ -108,6 +111,7 @@ numberOfReviewers: 0
 	return [".github/workflows/assign.yml", ".github/workflow/assign.yml", ".github/auto_assign.yml"]
 
 
+@management.register("dependabot")
 def make_dependabot(repo_path: pathlib.Path, templates: jinja2.Environment) -> List[str]:
 	"""
 	Add configuration for ``dependabot`` to the desired repo
@@ -140,6 +144,7 @@ update_configs:
 	return [".dependabot/config.yml"]
 
 
+@management.register("imgbot")
 def make_imgbot(repo_path: pathlib.Path, templates: jinja2.Environment) -> List[str]:
 	"""
 	Add configuration for ``imgbot`` to the desired repo

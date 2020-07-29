@@ -31,6 +31,7 @@ from typing import List
 # 3rd party
 import jinja2
 from domdf_python_tools.paths import clean_writer, PathPlus
+from repo_helper.files import management
 
 __all__ = [
 		"make_manifest",
@@ -41,6 +42,7 @@ __all__ = [
 		]
 
 
+@management.register("manifest")
 def make_manifest(repo_path: pathlib.Path, templates: jinja2.Environment) -> List[str]:
 	"""
 	Update the ``MANIFEST.in`` file for ``setuptools``.
@@ -82,6 +84,7 @@ def make_manifest(repo_path: pathlib.Path, templates: jinja2.Environment) -> Lis
 	return ["MANIFEST.in"]
 
 
+@management.register("pyproject")
 def make_pyproject(repo_path: pathlib.Path, templates: jinja2.Environment) -> List[str]:
 	"""
 	Create the pyproject.toml file for pep517
@@ -143,6 +146,7 @@ setup_py_defaults = dict(
 		)
 
 
+@management.register("setup")
 def make_setup(repo_path: pathlib.Path, templates: jinja2.Environment) -> List[str]:
 	"""
 	Update the ``setup.py`` script.
@@ -173,6 +177,7 @@ def make_setup(repo_path: pathlib.Path, templates: jinja2.Environment) -> List[s
 	return ["setup.py"]
 
 
+@management.register("setup_cfg")
 def make_setup_cfg(repo_path: pathlib.Path, templates: jinja2.Environment) -> List[str]:
 	"""
 	Update the ``setup.py`` script.
@@ -190,6 +195,7 @@ def make_setup_cfg(repo_path: pathlib.Path, templates: jinja2.Environment) -> Li
 	return ["setup.cfg"]
 
 
+@management.register("pkginfo")
 def make_pkginfo(repo_path: pathlib.Path, templates: jinja2.Environment) -> List[str]:
 	"""
 	Update the ``__pkginfo__.py`` file that contains the configuration used by

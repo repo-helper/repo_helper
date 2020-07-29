@@ -822,8 +822,8 @@ class sphinx_html_theme(ConfigVar):  # noqa
 	Currently the supported themes are `sphinx_rtd_theme <https://sphinx-rtd-theme.readthedocs.io/en/stable/>`_ and `alabaster <https://alabaster.readthedocs.io>`_ .
 	"""
 
-	dtype = Literal["sphinx_rtd_theme", "alabaster", "repo_helper_sphinx_theme"]
-	default = "sphinx_rtd_theme"
+	dtype = Literal["sphinx_rtd_theme", "alabaster", "repo_helper_sphinx_theme", "domdf_sphinx_theme"]
+	default = "domdf_sphinx_theme"
 	category: str = "documentation"
 
 

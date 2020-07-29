@@ -28,6 +28,8 @@ from typing import List
 import jinja2
 
 # this package
+from repo_helper.files import management
+
 from repo_helper.blocks import (
 		create_readme_install_block,
 		create_shields_block,
@@ -40,6 +42,7 @@ from repo_helper.blocks import (
 __all__ = ["rewrite_readme"]
 
 
+@management.register("readme")
 def rewrite_readme(repo_path: pathlib.Path, templates: jinja2.Environment) -> List[str]:
 	"""
 	Update blocks in the README.rst file.

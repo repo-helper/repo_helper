@@ -35,6 +35,7 @@ from typing import Any, Dict, List
 import jinja2
 import requirements  # type: ignore
 from packaging.requirements import InvalidRequirement, Requirement
+from repo_helper.files import management
 
 from repo_helper.configupdater2 import ConfigUpdater  # type: ignore
 from domdf_python_tools.paths import PathPlus
@@ -46,6 +47,7 @@ from repo_helper.utils import ensure_requirements
 __all__ = ["make_tox", "make_yapf", "make_isort", "ensure_tests_requirements", "make_pre_commit"]
 
 
+@management.register("tox")
 def make_tox(repo_path: pathlib.Path, templates: jinja2.Environment) -> List[str]:
 	"""
 	Add configuration for ``Tox``.
@@ -380,6 +382,7 @@ def make_tox(repo_path: pathlib.Path, templates: jinja2.Environment) -> List[str
 	return ["tox.ini"]
 
 
+@management.register("yapf")
 def make_yapf(repo_path: pathlib.Path, templates: jinja2.Environment) -> List[str]:
 	"""
 	Add configuration for ``yapf``.
@@ -471,6 +474,7 @@ def make_isort(repo_path: pathlib.Path, templates: jinja2.Environment) -> List[s
 	return [".isort.cfg"]
 
 
+@management.register("test_requirements", ["enable_tests"])
 def ensure_tests_requirements(repo_path: pathlib.Path, templates: jinja2.Environment) -> List[str]:
 	"""
 	Ensure ``tests/requirements.txt`` contains the required entries.
@@ -530,6 +534,7 @@ def ensure_tests_requirements(repo_path: pathlib.Path, templates: jinja2.Environ
 	return [os.path.join(templates.globals["tests_dir"], "requirements.txt")]
 
 
+@management.register("pre-commit", ["enable_pre_commit"])
 def make_pre_commit(repo_path: pathlib.Path, templates: jinja2.Environment) -> List[str]:
 	"""
 	Add configuration for ``pre-commit``.

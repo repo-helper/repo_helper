@@ -30,8 +30,10 @@ from typing import List
 # 3rd party
 import jinja2
 from domdf_python_tools.paths import PathPlus
+from configupdater import ConfigUpdater  # type: ignore
 
 # this package
+from repo_helper.files import management
 from repo_helper.templates import template_dir
 
 __all__ = [
@@ -46,6 +48,7 @@ __all__ = [
 		]
 
 
+@management.register("travis")
 def make_travis(repo_path: pathlib.Path, templates: jinja2.Environment) -> List[str]:
 	"""
 	Add configuration for ``Travis-CI`` to the desired repo.
@@ -67,6 +70,7 @@ def make_travis(repo_path: pathlib.Path, templates: jinja2.Environment) -> List[
 	return [".travis.yml"]
 
 
+@management.register("copy_pypi_2_github", ["enable_releases"])
 def remove_copy_pypi_2_github(repo_path: pathlib.Path, templates: jinja2.Environment) -> List[str]:
 	"""
 	Remove deprecated copy_pypi_2_github.py script.
@@ -85,6 +89,7 @@ def remove_copy_pypi_2_github(repo_path: pathlib.Path, templates: jinja2.Environ
 	return [".ci/copy_pypi_2_github.py"]
 
 
+@management.register("make_conda_recipe", ["enable_conda"])
 def make_make_conda_recipe(repo_path: pathlib.Path, templates: jinja2.Environment) -> List[str]:
 	"""
 	Add script to create a Conda recipe for the package.
@@ -100,6 +105,7 @@ def make_make_conda_recipe(repo_path: pathlib.Path, templates: jinja2.Environmen
 	return ["make_conda_recipe.py"]
 
 
+@management.register("travis_deploy_conda", ["enable_conda"])
 def make_travis_deploy_conda(repo_path: pathlib.Path, templates: jinja2.Environment) -> List[str]:
 	"""
 	Add script to build Conda package and deploy to Anaconda.
@@ -120,6 +126,7 @@ def make_travis_deploy_conda(repo_path: pathlib.Path, templates: jinja2.Environm
 	return [".ci/travis_deploy_conda.sh"]
 
 
+@management.register("actions")
 def make_github_ci(repo_path: pathlib.Path, templates: jinja2.Environment) -> List[str]:
 	"""
 	Add configuration for `Github Actions` to the desired repo.
@@ -183,6 +190,7 @@ def make_github_ci(repo_path: pathlib.Path, templates: jinja2.Environment) -> Li
 	return [".github/workflows/python_ci.yml", ".github/workflows/python_ci_macos.yml"]
 
 
+@management.register("manylinux")
 def make_github_manylinux(repo_path: pathlib.Path, templates: jinja2.Environment) -> List[str]:
 	"""
 	Add configuration for `Github Actions` manylinux wheel builds the desired repo.
@@ -222,6 +230,7 @@ def make_github_manylinux(repo_path: pathlib.Path, templates: jinja2.Environment
 	return [".github/workflows/manylinux_build.yml"]
 
 
+@management.register("docs_action", ["enable_docs"])
 def make_github_docs_test(repo_path: pathlib.Path, templates: jinja2.Environment) -> List[str]:
 	"""
 	Add configuration for `Github Actions` documentation check to the desired repo.
@@ -240,6 +249,7 @@ def make_github_docs_test(repo_path: pathlib.Path, templates: jinja2.Environment
 	return [".github/workflows/docs_test_action.yml"]
 
 
+@management.register("octocheese")
 def make_github_octocheese(repo_path: pathlib.Path, templates: jinja2.Environment) -> List[str]:
 	"""
 	Add configuration for the OctoCheese `Github Action`.
@@ -261,3 +271,67 @@ def make_github_octocheese(repo_path: pathlib.Path, templates: jinja2.Environmen
 			(dot_github / "workflows" / "octocheese.yml").unlink()
 
 	return [".github/workflows/octocheese.yml"]
+
+
+@management.register("bumpversion")
+def ensure_bumpversion(repo_path: pathlib.Path, templates: jinja2.Environment) -> List[str]:
+	"""
+	Add configuration for ``bumpversion`` to the desired repo
+	https://pypi.org/project/bumpversion/
+
+	:param repo_path: Path to the repository root.
+	:param templates:
+	:type templates: jinja2.Environment
+	"""
+
+	bumpversion_file = PathPlus(repo_path / ".bumpversion.cfg")
+
+	if not bumpversion_file.is_file():
+		with bumpversion_file.open('w', encoding="UTF-8") as fp:
+			fp.write(
+					f"""\
+[bumpversion]
+current_version = {templates.globals["version"]}
+commit = True
+tag = True
+
+"""
+					)
+
+	bv = ConfigUpdater()
+	bv.read(str(bumpversion_file))
+
+	old_sections = [
+			"bumpversion:file:git_helper.yml",
+			]
+
+	for section in old_sections:
+		if section in bv.sections():
+			bv.remove_section(section)
+
+	required_sections = [
+			"bumpversion:file:repo_helper.yml",
+			"bumpversion:file:__pkginfo__.py",
+			"bumpversion:file:README.rst",
+			]
+
+	if templates.globals["enable_docs"]:
+		required_sections.append("bumpversion:file:doc-source/index.rst")
+
+	if templates.globals["py_modules"]:
+		for modname in templates.globals["py_modules"]:
+			required_sections.append(f"bumpversion:file:{templates.globals['source_dir']}{modname}.py")
+	elif not templates.globals["stubs_package"]:
+		required_sections.append(
+				f"bumpversion:file:{templates.globals['source_dir']}{templates.globals['import_name']}/__init__.py"
+				)
+
+	for section in required_sections:
+		if section not in bv.sections():
+			bv.add_section(section)
+
+	bv["bumpversion"]["current_version"] = templates.globals["version"]
+
+	bumpversion_file.write_clean(str(bv))
+
+	return [".bumpversion.cfg"]

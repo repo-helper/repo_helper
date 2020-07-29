@@ -30,48 +30,18 @@ from typing import Callable, List, Sequence, Tuple, Union
 
 # 3rd party
 import jinja2
-from domdf_python_tools.paths import PathPlus
+from domdf_python_tools.terminal_colours import Back
 from domdf_python_tools.utils import enquote_value
-from configupdater import ConfigUpdater  # type: ignore
 
 # this package
-from repo_helper.files.bots import make_auto_assign_action, make_dependabot, make_imgbot, make_stale_bot
-from repo_helper.files.ci_cd import (
-		make_github_manylinux,
-		remove_copy_pypi_2_github,
-		make_github_ci,
-		make_github_docs_test,
-		make_github_octocheese,
-		make_make_conda_recipe,
-		make_travis,
-		make_travis_deploy_conda,
-		)
-from repo_helper.files.docs import (
-		copy_docs_styling,
-		ensure_doc_requirements,
-		make_404_page,
-		make_conf,
-		make_docs_source_rst,
-		make_docutils_conf,
-		make_rtfd,
-		rewrite_docs_index,
-		)
-from repo_helper.files.gitignore import make_gitignore
-from repo_helper.files.linting import (
-		code_only_warning, lint_fix_list, lint_warn_list, make_lint_roller, make_pylintrc
-		)
-from repo_helper.files.packaging import make_manifest, make_pkginfo, make_pyproject, make_setup, make_setup_cfg
-from repo_helper.files.readme import rewrite_readme
+from repo_helper.files import management
+from repo_helper.files.docs import copy_docs_styling
+from repo_helper.files.linting import code_only_warning, lint_fix_list, lint_warn_list
+from repo_helper.files.testing import make_isort
 from .templates import template_dir
-from repo_helper.files.testing import ensure_tests_requirements, make_isort, make_pre_commit, make_tox, make_yapf
 from .yaml_parser import parse_yaml
 
-__all__ = [
-		"RepoHelper",
-		"ensure_bumpversion",
-		"make_issue_templates",
-		"make_contributing",
-		]
+__all__ = ["RepoHelper"]
 
 
 class RepoHelper:
@@ -89,43 +59,7 @@ class RepoHelper:
 				)
 		self.load_settings()
 
-		self.files: List[Tuple[Callable, str, Sequence[str]]] = [
-				(remove_copy_pypi_2_github, "copy_pypi_2_github", ["enable_releases"]),
-				(make_lint_roller, "lint_roller", []),
-				(make_stale_bot, "stale_bot", []),
-				(make_auto_assign_action, "auto_assign", []),
-				(rewrite_readme, "readme", []),
-				(rewrite_docs_index, "index.rst", ["enable_docs"]),
-				(ensure_doc_requirements, "doc_requirements", ["enable_docs"]),
-				(make_pylintrc, "pylintrc", []),
-				(make_manifest, "manifest", []),
-				(make_setup, "setup", []),
-				(make_setup_cfg, "setup_cfg", []),
-				(make_pkginfo, "pkginfo", []),
-				(make_conf, "conf", ["enable_docs"]),
-				(make_gitignore, "gitignore", []),
-				(make_rtfd, "rtfd", ["enable_docs"]),
-				(make_travis, "travis", []),
-				(make_github_ci, "actions", []),
-				(make_github_manylinux, "manylinux", []),
-				(make_tox, "tox", []),
-				(make_yapf, "yapf", []),
-				(ensure_tests_requirements, "test_requirements", ["enable_tests"]),
-				(make_dependabot, "dependabot", []),
-				(make_imgbot, "imgbot", []),
-				(make_github_octocheese, "octocheese", []),
-				(make_travis_deploy_conda, "travis_deploy_conda", ["enable_conda"]),
-				(make_make_conda_recipe, "make_conda_recipe", ["enable_conda"]),
-				(ensure_bumpversion, "bumpversion", []),
-				(make_issue_templates, "issue_templates", []),
-				(make_404_page, "404", ["enable_docs"]),
-				(make_docs_source_rst, "Source_rst", ["enable_docs"]),
-				(make_github_docs_test, "docs_action", ["enable_docs"]),
-				(make_docutils_conf, "docutils_conf", ["enable_docs"]),
-				(make_contributing, "contributing", []),
-				(make_docs_contributing, "contributing", ["enable_docs"]),
-				(make_pre_commit, "pre-commit", ["enable_pre_commit"]),
-				(make_pyproject, "pyproject", []),
+		self.files: List[Tuple[Callable, str, Sequence[str]]] = management + [
 				(make_isort, "isort", []),  # Must always run last
 				]
 
@@ -179,6 +113,9 @@ class RepoHelper:
 			if exclude_name not in self.exclude_files and all([
 					self.templates.globals[req] for req in other_requirements
 					]):
+
+				print(f"{function_.__name__}{'.'*(75-len(function_.__name__))}{Back.GREEN('Done')}")
+
 				output_filenames = function_(self.target_repo, self.templates)
 
 				for filename in output_filenames:
@@ -191,152 +128,3 @@ class RepoHelper:
 
 
 GitHelper = RepoHelper
-
-
-def ensure_bumpversion(repo_path: pathlib.Path, templates: jinja2.Environment) -> List[str]:
-	"""
-	Add configuration for ``bumpversion`` to the desired repo
-	https://pypi.org/project/bumpversion/
-
-	:param repo_path: Path to the repository root.
-	:param templates:
-	:type templates: jinja2.Environment
-	"""
-
-	bumpversion_file = PathPlus(repo_path / ".bumpversion.cfg")
-
-	if not bumpversion_file.is_file():
-		with bumpversion_file.open('w', encoding="UTF-8") as fp:
-			fp.write(
-					f"""\
-[bumpversion]
-current_version = {templates.globals["version"]}
-commit = True
-tag = True
-
-"""
-					)
-
-	bv = ConfigUpdater()
-	bv.read(str(bumpversion_file))
-
-	old_sections = [
-			"bumpversion:file:git_helper.yml",
-			]
-
-	for section in old_sections:
-		if section in bv.sections():
-			bv.remove_section(section)
-
-	required_sections = [
-			"bumpversion:file:repo_helper.yml",
-			"bumpversion:file:__pkginfo__.py",
-			"bumpversion:file:README.rst",
-			]
-
-	if templates.globals["enable_docs"]:
-		required_sections.append("bumpversion:file:doc-source/index.rst")
-
-	if templates.globals["py_modules"]:
-		for modname in templates.globals["py_modules"]:
-			required_sections.append(f"bumpversion:file:{templates.globals['source_dir']}{modname}.py")
-	elif not templates.globals["stubs_package"]:
-		required_sections.append(
-				f"bumpversion:file:{templates.globals['source_dir']}{templates.globals['import_name']}/__init__.py"
-				)
-
-	for section in required_sections:
-		if section not in bv.sections():
-			bv.add_section(section)
-
-	bv["bumpversion"]["current_version"] = templates.globals["version"]
-
-	bumpversion_file.write_clean(str(bv))
-
-	return [".bumpversion.cfg"]
-
-
-def make_issue_templates(repo_path: pathlib.Path, templates: jinja2.Environment) -> List[str]:
-	"""
-	Add issue templates for GitHub to the desired repo
-
-	:param repo_path: Path to the repository root.
-	:param templates:
-	:type templates: jinja2.Environment
-	"""
-
-	bug_report = templates.get_template("bug_report.md")
-	feature_request = templates.get_template("feature_request.md")
-
-	issue_template_dir = PathPlus(repo_path / ".github" / "ISSUE_TEMPLATE")
-	issue_template_dir.maybe_make(parents=True)
-
-	(issue_template_dir / "bug_report.md").write_clean(bug_report.render())
-	(issue_template_dir / "feature_request.md").write_clean(feature_request.render())
-
-	return [
-			os.path.join(".github", "ISSUE_TEMPLATE", "bug_report.md"),
-			os.path.join(".github", "ISSUE_TEMPLATE", "feature_request.md"),
-			]
-
-
-def github_bash_block(*commands):
-	if not commands:
-		return ''
-
-	buf = f".. code-block:: bash"
-	buf += "\n\n"
-
-	for command in commands:
-		buf += f"	$ {command}\n"
-
-	return buf
-
-
-def sphinx_bash_block(*commands):
-	if not commands:
-		return ''
-
-	buf = f".. prompt:: bash"
-	buf += "\n\n"
-
-	for command in commands:
-		buf += f"	{command}\n"
-
-	return buf
-
-
-def make_contributing(repo_path: pathlib.Path, templates: jinja2.Environment) -> List[str]:
-	"""
-	Add CONTRIBUTING.rst to the desired repo
-
-	:param repo_path: Path to the repository root.
-	:param templates:
-	:type templates: jinja2.Environment
-	"""
-
-	contributing = templates.get_template("CONTRIBUTING.rst")
-
-	PathPlus(repo_path / "CONTRIBUTING.rst").write_clean(contributing.render(bash_block=github_bash_block))
-
-	if (repo_path / "CONTRIBUTING.md").is_file():
-		(repo_path / "CONTRIBUTING.md").unlink()
-
-	return ["CONTRIBUTING.rst", "CONTRIBUTING.md"]
-
-
-def make_docs_contributing(repo_path: pathlib.Path, templates: jinja2.Environment) -> List[str]:
-	"""
-	Add CONTRIBUTING.rst to the documentation directory of the repo
-
-	:param repo_path: Path to the repository root.
-	:param templates:
-	:type templates: jinja2.Environment
-	"""
-
-	contributing = templates.get_template("CONTRIBUTING.rst")
-
-	PathPlus(repo_path / templates.globals["docs_dir"] / "contributing.rst"
-				).write_clean(contributing.render(bash_block=sphinx_bash_block))
-
-	return [os.path.join(templates.globals["docs_dir"], "contributing.rst")]

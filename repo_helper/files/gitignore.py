@@ -30,6 +30,7 @@ from typing import List
 # 3rd party
 import jinja2
 from domdf_python_tools.paths import PathPlus
+from repo_helper.files import management
 
 __all__ = [
 		"ignores",
@@ -210,6 +211,7 @@ ignores.extend((
 		))
 
 
+@management.register("gitignore")
 def make_gitignore(repo_path: pathlib.Path, templates: jinja2.Environment) -> List[str]:
 	"""
 	Add .gitignore file to the given repository
