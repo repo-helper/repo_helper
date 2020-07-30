@@ -149,7 +149,7 @@ def test_ensure_doc_requirements(demo_environment):
 				) == """\
 alabaster
 autodocsumm
-default_values
+default_values>=0.0.6
 extras_require
 sphinx>=3.0.3
 sphinx-copybutton>=0.2.12
@@ -159,6 +159,7 @@ sphinx-tabs>=1.1.13
 sphinx_autodoc_typehints>=1.11.0
 sphinxcontrib-httpdomain>=1.7.0
 sphinxemoji>=0.1.6
+toctree_plus>=0.0.1
 """
 
 		with (tmpdir_p / managed_files[0]).open('a', encoding="UTF-8") as fp:
@@ -172,7 +173,7 @@ sphinxemoji>=0.1.6
 				) == """\
 alabaster
 autodocsumm
-default_values
+default_values>=0.0.6
 extras_require
 lorem>=0.1.1
 sphinx>=3.0.3
@@ -183,4 +184,5 @@ sphinx-tabs>=1.1.13
 sphinx_autodoc_typehints>=1.11.0
 sphinxcontrib-httpdomain>=1.7.0
 sphinxemoji>=0.1.6
+toctree_plus>=0.0.1
 """
