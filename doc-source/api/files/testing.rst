@@ -1,6 +1,6 @@
-********************************
-:mod:`repo_helper.files.testing`
-********************************
+*********************************
+:mod:`~repo_helper.files.testing`
+*********************************
 
 .. automodule:: repo_helper.files.testing
 	:members:
