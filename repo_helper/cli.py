@@ -36,7 +36,6 @@ import pre_commit.main  # type: ignore
 from domdf_python_tools.paths import PathPlus
 from dulwich import porcelain, repo  # type: ignore
 from dulwich.errors import CommitError  # type: ignore
-from click_default_group import DefaultGroup
 
 CONTEXT_SETTINGS = dict(help_option_names=['-h', '--help'], max_content_width=120)
 click_command = partial(click.command, context_settings=CONTEXT_SETTINGS)

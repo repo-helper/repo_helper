@@ -27,19 +27,6 @@ Functions to create files
 import inspect
 from typing import Callable, List, Optional, Sequence, Tuple
 
-# this package
-from repo_helper.files import (
-		bots,
-		ci_cd,
-		contributing,
-		docs,
-		gitignore,
-		linting,
-		packaging,
-		readme,
-		testing,
-		)
-
 
 class Management(list):
 	"""

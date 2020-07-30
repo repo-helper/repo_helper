@@ -486,7 +486,7 @@ def ensure_tests_requirements(repo_path: pathlib.Path, templates: jinja2.Environ
 
 	target_requirements = {
 			Requirement("coverage>=5.1"),
-			Requirement("pytest>=6.0.0rc1"),
+			Requirement("pytest>=6.0.0"),
 			Requirement("pytest-cov>=2.8.1"),
 			Requirement("pytest-randomly>=3.3.1"),
 			Requirement("pytest-rerunfailures>=9.0"),

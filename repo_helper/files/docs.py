@@ -145,7 +145,12 @@ def ensure_doc_requirements(repo_path: pathlib.Path, templates: jinja2.Environme
 				try:
 					req = Requirement(line)
 					if req.name.casefold() not in target_requirement_names:
+						if req.name == "sphinx_rtd_theme" and templates.globals["sphinx_html_theme"
+																				] == "domdf_sphinx_theme":
+							continue
+
 						target_requirements.add(req)
+
 				except InvalidRequirement:
 					# TODO: Show warning to user
 					pass

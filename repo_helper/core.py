@@ -40,8 +40,31 @@ from repo_helper.files.linting import code_only_warning, lint_fix_list, lint_war
 from repo_helper.files.testing import make_isort
 from .templates import template_dir
 from .yaml_parser import parse_yaml
+# this package
+from repo_helper.files import (
+		bots,
+		ci_cd,
+		contributing,
+		docs,
+		gitignore,
+		linting,
+		packaging,
+		readme,
+		testing,
+		)
 
-__all__ = ["RepoHelper"]
+__all__ = [
+		"RepoHelper",
+		"bots",
+		"ci_cd",
+		"contributing",
+		"docs",
+		"gitignore",
+		"linting",
+		"packaging",
+		"readme",
+		"testing",
+		]
 
 
 class RepoHelper:
