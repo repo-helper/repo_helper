@@ -139,7 +139,10 @@ ignores.extend((".ipynb_checkpoints", ))
 ignores.extend((".python-version", ))
 
 # celery beat schedule file
-ignores.extend(("celerybeat-schedule", ))
+ignores.extend((
+		"celerybeat-schedule",
+		"celerybeat.pid",
+		))
 
 # SageMath parsed files
 ignores.extend(("*.sage.py", ))
@@ -168,7 +171,11 @@ ignores.extend((".ropeproject", ))
 ignores.extend(("/site", ))
 
 # mypy
-ignores.extend((".mypy_cache/", ))
+ignores.extend((
+		".mypy_cache/",
+		".dmypy.json",
+		"dmypy.json",
+		))
 
 # Covers JetBrains IDEs: IntelliJ, RubyMine, PhpStorm, AppCode, PyCharm, CLion, Android Studio, WebStorm and Rider
 # Reference: https://intellij-support.jetbrains.com/hc/en-us/articles/206544839
@@ -205,9 +212,13 @@ ignores.extend((
 ignores.extend((
 		".idea",
 		"build",
-		"*.egg-info",
 		"**/__pycache__",
 		"**/conda",
+		"__pypackages__/",
+		"profile_default/",
+		"ipython_config.py",
+		"Pipfile.lock",
+		".pyre/",
 		))
 
 

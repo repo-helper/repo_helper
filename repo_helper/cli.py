@@ -207,7 +207,7 @@ def init(ctx, force, commit, message):
 
 	path: PathPlus = ctx.obj["PATH"]
 
-	return run(path=path, force=force, initialise=False, commit=commit, message=message)
+	return run(path=path, force=force, initialise=True, commit=commit, message=message)
 
 
 def run(path, force, initialise, commit, message):
@@ -236,9 +236,9 @@ def run(path, force, initialise, commit, message):
 		with Fore.RED:
 			error_block = textwrap.indent(str(e), "	")
 			print(f"""\
-	Unable to run 'repo_helper'.
-	The error was:
-	{error_block}""")
+Unable to run 'repo_helper'.
+The error was:
+{error_block}""")
 			return 1
 
 	status, lines = check_git_status(gh.target_repo)

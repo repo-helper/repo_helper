@@ -48,9 +48,9 @@ modname = "{{ modname }}"
 pypi_name = "{{ pypi_name }}"
 import_name = "{{ import_name }}"
 __license__ = "{{ license }}"
-short_desc = "{{ short_desc }}"
-__author__ = author = "{{ author }}"
-author_email = "{{ email }}"
+short_desc = {{ short_desc.__repr__() }}
+__author__ = author = {{ author.__repr__() }}
+author_email = {{ email.__repr__() }}
 github_username = "{{ username }}"
 web = github_url = "https://github.com/{{ username }}/{{ repo_name }}"
 repo_root = pathlib.Path(__file__).parent

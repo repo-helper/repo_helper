@@ -40,7 +40,7 @@ def test_make_manifest(demo_environment):
 include __pkginfo__.py
 include LICENSE
 include requirements.txt
-recursive-exclude **/__pycache__ *
+prune **/__pycache__
 recursive-include hello_world *.pyi
 include hello_world/py.typed
 """
@@ -62,7 +62,7 @@ include hello_world/py.typed
 include __pkginfo__.py
 include LICENSE
 include requirements.txt
-recursive-exclude **/__pycache__ *
+prune **/__pycache__
 recursive-include hello_world/templates *
 include hello_world/submodule/requirements.txt
 recursive-include hello_world *.pyi

@@ -24,9 +24,9 @@
 #
 #
 
-__author__ = "{{ author }}"
-__copyright__ = "{{ copyright_years }} {{ author }}"
+__author__: str = "{{ author }}"
+__copyright__: str = "{{ copyright_years }} {{ author }}"
 
-__license__ = "{{ license }}"
-__version__ = "{{ version }}"
-__email__ = "{{ email }}"
+__license__: str = "{{ license }}"
+__version__: str = "{{ version }}"
+__email__: str = "{{ email }}"

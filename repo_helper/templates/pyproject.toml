@@ -1,9 +1,8 @@
 [build-system]
 requires = [
 	"setuptools >= 40.6.0",
-    "wheel >= 0.34.2",
-{% for requirement in tox_build_requirements %}
-    {{requirement}}{% endfor %}
+    "wheel >= 0.34.2",{% for requirement in tox_build_requirements %}
+    "{{requirement}}",{% endfor %}
     ]
 build-backend = "setuptools.build_meta"
 

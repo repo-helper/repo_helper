@@ -60,6 +60,8 @@ def make_travis(repo_path: pathlib.Path, templates: jinja2.Environment) -> List[
 	:type templates: jinja2.Environment
 	"""
 
+	# TODO: Use travis matrix rather than tox-travis; see humanity for example
+
 	if templates.globals["pure_python"]:
 		travis = templates.get_template("travis.yml")
 	else:
@@ -331,6 +333,8 @@ tag = True
 			bv.add_section(section)
 
 	bv["bumpversion"]["current_version"] = templates.globals["version"]
+	bv["bumpversion"]["commit"] = "True"
+	bv["bumpversion"]["tag"] = "True"
 
 	bumpversion_file.write_clean(str(bv))
 

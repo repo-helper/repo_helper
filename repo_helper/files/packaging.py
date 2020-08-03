@@ -56,7 +56,7 @@ def make_manifest(repo_path: pathlib.Path, templates: jinja2.Environment) -> Lis
 			"include __pkginfo__.py",
 			"include LICENSE",
 			"include requirements.txt",
-			"recursive-exclude **/__pycache__ *",
+			"prune **/__pycache__",
 			*templates.globals["manifest_additional"],
 			]
 
@@ -159,7 +159,7 @@ def make_setup(repo_path: pathlib.Path, templates: jinja2.Environment) -> List[s
 	setup = templates.get_template("setup._py")
 
 	data = copy.deepcopy(setup_py_defaults)
-	data["description"] = f'"{templates.globals["short_desc"]}"'
+	data["description"] = repr(templates.globals["short_desc"])
 
 	# data["packages"] = f'find_packages(exclude=("{templates.globals["tests_dir"]}", "{templates.globals["docs_dir"]}"))'
 	# data["python_requires"] = f'">={templates.globals["min_py_version"]}"'
@@ -168,7 +168,7 @@ def make_setup(repo_path: pathlib.Path, templates: jinja2.Environment) -> List[s
 	with (repo_path / "setup.py").open('w', encoding="UTF-8") as fp:
 		clean_writer(
 				setup.render(
-						additional_setup_args="\n".join(["\t\t{}={},".format(*x) for x in sorted(data.items())])
+						additional_setup_args="\n".join([f"\t\t{k}={v}," for k, v in sorted(data.items())])
 						+ "\n" + templates.globals["additional_setup_args"]
 						),
 				fp

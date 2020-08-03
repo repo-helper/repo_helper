@@ -101,7 +101,7 @@ def ensure_doc_requirements(repo_path: pathlib.Path, templates: jinja2.Environme
 	if templates.globals["sphinx_html_theme"] == "sphinx_rtd_theme":
 		target_requirements.add(Requirement("sphinx_rtd_theme<0.5"))
 	elif templates.globals["sphinx_html_theme"] == "domdf_sphinx_theme":
-		target_requirements.add(Requirement("domdf_sphinx_theme>=0.0.10"))
+		target_requirements.add(Requirement("domdf_sphinx_theme>=0.0.11"))
 	else:
 		target_requirements.add(Requirement(templates.globals['sphinx_html_theme']))
 
