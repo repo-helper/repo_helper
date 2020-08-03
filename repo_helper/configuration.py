@@ -360,7 +360,7 @@ class keywords(ConfigVar):  # noqa
 	category: str = "metadata"
 
 
-class license(ConfigVar):  # noqa
+class license(ConfigVar):  # noqa  # pylint: disable=redefined-builtin
 	"""
 	The license for the project.
 

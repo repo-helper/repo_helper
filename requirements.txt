@@ -12,7 +12,7 @@ pre-commit
 pyyaml>=5.3.1
 requests
 requirements-parser>=0.2.0
-tox
+tox<=3.18.1
 trove_classifiers>=2020.5.21
 typing_extensions
 typing_inspect

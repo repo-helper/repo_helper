@@ -247,8 +247,6 @@ code_only_warning = [
 		"D417",  # Missing argument descriptions in the docstring
 		]
 
-# TODO: E302 results in tabs being converted to spaces. File bug report for autopep8
-
 
 @management.register("pylintrc")
 def make_pylintrc(repo_path: pathlib.Path, templates: jinja2.Environment) -> List[str]:

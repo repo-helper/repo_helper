@@ -138,7 +138,7 @@ The username of the author.
 
 	# ---------- copyright_years ----------
 	click.echo("\nThe copyright years for the library.")
-	copyright_years = click.prompt("Copyright years", default=datetime.today().year)
+	copyright_years = click.prompt("Copyright years", default=datetime.today().year, type=str)
 
 	# ---------- license_ ----------
 	click.echo(
@@ -147,8 +147,9 @@ The SPDX identifier for the license this library is distributed under.
 Not all SPDX identifiers are allowed as not all map to PyPI Trove classifiers."""
 			)
 	while True:
+		license_ = click.prompt("License")
 		try:
-			license_ = license_lookup[click.prompt("License")]
+			license_lookup[license_]
 			break
 		except KeyError:
 			click.echo("That is not a valid identifier. ")
@@ -162,14 +163,16 @@ Not all SPDX identifiers are allowed as not all map to PyPI Trove classifiers.""
 			f"""\
 # Configuration for 'repo_helper' (https://github.com/domdfcoding/repo_helper
 ---
-modname: "{modname}"
-copyright_years: "{copyright_years}"
-author: "{author}"
-email: "{email}"
-username: "{username}"
-version: "{version}"
-license: "{license_}"
-short_desc: "{short_desc}"
+modname: {modname!r}
+copyright_years: {copyright_years!r}
+author: {author!r}
+email: {email!r}
+username: {username!r}
+version: {str(version)!r}
+license: {license_!r}
+short_desc: {short_desc!r}
+
+enable_conda: False
 """
 			)
 

@@ -69,9 +69,7 @@ def parse_yaml(repo_path: pathlib.Path):
 
 	# load user settings from repo_helper.yml
 	with (repo_path / "repo_helper.yml").open(encoding="UTF-8") as file:
-		# The FullLoader parameter handles the conversion from YAML
-		#   scalar values to Python the dictionary format
-		raw_config_vars = yaml.load(file, Loader=yaml.FullLoader)
+		raw_config_vars = yaml.safe_load(file)
 
 	# --------------------------------------
 

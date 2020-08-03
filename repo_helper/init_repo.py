@@ -66,7 +66,7 @@ def init_repo(repo_path: pathlib.Path, templates: jinja2.Environment) -> List[st
 	if templates.globals["enable_tests"]:
 		maybe_make(repo_path / templates.globals["tests_dir"])
 		(repo_path / templates.globals["tests_dir"] / "__init__.py").open('a', encoding="UTF-8").close()
-		(repo_path / templates.globals["tests_dir"] / "requirements.txt").open('a', encoding="UTF-8").close()
+		(repo_path / templates.globals["tests_dir"] / "requirements.txt").touch()
 
 	# docs
 	if templates.globals["enable_docs"]:
@@ -85,7 +85,8 @@ def init_repo(repo_path: pathlib.Path, templates: jinja2.Environment) -> List[st
 			buf += '=' * len(templates.globals["import_name"])
 			buf += f"\n{templates.globals['import_name']}\n="
 			buf += '=' * len(templates.globals["import_name"])
-			buf += f"""\n\n
+			buf += f"""
+
 .. automodule:: {templates.globals["import_name"]}
 	:autosummary:
 	:members:
@@ -155,6 +156,7 @@ def init_repo(repo_path: pathlib.Path, templates: jinja2.Environment) -> List[st
 			os.path.join(templates.globals["tests_dir"], "__init__.py"),
 			os.path.join(templates.globals["docs_dir"], "git_download.png"),
 			os.path.join(templates.globals["docs_dir"], "docs.rst"),
+			os.path.join(templates.globals["docs_dir"], "api", f"{templates.globals['modname']}.rst"),
 			os.path.join(templates.globals["docs_dir"], "index.rst"),
 			os.path.join(templates.globals["tests_dir"], "__init__.py"),
 			os.path.join(templates.globals["tests_dir"], "requirements.txt"),
