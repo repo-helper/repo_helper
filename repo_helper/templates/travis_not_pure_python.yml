@@ -10,7 +10,7 @@ python:
 install:
   {% for line in travis_extra_install_pre %}- {{ line }}
   {% endfor %}
-  - pip install pip {% for req in travis_additional_requirements %}{{ req }} {% endfor %} --upgrade
+  - pip install --upgrade pip {% for req in travis_additional_requirements %}{{ req }} {% endfor %}
   - pip install tox
   {% for line in travis_extra_install_post %}- {{ line }}
   {% endfor %}

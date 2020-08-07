@@ -4,7 +4,6 @@ name: {{ ci_name }}
 
 on:
   push:
-    branches: ["master"]
   pull_request:
     branches: ["master"]
 
@@ -13,19 +12,19 @@ jobs:
     name: "Python ${{ "{{" }} matrix.python-version {{ "}}" }}"
     runs-on: "{{ ci_platform }}"
     env:
-      USING_COVERAGE: '{{ ",".join(no_dev_versions(python_versions)) }}'
+      USING_COVERAGE: '{{ ",".join((python_versions)) }}'
 
     strategy:
       fail-fast: False
       matrix:
-        python-version: ["{{ '","'.join(no_dev_versions(python_versions)) }}"]
+        python-version: ["{{ '","'.join((python_versions)) }}"]
 
 
     steps:
       - name: Checkout 🛎️
         uses: "actions/checkout@v2"
       - name: Setup Python 🐍
-        uses: "actions/setup-python@v1"
+        uses: "actions/setup-python@v2"
         with:
           python-version: "${{ "{{" }} matrix.python-version {{ "}}" }}"
       - name: Install dependencies 🔧
@@ -55,7 +54,7 @@ jobs:
         uses: "actions/checkout@v2"
 
       - name: Setup Python 🐍
-        uses: "actions/setup-python@v1"
+        uses: "actions/setup-python@v2"
         with:
           python-version: 3.8
 
