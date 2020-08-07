@@ -24,47 +24,55 @@ Core functionality of ``repo_helper``.
 #
 
 # stdlib
+import inspect
 import os.path
 import pathlib
-from typing import Callable, List, Sequence, Tuple, Union
+from typing import Any, Callable, List, Sequence, Tuple, Union
 
 # 3rd party
 import jinja2
+from domdf_python_tools.import_tools import discover
 from domdf_python_tools.terminal_colours import Back
 from domdf_python_tools.utils import enquote_value
 
 # this package
+import repo_helper.files
 from repo_helper.files import management
 from repo_helper.files.docs import copy_docs_styling
 from repo_helper.files.linting import code_only_warning, lint_fix_list, lint_warn_list
 from repo_helper.files.testing import make_isort
+
+# this package
 from .templates import template_dir
 from .yaml_parser import parse_yaml
-# this package
-from repo_helper.files import (
-		bots,
-		ci_cd,
-		contributing,
-		docs,
-		gitignore,
-		linting,
-		packaging,
-		readme,
-		testing,
-		)
 
-__all__ = [
-		"RepoHelper",
-		"bots",
-		"ci_cd",
-		"contributing",
-		"docs",
-		"gitignore",
-		"linting",
-		"packaging",
-		"readme",
-		"testing",
-		]
+__all__ = ["RepoHelper"]
+
+
+def is_registered(obj: Any) -> bool:
+	"""
+	Return whether ``obj`` is a registered function
+
+	:param obj:
+	:type obj:
+
+	:return:
+	:rtype:
+
+	.. TODO:: Allow all callables
+	"""
+
+	if inspect.isfunction(obj):
+		return bool(getattr(obj, "_repo_helper_registered", False))
+
+	return False
+
+
+def import_registered_functions() -> List[object]:
+	return discover(repo_helper.files, is_registered)
+
+
+import_registered_functions()
 
 
 class RepoHelper:

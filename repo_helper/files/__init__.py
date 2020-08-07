@@ -83,6 +83,8 @@ class Management(list):
 			if name:
 				function.__name__ = name
 
+			setattr(function, "_repo_helper_registered", True)
+
 			return function
 
 		return _decorator
