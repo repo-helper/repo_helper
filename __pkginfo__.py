@@ -44,9 +44,9 @@ modname = "repo_helper"
 pypi_name = "repo_helper"
 import_name = "repo_helper"
 __license__ = "GNU Lesser General Public License v3 or later (LGPLv3+)"
-short_desc = "Update multiple configuration files, build scripts etc. from a single location"
-__author__ = author = "Dominic Davis-Foster"
-author_email = "dominic@davis-foster.co.uk"
+short_desc = 'Update multiple configuration files, build scripts etc. from a single location'
+__author__ = author = 'Dominic Davis-Foster'
+author_email = 'dominic@davis-foster.co.uk'
 github_username = "domdfcoding"
 web = github_url = "https://github.com/domdfcoding/repo_helper"
 repo_root = pathlib.Path(__file__).parent

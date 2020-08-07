@@ -4,7 +4,6 @@ name: Windows Tests
 
 on:
   push:
-    branches: ["master"]
   pull_request:
     branches: ["master"]
 
@@ -13,19 +12,19 @@ jobs:
     name: "Python ${{ matrix.python-version }}"
     runs-on: "windows-2019"
     env:
-      USING_COVERAGE: '3.7,3.8'
+      USING_COVERAGE: '3.7,3.8,3.9-dev'
 
     strategy:
       fail-fast: False
       matrix:
-        python-version: ["3.7","3.8"]
+        python-version: ["3.7","3.8","3.9-dev"]
 
 
     steps:
       - name: Checkout 🛎️
         uses: "actions/checkout@v2"
       - name: Setup Python 🐍
-        uses: "actions/setup-python@v1"
+        uses: "actions/setup-python@v2"
         with:
           python-version: "${{ matrix.python-version }}"
       - name: Install dependencies 🔧

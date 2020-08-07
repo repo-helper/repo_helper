@@ -2,7 +2,7 @@ bump2version
 click
 configupdater
 cssutils
-domdf-python-tools>=0.4.1
+domdf-python-tools>=0.4.4
 dulwich==0.19.16
 email_validator
 importlib_resources
