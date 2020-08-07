@@ -30,7 +30,9 @@ from typing import List
 
 # 3rd party
 import jinja2
-from domdf_python_tools.paths import clean_writer, PathPlus
+from domdf_python_tools.paths import PathPlus, clean_writer
+
+# this package
 from repo_helper.files import management
 
 __all__ = [
@@ -168,8 +170,8 @@ def make_setup(repo_path: pathlib.Path, templates: jinja2.Environment) -> List[s
 	with (repo_path / "setup.py").open('w', encoding="UTF-8") as fp:
 		clean_writer(
 				setup.render(
-						additional_setup_args="\n".join([f"\t\t{k}={v}," for k, v in sorted(data.items())])
-						+ "\n" + templates.globals["additional_setup_args"]
+						additional_setup_args="\n".join([f"\t\t{k}={v}," for k, v in sorted(data.items())]) + "\n"
+						+ templates.globals["additional_setup_args"]
 						),
 				fp
 				)

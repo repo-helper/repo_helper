@@ -25,9 +25,10 @@ import os
 import pathlib
 import tempfile
 
-# this package
+# 3rd party
 from domdf_python_tools.paths import PathPlus
 
+# this package
 from repo_helper.files.testing import ensure_tests_requirements, make_isort, make_yapf
 
 

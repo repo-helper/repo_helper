@@ -20,9 +20,10 @@
 #  MA 02110-1301, USA.
 #
 
-# 3rd party
+# stdlib
 import os
 
+# 3rd party
 import jinja2
 import pytest
 

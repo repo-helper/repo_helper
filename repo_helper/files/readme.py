@@ -28,8 +28,6 @@ from typing import List
 import jinja2
 
 # this package
-from repo_helper.files import management
-
 from repo_helper.blocks import (
 		create_readme_install_block,
 		create_shields_block,
@@ -38,6 +36,7 @@ from repo_helper.blocks import (
 		shields_regex,
 		short_desc_regex
 		)
+from repo_helper.files import management
 
 __all__ = ["rewrite_readme"]
 

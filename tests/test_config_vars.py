@@ -26,6 +26,10 @@ from typing import Any, Dict, Type
 
 # 3rd party
 import pytest
+
+# this package
+from repo_helper.config_vars import ConfigVar
+from repo_helper.configuration import *
 from tests.classes import (
 		BoolFalseTest,
 		BoolTrueTest,
@@ -38,10 +42,6 @@ from tests.classes import (
 		test_list_int,
 		test_list_str
 		)
-
-# this package
-from repo_helper.config_vars import ConfigVar
-from repo_helper.configuration import *
 
 
 class Test_author(RequiredStringTest):

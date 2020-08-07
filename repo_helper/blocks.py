@@ -50,6 +50,7 @@ __all__ = [
 		"create_docs_links_block",
 		]
 
+# this package
 from repo_helper.shields import make_pre_commit_shield
 
 installation_regex = re.compile(r'(?s)(\.\. start installation)(.*?)(\.\. end installation)')

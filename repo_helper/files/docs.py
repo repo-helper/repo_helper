@@ -30,19 +30,16 @@ import logging
 import os.path
 import pathlib
 import shutil
-from typing import List
-from typing import Dict, Sequence, Union
+from typing import Dict, List, Sequence, Union
 
-import cssutils  # type: ignore
-from cssutils import css  # type: ignore
 # 3rd party
+import cssutils  # type: ignore
 import jinja2
-from domdf_python_tools.paths import clean_writer, PathPlus
+from cssutils import css  # type: ignore
+from domdf_python_tools.paths import PathPlus, clean_writer
+from packaging.requirements import InvalidRequirement, Requirement
 
 # this package
-from packaging.requirements import InvalidRequirement, Requirement
-from repo_helper.files import management
-
 from repo_helper.blocks import (
 		create_docs_install_block,
 		create_docs_links_block,
@@ -53,8 +50,7 @@ from repo_helper.blocks import (
 		shields_regex,
 		short_desc_regex
 		)
-
-# this package
+from repo_helper.files import management
 from repo_helper.templates import init_repo_template_dir, template_dir
 
 __all__ = [

@@ -32,7 +32,7 @@ from typing import List, Optional
 # 3rd party
 import jinja2
 import requests
-from domdf_python_tools.paths import clean_writer, maybe_make, PathPlus
+from domdf_python_tools.paths import PathPlus, clean_writer, maybe_make
 from jinja2 import BaseLoader, Environment, StrictUndefined
 
 # this package

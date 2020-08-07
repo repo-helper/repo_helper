@@ -32,7 +32,7 @@ from typing import Any, Iterable, List, Optional, Tuple, Type, Union
 # 3rd party
 import requirements  # type: ignore
 import trove_classifiers  # type: ignore
-from domdf_python_tools.paths import maybe_make, PathPlus
+from domdf_python_tools.paths import PathPlus, maybe_make
 from domdf_python_tools.terminal_colours import Fore
 from domdf_python_tools.utils import stderr_writer
 from packaging.requirements import InvalidRequirement, Requirement

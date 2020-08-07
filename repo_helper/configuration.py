@@ -25,8 +25,8 @@ import os
 from typing import Any, Dict, Iterable, List, Optional, Union
 
 # 3rd party
-from typing_extensions import Literal
 from packaging.version import Version
+from typing_extensions import Literal
 
 # this package
 from repo_helper.config_vars import ConfigVar, get_version_classifiers, optional_getter

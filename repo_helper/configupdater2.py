@@ -56,15 +56,11 @@ from textwrap import indent
 from typing import Iterable, Mapping
 
 # 3rd party
-from configupdater.configupdater import (  # type: ignore
-		Block,
-		BlockBuilder,
-		Comment,
-		Space,
-		ConfigUpdater as __BaseConfigUpdater,
-		Container, NoConfigFileReadError,
-		Option as __BaseOption,
-		)
+from configupdater.configupdater import Block, BlockBuilder, Comment
+from configupdater.configupdater import ConfigUpdater as __BaseConfigUpdater  # type: ignore
+from configupdater.configupdater import Container, NoConfigFileReadError
+from configupdater.configupdater import Option as __BaseOption
+from configupdater.configupdater import Space
 
 __all__ = [
 		"NoSectionError",
