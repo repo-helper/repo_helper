@@ -11,7 +11,7 @@
 #
 #  This program is distributed in the hope that it will be useful,
 #  but WITHOUT ANY WARRANTY; without even the implied warranty of
-#  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
 #  GNU Lesser General Public License for more details.
 #
 #  You should have received a copy of the GNU Lesser General Public License
@@ -24,6 +24,8 @@
 import os
 
 # 3rd party
+import sys
+
 import jinja2
 import pytest
 
@@ -32,7 +34,7 @@ from repo_helper.files.linting import lint_fix_list, lint_warn_list
 from repo_helper.templates import template_dir
 
 
-@pytest.fixture()
+@pytest.fixture(scope="function")
 def demo_environment():
 	templates = jinja2.Environment(
 			loader=jinja2.FileSystemLoader(str(template_dir)),

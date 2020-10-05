@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 #
-#  __init__.py
+#  test_gitignore.py
 #
 #  Copyright © 2020 Dominic Davis-Foster <dominic@davis-foster.co.uk>
 #
@@ -19,3 +19,20 @@
 #  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
 #  MA 02110-1301, USA.
 #
+
+# stdlib
+import pathlib
+
+# this package
+from pytest_regressions.file_regression import FileRegressionFixture
+
+from repo_helper.files.gitignore import make_gitignore
+from tests.common import check_file_output
+
+
+def test_make_gitignore(tmpdir, demo_environment, file_regression: FileRegressionFixture):
+	tmpdir_p = pathlib.Path(tmpdir)
+
+	managed_files = make_gitignore(tmpdir_p, demo_environment)
+	assert managed_files == [".gitignore"]
+	check_file_output(tmpdir_p / managed_files[0], file_regression)

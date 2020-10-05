@@ -11,7 +11,7 @@
 #
 #  This program is distributed in the hope that it will be useful,
 #  but WITHOUT ANY WARRANTY; without even the implied warranty of
-#  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
 #  GNU Lesser General Public License for more details.
 #
 #  You should have received a copy of the GNU Lesser General Public License
@@ -539,7 +539,7 @@ class Test_travis_site(EnumTest):
 class Test_travis_ubuntu_version(EnumTest):
 	config_var = travis_ubuntu_version
 	test_value = "bionic"
-	default_value = "xenial"
+	default_value = "focal"
 	non_enum_values = ["groovy", "wiley", "18.04", 18.04, "a string"]
 
 

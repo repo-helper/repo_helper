@@ -1,0 +1,57 @@
+# This file is managed by 'repo_helper'. Don't edit it directly.
+---
+
+language: python
+dist: bionic
+cache: pip
+python:
+  - '3.6'
+  - '3.7'
+
+arch:
+  - amd64
+  - arm64
+install:
+  - sudo apt update
+
+  - pip install --upgrade pip isort black
+  - pip install tox tox-travis
+
+  - sudo apt install python3-gi
+
+script:
+  - tox -vv
+
+
+stages:
+  - test
+  - deploy_pypi
+
+
+
+jobs:
+  allow_failures:
+    - arch: arm64
+
+  exclude:
+    - python: '3.7'
+      arch: arm64
+
+  include:
+    - stage: test
+      dist: bionic
+      python: 3.8
+
+    - stage: deploy_pypi
+      python: "3.6"
+      script: skip
+      deploy:
+        on:
+          tags: true
+          repo: octocat/hello-world
+        provider: pypi
+        user: "DomDF"
+        password:
+          secure: 1234abcd
+        distributions: "sdist bdist_wheel"
+        skip_existing: true
