@@ -14,7 +14,7 @@ Functions to create files
 #
 #  This program is distributed in the hope that it will be useful,
 #  but WITHOUT ANY WARRANTY; without even the implied warranty of
-#  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
 #  GNU Lesser General Public License for more details.
 #
 #  You should have received a copy of the GNU Lesser General Public License
@@ -37,7 +37,6 @@ class Management(list):
 	* the function,
 	* a string to use in 'exclude_files' to disable this function,
 	* a list of strings representing config values that must be true to call the function.
-
 	"""
 
 	def __init__(self, *args, **kwargs):
@@ -62,8 +61,10 @@ class Management(list):
 				templates: jinja2.Environment,
 				) -> List[str]: ...
 
-		:param exclude_name:
-		:param exclude_unless_true:
+		:param exclude_name: A string to use in 'exclude_files' to disable this function.
+		:param exclude_unless_true: A list of strings representing config values that must be true to call the function.
+		:param name: Optional name to use for the function in the output. Defaults to the name of the function.
+		:no-default name:
 
 		:return: The registered function.
 
