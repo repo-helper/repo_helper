@@ -7,6 +7,9 @@ cache: pip
 python:
   {% for version in python_versions %}- '{{ version }}'
   {% endfor %}
+arch:
+  - amd64
+  - arm64
 install:
   {% for line in travis_extra_install_pre %}- {{ line }}
   {% endfor %}
@@ -16,7 +19,7 @@ install:
   {% for line in travis_extra_install_post %}- {{ line }}
   {% endfor %}
 script:
-  - tox
+  - tox -vv
 {% if enable_tests %}after_success:
   - coveralls
 {% endif %}
@@ -28,7 +31,18 @@ stages:
 {% if False %}{% if enable_releases %}  - deploy_releases{% endif %}{% endif %}
 {% if on_pypi or enable_conda %}
 jobs:
+  allow_failures:
+    - arch: arm64
+
+  exclude:
+    {% for version in python_versions[1:] %}- python: '{{ version }}'
+      arch: arm64
+    {% endfor %}
   include:
+    - stage: test
+      dist: bionic
+      python: 3.8
+
 {% if on_pypi %}    - stage: deploy_pypi
       python: "{{ python_deploy_version }}"
       script: skip
@@ -54,8 +68,6 @@ jobs:
         - chmod +x .ci/travis_deploy_conda.sh
       script: skip
       deploy:
-        on:
-          repo: {{ username }}/{{ repo_name }}
         provider: script
         script: .ci/travis_deploy_conda.sh || return 1;{% endif %}
 

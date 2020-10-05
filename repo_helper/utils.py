@@ -26,13 +26,15 @@ General utilities.
 # stdlib
 import os
 import pathlib
+import re
 import subprocess
-from typing import Any, Iterable, List, Optional, Tuple, Type, Union
+import textwrap
+from pprint import PrettyPrinter
+from typing import Any, Callable, Iterable, List, Optional, Set, Tuple, Type, Union
 
 # 3rd party
-import requirements  # type: ignore
 import trove_classifiers  # type: ignore
-from domdf_python_tools.paths import PathPlus, maybe_make
+from domdf_python_tools.paths import PathPlus
 from domdf_python_tools.terminal_colours import Fore
 from domdf_python_tools.utils import stderr_writer
 from packaging.requirements import InvalidRequirement, Requirement
@@ -44,11 +46,15 @@ __all__ = [
 		"get_git_status",
 		"ensure_requirements",
 		"validate_classifiers",
-		"stderr_writer",
 		"license_lookup",
 		"check_union",
 		"get_json_type",
 		"json_type_lookup",
+		"indent_with_tab",
+		"FancyPrinter",
+		"pformat_tabs",
+		"normalize",
+		"read_requirements",
 		]
 
 
@@ -326,3 +332,91 @@ def get_json_type(type_):
 
 	elif get_origin(type_) is dict:
 		return {"type": "object"}
+
+
+def indent_with_tab(text: str, depth: int = 1, predicate: Optional[Callable[[str], bool]] = None) -> str:
+	"""
+	Adds ``'\t'`` to the beginning of selected lines in 'text'.
+
+	:param text: The text to indent.
+	:param depth: The depth of the indentation.
+	:param predicate: If given, ``'\t'``  will only be added to the lines where ``predicate(line)`` is True.
+		If ``predicate`` is not provided, it will default to adding ``'\t'``  to all non-empty lines
+		that do not consist solely of whitespace characters.
+
+	:return:
+	:rtype:
+	"""
+
+	return textwrap.indent(text, "\t"*depth, predicate=predicate)
+
+
+class FancyPrinter(PrettyPrinter):
+	# TODO: tuple, dict etc
+
+	def _pprint_list(self, object, stream, indent, allowance, context, level):
+		stream.write(f"[\n ")
+		self._format_items(object, stream, indent, allowance + 1,
+						   context, level)
+		stream.write(f",\n{' ' * self._indent_per_level}]")
+
+
+FancyPrinter._dispatch[list.__repr__] = FancyPrinter._pprint_list
+
+
+def pformat_tabs(
+		object: object,
+		width: int = 80,
+		depth: Optional[int] = None,
+		*,
+		compact: bool = False,
+		) -> str:
+	"""
+	Format a Python object into a pretty-printed representation.
+	Indentation is set at one tab.
+	"""
+
+	prettyprinter = FancyPrinter(indent=4, width=width, depth=depth, compact=compact)
+
+	buf = []
+	for line in prettyprinter.pformat(object).splitlines():
+		buf.append(re.sub("^ {4}", r"\t", line))
+		# buf.append(line)
+
+	return "\n".join(buf)
+
+
+_normalize_pattern = re.compile(r"[-_.]+")
+
+
+def normalize(name: str) -> str:
+	"""
+	Normalize name for PyPI et al.
+	
+	From https://www.python.org/dev/peps/pep-0503/ (public domain).
+	
+	:param name: The project name
+	"""
+
+	return _normalize_pattern.sub("-", name).lower()
+
+
+def read_requirements(req_file: pathlib.Path) -> Tuple[Set[Requirement], List[str]]:
+
+	comments = []
+	requirements = set()
+
+	with req_file.open(encoding="UTF-8") as fp:
+		for line in fp.readlines():
+			if line.startswith("#"):
+				comments.append(line)
+			elif line:
+				try:
+					req = Requirement(line)
+					if req.name.lower() not in [r.name.lower() for r in requirements]:
+						requirements.add(req)
+				except InvalidRequirement:
+					# TODO: Show warning to user
+					pass
+
+	return requirements, comments

@@ -1048,8 +1048,8 @@ class travis_ubuntu_version(ConfigVar):  # noqa
 		travis_ubuntu_version: "xenial"
 	"""
 
-	dtype = Literal["bionic", "xenial", "trusty", "precise"]
-	default = "xenial"
+	dtype = Literal["focal", "bionic", "xenial", "trusty", "precise"]
+	default = "focal"
 	category: str = "travis"
 
 

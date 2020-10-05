@@ -27,7 +27,8 @@ Core functionality of ``repo_helper``.
 import inspect
 import os.path
 import pathlib
-from typing import Any, Callable, List, Sequence, Tuple, Union
+import sys
+from typing import Any, Callable, List, Sequence, Tuple, Type, Union
 
 # 3rd party
 import jinja2
@@ -68,7 +69,7 @@ def is_registered(obj: Any) -> bool:
 	return False
 
 
-def import_registered_functions() -> List[object]:
+def import_registered_functions() -> List[Type]:
 	return discover(repo_helper.files, is_registered)
 
 
@@ -145,9 +146,10 @@ class RepoHelper:
 					self.templates.globals[req] for req in other_requirements
 					]):
 
-				print(f"{function_.__name__}{'.'*(75-len(function_.__name__))}{Back.GREEN('Done')}")
-
+				print(f"{function_.__name__}{'.'*(75-len(function_.__name__))}", end='')
+				sys.stdout.flush()
 				output_filenames = function_(self.target_repo, self.templates)
+				print(f"{Back.GREEN('Done')}")
 
 				for filename in output_filenames:
 					all_managed_files.append(str(filename))

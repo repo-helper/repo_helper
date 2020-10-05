@@ -165,6 +165,113 @@ shields_block_template: Template = Environment(
 				)
 
 
+docs_shields_block_template: Template = Environment(
+		loader=BaseLoader(),
+		undefined=StrictUndefined,
+		).from_string(
+				"""\
+.. start shields{% if unique_name %} {{ unique_name.lstrip("_") }}{% endif %}
+
+.. list-table::
+	:stub-columns: 1
+	:widths: 10 90
+
+	{% if docs %}* - Docs
+	  - |docs{{ unique_name }}| |docs_check{{ unique_name }}|
+	{% endif %}* - Tests
+	  - |travis{{ unique_name }}| \
+{% if "Windows" in platforms %}|actions_windows{{ unique_name }}| {% endif %}\
+{% if "macOS" in platforms %}|actions_macos{{ unique_name }}| {% endif %}\
+{% if tests %}|coveralls{{ unique_name }}| {% endif %}\
+|codefactor{{ unique_name }}|
+	{% if on_pypi %}* - PyPI
+	  - |pypi-version{{ unique_name }}| |supported-versions{{ unique_name }}| |supported-implementations{{ unique_name }}| |wheel{{ unique_name }}|{% endif %}
+	{% if conda %}* - Anaconda
+	  - |conda-version{{ unique_name }}| |conda-platform{{ unique_name }}|
+	{% endif %}* - Activity
+	  - |commits-latest{{ unique_name }}| |commits-since{{ unique_name }}| |maintained{{ unique_name }}|
+	{% if docker_shields %}* - Docker
+	  - |docker_build{{ unique_name }}| |docker_automated{{ unique_name }}| |docker_size{{ unique_name }}|
+	{% endif %}* - Other
+	  - |license{{ unique_name }}| |language{{ unique_name }}| |requires{{ unique_name }}|\
+{% if pre_commit %} |pre_commit{{ unique_name }}|{% endif %}
+
+{% if docs %}.. |docs{{ unique_name }}| {{ make_rtfd_shield(repo_name)[3:] }}
+
+.. |docs_check{{ unique_name }}| {{ make_docs_check_shield(repo_name, username)[3:] }}{% endif %}
+
+.. |travis{{ unique_name }}| {{ make_travis_shield(repo_name, username, travis_site)[3:] }}
+{% if "Windows" in platforms %}
+.. |actions_windows{{ unique_name }}| {{ make_actions_windows_shield(repo_name, username)[3:] }}
+{% endif %}{% if "macOS" in platforms %}
+.. |actions_macos{{ unique_name }}| {{ make_actions_macos_shield(repo_name, username)[3:] }}
+{% endif %}
+.. |requires{{ unique_name }}| {{ make_requires_shield(repo_name, username)[3:] }}
+{% if tests %}
+.. |coveralls{{ unique_name }}| {{ make_coveralls_shield(repo_name, username)[3:] }}
+{% endif %}
+.. |codefactor{{ unique_name }}| {{ make_codefactor_shield(repo_name, username)[3:] }}
+
+.. |pypi-version{{ unique_name }}| {{ make_pypi_version_shield(pypi_name)[3:] }}
+
+.. |supported-versions{{ unique_name }}| {{ make_python_versions_shield(pypi_name)[3:] }}
+
+.. |supported-implementations{{ unique_name }}| {{ make_python_implementations_shield(pypi_name)[3:] }}
+
+.. |wheel{{ unique_name }}| {{ make_wheel_shield(pypi_name)[3:] }}
+{% if conda %}
+.. |conda-version{{ unique_name }}| {{ make_conda_version_shield(pypi_name, username)[3:] }}
+
+.. |conda-platform{{ unique_name }}| {{ make_conda_platform_shield(pypi_name, username)[3:] }}
+{% endif %}
+.. |license{{ unique_name }}| {{ make_license_shield(repo_name, username)[3:] }}
+
+.. |language{{ unique_name }}| {{ make_language_shield(repo_name, username)[3:] }}
+
+.. |commits-since{{ unique_name }}| {{ make_activity_shield(repo_name, username, version)[3:] }}
+
+.. |commits-latest{{ unique_name }}| {{ make_last_commit_shield(repo_name, username)[3:] }}
+
+.. |maintained{{ unique_name }}| {{ make_maintained_shield()[3:] }}
+{% if docker_shields %}
+.. |docker_build{{ unique_name }}| {{ make_docker_build_status_shield(docker_name, username)[3:] }}
+
+.. |docker_automated{{ unique_name }}| {{ make_docker_automated_build_shield(docker_name, username)[3:] }}
+
+.. |docker_size{{ unique_name }}| {{ make_docker_size_shield(docker_name, username)[3:] }}
+{% endif %}{% if pre_commit %}
+.. |pre_commit{{ unique_name }}| {{ make_pre_commit_shield()[3:] }}
+{% endif %}
+.. end shields
+""",
+				globals={
+						"make_maintained_shield": make_docs_maintained_shield,
+						"make_rtfd_shield": make_docs_rtfd_shield,
+						"make_docs_check_shield": make_docs_docs_check_shield,
+						"make_travis_shield": make_docs_travis_shield,
+						"make_actions_windows_shield": make_docs_actions_windows_shield,
+						"make_actions_macos_shield": make_docs_actions_macos_shield,
+						"make_requires_shield": make_docs_requires_shield,
+						"make_coveralls_shield": make_docs_coveralls_shield,
+						"make_codefactor_shield": make_docs_codefactor_shield,
+						"make_pypi_version_shield": make_docs_pypi_version_shield,
+						"make_python_versions_shield": make_docs_python_versions_shield,
+						"make_python_implementations_shield": make_docs_python_implementations_shield,
+						"make_wheel_shield": make_docs_wheel_shield,
+						"make_conda_version_shield": make_docs_conda_version_shield,
+						"make_conda_platform_shield": make_docs_conda_platform_shield,
+						"make_license_shield": make_docs_license_shield,
+						"make_language_shield": make_docs_language_shield,
+						"make_activity_shield": make_docs_activity_shield,
+						"make_last_commit_shield": make_docs_last_commit_shield,
+						"make_docker_build_status_shield": make_docs_docker_build_status_shield,
+						"make_docker_automated_build_shield": make_docs_docker_automated_build_shield,
+						"make_docker_size_shield": make_docs_docker_size_shield,
+						"make_pre_commit_shield": make_docs_pre_commit_shield,
+						}
+				)
+
+
 def create_shields_block(
 		username: str,
 		repo_name: str,
@@ -181,34 +288,26 @@ def create_shields_block(
 		platforms: Optional[Iterable[str]] = None,
 		pre_commit: bool = False,
 		on_pypi: bool = True,
+		template=shields_block_template,
 		) -> str:
 	"""
 	Create the shields block for insertion into the README, documentation etc.
 
 	:param username: The username of the GitHub account that owns the repository.
-	:type username: str
 	:param repo_name: The name of the repository.
-	:type repo_name: str
 	:param version:
 	:param conda:
-	:type conda: bool
 	:param tests:
-	:type tests: bool
 	:param docs:
-	:type docs: bool
 	:param travis_site:
 	:param pypi_name: The name of the project on PyPI. Defaults to the value of ``repo_name`` if unset.
 	:param unique_name: An optional unique name for the reST substitutions.
-	:type unique_name: str, optional
 	:param docker_shields: Whether to show shields for Docker. Default :py:obj:`False`.
-	:type docker_shields: bool
 	:param docker_name: The name of the Docker image on DockerHub.
-	:type docker_name: str, optional
 	:param platforms: List of supported platforms.
 	:param pre_commit: Whether to show a shield for pre-commit
-	:type pre_commit: bool
 	:param on_pypi:
-	:type on_pypi: bool
+	:param shields_block_template:
 
 	:return: The shields block created from the above settings.
 	"""
@@ -222,7 +321,7 @@ def create_shields_block(
 	if platforms:
 		platforms = set(platforms)
 
-	return shields_block_template.render(
+	return template.render(
 			username=username,
 			repo_name=repo_name,
 			tests=tests,
@@ -238,6 +337,7 @@ def create_shields_block(
 			pre_commit=pre_commit,
 			on_pypi=on_pypi,
 			)
+
 
 
 readme_installation_block_template = Environment(loader=BaseLoader, undefined=StrictUndefined).from_string(  # type: ignore
@@ -333,34 +433,12 @@ docs_installation_block_template = Environment(
 				"""\
 .. start installation
 
-.. tabs::
-
-	.. tab:: from PyPI
-
-		.. prompt:: bash
-
-			python3 -m pip install {{ pypi_name }} --user
-
-{% if conda %}	.. tab:: from Anaconda
-
-		First add the required channels
-
-		.. prompt:: bash
-{% for channel in conda_channels %}
-			conda config --add channels http://conda.anaconda.org/{{ channel }}{% endfor %}
-
-		Then install
-
-		.. prompt:: bash
-
-			conda install {{ pypi_name }}
+.. installation:: {{ pypi_name }}
+	:pypi:
+	:github:
+{% if conda %}	:anaconda:
+	:conda-channels: {{ conda_channels }}
 {% endif %}
-	.. tab:: from GitHub
-
-		.. prompt:: bash
-
-			python3 -m pip install git+https://github.com/{{ username }}/{{ repo_name }}@master --user
-
 .. end installation
 """
 				)
@@ -394,12 +472,13 @@ def create_docs_install_block(
 	if not pypi_name:
 		pypi_name = repo_name
 
+	if conda_channels is None:
+		conda_channels = []
+
 	return docs_installation_block_template.render(
-			repo_name=repo_name,
-			username=username,
 			conda=conda,
 			pypi_name=pypi_name,
-			conda_channels=conda_channels,
+			conda_channels=", ".join(conda_channels),
 			)
 
 

@@ -12,12 +12,12 @@ jobs:
     name: "Python ${{ "{{" }} matrix.python-version {{ "}}" }}"
     runs-on: "{{ ci_platform }}"
     env:
-      USING_COVERAGE: '{{ ",".join((python_versions)) }}'
+      USING_COVERAGE: '{{ ",".join(no_dev_versions(python_versions)) }}'
 
     strategy:
       fail-fast: False
       matrix:
-        python-version: ["{{ '","'.join((python_versions)) }}"]
+        python-version: ["{{ '","'.join(no_dev_versions(python_versions)) }}"]
 
 
     steps:

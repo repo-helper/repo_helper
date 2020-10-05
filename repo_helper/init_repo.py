@@ -88,10 +88,6 @@ def init_repo(repo_path: pathlib.Path, templates: jinja2.Environment) -> List[st
 			buf += f"""
 
 .. automodule:: {templates.globals["import_name"]}
-	:autosummary:
-	:members:
-	:inherited-members:
-	:undoc-members:
 """
 			clean_writer(buf, fp)
 
@@ -106,26 +102,23 @@ def init_repo(repo_path: pathlib.Path, templates: jinja2.Environment) -> List[st
 
 	base_license_url = "https://raw.githubusercontent.com/licenses/license-templates/master/templates/"
 
-	if templates.globals["license"] in {
-			"GNU Lesser General Public License v3 (LGPLv3)",
-			"GNU Lesser General Public License v3 or later (LGPLv3+)"
-			}:
-		license_url = f"{base_license_url}lgpl.txt"
+	license_file_lookup = {
+			"GNU Lesser General Public License v3 (LGPLv3)": (f"{base_license_url}lgpl.txt", "lgpl3.py"),
+			"GNU Lesser General Public License v3 or later (LGPLv3+)": (f"{base_license_url}lgpl.txt", "lgpl3_plus.py"),
+			"GNU General Public License v3 (GPLv3)": (f"{base_license_url}gpl3.txt", "gpl3.py"),
+			"GNU General Public License v3 or later (GPLv3+)": (f"{base_license_url}gpl3.txt", "gpl3_plus.py"),
+			"GNU General Public License v2 (GPLv2)": (f"{base_license_url}gpl2.txt", "gpl2.py"),
+			"GNU General Public License v2 or later (GPLv2+)": (f"{base_license_url}gpl2.txt", "gpl2_plus.py"),
+			"MIT License": (f"{base_license_url}mit.txt", "mit.py"),
+			}
 
-	if templates.globals["license"] in {
-			"GNU General Public License v3 (GPLv3)",
-			"GNU General Public License v3 or later (GPLv3+)",
-			}:
-		license_url = f"{base_license_url}gpl3.txt"
+	# TODO: 2 vs 3 clause BSD
 
-	if templates.globals["license"] == "GNU General Public License v2 (GPLv2)":
-		license_url = f"{base_license_url}gpl2.txt"
+	if templates.globals["license"] in license_file_lookup:
+		license_url = license_file_lookup[templates.globals["license"]][0]
 
 	if templates.globals["license"] == "BSD License":
 		license_url = f"{base_license_url}bsd2.txt"
-
-	if templates.globals["license"] == "MIT License":
-		license_url = f"{base_license_url}mit.txt"
 
 	if templates.globals["license"] == "Apache Software License":
 		license_url = f"{base_license_url}apache.txt"
