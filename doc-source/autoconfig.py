@@ -9,7 +9,7 @@ the ``.. conf::`` directive to document configuration manually,
 and the ``:conf:`` role to link to a ``.. conf::`` directive.
 """
 #
-#  Copyright (c) 2020 Dominic Davis-Foster <dominic@davis-foster.co.uk>
+#  Copyright © 2020 Dominic Davis-Foster <dominic@davis-foster.co.uk>
 #
 #  This program is free software; you can redistribute it and/or modify
 #  it under the terms of the GNU General Public License as published by

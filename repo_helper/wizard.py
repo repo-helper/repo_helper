@@ -14,7 +14,7 @@ Wizard 🧙‍ for creating a 'repo_helper.yml' file.
 #
 #  This program is distributed in the hope that it will be useful,
 #  but WITHOUT ANY WARRANTY; without even the implied warranty of
-#  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
 #  GNU Lesser General Public License for more details.
 #
 #  You should have received a copy of the GNU Lesser General Public License
@@ -161,7 +161,7 @@ Not all SPDX identifiers are allowed as not all map to PyPI Trove classifiers.""
 	# ---------- writeout ----------
 	config_file.write_clean(
 			f"""\
-# Configuration for 'repo_helper' (https://github.com/domdfcoding/repo_helper
+# Configuration for 'repo_helper' (https://github.com/domdfcoding/repo_helper)
 ---
 modname: {modname!r}
 copyright_years: {copyright_years!r}
