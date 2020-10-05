@@ -29,7 +29,7 @@ This project is in an early stage, and some things might not work correctly or b
 
 .. |docs| image:: https://img.shields.io/readthedocs/repo_helper/latest?logo=read-the-docs
 	:target: https://repo_helper.readthedocs.io/en/latest/?badge=latest
-	:alt: Documentation Status
+	:alt: Documentation Build Status
 
 .. |docs_check| image:: https://github.com/domdfcoding/repo_helper/workflows/Docs%20Check/badge.svg
 	:target: https://github.com/domdfcoding/repo_helper/actions?query=workflow%3A%22Docs+Check%22

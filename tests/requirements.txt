@@ -1,7 +1,8 @@
 coverage>=5.1
-coverage_pyver_pragma>=0.0.2
+coverage_pyver_pragma>=0.0.5
 lorem
 pytest>=6.0.0
 pytest-cov>=2.8.1
 pytest-randomly>=3.3.1
 pytest-regressions
+pytest-timeout>=1.4.2
