@@ -22,11 +22,11 @@
 
 # stdlib
 import pathlib
-import tempfile
 
-# this package
+# 3rd party
 from pytest_regressions.file_regression import FileRegressionFixture
 
+# this package
 from repo_helper.files.bots import make_auto_assign_action, make_dependabot, make_imgbot, make_stale_bot
 from tests.common import check_file_output
 

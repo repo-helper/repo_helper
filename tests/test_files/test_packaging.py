@@ -23,9 +23,10 @@
 # stdlib
 import pathlib
 
-# this package
+# 3rd party
 from pytest_regressions.file_regression import FileRegressionFixture
 
+# this package
 from repo_helper.files.packaging import make_manifest, make_pkginfo, make_pyproject, make_setup, make_setup_cfg
 from tests.common import check_file_output
 
@@ -145,4 +146,3 @@ def test_make_pkginfo(tmpdir, demo_environment, file_regression: FileRegressionF
 	managed_files = make_pkginfo(tmpdir_p, demo_environment)
 	assert managed_files == ["__pkginfo__.py"]
 	check_file_output(tmpdir_p / managed_files[0], file_regression)
-

@@ -41,17 +41,19 @@ from packaging.requirements import Requirement
 
 # this package
 from repo_helper.blocks import (
-	create_docs_install_block,
-	create_docs_links_block,
-	create_shields_block,
-	create_short_desc_block,
-	docs_shields_block_template, installation_regex,
-	links_regex,
-	shields_regex,
-	short_desc_regex,
-	)
+		create_docs_install_block,
+		create_docs_links_block,
+		create_shields_block,
+		create_short_desc_block,
+		docs_shields_block_template,
+		installation_regex,
+		links_regex,
+		shields_regex,
+		short_desc_regex
+		)
 from repo_helper.files import management
 from repo_helper.templates import init_repo_template_dir, template_dir
+from repo_helper.utils import normalize, pformat_tabs, read_requirements
 
 __all__ = [
 		"ensure_doc_requirements",
@@ -65,7 +67,6 @@ __all__ = [
 		]
 
 # Disable logging from cssutils
-from repo_helper.utils import normalize, pformat_tabs, read_requirements
 
 logging.getLogger("CSSUTILS").addHandler(logging.NullHandler())
 logging.getLogger("CSSUTILS").propagate = False
@@ -128,7 +129,7 @@ def ensure_doc_requirements(repo_path: pathlib.Path, templates: jinja2.Environme
 	# Remove requirements given in the library requirements.txt file.
 	target_requirements = {r for r in target_requirements if r.name not in lib_requirements_names}
 
-	target_requirement_names: Set[str] = set(normalize(r.name) for r in target_requirements)
+	target_requirement_names: Set[str] = {normalizer.name for r in target_requirements}
 
 	req_file = PathPlus(repo_path / templates.globals["docs_dir"] / "requirements.txt")
 	req_file.parent.maybe_make(parents=True)
@@ -298,8 +299,7 @@ def make_conf(repo_path: pathlib.Path, templates: jinja2.Environment) -> List[st
 			"sphinx_copybutton",
 			"sphinxcontrib.default_values",
 			"sphinxcontrib.toctree_plus",
-			"seed_intersphinx_mapping",
-			# "sphinx.ext.autosectionlabel",
+			"seed_intersphinx_mapping",  # "sphinx.ext.autosectionlabel",
 			]
 	# "sphinx_gitstamp",
 

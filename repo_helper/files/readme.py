@@ -26,10 +26,9 @@ from typing import List
 
 # 3rd party
 import jinja2
-
-# this package
 from domdf_python_tools.paths import PathPlus
 
+# this package
 from repo_helper.blocks import (
 		create_readme_install_block,
 		create_shields_block,

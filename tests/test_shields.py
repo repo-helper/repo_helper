@@ -23,9 +23,10 @@
 # stdlib
 import datetime
 
-# this package
+# 3rd party
 import pytest
 
+# this package
 from repo_helper import shields
 
 
@@ -680,7 +681,6 @@ def test_make_language_shield():
 	:alt: GitHub top language"""
 
 
-
 @pytest.mark.parametrize("pypi_name", [
 		"HELLO-WORLD",
 		"hello-world",
@@ -688,7 +688,8 @@ def test_make_language_shield():
 		])
 def test_make_docs_language_shield(pypi_name):
 	assert shields.make_docs_language_shield(
-			pypi_name, "octocat",
+			pypi_name,
+			"octocat",
 			) == """\
 .. github-shield::
 	:top-language:
@@ -731,7 +732,9 @@ def test_make_activity_shield():
 		])
 def test_make_docs_activity_shield(version):
 	assert shields.make_docs_activity_shield(
-			"hello_world", "octocat", version,
+			"hello_world",
+			"octocat",
+			version,
 			) == f"""\
 .. github-shield::
 	:commits-since: v{version}

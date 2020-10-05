@@ -23,21 +23,20 @@
 # 3rd party
 import lorem  # type: ignore
 import pytest
-
-# this package
 from pytest_regressions.file_regression import FileRegressionFixture
 
+# this package
 from repo_helper.blocks import (
-	create_docs_install_block,
-	create_docs_links_block,
-	create_readme_install_block,
-	create_shields_block,
-	create_short_desc_block,
-	installation_regex,
-	links_regex,
-	shields_regex,
-	short_desc_regex,
-	)
+		create_docs_install_block,
+		create_docs_links_block,
+		create_readme_install_block,
+		create_shields_block,
+		create_short_desc_block,
+		installation_regex,
+		links_regex,
+		shields_regex,
+		short_desc_regex
+		)
 from tests.common import check_file_regression
 
 
@@ -78,65 +77,82 @@ def test_short_desc_regex(value):
 	assert m == "hello world"
 
 
-@pytest.mark.parametrize("kwargs", [
-		pytest.param(
-				dict(username="octocat",
-					 repo_name="REPO_NAME",
-					 version="1.2.3",
-					 conda=True,
-					 tests=True,
-					 docs=True,
-					 travis_site="com",
-					 pypi_name="PYPI_NAME",
-					 docker_shields=False,
-					 docker_name='',
-					 platforms=["Windows", "macOS", "Linux"],
-					 ),
-				id="case_1"),
-		pytest.param(
-
-				dict(
-						username="octocat",
-						repo_name="REPO_NAME",
-						version="1.2.3",
-						conda=False,
-						tests=False,
-						docs=False,
-						travis_site="com",
-						pypi_name="PYPI_NAME",
-						unique_name="_UNIQUE_NAME",
-						docker_shields=True,
-						docker_name="DOCKER_NAME",
-						platforms=[],
+@pytest.mark.parametrize(
+		"kwargs",
+		[
+				pytest.param(
+						dict(
+								username="octocat",
+								repo_name="REPO_NAME",
+								version="1.2.3",
+								conda=True,
+								tests=True,
+								docs=True,
+								travis_site="com",
+								pypi_name="PYPI_NAME",
+								docker_shields=False,
+								docker_name='',
+								platforms=["Windows", "macOS", "Linux"],
+								),
+						id="case_1"
 						),
-				id="case_2"),
-		])
+				pytest.param(
+						dict(
+								username="octocat",
+								repo_name="REPO_NAME",
+								version="1.2.3",
+								conda=False,
+								tests=False,
+								docs=False,
+								travis_site="com",
+								pypi_name="PYPI_NAME",
+								unique_name="_UNIQUE_NAME",
+								docker_shields=True,
+								docker_name="DOCKER_NAME",
+								platforms=[],
+								),
+						id="case_2"
+						),
+				]
+		)
 def test_create_shields_block(file_regression: FileRegressionFixture, kwargs):
 	result = create_shields_block(**kwargs)
 	check_file_regression(result, file_regression, extension=".rst")
 
 
-@pytest.mark.parametrize("kwargs", [
-		pytest.param(dict(
-repo_name="REPO_NAME",
-			username="octocat",
-			conda=True,
-			pypi_name="PYPI_NAME",
-			conda_channels=["conda-forge", "bioconda"],
-				), id="case_1"),
-		pytest.param(dict(
-				repo_name="REPO_NAME",
-				username="octocat",
-				conda=True,
-				conda_channels=["conda-forge", "bioconda"],
-				), id="case_2"),
-		pytest.param(dict(
-				repo_name="REPO_NAME",
-				username="octocat",
-				conda=False,
-				pypi_name="PYPI_NAME",
-				), id="case_3"),
-		])
+@pytest.mark.parametrize(
+		"kwargs",
+		[
+				pytest.param(
+						dict(
+								repo_name="REPO_NAME",
+								username="octocat",
+								conda=True,
+								pypi_name="PYPI_NAME",
+								conda_channels=["conda-forge", "bioconda"],
+								),
+						id="case_1"
+						),
+				pytest.param(
+						dict(
+								repo_name="REPO_NAME",
+								username="octocat",
+								conda=True,
+								conda_channels=["conda-forge", "bioconda"],
+								),
+						id="case_2"
+						),
+				pytest.param(
+						dict(
+								repo_name="REPO_NAME",
+								username="octocat",
+								conda=False,
+								pypi_name="PYPI_NAME",
+								),
+						id="case_3"
+						),
+				]
+		)
 def test_create_docs_install_block(file_regression: FileRegressionFixture, kwargs):
 	result = create_docs_install_block(**kwargs)
 	check_file_regression(result, file_regression, extension=".rst")
@@ -148,24 +164,31 @@ def test_create_docs_install_block(file_regression: FileRegressionFixture, kwarg
 				)
 
 
-@pytest.mark.parametrize("kwargs", [
-		pytest.param(dict(
-modname="hello_world",
-			username="octocat",
-			conda=True,
-			pypi_name="PYPI_NAME",
-			conda_channels=["conda-forge", "bioconda"],
-				), id="case_1"),
-		pytest.param(dict(
-				modname="hello_world",
-				username="octocat",
-				conda=True,
-				conda_channels=["conda-forge", "bioconda"],
-				), id="case_2"),
-		pytest.param(dict(
-				modname="hello_world", username="octocat", conda=False
-				), id="case_3"),
-		])
+@pytest.mark.parametrize(
+		"kwargs",
+		[
+				pytest.param(
+						dict(
+								modname="hello_world",
+								username="octocat",
+								conda=True,
+								pypi_name="PYPI_NAME",
+								conda_channels=["conda-forge", "bioconda"],
+								),
+						id="case_1"
+						),
+				pytest.param(
+						dict(
+								modname="hello_world",
+								username="octocat",
+								conda=True,
+								conda_channels=["conda-forge", "bioconda"],
+								),
+						id="case_2"
+						),
+				pytest.param(dict(modname="hello_world", username="octocat", conda=False), id="case_3"),
+				]
+		)
 def test_create_readme_install_block(file_regression: FileRegressionFixture, kwargs):
 	result = create_readme_install_block(**kwargs)
 	check_file_regression(result, file_regression, extension=".rst")

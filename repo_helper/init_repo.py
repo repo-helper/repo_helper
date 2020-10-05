@@ -104,7 +104,8 @@ def init_repo(repo_path: pathlib.Path, templates: jinja2.Environment) -> List[st
 
 	license_file_lookup = {
 			"GNU Lesser General Public License v3 (LGPLv3)": (f"{base_license_url}lgpl.txt", "lgpl3.py"),
-			"GNU Lesser General Public License v3 or later (LGPLv3+)": (f"{base_license_url}lgpl.txt", "lgpl3_plus.py"),
+			"GNU Lesser General Public License v3 or later (LGPLv3+)":
+					(f"{base_license_url}lgpl.txt", "lgpl3_plus.py"),
 			"GNU General Public License v3 (GPLv3)": (f"{base_license_url}gpl3.txt", "gpl3.py"),
 			"GNU General Public License v3 or later (GPLv3+)": (f"{base_license_url}gpl3.txt", "gpl3_plus.py"),
 			"GNU General Public License v2 (GPLv2)": (f"{base_license_url}gpl2.txt", "gpl2.py"),

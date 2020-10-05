@@ -30,6 +30,8 @@ import sys
 from repo_helper.cli import cli
 from repo_helper.wizard import wizard
 
+__all__ = ["main"]
+
 wizard = wizard  # to prevent unused import warning
 
 

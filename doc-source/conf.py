@@ -50,7 +50,6 @@ extensions = [
 	'sphinxcontrib.toctree_plus',
 	'seed_intersphinx_mapping',
 	'autoconfig',
-	'autodocsumm',
 	]
 
 sphinxemoji_style = 'twemoji'

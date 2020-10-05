@@ -31,13 +31,12 @@ from typing import Dict, Iterable, List, Union
 
 # 3rd party
 import jinja2
-from domdf_python_tools.paths import PathPlus, clean_writer
 import tomlkit
-
-# this package
+from domdf_python_tools.paths import PathPlus, clean_writer
 from packaging.requirements import InvalidRequirement, Requirement
 from packaging.specifiers import Specifier, SpecifierSet
 
+# this package
 from repo_helper.configupdater2 import ConfigUpdater
 from repo_helper.files import management
 from repo_helper.utils import indent_with_tab
@@ -203,7 +202,10 @@ def resolve_specifiers(specifiers: Iterable[Specifier]) -> SpecifierSet:
 	return final_specifier_set
 
 
-def combine_requirements(requirement: Union[Requirement, Iterable[Requirement]], *requirements: Requirement) -> List[Requirement]:
+def combine_requirements(
+		requirement: Union[Requirement, Iterable[Requirement]],
+		*requirements: Requirement,
+		) -> List[Requirement]:
 	"""
 	Combine duplicated requirements in a list.
 
@@ -354,10 +356,14 @@ def make_setup_cfg(repo_path: pathlib.Path, templates: jinja2.Environment) -> Li
 	data["metadata"]["long_description_content_type"] = "text/x-rst"
 	data["metadata"]["platforms"] = templates.globals["platforms"]
 	data["metadata"]["url"] = "https://github.com/{username}/{repo_name}".format(**templates.globals)
-	data["metadata"]["project_urls"] = indent_with_tab(textwrap.dedent("""
+	data["metadata"]["project_urls"] = indent_with_tab(
+			textwrap.dedent(
+					"""
 Documentation = https://{repo_name}.readthedocs.io
 Issue_Tracker = https://github.com/{username}/{repo_name}/issues
-Source_Code = https://github.com/{username}/{repo_name}""".format(**templates.globals)))
+Source_Code = https://github.com/{username}/{repo_name}""".format(**templates.globals)
+					)
+			)
 	data["metadata"]["classifiers"] = templates.globals["classifiers"]
 
 	# Options
@@ -370,11 +376,13 @@ Source_Code = https://github.com/{username}/{repo_name}""".format(**templates.gl
 	else:
 		data["options"]["packages"] = "find:"
 
-	data["options.packages.find"]["exclude"] = indent_with_tab(textwrap.dedent("""
+	data["options.packages.find"]["exclude"] = indent_with_tab(
+			textwrap.dedent("""
 {tests_dir}
 {tests_dir}.*
 {docs_dir}
-""".format(**templates.globals)))
+""".format(**templates.globals))
+			)
 
 	# mypy
 	data["mypy"]["python_version"] = templates.globals["min_py_version"]

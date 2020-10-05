@@ -24,8 +24,6 @@
 import os
 
 # 3rd party
-import sys
-
 import jinja2
 import pytest
 

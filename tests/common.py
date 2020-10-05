@@ -1,5 +1,7 @@
+# stdlib
 import pathlib
 
+# 3rd party
 from pytest_regressions.file_regression import FileRegressionFixture
 
 
@@ -13,4 +15,3 @@ def check_file_output(filename: pathlib.Path, file_regression: FileRegressionFix
 	if extension == ".py":
 		extension = "._py_"
 	check_file_regression(data, file_regression, extension)
-

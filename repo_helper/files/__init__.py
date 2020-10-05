@@ -27,6 +27,8 @@ Functions to create files
 import inspect
 from typing import Callable, List, Optional, Sequence, Tuple
 
+__all__ = ["Management"]
+
 
 class Management(list):
 	"""

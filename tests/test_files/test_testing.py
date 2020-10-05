@@ -27,12 +27,11 @@ import tempfile
 
 # 3rd party
 from domdf_python_tools.paths import PathPlus
-
-# this package
 from pytest_regressions.file_regression import FileRegressionFixture
 
+# this package
 from repo_helper.files.linting import code_only_warning
-from repo_helper.files.testing import ensure_tests_requirements, make_isort, make_pre_commit, make_yapf, make_tox
+from repo_helper.files.testing import ensure_tests_requirements, make_isort, make_pre_commit, make_tox, make_yapf
 from tests.common import check_file_output
 
 

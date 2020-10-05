@@ -37,6 +37,8 @@ from domdf_python_tools.paths import PathPlus
 from repo_helper.cli import cli_command
 from repo_helper.utils import license_lookup
 
+__all__ = ["wizard"]
+
 
 @cli_command()
 @click.pass_context

@@ -164,7 +164,6 @@ shields_block_template: Template = Environment(
 						}
 				)
 
-
 docs_shields_block_template: Template = Environment(
 		loader=BaseLoader(),
 		undefined=StrictUndefined,

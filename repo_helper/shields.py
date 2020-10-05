@@ -30,7 +30,6 @@ from typing import Union
 # 3rd party
 from typing_extensions import Literal
 
-
 __all__ = [
 		"make_rtfd_shield",
 		"make_docs_check_shield",
@@ -729,7 +728,6 @@ def make_docs_maintained_shield() -> str:
 make_docs_docker_build_status_shield = make_docker_build_status_shield
 make_docs_docker_automated_build_shield = make_docker_automated_build_shield
 make_docs_docker_size_shield = make_docker_size_shield
-
 
 make_docs_typing_shield = make_typing_shield
 

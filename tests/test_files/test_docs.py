@@ -24,9 +24,10 @@
 import os
 import pathlib
 
-# this package
+# 3rd party
 from pytest_regressions.file_regression import FileRegressionFixture
 
+# this package
 from repo_helper.files.docs import ensure_doc_requirements, make_404_page, make_docs_source_rst, make_rtfd
 from tests.common import check_file_output
 
@@ -69,9 +70,7 @@ def test_make_404_page(tmpdir, demo_environment):
 	(tmpdir_p / "doc-source").mkdir()
 
 	managed_files = make_404_page(tmpdir_p, demo_environment)
-	assert managed_files == [
-			os.path.join("doc-source", "404.rst"), os.path.join("doc-source", "not-found.png")
-			]
+	assert managed_files == [os.path.join("doc-source", "404.rst"), os.path.join("doc-source", "not-found.png")]
 	for filename in managed_files:
 		assert (tmpdir_p / filename).is_file()
 

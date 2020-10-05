@@ -23,9 +23,10 @@
 # stdlib
 import pathlib
 
-# this package
+# 3rd party
 from pytest_regressions.file_regression import FileRegressionFixture
 
+# this package
 from repo_helper.files.gitignore import make_gitignore
 from tests.common import check_file_output
 

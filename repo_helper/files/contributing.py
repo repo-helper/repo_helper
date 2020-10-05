@@ -103,7 +103,8 @@ def make_docs_contributing(repo_path: pathlib.Path, templates: jinja2.Environmen
 	"""
 
 	contributing = templates.get_template("CONTRIBUTING.rst")
-	content = "\n".join(["Overview", "---------"] + contributing.render(bash_block=sphinx_bash_block).splitlines()[3:])
+	content = "\n".join(["Overview", "---------"]
+						+ contributing.render(bash_block=sphinx_bash_block).splitlines()[3:])
 	PathPlus(repo_path / templates.globals["docs_dir"] / "contributing.rst").write_clean(content)
 
 	return [os.path.join(templates.globals["docs_dir"], "contributing.rst")]

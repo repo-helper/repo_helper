@@ -337,7 +337,7 @@ def indent_with_tab(text: str, depth: int = 1, predicate: Optional[Callable[[str
 	:rtype:
 	"""
 
-	return textwrap.indent(text, "\t"*depth, predicate=predicate)
+	return textwrap.indent(text, "\t" * depth, predicate=predicate)
 
 
 class FancyPrinter(PrettyPrinter):
@@ -345,8 +345,7 @@ class FancyPrinter(PrettyPrinter):
 
 	def _pprint_list(self, object, stream, indent, allowance, context, level):
 		stream.write(f"[\n ")
-		self._format_items(object, stream, indent, allowance + 1,
-						   context, level)
+		self._format_items(object, stream, indent, allowance + 1, context, level)
 		stream.write(f",\n{' ' * self._indent_per_level}]")
 
 
@@ -381,9 +380,9 @@ _normalize_pattern = re.compile(r"[-_.]+")
 def normalize(name: str) -> str:
 	"""
 	Normalize name for PyPI et al.
-	
+
 	From https://www.python.org/dev/peps/pep-0503/ (public domain).
-	
+
 	:param name: The project name
 	"""
 

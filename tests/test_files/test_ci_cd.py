@@ -24,9 +24,10 @@
 import pathlib
 import tempfile
 
-# this package
+# 3rd party
 from pytest_regressions.file_regression import FileRegressionFixture
 
+# this package
 from repo_helper.files.ci_cd import make_github_ci, make_travis, make_travis_deploy_conda
 from tests.common import check_file_output
 
@@ -105,11 +106,7 @@ def test_github_ci_case_2(tmpdir, demo_environment, file_regression: FileRegress
 def test_github_ci_case_3(tmpdir, demo_environment):
 	tmpdir_p = pathlib.Path(tmpdir)
 
-	demo_environment.globals.update(
-			dict(
-					platforms=["Windows", "macOS"],
-					)
-			)
+	demo_environment.globals.update(dict(platforms=["Windows", "macOS"], ))
 
 	managed_files = make_github_ci(tmpdir_p, demo_environment)
 	assert managed_files == [".github/workflows/python_ci.yml", ".github/workflows/python_ci_macos.yml"]
