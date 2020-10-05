@@ -158,6 +158,9 @@ class ComparableRequirement(Requirement):
 			return NotImplemented
 
 
+operator_symbols = ('<=', '<', '!=', '==', '>=', '>', '~=', '===', )
+
+
 def resolve_specifiers(specifiers: Iterable[Specifier]) -> SpecifierSet:
 	"""
 	Resolve duplicated and overlapping requirement specifiers.
@@ -169,7 +172,7 @@ def resolve_specifiers(specifiers: Iterable[Specifier]) -> SpecifierSet:
 
 	final_specifier_set = SpecifierSet()
 
-	operator_lookup: Dict[str, List[Specifier]] = {s: [] for s in ('<=', '<', '!=', '==', '>=', '>', '~=', '===', )}
+	operator_lookup: Dict[str, List[Specifier]] = {s: [] for s in operator_symbols}
 
 	for spec in specifiers:
 		if spec.operator in operator_lookup:
