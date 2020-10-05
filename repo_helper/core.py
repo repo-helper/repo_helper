@@ -55,10 +55,6 @@ def is_registered(obj: Any) -> bool:
 	Return whether ``obj`` is a registered function
 
 	:param obj:
-	:type obj:
-
-	:return:
-	:rtype:
 
 	.. TODO:: Allow all callables
 	"""

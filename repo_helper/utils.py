@@ -63,7 +63,6 @@ def check_git_status(repo_path: pathlib.Path) -> Tuple[bool, List[str]]:
 	Check the ``git`` status of the given repository
 
 	:param repo_path: Path to the repository root.
-	:type repo_path: pathlib.Path
 
 	:return: Whether the git working directory is clean, and the list of uncommitted files if it isn't
 	:rtype: bool
@@ -92,7 +91,6 @@ def get_git_status(repo_path: pathlib.Path) -> str:
 	Returns the output of ``git status``
 
 	:param repo_path: Path to the repository root.
-	:type repo_path: pathlib.Path
 
 	:rtype: str
 	"""
@@ -285,12 +283,7 @@ def check_union(obj: Any, dtype: Type):
 	Check if the type of ``obj`` is one of the types in a :class:`typing.Union` or a :class:`typing.List``.
 
 	:param obj:
-	:type obj:
 	:param dtype:
-	:type dtype:
-
-	:return:
-	:rtype:
 	"""
 
 	return isinstance(obj, dtype.__args__)  # type: ignore
@@ -309,10 +302,6 @@ def get_json_type(type_):
 	Get the type for the JSON schema that corresponds to the given Python type.
 
 	:param type_:
-	:type type_:
-
-	:return:
-	:rtype:
 	"""
 
 	if type_ in json_type_lookup:

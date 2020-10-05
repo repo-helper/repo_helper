@@ -691,7 +691,6 @@ def make_style(selector: str, styles: Dict[str, Union[Sequence, str, int, None]]
 	Create a CSS Style Rule from a dictionary.
 
 	:param selector:
-	:type selector: str
 	:param styles:
 
 	:return:

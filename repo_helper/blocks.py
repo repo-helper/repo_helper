@@ -382,11 +382,8 @@ def create_readme_install_block(
 	Create the installation instructions for insertion into the README.
 
 	:param modname: The name of the program / library.
-	:type modname: str
 	:param username: The username of the GitHub account that owns the repository.
-	:type username: str
 	:param conda:
-	:type conda: bool
 	:param pypi_name: The name of the project on PyPI. Defaults to the value of ``repo_name`` if unset.
 	:param conda_channels: List of required Conda channels.
 
@@ -413,7 +410,6 @@ def create_short_desc_block(short_desc: str) -> str:
 	Creates the short description block insertion into the README, documentation etc.
 
 	:param short_desc: A short description of the program / library.
-	:type short_desc: str
 
 	:return: The short description block created from the above settings.
 	"""
@@ -455,11 +451,8 @@ def create_docs_install_block(
 	Create the installation instructions for insertion into the documentation.
 
 	:param repo_name: The name of the GitHub repository.
-	:type repo_name: str
 	:param username: The username of the GitHub account that owns the repository.
-	:type username: str
 	:param conda:
-	:type conda: bool
 	:param pypi_name: The name of the project on PyPI. Defaults to the value of ``repo_name`` if unset.
 	:param conda_channels: List of required Conda channels.
 
@@ -500,9 +493,7 @@ def create_docs_links_block(username: str, repo_name: str) -> str:
 	Create the documentation links block.
 
 	:param username: The username of the GitHub account that owns the repository.
-	:type username: str
 	:param repo_name: The name of the GitHub repository.
-	:type repo_name: str
 
 	:return: The documentation links block created from the above settings.
 	"""

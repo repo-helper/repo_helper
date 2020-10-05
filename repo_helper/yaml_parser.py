@@ -45,15 +45,11 @@ __all__ = [
 		]
 
 
-def parse_yaml(repo_path: pathlib.Path):
+def parse_yaml(repo_path: pathlib.Path) -> Dict:
 	"""
 	Parse configuration values from a ``YAML`` file.
 
 	:param repo_path: Path to the repository root.
-	:type repo_path: pathlib.Path
-
-	:return:
-	:rtype: dict
 	"""
 
 	if (repo_path / "git_helper.yml").is_file():

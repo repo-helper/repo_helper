@@ -113,9 +113,7 @@ def commit_changed_files(
 	:param commit: Whether to commit the changes automatically.
 		:py:obj:`None` (default) indicates the user should be asked.
 	:param message: The commit message to use. Default ``"Updated files with 'repo_helper'."``
-	:type message: bytes
 	:param enable_pre_commit: Whether to install and configure pre-commit. Default :py:obj`True`.
-	:type enable_pre_commit: bool
 	"""
 
 	# print(repo_path)
