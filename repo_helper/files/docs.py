@@ -129,7 +129,7 @@ def ensure_doc_requirements(repo_path: pathlib.Path, templates: jinja2.Environme
 	# Remove requirements given in the library requirements.txt file.
 	target_requirements = {r for r in target_requirements if r.name not in lib_requirements_names}
 
-	target_requirement_names: Set[str] = {normalizer.name for r in target_requirements}
+	target_requirement_names: Set[str] = {normalize(r.name) for r in target_requirements}
 
 	req_file = PathPlus(repo_path / templates.globals["docs_dir"] / "requirements.txt")
 	req_file.parent.maybe_make(parents=True)
