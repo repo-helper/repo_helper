@@ -143,7 +143,7 @@ def make_github_ci(repo_path: pathlib.Path, templates: jinja2.Environment) -> Li
 	actions = templates.get_template("github_ci.yml")
 
 	def no_dev_versions(versions):
-		return [v for v in versions if not v.endswith("dev")]
+		return [v for v in versions if not v.endswith("-dev")]
 
 	dot_github = PathPlus(repo_path / ".github")
 	(dot_github / "workflows").maybe_make(parents=True)

@@ -26,14 +26,21 @@ Manage configuration for packaging tools.
 # stdlib
 import copy
 import pathlib
-from typing import List
+import textwrap
+from typing import Dict, Iterable, List, Union
 
 # 3rd party
 import jinja2
 from domdf_python_tools.paths import PathPlus, clean_writer
+import tomlkit
 
 # this package
+from packaging.requirements import InvalidRequirement, Requirement
+from packaging.specifiers import Specifier, SpecifierSet
+
+from repo_helper.configupdater2 import ConfigUpdater
 from repo_helper.files import management
+from repo_helper.utils import indent_with_tab
 
 __all__ = [
 		"make_manifest",
@@ -86,6 +93,149 @@ def make_manifest(repo_path: pathlib.Path, templates: jinja2.Environment) -> Lis
 	return ["MANIFEST.in"]
 
 
+def _check_equal_not_none(left, right):
+	if not left or not right:
+		return True
+	else:
+		return left == right
+
+
+class ComparableRequirement(Requirement):
+
+	def __eq__(self, other):
+
+		if isinstance(other, str):
+			try:
+				other = Requirement(other)
+			except InvalidRequirement:
+				return NotImplemented
+
+			return all((
+					_check_equal_not_none(self.name, other.name),
+					_check_equal_not_none(self.url, other.url),
+					_check_equal_not_none(self.extras, other.extras),
+					_check_equal_not_none(self.specifier, other.specifier),
+					_check_equal_not_none(self.marker, other.marker),
+					))
+
+		if isinstance(other, Requirement):
+			return (
+					self.name == other.name and self.url == other.url and self.extras == other.extras
+					and self.specifier == other.specifier and self.marker == other.marker
+					)
+		else:
+			return NotImplemented
+
+	def __gt__(self, other) -> bool:
+		if isinstance(other, self.__class__):
+			return self.name > other.name
+		elif isinstance(other, str):
+			return self.name > other
+		else:
+			return NotImplemented
+
+	def __ge__(self, other) -> bool:
+		if isinstance(other, self.__class__):
+			return self.name >= other.name
+		elif isinstance(other, str):
+			return self.name >= other
+		else:
+			return NotImplemented
+
+	def __le__(self, other) -> bool:
+		if isinstance(other, self.__class__):
+			return self.name <= other.name
+		elif isinstance(other, str):
+			return self.name <= other
+		else:
+			return NotImplemented
+
+	def __lt__(self, other) -> bool:
+		if isinstance(other, self.__class__):
+			return self.name < other.name
+		elif isinstance(other, str):
+			return self.name < other
+		else:
+			return NotImplemented
+
+
+def resolve_specifiers(specifiers: Iterable[Specifier]) -> SpecifierSet:
+	"""
+	Resolve duplicated and overlapping requirement specifiers.
+
+	:param specifiers:
+
+	:return:
+	"""
+
+	final_specifier_set = SpecifierSet()
+
+	operator_lookup: Dict[str, List[Specifier]] = {s: [] for s in ('<=', '<', '!=', '==', '>=', '>', '~=', '===', )}
+
+	for spec in specifiers:
+		if spec.operator in operator_lookup:
+			operator_lookup[spec.operator].append(spec)
+
+	if operator_lookup['<=']:
+		final_specifier_set &= SpecifierSet(f"<={min(spec.version for spec in operator_lookup['<='])}")
+
+	if operator_lookup['<']:
+		final_specifier_set &= SpecifierSet(f"<{min(spec.version for spec in operator_lookup['<'])}")
+
+	for spec in operator_lookup['!=']:
+		final_specifier_set &= SpecifierSet(f"!={spec.version}")
+
+	for spec in operator_lookup['==']:
+		final_specifier_set &= SpecifierSet(f"=={spec.version}")
+
+	if operator_lookup['>=']:
+		final_specifier_set &= SpecifierSet(f">={max(spec.version for spec in operator_lookup['>='])}")
+
+	if operator_lookup['>']:
+		final_specifier_set &= SpecifierSet(f">{max(spec.version for spec in operator_lookup['>'])}")
+
+	for spec in operator_lookup['~=']:
+		final_specifier_set &= SpecifierSet(f"~={spec.version}")
+
+	for spec in operator_lookup['===']:
+		final_specifier_set &= SpecifierSet(f"==={spec.version}")
+
+	return final_specifier_set
+
+
+def combine_requirements(requirement: Union[Requirement, Iterable[Requirement]], *requirements: Requirement) -> List[Requirement]:
+	"""
+	Combine duplicated requirements in a list.
+
+	:param requirement: A single requirement, or an iterable of requirements
+	:param requirements: Additional requirements
+
+	:return:
+
+	.. TODO:: Markers
+	"""
+
+	if isinstance(requirement, Iterable):
+		all_requirements = [*requirement, *requirements]
+	else:
+		all_requirements = [requirement, *requirements]
+
+	merged_requirements = []
+
+	for req in all_requirements:
+		if req.name in merged_requirements:
+			other_req = merged_requirements[merged_requirements.index(req.name)]
+			other_req.specifier &= req.specifier
+			other_req.extras &= req.extras
+			other_req.specifier = resolve_specifiers(other_req.specifier)
+		else:
+			if not isinstance(req, ComparableRequirement):
+				req = ComparableRequirement(str(req))
+			merged_requirements.append(req)
+
+	return merged_requirements
+
+
 @management.register("pyproject")
 def make_pyproject(repo_path: pathlib.Path, templates: jinja2.Environment) -> List[str]:
 	"""
@@ -96,55 +246,38 @@ def make_pyproject(repo_path: pathlib.Path, templates: jinja2.Environment) -> Li
 	:type templates: jinja2.Environment
 	"""
 
-	pyproject = templates.get_template("pyproject.toml")
+	pyproject_file = PathPlus(repo_path / "pyproject.toml")
 
-	with (repo_path / "pyproject.toml").open('w', encoding="UTF-8") as fp:
-		clean_writer(pyproject.render(), fp)
+	if pyproject_file.is_file():
+		data = tomlkit.parse(pyproject_file.read_text())
+	else:
+		data = tomlkit.document()
 
+	build_requirements = [
+			"setuptools>=40.6.0",
+			"wheel>=0.34.2",
+			*templates.globals["tox_build_requirements"],
+			]
 
-# 	with (repo_path / "pyproject.toml").open('w', encoding="UTF-8") as fp:
-# 		buf = """\
-# [build-system]
-# requires = [
-#     "setuptools >= 40.6.0",
-#     "wheel >= 0.34.2",
-# """
-#
-#
-# 		for requirement in templates.globals["tox_build_requirements"]:
-# 			buf += f'    "{requirement}",'
-#
-# 		buf += """\
-#     ]
-# build-backend = "setuptools.build_meta"
-#
-# [tool.flit.metadata]
-#
-# """
-#
-# 		clean_writer(buf, fp)
+	if "build-system" in data:
+		build_requirements.extend(data["build-system"].get("requires", []))
+	else:
+		data["build-system"] = tomlkit.table()
+
+	build_requirements = sorted(combine_requirements(Requirement(req) for req in build_requirements))
+
+	data["build-system"]["requires"] = [str(x) for x in build_requirements]
+	data["build-system"]["build-backend"] = "setuptools.build_meta"
+
+	pyproject_file.write_clean(tomlkit.dumps(data))
 
 	return ["pyproject.toml"]
 
+
 setup_py_defaults = dict(
-		# author="author",
-		# author_email="author_email",
-		# classifiers="classifiers",
-		# description="short_desc",
-		# entry_points="entry_points",
 		extras_require="extras_require",
-		# include_package_data="True",
 		install_requires="install_requires",
-		# license="__license__",
-		# long_description="long_description",
-		# name="pypi_name",
-		# project_urls="project_urls",
-		# py_modules="py_modules",
-		# url="web",
 		version="__version__",
-		# keywords="keywords",
-		# zip_safe="False",
-		# long_description_content_type="'text/x-rst'"
 		)
 
 
@@ -189,10 +322,84 @@ def make_setup_cfg(repo_path: pathlib.Path, templates: jinja2.Environment) -> Li
 	:type templates: jinja2.Environment
 	"""
 
-	setup = templates.get_template("setup_template.cfg")
+	setup_cfg_file = PathPlus(repo_path / "setup.cfg")
+	data = ConfigUpdater()
 
-	with (repo_path / "setup.cfg").open('w', encoding="UTF-8") as fp:
-		clean_writer(setup.render(), fp)
+	managed_sections = [
+			"metadata",
+			"options",
+			"options.packages.find",
+			"mypy",
+			]
+
+	buf = [
+			"# This file is managed by 'repo_helper'.",
+			"# You may add new sections, but any changes made to the following sections will be lost:",
+			]
+
+	for sec in managed_sections:
+		data.add_section(sec)
+		buf.append(f"#     * {sec}")
+
+	buf += ""
+
+	# Metadata
+	data["metadata"]["name"] = templates.globals["pypi_name"]
+	# data["metadata"]["description"] = templates.globals["short_desc"]
+	data["metadata"]["author"] = templates.globals["author"]
+	data["metadata"]["author_email"] = templates.globals["email"]
+	data["metadata"]["license"] = templates.globals["license"]
+	data["metadata"]["keywords"] = templates.globals["keywords"]
+	data["metadata"]["long_description"] = "file: README.rst"
+	data["metadata"]["long_description_content_type"] = "text/x-rst"
+	data["metadata"]["platforms"] = templates.globals["platforms"]
+	data["metadata"]["url"] = "https://github.com/{username}/{repo_name}".format(**templates.globals)
+	data["metadata"]["project_urls"] = indent_with_tab(textwrap.dedent("""
+Documentation = https://{repo_name}.readthedocs.io
+Issue_Tracker = https://github.com/{username}/{repo_name}/issues
+Source_Code = https://github.com/{username}/{repo_name}""".format(**templates.globals)))
+	data["metadata"]["classifiers"] = templates.globals["classifiers"]
+
+	# Options
+	data["options"]["python_requires"] = ">={min_py_version}".format(**templates.globals)
+	data["options"]["zip_safe"] = False
+	data["options"]["include_package_data"] = True
+
+	if templates.globals["stubs_package"]:
+		data["options"]["packages"] = "{import_name}-stubs".format(**templates.globals)
+	else:
+		data["options"]["packages"] = "find:"
+
+	data["options.packages.find"]["exclude"] = indent_with_tab(textwrap.dedent("""
+{tests_dir}
+{tests_dir}.*
+{docs_dir}
+""".format(**templates.globals)))
+
+	# mypy
+	data["mypy"]["python_version"] = templates.globals["min_py_version"]
+	data["mypy"]["namespace_packages"] = True
+	data["mypy"]["check_untyped_defs"] = True
+
+	if setup_cfg_file.is_file():
+		existing_config = ConfigUpdater()
+		existing_config.read(str(setup_cfg_file))
+		for section in existing_config.sections_blocks():
+			if section.name not in managed_sections:
+				data.add_section(section)
+
+	if "options.entry_points" not in data.sections():
+		data.add_section("options.entry_points")
+
+	if templates.globals["console_scripts"]:
+		data["options.entry_points"]["console_scripts"] = templates.globals["console_scripts"]
+	else:
+		if not data["options.entry_points"].options():
+			data.remove_section("options.entry_points")
+
+	buf.append(str(data))
+
+	setup_cfg_file.write_clean("\n".join(buf))
 
 	return ["setup.cfg"]
 

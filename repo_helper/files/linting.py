@@ -65,7 +65,7 @@ lint_fix_list = [
 		]
 
 lint_warn_list = [
-		"E101",
+		# "E101",
 		"E111",
 		"E112",
 		"E113",
@@ -124,6 +124,11 @@ lint_warn_list.extend((
 		"STRFTIME002",  # Windows-specific strftime code used
 		))
 
+# flake8_sphinx_links
+lint_warn_list.extend((
+		"SXL001 ",  # Double backticked variable should be a link to Python documentation.
+		))
+
 # flake8_pytest
 lint_warn_list.extend((
 		"PT001",  # use @pytest.fixture() over @pytest.fixture (configurable by pytest-fixture-no-parentheses)
@@ -131,12 +136,15 @@ lint_warn_list.extend((
 		"PT003",  # scope='function' is implied in @pytest.fixture()
 		"PT004",  # fixture '{name}' does not return anything, add leading underscore
 		"PT005",  # fixture '{name}' returns a value, remove leading underscore
-		"PT006",  # wrong name(s) type in @pytest.mark.parametrize, expected {expected_type} (configurable by pytest-parametrize-names-type)
-		"PT007",  # wrong values type in @pytest.mark.parametrize, expected {expected_type} (configurable by pytest-parametrize-values-type and pytest-parametrize-values-row-type)
+		"PT006",
+		# wrong name(s) type in @pytest.mark.parametrize, expected {expected_type} (configurable by pytest-parametrize-names-type)
+		"PT007",
+		# wrong values type in @pytest.mark.parametrize, expected {expected_type} (configurable by pytest-parametrize-values-type and pytest-parametrize-values-row-type)
 		"PT008",  # use return_value= instead of patching with lambda
 		"PT009",  # use a regular assert instead of unittest-style '{assertion}'
 		"PT010",  # set the expected exception in pytest.raises()
-		"PT011",  # set the match parameter in pytest.raises({exception}) (configurable by pytest-raises-require-match-for)
+		"PT011",
+		# set the match parameter in pytest.raises({exception}) (configurable by pytest-raises-require-match-for)
 		"PT012",  # pytest.raises() block should contain a single simple statement
 		"PT013",  # found incorrect import of pytest, use simple 'import pytest' instead
 		"PT014",  # found duplicate test cases {indexes} in @pytest.mark.parametrize
@@ -246,6 +254,11 @@ code_only_warning = [
 		"D415",  # First line should end with a period, question mark, or exclamation point
 		"D417",  # Missing argument descriptions in the docstring
 		]
+
+# flake8_dunder_all
+code_only_warning.extend((
+		"DALL000 ",  # DALL000 Module lacks __all__.
+		))
 
 
 @management.register("pylintrc")

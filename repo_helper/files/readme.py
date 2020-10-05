@@ -28,6 +28,8 @@ from typing import List
 import jinja2
 
 # this package
+from domdf_python_tools.paths import PathPlus
+
 from repo_helper.blocks import (
 		create_readme_install_block,
 		create_shields_block,
@@ -51,7 +53,7 @@ def rewrite_readme(repo_path: pathlib.Path, templates: jinja2.Environment) -> Li
 	:type templates: jinja2.Environment
 	"""
 
-	readme_file = repo_path / "README.rst"
+	readme_file = PathPlus(repo_path / "README.rst")
 	readme = readme_file.read_text(encoding="UTF-8")
 
 	shields_block = create_shields_block(
@@ -89,12 +91,9 @@ def rewrite_readme(repo_path: pathlib.Path, templates: jinja2.Environment) -> Li
 			)
 
 	readme = installation_regex.sub(install_block, readme)
-
 	short_desc_block = create_short_desc_block(templates.globals["short_desc"], )
-
 	readme = short_desc_regex.sub(short_desc_block, readme)
 
-	with readme_file.open('w', encoding="UTF-8") as fp:
-		fp.write(readme)
+	readme_file.write_clean(readme)
 
 	return ["README.rst"]

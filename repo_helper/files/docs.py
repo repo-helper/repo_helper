@@ -30,26 +30,26 @@ import logging
 import os.path
 import pathlib
 import shutil
-from typing import Dict, List, Sequence, Union
+from typing import Dict, List, Sequence, Set, Union
 
 # 3rd party
 import cssutils  # type: ignore
 import jinja2
 from cssutils import css  # type: ignore
 from domdf_python_tools.paths import PathPlus, clean_writer
-from packaging.requirements import InvalidRequirement, Requirement
+from packaging.requirements import Requirement
 
 # this package
 from repo_helper.blocks import (
-		create_docs_install_block,
-		create_docs_links_block,
-		create_shields_block,
-		create_short_desc_block,
-		installation_regex,
-		links_regex,
-		shields_regex,
-		short_desc_regex
-		)
+	create_docs_install_block,
+	create_docs_links_block,
+	create_shields_block,
+	create_short_desc_block,
+	docs_shields_block_template, installation_regex,
+	links_regex,
+	shields_regex,
+	short_desc_regex,
+	)
 from repo_helper.files import management
 from repo_helper.templates import init_repo_template_dir, template_dir
 
@@ -65,6 +65,8 @@ __all__ = [
 		]
 
 # Disable logging from cssutils
+from repo_helper.utils import normalize, pformat_tabs, read_requirements
+
 logging.getLogger("CSSUTILS").addHandler(logging.NullHandler())
 logging.getLogger("CSSUTILS").propagate = False
 logging.getLogger("CSSUTILS").addFilter(lambda record: False)
@@ -83,47 +85,50 @@ def ensure_doc_requirements(repo_path: pathlib.Path, templates: jinja2.Environme
 	target_requirements = {
 			Requirement("sphinxcontrib-httpdomain>=1.7.0"),
 			Requirement("sphinxemoji>=0.1.6"),
-			Requirement("sphinx-notfound-page"),
+			Requirement("sphinx-notfound-page>=0.5"),
 			Requirement("sphinx-tabs>=1.1.13"),
-			Requirement("autodocsumm"),
+			Requirement("autodocsumm>=0.2.0"),
 			# Requirement("sphinx-gitstamp"),
 			# Requirement("gitpython"),
-			Requirement("sphinx_autodoc_typehints>=1.11.0"),
+			# Requirement("sphinx_autodoc_typehints>=1.11.0"),
 			Requirement("sphinx-copybutton>=0.2.12"),  # https://sphinx-copybutton.readthedocs.io/en/latest/
-			Requirement("sphinx-prompt>=1.2.0"
-						),  # ("git+https://github.com/ScriptAutomate/sphinx-tabs-expanded.git", None)
+			Requirement("sphinx-prompt>=1.1.0"),
+			Requirement("sphinx>=3.0.3"),
 			}
 
-	if templates.globals["sphinx_html_theme"] == "sphinx_rtd_theme":
-		target_requirements.add(Requirement("sphinx_rtd_theme<0.5"))
-	elif templates.globals["sphinx_html_theme"] == "domdf_sphinx_theme":
-		target_requirements.add(Requirement("domdf_sphinx_theme>=0.0.11"))
+	# Mapping of pypi_name to version specifier
+	theme_versions = {
+			"sphinx_rtd_theme": "<0.5",
+			"domdf_sphinx_theme": ">=0.1.0",
+			}
+
+	for name, specifier in theme_versions.items():
+		if name == templates.globals["sphinx_html_theme"]:
+			target_requirements.add(Requirement(f"{name}{specifier}"))
+			break
 	else:
 		target_requirements.add(Requirement(templates.globals['sphinx_html_theme']))
 
-	if templates.globals["pypi_name"] != "extras_require":
-		target_requirements.add(Requirement("extras_require"))
+	# Mapping of pypi_name to version specifier
+	my_sphinx_extensions = {
+			"extras_require": ">=0.2.0",
+			"seed_intersphinx_mapping": ">=0.1.1",
+			"default_values": ">=0.2.0",
+			"toctree_plus": ">=0.0.4",
+			"sphinx-toolbox": ">=1.0.0",
+			}
 
-	if templates.globals["pypi_name"] != "default_values":
-		target_requirements.add(Requirement("default_values>=0.0.6"))
+	for name, specifier in my_sphinx_extensions.items():
+		if name != templates.globals["pypi_name"]:
+			target_requirements.add(Requirement(f"{name}{specifier}"))
 
-	if templates.globals["pypi_name"] != "toctree_plus":
-		target_requirements.add(Requirement("toctree_plus>=0.0.1"))
+	lib_requirements, _ = read_requirements(repo_path / "requirements.txt")
+	lib_requirements_names = [r.name for r in lib_requirements]
 
-	if templates.globals["pypi_name"] not in {
-			"extras_require",
-			"default_values",
-			"toctree_plus",
-			}:
-		target_requirements.add(Requirement("sphinx>=3.0.3"))
+	# Remove requirements given in the library requirements.txt file.
+	target_requirements = {r for r in target_requirements if r.name not in lib_requirements_names}
 
-	# TODO: only require sphinx if not in requirements.txt
-
-	_target_requirement_names: List[str] = [r.name.casefold() for r in target_requirements]
-	_target_requirement_names += [r.replace("-", "_").casefold() for r in _target_requirement_names]
-	_target_requirement_names += [r.replace("_", "-").casefold() for r in _target_requirement_names]
-
-	target_requirement_names = set(_target_requirement_names)
+	target_requirement_names: Set[str] = set(normalize(r.name) for r in target_requirements)
 
 	req_file = PathPlus(repo_path / templates.globals["docs_dir"] / "requirements.txt")
 	req_file.parent.maybe_make(parents=True)
@@ -131,34 +136,27 @@ def ensure_doc_requirements(repo_path: pathlib.Path, templates: jinja2.Environme
 	if not req_file.is_file():
 		req_file.touch()
 
-	comments = []
+	current_requirements, comments = read_requirements(req_file)
+	for req in current_requirements:
+		if normalize(req.name) not in target_requirement_names:
+			if req.name == "sphinx_rtd_theme" and templates.globals["sphinx_html_theme"] == "domdf_sphinx_theme":
+				target_requirements.add(Requirement("domdf_sphinx_theme>=0.1.0"))
+			else:
+				target_requirements.add(req)
 
-	with req_file.open(encoding="UTF-8") as fp:
-		for line in fp.readlines():
-			if line.startswith("#"):
-				comments.append(line)
-			elif line:
-				try:
-					req = Requirement(line)
-					if req.name.casefold() not in target_requirement_names:
-						if req.name == "sphinx_rtd_theme" and templates.globals["sphinx_html_theme"
-																				] == "domdf_sphinx_theme":
-							continue
+	buf = [*comments]
 
-						target_requirements.add(req)
+	for req in sorted(target_requirements, key=lambda r: r.name.casefold()):
+		buf.append(str(req))
 
-				except InvalidRequirement:
-					# TODO: Show warning to user
-					pass
+	# Temporary replacement of some libraries
+	for line in buf:
+		if line.startswith("sphinx_autodoc_typehints"):
+			buf.remove(line)
 
-	with req_file.open('w', encoding="UTF-8") as fp:
-		for comment in comments:
-			fp.write(comment)
-			fp.write("\n")
+	# buf.insert(0, "git+git://github.com/domdfcoding/sphinx-autodoc-typehints.git@backslashes")
 
-		for req in sorted(target_requirements, key=lambda r: r.name.casefold()):
-			fp.write(str(req))
-			fp.write("\n")
+	req_file.write_clean("\n".join(buf))
 
 	return [os.path.join(templates.globals["docs_dir"], "requirements.txt")]
 
@@ -195,7 +193,7 @@ sphinx:
 formats: all
 
 python:
-  version: {templates.globals["python_deploy_version"]}
+  version: 3.8
   install:
     - requirements: requirements.txt
     - requirements: {templates.globals["docs_dir"]}/requirements.txt
@@ -243,6 +241,7 @@ def make_conf(repo_path: pathlib.Path, templates: jinja2.Environment) -> List[st
 	"""
 
 	conf = templates.get_template("conf._py")
+	conf_file = PathPlus(repo_path / templates.globals["docs_dir"] / "conf.py")
 
 	username = templates.globals["username"]
 	repo_name = templates.globals["repo_name"]
@@ -284,7 +283,32 @@ def make_conf(repo_path: pathlib.Path, templates: jinja2.Environment) -> List[st
 			if key not in templates.globals["html_theme_options"]:
 				templates.globals["html_theme_options"][key] = val
 
-	PathPlus(repo_path / templates.globals["docs_dir"] / "conf.py").write_clean(conf.render())
+	sphinx_extensions = [
+			"sphinx_toolbox",
+			"sphinx_toolbox.more_autodoc",
+			"sphinx_toolbox.more_autosummary",
+			"sphinx_toolbox.tweaks.param_dash",
+			'sphinx.ext.intersphinx',
+			'sphinx.ext.mathjax',
+			'sphinxcontrib.httpdomain',
+			"sphinxcontrib.extras_require",
+			"sphinx.ext.todo",
+			"sphinxemoji.sphinxemoji",
+			"notfound.extension",
+			"sphinx_copybutton",
+			"sphinxcontrib.default_values",
+			"sphinxcontrib.toctree_plus",
+			"seed_intersphinx_mapping",
+			# "sphinx.ext.autosectionlabel",
+			]
+	# "sphinx_gitstamp",
+
+	# if "attr_utils.autodoc_typehints" not in templates.globals["extra_sphinx_extensions"]:
+	# 	sphinx_extensions.append("sphinx_autodoc_typehints")
+
+	sphinx_extensions.extend(templates.globals["extra_sphinx_extensions"])
+
+	conf_file.write_clean(conf.render(sphinx_extensions=sphinx_extensions, pformat=pformat_tabs))
 
 	return [os.path.join(templates.globals["docs_dir"], "conf.py")]
 
@@ -552,6 +576,7 @@ def rewrite_docs_index(repo_path: pathlib.Path, templates: jinja2.Environment) -
 	index_rst = index_rst_file.read_text(encoding="UTF-8")
 
 	shields_block = create_shields_block(
+			template=docs_shields_block_template,
 			username=templates.globals["username"],
 			repo_name=templates.globals["repo_name"],
 			version=templates.globals["version"],
@@ -681,3 +706,22 @@ def make_style(selector: str, styles: Dict[str, Union[Sequence, str, int, None]]
 			style[name] = str(properties)
 
 	return css.CSSStyleRule(selectorText=selector, style=style)
+
+
+@management.register("autodoc_augment_defaults", ["enable_docs"])
+def remove_autodoc_augment_defaults(repo_path: pathlib.Path, templates: jinja2.Environment) -> List[str]:
+	"""
+	Remove the redundant "autodoc_augment_defaults" extension.
+
+	:param repo_path: Path to the repository root.
+	:param templates:
+	:type templates: jinja2.Environment
+	"""
+
+	docs_dir = PathPlus(repo_path / templates.globals["docs_dir"])
+	target_file = docs_dir / "autodoc_augment_defaults.py"
+
+	if target_file.is_file():
+		target_file.unlink()
+
+	return [target_file.relative_to(repo_path)]
