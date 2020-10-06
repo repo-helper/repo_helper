@@ -28,14 +28,18 @@ from typing import List, Union
 import pytest
 from domdf_python_tools.paths import PathPlus
 from domdf_python_tools.terminal_colours import Fore
-
-# this package
 from pytest_git import GitRepo
 
+# this package
 from repo_helper.utils import (
-	check_git_status, check_union, FancyPrinter, indent_with_tab, normalize, pformat_tabs,
-	validate_classifiers,
-	)
+		FancyPrinter,
+		check_git_status,
+		check_union,
+		indent_with_tab,
+		normalize,
+		pformat_tabs,
+		validate_classifiers
+		)
 
 
 def test_check_git_status(git_repo: GitRepo):
@@ -129,6 +133,7 @@ def test_union():
 
 # TODO: get_json_type
 
+
 def test_indent_with_tab():
 	assert indent_with_tab("hello") == "\thello"
 	assert indent_with_tab("hello\nworld") == "\thello\n\tworld"
@@ -136,14 +141,27 @@ def test_indent_with_tab():
 	assert indent_with_tab("hello\n\nworld", depth=2) == "\t\thello\n\n\t\tworld"
 
 
-fruit = ["apple", "orange", "pear", "lemon", "grape", "strawberry", "banana", "plum", "tomato", "cherry", "blackcurrant",]
+fruit = [
+		"apple",
+		"orange",
+		"pear",
+		"lemon",
+		"grape",
+		"strawberry",
+		"banana",
+		"plum",
+		"tomato",
+		"cherry",
+		"blackcurrant",
+		]
 
 
 class TestFancyPrinter:
 
 	def test_list(self):
-		assert FancyPrinter().pformat([1,2,3,4,5,6,7,8,9,10]) == "[1, 2, 3, 4, 5, 6, 7, 8, 9, 10]"
-		assert FancyPrinter().pformat(fruit) == dedent("""\
+		assert FancyPrinter().pformat([1, 2, 3, 4, 5, 6, 7, 8, 9, 10]) == "[1, 2, 3, 4, 5, 6, 7, 8, 9, 10]"
+		assert FancyPrinter().pformat(fruit) == dedent(
+				"""\
 		[
 		 'apple',
 		 'orange',
@@ -156,11 +174,13 @@ class TestFancyPrinter:
 		 'tomato',
 		 'cherry',
 		 'blackcurrant',
-		 ]""")
+		 ]"""
+				)
 
 
 def test_pformat_tabs():
-	assert pformat_tabs(fruit) == dedent("""\
+	assert pformat_tabs(fruit) == dedent(
+			"""\
 		[
 			'apple',
 			'orange',
@@ -173,18 +193,23 @@ def test_pformat_tabs():
 			'tomato',
 			'cherry',
 			'blackcurrant',
-			]""")
+			]"""
+			)
 
 
-@pytest.mark.parametrize("name, expected", [
-		("foo", "foo"),
-		("bar", "bar"),
-		("baz", "baz"),
-		("baz-extensions", "baz-extensions"),
-		("baz_extensions", "baz-extensions"),
-		("baz.extensions", "baz-extensions"),
-		])
+@pytest.mark.parametrize(
+		"name, expected",
+		[
+				("foo", "foo"),
+				("bar", "bar"),
+				("baz", "baz"),
+				("baz-extensions", "baz-extensions"),
+				("baz_extensions", "baz-extensions"),
+				("baz.extensions", "baz-extensions"),
+				]
+		)
 def test_normalize(name, expected):
 	assert normalize(name) == expected
+
 
 # TODO: read_requirements

@@ -158,7 +158,7 @@ class ComparableRequirement(Requirement):
 			return NotImplemented
 
 
-operator_symbols = ('<=', '<', '!=', '==', '>=', '>', '~=', '===', )
+operator_symbols = ('<=', '<', '!=', '==', '>=', '>', '~=', '===')
 
 
 def resolve_specifiers(specifiers: Iterable[Specifier]) -> SpecifierSet:

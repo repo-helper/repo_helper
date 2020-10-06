@@ -28,7 +28,7 @@ import os.path
 import pathlib
 import re
 import textwrap
-from typing import Iterable, List
+from typing import Any, Iterable, List
 
 # 3rd party
 import jinja2
@@ -43,7 +43,15 @@ from repo_helper.files import management
 from repo_helper.files.linting import code_only_warning, lint_fix_list, lint_warn_list
 from repo_helper.utils import indent_with_tab, read_requirements
 
-__all__ = ["indent_join", "make_tox", "ToxConfig", "make_yapf", "make_isort", "ensure_tests_requirements", "make_pre_commit",]
+__all__ = [
+		"indent_join",
+		"make_tox",
+		"ToxConfig",
+		"make_yapf",
+		"make_isort",
+		"ensure_tests_requirements",
+		"make_pre_commit",
+		]
 
 
 def indent_join(iterable: Iterable[str]):
@@ -55,6 +63,11 @@ def indent_join(iterable: Iterable[str]):
 
 
 class ToxConfig:
+	"""
+
+	:param repo_path:
+	:param templates:
+	"""
 
 	managed_sections = [
 			"tox",
@@ -82,9 +95,9 @@ class ToxConfig:
 		self._ini = ConfigUpdater()
 
 		self._output = StringList([
-			"# This file is managed by 'repo_helper'.",
-			"# You may add new sections, but any changes made to the following sections will be lost:",
-			])
+				"# This file is managed by 'repo_helper'.",
+				"# You may add new sections, but any changes made to the following sections will be lost:",
+				])
 
 		for sec in self.managed_sections:
 			self._ini.add_section(sec)
@@ -92,12 +105,18 @@ class ToxConfig:
 
 		self._output.blankline(ensure_single=True)
 
-	def __getitem__(self, item):
+	def __getitem__(self, item: str) -> Any:
+		"""
+		Passthrough to ``templates.globals``.
+
+		:param item:
+		"""
+
 		return self._globals[item]
 
 	def get_source_files(self) -> List[str]:
 		"""
-		Compile the list of source files
+		Compile the list of source files.
 		"""
 
 		source_files = []
@@ -107,14 +126,14 @@ class ToxConfig:
 
 			for file in self._globals["py_modules"]:
 				source_files.append(f"{file}.py")
+
 		elif self._globals["stubs_package"]:
-			source_files.append(
-					f"{self._globals['source_dir']}{self._globals['import_name'].replace('.', '/')}-stubs"
-					)
+			directory = f"{self._globals['source_dir']}{self._globals['import_name'].replace('.', '/')}-stubs"
+			source_files.append(directory)
+
 		else:
-			source_files.append(
-					f"{self._globals['source_dir']}{self._globals['import_name'].replace('.', '/')}"
-					)
+			directory = f"{self._globals['source_dir']}{self._globals['import_name'].replace('.', '/')}"
+			source_files.append(directory)
 
 		if self._globals["enable_tests"]:
 			source_files.append(self._globals["tests_dir"])
@@ -145,10 +164,7 @@ class ToxConfig:
 
 		self._ini["tox"]["envlist"] = [*self["tox_py_versions"], "mypy", "build"]
 		self._ini["tox"]["skip_missing_interpreters"] = True
-		self._ini["tox"]["requires"] = indent_join([
-				"pip>=20.2.1",
-				*self["tox_requirements"],
-				])
+		self._ini["tox"]["requires"] = indent_join(["pip>=20.2.1", *self["tox_requirements"]])
 		self._ini["tox"]["isolated_build"] = True
 
 	def envlists(self):
@@ -166,38 +182,36 @@ class ToxConfig:
 		``[travis]``
 		"""
 
-		self._ini["travis"]["python"] = indent_join(
-				f"{py_ver}: {tox_py_ver}"
-				for py_ver, tox_py_ver in self["tox_travis_versions"].items())
+		versions = (f"{py_ver}: {tox_py_ver}" for py_ver, tox_py_ver in self["tox_travis_versions"].items())
+		self._ini["travis"]["python"] = indent_join(versions)
 
 	def gh_actions(self):
 		"""
 		``[gh-actions]``
 		"""
 
-		self._ini["gh-actions"]["python"] = indent_join(
-				f"{py_ver}: {tox_py_ver}"
-				for py_ver, tox_py_ver in self["gh_actions_versions"].items())
+		versions = (f"{py_ver}: {tox_py_ver}" for py_ver, tox_py_ver in self["gh_actions_versions"].items())
+		self._ini["gh-actions"]["python"] = indent_join(versions)
 
 	def testenv(self):
 		"""
 		``[testenv]``
 		"""
 
-		self._ini["testenv"]["setenv"] = indent_join([
-				"PYTHONDEVMODE = 1",
-				"PIP_USE_FEATURE = 2020-resolver",
-				])
+		self._ini["testenv"]["setenv"] = indent_join(["PYTHONDEVMODE = 1", "PIP_USE_FEATURE = 2020-resolver"])
+
 		if self["enable_tests"]:
 			self._ini["testenv"]["deps"] = f"-r{{toxinidir}}/{self['tests_dir']}/requirements.txt"
+
 		if self["tox_testenv_extras"]:
 			self._ini["testenv"]["extras"] = self["tox_testenv_extras"]
 
 		testenv_commands = ["python --version"]
+
 		if self["enable_tests"]:
 			testenv_commands.append(
-				f"python -m pytest --cov={self['import_name']} -r aR {self['tests_dir']}/ --durations 25 {{posargs}}")
-			# --reruns 1 --reruns-delay 5
+					f"python -m pytest --cov={self['import_name']} -r aR {self['tests_dir']}/ {{posargs}}"
+					)
 			testenv_commands.insert(0, '')
 
 		self._ini["testenv"]["commands"] = indent_join(testenv_commands)
@@ -217,9 +231,10 @@ class ToxConfig:
 
 			self._ini["testenv:docs"]["deps"] = indent_join([
 					"-r{toxinidir}/requirements.txt",
-					f"-r{{toxinidir}}/{self['docs_dir']}/requirements.txt"],
-					)
+					f"-r{{toxinidir}}/{self['docs_dir']}/requirements.txt",
+					], )
 			self._ini["testenv:docs"]["commands"] = "sphinx-build -M html . ./build {posargs}"
+
 		else:
 			self._ini.remove_section("testenv:docs")
 
@@ -234,12 +249,13 @@ class ToxConfig:
 				"twine",
 				"pep517",
 				"check-wheel-contents",
-				*self["tox_build_requirements"]])
+				*self["tox_build_requirements"],
+				])
 		self._ini["testenv:build"]["commands"] = indent_join([
 				'python -m pep517.build --source --binary "{toxinidir}"',
 				# python setup.py {posargs} sdist bdist_wheel
 				"twine check dist/*",
-				"check-wheel-contents dist/"
+				"check-wheel-contents dist/",
 				])
 
 	def testenv_lint(self):
@@ -262,8 +278,7 @@ class ToxConfig:
 				"flake8-sphinx-links",
 				"flake8-dunder-all",
 				"git+https://github.com/domdfcoding/flake8-rst-docstrings.git",
-				"flake8-builtins",
-				# "flake8-walrus",
+				"flake8-builtins",  # "flake8-walrus",
 				"pygments",
 				"git+https://github.com/domdfcoding/flake8-quotes.git",
 				])
@@ -321,12 +336,15 @@ class ToxConfig:
 
 		self._ini["testenv:pyup"]["basepython"] = "python{min_py_version}".format(**self._globals)
 		self._ini["testenv:pyup"]["skip_install"] = True
-		if self["tox_testenv_extras"]:
-			self._ini["testenv:pyup"]["extras"] = self["tox_testenv_extras"]
 		self._ini["testenv:pyup"]["ignore_errors"] = True
 		self._ini["testenv:pyup"]["changedir"] = "{toxinidir}"
 		self._ini["testenv:pyup"]["deps"] = "pyupgrade-directories"
-		self._ini["testenv:pyup"]["commands"] = f"pyup_dirs {' '.join(self.get_source_files())} --py36-plus --recursive"
+
+		if self["tox_testenv_extras"]:
+			self._ini["testenv:pyup"]["extras"] = self["tox_testenv_extras"]
+
+		commands = f"pyup_dirs {' '.join(self.get_source_files())} --py36-plus --recursive"
+		self._ini["testenv:pyup"]["commands"] = commands
 
 	def testenv_coverage(self):
 		"""
@@ -334,7 +352,7 @@ class ToxConfig:
 		"""
 
 		if self["enable_tests"]:
-			self._ini["testenv:coverage"]["basepython"] = "python{min_py_version}".format(**self._globals)
+			self._ini["testenv:coverage"]["basepython"] = f"python{self['min_py_version']}"
 			self._ini["testenv:coverage"]["skip_install"] = True
 			self._ini["testenv:coverage"]["ignore_errors"] = True
 			self._ini["testenv:coverage"]["whitelist_externals"] = "/bin/bash"
@@ -343,7 +361,9 @@ class ToxConfig:
 			coverage_deps = ["coverage"]
 			if self["pypi_name"] != "coverage_pyver_pragma":
 				coverage_deps.append("coverage_pyver_pragma")
+
 			self._ini["testenv:coverage"]["deps"] = indent_join(coverage_deps)
+
 			self._ini["testenv:coverage"]["commands"] = indent_join([
 					'/bin/bash -c "rm -rf htmlcov"',
 					"coverage html",
@@ -358,9 +378,12 @@ class ToxConfig:
 		"""
 
 		self._ini["flake8"]["max-line-length"] = "120"
-		self._ini["flake8"]["select"] = " ".join(str(x) for x in lint_fix_list + lint_warn_list + code_only_warning)
-		self._ini["flake8"][
-			"exclude"] = f".git,__pycache__,{self['docs_dir']},old,build,dist,make_conda_recipe.py,__pkginfo__.py,setup.py"
+		self._ini["flake8"]["select"] = " ".join(
+				str(x) for x in lint_fix_list + lint_warn_list + code_only_warning
+				)
+
+		excludes = f".git,__pycache__,{self['docs_dir']},old,build,dist,make_conda_recipe.py,__pkginfo__.py,setup.py"
+		self._ini["flake8"]["exclude"] = excludes
 		self._ini["flake8"]["rst-roles"] = indent_join([
 				"class",
 				"func",
@@ -400,8 +423,9 @@ class ToxConfig:
 				"rst:role",
 				"pre-commit-shield",
 				])
-		self._ini["flake8"][
-			"per-file-ignores"] = f"{self['tests_dir']}/*: {' '.join(str(e) for e in code_only_warning)}"
+
+		per_file_ignores = f"{self['tests_dir']}/*: {' '.join(str(e) for e in code_only_warning)}"
+		self._ini["flake8"]["per-file-ignores"] = per_file_ignores
 		self._ini["flake8"]["pytest-parametrize-names-type"] = "csv"
 		self._ini["flake8"]["inline-quotes"] = '"'
 		self._ini["flake8"]["multiline-quotes"] = '"""'
@@ -449,22 +473,25 @@ class ToxConfig:
 			if self["pure_python"]:
 				# Don't check contents for packages with binary extensions
 				self._ini["check-wheel-contents"][
-					"package"] = f"{os.path.join(self['source_dir'], self['import_name'])}-stubs"
+						"package"] = f"{os.path.join(self['source_dir'], self['import_name'])}-stubs"
 
 		else:
 			self._ini["check-wheel-contents"]["toplevel"] = f"{self['import_name'].split('.')[0]}"
 
 			if self["pure_python"]:
 				# Don't check contents for packages with binary extensions
-				self._ini["check-wheel-contents"]["package"] = os.path.join(self["source_dir"],
-																	  self["import_name"].split('.')[0])
+				self._ini["check-wheel-contents"]["package"] = os.path.join(
+						self["source_dir"],
+						self["import_name"].split('.')[0],
+						)
 
 	def pytest(self):
 		"""
 		``[pytest]``
 		"""
 
-		self._ini["pytest"]["addopts"] = "--color yes"
+		self._ini["pytest"]["addopts"] = "--color yes --durations 25"
+		# --reruns 1 --reruns-delay 5
 		self._ini["pytest"]["timeout"] = 300
 
 	def write_out(self):
@@ -482,7 +509,6 @@ class ToxConfig:
 			existing_config.read(str(tox_file))
 			for section in existing_config.sections_blocks():
 				if section.name not in self.managed_sections:
-					print(section)
 					self._ini.add_section(section)
 
 		self._output.append(str(self._ini))
