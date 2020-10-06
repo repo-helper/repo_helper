@@ -13,7 +13,7 @@ pyyaml>=5.3.1
 requests>=2.24.0
 requirements-parser>=0.2.0
 tomlkit>=0.7.0
-tox<=3.18.1
+tox<3.20.1
 tox-battery>=0.6.1
 tox-envlist>=0.1.0
 trove_classifiers>=2020.5.21
