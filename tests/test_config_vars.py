@@ -586,7 +586,7 @@ class Test_platforms:
 				{self.config_var.__name__: test_list_int},
 				]:
 			with pytest.raises(ValueError):
-				self.config_var.get(wrong_value)
+				self.config_var.get(wrong_value)  # type: ignore
 
 
 class Test_python_deploy_version(OptionalStringTest):

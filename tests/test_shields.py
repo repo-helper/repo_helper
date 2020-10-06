@@ -567,14 +567,14 @@ def test_make_wheel_shield():
 		"hello-world",
 		"hello_world",
 		])
-def test_make_docs_wheel_shield(pypi_name):
+def test_make_docs_implementation_shield(pypi_name):
 	assert shields.make_docs_python_implementations_shield(
 			pypi_name
 			) == f"""\
 .. pypi-shield::
 	:project: {pypi_name}
-	:wheel:
-	:alt: PyPI - Wheel"""
+	:implementations:
+	:alt: PyPI - Supported Implementations"""
 
 
 def test_make_conda_version_shield():

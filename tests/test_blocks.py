@@ -23,7 +23,7 @@
 # 3rd party
 import lorem  # type: ignore
 import pytest
-from pytest_regressions.file_regression import FileRegressionFixture
+from pytest_regressions.file_regression import FileRegressionFixture  # type: ignore
 
 # this package
 from repo_helper.blocks import (

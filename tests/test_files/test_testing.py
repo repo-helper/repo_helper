@@ -27,7 +27,7 @@ import tempfile
 
 # 3rd party
 from domdf_python_tools.paths import PathPlus
-from pytest_regressions.file_regression import FileRegressionFixture
+from pytest_regressions.file_regression import FileRegressionFixture  # type: ignore
 
 # this package
 from repo_helper.files.linting import code_only_warning

@@ -2,7 +2,7 @@
 import pathlib
 
 # 3rd party
-from pytest_regressions.file_regression import FileRegressionFixture
+from pytest_regressions.file_regression import FileRegressionFixture  # type: ignore
 
 
 def check_file_regression(data, file_regression: FileRegressionFixture, extension=".txt"):

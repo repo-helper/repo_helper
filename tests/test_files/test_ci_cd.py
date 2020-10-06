@@ -22,10 +22,9 @@
 
 # stdlib
 import pathlib
-import tempfile
 
 # 3rd party
-from pytest_regressions.file_regression import FileRegressionFixture
+from pytest_regressions.file_regression import FileRegressionFixture  # type: ignore
 
 # this package
 from repo_helper.files.ci_cd import make_github_ci, make_travis, make_travis_deploy_conda

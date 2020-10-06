@@ -25,7 +25,7 @@ import os
 import pathlib
 
 # 3rd party
-from pytest_regressions.file_regression import FileRegressionFixture
+from pytest_regressions.file_regression import FileRegressionFixture  # type: ignore
 
 # this package
 from repo_helper.files.docs import ensure_doc_requirements, make_404_page, make_docs_source_rst, make_rtfd

@@ -21,13 +21,72 @@
 #
 
 # stdlib
+from textwrap import dedent
 from typing import List, Union
 
 # 3rd party
+import pytest
+from domdf_python_tools.paths import PathPlus
 from domdf_python_tools.terminal_colours import Fore
 
 # this package
-from repo_helper.utils import check_union, validate_classifiers
+from pytest_git import GitRepo
+
+from repo_helper.utils import (
+	check_git_status, check_union, FancyPrinter, indent_with_tab, normalize, pformat_tabs,
+	validate_classifiers,
+	)
+
+
+def test_check_git_status(git_repo: GitRepo):
+	repo_path = PathPlus(git_repo.workspace)
+	clean, files = check_git_status(repo_path)
+	assert clean
+	assert files == []
+
+	(repo_path / "file.txt").write_text("Hello World")
+	clean, files = check_git_status(repo_path)
+	assert clean
+	assert files == []
+
+	git_repo.run("git add file.txt")
+	clean, files = check_git_status(repo_path)
+	assert not clean
+	assert files == ["A  file.txt"]
+
+	git_repo.api.index.commit("Initial commit")
+	clean, files = check_git_status(repo_path)
+	assert clean
+	assert files == []
+
+	(repo_path / "file.txt").write_text("Hello Again")
+	clean, files = check_git_status(repo_path)
+	assert not clean
+	assert files == ["M file.txt"]
+
+
+# def test_ensure_requirements(tmpdir):
+# 	tmpdir_p = PathPlus(tmpdir)
+# 	req_file = tmpdir_p / "requirements.txt"
+# 	req_file.write_lines([
+# 			"foo",
+# 			"bar",
+# 			"baz",
+# 			])
+# 	ensure_requirements([], req_file)
+# 	assert req_file.read_lines() == [
+# 			"bar",
+# 			"baz",
+# 			"foo",
+# 			'',
+# 			]
+# 	ensure_requirements([("virtualenv", "20.0.33")], req_file)
+# 	assert req_file.read_lines() == [
+# 			"bar",
+# 			"baz",
+# 			"foo",
+# 			'',
+# 			]
 
 
 class TestValidateClassifiers:
@@ -66,3 +125,66 @@ def test_union():
 	assert check_union(123, List[int])
 	assert not check_union("abc", List[int])
 	assert not check_union(123, List[str])
+
+
+# TODO: get_json_type
+
+def test_indent_with_tab():
+	assert indent_with_tab("hello") == "\thello"
+	assert indent_with_tab("hello\nworld") == "\thello\n\tworld"
+	assert indent_with_tab("hello\n\nworld") == "\thello\n\n\tworld"
+	assert indent_with_tab("hello\n\nworld", depth=2) == "\t\thello\n\n\t\tworld"
+
+
+fruit = ["apple", "orange", "pear", "lemon", "grape", "strawberry", "banana", "plum", "tomato", "cherry", "blackcurrant",]
+
+
+class TestFancyPrinter:
+
+	def test_list(self):
+		assert FancyPrinter().pformat([1,2,3,4,5,6,7,8,9,10]) == "[1, 2, 3, 4, 5, 6, 7, 8, 9, 10]"
+		assert FancyPrinter().pformat(fruit) == dedent("""\
+		[
+		 'apple',
+		 'orange',
+		 'pear',
+		 'lemon',
+		 'grape',
+		 'strawberry',
+		 'banana',
+		 'plum',
+		 'tomato',
+		 'cherry',
+		 'blackcurrant',
+		 ]""")
+
+
+def test_pformat_tabs():
+	assert pformat_tabs(fruit) == dedent("""\
+		[
+			'apple',
+			'orange',
+			'pear',
+			'lemon',
+			'grape',
+			'strawberry',
+			'banana',
+			'plum',
+			'tomato',
+			'cherry',
+			'blackcurrant',
+			]""")
+
+
+@pytest.mark.parametrize("name, expected", [
+		("foo", "foo"),
+		("bar", "bar"),
+		("baz", "baz"),
+		("baz-extensions", "baz-extensions"),
+		("baz_extensions", "baz-extensions"),
+		("baz.extensions", "baz-extensions"),
+		])
+def test_normalize(name, expected):
+	assert normalize(name) == expected
+
+# TODO: read_requirements
