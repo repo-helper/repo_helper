@@ -24,18 +24,21 @@ General utilities.
 #
 
 # stdlib
+import contextlib
 import os
 import pathlib
 import re
 import subprocess
 import textwrap
 from pprint import PrettyPrinter
-from typing import Any, Callable, Iterable, List, Optional, Set, Tuple, Type, Union
+from typing import Any, Callable, Iterable, List, MutableMapping, Optional, Set, Tuple, Union
 
 # 3rd party
 import trove_classifiers  # type: ignore
 from domdf_python_tools.paths import PathPlus
+from domdf_python_tools.stringlist import StringList
 from domdf_python_tools.terminal_colours import Fore
+from domdf_python_tools.typing import PathLike
 from domdf_python_tools.utils import stderr_writer
 from packaging.requirements import InvalidRequirement, Requirement
 from typing_extensions import Literal
@@ -43,8 +46,6 @@ from typing_inspect import get_origin  # type: ignore
 
 __all__ = [
 		"check_git_status",
-		"get_git_status",
-		"ensure_requirements",
 		"validate_classifiers",
 		"license_lookup",
 		"check_union",
@@ -58,98 +59,98 @@ __all__ = [
 		]
 
 
-def check_git_status(repo_path: pathlib.Path) -> Tuple[bool, List[str]]:
+@contextlib.contextmanager
+def in_directory(directory: PathLike):
+	"""
+	Context manager to change into the given directory for the
+	duration of the ``with`` block.
+
+	:param directory:
+	"""
+
+	oldwd = os.getcwd()
+	try:
+		os.chdir(str(directory))
+		yield
+	finally:
+		os.chdir(oldwd)
+
+
+def check_git_status(repo_path: PathLike) -> Tuple[bool, List[str]]:
 	"""
 	Check the ``git`` status of the given repository
 
 	:param repo_path: Path to the repository root.
 
-	:return: Whether the git working directory is clean, and the list of uncommitted files if it isn't
-	:rtype: bool
+	:return: Whether the git working directory is clean, and the list of uncommitted files if it isn't.
 	"""
 
-	oldwd = os.getcwd()
-	os.chdir(str(repo_path))
+	with in_directory(repo_path):
 
-	lines = [
-			line.strip()
-			for line in subprocess.check_output(["git", "status", "--porcelain"]).splitlines()
-			if not line.strip().startswith(b"??")
-			]
+		lines = [
+				line.strip()
+				for line in subprocess.check_output(["git", "status", "--porcelain"]).splitlines()
+				if not line.strip().startswith(b"??")
+				]
 
 	# print(lines)
-
-	os.chdir(oldwd)
-
 	str_lines = [line.decode("UTF-8") for line in lines]
 
 	return not bool(str_lines), str_lines
 
 
-def get_git_status(repo_path: pathlib.Path) -> str:
-	"""
-	Returns the output of ``git status``
+#
+# def get_git_status(repo_path: PathLike) -> str:
+# 	"""
+# 	Returns the output of ``git status``
+#
+# 	:param repo_path: Path to the repository root.
+# 	"""
+#
+# 	with in_directory(repo_path):
+# 		return subprocess.check_output(["git", "status"]).decode("UTF-8")
 
-	:param repo_path: Path to the repository root.
-
-	:rtype: str
-	"""
-
-	oldwd = os.getcwd()
-	os.chdir(str(repo_path))
-
-	status = subprocess.check_output(["git", "status"]).decode("UTF-8")
-
-	os.chdir(oldwd)
-
-	return status
-
-
-def ensure_requirements(requirements_list: Iterable[Requirement], requirements_file: pathlib.Path):
-	"""
-	Ensure the given requirements file contains the required entries.
-
-	:param requirements_list: List of (requirement, version) tuples. Version can be ``None``
-	:param requirements_file: The path to the requirements file
-	"""
-
-	target_requirements = set(requirements_list)
-
-	_target_requirement_names: List[str] = [r.name.casefold() for r in target_requirements]
-	_target_requirement_names += [r.replace("-", "_").casefold() for r in _target_requirement_names]
-	_target_requirement_names += [r.replace("_", "-").casefold() for r in _target_requirement_names]
-
-	target_requirement_names = set(_target_requirement_names)
-
-	req_file = PathPlus(requirements_file)
-	req_file.parent.maybe_make(parents=True)
-
-	if not req_file.is_file():
-		req_file.touch()
-
-	comments = []
-
-	with req_file.open(encoding="UTF-8") as fp:
-		for line in fp.readlines():
-			if line.startswith("#"):
-				comments.append(line)
-			elif line:
-				try:
-					req = Requirement(line)
-					if req.name.casefold() not in target_requirement_names:
-						target_requirements.add(req)
-				except InvalidRequirement:
-					# TODO: Show warning to user
-					pass
-
-	with req_file.open('w', encoding="UTF-8") as fp:
-		for comment in comments:
-			fp.write(comment)
-			fp.write("\n")
-
-		for req in sorted(target_requirements, key=lambda r: r.name.casefold()):
-			fp.write(str(req))
-			fp.write("\n")
+#
+# def ensure_requirements(requirements_list: Iterable[Requirement], requirements_file: pathlib.Path):
+# 	"""
+# 	Ensure the given requirements file contains the required entries.
+#
+# 	:param requirements_list: List of ``(requirement, version)`` tuples. Version can be :py:obj:`None`.
+# 	:param requirements_file: The path to the requirements file.
+# 	"""
+#
+# 	target_requirements = set(requirements_list)
+#
+# 	_target_requirement_names: List[str] = [r.name.casefold() for r in target_requirements]
+# 	_target_requirement_names += [r.replace("-", "_").casefold() for r in _target_requirement_names]
+# 	_target_requirement_names += [r.replace("_", "-").casefold() for r in _target_requirement_names]
+#
+# 	target_requirement_names = set(_target_requirement_names)
+#
+# 	req_file = PathPlus(requirements_file)
+# 	req_file.parent.maybe_make(parents=True)
+#
+# 	if not req_file.is_file():
+# 		req_file.touch()
+#
+# 	comments = []
+#
+# 	for line in req_file.read_lines():
+# 		if line.startswith("#"):
+# 			comments.append(line)
+# 		elif line:
+# 			try:
+# 				req = Requirement(line)
+# 				if req.name.casefold() not in target_requirement_names:
+# 					target_requirements.add(req)
+# 			except InvalidRequirement:
+# 				# TODO: Show warning to user
+# 				pass
+#
+# 	output = StringList(comments)
+# 	output.extend([str(r) for r in sorted(target_requirements, key=lambda r: r.name.casefold())])
+# 	output.blankline(ensure_single=True)
+# 	req_file.write_lines(output)
 
 
 def validate_classifiers(classifiers: Iterable[str]) -> bool:
@@ -157,9 +158,6 @@ def validate_classifiers(classifiers: Iterable[str]) -> bool:
 	Validate a list of `Trove Classifiers <https://pypi.org/classifiers/>`_.
 
 	:param classifiers:
-
-	:return:
-	:rtype:
 	"""
 
 	invalid_classifier = False
@@ -277,13 +275,17 @@ license_lookup = {
 		"Public Domain": "Public Domain",
 		}
 
+UnionType = type(Union)
+GenericAliasType = type(List)
 
-def check_union(obj: Any, dtype: Type):
-	"""
+
+def check_union(obj: Any, dtype: Union[GenericAliasType, UnionType]):  # type: ignore
+	r"""
 	Check if the type of ``obj`` is one of the types in a :class:`typing.Union` or a :class:`typing.List``.
 
 	:param obj:
 	:param dtype:
+	:type dtype: :class:`~typing.Union`\, :class:`~typing.List`\, etc.
 	"""
 
 	return isinstance(obj, dtype.__args__)  # type: ignore
@@ -332,15 +334,18 @@ def indent_with_tab(text: str, depth: int = 1, predicate: Optional[Callable[[str
 	:param predicate: If given, ``'\t'``  will only be added to the lines where ``predicate(line)`` is True.
 		If ``predicate`` is not provided, it will default to adding ``'\t'``  to all non-empty lines
 		that do not consist solely of whitespace characters.
-
-	:return:
-	:rtype:
 	"""
 
 	return textwrap.indent(text, "\t" * depth, predicate=predicate)
 
 
 class FancyPrinter(PrettyPrinter):
+	# TODO: docs
+	_dispatch: MutableMapping[Callable, Callable]
+	_indent_per_level: int
+	_format_items: Callable[[Any, Any, Any, Any, Any, Any], None]
+	_dispatch = dict(PrettyPrinter._dispatch)  # type: ignore
+
 	# TODO: tuple, dict etc
 
 	def _pprint_list(self, object, stream, indent, allowance, context, level):
@@ -348,8 +353,7 @@ class FancyPrinter(PrettyPrinter):
 		self._format_items(object, stream, indent, allowance + 1, context, level)
 		stream.write(f",\n{' ' * self._indent_per_level}]")
 
-
-FancyPrinter._dispatch[list.__repr__] = FancyPrinter._pprint_list
+	_dispatch[list.__repr__] = _pprint_list
 
 
 def pformat_tabs(
@@ -366,12 +370,11 @@ def pformat_tabs(
 
 	prettyprinter = FancyPrinter(indent=4, width=width, depth=depth, compact=compact)
 
-	buf = []
+	buf = StringList()
 	for line in prettyprinter.pformat(object).splitlines():
 		buf.append(re.sub("^ {4}", r"\t", line))
-		# buf.append(line)
 
-	return "\n".join(buf)
+	return str(buf)
 
 
 _normalize_pattern = re.compile(r"[-_.]+")
@@ -379,9 +382,9 @@ _normalize_pattern = re.compile(r"[-_.]+")
 
 def normalize(name: str) -> str:
 	"""
-	Normalize name for PyPI et al.
+	Normalize the given name for PyPI et al.
 
-	From https://www.python.org/dev/peps/pep-0503/ (public domain).
+	From :pep:`503` (public domain).
 
 	:param name: The project name
 	"""
@@ -390,21 +393,27 @@ def normalize(name: str) -> str:
 
 
 def read_requirements(req_file: pathlib.Path) -> Tuple[Set[Requirement], List[str]]:
+	"""
+	Reads :pep:`508` requirements from the given file.
+
+	:param req_file:
+
+	:return: The requirements, and a list of commented lines.
+	"""
 
 	comments = []
 	requirements = set()
 
-	with req_file.open(encoding="UTF-8") as fp:
-		for line in fp.readlines():
-			if line.startswith("#"):
-				comments.append(line)
-			elif line:
-				try:
-					req = Requirement(line)
-					if req.name.lower() not in [r.name.lower() for r in requirements]:
-						requirements.add(req)
-				except InvalidRequirement:
-					# TODO: Show warning to user
-					pass
+	for line in PathPlus(req_file).read_lines():
+		if line.startswith("#"):
+			comments.append(line)
+		elif line:
+			try:
+				req = Requirement(line)
+				if req.name.lower() not in [r.name.lower() for r in requirements]:
+					requirements.add(req)
+			except InvalidRequirement:
+				# TODO: Show warning to user
+				pass
 
 	return requirements, comments
