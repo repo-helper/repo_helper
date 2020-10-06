@@ -287,7 +287,7 @@ The error was:
 				message=message.encode("UTF-8"),
 				)
 	except CommitError as e:
-		indented_error = textwrap.indent(textwrap.wrap(str(e)), "\t")
+		indented_error = "\n".join(f"\t{line}" for line in textwrap.wrap(str(e)))
 		click.echo(f"Unable to commit changes. The error was:\n\n{indented_error}", err=True)
 		# stderr_writer(f"Unable to commit changes. The error was:\n\n{indented_error}")
 		return 1

@@ -140,7 +140,7 @@ The username of the author.
 
 	# ---------- copyright_years ----------
 	click.echo("\nThe copyright years for the library.")
-	copyright_years = click.prompt("Copyright years", default=datetime.today().year, type=str)
+	copyright_years = click.prompt("Copyright years", default=str(datetime.today().year), type=str)
 
 	# ---------- license_ ----------
 	click.echo(

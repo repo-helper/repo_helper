@@ -723,4 +723,4 @@ def remove_autodoc_augment_defaults(repo_path: pathlib.Path, templates: jinja2.E
 	if target_file.is_file():
 		target_file.unlink()
 
-	return [target_file.relative_to(repo_path)]
+	return [str(target_file.relative_to(repo_path))]

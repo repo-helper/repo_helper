@@ -27,11 +27,11 @@ Manage configuration for packaging tools.
 import copy
 import pathlib
 import textwrap
-from typing import Dict, Iterable, List, Union
+from typing import Dict, Iterable, List, Sequence, Union
 
 # 3rd party
 import jinja2
-import tomlkit
+import tomlkit  # type: ignore
 from domdf_python_tools.paths import PathPlus, clean_writer
 from packaging.requirements import InvalidRequirement, Requirement
 from packaging.specifiers import Specifier, SpecifierSet
@@ -208,7 +208,7 @@ def resolve_specifiers(specifiers: Iterable[Specifier]) -> SpecifierSet:
 def combine_requirements(
 		requirement: Union[Requirement, Iterable[Requirement]],
 		*requirements: Requirement,
-		) -> List[Requirement]:
+		) -> Sequence[Requirement]:
 	"""
 	Combine duplicated requirements in a list.
 
@@ -225,7 +225,7 @@ def combine_requirements(
 	else:
 		all_requirements = [requirement, *requirements]
 
-	merged_requirements = []
+	merged_requirements: List[ComparableRequirement] = []
 
 	for req in all_requirements:
 		if req.name in merged_requirements:

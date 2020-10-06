@@ -93,7 +93,7 @@ class Container(ABC):
 
 	def __init__(self, **kwargs):
 		self._structure = list()
-		super().__init__(**kwargs)
+		super().__init__()
 
 	@property
 	def structure(self):
@@ -118,7 +118,7 @@ class Block(ABC):
 		self._container = container
 		self.lines = []
 		self._updated = False
-		super().__init__(**kwargs)
+		super().__init__()
 
 	def __str__(self):
 		return ''.join(self.lines)

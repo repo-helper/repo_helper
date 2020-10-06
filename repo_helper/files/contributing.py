@@ -26,22 +26,14 @@ Contributing information for GitHub and documentation, plus GitHub issue templat
 # stdlib
 import os.path
 import pathlib
-import re
-import textwrap
-from configparser import ConfigParser
-from typing import Any, Dict, List
+from typing import List
 
 # 3rd party
 import jinja2
-import requirements  # type: ignore
 from domdf_python_tools.paths import PathPlus
-from packaging.requirements import InvalidRequirement, Requirement
 
 # this package
-from repo_helper.configupdater2 import ConfigUpdater  # type: ignore
 from repo_helper.files import management
-from repo_helper.files.linting import code_only_warning, lint_fix_list, lint_warn_list
-from repo_helper.utils import ensure_requirements
 
 __all__ = ["make_contributing", "make_docs_contributing", "make_issue_templates"]
 
