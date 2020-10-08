@@ -45,6 +45,7 @@ __all__ = [
 		"make_github_docs_test",
 		"make_github_octocheese",
 		"make_github_manylinux",
+		"ensure_bumpversion",
 		]
 
 
@@ -307,10 +308,6 @@ tag = True
 			"bumpversion:file:git_helper.yml",
 			]
 
-	for section in old_sections:
-		if section in bv.sections():
-			bv.remove_section(section)
-
 	required_sections = [
 			"bumpversion:file:repo_helper.yml",
 			"bumpversion:file:__pkginfo__.py",
@@ -319,6 +316,12 @@ tag = True
 
 	if templates.globals["enable_docs"]:
 		required_sections.append("bumpversion:file:doc-source/index.rst")
+	else:
+		old_sections.append("bumpversion:file:doc-source/index.rst")
+
+	for section in old_sections:
+		if section in bv.sections():
+			bv.remove_section(section)
 
 	if templates.globals["py_modules"]:
 		for modname in templates.globals["py_modules"]:

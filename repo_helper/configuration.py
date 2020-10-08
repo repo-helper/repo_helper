@@ -662,7 +662,9 @@ def parse_additional_setup_args(setup_args):
 
 class additional_setup_args(ConfigVar):  # noqa
 	"""
-	A dictionary of additional keyword arguments for :func:`setuptools.setup()`. The values can refer to variables in ``__pkginfo__.py``. String values must be enclosed in quotes here.
+	A dictionary of additional keyword arguments for :func:`setuptools.setup()`.
+	The values can refer to variables in ``__pkginfo__.py``.
+	String values must be enclosed in quotes here.
 
 	Example:
 
@@ -675,7 +677,6 @@ class additional_setup_args(ConfigVar):  # noqa
 
 	dtype = Dict[str, str]
 	default: Dict[str, str] = {}
-	validator = parse_additional_setup_args
 	category: str = "packaging"
 
 

@@ -1,0 +1,11 @@
+.wy-nav-content {
+	max-width: 1200px !important;
+}
+
+li p:last-child {
+	margin-bottom: 12px !important;
+}
+
+html {
+	scroll-behavior: smooth;
+}

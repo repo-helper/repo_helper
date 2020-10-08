@@ -1,0 +1,37 @@
+<p><tt><span class="pre">hello-world</span></tt> uses <a href="https://tox.readthedocs.io" rel="nofollow">tox</a> to automate testing and packaging, and <a href="https://pre-commit.com" rel="nofollow">pre-commit</a> to maintain code quality.</p>
+<p>Install <tt><span class="pre">pre-commit</span></tt> with <tt>pip</tt> and install the git hook:</p>
+<pre>$ python -m pip install pre-commit
+$ pre-commit install
+</pre>
+<div id="coding-style">
+<h2>Coding style</h2>
+<p><a href="https://github.com/google/yapf" rel="nofollow">Yapf</a> is used for code formatting, and <a href="https://timothycrosley.github.io/isort/" rel="nofollow">isort</a> is used to sort imports.</p>
+<p><tt>yapf</tt> and <tt>isort</tt> can be run manually via <tt><span class="pre">pre-commit</span></tt>:</p>
+<pre>$ pre-commit run yapf -a
+$ pre-commit run isort -a
+</pre>
+<p>The complete autoformatting suite can be run with <tt><span class="pre">pre-commit</span></tt>:</p>
+<pre>$ pre-commit run -a
+</pre>
+</div>
+<div id="automated-tests">
+<h2>Automated tests</h2>
+<p>Tests are run with <tt>tox</tt> and <tt>pytest</tt>. To run tests for a specific Python version, such as Python 3.6, run:</p>
+<pre>$ tox -e py36
+</pre>
+<p>To run tests for all Python versions, simply run:</p>
+<pre>$ tox
+</pre>
+</div>
+<div id="type-annotations">
+<h2>Type Annotations</h2>
+<p>Type annotations are checked using <tt>mypy</tt>. Run <tt>mypy</tt> using <tt>tox</tt>:</p>
+<pre>$ tox -e mypy
+</pre>
+</div>
+<div id="build-documentation-locally">
+<h2>Build documentation locally</h2>
+<p>The documentation is powered by Sphinx. A local copy of the documentation can be built with <tt>tox</tt>:</p>
+<pre>$ tox -e docs
+</pre>
+</div>

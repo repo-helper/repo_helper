@@ -13,15 +13,15 @@ sys.path.append('.')
 from __pkginfo__ import *  # pylint: disable=wildcard-import
 
 import datetime
-print('datetime.datetime.now')
+print(datetime.datetime.now)
 
 setup(
+		alice='19',
+		bob=22,
 		description='a short description',
 		extras_require=extras_require,
+		foo='bar',
 		install_requires=install_requires,
 		py_modules=[],
 		version=__version__,
-		foo="bar",
-		alice="19",
-		bob=22,
 		)

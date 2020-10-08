@@ -24,8 +24,8 @@ Contributing information for GitHub and documentation, plus GitHub issue templat
 #
 
 # stdlib
-import os.path
 import pathlib
+import re
 from typing import List
 
 # 3rd party
@@ -38,7 +38,14 @@ from repo_helper.files import management
 __all__ = ["make_contributing", "make_docs_contributing", "make_issue_templates"]
 
 
-def github_bash_block(*commands):
+def github_bash_block(*commands: str) -> str:
+	"""
+	Formats the given commands in a reStructuredText bash
+	code block suitable for rendering on GitHub.
+
+	:param commands:
+	"""
+
 	if not commands:
 		return ''
 
@@ -46,12 +53,16 @@ def github_bash_block(*commands):
 	buf += "\n\n"
 
 	for command in commands:
-		buf += f"	$ {command}\n"
+		if re.match(r"^ ?[>$] ?", command):
+			buf += f"	{command.lstrip()}\n"
+		else:
+			buf += f"	$ {command}\n"
 
 	return buf
 
 
 def sphinx_bash_block(*commands):
+	# TODO: fix from above
 	if not commands:
 		return ''
 
@@ -97,9 +108,13 @@ def make_docs_contributing(repo_path: pathlib.Path, templates: jinja2.Environmen
 	contributing = templates.get_template("CONTRIBUTING.rst")
 	content = "\n".join(["Overview", "---------"]
 						+ contributing.render(bash_block=sphinx_bash_block).splitlines()[3:])
-	PathPlus(repo_path / templates.globals["docs_dir"] / "contributing.rst").write_clean(content)
 
-	return [os.path.join(templates.globals["docs_dir"], "contributing.rst")]
+	docs_dir = PathPlus(repo_path / templates.globals["docs_dir"])
+	docs_dir.maybe_make(parents=True)
+	contributing_rst = (docs_dir / "contributing.rst")
+	contributing_rst.write_clean(content)
+
+	return [str(contributing_rst.relative_to(repo_path))]
 
 
 @management.register("issue_templates")
@@ -112,16 +127,14 @@ def make_issue_templates(repo_path: pathlib.Path, templates: jinja2.Environment)
 	:type templates: jinja2.Environment
 	"""
 
-	bug_report = templates.get_template("bug_report.md")
-	feature_request = templates.get_template("feature_request.md")
+	managed_files = []
 
 	issue_template_dir = PathPlus(repo_path / ".github" / "ISSUE_TEMPLATE")
 	issue_template_dir.maybe_make(parents=True)
 
-	(issue_template_dir / "bug_report.md").write_clean(bug_report.render())
-	(issue_template_dir / "feature_request.md").write_clean(feature_request.render())
+	for filename in ["bug_report.md", "feature_request.md"]:
+		filepath = issue_template_dir / filename
+		filepath.write_clean(templates.get_template(filename).render())
+		managed_files.append(str(filepath.relative_to(repo_path)))
 
-	return [
-			os.path.join(".github", "ISSUE_TEMPLATE", "bug_report.md"),
-			os.path.join(".github", "ISSUE_TEMPLATE", "feature_request.md"),
-			]
+	return managed_files

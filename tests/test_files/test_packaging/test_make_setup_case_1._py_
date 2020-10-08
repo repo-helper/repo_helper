@@ -20,5 +20,4 @@ setup(
 		install_requires=install_requires,
 		py_modules=[],
 		version=__version__,
-
 		)

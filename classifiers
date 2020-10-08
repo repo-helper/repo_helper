@@ -1,0 +1,122 @@
+Development Status :: 1 - Planning
+Development Status :: 2 - Pre-Alpha
+Development Status :: 3 - Alpha
+Development Status :: 4 - Beta
+Development Status :: 5 - Production/Stable
+Development Status :: 6 - Mature
+Development Status :: 7 - Inactive
+
+Intended Audience :: Developers
+Intended Audience :: End Users/Desktop
+Intended Audience :: Information Technology
+Intended Audience :: Science/Research
+Intended Audience :: System Administrators
+
+Programming Language :: C
+Programming Language :: C++
+Programming Language :: Cython
+Programming Language :: JavaScript
+Programming Language :: R
+Programming Language :: Ruby
+Programming Language :: Rust
+Programming Language :: SQL
+Programming Language :: Unix Shell
+
+Environment :: Console
+Environment :: No Input/Output (Daemon)
+Environment :: Plugins
+Environment :: Web Environment
+Environment :: X11 Applications
+Environment :: X11 Applications :: GTK
+Environment :: X11 Applications :: Gnome
+Topic :: Software Development :: User Interfaces
+Topic :: Software Development :: Widget Sets
+
+Framework :: Dash
+Framework :: Jupyter
+Framework :: Matplotlib
+
+
+if utility:
+	Topic :: Utilities
+
+if flake8 plugin:
+	Framework :: Flake8
+	Intended Audience :: Developers
+
+if Flask
+	Framework :: Flask
+	Topic :: Internet :: WWW/HTTP :: WSGI :: Application
+
+
+if Pytest plugin:
+	Framework :: Pytest
+	Framework :: tox
+	Topic :: Software Development :: Quality Assurance
+	Topic :: Software Development :: Testing
+	Topic :: Software Development :: Testing :: Unit
+	Intended Audience :: Developers
+
+
+if Sphinx extension:
+	Framework :: Sphinx :: Extension
+	Framework :: Sphinx :: Theme
+	Topic :: Documentation
+	Topic :: Documentation :: Sphinx
+	Topic :: Software Development :: Documentation
+	Intended Audience :: Developers
+
+if Library:
+	Topic :: Software Development :: Libraries :: Python Modules
+	Intended Audience :: Developers
+
+
+Topic :: Artistic Software
+Topic :: Communications
+Topic :: Home Automation
+Topic :: Multimedia :: Graphics
+Topic :: Software Development :: Embedded Systems
+
+Topic :: Database
+Topic :: Database :: Database Engines/Servers
+Topic :: Database :: Front-Ends
+
+Topic :: Games/Entertainment
+Topic :: Games/Entertainment :: Arcade
+Topic :: Games/Entertainment :: Board Games
+Topic :: Games/Entertainment :: First Person Shooters
+Topic :: Games/Entertainment :: Fortune Cookies
+Topic :: Games/Entertainment :: Multi-User Dungeons (MUD)
+Topic :: Games/Entertainment :: Puzzle Games
+Topic :: Games/Entertainment :: Real Time Strategy
+Topic :: Games/Entertainment :: Role-Playing
+Topic :: Games/Entertainment :: Side-Scrolling/Arcade Games
+Topic :: Games/Entertainment :: Simulation
+Topic :: Games/Entertainment :: Turn Based Strategy
+Topic :: Software Development :: Libraries :: pygame
+
+Topic :: Internet
+Topic :: Internet :: WWW/HTTP
+Topic :: Internet :: WWW/HTTP :: Dynamic Content
+Topic :: Internet :: WWW/HTTP :: Site Management
+
+Topic :: Scientific/Engineering :: Bio-Informatics
+Topic :: Scientific/Engineering :: Chemistry
+Topic :: Scientific/Engineering :: Image Processing
+Topic :: Scientific/Engineering :: Image Recognition
+Topic :: Scientific/Engineering :: Information Analysis
+Topic :: Scientific/Engineering :: Mathematics
+Topic :: Scientific/Engineering :: Physics
+Topic :: Scientific/Engineering :: Visualization
+
+
+Topic :: Software Development :: Build Tools
+Topic :: Software Development :: Code Generators
+Topic :: Software Development :: Version Control :: Git
+Topic :: System :: Archiving :: Packaging
+Topic :: System :: Software Distribution
+
+Topic :: Text Processing :: Markup :: HTML
+Topic :: Text Processing :: Markup :: LaTeX
+Topic :: Text Processing :: Markup :: Markdown
+Topic :: Text Processing :: Markup :: XML

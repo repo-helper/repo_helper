@@ -109,19 +109,20 @@ class ComparableRequirement(Requirement):
 			except InvalidRequirement:
 				return NotImplemented
 
-			return all((
+			return self == other
+
+		elif isinstance(other, Requirement):
+			if all((
 					_check_equal_not_none(self.name, other.name),
 					_check_equal_not_none(self.url, other.url),
 					_check_equal_not_none(self.extras, other.extras),
 					_check_equal_not_none(self.specifier, other.specifier),
-					_check_equal_not_none(self.marker, other.marker),
-					))
+					)):
+				if self.marker is not None and other.marker is not None:
+					return all(str(left) == str(right) for left, right in zip(self.marker._markers, other.marker._markers))
+				return True
+			return False
 
-		if isinstance(other, Requirement):
-			return (
-					self.name == other.name and self.url == other.url and self.extras == other.extras
-					and self.specifier == other.specifier and self.marker == other.marker
-					)
 		else:
 			return NotImplemented
 
@@ -305,14 +306,10 @@ def make_setup(repo_path: pathlib.Path, templates: jinja2.Environment) -> List[s
 	# data["python_requires"] = f'">={templates.globals["min_py_version"]}"'
 	data["py_modules"] = templates.globals["py_modules"]
 
-	with (repo_path / "setup.py").open('w', encoding="UTF-8") as fp:
-		clean_writer(
-				setup.render(
-						additional_setup_args="\n".join([f"\t\t{k}={v}," for k, v in sorted(data.items())]) + "\n"
-						+ templates.globals["additional_setup_args"]
-						),
-				fp
-				)
+	setup_args = sorted({**data, **templates.globals["additional_setup_args"]}.items())
+
+	setup_file = PathPlus(repo_path / "setup.py")
+	setup_file.write_clean(setup.render(additional_setup_args="\n".join(f"\t\t{k}={v}," for k, v in setup_args)))
 
 	return ["setup.py"]
 

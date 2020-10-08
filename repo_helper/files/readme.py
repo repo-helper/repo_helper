@@ -85,6 +85,7 @@ def rewrite_readme(repo_path: pathlib.Path, templates: jinja2.Environment) -> Li
 			templates.globals["modname"],
 			templates.globals["username"],
 			templates.globals["enable_conda"],
+			templates.globals["on_pypi"],
 			templates.globals["pypi_name"],
 			templates.globals["conda_channels"],
 			)

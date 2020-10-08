@@ -617,11 +617,12 @@ class Test_additional_setup_args(DictTest):
 	test_value = dict(key="value")
 
 	def test_success(self):
-		assert self.config_var.get({self.config_var.__name__: self.test_value}) == "		key=value,"
-		assert self.config_var.get({self.config_var.__name__: {}}) == ''
-		assert self.config_var.get({"username": "domdfcoding"}) == ''
-		assert self.config_var.get() == ''
-		assert self.config_var.get({}) == ''
+		assert self.config_var.get({self.config_var.__name__: self.test_value}) == {"key": "value"}
+		assert self.config_var.get({self.config_var.__name__: dict(key="'value'")}) == {"key": "'value'"}
+		assert self.config_var.get({self.config_var.__name__: {}}) == {}
+		assert self.config_var.get({"username": "domdfcoding"}) == {}
+		assert self.config_var.get() == {}
+		assert self.config_var.get({}) == {}
 
 
 class Test_extras_require(DictTest):

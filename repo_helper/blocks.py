@@ -374,6 +374,7 @@ def create_readme_install_block(
 		modname: str,
 		username: str,
 		conda: bool = True,
+		pypi: bool = True,
 		pypi_name: Optional[str] = None,
 		conda_channels: Optional[Sequence[str]] = None,
 		) -> str:
@@ -382,7 +383,8 @@ def create_readme_install_block(
 
 	:param modname: The name of the program / library.
 	:param username: The username of the GitHub account that owns the repository.
-	:param conda:
+	:param conda: Whether to show Anaconda installation instructions.
+	:param pypi: Whether to show PyPI installation instructions.
 	:param pypi_name: The name of the project on PyPI. Defaults to the value of ``repo_name`` if unset.
 	:param conda_channels: List of required Conda channels.
 
@@ -395,13 +397,16 @@ def create_readme_install_block(
 	if not pypi_name:
 		pypi_name = modname
 
-	return readme_installation_block_template.render(
-			modname=modname,
-			username=username,
-			conda=conda,
-			pypi_name=pypi_name,
-			conda_channels=conda_channels,
-			)
+	if pypi:
+		return readme_installation_block_template.render(
+				modname=modname,
+				username=username,
+				conda=conda,
+				pypi_name=pypi_name,
+				conda_channels=conda_channels,
+				)
+	else:
+		return "\n.. start installation\n.. end installation\n"
 
 
 def create_short_desc_block(short_desc: str) -> str:
@@ -429,7 +434,7 @@ docs_installation_block_template = Environment(
 .. start installation
 
 .. installation:: {{ pypi_name }}
-	:pypi:
+{% if pypi %}	:pypi:{% endif %}
 	:github:
 {% if conda %}	:anaconda:
 	:conda-channels: {{ conda_channels }}
@@ -443,6 +448,7 @@ def create_docs_install_block(
 		repo_name: str,
 		username: str,
 		conda: bool = True,
+		pypi: bool = True,
 		pypi_name: Optional[str] = None,
 		conda_channels: Optional[Sequence[str]] = None,
 		) -> str:
@@ -451,7 +457,8 @@ def create_docs_install_block(
 
 	:param repo_name: The name of the GitHub repository.
 	:param username: The username of the GitHub account that owns the repository.
-	:param conda:
+	:param conda: Whether to show Anaconda installation instructions.
+	:param pypi: Whether to show PyPI installation instructions.
 	:param pypi_name: The name of the project on PyPI. Defaults to the value of ``repo_name`` if unset.
 	:param conda_channels: List of required Conda channels.
 
@@ -469,6 +476,7 @@ def create_docs_install_block(
 
 	return docs_installation_block_template.render(
 			conda=conda,
+			pypi=pypi,
 			pypi_name=pypi_name,
 			conda_channels=", ".join(conda_channels),
 			)

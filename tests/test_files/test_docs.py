@@ -28,8 +28,11 @@ import pathlib
 from pytest_regressions.file_regression import FileRegressionFixture  # type: ignore
 
 # this package
-from repo_helper.files.docs import ensure_doc_requirements, make_404_page, make_docs_source_rst, make_rtfd
-from tests.common import check_file_output
+from repo_helper.files.docs import (
+	ensure_doc_requirements, make_404_page, make_alabaster_theming, make_conf, make_docs_source_rst, make_docutils_conf,
+	make_readthedocs_theming, make_rtfd, remove_autodoc_augment_defaults,
+	)
+from tests.common import check_file_output, check_file_regression
 
 
 def test_make_rtfd_case_1(tmpdir, demo_environment, file_regression: FileRegressionFixture):
@@ -90,6 +93,11 @@ def test_make_docs_source_rst(tmpdir, demo_environment):
 
 	assert not (tmpdir_p / "doc-source" / "Building.rst").is_file()
 
+	(tmpdir_p / "doc-source" / "Building.rst").touch()
+	assert (tmpdir_p / "doc-source" / "Building.rst").is_file()
+	make_docs_source_rst(tmpdir_p, demo_environment)
+	assert not (tmpdir_p / "doc-source" / "Building.rst").is_file()
+
 
 def test_ensure_doc_requirements(tmpdir, demo_environment):
 	tmpdir_p = pathlib.Path(tmpdir)
@@ -145,3 +153,42 @@ sphinxcontrib-httpdomain>=1.7.0
 sphinxemoji>=0.1.6
 toctree_plus>=0.0.4
 """
+
+
+def test_make_docutils_conf(tmp_pathplus, demo_environment, file_regression):
+	managed_files = make_docutils_conf(tmp_pathplus, demo_environment)
+	assert managed_files == ["doc-source/docutils.conf"]
+	check_file_output(tmp_pathplus / managed_files[0], file_regression)
+
+
+def test_make_conf(tmp_pathplus, demo_environment, file_regression):
+	# TODO: with values for these
+	demo_environment.globals["html_theme_options"] = {}
+	demo_environment.globals["extra_sphinx_extensions"] = []
+	demo_environment.globals["sphinx_conf_preamble"] = []
+	demo_environment.globals["sphinx_conf_epilogue"] = []
+	demo_environment.globals["rtfd_author"] = "Joe Bloggs"
+	demo_environment.globals["author"] = "E. Xample"
+	demo_environment.globals["copyright_years"] = "2020-2021"
+	demo_environment.globals["intersphinx_mapping"] = {}
+	demo_environment.globals["html_context"] = {}
+
+	managed_files = make_conf(tmp_pathplus, demo_environment)
+	assert managed_files == ["doc-source/conf.py"]
+	check_file_output(tmp_pathplus / managed_files[0], file_regression)
+
+
+def test_make_alabaster_theming(file_regression):
+	check_file_regression(make_alabaster_theming(), file_regression, "style.css")
+
+
+def test_make_readthedocs_theming(file_regression):
+	check_file_regression(make_readthedocs_theming(), file_regression, "style.css")
+
+
+def test_remove_autodoc_augment_defaults(tmp_pathplus, demo_environment):
+	(tmp_pathplus / "doc-source").mkdir(parents=True)
+	(tmp_pathplus / "doc-source" / "autodoc_augment_defaults.py").touch()
+	assert (tmp_pathplus / "doc-source" / "autodoc_augment_defaults.py").is_file()
+	assert remove_autodoc_augment_defaults(tmp_pathplus, demo_environment) == ["doc-source/autodoc_augment_defaults.py"]
+	assert not (tmp_pathplus / "doc-source" / "autodoc_augment_defaults.py").is_file()

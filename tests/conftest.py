@@ -32,6 +32,9 @@ from repo_helper.files.linting import lint_fix_list, lint_warn_list
 from repo_helper.templates import template_dir
 
 
+pytest_plugins = ("domdf_python_tools.testing", )
+
+
 @pytest.fixture(scope="function")
 def demo_environment():
 	templates = jinja2.Environment(
@@ -67,7 +70,7 @@ def demo_environment():
 					additional_requirements_files=[],
 					source_dir='',
 					tests_dir="tests",
-					additional_setup_args='',
+					additional_setup_args={},
 					setup_pre=[],
 					docs_dir="doc-source",
 					sphinx_html_theme="alabaster",

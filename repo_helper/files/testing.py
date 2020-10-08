@@ -316,11 +316,7 @@ class ToxConfig:
 			self._ini["testenv:mypy"]["ignore_errors"] = True
 			self._ini["testenv:mypy"]["changedir"] = "{toxinidir}"
 
-			mypy_deps = ["mypy==0.782", "lxml"]
-			if self["enable_tests"]:
-				mypy_deps.append(f"-r{{toxinidir}}/{self._globals['tests_dir']}/requirements.txt")
-			mypy_deps.extend(self._globals["mypy_deps"])
-			self._ini["testenv:mypy"]["deps"] = indent_join(mypy_deps)
+			self._ini["testenv:mypy"]["deps"] = indent_join(self.get_mypy_dependencies())
 
 			if self._globals["stubs_package"]:
 				self._ini["testenv:mypy"]["commands"] = "mypy tests {posargs}"

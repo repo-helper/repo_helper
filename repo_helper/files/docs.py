@@ -37,6 +37,7 @@ import cssutils  # type: ignore
 import jinja2
 from cssutils import css  # type: ignore
 from domdf_python_tools.paths import PathPlus, clean_writer
+from domdf_python_tools.utils import enquote_value
 from packaging.requirements import Requirement
 
 # this package
@@ -242,7 +243,9 @@ def make_conf(repo_path: pathlib.Path, templates: jinja2.Environment) -> List[st
 	"""
 
 	conf = templates.get_template("conf._py")
-	conf_file = PathPlus(repo_path / templates.globals["docs_dir"] / "conf.py")
+	docs_dir = PathPlus(repo_path / templates.globals["docs_dir"])
+	docs_dir.maybe_make(parents=True)
+	conf_file = docs_dir / "conf.py"
 
 	username = templates.globals["username"]
 	repo_name = templates.globals["repo_name"]
@@ -308,9 +311,13 @@ def make_conf(repo_path: pathlib.Path, templates: jinja2.Environment) -> List[st
 
 	sphinx_extensions.extend(templates.globals["extra_sphinx_extensions"])
 
-	conf_file.write_clean(conf.render(sphinx_extensions=sphinx_extensions, pformat=pformat_tabs))
+	conf_file.write_clean(conf.render(
+			sphinx_extensions=sphinx_extensions,
+			pformat=pformat_tabs,
+			enquote_value=enquote_value,
+			))
 
-	return [os.path.join(templates.globals["docs_dir"], "conf.py")]
+	return [str(conf_file.relative_to(repo_path))]
 
 
 class StyleSheet(css.CSSStyleSheet):
@@ -606,6 +613,7 @@ def rewrite_docs_index(repo_path: pathlib.Path, templates: jinja2.Environment) -
 			templates.globals["repo_name"],
 			templates.globals["username"],
 			templates.globals["enable_conda"],
+			templates.globals["on_pypi"],
 			templates.globals["pypi_name"],
 			templates.globals["conda_channels"],
 			)

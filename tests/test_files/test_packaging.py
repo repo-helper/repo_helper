@@ -24,10 +24,14 @@
 import pathlib
 
 # 3rd party
+import pytest
 from pytest_regressions.file_regression import FileRegressionFixture  # type: ignore
 
 # this package
-from repo_helper.files.packaging import make_manifest, make_pkginfo, make_pyproject, make_setup, make_setup_cfg
+from repo_helper.files.packaging import (
+	ComparableRequirement, make_manifest, make_pkginfo, make_pyproject, make_setup,
+	make_setup_cfg,
+	)
 from tests.common import check_file_output
 
 
@@ -71,11 +75,8 @@ def test_make_setup_case_2(tmpdir, demo_environment, file_regression: FileRegres
 	demo_environment.globals.update(
 			dict(
 					min_py_version="3.8",
-					additional_setup_args="""\
-		foo="bar",
-		alice="19",
-		bob=22,""",
-					setup_pre=["import datetime", "print('datetime.datetime.now')"],
+					additional_setup_args=dict(foo="'bar'", alice="'19'", bob=22),
+					setup_pre=["import datetime", "print(datetime.datetime.now)"],
 					docs_dir="userguide",
 					tests_dir="testing",
 					)
@@ -146,3 +147,43 @@ def test_make_pkginfo(tmpdir, demo_environment, file_regression: FileRegressionF
 	managed_files = make_pkginfo(tmpdir_p, demo_environment)
 	assert managed_files == ["__pkginfo__.py"]
 	check_file_output(tmpdir_p / managed_files[0], file_regression)
+
+
+class TestComparableRequirement:
+
+	@pytest.fixture(scope="class")
+	def req(self):
+		return ComparableRequirement('pytest==6.0.0; python_version <= "3.9"')
+
+	def test_eq(self, req):
+		assert req == req
+		assert req == ComparableRequirement('pytest==6.0.0; python_version <= "3.9"')
+		assert req == ComparableRequirement('pytest==6.0.0')
+		assert req == ComparableRequirement('pytest')
+		assert req == ComparableRequirement('pytest[extra]')
+
+	def test_gt(self, req):
+		assert req == req
+		assert req < "pytest-rerunfailures"
+		assert req < ComparableRequirement("pytest-rerunfailures")
+		assert req < ComparableRequirement("pytest-rerunfailures==1.2.3")
+
+	def test_lt(self, req):
+		assert req == req
+		assert req > "apeye"
+		assert req > ComparableRequirement("apeye")
+		assert req > ComparableRequirement("apeye==1.2.3")
+
+	def test_ge(self, req):
+		assert req == req
+		assert req <= "pytest-rerunfailures"
+		assert req <= ComparableRequirement("pytest-rerunfailures")
+		assert req <= ComparableRequirement("pytest-rerunfailures==1.2.3")
+		assert req <= ComparableRequirement('pytest==6.0.0; python_version <= "3.9"')
+
+	def test_ll(self, req):
+		assert req == req
+		assert req >= "apeye"
+		assert req >= ComparableRequirement('apeye')
+		assert req >= ComparableRequirement('apeye==1.2.3')
+		assert req >= ComparableRequirement('pytest==6.0.0; python_version <= "3.9"')
