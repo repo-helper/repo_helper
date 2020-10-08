@@ -311,11 +311,13 @@ def make_conf(repo_path: pathlib.Path, templates: jinja2.Environment) -> List[st
 
 	sphinx_extensions.extend(templates.globals["extra_sphinx_extensions"])
 
-	conf_file.write_clean(conf.render(
-			sphinx_extensions=sphinx_extensions,
-			pformat=pformat_tabs,
-			enquote_value=enquote_value,
-			))
+	conf_file.write_clean(
+			conf.render(
+					sphinx_extensions=sphinx_extensions,
+					pformat=pformat_tabs,
+					enquote_value=enquote_value,
+					)
+			)
 
 	return [str(conf_file.relative_to(repo_path))]
 

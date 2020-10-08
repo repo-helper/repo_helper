@@ -1,15 +1,16 @@
+# stdlib
 import os
 import pathlib
 import types
 
+# 3rd party
+import sdjson
 from domdf_python_tools.paths import PathPlus
 from pytest_git import GitRepo
 
+# this package
 from repo_helper.init_repo import init_repo
 from tests.common import check_file_output, check_file_regression
-
-
-import sdjson
 
 
 @sdjson.register_encoder(types.GeneratorType)
@@ -62,4 +63,6 @@ def test_init_repo(git_repo: GitRepo, demo_environment, file_regression):
 	assert (repo_path / "doc-source").is_dir()
 	check_file_output(repo_path / "doc-source/index.rst", file_regression, extension=".docs_index.rst")
 	assert (repo_path / "doc-source" / "api").is_dir()
-	check_file_output(repo_path / "doc-source/api/hello-world.rst", file_regression, extension=".docs_hello-world.rst")
+	check_file_output(
+			repo_path / "doc-source/api/hello-world.rst", file_regression, extension=".docs_hello-world.rst"
+			)

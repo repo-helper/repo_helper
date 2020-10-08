@@ -29,12 +29,16 @@ from pytest_regressions.file_regression import FileRegressionFixture  # type: ig
 
 # this package
 from repo_helper.files.ci_cd import (
-	ensure_bumpversion, make_github_ci, make_github_docs_test, make_github_manylinux, make_github_octocheese,
-	make_make_conda_recipe,
-	make_travis,
-	make_travis_deploy_conda,
-	remove_copy_pypi_2_github,
-	)
+		ensure_bumpversion,
+		make_github_ci,
+		make_github_docs_test,
+		make_github_manylinux,
+		make_github_octocheese,
+		make_make_conda_recipe,
+		make_travis,
+		make_travis_deploy_conda,
+		remove_copy_pypi_2_github
+		)
 from tests.common import check_file_output
 
 
@@ -44,7 +48,6 @@ def test_travis_case_1(tmpdir, demo_environment, file_regression: FileRegression
 	managed_files = make_travis(tmpdir_p, demo_environment)
 	assert managed_files == [".travis.yml"]
 	check_file_output(tmpdir_p / managed_files[0], file_regression)
-
 
 
 def test_travis_case_2(tmpdir, demo_environment, file_regression):
@@ -207,7 +210,13 @@ def test_make_make_conda_recipe(tmp_pathplus, demo_environment, file_regression)
 
 @pytest.mark.parametrize("py_versions", [["3.6", "3.7", "3.8"], ["3.6", "3.7"]])
 @pytest.mark.parametrize("platforms", [["Linux"], ["Linux", "Windows"]])
-def test_make_github_manylinux(tmp_pathplus, demo_environment, file_regression: FileRegressionFixture, platforms, py_versions,):
+def test_make_github_manylinux(
+		tmp_pathplus,
+		demo_environment,
+		file_regression: FileRegressionFixture,
+		platforms,
+		py_versions,
+		):
 
 	demo_environment.globals["platforms"] = platforms
 	demo_environment.globals["pure_python"] = False
@@ -223,7 +232,12 @@ def test_make_github_manylinux(tmp_pathplus, demo_environment, file_regression: 
 
 
 @pytest.mark.parametrize("platforms", [["Linux"], ["Linux", "Windows"]])
-def test_make_github_manylinux_pure_python(tmp_pathplus, demo_environment, file_regression: FileRegressionFixture, platforms,):
+def test_make_github_manylinux_pure_python(
+		tmp_pathplus,
+		demo_environment,
+		file_regression: FileRegressionFixture,
+		platforms,
+		):
 
 	demo_environment.globals["platforms"] = platforms
 	demo_environment.globals["pure_python"] = True
@@ -244,7 +258,13 @@ def test_make_github_octocheese(tmp_pathplus, demo_environment, file_regression:
 
 @pytest.mark.parametrize("py_versions", [["3.6", "3.7", "3.8"], ["3.6", "3.7"]])
 @pytest.mark.parametrize("enable_docs", [True, False])
-def test_ensure_bumpversion(tmp_pathplus, demo_environment, file_regression: FileRegressionFixture, enable_docs, py_versions,):
+def test_ensure_bumpversion(
+		tmp_pathplus,
+		demo_environment,
+		file_regression: FileRegressionFixture,
+		enable_docs,
+		py_versions,
+		):
 	demo_environment.globals["version"] = "1.2.3"
 	demo_environment.globals["enable_docs"] = enable_docs
 	assert ensure_bumpversion(tmp_pathplus, demo_environment) == [".bumpversion.cfg"]

@@ -29,9 +29,13 @@ from pytest_regressions.file_regression import FileRegressionFixture  # type: ig
 
 # this package
 from repo_helper.files.packaging import (
-	ComparableRequirement, make_manifest, make_pkginfo, make_pyproject, make_setup,
-	make_setup_cfg,
-	)
+		ComparableRequirement,
+		make_manifest,
+		make_pkginfo,
+		make_pyproject,
+		make_setup,
+		make_setup_cfg
+		)
 from tests.common import check_file_output
 
 

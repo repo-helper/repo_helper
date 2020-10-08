@@ -119,7 +119,10 @@ class ComparableRequirement(Requirement):
 					_check_equal_not_none(self.specifier, other.specifier),
 					)):
 				if self.marker is not None and other.marker is not None:
-					return all(str(left) == str(right) for left, right in zip(self.marker._markers, other.marker._markers))
+					return all(
+							str(left) == str(right) for left,
+							right in zip(self.marker._markers, other.marker._markers)
+							)
 				return True
 			return False
 

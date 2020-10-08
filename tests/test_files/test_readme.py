@@ -20,20 +20,20 @@
 #  MA 02110-1301, USA.
 #
 
-# 3rd party
+# stdlib
 import sys
 
+# 3rd party
+import importlib_resources
 import pytest
 from domdf_python_tools.paths import PathPlus
 from pytest_regressions.file_regression import FileRegressionFixture  # type: ignore
-
-# this package
 from readme_renderer.rst import render
 
+# this package
+import tests.test_files.test_readme_input
 from repo_helper.files.readme import rewrite_readme
 from tests.common import check_file_output, check_file_regression
-import importlib_resources
-import tests.test_files.test_readme_input
 
 
 @pytest.mark.parametrize("filename", [
@@ -64,5 +64,3 @@ def test_rewrite_readme(tmp_pathplus, demo_environment, file_regression: FileReg
 	rendered = render(readme_file.read_text(), stream=sys.stderr)
 	assert rendered is not None
 	check_file_regression(rendered, file_regression, extension=".html")
-
-

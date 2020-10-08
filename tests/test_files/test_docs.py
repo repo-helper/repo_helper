@@ -29,9 +29,16 @@ from pytest_regressions.file_regression import FileRegressionFixture  # type: ig
 
 # this package
 from repo_helper.files.docs import (
-	ensure_doc_requirements, make_404_page, make_alabaster_theming, make_conf, make_docs_source_rst, make_docutils_conf,
-	make_readthedocs_theming, make_rtfd, remove_autodoc_augment_defaults,
-	)
+		ensure_doc_requirements,
+		make_404_page,
+		make_alabaster_theming,
+		make_conf,
+		make_docs_source_rst,
+		make_docutils_conf,
+		make_readthedocs_theming,
+		make_rtfd,
+		remove_autodoc_augment_defaults
+		)
 from tests.common import check_file_output, check_file_regression
 
 
@@ -190,5 +197,6 @@ def test_remove_autodoc_augment_defaults(tmp_pathplus, demo_environment):
 	(tmp_pathplus / "doc-source").mkdir(parents=True)
 	(tmp_pathplus / "doc-source" / "autodoc_augment_defaults.py").touch()
 	assert (tmp_pathplus / "doc-source" / "autodoc_augment_defaults.py").is_file()
-	assert remove_autodoc_augment_defaults(tmp_pathplus, demo_environment) == ["doc-source/autodoc_augment_defaults.py"]
+	assert remove_autodoc_augment_defaults(tmp_pathplus,
+											demo_environment) == ["doc-source/autodoc_augment_defaults.py"]
 	assert not (tmp_pathplus / "doc-source" / "autodoc_augment_defaults.py").is_file()

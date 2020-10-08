@@ -7,4 +7,4 @@ pytest-git>=1.7.0
 pytest-randomly>=3.3.1
 pytest-regressions>=2.0.1
 pytest-timeout>=1.4.2
-readme-renderer
+readme-renderer>=26.0

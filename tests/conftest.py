@@ -31,7 +31,6 @@ import pytest
 from repo_helper.files.linting import lint_fix_list, lint_warn_list
 from repo_helper.templates import template_dir
 
-
 pytest_plugins = ("domdf_python_tools.testing", )
 
 

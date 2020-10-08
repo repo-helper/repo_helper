@@ -21,35 +21,31 @@
 #
 
 # stdlib
-import pathlib
-
-# 3rd party
 import sys
 
+# 3rd party
 import pytest
 from pytest_regressions.file_regression import FileRegressionFixture  # type: ignore
-
-# this package
-from repo_helper.files.ci_cd import (
-	ensure_bumpversion, make_github_ci, make_github_docs_test, make_github_manylinux, make_github_octocheese,
-	make_make_conda_recipe,
-	make_travis,
-	make_travis_deploy_conda,
-	remove_copy_pypi_2_github,
-	)
-from repo_helper.files.contributing import (
-	github_bash_block, make_contributing, make_docs_contributing,
-	make_issue_templates,
-	)
-from tests.common import check_file_output, check_file_regression
 from readme_renderer.rst import render
 
+# this package
+from repo_helper.files.contributing import (
+		github_bash_block,
+		make_contributing,
+		make_docs_contributing,
+		make_issue_templates
+		)
+from tests.common import check_file_output, check_file_regression
 
-@pytest.mark.parametrize("commands", [
-		["sudo apt install python3-dev"],
-		["sudo apt update", "sudo apt upgrade -y", "sudo reboot"],
-		["for i in 1 2 3 4 5", "> do", '>    echo "Welcome $i times"', "> done"],
-		])
+
+@pytest.mark.parametrize(
+		"commands",
+		[
+				["sudo apt install python3-dev"],
+				["sudo apt update", "sudo apt upgrade -y", "sudo reboot"],
+				["for i in 1 2 3 4 5", "> do", '>    echo "Welcome $i times"', "> done"],
+				]
+		)
 def test_github_bash_block(file_regression: FileRegressionFixture, commands):
 	check_file_regression(github_bash_block(*commands), file_regression, extension=".rst")
 
@@ -85,5 +81,3 @@ def test_make_issue_templates(tmp_pathplus, demo_environment, file_regression: F
 
 	data = (tmp_pathplus / managed_files[1]).read_text()
 	check_file_regression(data, file_regression, ".feature.md")
-
-
