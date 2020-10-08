@@ -41,8 +41,7 @@ __all__ = ["wizard"]
 
 
 @cli_command()
-@click.pass_context
-def wizard(ctx):
+def wizard():
 	"""
 	Run the wizard 🧙 to create a 'repo_helper.yml' file.
 	"""
@@ -55,7 +54,7 @@ def wizard(ctx):
 	from dulwich.repo import Repo  # type: ignore
 	from email_validator import EmailNotValidError, validate_email  # type: ignore
 
-	path: PathPlus = ctx.obj["PATH"]
+	path = PathPlus.cwd()
 	config_file = path / 'repo_helper.yml'
 
 	try:
@@ -63,25 +62,22 @@ def wizard(ctx):
 	except NotGitRepository:
 
 		with Fore.RED:
-			click.echo(
-					f"""\
-The directory {path} is not a git repository.
-You may need to run 'git init' in that directory first."""
-					)
+			click.echo(f"The directory {path} is not a git repository.")
+			click.echo("You may need to run 'git init' in that directory first.")
 
 		raise click.Abort()
 
 	ret = 0
 
 	# ---------- intro ----------
-	click.echo("This wizard 🧙‍will guide you through creating a 'repo_helper.yml' configuration file")
+	click.echo("This wizard 🧙‍will guide you through creating a 'repo_helper.yml' configuration file.")
 	click.echo(f"This will be created in '{config_file}'.")
 	if not click.confirm('Do you want to continue?'):
 		raise click.Abort()
 
 	# ---------- file exists warning ----------
 	if config_file.is_file():
-		click.echo(f"\nWoah! That file already exists. It will be overwritten if you continue!.")
+		click.echo(f"\nWoah! That file already exists. It will be overwritten if you continue!")
 		if not click.confirm('Are you sure you want to continue?'):
 			raise click.Abort()
 
@@ -129,7 +125,7 @@ The author is usually the person who wrote the library.""")
 	click.echo(
 			"""
 The username of the author.
-(repo_helper naïvely assumes that you use the same username on GitHub and other sites.)"""
+(repo_helper naïvely assumes that you use the same username on GitHub as on other sites.)"""
 			)
 	username = click.prompt("Username", default=author)
 	# TODO: validate username
@@ -154,7 +150,7 @@ Not all SPDX identifiers are allowed as not all map to PyPI Trove classifiers.""
 			license_lookup[license_]
 			break
 		except KeyError:
-			click.echo("That is not a valid identifier. ")
+			click.echo("That is not a valid identifier.")
 
 	# ---------- short_desc ----------
 	click.echo("\nEnter a short, one-line description for the project.")

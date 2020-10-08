@@ -9,10 +9,12 @@ from setuptools import setup
 
 sys.path.append('.')
 
+# stdlib
+import datetime
+
 # this package
 from __pkginfo__ import *  # pylint: disable=wildcard-import
 
-import datetime
 print(datetime.datetime.now)
 
 setup(

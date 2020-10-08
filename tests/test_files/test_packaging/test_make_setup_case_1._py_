@@ -12,8 +12,6 @@ sys.path.append('.')
 # this package
 from __pkginfo__ import *  # pylint: disable=wildcard-import
 
-
-
 setup(
 		description='a short description',
 		extras_require=extras_require,

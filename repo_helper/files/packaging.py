@@ -27,19 +27,22 @@ Manage configuration for packaging tools.
 import copy
 import pathlib
 import textwrap
-from typing import Dict, Iterable, List, Sequence, Union
+from typing import Any, Dict, Iterable, List, Optional, Sequence, Union
 
 # 3rd party
+import importlib_resources
 import jinja2
 import tomlkit  # type: ignore
 from domdf_python_tools.paths import PathPlus, clean_writer
+import repo_helper.files
+import repo_helper.files
 from packaging.requirements import InvalidRequirement, Requirement
 from packaging.specifiers import Specifier, SpecifierSet
 
 # this package
 from repo_helper.configupdater2 import ConfigUpdater
 from repo_helper.files import management
-from repo_helper.utils import indent_with_tab
+from repo_helper.utils import indent_with_tab, reformat_file
 
 __all__ = [
 		"make_manifest",
@@ -73,35 +76,38 @@ def make_manifest(repo_path: pathlib.Path, templates: jinja2.Environment) -> Lis
 		manifest_entries.append(f"include {file.parent}/{file.name}")
 
 	if templates.globals["stubs_package"]:
-		manifest_entries.append(
-				f"recursive-include {templates.globals['source_dir']}{templates.globals['import_name']}-stubs *.pyi"
-				)
-		manifest_entries.append(
-				f"include {templates.globals['source_dir']}{templates.globals['import_name']}-stubs/py.typed"
-				)
+		import_name = f"{templates.globals['import_name']}-stubs"
 	else:
-		manifest_entries.append(
-				f"recursive-include {templates.globals['source_dir']}{templates.globals['import_name'].replace('.', '/')} *.pyi"
-				)
-		manifest_entries.append(
-				f"include {templates.globals['source_dir']}{templates.globals['import_name'].replace('.', '/')}/py.typed"
-				)
+		import_name = templates.globals["import_name"].replace('.', '/')
+
+	manifest_entries.extend([
+			f"recursive-include {templates.globals['source_dir']}{import_name} *.pyi",
+			f"include {templates.globals['source_dir']}{import_name}/py.typed",
+			])
 
 	PathPlus(repo_path / "MANIFEST.in").write_clean("\n".join(manifest_entries))
 
 	return ["MANIFEST.in"]
 
 
-def _check_equal_not_none(left, right):
+def _check_equal_not_none(left: Optional[Any], right: Optional[Any]):
 	if not left or not right:
 		return True
 	else:
 		return left == right
 
 
+def _check_marker_equality(left: Optional[Any], right: Optional[Any]):
+	if left is not None and right is not None:
+		for left_mark, right_mark in zip(left._markers, right._markers):
+			if str(left_mark) != str(right_mark):
+				return False
+	return True
+
+
 class ComparableRequirement(Requirement):
 
-	def __eq__(self, other):
+	def __eq__(self, other) -> bool:
 
 		if isinstance(other, str):
 			try:
@@ -112,25 +118,18 @@ class ComparableRequirement(Requirement):
 			return self == other
 
 		elif isinstance(other, Requirement):
-			if all((
+			return all((
 					_check_equal_not_none(self.name, other.name),
 					_check_equal_not_none(self.url, other.url),
 					_check_equal_not_none(self.extras, other.extras),
 					_check_equal_not_none(self.specifier, other.specifier),
-					)):
-				if self.marker is not None and other.marker is not None:
-					return all(
-							str(left) == str(right) for left,
-							right in zip(self.marker._markers, other.marker._markers)
-							)
-				return True
-			return False
-
+					_check_marker_equality(self.marker, other.marker),
+					))
 		else:
 			return NotImplemented
 
 	def __gt__(self, other) -> bool:
-		if isinstance(other, self.__class__):
+		if isinstance(other, Requirement):
 			return self.name > other.name
 		elif isinstance(other, str):
 			return self.name > other
@@ -138,7 +137,7 @@ class ComparableRequirement(Requirement):
 			return NotImplemented
 
 	def __ge__(self, other) -> bool:
-		if isinstance(other, self.__class__):
+		if isinstance(other, Requirement):
 			return self.name >= other.name
 		elif isinstance(other, str):
 			return self.name >= other
@@ -146,7 +145,7 @@ class ComparableRequirement(Requirement):
 			return NotImplemented
 
 	def __le__(self, other) -> bool:
-		if isinstance(other, self.__class__):
+		if isinstance(other, Requirement):
 			return self.name <= other.name
 		elif isinstance(other, str):
 			return self.name <= other
@@ -154,7 +153,7 @@ class ComparableRequirement(Requirement):
 			return NotImplemented
 
 	def __lt__(self, other) -> bool:
-		if isinstance(other, self.__class__):
+		if isinstance(other, Requirement):
 			return self.name < other.name
 		elif isinstance(other, str):
 			return self.name < other
@@ -313,6 +312,10 @@ def make_setup(repo_path: pathlib.Path, templates: jinja2.Environment) -> List[s
 
 	setup_file = PathPlus(repo_path / "setup.py")
 	setup_file.write_clean(setup.render(additional_setup_args="\n".join(f"\t\t{k}={v}," for k, v in setup_args)))
+
+	with importlib_resources.path(repo_helper.files, ".isort.cfg") as isort_config:
+		yapf_style = PathPlus(isort_config).parent.parent / "templates"  / "style.yapf"
+		reformat_file(setup_file, yapf_style=str(yapf_style), isort_config_file=str(isort_config))
 
 	return ["setup.py"]
 

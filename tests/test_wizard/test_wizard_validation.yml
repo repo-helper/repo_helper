@@ -1,0 +1,12 @@
+# Configuration for 'repo_helper' (https://github.com/domdfcoding/repo_helper)
+---
+modname: 'hello-world'
+copyright_years: '2020'
+author: 'Joe Bloggs'
+email: 'joe@example.com'
+username: 'joe'
+version: '0.0.0'
+license: 'GPLv3'
+short_desc: 'a short, one-line description for the project'
+
+enable_conda: False

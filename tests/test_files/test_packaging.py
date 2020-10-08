@@ -24,7 +24,10 @@
 import pathlib
 
 # 3rd party
+from textwrap import dedent
+
 import pytest
+from packaging.requirements import Requirement
 from pytest_regressions.file_regression import FileRegressionFixture  # type: ignore
 
 # this package
@@ -134,6 +137,34 @@ def test_make_setup_cfg(tmpdir, demo_environment, file_regression: FileRegressio
 	check_file_output(tmpdir_p / managed_files[0], file_regression)
 
 
+def test_make_setup_cfg_existing(tmpdir, demo_environment, file_regression: FileRegressionFixture):
+	# TODO: permutations to cover all branches
+
+	tmpdir_p = pathlib.Path(tmpdir)
+	(tmpdir_p / "setup.cfg").write_text(dedent("""
+	[somesection]
+	key=value
+	apple=fruit
+	number=1234
+	python=awesome
+	
+	[mypy]
+	namespace_packages=False
+	check_untyped_defs=False
+	"""))
+
+	demo_environment.globals["author"] = "Joe Bloggs"
+	demo_environment.globals["email"] = "j.bloggs@example.com"
+	demo_environment.globals["license"] = "MIT License"
+	demo_environment.globals["keywords"] = ["awesome", "python", "project"]
+	demo_environment.globals["classifiers"] = []
+	demo_environment.globals["console_scripts"] = []
+
+	managed_files = make_setup_cfg(tmpdir_p, demo_environment)
+	assert managed_files == ["setup.cfg"]
+	check_file_output(tmpdir_p / managed_files[0], file_regression)
+
+
 def test_make_pkginfo(tmpdir, demo_environment, file_regression: FileRegressionFixture):
 	# TODO: permutations to cover all branches
 
@@ -159,35 +190,79 @@ class TestComparableRequirement:
 	def req(self):
 		return ComparableRequirement('pytest==6.0.0; python_version <= "3.9"')
 
-	def test_eq(self, req):
+	@pytest.mark.parametrize("other", [
+			ComparableRequirement('pytest==6.0.0; python_version <= "3.9"'),
+			ComparableRequirement('pytest==6.0.0'),
+			ComparableRequirement('pytest'),
+			ComparableRequirement('pytest[extra]'),
+			Requirement('pytest==6.0.0; python_version <= "3.9"'),
+			Requirement('pytest==6.0.0'),
+			Requirement('pytest'),
+			Requirement('pytest[extra]'),
+			'pytest',
+			])
+	def test_eq(self, req, other):
 		assert req == req
-		assert req == ComparableRequirement('pytest==6.0.0; python_version <= "3.9"')
-		assert req == ComparableRequirement('pytest==6.0.0')
-		assert req == ComparableRequirement('pytest')
-		assert req == ComparableRequirement('pytest[extra]')
+		assert req == other
 
-	def test_gt(self, req):
-		assert req == req
-		assert req < "pytest-rerunfailures"
-		assert req < ComparableRequirement("pytest-rerunfailures")
-		assert req < ComparableRequirement("pytest-rerunfailures==1.2.3")
+	@pytest.mark.parametrize("other", [
+			"pytest-rerunfailures",
+			ComparableRequirement("pytest-rerunfailures"),
+			ComparableRequirement("pytest-rerunfailures==1.2.3"),
+			Requirement("pytest-rerunfailures"),
+			Requirement("pytest-rerunfailures==1.2.3"),
+			])
+	def test_gt(self, req, other):
+		assert req < other
 
-	def test_lt(self, req):
-		assert req == req
-		assert req > "apeye"
-		assert req > ComparableRequirement("apeye")
-		assert req > ComparableRequirement("apeye==1.2.3")
+	@pytest.mark.parametrize("other", [
+			"apeye",
+			ComparableRequirement("apeye"),
+			ComparableRequirement("apeye==1.2.3"),
+			Requirement("apeye"),
+			Requirement("apeye==1.2.3"),
+			])
+	def test_lt(self, req, other):
+		assert req > other
 
-	def test_ge(self, req):
-		assert req == req
-		assert req <= "pytest-rerunfailures"
-		assert req <= ComparableRequirement("pytest-rerunfailures")
-		assert req <= ComparableRequirement("pytest-rerunfailures==1.2.3")
-		assert req <= ComparableRequirement('pytest==6.0.0; python_version <= "3.9"')
+	@pytest.mark.parametrize("other", [
+			"pytest-rerunfailures",
+			ComparableRequirement("pytest-rerunfailures"),
+			ComparableRequirement("pytest-rerunfailures==1.2.3"),
+			ComparableRequirement('pytest==6.0.0; python_version <= "3.9"'),
+			Requirement("pytest-rerunfailures"),
+			Requirement("pytest-rerunfailures==1.2.3"),
+			Requirement('pytest==6.0.0; python_version <= "3.9"'),
+			ComparableRequirement('pytest==6.0.0; python_version <= "3.9"'),
+			ComparableRequirement('pytest==6.0.0'),
+			ComparableRequirement('pytest'),
+			ComparableRequirement('pytest[extra]'),
+			Requirement('pytest==6.0.0; python_version <= "3.9"'),
+			Requirement('pytest==6.0.0'),
+			Requirement('pytest'),
+			Requirement('pytest[extra]'),
+			'pytest',
+			])
+	def test_ge(self, req, other):
+		assert req <= other
+		assert req <= req
 
-	def test_ll(self, req):
-		assert req == req
-		assert req >= "apeye"
-		assert req >= ComparableRequirement('apeye')
-		assert req >= ComparableRequirement('apeye==1.2.3')
-		assert req >= ComparableRequirement('pytest==6.0.0; python_version <= "3.9"')
+	@pytest.mark.parametrize("other", [
+			"apeye",
+			ComparableRequirement("apeye"),
+			ComparableRequirement("apeye==1.2.3"),
+			Requirement("apeye"),
+			Requirement("apeye==1.2.3"),
+			ComparableRequirement('pytest==6.0.0; python_version <= "3.9"'),
+			ComparableRequirement('pytest==6.0.0'),
+			ComparableRequirement('pytest'),
+			ComparableRequirement('pytest[extra]'),
+			Requirement('pytest==6.0.0; python_version <= "3.9"'),
+			Requirement('pytest==6.0.0'),
+			Requirement('pytest'),
+			Requirement('pytest[extra]'),
+			'pytest',
+			])
+	def test_le(self, req, other):
+		assert req >= other
+		assert req >= req

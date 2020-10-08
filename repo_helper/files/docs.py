@@ -311,13 +311,11 @@ def make_conf(repo_path: pathlib.Path, templates: jinja2.Environment) -> List[st
 
 	sphinx_extensions.extend(templates.globals["extra_sphinx_extensions"])
 
-	conf_file.write_clean(
-			conf.render(
-					sphinx_extensions=sphinx_extensions,
-					pformat=pformat_tabs,
-					enquote_value=enquote_value,
-					)
-			)
+	conf_file.write_clean(conf.render(
+			sphinx_extensions=sphinx_extensions,
+			pformat=pformat_tabs,
+			enquote_value=enquote_value,
+			))
 
 	return [str(conf_file.relative_to(repo_path))]
 
@@ -516,7 +514,7 @@ def copy_docs_styling(repo_path: pathlib.Path, templates: jinja2.Environment) ->
 	dest__static_dir = PathPlus(repo_path / templates.globals["docs_dir"] / "_static")
 	dest__templates_dir = PathPlus(repo_path / templates.globals["docs_dir"] / "_templates")
 
-	for directory in [dest__static_dir, dest__templates_dir]:
+	for directory in {dest__static_dir, dest__templates_dir}:
 		directory.maybe_make(parents=True)
 
 	if templates.globals["sphinx_html_theme"] == "sphinx_rtd_theme":
@@ -548,26 +546,9 @@ def copy_docs_styling(repo_path: pathlib.Path, templates: jinja2.Environment) ->
 """
 			)
 
-	if (dest__templates_dir / "footer.html").is_file():
-		(dest__templates_dir / "footer.html").unlink()
-
-	# with (dest__templates_dir / "footer.html").open('w', encoding="UTF-8") as fp:
-	# 	clean_writer(
-	# 			"""<!--- This file is managed by 'repo_helper'. Don't edit it directly. --->
-
-
-# {% extends "!footer.html" %}
-# {% block extrafooter %}
-# {%- if gitstamp %} Last updated {{ gitstamp }}. {%- endif %}
-# {% endblock %}
-# """,
-# 				fp
-# 				)
-
 	return [
 			os.path.join(templates.globals["docs_dir"], "_static", "style.css"),
 			os.path.join(templates.globals["docs_dir"], "_templates", "layout.html"),
-			os.path.join(templates.globals["docs_dir"], "_templates", "footer.html"),
 			]
 
 

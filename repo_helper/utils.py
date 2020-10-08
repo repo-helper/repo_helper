@@ -34,6 +34,7 @@ from pprint import PrettyPrinter
 from typing import Any, Callable, Iterable, List, MutableMapping, Optional, Set, Tuple, Union
 
 # 3rd party
+import isort
 import trove_classifiers  # type: ignore
 from domdf_python_tools.paths import PathPlus
 from domdf_python_tools.stringlist import StringList
@@ -43,6 +44,8 @@ from domdf_python_tools.utils import stderr_writer
 from packaging.requirements import InvalidRequirement, Requirement
 from typing_extensions import Literal
 from typing_inspect import get_origin  # type: ignore
+import yapf_isort
+
 
 __all__ = [
 		"check_git_status",
@@ -417,3 +420,20 @@ def read_requirements(req_file: pathlib.Path) -> Tuple[Set[Requirement], List[st
 				pass
 
 	return requirements, comments
+
+
+def reformat_file(filename: PathLike, yapf_style: str, isort_config_file: str) -> int:
+	"""
+	Reformat the given file.
+
+	:param filename:
+	:param yapf_style:
+	:param isort_config_file:
+	"""
+
+	isort_config = isort.Config(settings_file=str(isort_config_file))
+	r = yapf_isort.Reformatter(filename, yapf_style, isort_config)
+	ret = r.run()
+	r.to_file()
+
+	return ret

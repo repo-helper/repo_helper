@@ -1,0 +1,211 @@
+# stdlib
+import re
+
+# 3rd party
+from typing import List
+
+from domdf_python_tools.paths import PathPlus
+from pytest_git import GitRepo
+
+# this package
+from repo_helper.utils import in_directory
+from repo_helper.wizard import wizard
+from tests.common import check_file_output
+from click.testing import CliRunner, Result
+
+
+def test_wizard(git_repo: GitRepo, file_regression):
+	repo_path = PathPlus(git_repo.workspace)
+
+	with in_directory(repo_path):
+		runner = CliRunner()
+
+		stdin = "\n".join([
+				"n",  # Are you sure you want to continue?
+				]) + "\n"
+
+		result: Result = runner.invoke(wizard, catch_exceptions=False, input=stdin, obj={})
+		assert result.exit_code == 1
+
+		stdout: List[str] = result.stdout.splitlines()
+		assert stdout[0] == "This wizard 🧙‍will guide you through creating a 'repo_helper.yml' configuration file."
+		assert re.match(r"This will be created in '.*[\/]repo_helper\.yml'\.", stdout[1])
+		assert stdout[2] == "Do you want to continue? [y/N]: n"
+		assert stdout[3] == "Aborted!"
+
+		runner = CliRunner()
+
+		stdin = "\n".join([
+				"y",  # Are you sure you want to continue?
+				"hello-world",  # The name of the library/project.
+				"Joe Bloggs",  # The name of the author.
+				"joe@example.com",  # The email address of the author
+				"joe",  # The username of the author
+				"1.2.3",  # The version number of the library
+				"2020-2021",  # The copyright years for the library.
+				"MIT",  # The SPDX identifier for the license
+				"a short, one-line description for the project",  # Enter a short, one-line description for the project.
+				]) + "\n"
+
+		result: Result = runner.invoke(wizard, catch_exceptions=False, input=stdin, obj={})
+		assert not result.exception
+		assert result.exit_code == 0
+
+		assert (repo_path / "repo_helper.yml").is_file()
+		check_file_output((repo_path / "repo_helper.yml"), file_regression)
+
+		runner = CliRunner()
+
+		stdin = "\n".join([
+				"y",  # Are you sure you want to continue?
+				"n",  # Are you sure you want to continue?
+				]) + "\n"
+
+		result: Result = runner.invoke(wizard, catch_exceptions=False, input=stdin, obj={})
+		assert result.exit_code == 1
+
+		stdout: List[str] = result.stdout.splitlines()
+		assert stdout[0] == "This wizard 🧙‍will guide you through creating a 'repo_helper.yml' configuration file."
+		assert re.match(r"This will be created in '.*[\/]repo_helper\.yml'\.", stdout[1])
+		assert stdout[2] == "Do you want to continue? [y/N]: y"
+		assert not stdout[3]
+		assert stdout[4] == "Woah! That file already exists. It will be overwritten if you continue!"
+		assert stdout[5] == "Are you sure you want to continue? [y/N]: n"
+		assert stdout[6] == "Aborted!"
+
+
+def test_wizard_validation(git_repo: GitRepo, file_regression):
+	repo_path = PathPlus(git_repo.workspace)
+
+	with in_directory(repo_path):
+
+		runner = CliRunner()
+
+		stdin = "\n".join([
+				"y",  # Are you sure you want to continue?
+				"hello-world",  # The name of the library/project.
+				"Joe Bloggs",  # The name of the author.
+				"joeexample.com",  # The email address of the author
+				"joe@example.com",  # The email address of the author
+				"joe",  # The username of the author
+				"",  # The version number of the library
+				"",  # The copyright years for the library.
+				"jygjgvkj",  # The SPDX identifier for the license
+				"GPLv3",  # The SPDX identifier for the license
+				"",  # Enter a short, one-line description for the project.
+				"",
+				"a short, one-line description for the project",
+				]) + "\n"
+
+		result: Result = runner.invoke(wizard, catch_exceptions=False, input=stdin, obj={})
+		stdout: List[str] = result.stdout.splitlines()
+
+		assert not result.exception
+		assert result.exit_code == 0
+
+		assert "That is not a valid identifier." in stdout
+		assert "That is not a valid email address." in stdout
+		assert stdout.count("Description: ") == 2
+		assert stdout.count("Description: a short, one-line description for the project") == 1
+
+		assert (repo_path / "repo_helper.yml").is_file()
+		check_file_output((repo_path / "repo_helper.yml"), file_regression)
+
+
+def test_wizard_git_config(git_repo: GitRepo, file_regression):
+	repo_path = PathPlus(git_repo.workspace)
+
+	with in_directory(repo_path):
+
+		(repo_path / ".git" / "config").write_lines([
+				"[user]",
+				"	name = Guido",
+				"	email = guido@python.org",
+				])
+
+		runner = CliRunner()
+
+		stdin = "\n".join([
+				"y",  # Are you sure you want to continue?
+				"hello-world",  # The name of the library/project.
+				"",  # The name of the author.
+				"",  # The email address of the author
+				"joe",  # The username of the author
+				"",  # The version number of the library
+				"",  # The copyright years for the library.
+				"GPLv3",  # The SPDX identifier for the license
+				"a short, one-line description for the project",
+				]) + "\n"
+
+		result: Result = runner.invoke(wizard, catch_exceptions=False, input=stdin, obj={})
+		assert not result.exception
+		assert result.exit_code == 0
+
+		assert (repo_path / "repo_helper.yml").is_file()
+		check_file_output((repo_path / "repo_helper.yml"), file_regression)
+
+
+def test_wizard_env_vars(git_repo: GitRepo, file_regression, monkeypatch):
+
+	# Monkeypatch dulwich so it doesn't try to use the global config.
+	from dulwich.config import StackedConfig
+	monkeypatch.setattr(StackedConfig, "default_backends", lambda *args: [], raising=True)
+	monkeypatch.setenv("GIT_COMMITTER_NAME", "Guido")
+	monkeypatch.setenv("GIT_COMMITTER_EMAIL", "guido@python.org")
+
+	repo_path = PathPlus(git_repo.workspace)
+
+	with in_directory(repo_path):
+		runner = CliRunner()
+
+		stdin = "\n".join([
+				"y",  # Are you sure you want to continue?
+				"hello-world",  # The name of the library/project.
+				"",  # The name of the author.
+				"",  # The email address of the author
+				"joe",  # The username of the author
+				"",  # The version number of the library
+				"",  # The copyright years for the library.
+				"GPLv3",  # The SPDX identifier for the license
+				"a short, one-line description for the project",
+				]) + "\n"
+
+		result: Result = runner.invoke(wizard, catch_exceptions=False, input=stdin, obj={})
+		assert not result.exception
+		assert result.exit_code == 0
+
+		assert (repo_path / "repo_helper.yml").is_file()
+		check_file_output((repo_path / "repo_helper.yml"), file_regression)
+
+
+def test_wizard_not_git(tmp_pathplus, file_regression, monkeypatch):
+
+	# Monkeypatch dulwich so it doesn't try to use the global config.
+	from dulwich.config import StackedConfig
+	monkeypatch.setattr(StackedConfig, "default_backends", lambda *args: [], raising=True)
+	monkeypatch.setenv("GIT_COMMITTER_NAME", "Guido")
+	monkeypatch.setenv("GIT_COMMITTER_EMAIL", "guido@python.org")
+
+	with in_directory(tmp_pathplus):
+		runner = CliRunner()
+
+		stdin = "\n".join([
+				"y",  # Are you sure you want to continue?
+				"hello-world",  # The name of the library/project.
+				"",  # The name of the author.
+				"",  # The email address of the author
+				"joe",  # The username of the author
+				"",  # The version number of the library
+				"",  # The copyright years for the library.
+				"GPLv3",  # The SPDX identifier for the license
+				"a short, one-line description for the project",
+				]) + "\n"
+
+		result: Result = runner.invoke(wizard, catch_exceptions=False, input=stdin, obj={})
+		assert result.exit_code == 1
+
+		stdout: List[str] = result.stdout.splitlines()
+		assert re.match(r"The directory .* is not a git repository\.", stdout[0][5:])
+		assert stdout[1] == "You may need to run 'git init' in that directory first."
+		assert stdout[2] == '\x1b[39mAborted!'
+		assert not (tmp_pathplus / "repo_helper.yml").is_file()

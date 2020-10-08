@@ -25,20 +25,21 @@ import os
 import pathlib
 
 # 3rd party
+import pytest
 from pytest_regressions.file_regression import FileRegressionFixture  # type: ignore
 
 # this package
 from repo_helper.files.docs import (
-		ensure_doc_requirements,
-		make_404_page,
-		make_alabaster_theming,
-		make_conf,
-		make_docs_source_rst,
-		make_docutils_conf,
-		make_readthedocs_theming,
-		make_rtfd,
-		remove_autodoc_augment_defaults
-		)
+	copy_docs_styling, ensure_doc_requirements,
+	make_404_page,
+	make_alabaster_theming,
+	make_conf,
+	make_docs_source_rst,
+	make_docutils_conf,
+	make_readthedocs_theming,
+	make_rtfd,
+	remove_autodoc_augment_defaults,
+	)
 from tests.common import check_file_output, check_file_regression
 
 
@@ -200,3 +201,17 @@ def test_remove_autodoc_augment_defaults(tmp_pathplus, demo_environment):
 	assert remove_autodoc_augment_defaults(tmp_pathplus,
 											demo_environment) == ["doc-source/autodoc_augment_defaults.py"]
 	assert not (tmp_pathplus / "doc-source" / "autodoc_augment_defaults.py").is_file()
+
+
+@pytest.mark.parametrize("theme", [
+		"sphinx_rtd_theme",
+		"alabaster",
+		"domdf_sphinx_theme",
+		])
+def test_copy_docs_styling(tmp_pathplus, demo_environment, file_regression, theme):
+	demo_environment.globals["sphinx_html_theme"] = theme
+	managed_files = copy_docs_styling(tmp_pathplus, demo_environment)
+	assert managed_files == ["doc-source/_static/style.css", "doc-source/_templates/layout.html"]
+	check_file_output(tmp_pathplus / managed_files[0], file_regression, "style.css")
+	check_file_output(tmp_pathplus / managed_files[1], file_regression, "layout.html")
+
