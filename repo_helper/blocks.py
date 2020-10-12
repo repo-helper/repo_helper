@@ -33,6 +33,7 @@ from typing_extensions import Literal
 
 # this package
 from repo_helper.shields import *
+from repo_helper._docs_shields import *
 
 __all__ = [
 		"installation_regex",
@@ -50,13 +51,19 @@ __all__ = [
 		"create_docs_links_block",
 		]
 
-# this package
-from repo_helper.shields import make_pre_commit_shield
 
+#: Regular expression to match the installation block placeholder.
 installation_regex = re.compile(r'(?s)(\.\. start installation)(.*?)(\.\. end installation)')
+
+#: Regular expression to match the shields block placeholder.
 shields_regex = re.compile(r'(?s)(\.\. start shields)(.*?)(\.\. end shields)')
+
+#: Regular expression to match the short description block placeholder.
 short_desc_regex = re.compile(r'(?s)(\.\. start short_desc)(.*?)(\.\. end short_desc)')
+
+#: Regular expression to match the links block placeholder.
 links_regex = re.compile(r'(?s)(\.\. start links)(.*?)(\.\. end links)')
+
 
 shields_block_template: Template = Environment(
 		loader=BaseLoader(),
@@ -457,6 +464,7 @@ def create_docs_install_block(
 
 	:param repo_name: The name of the GitHub repository.
 	:param username: The username of the GitHub account that owns the repository.
+		(Not used; ensures API compatibility with :func:`~.create_readme_install_block`)
 	:param conda: Whether to show Anaconda installation instructions.
 	:param pypi: Whether to show PyPI installation instructions.
 	:param pypi_name: The name of the project on PyPI. Defaults to the value of ``repo_name`` if unset.

@@ -22,14 +22,26 @@
 
 # stdlib
 import os
-from typing import Any, Dict, Iterable, List, Optional, Union
+from typing import Optional, Tuple, Union
+# stdlib
+import json
+import pathlib
+from typing import Any, Dict, Iterable, List, Type
 
 # 3rd party
+from ytools import validate
+
+# this package
+from repo_helper.config_vars import make_schema
+# 3rd party
+import importlib_resources
+import yaml
 from packaging.version import Version
 from typing_extensions import Literal
 
 # this package
-from repo_helper.config_vars import ConfigVar, get_version_classifiers, optional_getter
+import repo_helper
+from repo_helper.config_vars import ConfigVar, optional_getter
 from repo_helper.utils import license_lookup, validate_classifiers
 
 __all__ = [
@@ -96,6 +108,80 @@ __all__ = [
 		"pure_python",
 		"stubs_package",
 		"on_pypi",
+		"parse_yaml",
+		"get_tox_python_versions",
+		"get_tox_travis_python_versions",
+		"get_gh_actions_python_versions",
+		"dump_schema",
+		"mypy_plugins",
+		]
+
+
+all_values = [
+		"author",
+		"email",
+		"username",
+		"modname",
+		"version",
+		"copyright_years",
+		"repo_name",
+		"pypi_name",
+		"import_name",
+		"classifiers",
+		"keywords",
+		"license",
+		"short_desc",
+		"source_dir",
+		"enable_tests",
+		"enable_releases",
+		"enable_pre_commit",
+		"docker_shields",
+		"docker_name",
+		"python_deploy_version",
+		"python_versions",
+		"manifest_additional",
+		"py_modules",
+		"console_scripts",
+		"additional_setup_args",
+		"extras_require",
+		"additional_requirements_files",
+		"setup_pre",
+		"platforms",
+		"rtfd_author",
+		"preserve_custom_theme",
+		"sphinx_html_theme",
+		"extra_sphinx_extensions",
+		"intersphinx_mapping",
+		"sphinx_conf_preamble",
+		"sphinx_conf_epilogue",
+		"html_theme_options",
+		"html_context",
+		"enable_docs",
+		"docs_dir",
+		"tox_requirements",
+		"tox_build_requirements",
+		"tox_testenv_extras",
+		"travis_site",
+		"travis_ubuntu_version",
+		"travis_extra_install_pre",
+		"travis_extra_install_post",
+		"travis_pypi_secure",
+		"travis_additional_requirements",
+		"enable_conda",
+		"enable_conda",
+		"conda_channels",
+		"conda_description",
+		"additional_ignore",
+		"yapf_exclude",
+		"tests_dir",
+		"pkginfo_extra",
+		"exclude_files",
+		"imgbot_ignore",
+		"mypy_deps",
+		"pure_python",
+		"stubs_package",
+		"on_pypi",
+		"mypy_plugins",
 		]
 
 
@@ -256,6 +342,52 @@ class import_name(ConfigVar):  # noqa
 	dtype = str
 	default = modname
 	category: str = "metadata"
+
+	@classmethod
+	def get(cls, raw_config_vars: Optional[Dict[str, Any]] = None) -> Any:
+		"""
+		Returns the value of this :class:`~repo_helper.config_vars.ConfigVar`
+
+		:param raw_config_vars: Dictionary to obtain the value from.
+
+		:return:
+		:rtype: See the ``rtype`` attribute.
+		"""
+
+		if raw_config_vars is None:
+			raw_config_vars = {}
+
+		if cls.rtype is None:
+			cls.rtype = cls.dtype
+
+		if stubs_package.get(raw_config_vars):
+			name = cls.dtype(optional_getter(raw_config_vars, cls, cls.required))
+			if name.endswith("-stubs"):
+				return name[:-6]
+			return name
+		else:
+			return cls.validator(cls.validate(raw_config_vars))
+
+	@classmethod
+	def validate(cls, raw_config_vars: Optional[Dict[str, Any]] = None):
+
+		if raw_config_vars is None:
+			raw_config_vars = {}
+
+		if cls.rtype is None:
+			cls.rtype = cls.dtype
+
+		obj = optional_getter(raw_config_vars, cls, cls.required)
+
+		if stubs_package.get(raw_config_vars):
+			return cls.validator(obj)
+		else:
+			obj = optional_getter(raw_config_vars, cls, cls.required)
+
+			if not isinstance(obj, cls.dtype):  # type: ignore
+				raise ValueError(f"'{cls.__name__}' must be a {cls.dtype}") from None
+
+			return cls.rtype(obj)
 
 	@staticmethod
 	def validator(name: str) -> str:
@@ -1321,3 +1453,305 @@ class exclude_files(ConfigVar):  # noqa
 
 	dtype = List[str]
 	default: List[str] = []
+
+
+def parse_yaml(repo_path: pathlib.Path) -> Dict:
+	"""
+	Parse configuration values from ``repo_helper.yml``.
+
+	:param repo_path: Path to the repository root.
+
+	:returns: Mapping of configuration keys to values.
+	"""
+
+	if (repo_path / "git_helper.yml").is_file():
+		(repo_path / "git_helper.yml").rename(repo_path / "repo_helper.yml")
+
+	if not (repo_path / "repo_helper.yml").is_file():
+		raise FileNotFoundError(f"'repo_helper.yml' not found in {repo_path}")
+
+	with importlib_resources.path(repo_helper, "repo_helper_schema.json") as schema:
+		validate(str(schema), [repo_path / "repo_helper.yml"])
+
+	config_vars = {}
+
+	# load user settings from repo_helper.yml
+	with (repo_path / "repo_helper.yml").open(encoding="UTF-8") as file:
+		raw_config_vars = yaml.safe_load(file)
+
+	# --------------------------------------
+
+	metadata_vars: List[Type[ConfigVar]] = [
+			author,
+			email,
+			username,
+			modname,
+			version,
+			copyright_years,
+			repo_name,
+			pypi_name,
+			import_name,
+			classifiers,
+			keywords,
+			license,
+			short_desc,
+			source_dir,
+			pure_python,
+			stubs_package,
+			on_pypi,
+			enable_tests,
+			enable_releases,
+			enable_pre_commit,
+			docker_shields,
+			docker_name,
+			manifest_additional,
+			py_modules,
+			console_scripts,
+			setup_pre,
+			additional_setup_args,
+			platforms,
+			rtfd_author,
+			preserve_custom_theme,
+			sphinx_html_theme,
+			extra_sphinx_extensions,
+			intersphinx_mapping,
+			sphinx_conf_preamble,
+			sphinx_conf_epilogue,
+			html_theme_options,
+			html_context,
+			enable_docs,
+			docs_dir,
+			imgbot_ignore,
+			mypy_deps,
+			mypy_plugins,
+			python_deploy_version,
+			python_versions,
+			tox_requirements,
+			tox_build_requirements,
+			tox_testenv_extras,
+			]
+
+	for var in metadata_vars:
+		config_vars[var.__name__] = var.get(raw_config_vars)
+
+	# Packaging
+	extras_require, additional_requirements_files = parse_extras(raw_config_vars, repo_path)
+	config_vars["extras_require"] = extras_require
+	config_vars["additional_requirements_files"] = additional_requirements_files
+
+	# Python Versions
+	config_vars["min_py_version"] = min_py_version = min(config_vars["python_versions"])
+	if config_vars["python_deploy_version"] < min_py_version:
+		config_vars["python_deploy_version"] = min_py_version
+
+	# Tox
+	tox_py_versions = get_tox_python_versions(config_vars["python_versions"])
+	config_vars["tox_py_versions"] = tox_py_versions
+	tox_travis_versions = get_tox_travis_python_versions(config_vars["python_versions"], tox_py_versions)
+	gh_actions_versions = get_gh_actions_python_versions(config_vars["python_versions"], tox_py_versions)
+
+	# Travis
+	tox_travis_versions[config_vars["python_deploy_version"]] += ", mypy"
+	config_vars["tox_travis_versions"] = tox_travis_versions
+	config_vars["gh_actions_versions"] = gh_actions_versions
+
+	travis_vars: List[Type[ConfigVar]] = [
+			travis_site,
+			travis_pypi_secure,
+			travis_extra_install_pre,
+			travis_extra_install_post,
+			travis_additional_requirements,
+			travis_ubuntu_version,
+			]
+
+	for var in travis_vars:
+		config_vars[var.__name__] = var.get(raw_config_vars)
+
+	other_vars: List[Type[ConfigVar]] = [
+			# Conda & Anaconda
+			enable_conda,
+			conda_channels,
+			conda_description,
+
+  # Other
+			tests_dir,
+			additional_ignore,
+			yapf_exclude,
+			exclude_files,
+			pkginfo_extra,
+			]
+
+	for var in other_vars:
+		config_vars[var.__name__] = var.get(raw_config_vars)
+
+	def add_classifier(classifier):
+		if classifier not in config_vars["classifiers"]:
+			config_vars["classifiers"].append(classifier)
+
+	if (repo_path / config_vars["import_name"].replace(".", "/") / "py.typed").is_file():
+		add_classifier("Typing :: Typed")
+
+	return config_vars
+
+
+def get_tox_python_versions(python_versions: Iterable[str]) -> List[str]:
+	"""
+	Prepares the list of Python versions to use as tox testenv names.
+
+	:param python_versions: List of Python versions to run tests for.
+	"""
+
+	tox_py_versions = []
+
+	for py_version in python_versions:
+		py_version = str(py_version).replace(".", '')
+		if not py_version.startswith("py"):
+			py_version = f"py{py_version}"
+		tox_py_versions.append(py_version)
+
+	return tox_py_versions
+
+
+def get_tox_travis_python_versions(
+		python_versions: Iterable[str],
+		tox_py_versions: Iterable[str],
+		) -> Dict[str, str]:
+	"""
+	Prepares the mapping of Python versions to tox testenvs for use with Travis.
+
+	:param python_versions: List of Python versions to run tests for.
+	:param tox_py_versions: The list of tox testenvs for the Python versions.
+	"""
+
+	tox_travis_matrix: Dict[str, str] = {}
+
+	for py_version, tox_py_version in zip(python_versions, tox_py_versions):
+		tox_travis_matrix[str(py_version)] = f"{tox_py_version}, build"
+
+	return tox_travis_matrix
+
+
+def get_gh_actions_python_versions(
+		python_versions: Iterable[str],
+		tox_py_versions: Iterable[str],
+		) -> Dict[str, str]:
+	"""
+	Prepares the mapping of Python versions to tox testenvs for use with GitHub actions.
+
+	:param python_versions: List of Python versions to run tests for.
+	:param tox_py_versions: The list of tox testenvs for the Python versions.
+	"""
+
+	tox_travis_matrix: Dict[str, str] = {}
+
+	for py_version, tox_py_version in zip(python_versions, tox_py_versions):
+		if tox_py_version != "docs":
+			tox_travis_matrix[str(py_version)] = f"{tox_py_version}, build"
+
+	return tox_travis_matrix
+
+
+def dump_schema() -> Dict[str, Any]:
+	"""
+	Dump the schema for ``repo_helper.yml`` to ``repo_helper/repo_helper_schema.json``
+	and return the schema as a dictionary.
+
+	:rtype: str
+	"""
+
+	schema = make_schema(*[globals()[x] for x in all_values])
+
+	with importlib_resources.path(repo_helper, "repo_helper_schema.json") as schema_file:
+		pathlib.Path(schema_file).write_text(json.dumps(schema, indent=2))
+
+	return schema
+
+
+def get_version_classifiers(python_versions: Iterable[str]) -> List[str]:
+	"""
+	Returns `Trove Classifiers <https://pypi.org/classifiers/>`_ for the supported Python versions and implementations.
+
+	:param python_versions: Iterable of supported Python versions.
+
+	:return: List of `Trove Classifiers <https://pypi.org/classifiers/>`_
+	"""
+
+	version_classifiers = []
+
+	for py_version in python_versions:
+		if str(py_version).startswith("3"):
+			py_version = py_version.replace("-dev", '')
+			for classifier in (
+					f'Programming Language :: Python :: {py_version}',
+					"Programming Language :: Python :: Implementation :: CPython",
+					):
+				version_classifiers.append(classifier)
+
+		elif py_version.lower().startswith("pypy"):
+			classifier = "Programming Language :: Python :: Implementation :: PyPy"
+			version_classifiers.append(classifier)
+
+	version_classifiers.append('Programming Language :: Python')
+	version_classifiers.append('Programming Language :: Python :: 3 :: Only')
+
+	return version_classifiers
+
+
+def parse_extras(raw_config_vars: Dict[str, Any], repo_path: pathlib.Path) -> Tuple[Dict, List[str]]:
+	"""
+	Returns parsed ``setuptools`` ``extras_require``.
+
+	:param raw_config_vars: Dictionary to obtain the value from.
+	:param repo_path: The path to the repository.
+
+	:return:
+	"""
+
+	additional_requirements_files = raw_config_vars.get("additional_requirements_files", [])
+
+	extras_require = raw_config_vars.get("extras_require", {})
+
+	all_extras = []
+
+	for extra, requires in extras_require.items():
+		if isinstance(requires, str):
+			if (repo_path / requires).is_file():
+				# a path to the requirements file from the repo root
+				extras_require[extra] = [
+						x for x in (repo_path / requires).read_text(encoding="UTF-8").split("\n") if x
+						]
+				if requires not in additional_requirements_files:
+					additional_requirements_files.append(requires)
+			else:
+				# A single requirement
+				extras_require[extra] = [requires]
+
+		all_extras += [x.replace(" ", '') for x in extras_require[extra]]
+
+	all_extras = sorted(set(all_extras))
+
+	extras_require["all"] = all_extras
+
+	return extras_require, additional_requirements_files
+
+
+
+class mypy_plugins(ConfigVar):  # noqa
+	"""
+	A list of plugins to enable for mypy.
+
+	Example:
+
+	.. code-block:: yaml
+
+		mypy_plugins:
+		  - /one/plugin.py
+		  - other.plugin
+		  - custom_plugin:custom_entry_point
+
+	See https://mypy.readthedocs.io/en/stable/extending_mypy.html#extending-mypy-using-plugins for more info.
+	"""
+
+	dtype = List[str]
+	default: List[str] = []
+	category: str = "other"
