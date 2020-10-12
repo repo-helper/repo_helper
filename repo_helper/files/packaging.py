@@ -34,12 +34,11 @@ import importlib_resources
 import jinja2
 import tomlkit  # type: ignore
 from domdf_python_tools.paths import PathPlus, clean_writer
-import repo_helper.files
-import repo_helper.files
 from packaging.requirements import InvalidRequirement, Requirement
 from packaging.specifiers import Specifier, SpecifierSet
 
 # this package
+import repo_helper.files
 from repo_helper.configupdater2 import ConfigUpdater
 from repo_helper.files import management
 from repo_helper.utils import indent_with_tab, reformat_file
@@ -314,7 +313,7 @@ def make_setup(repo_path: pathlib.Path, templates: jinja2.Environment) -> List[s
 	setup_file.write_clean(setup.render(additional_setup_args="\n".join(f"\t\t{k}={v}," for k, v in setup_args)))
 
 	with importlib_resources.path(repo_helper.files, ".isort.cfg") as isort_config:
-		yapf_style = PathPlus(isort_config).parent.parent / "templates"  / "style.yapf"
+		yapf_style = PathPlus(isort_config).parent.parent / "templates" / "style.yapf"
 		reformat_file(setup_file, yapf_style=str(yapf_style), isort_config_file=str(isort_config))
 
 	return ["setup.py"]
@@ -394,6 +393,9 @@ Source_Code = https://github.com/{username}/{repo_name}""".format(**templates.gl
 	data["mypy"]["python_version"] = templates.globals["min_py_version"]
 	data["mypy"]["namespace_packages"] = True
 	data["mypy"]["check_untyped_defs"] = True
+	if templates.globals["mypy_plugins"]:
+		data["mypy"]["plugins"] = ", ".join(templates.globals["mypy_plugins"])
+
 
 	if setup_cfg_file.is_file():
 		existing_config = ConfigUpdater()

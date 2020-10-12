@@ -321,6 +321,12 @@
         "boolean",
         "string"
       ]
+    },
+    "mypy_plugins": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
     }
   },
   "required": [
