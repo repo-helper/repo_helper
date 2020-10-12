@@ -28,7 +28,7 @@ import sys
 
 # this package
 from repo_helper.cli import cli
-from repo_helper.wizard import wizard
+from repo_helper.cli.wizard import wizard
 
 __all__ = ["main"]
 

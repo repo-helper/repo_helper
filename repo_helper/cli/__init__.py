@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 #
-#  cli.py
+#  __init__.py
 """
 Core CLI tools
 """
@@ -24,28 +24,16 @@ Core CLI tools
 #
 
 # stdlib
-import os
-import pathlib
 import textwrap
 from functools import partial
-from typing import Iterable, Optional, Union
 
 # 3rd party
 import click
-import pre_commit.main  # type: ignore
 from domdf_python_tools.paths import PathPlus
-from dulwich import porcelain, repo  # type: ignore
-from dulwich.errors import CommitError  # type: ignore
-
-__all__ = ["get_env_vars", "cli", "commit_changed_files", "init", "run"]
-
-CONTEXT_SETTINGS = dict(help_option_names=['-h', '--help'], max_content_width=120)
-click_command = partial(click.command, context_settings=CONTEXT_SETTINGS)
-click_group = partial(click.group, context_settings=CONTEXT_SETTINGS)
+from repo_helper.cli.utils import commit_changed_files, get_env_vars, CONTEXT_SETTINGS, click_command, click_group
 
 
-def get_env_vars(ctx, args, incomplete):
-	return [k for k in os.environ.keys() if incomplete in k]
+__all__ = ["cli", "init", "run"]
 
 
 @click_group(invoke_without_command=True)
@@ -98,75 +86,6 @@ def cli(ctx, force, commit, message):
 
 
 cli_command = partial(cli.command, context_settings=CONTEXT_SETTINGS)
-
-
-def commit_changed_files(
-		repo_path: Union[str, pathlib.Path],
-		managed_files: Iterable[str],
-		commit: Optional[bool] = None,
-		message: bytes = b"Updated files with 'repo_helper'.",
-		enable_pre_commit: bool = True,
-		) -> None:
-	"""
-	Stage and commit any files that have been updated, added or removed.
-
-	:param repo_path: The path to the repository root.
-	:param managed_files: List of files managed by ``repo_helper``.
-	:param commit: Whether to commit the changes automatically.
-		:py:obj:`None` (default) indicates the user should be asked.
-	:param message: The commit message to use. Default ``"Updated files with 'repo_helper'."``
-	:param enable_pre_commit: Whether to install and configure pre-commit. Default :py:obj`True`.
-	"""
-
-	# print(repo_path)
-	if not isinstance(repo_path, pathlib.Path):
-		repo_path = pathlib.Path(repo_path)
-
-	repo_path = repo_path.absolute()
-
-	r = repo.Repo(str(repo_path))
-
-	status = porcelain.status(r)
-	unstaged_changes = status.unstaged
-	untracked_files = status.untracked
-
-	staged_files = []
-
-	for filename in managed_files:
-		if filename.encode("UTF-8") in unstaged_changes or filename in untracked_files:
-			r.stage(filename)
-			staged_files.append(filename)
-
-	# Ensure pre-commit hooks are installed
-	if enable_pre_commit:
-		last_wd = os.getcwd()
-		os.chdir(str(repo_path))
-		pre_commit.main.main(["install"])
-		os.chdir(last_wd)
-
-	if staged_files:
-		click.echo("\nThe following files will be committed:")
-		for filename in staged_files:
-			click.echo(f"  {filename}")
-
-		if commit is None:
-			commit = click.confirm('Commit?', default=True)
-
-		if commit:
-
-			# Ensure the working directory for pre-commit is correct
-			r.hooks["pre-commit"].cwd = str(repo_path.absolute())
-
-			try:
-				commit_id = r.do_commit(message=message)
-				click.echo(f"Committed as {commit_id.decode('UTF-8')}")
-			except CommitError as e:
-				click.echo(f"Unable to commit: {e}", err=True)
-
-		else:
-			click.echo("Changed files were staged but not committed.")
-	else:
-		click.echo("Nothing to commit")
 
 
 @click.option(
@@ -256,18 +175,14 @@ The error was:
 			pass
 		else:
 			click.echo(f"{Fore.RED}Git working directory is not clean:", err=True)
-			# stderr_writer(f"{Fore.RED}Git working directory is not clean:")
 
 			for line in lines:
 				click.echo(f"  {line}", err=True)
-			# stderr_writer(f"  {line}")
 
 			click.echo(Fore.RESET, err=True)
-			# stderr_writer(Fore.RESET)
 
 			if force:
 				click.echo(f"{Fore.RED}Proceeding anyway{Fore.RESET}", err=True)
-			# stderr_writer(f"{Fore.RED}Proceeding anyway{Fore.RESET}")
 			else:
 				return 1
 
@@ -289,7 +204,6 @@ The error was:
 	except CommitError as e:
 		indented_error = "\n".join(f"\t{line}" for line in textwrap.wrap(str(e)))
 		click.echo(f"Unable to commit changes. The error was:\n\n{indented_error}", err=True)
-		# stderr_writer(f"Unable to commit changes. The error was:\n\n{indented_error}")
 		return 1
 
 	return 0
