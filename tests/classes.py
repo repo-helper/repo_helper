@@ -25,9 +25,7 @@ from typing import Any, Dict, List, Type
 
 # 3rd party
 import pytest
-
-# this package
-from repo_helper.config_vars import ConfigVar
+from configconfig.configvar import ConfigVar
 
 test_list_int = [1, 2, 3, 4]
 test_list_str = ['a', 'b', 'c', 'd']

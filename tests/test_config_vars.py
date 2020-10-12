@@ -26,9 +26,9 @@ from typing import Any, Dict, Type
 
 # 3rd party
 import pytest
+from configconfig.configvar import ConfigVar
 
 # this package
-from repo_helper.config_vars import ConfigVar
 from repo_helper.configuration import *
 from tests.classes import (
 		BoolFalseTest,

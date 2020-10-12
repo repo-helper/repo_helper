@@ -49,7 +49,7 @@ extensions = [
 	'sphinxcontrib.default_values',
 	'sphinxcontrib.toctree_plus',
 	'seed_intersphinx_mapping',
-	'autoconfig',
+	'configconfig.autoconfig',
 	]
 
 sphinxemoji_style = 'twemoji'

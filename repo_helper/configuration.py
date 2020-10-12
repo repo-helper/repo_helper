@@ -21,27 +21,22 @@
 #
 
 # stdlib
-import os
-from typing import Optional, Tuple, Union
-# stdlib
 import json
+import os
 import pathlib
-from typing import Any, Dict, Iterable, List, Type
+from typing import Any, Dict, Iterable, List, Optional, Tuple, Type, Union
 
-# 3rd party
-from ytools import validate
-
-# this package
-from repo_helper.config_vars import make_schema
 # 3rd party
 import importlib_resources
 import yaml
+from configconfig.configvar import ConfigVar
+from configconfig.utils import make_schema, optional_getter
 from packaging.version import Version
 from typing_extensions import Literal
+from ytools import validate
 
 # this package
 import repo_helper
-from repo_helper.config_vars import ConfigVar, optional_getter
 from repo_helper.utils import license_lookup, validate_classifiers
 
 __all__ = [
@@ -115,7 +110,6 @@ __all__ = [
 		"dump_schema",
 		"mypy_plugins",
 		]
-
 
 all_values = [
 		"author",
@@ -1733,7 +1727,6 @@ def parse_extras(raw_config_vars: Dict[str, Any], repo_path: pathlib.Path) -> Tu
 	extras_require["all"] = all_extras
 
 	return extras_require, additional_requirements_files
-
 
 
 class mypy_plugins(ConfigVar):  # noqa

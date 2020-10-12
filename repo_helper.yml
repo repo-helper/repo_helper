@@ -45,7 +45,7 @@ classifiers:
   - 'Topic :: Utilities'
 
 extra_sphinx_extensions:
-  - autoconfig
+  - configconfig.autoconfig
 
 intersphinx_mapping:
   - "'jinja2': ('https://jinja.palletsprojects.com/en/2.11.x/', None)"
