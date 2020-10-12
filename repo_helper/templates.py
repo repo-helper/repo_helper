@@ -2,8 +2,8 @@
 #
 #  templates.py
 """
-Contains the :class:`pathlib.Path` objects representing the templates directory (``template_dir``),
-and the directory representing the files used to initialise a new repository (``init_repo_template_dir``).
+Contains the :class:`pathlib.Path` objects representing the templates directory (:data:`template_dir`),
+and the directory representing the files used to initialise a new repository (:data:`init_repo_template_dir`).
 """
 #
 #  Copyright © 2020 Dominic Davis-Foster <dominic@davis-foster.co.uk>
@@ -29,5 +29,8 @@ import pathlib
 
 __all__ = ["template_dir", "init_repo_template_dir"]
 
+#: The templates directory.
 template_dir = (pathlib.Path(__file__).parent / "templates").absolute()
+
+#: The directory representing the files used to initialise a new repository
 init_repo_template_dir = (pathlib.Path(__file__).parent / "init_repo_files").absolute()

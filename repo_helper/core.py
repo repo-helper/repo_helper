@@ -70,6 +70,10 @@ def is_registered(obj: Any) -> bool:
 
 
 def import_registered_functions() -> List[Type]:
+	"""
+	Returns a list of all registered functions.
+	"""
+
 	return discover(repo_helper.files, is_registered)
 
 
