@@ -30,16 +30,17 @@ from pytest_regressions.file_regression import FileRegressionFixture  # type: ig
 
 # this package
 from repo_helper.files.docs import (
-	copy_docs_styling, ensure_doc_requirements,
-	make_404_page,
-	make_alabaster_theming,
-	make_conf,
-	make_docs_source_rst,
-	make_docutils_conf,
-	make_readthedocs_theming,
-	make_rtfd,
-	remove_autodoc_augment_defaults,
-	)
+		copy_docs_styling,
+		ensure_doc_requirements,
+		make_404_page,
+		make_alabaster_theming,
+		make_conf,
+		make_docs_source_rst,
+		make_docutils_conf,
+		make_readthedocs_theming,
+		make_rtfd,
+		remove_autodoc_augment_defaults
+		)
 from tests.common import check_file_output, check_file_regression
 
 
@@ -214,4 +215,3 @@ def test_copy_docs_styling(tmp_pathplus, demo_environment, file_regression, them
 	assert managed_files == ["doc-source/_static/style.css", "doc-source/_templates/layout.html"]
 	check_file_output(tmp_pathplus / managed_files[0], file_regression, "style.css")
 	check_file_output(tmp_pathplus / managed_files[1], file_regression, "layout.html")
-

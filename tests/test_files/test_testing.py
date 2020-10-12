@@ -125,7 +125,7 @@ def test_ensure_tests_requirements(demo_environment):
 				encoding="UTF-8"
 				) == """\
 coverage>=5.1
-coverage_pyver_pragma>=0.0.5
+coverage_pyver_pragma>=0.0.6
 pytest>=6.0.0
 pytest-cov>=2.8.1
 pytest-randomly>=3.3.1
@@ -142,7 +142,7 @@ pytest-timeout>=1.4.2
 				encoding="UTF-8"
 				) == """\
 coverage>=5.1
-coverage_pyver_pragma>=0.0.5
+coverage_pyver_pragma>=0.0.6
 lorem>=0.1.1
 pytest>=6.0.0
 pytest-cov>=2.8.1

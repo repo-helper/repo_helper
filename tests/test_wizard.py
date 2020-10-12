@@ -1,17 +1,16 @@
 # stdlib
 import re
-
-# 3rd party
 from typing import List
 
+# 3rd party
+from click.testing import CliRunner, Result
 from domdf_python_tools.paths import PathPlus
 from pytest_git import GitRepo
 
 # this package
 from repo_helper.utils import in_directory
-from repo_helper.wizard import wizard
+from repo_helper.cli.wizard import wizard
 from tests.common import check_file_output
-from click.testing import CliRunner, Result
 
 
 def test_wizard(git_repo: GitRepo, file_regression):
@@ -148,6 +147,7 @@ def test_wizard_git_config(git_repo: GitRepo, file_regression):
 def test_wizard_env_vars(git_repo: GitRepo, file_regression, monkeypatch):
 
 	# Monkeypatch dulwich so it doesn't try to use the global config.
+	# 3rd party
 	from dulwich.config import StackedConfig
 	monkeypatch.setattr(StackedConfig, "default_backends", lambda *args: [], raising=True)
 	monkeypatch.setenv("GIT_COMMITTER_NAME", "Guido")
@@ -181,6 +181,7 @@ def test_wizard_env_vars(git_repo: GitRepo, file_regression, monkeypatch):
 def test_wizard_not_git(tmp_pathplus, file_regression, monkeypatch):
 
 	# Monkeypatch dulwich so it doesn't try to use the global config.
+	# 3rd party
 	from dulwich.config import StackedConfig
 	monkeypatch.setattr(StackedConfig, "default_backends", lambda *args: [], raising=True)
 	monkeypatch.setenv("GIT_COMMITTER_NAME", "Guido")
