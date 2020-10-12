@@ -24,158 +24,96 @@
 import json
 import os
 import pathlib
-from typing import Any, Dict, Iterable, List, Optional, Tuple, Type, Union
+from typing import Any, Dict, Iterable, List, Mapping, MutableMapping, Optional, Tuple, Type, Union
 
 # 3rd party
 import importlib_resources
-import yaml
 from configconfig.configvar import ConfigVar
+from configconfig.parser import Parser
 from configconfig.utils import make_schema, optional_getter
+from domdf_python_tools.paths import PathPlus
 from packaging.version import Version
 from typing_extensions import Literal
-from ytools import validate
 
 # this package
 import repo_helper
 from repo_helper.utils import license_lookup, validate_classifiers
 
 __all__ = [
-		"author",
-		"email",
-		"username",
-		"modname",
-		"version",
-		"copyright_years",
-		"repo_name",
-		"pypi_name",
-		"import_name",
-		"classifiers",
-		"keywords",
-		"license",
-		"short_desc",
-		"source_dir",
-		"enable_tests",
-		"enable_releases",
-		"enable_pre_commit",
-		"docker_shields",
-		"docker_name",
-		"python_deploy_version",
-		"python_versions",
-		"manifest_additional",
-		"py_modules",
-		"console_scripts",
-		"additional_setup_args",
-		"extras_require",
+		"RepoHelperParser",
+		"additional_ignore",
 		"additional_requirements_files",
-		"setup_pre",
-		"platforms",
-		"rtfd_author",
-		"preserve_custom_theme",
-		"sphinx_html_theme",
-		"extra_sphinx_extensions",
-		"intersphinx_mapping",
-		"sphinx_conf_preamble",
-		"sphinx_conf_epilogue",
-		"html_theme_options",
-		"html_context",
-		"enable_docs",
-		"docs_dir",
-		"tox_requirements",
-		"tox_build_requirements",
-		"tox_testenv_extras",
-		"travis_site",
-		"travis_ubuntu_version",
-		"travis_extra_install_pre",
-		"travis_extra_install_post",
-		"travis_pypi_secure",
-		"travis_additional_requirements",
-		"enable_conda",
-		"enable_conda",
+		"additional_setup_args",
+		"author",
+		"classifiers",
 		"conda_channels",
 		"conda_description",
-		"additional_ignore",
-		"yapf_exclude",
-		"tests_dir",
-		"pkginfo_extra",
+		"console_scripts",
+		"copyright_years",
+		"default_python_versions",
+		"docker_name",
+		"docker_shields",
+		"docs_dir",
+		"dump_schema",
+		"email",
+		"enable_conda",
+		"enable_docs",
+		"enable_pre_commit",
+		"enable_releases",
+		"enable_tests",
 		"exclude_files",
-		"imgbot_ignore",
-		"mypy_deps",
-		"pure_python",
-		"stubs_package",
-		"on_pypi",
-		"parse_yaml",
+		"extra_sphinx_extensions",
+		"extras_require",
+		"get_gh_actions_python_versions",
 		"get_tox_python_versions",
 		"get_tox_travis_python_versions",
-		"get_gh_actions_python_versions",
-		"dump_schema",
-		"mypy_plugins",
-		]
-
-all_values = [
-		"author",
-		"email",
-		"username",
-		"modname",
-		"version",
-		"copyright_years",
-		"repo_name",
-		"pypi_name",
+		"get_version_classifiers",
+		"html_context",
+		"html_theme_options",
+		"imgbot_ignore",
 		"import_name",
-		"classifiers",
+		"intersphinx_mapping",
 		"keywords",
 		"license",
-		"short_desc",
-		"source_dir",
-		"enable_tests",
-		"enable_releases",
-		"enable_pre_commit",
-		"docker_shields",
-		"docker_name",
+		"manifest_additional",
+		"modname",
+		"mypy_deps",
+		"mypy_plugins",
+		"on_pypi",
+		"parse_additional_setup_args",
+		"parse_extras",
+		"parse_yaml",
+		"pkginfo_extra",
+		"platforms",
+		"preserve_custom_theme",
+		"pure_python",
+		"py_modules",
+		"pypi_name",
 		"python_deploy_version",
 		"python_versions",
-		"manifest_additional",
-		"py_modules",
-		"console_scripts",
-		"additional_setup_args",
-		"extras_require",
-		"additional_requirements_files",
-		"setup_pre",
-		"platforms",
+		"repo_name",
 		"rtfd_author",
-		"preserve_custom_theme",
-		"sphinx_html_theme",
-		"extra_sphinx_extensions",
-		"intersphinx_mapping",
-		"sphinx_conf_preamble",
+		"setup_pre",
+		"short_desc",
+		"source_dir",
 		"sphinx_conf_epilogue",
-		"html_theme_options",
-		"html_context",
-		"enable_docs",
-		"docs_dir",
-		"tox_requirements",
+		"sphinx_conf_preamble",
+		"sphinx_html_theme",
+		"stubs_package",
+		"tests_dir",
 		"tox_build_requirements",
+		"tox_requirements",
 		"tox_testenv_extras",
+		"travis_additional_requirements",
+		"travis_extra_install_post",
+		"travis_extra_install_pre",
+		"travis_pypi_secure",
 		"travis_site",
 		"travis_ubuntu_version",
-		"travis_extra_install_pre",
-		"travis_extra_install_post",
-		"travis_pypi_secure",
-		"travis_additional_requirements",
-		"enable_conda",
-		"enable_conda",
-		"conda_channels",
-		"conda_description",
-		"additional_ignore",
+		"username",
+		"validate_version",
+		"version",
 		"yapf_exclude",
-		"tests_dir",
-		"pkginfo_extra",
-		"exclude_files",
-		"imgbot_ignore",
-		"mypy_deps",
-		"pure_python",
-		"stubs_package",
-		"on_pypi",
-		"mypy_plugins",
 		]
 
 
@@ -1449,6 +1387,27 @@ class exclude_files(ConfigVar):  # noqa
 	default: List[str] = []
 
 
+class mypy_plugins(ConfigVar):  # noqa
+	"""
+	A list of plugins to enable for mypy.
+
+	Example:
+
+	.. code-block:: yaml
+
+		mypy_plugins:
+		  - /one/plugin.py
+		  - other.plugin
+		  - custom_plugin:custom_entry_point
+
+	See https://mypy.readthedocs.io/en/stable/extending_mypy.html#extending-mypy-using-plugins for more info.
+	"""
+
+	dtype = List[str]
+	default: List[str] = []
+	category: str = "other"
+
+
 def parse_yaml(repo_path: pathlib.Path) -> Dict:
 	"""
 	Parse configuration values from ``repo_helper.yml``.
@@ -1464,128 +1423,123 @@ def parse_yaml(repo_path: pathlib.Path) -> Dict:
 	if not (repo_path / "repo_helper.yml").is_file():
 		raise FileNotFoundError(f"'repo_helper.yml' not found in {repo_path}")
 
-	with importlib_resources.path(repo_helper, "repo_helper_schema.json") as schema:
-		validate(str(schema), [repo_path / "repo_helper.yml"])
-
-	config_vars = {}
-
-	# load user settings from repo_helper.yml
-	with (repo_path / "repo_helper.yml").open(encoding="UTF-8") as file:
-		raw_config_vars = yaml.safe_load(file)
-
-	# --------------------------------------
-
-	metadata_vars: List[Type[ConfigVar]] = [
-			author,
-			email,
-			username,
-			modname,
-			version,
-			copyright_years,
-			repo_name,
-			pypi_name,
-			import_name,
-			classifiers,
-			keywords,
-			license,
-			short_desc,
-			source_dir,
-			pure_python,
-			stubs_package,
-			on_pypi,
-			enable_tests,
-			enable_releases,
-			enable_pre_commit,
-			docker_shields,
-			docker_name,
-			manifest_additional,
-			py_modules,
-			console_scripts,
-			setup_pre,
-			additional_setup_args,
-			platforms,
-			rtfd_author,
-			preserve_custom_theme,
-			sphinx_html_theme,
-			extra_sphinx_extensions,
-			intersphinx_mapping,
-			sphinx_conf_preamble,
-			sphinx_conf_epilogue,
-			html_theme_options,
-			html_context,
-			enable_docs,
-			docs_dir,
-			imgbot_ignore,
-			mypy_deps,
-			mypy_plugins,
-			python_deploy_version,
-			python_versions,
-			tox_requirements,
-			tox_build_requirements,
-			tox_testenv_extras,
-			]
-
-	for var in metadata_vars:
-		config_vars[var.__name__] = var.get(raw_config_vars)
-
-	# Packaging
-	extras_require, additional_requirements_files = parse_extras(raw_config_vars, repo_path)
-	config_vars["extras_require"] = extras_require
-	config_vars["additional_requirements_files"] = additional_requirements_files
-
-	# Python Versions
-	config_vars["min_py_version"] = min_py_version = min(config_vars["python_versions"])
-	if config_vars["python_deploy_version"] < min_py_version:
-		config_vars["python_deploy_version"] = min_py_version
-
-	# Tox
-	tox_py_versions = get_tox_python_versions(config_vars["python_versions"])
-	config_vars["tox_py_versions"] = tox_py_versions
-	tox_travis_versions = get_tox_travis_python_versions(config_vars["python_versions"], tox_py_versions)
-	gh_actions_versions = get_gh_actions_python_versions(config_vars["python_versions"], tox_py_versions)
-
-	# Travis
-	tox_travis_versions[config_vars["python_deploy_version"]] += ", mypy"
-	config_vars["tox_travis_versions"] = tox_travis_versions
-	config_vars["gh_actions_versions"] = gh_actions_versions
-
-	travis_vars: List[Type[ConfigVar]] = [
-			travis_site,
-			travis_pypi_secure,
-			travis_extra_install_pre,
-			travis_extra_install_post,
-			travis_additional_requirements,
-			travis_ubuntu_version,
-			]
-
-	for var in travis_vars:
-		config_vars[var.__name__] = var.get(raw_config_vars)
-
-	other_vars: List[Type[ConfigVar]] = [
-			# Conda & Anaconda
-			enable_conda,
-			conda_channels,
-			conda_description,
-
-  # Other
-			tests_dir,
-			additional_ignore,
-			yapf_exclude,
-			exclude_files,
-			pkginfo_extra,
-			]
-
-	for var in other_vars:
-		config_vars[var.__name__] = var.get(raw_config_vars)
-
-	def add_classifier(classifier):
-		if classifier not in config_vars["classifiers"]:
-			config_vars["classifiers"].append(classifier)
-
-	if (repo_path / config_vars["import_name"].replace(".", "/") / "py.typed").is_file():
-		add_classifier("Typing :: Typed")
+	parser = RepoHelperParser(allow_unknown_keys=False)
+	config_vars = parser.run(repo_path / "repo_helper.yml")
 
 	return config_vars
+
+
+# ---------------------
+
+all_values = [
+		author,
+		email,
+		username,
+		modname,
+		version,
+		copyright_years,
+		repo_name,
+		pypi_name,
+		import_name,
+		classifiers,
+		keywords,
+		license,
+		short_desc,
+		source_dir,
+		enable_tests,
+		enable_releases,
+		enable_pre_commit,
+		docker_shields,
+		docker_name,
+		python_deploy_version,
+		python_versions,
+		manifest_additional,
+		py_modules,
+		console_scripts,
+		additional_setup_args,
+		extras_require,
+		additional_requirements_files,
+		setup_pre,
+		platforms,
+		rtfd_author,
+		preserve_custom_theme,
+		sphinx_html_theme,
+		extra_sphinx_extensions,
+		intersphinx_mapping,
+		sphinx_conf_preamble,
+		sphinx_conf_epilogue,
+		html_theme_options,
+		html_context,
+		enable_docs,
+		docs_dir,
+		tox_requirements,
+		tox_build_requirements,
+		tox_testenv_extras,
+		travis_site,
+		travis_ubuntu_version,
+		travis_extra_install_pre,
+		travis_extra_install_post,
+		travis_pypi_secure,
+		travis_additional_requirements,
+		enable_conda,
+		conda_channels,
+		conda_description,
+		additional_ignore,
+		yapf_exclude,
+		tests_dir,
+		pkginfo_extra,
+		exclude_files,
+		imgbot_ignore,
+		mypy_deps,
+		pure_python,
+		stubs_package,
+		on_pypi,
+		mypy_plugins,
+		]
+
+
+class RepoHelperParser(Parser):
+
+	config_vars = all_values
+
+	def custom_parsing(
+			self,
+			raw_config_vars: Mapping[str, Any],
+			parsed_config_vars: MutableMapping[str, Any],
+			filename: PathPlus,
+			):
+
+		repo_path = filename.parent
+
+		# Packaging
+		extras_require, additional_requirements_files = parse_extras(raw_config_vars, repo_path)
+		parsed_config_vars["extras_require"] = extras_require
+		parsed_config_vars["additional_requirements_files"] = additional_requirements_files
+
+		# Python Versions
+		parsed_config_vars["min_py_version"] = min_py_version = min(parsed_config_vars["python_versions"])
+		if parsed_config_vars["python_deploy_version"] < min_py_version:
+			parsed_config_vars["python_deploy_version"] = min_py_version
+
+		# Tox
+		tox_py_versions = get_tox_python_versions(parsed_config_vars["python_versions"])
+		parsed_config_vars["tox_py_versions"] = tox_py_versions
+		tox_travis_versions = get_tox_travis_python_versions(parsed_config_vars["python_versions"], tox_py_versions)
+		gh_actions_versions = get_gh_actions_python_versions(parsed_config_vars["python_versions"], tox_py_versions)
+
+		# Travis
+		tox_travis_versions[parsed_config_vars["python_deploy_version"]] += ", mypy"
+		parsed_config_vars["tox_travis_versions"] = tox_travis_versions
+		parsed_config_vars["gh_actions_versions"] = gh_actions_versions
+
+		def add_classifier(classifier):
+			if classifier not in parsed_config_vars["classifiers"]:
+				parsed_config_vars["classifiers"].append(classifier)
+
+		if (repo_path / parsed_config_vars["import_name"].replace(".", "/") / "py.typed").is_file():
+			add_classifier("Typing :: Typed")
+
+		return parsed_config_vars
 
 
 def get_tox_python_versions(python_versions: Iterable[str]) -> List[str]:
@@ -1653,7 +1607,7 @@ def dump_schema() -> Dict[str, Any]:
 	:rtype: str
 	"""
 
-	schema = make_schema(*[globals()[x] for x in all_values])
+	schema = make_schema(*all_values)
 
 	with importlib_resources.path(repo_helper, "repo_helper_schema.json") as schema_file:
 		pathlib.Path(schema_file).write_text(json.dumps(schema, indent=2))
@@ -1691,7 +1645,7 @@ def get_version_classifiers(python_versions: Iterable[str]) -> List[str]:
 	return version_classifiers
 
 
-def parse_extras(raw_config_vars: Dict[str, Any], repo_path: pathlib.Path) -> Tuple[Dict, List[str]]:
+def parse_extras(raw_config_vars: Mapping[str, Any], repo_path: pathlib.Path) -> Tuple[Dict, List[str]]:
 	"""
 	Returns parsed ``setuptools`` ``extras_require``.
 
@@ -1727,24 +1681,3 @@ def parse_extras(raw_config_vars: Dict[str, Any], repo_path: pathlib.Path) -> Tu
 	extras_require["all"] = all_extras
 
 	return extras_require, additional_requirements_files
-
-
-class mypy_plugins(ConfigVar):  # noqa
-	"""
-	A list of plugins to enable for mypy.
-
-	Example:
-
-	.. code-block:: yaml
-
-		mypy_plugins:
-		  - /one/plugin.py
-		  - other.plugin
-		  - custom_plugin:custom_entry_point
-
-	See https://mypy.readthedocs.io/en/stable/extending_mypy.html#extending-mypy-using-plugins for more info.
-	"""
-
-	dtype = List[str]
-	default: List[str] = []
-	category: str = "other"
