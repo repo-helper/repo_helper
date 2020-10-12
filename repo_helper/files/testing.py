@@ -145,7 +145,7 @@ class ToxConfig:
 		Compile the list of mypy dependencies
 		"""
 
-		mypy_deps = ["mypy==0.782", "lxml"]
+		mypy_deps = ["mypy==0.790", "lxml"]
 
 		if self._globals["enable_tests"]:
 			mypy_deps.append(f"-r{{toxinidir}}/{self._globals['tests_dir']}/requirements.txt")
@@ -444,7 +444,6 @@ class ToxConfig:
 		"""
 
 		self._ini["coverage:report"]["exclude_lines"] = indent_join([
-				r"(pragma|PRAGMA)[:\s]?\s*(no|NO)\s*(cover|COVER)",
 				"raise AssertionError",
 				"raise NotImplementedError",
 				"if 0:",
@@ -642,7 +641,7 @@ def ensure_tests_requirements(repo_path: pathlib.Path, templates: jinja2.Environ
 			}
 
 	if templates.globals["pypi_name"] != "coverage_pyver_pragma":
-		target_requirements.add(Requirement("coverage_pyver_pragma>=0.0.5"))
+		target_requirements.add(Requirement("coverage_pyver_pragma>=0.0.6"))
 
 	_target_requirement_names: List[str] = [r.name.casefold() for r in target_requirements]
 	_target_requirement_names += [r.replace("-", "_").casefold() for r in _target_requirement_names]

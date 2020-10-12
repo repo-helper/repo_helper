@@ -36,6 +36,7 @@ from typing import Any, Callable, Iterable, List, MutableMapping, Optional, Set,
 # 3rd party
 import isort
 import trove_classifiers  # type: ignore
+import yapf_isort
 from domdf_python_tools.paths import PathPlus
 from domdf_python_tools.stringlist import StringList
 from domdf_python_tools.terminal_colours import Fore
@@ -44,10 +45,9 @@ from domdf_python_tools.utils import stderr_writer
 from packaging.requirements import InvalidRequirement, Requirement
 from typing_extensions import Literal
 from typing_inspect import get_origin  # type: ignore
-import yapf_isort
-
 
 __all__ = [
+		"in_directory",
 		"check_git_status",
 		"validate_classifiers",
 		"license_lookup",
@@ -59,6 +59,7 @@ __all__ = [
 		"pformat_tabs",
 		"normalize",
 		"read_requirements",
+		"reformat_file",
 		]
 
 
@@ -81,7 +82,7 @@ def in_directory(directory: PathLike):
 
 def check_git_status(repo_path: PathLike) -> Tuple[bool, List[str]]:
 	"""
-	Check the ``git`` status of the given repository
+	Check the ``git`` status of the given repository.
 
 	:param repo_path: Path to the repository root.
 
@@ -96,9 +97,7 @@ def check_git_status(repo_path: PathLike) -> Tuple[bool, List[str]]:
 				if not line.strip().startswith(b"??")
 				]
 
-	# print(lines)
 	str_lines = [line.decode("UTF-8") for line in lines]
-
 	return not bool(str_lines), str_lines
 
 
@@ -284,7 +283,7 @@ GenericAliasType = type(List)
 
 def check_union(obj: Any, dtype: Union[GenericAliasType, UnionType]):  # type: ignore
 	r"""
-	Check if the type of ``obj`` is one of the types in a :class:`typing.Union` or a :class:`typing.List``.
+	Check if the type of ``obj`` is one of the types in a :class:`typing.Union` or a :class:`typing.List`.
 
 	:param obj:
 	:param dtype:
@@ -329,14 +328,14 @@ def get_json_type(type_):
 
 
 def indent_with_tab(text: str, depth: int = 1, predicate: Optional[Callable[[str], bool]] = None) -> str:
-	"""
+	r"""
 	Adds ``'\t'`` to the beginning of selected lines in 'text'.
 
 	:param text: The text to indent.
 	:param depth: The depth of the indentation.
-	:param predicate: If given, ``'\t'``  will only be added to the lines where ``predicate(line)`` is True.
-		If ``predicate`` is not provided, it will default to adding ``'\t'``  to all non-empty lines
-		that do not consist solely of whitespace characters.
+	:param predicate: If given, ``'\t'``  will only be added to the lines where ``predicate(line)``
+		is :py:obj`True`. If ``predicate`` is not provided, it will default to adding ``'\t'``
+		to all non-empty lines that do not consist solely of whitespace characters.
 	"""
 
 	return textwrap.indent(text, "\t" * depth, predicate=predicate)
@@ -360,7 +359,7 @@ class FancyPrinter(PrettyPrinter):
 
 
 def pformat_tabs(
-		object: object,
+		obj: object,
 		width: int = 80,
 		depth: Optional[int] = None,
 		*,
@@ -368,13 +367,19 @@ def pformat_tabs(
 		) -> str:
 	"""
 	Format a Python object into a pretty-printed representation.
+
 	Indentation is set at one tab.
+
+	:param obj: The object to format.
+	:param width: The maximum width of the output.
+	:param depth:
+	:param compact:
 	"""
 
 	prettyprinter = FancyPrinter(indent=4, width=width, depth=depth, compact=compact)
 
 	buf = StringList()
-	for line in prettyprinter.pformat(object).splitlines():
+	for line in prettyprinter.pformat(obj).splitlines():
 		buf.append(re.sub("^ {4}", r"\t", line))
 
 	return str(buf)
@@ -389,7 +394,7 @@ def normalize(name: str) -> str:
 
 	From :pep:`503` (public domain).
 
-	:param name: The project name
+	:param name: The project name.
 	"""
 
 	return _normalize_pattern.sub("-", name).lower()
