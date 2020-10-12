@@ -3,5 +3,4 @@
 **************************
 
 .. automodule:: repo_helper.core
-	:members:
-	:autosummary:
+	:no-show-inheritance:

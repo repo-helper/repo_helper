@@ -114,12 +114,10 @@ Installation
 
 .. toctree::
 	:maxdepth: 6
-	:caption: Documentation
 
 	config/index
 	api/index
-	contributing
-	Source
+	contributor-guide
 
 
 .. start links

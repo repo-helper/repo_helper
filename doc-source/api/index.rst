@@ -1,6 +1,6 @@
-================
-API Reference
-================
+============
+Public API
+============
 
 .. toctree::
 	:caption: Modules
