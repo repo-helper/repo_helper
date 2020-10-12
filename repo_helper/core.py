@@ -85,9 +85,14 @@ class RepoHelper:
 	Repo Helper: Manage configuration files with ease.
 
 	:param target_repo: The path to the root of the repository to manage files for.
+	:param managed_message: Message placed at the top of files to indicate that they are managed by ``repo_helper``.
 	"""
 
-	def __init__(self, target_repo: Union[str, pathlib.Path, os.PathLike]):
+	def __init__(
+			self,
+			target_repo: Union[str, pathlib.Path, os.PathLike],
+			managed_message="This file is managed by 'repo_helper'. Don't edit it directly."
+			):
 		self.target_repo = pathlib.Path(target_repo)
 		self.templates = jinja2.Environment(
 				loader=jinja2.FileSystemLoader(str(template_dir)),
@@ -98,6 +103,24 @@ class RepoHelper:
 		self.files: List[Tuple[Callable, str, Sequence[str]]] = management + [
 				(make_isort, "isort", []),  # Must always run last
 				]
+
+		self.templates.globals["managed_message"] = managed_message
+
+	@property
+	def managed_message(self) -> str:
+		"""
+		Message placed at the top of files to indicate that they are managed by ``repo_helper``.
+		"""
+
+		return self.templates.globals["managed_message"]
+
+	@managed_message.setter
+	def managed_message(self, value: str) -> None:
+		"""
+		Message placed at the top of files to indicate that they are managed by ``repo_helper``.
+		"""
+
+		self.templates.globals["managed_message"] = str(value)
 
 	def load_settings(self) -> None:
 		"""
