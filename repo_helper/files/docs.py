@@ -34,6 +34,7 @@ from typing import Dict, List, Sequence, Set, Union
 
 # 3rd party
 import cssutils  # type: ignore
+import importlib_resources
 import jinja2
 from cssutils import css  # type: ignore
 from domdf_python_tools.paths import PathPlus, clean_writer
@@ -41,6 +42,7 @@ from domdf_python_tools.utils import enquote_value
 from packaging.requirements import Requirement
 
 # this package
+import repo_helper
 from repo_helper.blocks import (
 		create_docs_install_block,
 		create_docs_links_block,
@@ -54,7 +56,7 @@ from repo_helper.blocks import (
 		)
 from repo_helper.files import management
 from repo_helper.templates import init_repo_template_dir, template_dir
-from repo_helper.utils import normalize, pformat_tabs, read_requirements
+from repo_helper.utils import normalize, pformat_tabs, read_requirements, reformat_file
 
 __all__ = [
 		"ensure_doc_requirements",
@@ -311,11 +313,17 @@ def make_conf(repo_path: pathlib.Path, templates: jinja2.Environment) -> List[st
 
 	sphinx_extensions.extend(templates.globals["extra_sphinx_extensions"])
 
-	conf_file.write_clean(conf.render(
-			sphinx_extensions=sphinx_extensions,
-			pformat=pformat_tabs,
-			enquote_value=enquote_value,
-			))
+	conf_file.write_clean(
+			conf.render(
+					sphinx_extensions=sphinx_extensions,
+					pformat=pformat_tabs,
+					enquote_value=enquote_value,
+					)
+			)
+
+	with importlib_resources.path(repo_helper.files, ".isort.cfg") as isort_config:
+		yapf_style = PathPlus(isort_config).parent.parent / "templates" / "style.yapf"
+		reformat_file(conf_file, yapf_style=str(yapf_style), isort_config_file=str(isort_config))
 
 	return [str(conf_file.relative_to(repo_path))]
 
@@ -511,8 +519,9 @@ def copy_docs_styling(repo_path: pathlib.Path, templates: jinja2.Environment) ->
 	:type templates: jinja2.Environment
 	"""
 
-	dest__static_dir = PathPlus(repo_path / templates.globals["docs_dir"] / "_static")
-	dest__templates_dir = PathPlus(repo_path / templates.globals["docs_dir"] / "_templates")
+	docs_dir = PathPlus(repo_path / templates.globals["docs_dir"])
+	dest__static_dir = docs_dir / "_static"
+	dest__templates_dir = docs_dir / "_templates"
 
 	for directory in {dest__static_dir, dest__templates_dir}:
 		directory.maybe_make(parents=True)
@@ -537,18 +546,18 @@ def copy_docs_styling(repo_path: pathlib.Path, templates: jinja2.Environment) ->
 	else:
 		PathPlus(dest__static_dir / "style.css").write_clean('')
 
-	PathPlus(dest__templates_dir / "layout.html").write_clean(
-			"""<!--- This file is managed by 'repo_helper'. Don't edit it directly. --->
-{% extends "!layout.html" %}
-{% block extrahead %}
-	<link href="{{ pathto("_static/style.css", True) }}" rel="stylesheet" type="text/css">
-{% endblock %}
-"""
-			)
+	PathPlus(dest__templates_dir / "layout.html").write_lines([
+			f"<!--- {templates.globals['managed_message']} --->",
+			'{% extends "!layout.html" %}',
+			'{% block extrahead %}',
+			'	<link href="{{ pathto("_static/style.css", True) }}" rel="stylesheet" type="text/css">',
+			"{% endblock %}",
+			''
+			])
 
 	return [
-			os.path.join(templates.globals["docs_dir"], "_static", "style.css"),
-			os.path.join(templates.globals["docs_dir"], "_templates", "layout.html"),
+			str((docs_dir / "_static" / "style.css").relative_to(repo_path)),
+			str((docs_dir / "_templates" / "layout.html").relative_to(repo_path)),
 			]
 
 
