@@ -61,12 +61,17 @@ from repo_helper.utils import normalize, pformat_tabs, read_requirements, reform
 __all__ = [
 		"ensure_doc_requirements",
 		"make_rtfd",
+		"make_docutils_conf",
 		"make_conf",
+		"StyleSheet",
+		"make_alabaster_theming",
+		"make_readthedocs_theming",
 		"copy_docs_styling",
 		"rewrite_docs_index",
 		"make_404_page",
 		"make_docs_source_rst",
-		"make_docutils_conf",
+		"make_style",
+		"remove_autodoc_augment_defaults",
 		]
 
 # Disable logging from cssutils

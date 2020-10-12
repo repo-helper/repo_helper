@@ -44,10 +44,14 @@ from repo_helper.files.linting import code_only_warning, lint_fix_list, lint_war
 from repo_helper.files.testing import make_isort
 
 # this package
+from .configuration import parse_yaml
 from .templates import template_dir
-from .yaml_parser import parse_yaml
 
-__all__ = ["RepoHelper"]
+__all__ = [
+		"RepoHelper",
+		"is_registered",
+		"import_registered_functions",
+		]
 
 
 def is_registered(obj: Any) -> bool:
@@ -104,23 +108,21 @@ class RepoHelper:
 		self.templates.globals["enquote_value"] = enquote_value
 		self.templates.globals["len"] = len
 		self.templates.globals["join_path"] = os.path.join
-		self.templates.globals["managed_message"
-								] = "This file is managed by 'repo_helper'. Don't edit it directly."
 
 	@property
-	def exclude_files(self) -> List[str]:
+	def exclude_files(self) -> Tuple[str]:
 		"""
-		:return: a list of excluded files that should **NOT** be managed by Git Helper.
+		A tuple of excluded files that should **NOT** be managed by Git Helper.
 		"""
 
-		return self.templates.globals["exclude_files"]
+		return tuple(self.templates.globals["exclude_files"])
 
 	@property
 	def repo_name(self) -> str:
 		"""
-		:return: the name of the repository being managed.
-		:rtype: str
+		The name of the repository being managed.
 		"""
+
 		return self.templates.globals["repo_name"]
 
 	def run(self) -> List[str]:
@@ -156,4 +158,5 @@ class RepoHelper:
 		return all_managed_files
 
 
+# Legacy alias
 GitHelper = RepoHelper

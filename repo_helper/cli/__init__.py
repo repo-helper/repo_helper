@@ -30,8 +30,9 @@ from functools import partial
 # 3rd party
 import click
 from domdf_python_tools.paths import PathPlus
-from repo_helper.cli.utils import commit_changed_files, get_env_vars, CONTEXT_SETTINGS, click_command, click_group
 
+# this package
+from repo_helper.cli.utils import CONTEXT_SETTINGS, click_command, click_group, commit_changed_files, get_env_vars
 
 __all__ = ["cli", "init", "run"]
 

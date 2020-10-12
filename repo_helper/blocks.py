@@ -25,15 +25,15 @@ Reusable blocks of reStructuredText.
 
 # stdlib
 import re
-from typing import Iterable, Optional, Sequence, Set, Union
+from typing import Iterable, Optional, Sequence, Union
 
 # 3rd party
 from jinja2 import BaseLoader, Environment, StrictUndefined, Template
 from typing_extensions import Literal
 
 # this package
-from repo_helper.shields import *
 from repo_helper._docs_shields import *
+from repo_helper.shields import *
 
 __all__ = [
 		"installation_regex",

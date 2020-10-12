@@ -27,8 +27,8 @@ import datetime
 import pytest
 
 # this package
-from repo_helper.shields import *
 from repo_helper._docs_shields import *
+from repo_helper.shields import *
 
 
 def test_make_rtfd_shield():
@@ -342,21 +342,15 @@ def test_make_coveralls_shield():
 
 
 def test_make_docs_coveralls_shield():
-	assert make_docs_coveralls_shield(
-			"hello-world", "octocat"
-			) == """\
+	assert make_docs_coveralls_shield("hello-world", "octocat") == """\
 .. coveralls-shield::
 	:alt: Coverage"""
 
-	assert make_docs_coveralls_shield(
-			"HELLO-WORLD", "octocat"
-			) == """\
+	assert make_docs_coveralls_shield("HELLO-WORLD", "octocat") == """\
 .. coveralls-shield::
 	:alt: Coverage"""
 
-	assert make_docs_coveralls_shield(
-			"hello_world", "octocat"
-			) == """\
+	assert make_docs_coveralls_shield("hello_world", "octocat") == """\
 .. coveralls-shield::
 	:alt: Coverage"""
 

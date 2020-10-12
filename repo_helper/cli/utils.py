@@ -35,6 +35,13 @@ import pre_commit.main  # type: ignore
 from dulwich import porcelain, repo  # type: ignore
 from dulwich.errors import CommitError  # type: ignore
 
+__all__ = [
+		"CONTEXT_SETTINGS",
+		"click_command",
+		"click_group",
+		"get_env_vars",
+		"commit_changed_files",
+		]
 
 CONTEXT_SETTINGS = dict(help_option_names=['-h', '--help'], max_content_width=120)
 click_command = partial(click.command, context_settings=CONTEXT_SETTINGS)

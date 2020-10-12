@@ -396,7 +396,6 @@ Source_Code = https://github.com/{username}/{repo_name}""".format(**templates.gl
 	if templates.globals["mypy_plugins"]:
 		data["mypy"]["plugins"] = ", ".join(templates.globals["mypy_plugins"])
 
-
 	if setup_cfg_file.is_file():
 		existing_config = ConfigUpdater()
 		existing_config.read(str(setup_cfg_file))

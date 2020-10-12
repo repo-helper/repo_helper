@@ -30,6 +30,16 @@ from typing import Union
 # 3rd party
 from typing_extensions import Literal
 
+# this package
+from repo_helper.shields import (
+		make_conda_platform_shield,
+		make_conda_version_shield,
+		make_docker_automated_build_shield,
+		make_docker_build_status_shield,
+		make_docker_size_shield,
+		make_typing_shield
+		)
+
 __all__ = [
 		"make_docs_rtfd_shield",
 		"make_docs_docs_check_shield",
@@ -56,11 +66,6 @@ __all__ = [
 		"make_docs_typing_shield",
 		"make_docs_pre_commit_shield",
 		]
-
-from repo_helper.shields import (
-	make_conda_platform_shield, make_conda_version_shield,
-	make_docker_automated_build_shield, make_docker_build_status_shield, make_docker_size_shield, make_typing_shield,
-	)
 
 
 def make_docs_rtfd_shield(repo_name: str) -> str:
