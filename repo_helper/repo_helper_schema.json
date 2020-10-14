@@ -223,6 +223,7 @@
     },
     "travis_ubuntu_version": {
       "enum": [
+        "focal",
         "bionic",
         "xenial",
         "trusty",

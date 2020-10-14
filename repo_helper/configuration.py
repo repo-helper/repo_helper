@@ -321,8 +321,8 @@ class import_name(ConfigVar):  # noqa
 
 			return cls.rtype(obj)
 
-	@staticmethod
-	def validator(name: str) -> str:
+	@classmethod
+	def validator(cls, name: str) -> str:
 		name = name.replace("-", "_")  # replace hyphens with underscores
 		name = name.replace("/", ".")
 		for part in name.split("."):
@@ -441,8 +441,8 @@ class license(ConfigVar):  # noqa  # pylint: disable=redefined-builtin
 	required = True
 	category: str = "metadata"
 
-	@staticmethod
-	def validator(value):
+	@classmethod
+	def validator(cls, value):
 		value = value.replace(" ", '')
 
 		if value in license_lookup:
@@ -536,8 +536,6 @@ class stubs_package(ConfigVar):  # noqa
 
 
 # Optional Features
-
-
 class enable_tests(ConfigVar):  # noqa
 	"""
 	Whether tests should be performed with pytest.
@@ -618,8 +616,6 @@ class docker_name(ConfigVar):  # noqa
 
 
 # Python Versions
-
-
 class python_deploy_version(ConfigVar):  # noqa
 	"""
 	The version of Python to use on Travis when deploying to PyPI, Anaconda and GitHub releases.
@@ -666,8 +662,6 @@ The lowest version of Python given above is used to set the minimum supported ve
 
 
 # Packaging
-
-
 class manifest_additional(ConfigVar):  # noqa
 	"""
 	A list of additional entries for ``MANIFEST.in``.
@@ -1524,8 +1518,12 @@ class RepoHelperParser(Parser):
 		# Tox
 		tox_py_versions = get_tox_python_versions(parsed_config_vars["python_versions"])
 		parsed_config_vars["tox_py_versions"] = tox_py_versions
-		tox_travis_versions = get_tox_travis_python_versions(parsed_config_vars["python_versions"], tox_py_versions)
-		gh_actions_versions = get_gh_actions_python_versions(parsed_config_vars["python_versions"], tox_py_versions)
+		tox_travis_versions = get_tox_travis_python_versions(
+				parsed_config_vars["python_versions"], tox_py_versions
+				)
+		gh_actions_versions = get_gh_actions_python_versions(
+				parsed_config_vars["python_versions"], tox_py_versions
+				)
 
 		# Travis
 		tox_travis_versions[parsed_config_vars["python_deploy_version"]] += ", mypy"
