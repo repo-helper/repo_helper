@@ -21,6 +21,7 @@
 #
 
 # 3rd party
+import pytest
 from pytest_regressions.file_regression import FileRegressionFixture  # type: ignore
 
 # this package
@@ -62,34 +63,16 @@ def test_dependabot(tmp_pathplus, demo_environment, file_regression: FileRegress
 	check_file_output(tmp_pathplus / managed_files[0], file_regression)
 
 
-def test_imgbot(tmpdir, demo_environment, file_regression: FileRegressionFixture):
-	tmpdir_p = pathlib.Path(tmpdir)
+@pytest.mark.parametrize(
+		"ignore",
+		[
+				pytest.param([], id="nothing"),
+				pytest.param(["ignore_dir/*", "**/wildcard_dir/*", "*.jpg"], id="something"),
+				]
+		)
+def test_imgbot(tmp_pathplus, demo_environment, file_regression: FileRegressionFixture, ignore):
+	demo_environment.globals["imgbot_ignore"] = ignore
 
-	managed_files = make_imgbot(tmpdir_p, demo_environment)
+	managed_files = make_imgbot(tmp_pathplus, demo_environment)
 	assert managed_files == [".imgbotconfig"]
-	assert (tmpdir_p / managed_files[0]).read_text(
-			encoding="UTF-8"
-			) == """\
-{
-    "schedule": "weekly",
-    "ignoredFiles": [
-        "**/*.svg"
-    ]
-}
-"""
-	demo_environment.globals["imgbot_ignore"] = ["ignore_dir/*", "**/wildcard_dir/*", "*.jpg"]
-	managed_files = make_imgbot(tmpdir_p, demo_environment)
-	assert managed_files == [".imgbotconfig"]
-	assert (tmpdir_p / managed_files[0]).read_text(
-			encoding="UTF-8"
-			) == """\
-{
-    "schedule": "weekly",
-    "ignoredFiles": [
-        "**/*.svg",
-        "ignore_dir/*",
-        "**/wildcard_dir/*",
-        "*.jpg"
-    ]
-}
-"""
+	check_file_output(tmp_pathplus / managed_files[0], file_regression, extension=".json")

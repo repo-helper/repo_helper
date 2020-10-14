@@ -1,0 +1,9 @@
+{
+    "schedule": "weekly",
+    "ignoredFiles": [
+        "**/*.svg",
+        "ignore_dir/*",
+        "**/wildcard_dir/*",
+        "*.jpg"
+    ]
+}
