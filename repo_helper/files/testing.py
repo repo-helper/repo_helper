@@ -638,6 +638,7 @@ def ensure_tests_requirements(repo_path: pathlib.Path, templates: jinja2.Environ
 			Requirement("pytest-cov>=2.8.1"),
 			Requirement("pytest-randomly>=3.3.1"),
 			Requirement("pytest-timeout>=1.4.2"),  # Requirement("pytest-rerunfailures>=9.0"),
+			Requirement("iniconfig!=1.1.0,>=1.0.1"),
 			}
 
 	if templates.globals["pypi_name"] != "coverage_pyver_pragma":
