@@ -30,6 +30,7 @@ from typing import List
 
 # 3rd party
 import jinja2
+import yaml
 from domdf_python_tools.paths import PathPlus
 
 # this package
@@ -128,20 +129,23 @@ def make_dependabot(repo_path: pathlib.Path, templates: jinja2.Environment) -> L
 	dependabot_dir = PathPlus(repo_path / ".dependabot")
 	dependabot_dir.maybe_make()
 
-	(dependabot_dir / "config.yml").write_clean(
-			f"""\
-# {templates.globals['managed_message']}
----
+	config = {
+			"version":
+					1,
+			"update_configs": [{
+					"package_manager": "python",
+					"directory": "/",
+					"update_schedule": "weekly",
+					"default_reviewers": [templates.globals['username']]
+					}]
+			}
 
-version: 1
-update_configs:
-  - package_manager: "python"
-    directory: "/"
-    update_schedule: "weekly"
-    default_reviewers:
-      - "{templates.globals['username']}"
-"""
-			)
+	(dependabot_dir / "config.yml").write_lines([
+			f"# {templates.globals['managed_message']}",
+			"---",
+			yaml.safe_dump(config),
+			'',
+			])
 
 	return [".dependabot/config.yml"]
 
