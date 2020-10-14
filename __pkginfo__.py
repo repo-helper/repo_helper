@@ -51,7 +51,7 @@ github_username = "domdfcoding"
 web = github_url = "https://github.com/domdfcoding/repo_helper"
 repo_root = pathlib.Path(__file__).parent
 install_requires = (repo_root / "requirements.txt").read_text(encoding="utf-8").split('\n')
-extras_require = {'all': []}
+extras_require = {'schema': ['lxml'], 'all': ['lxml']}
 
 
 
