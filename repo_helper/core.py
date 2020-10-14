@@ -33,7 +33,9 @@ from typing import Any, Callable, List, Sequence, Tuple, Type, Union
 # 3rd party
 import jinja2
 from domdf_python_tools.import_tools import discover
+from domdf_python_tools.paths import PathPlus
 from domdf_python_tools.terminal_colours import Back
+from domdf_python_tools.typing import PathLike
 from domdf_python_tools.utils import enquote_value
 
 # this package
@@ -90,10 +92,10 @@ class RepoHelper:
 
 	def __init__(
 			self,
-			target_repo: Union[str, pathlib.Path, os.PathLike],
+			target_repo: PathLike,
 			managed_message="This file is managed by 'repo_helper'. Don't edit it directly."
 			):
-		self.target_repo = pathlib.Path(target_repo)
+		self.target_repo = PathPlus(target_repo)
 		self.templates = jinja2.Environment(
 				loader=jinja2.FileSystemLoader(str(template_dir)),
 				undefined=jinja2.StrictUndefined,

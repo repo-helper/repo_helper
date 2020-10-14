@@ -1,8 +1,8 @@
 #!/usr/bin/env python
 #
-#  __main__.py
+#  pypi_secure.py
 """
-Entry point for running ``repo_helper`` from the command line.
+Add the encrypted PyPI password for Travis.
 """
 #
 #  Copyright © 2020 Dominic Davis-Foster <dominic@davis-foster.co.uk>
@@ -24,21 +24,38 @@ Entry point for running ``repo_helper`` from the command line.
 #
 
 # stdlib
-import sys
+from typing import Optional
+
+# 3rd party
+import click
 
 # this package
-from repo_helper.cli import cli
-from repo_helper.cli.utils import import_commands
+from repo_helper.cli import cli_command
 
-__all__ = ["main"]
-
-# Load commands
-import_commands()
+__all__ = ["pypi_secure"]
 
 
-def main():
-	return cli(obj={})
+@click.argument(
+		"password",
+		type=str,
+		default='',
+		)
+@cli_command()
+def pypi_secure(password: Optional[str] = None) -> int:
+	"""
+	Add the encrypted PyPI password for Travis to 'repo_helper.yml'.
+	"""
 
+	# stdlib
+	import getpass
+	from subprocess import PIPE, Popen
 
-if __name__ == '__main__':
-	sys.exit(main())
+	process = Popen(["travis", "encrypt", password or getpass.getpass(), "--pro"], stdout=PIPE)
+	(output, err) = process.communicate()
+	exit_code = process.wait()
+
+	with open("repo_helper.yml", encoding="UTF-8", mode="a") as fp:
+		fp.write("\n")
+		fp.write(f"travis_pypi_secure: {output.decode('UTF-8')}")
+
+	return exit_code

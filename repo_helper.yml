@@ -59,3 +59,7 @@ exclude_files:
   - pre-commit
   - tox
   - Source
+
+extras_require:
+  schema:
+    - lxml

@@ -31,12 +31,13 @@ import re
 import subprocess
 import textwrap
 from pprint import PrettyPrinter
-from typing import Any, Callable, Iterable, List, MutableMapping, Optional, Set, Tuple, Union
+from typing import TYPE_CHECKING, Any, Callable, Iterable, List, MutableMapping, Optional, Set, Tuple, Union
 
 # 3rd party
-import isort
+import click
+import isort  # type: ignore
 import trove_classifiers  # type: ignore
-import yapf_isort
+import yapf_isort  # type: ignore
 from domdf_python_tools.paths import PathPlus
 from domdf_python_tools.stringlist import StringList
 from domdf_python_tools.terminal_colours import Fore
@@ -45,6 +46,10 @@ from domdf_python_tools.utils import stderr_writer
 from packaging.requirements import InvalidRequirement, Requirement
 from typing_extensions import Literal
 from typing_inspect import get_origin  # type: ignore
+
+if TYPE_CHECKING:
+	# this package
+	from repo_helper import RepoHelper
 
 __all__ = [
 		"in_directory",
@@ -60,6 +65,7 @@ __all__ = [
 		"normalize",
 		"read_requirements",
 		"reformat_file",
+		"assert_clean",
 		]
 
 
@@ -442,3 +448,39 @@ def reformat_file(filename: PathLike, yapf_style: str, isort_config_file: str) -
 	r.to_file()
 
 	return ret
+
+
+def assert_clean(repo: "RepoHelper", allow_config: bool = False) -> True:
+	"""
+	Returns :py:obj:`True` if the working directory is clean.
+
+	If not, returns :py:obj:`False` and prints a helpful error message to stderr.
+
+	:param repo:
+	:param allow_config:
+	"""
+
+	status, lines = check_git_status(repo.target_repo)
+
+	if not status:
+		if allow_config and lines in (
+				["M repo_helper.yml"],
+				["A repo_helper.yml"],
+				["AM repo_helper.yml"],
+				["M git_helper.yml"],
+				["A git_helper.yml"],
+				["D git_helper.yml"],
+				["AM git_helper.yml"],
+				):
+			pass
+		else:
+			click.echo(f"{Fore.RED}Git working directory is not clean:", err=True)
+
+			for line in lines:
+				click.echo(f"  {line}", err=True)
+
+			click.echo(Fore.RESET, err=True)
+
+			return False
+
+	return True

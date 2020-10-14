@@ -65,7 +65,7 @@ def wizard():
 			click.echo(f"The directory {path} is not a git repository.")
 			click.echo("You may need to run 'git init' in that directory first.")
 
-		raise click.Abort()
+		raise click.Abort
 
 	ret = 0
 
