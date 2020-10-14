@@ -27,10 +27,7 @@ from typing import Any, Dict, Type
 # 3rd party
 import pytest
 from configconfig.configvar import ConfigVar
-
-# this package
-from repo_helper.configuration import *
-from tests.classes import (
+from configconfig.testing import (
 		BoolFalseTest,
 		BoolTrueTest,
 		DictTest,
@@ -42,6 +39,9 @@ from tests.classes import (
 		test_list_int,
 		test_list_str
 		)
+
+# this package
+from repo_helper.configuration import *
 
 
 class Test_author(RequiredStringTest):
