@@ -25,9 +25,9 @@ Functions to create files
 
 # stdlib
 import inspect
-from typing import Callable, List, Optional, Sequence, Tuple
+from typing import Any, Callable, List, Optional, Sequence, Tuple
 
-__all__ = ["Management"]
+__all__ = ["Management", "management", "is_registered"]
 
 
 class Management(list):
@@ -94,3 +94,18 @@ class Management(list):
 
 
 management = Management()
+
+
+def is_registered(obj: Any) -> bool:
+	"""
+	Return whether ``obj`` is a registered function
+
+	:param obj:
+
+	.. TODO:: Allow all callables
+	"""
+
+	if inspect.isfunction(obj):
+		return bool(getattr(obj, "_repo_helper_registered", False))
+
+	return False

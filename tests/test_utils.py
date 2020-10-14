@@ -34,7 +34,6 @@ from pytest_git import GitRepo
 from repo_helper.utils import (
 		FancyPrinter,
 		check_git_status,
-		check_union,
 		indent_with_tab,
 		normalize,
 		pformat_tabs,
@@ -118,20 +117,6 @@ class TestValidateClassifiers:
 		captured = capsys.readouterr()
 		assert not captured.out
 		assert not captured.err
-
-
-def test_union():
-	assert check_union("abc", Union[str, int])
-	assert check_union(123, Union[str, int])
-	assert not check_union(123, Union[str, bool])
-
-	assert check_union("abc", List[str])
-	assert check_union(123, List[int])
-	assert not check_union("abc", List[int])
-	assert not check_union(123, List[str])
-
-
-# TODO: get_json_type
 
 
 def test_indent_with_tab():

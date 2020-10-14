@@ -39,6 +39,7 @@ import isort  # type: ignore
 import trove_classifiers  # type: ignore
 import yapf_isort  # type: ignore
 from domdf_python_tools.paths import PathPlus
+from domdf_python_tools.pretty_print import FancyPrinter
 from domdf_python_tools.stringlist import StringList
 from domdf_python_tools.terminal_colours import Fore
 from domdf_python_tools.typing import PathLike
@@ -56,11 +57,7 @@ __all__ = [
 		"check_git_status",
 		"validate_classifiers",
 		"license_lookup",
-		"check_union",
-		"get_json_type",
-		"json_type_lookup",
 		"indent_with_tab",
-		"FancyPrinter",
 		"pformat_tabs",
 		"normalize",
 		"read_requirements",
@@ -283,55 +280,6 @@ license_lookup = {
 		"Public Domain": "Public Domain",
 		}
 
-UnionType = type(Union)
-GenericAliasType = type(List)
-
-
-def check_union(obj: Any, dtype: Union[GenericAliasType, UnionType]):  # type: ignore
-	r"""
-	Check if the type of ``obj`` is one of the types in a :class:`typing.Union` or a :class:`typing.List`.
-
-	:param obj:
-	:param dtype:
-	:type dtype: :class:`~typing.Union`\, :class:`~typing.List`\, etc.
-	"""
-
-	return isinstance(obj, dtype.__args__)  # type: ignore
-
-
-json_type_lookup = {
-		str: "string",
-		int: "number",
-		float: "number",
-		dict: "object",
-		}
-
-
-def get_json_type(type_):
-	"""
-	Get the type for the JSON schema that corresponds to the given Python type.
-
-	:param type_:
-	"""
-
-	if type_ in json_type_lookup:
-		return {"type": json_type_lookup[type_]}
-
-	elif get_origin(type_) is Union:
-		return {"type": [get_json_type(t)["type"] for t in type_.__args__]}
-
-	elif get_origin(type_) is Literal:
-		return {"enum": [x for x in type_.__args__]}
-
-	elif get_origin(type_) is list:
-		return get_json_type(type_.__args__[0])
-
-	elif type_ is bool:
-		return {"type": ["boolean", "string"]}
-
-	elif get_origin(type_) is dict:
-		return {"type": "object"}
-
 
 def indent_with_tab(text: str, depth: int = 1, predicate: Optional[Callable[[str], bool]] = None) -> str:
 	r"""
@@ -345,23 +293,6 @@ def indent_with_tab(text: str, depth: int = 1, predicate: Optional[Callable[[str
 	"""
 
 	return textwrap.indent(text, "\t" * depth, predicate=predicate)
-
-
-class FancyPrinter(PrettyPrinter):
-	# TODO: docs
-	_dispatch: MutableMapping[Callable, Callable]
-	_indent_per_level: int
-	_format_items: Callable[[Any, Any, Any, Any, Any, Any], None]
-	_dispatch = dict(PrettyPrinter._dispatch)  # type: ignore
-
-	# TODO: tuple, dict etc
-
-	def _pprint_list(self, object, stream, indent, allowance, context, level):
-		stream.write(f"[\n ")
-		self._format_items(object, stream, indent, allowance + 1, context, level)
-		stream.write(f",\n{' ' * self._indent_per_level}]")
-
-	_dispatch[list.__repr__] = _pprint_list
 
 
 def pformat_tabs(

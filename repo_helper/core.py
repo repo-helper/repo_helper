@@ -24,11 +24,9 @@ Core functionality of ``repo_helper``.
 #
 
 # stdlib
-import inspect
 import os.path
-import pathlib
 import sys
-from typing import Any, Callable, List, Sequence, Tuple, Type, Union
+from typing import Callable, List, Sequence, Tuple, Type
 
 # 3rd party
 import jinja2
@@ -40,7 +38,7 @@ from domdf_python_tools.utils import enquote_value
 
 # this package
 import repo_helper.files
-from repo_helper.files import management
+from repo_helper.files import is_registered, management
 from repo_helper.files.docs import copy_docs_styling
 from repo_helper.files.linting import code_only_warning, lint_fix_list, lint_warn_list
 from repo_helper.files.testing import make_isort
@@ -51,24 +49,8 @@ from .templates import template_dir
 
 __all__ = [
 		"RepoHelper",
-		"is_registered",
 		"import_registered_functions",
 		]
-
-
-def is_registered(obj: Any) -> bool:
-	"""
-	Return whether ``obj`` is a registered function
-
-	:param obj:
-
-	.. TODO:: Allow all callables
-	"""
-
-	if inspect.isfunction(obj):
-		return bool(getattr(obj, "_repo_helper_registered", False))
-
-	return False
 
 
 def import_registered_functions() -> List[Type]:
