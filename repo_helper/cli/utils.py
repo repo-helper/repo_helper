@@ -51,6 +51,7 @@ CLI utility functions
 #
 
 # stdlib
+import datetime
 import os
 import textwrap
 from functools import partial
@@ -155,8 +156,16 @@ def commit_changed_files(
 			# Ensure the working directory for pre-commit is correct
 			r.hooks["pre-commit"].cwd = str(repo_path.absolute())
 
+			current_time = datetime.datetime.now(datetime.timezone.utc).astimezone()
+			current_timezone = current_time.tzinfo.utcoffset(None).total_seconds()
+
 			try:
-				commit_id = r.do_commit(message=message)
+				commit_id = r.do_commit(
+						message=message,
+						commit_timestamp=current_time.timestamp(),
+						commit_timezone=current_timezone,
+						)
+
 				click.echo(f"Committed as {commit_id.decode('UTF-8')}")
 				return True
 			except CommitError as e:
