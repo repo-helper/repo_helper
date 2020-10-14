@@ -34,7 +34,6 @@
 
 __author__: str = "{{ author }}"
 __copyright__: str = "{{ copyright_years }} {{ author }}"
-
 __license__: str = "{{ license }}"
 __version__: str = "{{ version }}"
 __email__: str = "{{ email }}"

@@ -9,8 +9,6 @@
 .. start shields
 .. end shields
 
-|
-
 Installation
 --------------
 
