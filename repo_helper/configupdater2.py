@@ -1,3 +1,4 @@
+# type: ignore
 # Based on https://github.com/pyscaffold/configupdater
 # MIT Licensed
 # Copyright © 2018 Florian Wilhelm

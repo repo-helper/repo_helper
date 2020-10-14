@@ -31,8 +31,7 @@ from typing import List, Optional
 
 # 3rd party
 import jinja2
-import requests
-from apeye.url import URL
+from apeye.requests_url import RequestsURL
 from domdf_python_tools.paths import PathPlus, maybe_make
 from domdf_python_tools.stringlist import StringList
 from jinja2 import BaseLoader, Environment, StrictUndefined
@@ -42,7 +41,7 @@ from repo_helper.templates import init_repo_template_dir
 
 __all__ = ["init_repo", "base_license_url", "license_file_lookup"]
 
-base_license_url = URL("https://raw.githubusercontent.com/licenses/license-templates/master/templates/")
+base_license_url = RequestsURL("https://raw.githubusercontent.com/licenses/license-templates/master/templates/")
 
 license_file_lookup = {
 		"GNU Lesser General Public License v3 (LGPLv3)": (base_license_url / "lgpl.txt", "lgpl3.py"),
@@ -113,7 +112,7 @@ def init_repo(repo_path: pathlib.Path, templates: jinja2.Environment) -> List[st
 		(repo_path / filename).write_clean(template.render())
 
 	# Licenses from https://github.com/licenses/license-templates/tree/master/templates
-	license_url: Optional[str] = None
+	license_url: Optional[RequestsURL] = None
 	license_text: str = ''
 
 	# TODO: 2 vs 3 clause BSD
@@ -121,12 +120,12 @@ def init_repo(repo_path: pathlib.Path, templates: jinja2.Environment) -> List[st
 	if templates.globals["license"] in license_file_lookup:
 		license_url = license_file_lookup[templates.globals["license"]][0]
 	elif templates.globals["license"] == "BSD License":
-		license_url = f"{base_license_url}bsd2.txt"
+		license_url = base_license_url / "bsd2.txt"
 	elif templates.globals["license"] == "Apache Software License":
-		license_url = f"{base_license_url}apache.txt"
+		license_url = base_license_url / "apache.txt"
 
-	if license_url:
-		response = requests.get(license_url)
+	if license_url is not None:
+		response = license_url.get()
 		if response.status_code == 200:
 			license_text = response.text
 

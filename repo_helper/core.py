@@ -121,7 +121,7 @@ class RepoHelper:
 		self.templates.globals["join_path"] = os.path.join
 
 	@property
-	def exclude_files(self) -> Tuple[str]:
+	def exclude_files(self) -> Tuple[str, ...]:
 		"""
 		A tuple of excluded files that should **NOT** be managed by Git Helper.
 		"""

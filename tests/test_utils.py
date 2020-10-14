@@ -22,17 +22,16 @@
 
 # stdlib
 from textwrap import dedent
-from typing import List, Union
 
 # 3rd party
 import pytest
 from domdf_python_tools.paths import PathPlus
 from domdf_python_tools.terminal_colours import Fore
-from pytest_git import GitRepo
+from pytest_git import GitRepo  # type: ignore
+from domdf_python_tools.pretty_print import FancyPrinter
 
 # this package
 from repo_helper.utils import (
-		FancyPrinter,
 		check_git_status,
 		indent_with_tab,
 		normalize,

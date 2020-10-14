@@ -5,7 +5,7 @@ from typing import List
 # 3rd party
 from click.testing import CliRunner, Result
 from domdf_python_tools.paths import PathPlus
-from pytest_git import GitRepo
+from pytest_git import GitRepo  # type: ignore
 
 # this package
 from repo_helper.cli.commands.wizard import wizard
@@ -46,7 +46,7 @@ def test_wizard(git_repo: GitRepo, file_regression):
 				"a short, one-line description for the project",  # Enter a short, one-line description for the project.
 				]) + "\n"
 
-		result: Result = runner.invoke(wizard, catch_exceptions=False, input=stdin, obj={})
+		result = runner.invoke(wizard, catch_exceptions=False, input=stdin, obj={})
 		assert not result.exception
 		assert result.exit_code == 0
 
@@ -60,10 +60,10 @@ def test_wizard(git_repo: GitRepo, file_regression):
 				"n",  # Are you sure you want to continue?
 				]) + "\n"
 
-		result: Result = runner.invoke(wizard, catch_exceptions=False, input=stdin, obj={})
+		result = runner.invoke(wizard, catch_exceptions=False, input=stdin, obj={})
 		assert result.exit_code == 1
 
-		stdout: List[str] = result.stdout.splitlines()
+		stdout = result.stdout.splitlines()
 		assert stdout[0] == "This wizard 🧙‍will guide you through creating a 'repo_helper.yml' configuration file."
 		assert re.match(r"This will be created in '.*[\/]repo_helper\.yml'\.", stdout[1])
 		assert stdout[2] == "Do you want to continue? [y/N]: y"
@@ -146,9 +146,10 @@ def test_wizard_git_config(git_repo: GitRepo, file_regression):
 
 def test_wizard_env_vars(git_repo: GitRepo, file_regression, monkeypatch):
 
-	# Monkeypatch dulwich so it doesn't try to use the global config.
 	# 3rd party
-	from dulwich.config import StackedConfig
+	from dulwich.config import StackedConfig  # type: ignore
+
+	# Monkeypatch dulwich so it doesn't try to use the global config.
 	monkeypatch.setattr(StackedConfig, "default_backends", lambda *args: [], raising=True)
 	monkeypatch.setenv("GIT_COMMITTER_NAME", "Guido")
 	monkeypatch.setenv("GIT_COMMITTER_EMAIL", "guido@python.org")

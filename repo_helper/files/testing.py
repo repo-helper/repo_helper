@@ -503,7 +503,7 @@ class ToxConfig:
 			existing_config = ConfigUpdater()
 			existing_config.read(str(tox_file))
 			for section in existing_config.sections_blocks():
-				if section.name not in self.managed_sections:
+				if section.name not in self.managed_sections:  # type: ignore
 					self._ini.add_section(section)
 
 		self._output.append(str(self._ini))

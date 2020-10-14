@@ -42,7 +42,7 @@ Python implementation of ``git log``.
 import time
 from datetime import datetime
 from textwrap import indent
-from typing import Dict, Optional, Union
+from typing import Dict, Mapping, Optional, Union
 
 # 3rd party
 from domdf_python_tools.stringlist import StringList
@@ -66,7 +66,7 @@ def get_tags(repo: Union[Repo, str] = ".") -> Dict[str, str]:
 	with open_repo_closing(repo) as r:
 		raw_tags: Dict[bytes, bytes] = r.refs.as_dict(b"refs/tags")
 		for tag, sha, in raw_tags.items():
-			obj = repo.get_object(sha)
+			obj = r.get_object(sha)
 			if isinstance(obj, Tag):
 				tags[obj.object[1].decode("UTF-8")] = tag.decode("UTF-8")
 			elif isinstance(obj, Commit):
@@ -193,12 +193,12 @@ class Log:
 		:param from_tag: Show commits after the given tag.
 		"""
 
-		kwargs = dict(max_entries=max_entries, reverse=reverse)
+		kwargs: Mapping[str, Union[None, int, bool]] = dict(max_entries=max_entries, reverse=reverse)
 
 		if from_date is not None and from_tag is not None:
 			raise ValueError("'from_date' and 'from_tag' are exclusive.")
 		elif from_date:
-			kwargs["since"] = from_date.timestamp()
+			kwargs["since"] = from_date.timestamp()  # type: ignore
 		elif from_tag and not any(from_tag == tag for tag in self.tags.values()):
 			raise ValueError(f"No such tag {from_tag!r}")
 

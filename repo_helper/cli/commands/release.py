@@ -26,7 +26,7 @@ Make a release.
 # stdlib
 from functools import partial
 from types import MethodType
-from typing import Callable, Dict, List, Optional, Tuple
+from typing import Callable, cast, Dict, List, Optional, Tuple
 
 # 3rd party
 import click
@@ -50,7 +50,7 @@ from repo_helper.cli.utils import (
 		commit_option,
 		force_option
 		)
-from repo_helper.configupdater2 import ConfigUpdater
+from repo_helper.configupdater2 import ConfigUpdater  # type: ignore
 from repo_helper.utils import assert_clean
 
 __all__ = [
@@ -69,7 +69,7 @@ __all__ = [
 @cli_group(invoke_without_command=False)
 def release() -> None:
 	"""
-	Make a release.
+	Make a release 🚀.
 	"""
 
 
@@ -130,7 +130,7 @@ def resolve_command(self, ctx, args: List[str]) -> Tuple[str, Command, List[str]
 			bumper.bump(Version.from_str(version), commit, message)
 			return 0
 
-		return "version", version, args
+		return "version", cast(Command, version), args
 
 	return cmd_name, cmd, args[1:]
 
@@ -277,7 +277,7 @@ class Bumper:
 
 		bv = ConfigUpdater()
 		bv.read(self.bumpversion_file)
-		config = {}
+		config: Dict[str, BumpversionFileConfig] = {}
 
 		sections = [section for section in bv.sections() if section.startswith("bumpversion:file:")]
 

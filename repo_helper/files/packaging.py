@@ -39,7 +39,7 @@ from packaging.specifiers import Specifier, SpecifierSet
 
 # this package
 import repo_helper.files
-from repo_helper.configupdater2 import ConfigUpdater
+from repo_helper.configupdater2 import ConfigUpdater  # type: ignore
 from repo_helper.files import management
 from repo_helper.utils import indent_with_tab, reformat_file
 

@@ -28,7 +28,7 @@ import importlib_resources
 import pytest
 from domdf_python_tools.paths import PathPlus
 from pytest_regressions.file_regression import FileRegressionFixture  # type: ignore
-from readme_renderer.rst import render
+from readme_renderer.rst import render  # type: ignore
 
 # this package
 import tests.test_files.test_readme_input

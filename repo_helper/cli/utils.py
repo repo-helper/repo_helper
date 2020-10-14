@@ -55,7 +55,7 @@ import datetime
 import os
 import textwrap
 from functools import partial
-from typing import Any, Callable, Iterable, List, NoReturn, Optional
+from typing import Any, Callable, cast, Iterable, List, NoReturn, Optional
 
 # 3rd party
 import click
@@ -154,10 +154,10 @@ def commit_changed_files(
 
 		if commit:
 			# Ensure the working directory for pre-commit is correct
-			r.hooks["pre-commit"].cwd = str(repo_path.absolute())
+			r.hooks["pre-commit"].cwd = str(repo_path.absolute())  # type: ignore
 
 			current_time = datetime.datetime.now(datetime.timezone.utc).astimezone()
-			current_timezone = current_time.tzinfo.utcoffset(None).total_seconds()
+			current_timezone = current_time.tzinfo.utcoffset(None).total_seconds()  # type: ignore
 
 			try:
 				commit_id = r.do_commit(
@@ -361,4 +361,4 @@ def import_commands() -> List[Command]:
 	Returns a list of all commands.
 	"""
 
-	return discover(repo_helper.cli.commands, is_command)
+	return cast(List[Command], discover(repo_helper.cli.commands, is_command))

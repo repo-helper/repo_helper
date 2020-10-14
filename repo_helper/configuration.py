@@ -29,6 +29,7 @@ from typing import Any, Dict, Iterable, List, Mapping, MutableMapping, Optional,
 # 3rd party
 import importlib_resources
 from configconfig.configvar import ConfigVar
+from configconfig.metaclass import ConfigVarMeta
 from configconfig.parser import Parser
 from configconfig.utils import make_schema, optional_getter
 from domdf_python_tools.paths import PathPlus
@@ -182,11 +183,6 @@ class modname(ConfigVar):  # noqa
 	category: str = "metadata"
 
 
-def validate_version(version_string: str) -> str:
-	v = Version(version_string)
-	return str(v)
-
-
 class version(ConfigVar):  # noqa
 	"""
 	The version of the package.
@@ -202,7 +198,11 @@ class version(ConfigVar):  # noqa
 	rtype = str
 	required = True
 	category: str = "metadata"
-	validator = validate_version
+
+	@classmethod
+	def validator(cls, version_string: str) -> str:
+		v = Version(version_string)
+		return str(v)
 
 
 class copyright_years(ConfigVar):  # noqa
@@ -483,8 +483,11 @@ class source_dir(ConfigVar):  # noqa
 	dtype = str
 	required = False
 	default = ''
-	validator = lambda x: os.path.join(x, '')
 	category: str = "metadata"
+
+	@classmethod
+	def validator(cls, value: str) -> str:
+		return os.path.join(value, '')
 
 
 class pure_python(ConfigVar):  # noqa
@@ -657,8 +660,12 @@ The lowest version of Python given above is used to set the minimum supported ve
 	dtype = List[Union[str, float]]
 	rtype = List[str]
 	default = default_python_versions
-	validator = lambda x: [str(ver) for ver in x if ver]
 	category: str = "python versions"
+
+	@classmethod
+	def validator(cls, value: Iterable[str]) -> List[str]:
+		return [str(ver) for ver in value if ver]
+
 
 
 # Packaging
@@ -1425,7 +1432,7 @@ def parse_yaml(repo_path: pathlib.Path) -> Dict:
 
 # ---------------------
 
-all_values = [
+all_values: List[ConfigVarMeta] = [
 		author,
 		email,
 		username,
@@ -1494,7 +1501,7 @@ all_values = [
 
 class RepoHelperParser(Parser):
 
-	config_vars = all_values
+	config_vars: List[ConfigVarMeta] = all_values
 
 	def custom_parsing(
 			self,
@@ -1608,7 +1615,8 @@ def dump_schema() -> Dict[str, Any]:
 	schema = make_schema(*all_values)
 
 	with importlib_resources.path(repo_helper, "repo_helper_schema.json") as schema_file:
-		pathlib.Path(schema_file).write_text(json.dumps(schema, indent=2))
+		PathPlus(schema_file).write_clean(json.dumps(schema, indent=2))
+		print(f"Wrote schema to {schema_file}")
 
 	return schema
 
