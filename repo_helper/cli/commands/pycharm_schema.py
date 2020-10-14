@@ -39,32 +39,40 @@ def pycharm_schema() -> None:
 	from textwrap import indent
 
 	# 3rd party
+	import importlib_resources
 	from domdf_python_tools.paths import PathPlus
 	from domdf_python_tools.utils import printr
-	from lxml import etree, objectify
+	from lxml import etree, objectify  # type: ignore
 
-	schema_file = PathPlus(".idea/jsonSchemas.xml")
+	# this package
+	import repo_helper
+	from repo_helper.configuration import dump_schema
 
-	entry_xml = """\
-<entry key="repo_helper_schema">
-	<value>
-		<SchemaInfo>
-			<option name="name" value="repo_helper_schema" />
-			<option name="relativePathToSchema" value="/home/domdf/Python/01 GitHub Repos/git_helper/repo_helper/repo_helper_schema.json" />
-			<option name="patterns">
-				<list>
-					<Item>
-						<option name="path" value="repo_helper.yml" />
-					</Item>
-				</list>
-			</option>
-		</SchemaInfo>
-	</value>
-</entry>
-"""
+	dump_schema()
+	schema_mapping_file = PathPlus(".idea/jsonSchemas.xml")
 
-	if not schema_file.is_file():
-		schema_file.write_clean(
+	with importlib_resources.path(repo_helper, "repo_helper_schema.json") as schema_file:
+
+		entry_xml = f"""\
+	<entry key="repo_helper_schema">
+		<value>
+			<SchemaInfo>
+				<option name="name" value="repo_helper_schema" />
+				<option name="relativePathToSchema" value="{str(schema_file)}" />
+				<option name="patterns">
+					<list>
+						<Item>
+							<option name="path" value="repo_helper.yml" />
+						</Item>
+					</list>
+				</option>
+			</SchemaInfo>
+		</value>
+	</entry>
+	"""
+
+	if not schema_mapping_file.is_file():
+		schema_mapping_file.write_clean(
 				f"""\
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
@@ -90,4 +98,4 @@ def pycharm_schema() -> None:
 				break
 		else:
 			root.component.state.map.append(objectify.fromstring(entry_xml))
-			schema_file.write_clean(etree.tostring(root, pretty_print=True).decode("UTF-8"))
+			schema_mapping_file.write_clean(etree.tostring(root, pretty_print=True).decode("UTF-8"))
