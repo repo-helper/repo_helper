@@ -326,7 +326,7 @@ def make_conf(repo_path: pathlib.Path, templates: jinja2.Environment) -> List[st
 					)
 			)
 
-	with importlib_resources.path(repo_helper.files, ".isort.cfg") as isort_config:
+	with importlib_resources.path(repo_helper.files, "isort.cfg") as isort_config:
 		yapf_style = PathPlus(isort_config).parent.parent / "templates" / "style.yapf"
 		reformat_file(conf_file, yapf_style=str(yapf_style), isort_config_file=str(isort_config))
 

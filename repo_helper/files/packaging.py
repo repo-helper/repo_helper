@@ -312,7 +312,7 @@ def make_setup(repo_path: pathlib.Path, templates: jinja2.Environment) -> List[s
 	setup_file = PathPlus(repo_path / "setup.py")
 	setup_file.write_clean(setup.render(additional_setup_args="\n".join(f"\t\t{k}={v}," for k, v in setup_args)))
 
-	with importlib_resources.path(repo_helper.files, ".isort.cfg") as isort_config:
+	with importlib_resources.path(repo_helper.files, "isort.cfg") as isort_config:
 		yapf_style = PathPlus(isort_config).parent.parent / "templates" / "style.yapf"
 		reformat_file(setup_file, yapf_style=str(yapf_style), isort_config_file=str(isort_config))
 
