@@ -51,7 +51,6 @@ __all__ = [
 		"create_docs_links_block",
 		]
 
-
 #: Regular expression to match the installation block placeholder.
 installation_regex = re.compile(r'(?s)(\.\. start installation)(.*?)(\.\. end installation)')
 
@@ -63,7 +62,6 @@ short_desc_regex = re.compile(r'(?s)(\.\. start short_desc)(.*?)(\.\. end short_
 
 #: Regular expression to match the links block placeholder.
 links_regex = re.compile(r'(?s)(\.\. start links)(.*?)(\.\. end links)')
-
 
 shields_block_template: Template = Environment(
 		loader=BaseLoader(),

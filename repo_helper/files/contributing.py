@@ -35,7 +35,7 @@ from domdf_python_tools.paths import PathPlus
 # this package
 from repo_helper.files import management
 
-__all__ = ["make_contributing", "make_docs_contributing", "make_issue_templates"]
+__all__ = ["make_contributing", "make_docs_contributing", "make_issue_templates", "github_bash_block"]
 
 
 def github_bash_block(*commands: str) -> str:
