@@ -141,6 +141,11 @@ release_command = partial(release.command, context_settings=CONTEXT_SETTINGS)
 
 
 class BumpversionFileConfig(TypedDict):
+	"""
+	Represents the subset of ``bumpversion`` per-file configuration values
+	used by ``repo-helper``.
+	"""
+
 	search: str
 	replace: str
 
