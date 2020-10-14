@@ -31,6 +31,7 @@ import click
 from domdf_python_tools.paths import PathPlus
 
 # this package
+from repo_helper import __version__
 from repo_helper.cli.utils import (
 		CONTEXT_SETTINGS,
 		autocomplete_option,
@@ -60,6 +61,7 @@ Enable autocompletion with:
 __all__ = ["cli", "cli_command", "cli_group"]
 
 
+@click.version_option(__version__)
 @click_group(invoke_without_command=True)
 @force_option(help_text="Run 'repo_helper' even when the git working directory is not clean.")
 @commit_option(default=None)

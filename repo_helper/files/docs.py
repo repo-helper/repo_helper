@@ -109,6 +109,7 @@ def ensure_doc_requirements(repo_path: pathlib.Path, templates: jinja2.Environme
 	theme_versions = {
 			"sphinx_rtd_theme": "<0.5",
 			"domdf_sphinx_theme": ">=0.1.0",
+			"repo_helper_sphinx_theme": ">=0.0.2",
 			}
 
 	for name, specifier in theme_versions.items():

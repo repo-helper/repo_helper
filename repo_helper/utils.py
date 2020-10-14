@@ -30,8 +30,7 @@ import pathlib
 import re
 import subprocess
 import textwrap
-from pprint import PrettyPrinter
-from typing import TYPE_CHECKING, Any, Callable, Iterable, List, MutableMapping, Optional, Set, Tuple, Union
+from typing import TYPE_CHECKING, Callable, Iterable, List, Optional, Set, Tuple
 
 # 3rd party
 import click
@@ -45,8 +44,8 @@ from domdf_python_tools.terminal_colours import Fore
 from domdf_python_tools.typing import PathLike
 from domdf_python_tools.utils import stderr_writer
 from packaging.requirements import InvalidRequirement, Requirement
-from typing_extensions import Literal
-from typing_inspect import get_origin  # type: ignore
+import isort.settings  # type: ignore
+
 
 if TYPE_CHECKING:
 	# this package
@@ -347,7 +346,7 @@ def read_requirements(req_file: pathlib.Path) -> Tuple[Set[Requirement], List[st
 	"""
 
 	comments = []
-	requirements = set()
+	requirements: Set[Requirement] = set()
 
 	for line in PathPlus(req_file).read_lines():
 		if line.startswith("#"):
@@ -381,7 +380,10 @@ def reformat_file(filename: PathLike, yapf_style: str, isort_config_file: str) -
 	return ret
 
 
-def assert_clean(repo: "RepoHelper", allow_config: bool = False) -> True:
+isort.settings.CONFIG_SECTIONS["isort.cfg"] = ("settings", "isort")
+
+
+def assert_clean(repo: "RepoHelper", allow_config: bool = False) -> bool:
 	"""
 	Returns :py:obj:`True` if the working directory is clean.
 
