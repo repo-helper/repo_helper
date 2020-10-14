@@ -33,10 +33,10 @@ import shutil
 from typing import Dict, List, Sequence, Set, Union
 
 # 3rd party
-import cssutils  # type: ignore
+import css_parser  # type: ignore
 import importlib_resources
 import jinja2
-from cssutils import css  # type: ignore
+from css_parser import css  # type: ignore
 from domdf_python_tools.paths import PathPlus, clean_writer
 from domdf_python_tools.utils import enquote_value
 from packaging.requirements import Requirement
@@ -74,7 +74,7 @@ __all__ = [
 		"remove_autodoc_augment_defaults",
 		]
 
-# Disable logging from cssutils
+# Disable logging from css_parser
 
 logging.getLogger("CSSUTILS").addHandler(logging.NullHandler())
 logging.getLogger("CSSUTILS").propagate = False
@@ -350,12 +350,12 @@ def make_alabaster_theming() -> str:
 	sheet = StyleSheet()
 
 	# Reset CSS Parser to defaults
-	cssutils.ser.prefs.useDefaults()
+	css_parser.ser.prefs.useDefaults()
 
 	# Formatting preferences
-	cssutils.ser.prefs.omitLastSemicolon = False
-	cssutils.ser.prefs.indentClosingBrace = False
-	cssutils.ser.prefs.indent = "	"
+	css_parser.ser.prefs.omitLastSemicolon = False
+	css_parser.ser.prefs.indentClosingBrace = False
+	css_parser.ser.prefs.indent = "	"
 
 	# Helpers
 	important = "important"
@@ -461,7 +461,7 @@ def make_alabaster_theming() -> str:
 	stylesheet = sheet.cssText.decode("UTF-8").replace("}", "}\n")
 
 	# Reset CSS Parser to defaults
-	cssutils.ser.prefs.useDefaults()
+	css_parser.ser.prefs.useDefaults()
 
 	return f"""\
 {stylesheet}
@@ -485,12 +485,12 @@ def make_readthedocs_theming() -> str:
 	sheet = StyleSheet()
 
 	# Reset CSS Parser to defaults
-	cssutils.ser.prefs.useDefaults()
+	css_parser.ser.prefs.useDefaults()
 
 	# Formatting preferences
-	cssutils.ser.prefs.omitLastSemicolon = False
-	cssutils.ser.prefs.indentClosingBrace = False
-	cssutils.ser.prefs.indent = "	"
+	css_parser.ser.prefs.omitLastSemicolon = False
+	css_parser.ser.prefs.indentClosingBrace = False
+	css_parser.ser.prefs.indent = "	"
 
 	# Helpers
 	important = "important"
@@ -510,7 +510,7 @@ def make_readthedocs_theming() -> str:
 	stylesheet = sheet.cssText.decode("UTF-8").replace("}", "}\n")
 
 	# Reset CSS Parser to defaults
-	cssutils.ser.prefs.useDefaults()
+	css_parser.ser.prefs.useDefaults()
 
 	return stylesheet
 
