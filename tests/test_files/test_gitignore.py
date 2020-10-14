@@ -31,9 +31,7 @@ from repo_helper.files.gitignore import make_gitignore
 from tests.common import check_file_output
 
 
-def test_make_gitignore(tmpdir, demo_environment, file_regression: FileRegressionFixture):
-	tmpdir_p = pathlib.Path(tmpdir)
-
-	managed_files = make_gitignore(tmpdir_p, demo_environment)
+def test_make_gitignore(tmp_pathplus, demo_environment, file_regression: FileRegressionFixture):
+	managed_files = make_gitignore(tmp_pathplus, demo_environment)
 	assert managed_files == [".gitignore"]
-	check_file_output(tmpdir_p / managed_files[0], file_regression)
+	check_file_output(tmp_pathplus / managed_files[0], file_regression)

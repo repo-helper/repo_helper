@@ -20,9 +20,6 @@
 #  MA 02110-1301, USA.
 #
 
-# stdlib
-import pathlib
-
 # 3rd party
 from pytest_regressions.file_regression import FileRegressionFixture  # type: ignore
 
@@ -31,44 +28,38 @@ from repo_helper.files.bots import make_auto_assign_action, make_dependabot, mak
 from tests.common import check_file_output
 
 
-def test_stale_bot(tmpdir, demo_environment, file_regression: FileRegressionFixture):
-	tmpdir_p = pathlib.Path(tmpdir)
-
-	managed_files = make_stale_bot(tmpdir_p, demo_environment)
+def test_stale_bot(tmp_pathplus, demo_environment, file_regression: FileRegressionFixture):
+	managed_files = make_stale_bot(tmp_pathplus, demo_environment)
 	assert managed_files == [".github/stale.yml"]
-	check_file_output(tmpdir_p / managed_files[0], file_regression)
+	check_file_output(tmp_pathplus / managed_files[0], file_regression)
 
 
-def test_auto_assign_action(tmpdir, demo_environment, file_regression: FileRegressionFixture):
-	tmpdir_p = pathlib.Path(tmpdir)
-
-	wrong_file = tmpdir_p / ".github" / "workflow" / "assign.yml"
+def test_auto_assign_action(tmp_pathplus, demo_environment, file_regression: FileRegressionFixture):
+	wrong_file = tmp_pathplus / ".github" / "workflow" / "assign.yml"
 	wrong_file.parent.mkdir(parents=True)
 	wrong_file.write_text('')
 	assert wrong_file.is_file()
 
-	old_file = tmpdir_p / ".github" / "workflows" / "assign.yml"
+	old_file = tmp_pathplus / ".github" / "workflows" / "assign.yml"
 	old_file.parent.mkdir(parents=True)
 	old_file.write_text('')
 	assert old_file.is_file()
 
-	managed_files = make_auto_assign_action(tmpdir_p, demo_environment)
+	managed_files = make_auto_assign_action(tmp_pathplus, demo_environment)
 	assert managed_files == [
 			".github/workflows/assign.yml", ".github/workflow/assign.yml", ".github/auto_assign.yml"
 			]
 
-	check_file_output(tmpdir_p / managed_files[-1], file_regression)
+	check_file_output(tmp_pathplus / managed_files[-1], file_regression)
 
 	assert not wrong_file.is_file()
 	assert not old_file.is_file()
 
 
-def test_dependabot(tmpdir, demo_environment, file_regression: FileRegressionFixture):
-	tmpdir_p = pathlib.Path(tmpdir)
-
-	managed_files = make_dependabot(tmpdir_p, demo_environment)
+def test_dependabot(tmp_pathplus, demo_environment, file_regression: FileRegressionFixture):
+	managed_files = make_dependabot(tmp_pathplus, demo_environment)
 	assert managed_files == [".dependabot/config.yml"]
-	check_file_output(tmpdir_p / managed_files[0], file_regression)
+	check_file_output(tmp_pathplus / managed_files[0], file_regression)
 
 
 def test_imgbot(tmpdir, demo_environment, file_regression: FileRegressionFixture):

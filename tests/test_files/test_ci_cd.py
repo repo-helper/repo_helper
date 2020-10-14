@@ -42,17 +42,13 @@ from repo_helper.files.ci_cd import (
 from tests.common import check_file_output
 
 
-def test_travis_case_1(tmpdir, demo_environment, file_regression: FileRegressionFixture):
-	tmpdir_p = pathlib.Path(tmpdir)
-
-	managed_files = make_travis(tmpdir_p, demo_environment)
+def test_travis_case_1(tmp_pathplus, demo_environment, file_regression: FileRegressionFixture):
+	managed_files = make_travis(tmp_pathplus, demo_environment)
 	assert managed_files == [".travis.yml"]
-	check_file_output(tmpdir_p / managed_files[0], file_regression)
+	check_file_output(tmp_pathplus / managed_files[0], file_regression)
 
 
-def test_travis_case_2(tmpdir, demo_environment, file_regression):
-	tmpdir_p = pathlib.Path(tmpdir)
-
+def test_travis_case_2(tmp_pathplus, demo_environment, file_regression):
 	demo_environment.globals.update(
 			dict(
 					travis_ubuntu_version="bionic",
@@ -65,17 +61,9 @@ def test_travis_case_2(tmpdir, demo_environment, file_regression):
 					)
 			)
 
-	managed_files = make_travis(tmpdir_p, demo_environment)
+	managed_files = make_travis(tmp_pathplus, demo_environment)
 	assert managed_files == [".travis.yml"]
-	check_file_output(tmpdir_p / managed_files[0], file_regression)
-
-	# # Reset
-	# demo_environment.globals.update(dict(
-	# 		enable_tests=True,
-	# 		enable_conda=True,
-	# 		enable_releases=True,
-	# 		))
-	return
+	check_file_output(tmp_pathplus / managed_files[0], file_regression)
 
 
 @pytest.mark.parametrize("pure_python", [True, False])
@@ -83,7 +71,7 @@ def test_travis_case_2(tmpdir, demo_environment, file_regression):
 @pytest.mark.parametrize("enable_tests", [True, False])
 @pytest.mark.parametrize("enable_releases", [True, False])
 def test_travis_case_3(
-		tmpdir,
+		tmp_pathplus,
 		demo_environment,
 		file_regression,
 		pure_python,
@@ -91,8 +79,6 @@ def test_travis_case_3(
 		enable_tests,
 		enable_releases,
 		):
-	tmpdir_p = pathlib.Path(tmpdir)
-
 	demo_environment.globals.update(
 			dict(
 					pure_python=pure_python,
@@ -102,33 +88,26 @@ def test_travis_case_3(
 					)
 			)
 
-	managed_files = make_travis(tmpdir_p, demo_environment)
+	managed_files = make_travis(tmp_pathplus, demo_environment)
 	assert managed_files == [".travis.yml"]
-	check_file_output(tmpdir_p / managed_files[0], file_regression)
-	return
+	check_file_output(tmp_pathplus / managed_files[0], file_regression)
 
 
-def test_travis_deploy_conda(tmpdir, demo_environment, file_regression: FileRegressionFixture):
-	tmpdir_p = pathlib.Path(tmpdir)
-
-	managed_files = make_travis_deploy_conda(tmpdir_p, demo_environment)
+def test_travis_deploy_conda(tmp_pathplus, demo_environment, file_regression: FileRegressionFixture):
+	managed_files = make_travis_deploy_conda(tmp_pathplus, demo_environment)
 	assert managed_files == [".ci/travis_deploy_conda.sh"]
-	check_file_output(tmpdir_p / managed_files[0], file_regression)
+	check_file_output(tmp_pathplus / managed_files[0], file_regression)
 
 
-def test_github_ci_case_1(tmpdir, demo_environment, file_regression: FileRegressionFixture):
-	tmpdir_p = pathlib.Path(tmpdir)
-
-	managed_files = make_github_ci(tmpdir_p, demo_environment)
+def test_github_ci_case_1(tmp_pathplus, demo_environment, file_regression: FileRegressionFixture):
+	managed_files = make_github_ci(tmp_pathplus, demo_environment)
 	assert managed_files == [".github/workflows/python_ci.yml", ".github/workflows/python_ci_macos.yml"]
-	assert (tmpdir_p / managed_files[0]).is_file()
-	assert not (tmpdir_p / managed_files[1]).is_file()
-	check_file_output(tmpdir_p / managed_files[0], file_regression)
+	assert (tmp_pathplus / managed_files[0]).is_file()
+	assert not (tmp_pathplus / managed_files[1]).is_file()
+	check_file_output(tmp_pathplus / managed_files[0], file_regression)
 
 
-def test_github_ci_case_2(tmpdir, demo_environment, file_regression: FileRegressionFixture):
-	tmpdir_p = pathlib.Path(tmpdir)
-
+def test_github_ci_case_2(tmp_pathplus, demo_environment, file_regression: FileRegressionFixture):
 	demo_environment.globals.update(
 			dict(
 					travis_additional_requirements=["isort", "black"],
@@ -136,16 +115,14 @@ def test_github_ci_case_2(tmpdir, demo_environment, file_regression: FileRegress
 					)
 			)
 
-	managed_files = make_github_ci(tmpdir_p, demo_environment)
+	managed_files = make_github_ci(tmp_pathplus, demo_environment)
 	assert managed_files == [".github/workflows/python_ci.yml", ".github/workflows/python_ci_macos.yml"]
-	assert not (tmpdir_p / managed_files[0]).is_file()
-	assert (tmpdir_p / managed_files[1]).is_file()
-	check_file_output(tmpdir_p / managed_files[1], file_regression)
+	assert not (tmp_pathplus / managed_files[0]).is_file()
+	assert (tmp_pathplus / managed_files[1]).is_file()
+	check_file_output(tmp_pathplus / managed_files[1], file_regression)
 
 
-def test_github_ci_windows_38(tmpdir, demo_environment, file_regression: FileRegressionFixture):
-	tmpdir_p = pathlib.Path(tmpdir)
-
+def test_github_ci_windows_38(tmp_pathplus, demo_environment, file_regression: FileRegressionFixture):
 	demo_environment.globals.update(
 			dict(
 					travis_additional_requirements=["isort", "black"],
@@ -155,12 +132,12 @@ def test_github_ci_windows_38(tmpdir, demo_environment, file_regression: FileReg
 			)
 
 	demo_environment.globals["py_versions"] = ["3.6", "3.7", "3.8"]
-	managed_files = make_github_ci(tmpdir_p, demo_environment)
-	check_file_output(tmpdir_p / managed_files[1], file_regression)
+	managed_files = make_github_ci(tmp_pathplus, demo_environment)
+	check_file_output(tmp_pathplus / managed_files[1], file_regression)
 
 	demo_environment.globals["py_versions"] = ["3.6", "3.7"]
-	managed_files = make_github_ci(tmpdir_p, demo_environment)
-	check_file_output(tmpdir_p / managed_files[1], file_regression)
+	managed_files = make_github_ci(tmp_pathplus, demo_environment)
+	check_file_output(tmp_pathplus / managed_files[1], file_regression)
 
 
 def test_github_ci_case_3(tmp_pathplus, demo_environment):

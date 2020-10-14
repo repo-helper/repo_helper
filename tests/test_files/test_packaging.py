@@ -41,22 +41,19 @@ from repo_helper.files.packaging import (
 from tests.common import check_file_output
 
 
-def test_make_manifest_case_1(tmpdir, demo_environment, file_regression: FileRegressionFixture):
-	tmpdir_p = pathlib.Path(tmpdir)
-	managed_files = make_manifest(tmpdir_p, demo_environment)
+def test_make_manifest_case_1(tmp_pathplus, demo_environment, file_regression: FileRegressionFixture):
+	managed_files = make_manifest(tmp_pathplus, demo_environment)
 	assert managed_files == ["MANIFEST.in"]
-	check_file_output(tmpdir_p / managed_files[0], file_regression)
+	check_file_output(tmp_pathplus / managed_files[0], file_regression)
 
 
-def test_make_manifest_case_2(tmpdir, demo_environment, file_regression: FileRegressionFixture):
-	tmpdir_p = pathlib.Path(tmpdir)
-
+def test_make_manifest_case_2(tmp_pathplus, demo_environment, file_regression: FileRegressionFixture):
 	demo_environment.globals["manifest_additional"] = ["recursive-include hello_world/templates *"]
 	demo_environment.globals["additional_requirements_files"] = ["hello_world/submodule/requirements.txt"]
 
-	managed_files = make_manifest(tmpdir_p, demo_environment)
+	managed_files = make_manifest(tmp_pathplus, demo_environment)
 	assert managed_files == ["MANIFEST.in"]
-	check_file_output(tmpdir_p / managed_files[0], file_regression)
+	check_file_output(tmp_pathplus / managed_files[0], file_regression)
 
 	# # Reset
 	# demo_environment.globals.update(dict(
@@ -67,17 +64,13 @@ def test_make_manifest_case_2(tmpdir, demo_environment, file_regression: FileReg
 	return
 
 
-def test_make_setup_case_1(tmpdir, demo_environment, file_regression: FileRegressionFixture):
-	tmpdir_p = pathlib.Path(tmpdir)
-
-	managed_files = make_setup(tmpdir_p, demo_environment)
+def test_make_setup_case_1(tmp_pathplus, demo_environment, file_regression: FileRegressionFixture):
+	managed_files = make_setup(tmp_pathplus, demo_environment)
 	assert managed_files == ["setup.py"]
-	check_file_output(tmpdir_p / managed_files[0], file_regression)
+	check_file_output(tmp_pathplus / managed_files[0], file_regression)
 
 
-def test_make_setup_case_2(tmpdir, demo_environment, file_regression: FileRegressionFixture):
-	tmpdir_p = pathlib.Path(tmpdir)
-
+def test_make_setup_case_2(tmp_pathplus, demo_environment, file_regression: FileRegressionFixture):
 	demo_environment.globals.update(
 			dict(
 					min_py_version="3.8",
@@ -88,41 +81,23 @@ def test_make_setup_case_2(tmpdir, demo_environment, file_regression: FileRegres
 					)
 			)
 
-	managed_files = make_setup(tmpdir_p, demo_environment)
+	managed_files = make_setup(tmp_pathplus, demo_environment)
 	assert managed_files == ["setup.py"]
-	check_file_output(tmpdir_p / managed_files[0], file_regression)
-
-	#
-	# # Reset
-	# demo_environment.globals.update(
-	# 		dict(
-	# 				min_py_version="3.6",
-	# 				additional_setup_args='',
-	# 				setup_pre=[],
-	# 				docs_dir="doc-source",
-	# 				tests_dir="tests",
-	# 				)
-	# 		)
-	#
-	return
+	check_file_output(tmp_pathplus / managed_files[0], file_regression)
 
 
-def test_make_pyproject(tmpdir, demo_environment, file_regression: FileRegressionFixture):
+def test_make_pyproject(tmp_pathplus, demo_environment, file_regression: FileRegressionFixture):
 	# TODO: permutations to cover all branches
-
-	tmpdir_p = pathlib.Path(tmpdir)
 
 	demo_environment.globals["tox_build_requirements"] = []
 
-	managed_files = make_pyproject(tmpdir_p, demo_environment)
+	managed_files = make_pyproject(tmp_pathplus, demo_environment)
 	assert managed_files == ["pyproject.toml"]
-	check_file_output(tmpdir_p / managed_files[0], file_regression)
+	check_file_output(tmp_pathplus / managed_files[0], file_regression)
 
 
-def test_make_setup_cfg(tmpdir, demo_environment, file_regression: FileRegressionFixture):
+def test_make_setup_cfg(tmp_pathplus, demo_environment, file_regression: FileRegressionFixture):
 	# TODO: permutations to cover all branches
-
-	tmpdir_p = pathlib.Path(tmpdir)
 
 	demo_environment.globals["author"] = "Joe Bloggs"
 	demo_environment.globals["email"] = "j.bloggs@example.com"
@@ -132,16 +107,15 @@ def test_make_setup_cfg(tmpdir, demo_environment, file_regression: FileRegressio
 	demo_environment.globals["console_scripts"] = []
 	demo_environment.globals["mypy_plugins"] = []
 
-	managed_files = make_setup_cfg(tmpdir_p, demo_environment)
+	managed_files = make_setup_cfg(tmp_pathplus, demo_environment)
 	assert managed_files == ["setup.cfg"]
-	check_file_output(tmpdir_p / managed_files[0], file_regression)
+	check_file_output(tmp_pathplus / managed_files[0], file_regression)
 
 
-def test_make_setup_cfg_existing(tmpdir, demo_environment, file_regression: FileRegressionFixture):
+def test_make_setup_cfg_existing(tmp_pathplus, demo_environment, file_regression: FileRegressionFixture):
 	# TODO: permutations to cover all branches
 
-	tmpdir_p = pathlib.Path(tmpdir)
-	(tmpdir_p / "setup.cfg").write_text(
+	(tmp_pathplus / "setup.cfg").write_text(
 			dedent(
 					"""
 	[somesection]
@@ -165,15 +139,13 @@ def test_make_setup_cfg_existing(tmpdir, demo_environment, file_regression: File
 	demo_environment.globals["console_scripts"] = []
 	demo_environment.globals["mypy_plugins"] = []
 
-	managed_files = make_setup_cfg(tmpdir_p, demo_environment)
+	managed_files = make_setup_cfg(tmp_pathplus, demo_environment)
 	assert managed_files == ["setup.cfg"]
-	check_file_output(tmpdir_p / managed_files[0], file_regression)
+	check_file_output(tmp_pathplus / managed_files[0], file_regression)
 
 
-def test_make_pkginfo(tmpdir, demo_environment, file_regression: FileRegressionFixture):
+def test_make_pkginfo(tmp_pathplus, demo_environment, file_regression: FileRegressionFixture):
 	# TODO: permutations to cover all branches
-
-	tmpdir_p = pathlib.Path(tmpdir)
 
 	demo_environment.globals["author"] = "Joe Bloggs"
 	demo_environment.globals["email"] = "j.bloggs@example.com"
@@ -184,9 +156,9 @@ def test_make_pkginfo(tmpdir, demo_environment, file_regression: FileRegressionF
 	demo_environment.globals["version"] = "1.2.3"
 	demo_environment.globals["conda_description"] = "This is the conda description."
 
-	managed_files = make_pkginfo(tmpdir_p, demo_environment)
+	managed_files = make_pkginfo(tmp_pathplus, demo_environment)
 	assert managed_files == ["__pkginfo__.py"]
-	check_file_output(tmpdir_p / managed_files[0], file_regression)
+	check_file_output(tmp_pathplus / managed_files[0], file_regression)
 
 
 class TestComparableRequirement:

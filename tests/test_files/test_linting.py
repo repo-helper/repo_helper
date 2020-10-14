@@ -31,32 +31,23 @@ from repo_helper.files.linting import make_lint_roller, make_pylintrc
 from tests.common import check_file_output
 
 
-def test_pylintrc(tmpdir, demo_environment, file_regression: FileRegressionFixture):
-	tmpdir_p = pathlib.Path(tmpdir)
-	managed_files = make_pylintrc(tmpdir_p, demo_environment)
+def test_pylintrc(tmp_pathplus, demo_environment, file_regression: FileRegressionFixture):
+	managed_files = make_pylintrc(tmp_pathplus, demo_environment)
 	assert managed_files == [".pylintrc"]
-	check_file_output(tmpdir_p / managed_files[0], file_regression)
+	check_file_output(tmp_pathplus / managed_files[0], file_regression)
 
 
-def test_lint_roller_case_1(tmpdir, demo_environment, file_regression: FileRegressionFixture):
-	tmpdir_p = pathlib.Path(tmpdir)
-
-	managed_files = make_lint_roller(tmpdir_p, demo_environment)
+def test_lint_roller_case_1(tmp_pathplus, demo_environment, file_regression: FileRegressionFixture):
+	managed_files = make_lint_roller(tmp_pathplus, demo_environment)
 	assert managed_files == ["lint_roller.sh"]
-	check_file_output(tmpdir_p / managed_files[0], file_regression)
+	check_file_output(tmp_pathplus / managed_files[0], file_regression)
 
 
-def test_lint_roller_case_2(tmpdir, demo_environment, file_regression: FileRegressionFixture):
-	tmpdir_p = pathlib.Path(tmpdir)
-
+def test_lint_roller_case_2(tmp_pathplus, demo_environment, file_regression: FileRegressionFixture):
 	demo_environment.globals.update({
 			"py_modules": ["hello_world_cli"], "source_dir": "src/", "tests_dir": "testing"
 			})
 
-	managed_files = make_lint_roller(tmpdir_p, demo_environment)
+	managed_files = make_lint_roller(tmp_pathplus, demo_environment)
 	assert managed_files == ["lint_roller.sh"]
-	check_file_output(tmpdir_p / managed_files[0], file_regression)
-
-	# # Reset
-	# demo_environment.globals.update({"py_modules": [], "source_dir": '', "tests_dir": "tests"})
-	return
+	check_file_output(tmp_pathplus / managed_files[0], file_regression)

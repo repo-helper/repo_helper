@@ -44,17 +44,13 @@ from repo_helper.files.docs import (
 from tests.common import check_file_output, check_file_regression
 
 
-def test_make_rtfd_case_1(tmpdir, demo_environment, file_regression: FileRegressionFixture):
-	tmpdir_p = pathlib.Path(tmpdir)
-
-	managed_files = make_rtfd(tmpdir_p, demo_environment)
+def test_make_rtfd_case_1(tmp_pathplus, demo_environment, file_regression: FileRegressionFixture):
+	managed_files = make_rtfd(tmp_pathplus, demo_environment)
 	assert managed_files == [".readthedocs.yml"]
-	check_file_output(tmpdir_p / managed_files[0], file_regression)
+	check_file_output(tmp_pathplus / managed_files[0], file_regression)
 
 
-def test_make_rtfd_case_2(tmpdir, demo_environment, file_regression: FileRegressionFixture):
-	tmpdir_p = pathlib.Path(tmpdir)
-
+def test_make_rtfd_case_2(tmp_pathplus, demo_environment, file_regression: FileRegressionFixture):
 	demo_environment.globals.update(
 			dict(
 					additional_requirements_files=["hello_world/submodule/requirements.txt"],
@@ -62,63 +58,50 @@ def test_make_rtfd_case_2(tmpdir, demo_environment, file_regression: FileRegress
 					)
 			)
 
-	managed_files = make_rtfd(tmpdir_p, demo_environment)
+	managed_files = make_rtfd(tmp_pathplus, demo_environment)
 	assert managed_files == [".readthedocs.yml"]
-	check_file_output(tmpdir_p / managed_files[0], file_regression)
-
-	# # Reset
-	# demo_environment.globals.update(
-	# 		dict(
-	# 				additional_requirements_files=[],
-	# 				python_deploy_version="3.6",
-	# 				docs_dir="doc-source",
-	# 				)
-	# 		)
+	check_file_output(tmp_pathplus / managed_files[0], file_regression)
 	return
 
 
-def test_make_404_page(tmpdir, demo_environment):
-	tmpdir_p = pathlib.Path(tmpdir)
-	(tmpdir_p / "doc-source").mkdir()
+def test_make_404_page(tmp_pathplus, demo_environment):
+	(tmp_pathplus / "doc-source").mkdir()
 
-	managed_files = make_404_page(tmpdir_p, demo_environment)
+	managed_files = make_404_page(tmp_pathplus, demo_environment)
 	assert managed_files == [os.path.join("doc-source", "404.rst"), os.path.join("doc-source", "not-found.png")]
 	for filename in managed_files:
-		assert (tmpdir_p / filename).is_file()
+		assert (tmp_pathplus / filename).is_file()
 
 
-def test_make_docs_source_rst(tmpdir, demo_environment):
-	tmpdir_p = pathlib.Path(tmpdir)
-	(tmpdir_p / "doc-source").mkdir()
+def test_make_docs_source_rst(tmp_pathplus, demo_environment):
+	(tmp_pathplus / "doc-source").mkdir()
 
-	managed_files = make_docs_source_rst(tmpdir_p, demo_environment)
+	managed_files = make_docs_source_rst(tmp_pathplus, demo_environment)
 	assert managed_files == [
 			os.path.join("doc-source", "Source.rst"),
 			os.path.join("doc-source", "Building.rst"),
 			os.path.join("doc-source", "git_download.png")
 			]
 	for filename in [os.path.join("doc-source", "Source.rst"), os.path.join("doc-source", "git_download.png")]:
-		assert (tmpdir_p / filename).is_file()
+		assert (tmp_pathplus / filename).is_file()
 
-	assert not (tmpdir_p / "doc-source" / "Building.rst").is_file()
+	assert not (tmp_pathplus / "doc-source" / "Building.rst").is_file()
 
-	(tmpdir_p / "doc-source" / "Building.rst").touch()
-	assert (tmpdir_p / "doc-source" / "Building.rst").is_file()
-	make_docs_source_rst(tmpdir_p, demo_environment)
-	assert not (tmpdir_p / "doc-source" / "Building.rst").is_file()
+	(tmp_pathplus / "doc-source" / "Building.rst").touch()
+	assert (tmp_pathplus / "doc-source" / "Building.rst").is_file()
+	make_docs_source_rst(tmp_pathplus, demo_environment)
+	assert not (tmp_pathplus / "doc-source" / "Building.rst").is_file()
 
 
-def test_ensure_doc_requirements(tmpdir, demo_environment):
-	tmpdir_p = pathlib.Path(tmpdir)
+def test_ensure_doc_requirements(tmp_pathplus, demo_environment):
+	(tmp_pathplus / "requirements.txt").write_text('')
+	(tmp_pathplus / "doc-source").mkdir()
+	(tmp_pathplus / "doc-source" / "requirements.txt").write_text('')
 
-	(tmpdir_p / "requirements.txt").write_text('')
-	(tmpdir_p / "doc-source").mkdir()
-	(tmpdir_p / "doc-source" / "requirements.txt").write_text('')
-
-	managed_files = ensure_doc_requirements(tmpdir_p, demo_environment)
+	managed_files = ensure_doc_requirements(tmp_pathplus, demo_environment)
 	assert managed_files == [os.path.join("doc-source", "requirements.txt")]
 
-	assert (tmpdir_p / managed_files[0]).read_text(
+	assert (tmp_pathplus / managed_files[0]).read_text(
 			encoding="UTF-8"
 			) == """\
 alabaster
@@ -137,13 +120,13 @@ sphinxemoji>=0.1.6
 toctree_plus>=0.0.4
 """
 
-	with (tmpdir_p / managed_files[0]).open('a', encoding="UTF-8") as fp:
+	with (tmp_pathplus / managed_files[0]).open('a', encoding="UTF-8") as fp:
 		fp.write("lorem>=0.1.1")
 
-	managed_files = ensure_doc_requirements(tmpdir_p, demo_environment)
+	managed_files = ensure_doc_requirements(tmp_pathplus, demo_environment)
 	assert managed_files == [os.path.join("doc-source", "requirements.txt")]
 
-	assert (tmpdir_p / managed_files[0]).read_text(
+	assert (tmp_pathplus / managed_files[0]).read_text(
 			encoding="UTF-8"
 			) == """\
 alabaster

@@ -35,7 +35,7 @@ from repo_helper.files.testing import ensure_tests_requirements, make_isort, mak
 from tests.common import check_file_output
 
 
-def test_make_tox(tmpdir, demo_environment, file_regression: FileRegressionFixture):
+def test_make_tox(tmp_pathplus, demo_environment, file_regression: FileRegressionFixture):
 	# TODO: permutations to cover all branches
 	demo_environment.globals["mypy_deps"] = ["docutils-stubs"]
 	demo_environment.globals["tox_py_versions"] = ["py36", "py37", "py38"]
@@ -55,75 +55,66 @@ def test_make_tox(tmpdir, demo_environment, file_regression: FileRegressionFixtu
 			"3.7": "py37, build",
 			}
 
-	tmpdir_p = pathlib.Path(tmpdir)
-	make_tox(tmpdir_p, demo_environment)
-	check_file_output(tmpdir_p / "tox.ini", file_regression)
+	make_tox(tmp_pathplus, demo_environment)
+	check_file_output(tmp_pathplus / "tox.ini", file_regression)
 
 
-def test_make_yapf(tmpdir, demo_environment, file_regression):
-	tmpdir_p = pathlib.Path(tmpdir)
-	managed_files = make_yapf(tmpdir_p, demo_environment)
+def test_make_yapf(tmp_pathplus, demo_environment, file_regression):
+	managed_files = make_yapf(tmp_pathplus, demo_environment)
 	assert managed_files == [".style.yapf"]
-	check_file_output(tmpdir_p / managed_files[0], file_regression)
+	check_file_output(tmp_pathplus / managed_files[0], file_regression)
 
 
-def test_make_isort_case_1(tmpdir, demo_environment, file_regression):
-	tmpdir_p = pathlib.Path(tmpdir)
+def test_make_isort_case_1(tmp_pathplus, demo_environment, file_regression):
+	(tmp_pathplus / "tests").mkdir()
+	(tmp_pathplus / "tests" / "requirements.txt").write_text('')
 
-	(tmpdir_p / "tests").mkdir()
-	(tmpdir_p / "tests" / "requirements.txt").write_text('')
-
-	(tmpdir_p / "requirements.txt").write_text("""
+	(tmp_pathplus / "requirements.txt").write_text("""
 tox
 isort
 black
 wheel
 setuptools_rust
 """)
-	ensure_tests_requirements(tmpdir_p, demo_environment)
+	ensure_tests_requirements(tmp_pathplus, demo_environment)
 
-	managed_files = make_isort(tmpdir_p, demo_environment)
+	managed_files = make_isort(tmp_pathplus, demo_environment)
 	assert managed_files == [".isort.cfg"]
-	check_file_output(tmpdir_p / managed_files[0], file_regression)
+	check_file_output(tmp_pathplus / managed_files[0], file_regression)
 
 
-def test_make_isort_case_2(tmpdir, demo_environment, file_regression):
-	tmpdir_p = pathlib.Path(tmpdir)
+def test_make_isort_case_2(tmp_pathplus, demo_environment, file_regression):
+	(tmp_pathplus / "tests").mkdir()
+	(tmp_pathplus / "tests" / "requirements.txt").write_text('')
 
-	(tmpdir_p / "tests").mkdir()
-	(tmpdir_p / "tests" / "requirements.txt").write_text('')
-
-	(tmpdir_p / "requirements.txt").write_text("""
+	(tmp_pathplus / "requirements.txt").write_text("""
 tox
 isort
 black
 wheel
 setuptools_rust
 """)
-	ensure_tests_requirements(tmpdir_p, demo_environment)
+	ensure_tests_requirements(tmp_pathplus, demo_environment)
 
-	(tmpdir_p / ".isort.cfg").write_text("""[settings]
+	(tmp_pathplus / ".isort.cfg").write_text("""[settings]
 known_third_party=awesome_package
 """)
 
-	managed_files = make_isort(tmpdir_p, demo_environment)
+	managed_files = make_isort(tmp_pathplus, demo_environment)
 	assert managed_files == [".isort.cfg"]
-	check_file_output(tmpdir_p / managed_files[0], file_regression)
+	check_file_output(tmp_pathplus / managed_files[0], file_regression)
 
 
-def test_ensure_tests_requirements(demo_environment):
-	with tempfile.TemporaryDirectory() as tmpdir:
-		tmpdir_p = PathPlus(tmpdir)
+def test_ensure_tests_requirements(tmp_pathplus, demo_environment):
+	(tmp_pathplus / "tests").mkdir()
+	(tmp_pathplus / "tests" / "requirements.txt").write_text('')
 
-		(tmpdir_p / "tests").mkdir()
-		(tmpdir_p / "tests" / "requirements.txt").write_text('')
+	managed_files = ensure_tests_requirements(tmp_pathplus, demo_environment)
+	assert managed_files == [os.path.join("tests", "requirements.txt")]
 
-		managed_files = ensure_tests_requirements(tmpdir_p, demo_environment)
-		assert managed_files == [os.path.join("tests", "requirements.txt")]
-
-		assert (tmpdir_p / managed_files[0]).read_text(
-				encoding="UTF-8"
-				) == """\
+	assert (tmp_pathplus / managed_files[0]).read_text(
+			encoding="UTF-8"
+			) == """\
 coverage>=5.1
 coverage_pyver_pragma>=0.0.6
 pytest>=6.0.0
@@ -132,15 +123,15 @@ pytest-randomly>=3.3.1
 pytest-timeout>=1.4.2
 """
 
-		with (tmpdir_p / managed_files[0]).open('a', encoding="UTF-8") as fp:
-			fp.write("lorem>=0.1.1")
+	with (tmp_pathplus / managed_files[0]).open('a', encoding="UTF-8") as fp:
+		fp.write("lorem>=0.1.1")
 
-		managed_files = ensure_tests_requirements(tmpdir_p, demo_environment)
-		assert managed_files == [os.path.join("tests", "requirements.txt")]
+	managed_files = ensure_tests_requirements(tmp_pathplus, demo_environment)
+	assert managed_files == [os.path.join("tests", "requirements.txt")]
 
-		assert (tmpdir_p / managed_files[0]).read_text(
-				encoding="UTF-8"
-				) == """\
+	assert (tmp_pathplus / managed_files[0]).read_text(
+			encoding="UTF-8"
+			) == """\
 coverage>=5.1
 coverage_pyver_pragma>=0.0.6
 lorem>=0.1.1
@@ -151,11 +142,10 @@ pytest-timeout>=1.4.2
 """
 
 
-def test_make_pre_commit(tmpdir, demo_environment, file_regression):
+def test_make_pre_commit(tmp_pathplus, demo_environment, file_regression):
 	# TODO: permutations to cover all branches
 	demo_environment.globals["yapf_exclude"] = []
 
-	tmpdir_p = pathlib.Path(tmpdir)
-	managed_files = make_pre_commit(tmpdir_p, demo_environment)
+	managed_files = make_pre_commit(tmp_pathplus, demo_environment)
 	assert managed_files == [".pre-commit-config.yaml"]
-	check_file_output(tmpdir_p / managed_files[0], file_regression)
+	check_file_output(tmp_pathplus / managed_files[0], file_regression)
