@@ -4,12 +4,11 @@ from typing import List
 
 # 3rd party
 from click.testing import CliRunner, Result
-from domdf_python_tools.paths import PathPlus
+from domdf_python_tools.paths import PathPlus, in_directory
 from pytest_git import GitRepo  # type: ignore
 
 # this package
 from repo_helper.cli.commands.wizard import wizard
-from repo_helper.utils import in_directory
 from tests.common import check_file_output
 
 

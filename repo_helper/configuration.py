@@ -667,7 +667,6 @@ The lowest version of Python given above is used to set the minimum supported ve
 		return [str(ver) for ver in value if ver]
 
 
-
 # Packaging
 class manifest_additional(ConfigVar):  # noqa
 	"""

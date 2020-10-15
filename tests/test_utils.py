@@ -26,18 +26,12 @@ from textwrap import dedent
 # 3rd party
 import pytest
 from domdf_python_tools.paths import PathPlus
+from domdf_python_tools.pretty_print import FancyPrinter
 from domdf_python_tools.terminal_colours import Fore
 from pytest_git import GitRepo  # type: ignore
-from domdf_python_tools.pretty_print import FancyPrinter
 
 # this package
-from repo_helper.utils import (
-		check_git_status,
-		indent_with_tab,
-		normalize,
-		pformat_tabs,
-		validate_classifiers
-		)
+from repo_helper.utils import check_git_status, indent_with_tab, normalize, pformat_tabs, validate_classifiers
 
 
 def test_check_git_status(git_repo: GitRepo):

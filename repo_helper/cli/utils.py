@@ -55,7 +55,7 @@ import datetime
 import os
 import textwrap
 from functools import partial
-from typing import Any, Callable, cast, Iterable, List, NoReturn, Optional
+from typing import Any, Callable, Iterable, List, Optional
 
 # 3rd party
 import click
@@ -220,25 +220,19 @@ def commit_option(default: Optional[bool]) -> Callable:
 	* :py:obj:`False` -- Don't commit
 	"""
 
-	if default is None:
-		help_text = "Commit or do not commit any changed files.  [default: Ask first]"
-	elif default is True:
+	if default is True:
 		help_text = "Commit or do not commit any changed files.  [default: Commit automatically]"
 	elif default is False:
 		help_text = "Commit or do not commit any changed files.  [default: Don't commit]"
+	else:
+		help_text = "Commit or do not commit any changed files.  [default: Ask first]"
 
-	def deco(f: Callable) -> Callable:
-
-		return autocomplete_option(
-				"-y/-n",
-				"--commit/--no-commit",
-				default=default,
-				help=help_text,
-				)(
-						f
-						)
-
-	return deco
+	return autocomplete_option(
+			"-y/-n",
+			"--commit/--no-commit",
+			default=default,
+			help=help_text,
+			)
 
 
 def commit_message_option(default: str) -> Callable:
@@ -248,19 +242,14 @@ def commit_message_option(default: str) -> Callable:
 	:param default: The default commit message.
 	"""
 
-	def deco(f: Callable) -> Callable:
-		return autocomplete_option(
-				"-m",
-				"--message",
-				type=click.STRING,
-				default=default,
-				help='The commit message to use.',
-				show_default=True,
-				)(
-						f
-						)
-
-	return deco
+	return autocomplete_option(
+			"-m",
+			"--message",
+			type=click.STRING,
+			default=default,
+			help='The commit message to use.',
+			show_default=True,
+			)
 
 
 def force_option(help_text: str) -> Callable:
@@ -270,21 +259,16 @@ def force_option(help_text: str) -> Callable:
 	:param help_text: The help text for the option.
 	"""
 
-	def deco(f: Callable) -> Callable:
-		return autocomplete_option(
-				"-f",
-				"--force",
-				is_flag=True,
-				default=False,
-				help=help_text,
-				)(
-						f
-						)
-
-	return deco
+	return autocomplete_option(
+			"-f",
+			"--force",
+			is_flag=True,
+			default=False,
+			help=help_text,
+			)
 
 
-def abort(message: str) -> NoReturn:
+def abort(message: str) -> Exception:
 	"""
 	Aborts the program execution.
 
@@ -292,7 +276,7 @@ def abort(message: str) -> NoReturn:
 	"""
 
 	click.echo(Fore.RED(message), err=True)
-	raise click.Abort
+	return click.Abort()
 
 
 def run_repo_helper(path, force, initialise, commit, message):
@@ -309,13 +293,8 @@ def run_repo_helper(path, force, initialise, commit, message):
 	try:
 		gh = RepoHelper(path)
 	except FileNotFoundError as e:
-		with Fore.RED:
-			error_block = textwrap.indent(str(e), "	")
-			print(f"""\
-Unable to run 'repo_helper'.
-The error was:
-{error_block}""")
-			return 1
+		error_block = textwrap.indent(str(e), "	")
+		raise abort(f"Unable to run 'repo_helper'.\nThe error was:\n{error_block}")
 
 	if not assert_clean(gh, allow_config=True):
 		if force:

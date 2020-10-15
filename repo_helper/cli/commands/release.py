@@ -26,7 +26,7 @@ Make a release.
 # stdlib
 from functools import partial
 from types import MethodType
-from typing import Callable, cast, Dict, List, Optional, Tuple
+from typing import Callable, Dict, List, Optional, Tuple, cast
 
 # 3rd party
 import click
@@ -170,7 +170,7 @@ class Bumper:
 
 		pypi_secure_key = "travis_pypi_secure"
 		if not self.repo.templates.globals[pypi_secure_key]:
-			abort(f"Cowardly refusing to bump the version when {pypi_secure_key!r} is unset.")
+			raise abort(f"Cowardly refusing to bump the version when {pypi_secure_key!r} is unset.")
 
 		#:
 		self.current_version = self.get_current_version()
@@ -227,7 +227,7 @@ class Bumper:
 		dulwich_repo = Repo(self.repo.target_repo)
 
 		if f"v{new_version_str}".encode("UTF-8") in dulwich_repo.refs.as_dict(b"refs/tags"):
-			abort(f"The tag 'v{new_version_str}' already exists!")
+			raise abort(f"The tag 'v{new_version_str}' already exists!")
 
 		bumpversion_config = self.get_bumpversion_config(str(self.current_version)[1:], new_version_str)
 
@@ -307,10 +307,6 @@ class Bumper:
 def major(commit: Optional[bool], message: str, force: bool) -> int:
 	"""
 	Bump to the next major version.
-
-	:param commit: Whether to commit automatically (:py:obj:`True`) or ask first (:py:obj:`None`).
-	:param message: The commit message.
-	:param force: Whether to force bumping the version when the repository is unclean.
 	"""
 
 	bumper = Bumper(PathPlus.cwd(), force)
@@ -323,10 +319,6 @@ def major(commit: Optional[bool], message: str, force: bool) -> int:
 def minor(commit: Optional[bool], message: str, force: bool) -> int:
 	"""
 	Bump to the next minor version.
-
-	:param commit: Whether to commit automatically (:py:obj:`True`) or ask first (:py:obj:`None`).
-	:param message: The commit message.
-	:param force: Whether to force bumping the version when the repository is unclean.
 	"""
 
 	bumper = Bumper(PathPlus.cwd(), force)
@@ -339,10 +331,6 @@ def minor(commit: Optional[bool], message: str, force: bool) -> int:
 def patch(commit: Optional[bool], message: str, force: bool) -> int:
 	"""
 	Bump to the next patch version.
-
-	:param commit: Whether to commit automatically (:py:obj:`True`) or ask first (:py:obj:`None`).
-	:param message: The commit message.
-	:param force: Whether to force bumping the version when the repository is unclean.
 	"""
 
 	bumper = Bumper(PathPlus.cwd(), force)

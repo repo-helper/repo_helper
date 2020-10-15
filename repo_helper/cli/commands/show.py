@@ -107,7 +107,7 @@ def log(entries: Optional[int], reverse: bool, from_date: Optional[datetime], fr
 	try:
 		commit_log = Log(repo).log(max_entries=entries, reverse=reverse, from_date=from_date, from_tag=from_tag)
 	except ValueError as e:
-		abort(f"ERROR: {e}")
+		raise abort(f"ERROR: {e}")
 
 	click.echo_via_pager(commit_log, resolve_color_default())
 
@@ -151,7 +151,7 @@ def changelog(entries: Optional[int], reverse: bool) -> int:
 				from_tag=f"v{rh.templates.globals['version']}",
 				)
 	except ValueError as e:
-		abort(f"ERROR: {e}")
+		raise abort(f"ERROR: {e}")
 
 	click.echo_via_pager(commit_log, resolve_color_default())
 

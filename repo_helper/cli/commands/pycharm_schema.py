@@ -90,10 +90,10 @@ def pycharm_schema() -> None:
 	else:
 		schema = objectify.parse(".idea/jsonSchemas.xml")
 		root = schema.getroot()
-		printr(root)
+		# printr(root)
 
 		for entry in root.component.state.map.findall("entry"):
-			printr(entry)
+			# printr(entry)
 			if entry.attrib["key"] == "repo_helper_schema":
 				break
 		else:
