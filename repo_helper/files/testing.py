@@ -41,10 +41,10 @@ from packaging.requirements import Requirement
 from repo_helper.configupdater2 import ConfigUpdater  # type: ignore
 from repo_helper.files import management
 from repo_helper.files.linting import code_only_warning, lint_fix_list, lint_warn_list
-from repo_helper.utils import indent_with_tab, read_requirements
+from repo_helper.requirements_tools import read_requirements
+from repo_helper.utils import indent_join
 
 __all__ = [
-		"indent_join",
 		"make_tox",
 		"ToxConfig",
 		"make_yapf",
@@ -52,14 +52,6 @@ __all__ = [
 		"ensure_tests_requirements",
 		"make_pre_commit",
 		]
-
-
-def indent_join(iterable: Iterable[str]):
-	l = list(iterable)
-	if len(l) > 1:
-		if not l[0] == '':
-			l.insert(0, '')
-	return indent_with_tab(textwrap.dedent("\n".join(l)))
 
 
 class ToxConfig:

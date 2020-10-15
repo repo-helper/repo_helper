@@ -23,9 +23,6 @@ Repo Helper: Manage configuration files with ease.
 #  MA 02110-1301, USA.
 #
 
-# this package
-from repo_helper.core import RepoHelper
-
 __author__: str = "Dominic Davis-Foster"
 __copyright__: str = "2020 Dominic Davis-Foster"
 __license__: str = "LGPLv3+"

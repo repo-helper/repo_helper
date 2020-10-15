@@ -32,9 +32,10 @@ from typing import Optional
 import click
 
 # this package
-from repo_helper import RepoHelper
 from repo_helper.cli import cli_group
-from repo_helper.cli.utils import CONTEXT_SETTINGS, abort, autocomplete_option, resolve_color_default
+from repo_helper.cli.options import autocomplete_option
+from repo_helper.click_tools import CONTEXT_SETTINGS, abort, resolve_color_default
+from repo_helper.core import RepoHelper
 
 __all__ = ["show", "show_command", "version"]
 
@@ -100,7 +101,7 @@ def log(entries: Optional[int], reverse: bool, from_date: Optional[datetime], fr
 	from dulwich.repo import Repo
 
 	# this package
-	from repo_helper.log import Log
+	from repo_helper.git_tools import Log
 
 	repo = Repo(PathPlus.cwd())
 
@@ -139,7 +140,7 @@ def changelog(entries: Optional[int], reverse: bool) -> int:
 	from dulwich.repo import Repo
 
 	# this package
-	from repo_helper.log import Log
+	from repo_helper.git_tools import Log
 
 	repo = Repo(PathPlus.cwd())
 	rh = RepoHelper(PathPlus.cwd())

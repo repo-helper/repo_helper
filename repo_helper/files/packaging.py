@@ -27,20 +27,20 @@ Manage configuration for packaging tools.
 import copy
 import pathlib
 import textwrap
-from typing import Any, Dict, Iterable, List, Optional, Sequence, Union
+from typing import List
 
 # 3rd party
 import importlib_resources
 import jinja2
 import tomlkit  # type: ignore
 from domdf_python_tools.paths import PathPlus, clean_writer
-from packaging.requirements import InvalidRequirement, Requirement
-from packaging.specifiers import Specifier, SpecifierSet
+from packaging.requirements import Requirement
 
 # this package
 import repo_helper.files
 from repo_helper.configupdater2 import ConfigUpdater  # type: ignore
 from repo_helper.files import management
+from repo_helper.requirements_tools import combine_requirements
 from repo_helper.utils import indent_with_tab, reformat_file
 
 __all__ = [
@@ -87,160 +87,6 @@ def make_manifest(repo_path: pathlib.Path, templates: jinja2.Environment) -> Lis
 	PathPlus(repo_path / "MANIFEST.in").write_clean("\n".join(manifest_entries))
 
 	return ["MANIFEST.in"]
-
-
-def _check_equal_not_none(left: Optional[Any], right: Optional[Any]):
-	if not left or not right:
-		return True
-	else:
-		return left == right
-
-
-def _check_marker_equality(left: Optional[Any], right: Optional[Any]):
-	if left is not None and right is not None:
-		for left_mark, right_mark in zip(left._markers, right._markers):
-			if str(left_mark) != str(right_mark):
-				return False
-	return True
-
-
-class ComparableRequirement(Requirement):
-
-	def __eq__(self, other) -> bool:
-
-		if isinstance(other, str):
-			try:
-				other = Requirement(other)
-			except InvalidRequirement:
-				return NotImplemented
-
-			return self == other
-
-		elif isinstance(other, Requirement):
-			return all((
-					_check_equal_not_none(self.name, other.name),
-					_check_equal_not_none(self.url, other.url),
-					_check_equal_not_none(self.extras, other.extras),
-					_check_equal_not_none(self.specifier, other.specifier),
-					_check_marker_equality(self.marker, other.marker),
-					))
-		else:
-			return NotImplemented
-
-	def __gt__(self, other) -> bool:
-		if isinstance(other, Requirement):
-			return self.name > other.name
-		elif isinstance(other, str):
-			return self.name > other
-		else:
-			return NotImplemented
-
-	def __ge__(self, other) -> bool:
-		if isinstance(other, Requirement):
-			return self.name >= other.name
-		elif isinstance(other, str):
-			return self.name >= other
-		else:
-			return NotImplemented
-
-	def __le__(self, other) -> bool:
-		if isinstance(other, Requirement):
-			return self.name <= other.name
-		elif isinstance(other, str):
-			return self.name <= other
-		else:
-			return NotImplemented
-
-	def __lt__(self, other) -> bool:
-		if isinstance(other, Requirement):
-			return self.name < other.name
-		elif isinstance(other, str):
-			return self.name < other
-		else:
-			return NotImplemented
-
-
-operator_symbols = ('<=', '<', '!=', '==', '>=', '>', '~=', '===')
-
-
-def resolve_specifiers(specifiers: Iterable[Specifier]) -> SpecifierSet:
-	"""
-	Resolve duplicated and overlapping requirement specifiers.
-
-	:param specifiers:
-
-	:return:
-	"""
-
-	final_specifier_set = SpecifierSet()
-
-	operator_lookup: Dict[str, List[Specifier]] = {s: [] for s in operator_symbols}
-
-	for spec in specifiers:
-		if spec.operator in operator_lookup:
-			operator_lookup[spec.operator].append(spec)
-
-	if operator_lookup['<=']:
-		final_specifier_set &= SpecifierSet(f"<={min(spec.version for spec in operator_lookup['<='])}")
-
-	if operator_lookup['<']:
-		final_specifier_set &= SpecifierSet(f"<{min(spec.version for spec in operator_lookup['<'])}")
-
-	for spec in operator_lookup['!=']:
-		final_specifier_set &= SpecifierSet(f"!={spec.version}")
-
-	for spec in operator_lookup['==']:
-		final_specifier_set &= SpecifierSet(f"=={spec.version}")
-
-	if operator_lookup['>=']:
-		final_specifier_set &= SpecifierSet(f">={max(spec.version for spec in operator_lookup['>='])}")
-
-	if operator_lookup['>']:
-		final_specifier_set &= SpecifierSet(f">{max(spec.version for spec in operator_lookup['>'])}")
-
-	for spec in operator_lookup['~=']:
-		final_specifier_set &= SpecifierSet(f"~={spec.version}")
-
-	for spec in operator_lookup['===']:
-		final_specifier_set &= SpecifierSet(f"==={spec.version}")
-
-	return final_specifier_set
-
-
-def combine_requirements(
-		requirement: Union[Requirement, Iterable[Requirement]],
-		*requirements: Requirement,
-		) -> Sequence[Requirement]:
-	"""
-	Combine duplicated requirements in a list.
-
-	:param requirement: A single requirement, or an iterable of requirements
-	:param requirements: Additional requirements
-
-	:return:
-
-	.. TODO:: Markers
-	"""
-
-	if isinstance(requirement, Iterable):
-		all_requirements = [*requirement, *requirements]
-	else:
-		all_requirements = [requirement, *requirements]
-
-	merged_requirements: List[ComparableRequirement] = []
-
-	for req in all_requirements:
-		if req.name in merged_requirements:
-			other_req = merged_requirements[merged_requirements.index(req.name)]
-			other_req.specifier &= req.specifier
-			other_req.extras &= req.extras
-			other_req.specifier = resolve_specifiers(other_req.specifier)
-		else:
-			if not isinstance(req, ComparableRequirement):
-				req = ComparableRequirement(str(req))
-			merged_requirements.append(req)
-
-	return merged_requirements
 
 
 @management.register("pyproject")

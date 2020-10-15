@@ -27,13 +27,14 @@ Entry point for running ``repo_helper`` from the command line.
 import sys
 
 # this package
+import repo_helper.cli.commands
 from repo_helper.cli import cli
-from repo_helper.cli.utils import import_commands
+from repo_helper.click_tools import import_commands
 
 __all__ = ["main"]
 
 # Load commands
-import_commands()
+import_commands(repo_helper.cli.commands, entry_point="repo_helper.command")
 
 
 def main():

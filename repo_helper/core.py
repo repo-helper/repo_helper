@@ -46,6 +46,7 @@ from repo_helper.files.testing import make_isort
 # this package
 from .configuration import parse_yaml
 from .templates import template_dir
+from .utils import discover_entry_points
 
 __all__ = [
 		"RepoHelper",
@@ -58,7 +59,9 @@ def import_registered_functions() -> List[Type]:
 	Returns a list of all registered functions.
 	"""
 
-	return discover(repo_helper.files, is_registered)
+	local_functions = discover(repo_helper.files, is_registered)
+	third_party_commands = discover_entry_points("repo_helper.command", is_registered)
+	return [*local_functions, *third_party_commands]
 
 
 import_registered_functions()

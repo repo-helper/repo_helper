@@ -24,97 +24,44 @@ General utilities.
 #
 
 # stdlib
-import contextlib
-import os
-import pathlib
 import re
-import subprocess
+import sys
 import textwrap
-from typing import TYPE_CHECKING, Callable, Iterable, List, Optional, Set, Tuple
+from typing import TYPE_CHECKING, Any, Callable, Iterable, List, Optional, Set, Tuple
 
 # 3rd party
-import click
 import isort  # type: ignore
+import isort.settings  # type: ignore
 import trove_classifiers  # type: ignore
 import yapf_isort  # type: ignore
-from domdf_python_tools.paths import PathPlus
 from domdf_python_tools.pretty_print import FancyPrinter
 from domdf_python_tools.stringlist import StringList
 from domdf_python_tools.terminal_colours import Fore
 from domdf_python_tools.typing import PathLike
 from domdf_python_tools.utils import stderr_writer
-from packaging.requirements import InvalidRequirement, Requirement
-import isort.settings  # type: ignore
-
 
 if TYPE_CHECKING:
 	# this package
-	from repo_helper import RepoHelper
+	from repo_helper.core import RepoHelper
+
+if sys.version_info[:2] == (3, 7):  # pragma: no cover (py38+)
+	# 3rd party
+	import importlib_metadata  # type: ignore
+else:  # pragma: no cover (py38)
+	# stdlib
+	import importlib.metadata as importlib_metadata
 
 __all__ = [
-		"in_directory",
-		"check_git_status",
 		"validate_classifiers",
 		"license_lookup",
 		"indent_with_tab",
 		"pformat_tabs",
 		"normalize",
-		"read_requirements",
 		"reformat_file",
-		"assert_clean",
+		"discover_entry_points",
+		"indent_join",
 		]
 
-
-@contextlib.contextmanager
-def in_directory(directory: PathLike):
-	"""
-	Context manager to change into the given directory for the
-	duration of the ``with`` block.
-
-	:param directory:
-	"""
-
-	oldwd = os.getcwd()
-	try:
-		os.chdir(str(directory))
-		yield
-	finally:
-		os.chdir(oldwd)
-
-
-def check_git_status(repo_path: PathLike) -> Tuple[bool, List[str]]:
-	"""
-	Check the ``git`` status of the given repository.
-
-	:param repo_path: Path to the repository root.
-
-	:return: Whether the git working directory is clean, and the list of uncommitted files if it isn't.
-	"""
-
-	with in_directory(repo_path):
-
-		lines = [
-				line.strip()
-				for line in subprocess.check_output(["git", "status", "--porcelain"]).splitlines()
-				if not line.strip().startswith(b"??")
-				]
-
-	str_lines = [line.decode("UTF-8") for line in lines]
-	return not bool(str_lines), str_lines
-
-
-#
-# def get_git_status(repo_path: PathLike) -> str:
-# 	"""
-# 	Returns the output of ``git status``
-#
-# 	:param repo_path: Path to the repository root.
-# 	"""
-#
-# 	with in_directory(repo_path):
-# 		return subprocess.check_output(["git", "status"]).decode("UTF-8")
-
-#
 # def ensure_requirements(requirements_list: Iterable[Requirement], requirements_file: pathlib.Path):
 # 	"""
 # 	Ensure the given requirements file contains the required entries.
@@ -157,9 +104,54 @@ def check_git_status(repo_path: PathLike) -> Tuple[bool, List[str]]:
 # 	req_file.write_lines(output)
 
 
+def indent_with_tab(
+		text: str,
+		depth: int = 1,
+		predicate: Optional[Callable[[str], bool]] = None,
+		) -> str:
+	r"""
+	Adds ``'\t'`` to the beginning of selected lines in 'text'.
+
+	:param text: The text to indent.
+	:param depth: The depth of the indentation.
+	:param predicate: If given, ``'\t'``  will only be added to the lines where ``predicate(line)``
+		is :py:obj`True`. If ``predicate`` is not provided, it will default to adding ``'\t'``
+		to all non-empty lines that do not consist solely of whitespace characters.
+	"""
+
+	return textwrap.indent(text, "\t" * depth, predicate=predicate)
+
+
+def pformat_tabs(
+		obj: object,
+		width: int = 80,
+		depth: Optional[int] = None,
+		*,
+		compact: bool = False,
+		) -> str:
+	"""
+	Format a Python object into a pretty-printed representation.
+
+	Indentation is set at one tab.
+
+	:param obj: The object to format.
+	:param width: The maximum width of the output.
+	:param depth:
+	:param compact:
+	"""
+
+	prettyprinter = FancyPrinter(indent=4, width=width, depth=depth, compact=compact)
+
+	buf = StringList()
+	for line in prettyprinter.pformat(obj).splitlines():
+		buf.append(re.sub("^ {4}", r"\t", line))
+
+	return str(buf)
+
+
 def validate_classifiers(classifiers: Iterable[str]) -> bool:
 	"""
-	Validate a list of `Trove Classifiers <https://pypi.org/classifiers/>`_.
+	Validate a list of `trove classifiers <https://pypi.org/classifiers/>`_.
 
 	:param classifiers:
 	"""
@@ -177,6 +169,7 @@ def validate_classifiers(classifiers: Iterable[str]) -> bool:
 	return invalid_classifier
 
 
+#: Mapping of license short codes to license names used in trove classifiers.
 license_lookup = {
 		"AFL-1.1": "Academic Free License (AFL)",
 		"AFL-1.2": "Academic Free License (AFL)",
@@ -279,48 +272,6 @@ license_lookup = {
 		"Public Domain": "Public Domain",
 		}
 
-
-def indent_with_tab(text: str, depth: int = 1, predicate: Optional[Callable[[str], bool]] = None) -> str:
-	r"""
-	Adds ``'\t'`` to the beginning of selected lines in 'text'.
-
-	:param text: The text to indent.
-	:param depth: The depth of the indentation.
-	:param predicate: If given, ``'\t'``  will only be added to the lines where ``predicate(line)``
-		is :py:obj`True`. If ``predicate`` is not provided, it will default to adding ``'\t'``
-		to all non-empty lines that do not consist solely of whitespace characters.
-	"""
-
-	return textwrap.indent(text, "\t" * depth, predicate=predicate)
-
-
-def pformat_tabs(
-		obj: object,
-		width: int = 80,
-		depth: Optional[int] = None,
-		*,
-		compact: bool = False,
-		) -> str:
-	"""
-	Format a Python object into a pretty-printed representation.
-
-	Indentation is set at one tab.
-
-	:param obj: The object to format.
-	:param width: The maximum width of the output.
-	:param depth:
-	:param compact:
-	"""
-
-	prettyprinter = FancyPrinter(indent=4, width=width, depth=depth, compact=compact)
-
-	buf = StringList()
-	for line in prettyprinter.pformat(obj).splitlines():
-		buf.append(re.sub("^ {4}", r"\t", line))
-
-	return str(buf)
-
-
 _normalize_pattern = re.compile(r"[-_.]+")
 
 
@@ -336,84 +287,69 @@ def normalize(name: str) -> str:
 	return _normalize_pattern.sub("-", name).lower()
 
 
-def read_requirements(req_file: pathlib.Path) -> Tuple[Set[Requirement], List[str]]:
-	"""
-	Reads :pep:`508` requirements from the given file.
-
-	:param req_file:
-
-	:return: The requirements, and a list of commented lines.
-	"""
-
-	comments = []
-	requirements: Set[Requirement] = set()
-
-	for line in PathPlus(req_file).read_lines():
-		if line.startswith("#"):
-			comments.append(line)
-		elif line:
-			try:
-				req = Requirement(line)
-				if req.name.lower() not in [r.name.lower() for r in requirements]:
-					requirements.add(req)
-			except InvalidRequirement:
-				# TODO: Show warning to user
-				pass
-
-	return requirements, comments
-
-
 def reformat_file(filename: PathLike, yapf_style: str, isort_config_file: str) -> int:
 	"""
 	Reformat the given file.
 
 	:param filename:
-	:param yapf_style:
-	:param isort_config_file:
+	:param yapf_style: The name of the yapf style, or the path to the yapf style file.
+	:param isort_config_file: The filename of the isort configuration file.
 	"""
 
-	isort_config = isort.Config(settings_file=str(isort_config_file))
-	r = yapf_isort.Reformatter(filename, yapf_style, isort_config)
-	ret = r.run()
-	r.to_file()
+	old_isort_settings = isort.settings.CONFIG_SECTIONS.copy()
 
-	return ret
+	try:
+		isort.settings.CONFIG_SECTIONS["isort.cfg"] = ("settings", "isort")
+
+		isort_config = isort.Config(settings_file=str(isort_config_file))
+		r = yapf_isort.Reformatter(filename, yapf_style, isort_config)
+		ret = r.run()
+		r.to_file()
+
+		return ret
+
+	finally:
+		isort.settings.CONFIG_SECTIONS = old_isort_settings
 
 
-isort.settings.CONFIG_SECTIONS["isort.cfg"] = ("settings", "isort")
-
-
-def assert_clean(repo: "RepoHelper", allow_config: bool = False) -> bool:
+def discover_entry_points(
+		group_name: str,
+		match_func: Optional[Callable[[Any], bool]] = None,
+		) -> List[Any]:
 	"""
-	Returns :py:obj:`True` if the working directory is clean.
+	Returns a list of entry points in the given category,
+	optionally filtered by ``match_func``.
 
-	If not, returns :py:obj:`False` and prints a helpful error message to stderr.
+	:param group_name: The entry point group name, e.g. ``'entry_points'``.
+	:param match_func: Function taking an object and returning true if the object is to be included in the output.
+	:default match_func: :py:obj:`None`, which includes all objects.
 
-	:param repo:
-	:param allow_config:
+	:return: List of matching objects.
 	"""
 
-	status, lines = check_git_status(repo.target_repo)
+	matching_objects = []
 
-	if not status:
-		if allow_config and lines in (
-				["M repo_helper.yml"],
-				["A repo_helper.yml"],
-				["AM repo_helper.yml"],
-				["M git_helper.yml"],
-				["A git_helper.yml"],
-				["D git_helper.yml"],
-				["AM git_helper.yml"],
-				):
-			pass
-		else:
-			click.echo(f"{Fore.RED}Git working directory is not clean:", err=True)
+	for entry_point in importlib_metadata.entry_points().get(group_name, ()):
+		entry_point = entry_point.load()
 
-			for line in lines:
-				click.echo(f"  {line}", err=True)
+		if match_func is not None and not match_func(entry_point):
+			continue
 
-			click.echo(Fore.RESET, err=True)
+		matching_objects.append(entry_point)
 
-			return False
+	return matching_objects
 
-	return True
+
+def indent_join(iterable: Iterable[str]) -> str:
+	"""
+	Join an iterable of strings with newlines,
+	and indent each line with a tab if there is more then one element.
+
+	:param iterable:
+	"""
+
+	l = list(iterable)
+	if len(l) > 1:
+		if not l[0] == '':
+			l.insert(0, '')
+	return indent_with_tab(textwrap.dedent("\n".join(l)))

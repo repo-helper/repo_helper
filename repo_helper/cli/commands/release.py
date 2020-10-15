@@ -40,18 +40,13 @@ from dulwich.repo import Repo
 from typing_extensions import TypedDict
 
 # this package
-from repo_helper import RepoHelper
 from repo_helper.cli import cli_group
-from repo_helper.cli.utils import (
-		CONTEXT_SETTINGS,
-		abort,
-		commit_changed_files,
-		commit_message_option,
-		commit_option,
-		force_option
-		)
+from repo_helper.cli.options import commit_message_option, commit_option, force_option
+from repo_helper.cli.utils import commit_changed_files
+from repo_helper.click_tools import CONTEXT_SETTINGS, abort
 from repo_helper.configupdater2 import ConfigUpdater  # type: ignore
-from repo_helper.utils import assert_clean
+from repo_helper.core import RepoHelper
+from repo_helper.git_tools import assert_clean
 
 __all__ = [
 		"release",
@@ -162,7 +157,7 @@ class Bumper:
 		#:
 		self.repo = RepoHelper(repo_path)
 
-		if not assert_clean(self.repo):
+		if not assert_clean(self.repo.target_repo):
 			if force:
 				click.echo(Fore.RED("Proceeding anyway"), err=True)
 			else:

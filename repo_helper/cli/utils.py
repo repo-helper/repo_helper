@@ -2,7 +2,7 @@
 #
 #  utils.py
 """
-CLI utility functions
+CLI utility functions.
 """
 #
 #  Copyright © 2020 Dominic Davis-Foster <dominic@davis-foster.co.uk>
@@ -54,51 +54,24 @@ CLI utility functions
 import datetime
 import os
 import textwrap
-from functools import partial
-from typing import Any, Callable, Iterable, List, Optional
+from typing import Iterable, Optional
 
 # 3rd party
 import click
-import pre_commit.main  # type: ignore
-from click import Command, get_current_context
-from domdf_python_tools.import_tools import discover
 from domdf_python_tools.paths import PathPlus
 from domdf_python_tools.terminal_colours import Fore
 from domdf_python_tools.typing import PathLike
-from dulwich import porcelain  # type: ignore
 from dulwich import repo
-from dulwich.errors import CommitError  # type: ignore
+from dulwich.errors import CommitError
 
 # this package
-import repo_helper.cli.commands
-from repo_helper.core import RepoHelper
-from repo_helper.init_repo import init_repo
-from repo_helper.utils import assert_clean, discover_entry_points
+from repo_helper.click_tools import abort
+from repo_helper.git_tools import assert_clean
 
 __all__ = [
-		"CONTEXT_SETTINGS",
-		"click_command",
-		"click_group",
-		"get_env_vars",
 		"commit_changed_files",
-		"autocomplete_option",
-		"resolve_color_default",
-		"commit_message_option",
-		"commit_option",
-		"force_option",
-		"abort",
 		"run_repo_helper",
-		"is_command",
-		"import_commands",
 		]
-
-CONTEXT_SETTINGS = dict(help_option_names=['-h', '--help'], max_content_width=120)
-click_command = partial(click.command, context_settings=CONTEXT_SETTINGS)
-click_group = partial(click.group, context_settings=CONTEXT_SETTINGS)
-
-
-def get_env_vars(ctx, args, incomplete):
-	return [k for k in os.environ.keys() if incomplete in k]
 
 
 def commit_changed_files(
@@ -120,6 +93,10 @@ def commit_changed_files(
 
 	:returns: :py:obj:`True` if the changes were committed. :py:obj:`False` otherwise.
 	"""
+
+	# 3rd party
+	import pre_commit.main  # type: ignore
+	from dulwich import porcelain
 
 	# print(repo_path)
 	repo_path = PathPlus(repo_path).absolute()
@@ -178,107 +155,6 @@ def commit_changed_files(
 	return False
 
 
-# autocomplete_option = partial(click.option, autocompletion=get_env_vars)
-autocomplete_option = click.option
-
-
-def resolve_color_default(color: Optional[bool] = None) -> Optional[bool]:
-	""""
-	Internal helper to get the default value of the color flag.  If a
-	value is passed it's returned unchanged, otherwise it's looked up from
-	the current context.
-
-	If the environment variable ``PYCHARM_HOSTED`` is 1
-	(which is the case if running in PyCharm)
-	the output will be coloured by default.
-
-	:param color:
-	"""
-
-	if color is not None:
-		return color
-
-	ctx = get_current_context(silent=True)
-
-	if ctx is not None:
-		return ctx.color
-
-	if os.environ.get("PYCHARM_HOSTED", 0):
-		return True
-
-	return None
-
-
-def commit_option(default: Optional[bool]) -> Callable:
-	"""
-	Decorator to add the ``--commit / --no-commit` option to a click command.
-
-	:param default: Whether to commit automatically.
-
-	* :py:obj:`None` -- Ask first
-	* :py:obj:`True` -- Commit automatically
-	* :py:obj:`False` -- Don't commit
-	"""
-
-	if default is True:
-		help_text = "Commit or do not commit any changed files.  [default: Commit automatically]"
-	elif default is False:
-		help_text = "Commit or do not commit any changed files.  [default: Don't commit]"
-	else:
-		help_text = "Commit or do not commit any changed files.  [default: Ask first]"
-
-	return autocomplete_option(
-			"-y/-n",
-			"--commit/--no-commit",
-			default=default,
-			help=help_text,
-			)
-
-
-def commit_message_option(default: str) -> Callable:
-	"""
-	Decorator to add the ``-m / --message`` option to a click command.
-
-	:param default: The default commit message.
-	"""
-
-	return autocomplete_option(
-			"-m",
-			"--message",
-			type=click.STRING,
-			default=default,
-			help='The commit message to use.',
-			show_default=True,
-			)
-
-
-def force_option(help_text: str) -> Callable:
-	"""
-	Decorator to add the ``-f / --force`` option to a click command.
-
-	:param help_text: The help text for the option.
-	"""
-
-	return autocomplete_option(
-			"-f",
-			"--force",
-			is_flag=True,
-			default=False,
-			help=help_text,
-			)
-
-
-def abort(message: str) -> Exception:
-	"""
-	Aborts the program execution.
-
-	:param message:
-	"""
-
-	click.echo(Fore.RED(message), err=True)
-	return click.Abort()
-
-
 def run_repo_helper(
 		path,
 		force: bool,
@@ -296,13 +172,17 @@ def run_repo_helper(
 	:param message:
 	"""
 
+	# this package
+	from repo_helper.core import RepoHelper
+	from repo_helper.cli.commands.init import init_repo
+
 	try:
 		gh = RepoHelper(path)
 	except FileNotFoundError as e:
 		error_block = textwrap.indent(str(e), "	")
 		raise abort(f"Unable to run 'repo_helper'.\nThe error was:\n{error_block}")
 
-	if not assert_clean(gh, allow_config=True):
+	if not assert_clean(gh.target_repo, allow_config=True):
 		if force:
 			click.echo(Fore.RED("Proceeding anyway"), err=True)
 		else:
@@ -329,23 +209,3 @@ def run_repo_helper(
 		return 1
 
 	return 0
-
-
-def is_command(obj: Any) -> bool:
-	"""
-	Return whether ``obj`` is a click command.
-
-	:param obj:
-	"""
-
-	return isinstance(obj, Command)
-
-
-def import_commands() -> List[Command]:
-	"""
-	Returns a list of all commands.
-	"""
-
-	local_commands = discover(repo_helper.cli.commands, is_command, exclude_side_effects=False)
-	third_party_commands = discover_entry_points("repo_helper.command", is_command)
-	return [*local_commands, *third_party_commands]

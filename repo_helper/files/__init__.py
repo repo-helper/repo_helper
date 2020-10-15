@@ -25,12 +25,21 @@ Functions to create files
 
 # stdlib
 import inspect
+import pathlib
 from typing import Any, Callable, List, Optional, Sequence, Tuple
 
-__all__ = ["Management", "management", "is_registered"]
+# 3rd party
+import jinja2
+
+jinja2.Environment.__module__ = "jinja2"
+
+__all__ = ["Management", "management", "is_registered", "Manager"]
+
+#: Type hint for a function that manages files.
+Manager = Callable[[pathlib.Path, jinja2.Environment], List[str]]
 
 
-class Management(list):
+class Management(List[Tuple[Manager, str, List[str]]]):
 	"""
 	Class to store functions that manage files.
 

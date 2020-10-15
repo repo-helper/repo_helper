@@ -32,18 +32,9 @@ from domdf_python_tools.paths import PathPlus
 
 # this package
 from repo_helper import __version__
-from repo_helper.cli.utils import (
-		CONTEXT_SETTINGS,
-		autocomplete_option,
-		click_command,
-		click_group,
-		commit_changed_files,
-		commit_message_option,
-		commit_option,
-		force_option,
-		get_env_vars,
-		run_repo_helper
-		)
+from repo_helper.cli.options import commit_message_option, commit_option, force_option
+from repo_helper.cli.utils import run_repo_helper
+from repo_helper.click_tools import CONTEXT_SETTINGS, click_group
 
 """
 Enable autocompletion with:

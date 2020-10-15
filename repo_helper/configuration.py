@@ -112,7 +112,6 @@ __all__ = [
 		"travis_site",
 		"travis_ubuntu_version",
 		"username",
-		"validate_version",
 		"version",
 		"yapf_exclude",
 		]

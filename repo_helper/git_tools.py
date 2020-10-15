@@ -1,8 +1,8 @@
 #!/usr/bin/env python
 #
-#  log.py
+#  git_tools.py
 """
-Python implementation of ``git log``.
+General utilities for working with ``git`` repositories.
 """
 #
 #  Copyright © 2020 Dominic Davis-Foster <dominic@davis-foster.co.uk>
@@ -39,22 +39,31 @@ Python implementation of ``git log``.
 #
 
 # stdlib
+import subprocess
 import time
 from datetime import datetime
 from textwrap import indent
-from typing import Dict, Mapping, Optional, Union
+from typing import Dict, List, Mapping, Optional, Tuple, Union
 
 # 3rd party
+import click
+from domdf_python_tools.paths import PathPlus, in_directory
 from domdf_python_tools.stringlist import StringList
 from domdf_python_tools.terminal_colours import Fore
+from domdf_python_tools.typing import PathLike
 from dulwich.objects import Commit, Tag, format_timezone
 from dulwich.porcelain import open_repo_closing
 from dulwich.repo import Repo
 
-__all__ = ["get_tags", "Log"]
+__all__ = [
+		"get_tags",
+		"Log",
+		"check_git_status",
+		"assert_clean",
+		]
 
 
-def get_tags(repo: Union[Repo, str] = ".") -> Dict[str, str]:
+def get_tags(repo: Union[Repo, PathLike] = ".") -> Dict[str, str]:
 	"""
 	Returns a mapping of commit SHAs to tags.
 
@@ -85,7 +94,7 @@ class Log:
 	#: The git repository.
 	repo: Repo
 
-	def __init__(self, repo: Union[Repo, str] = "."):
+	def __init__(self, repo: Union[Repo, PathLike] = "."):
 		if isinstance(repo, Repo):
 			self.repo = repo
 		else:
@@ -118,11 +127,12 @@ class Log:
 				self.remote_branches[key[13:]] = value
 
 	# Based on https://www.dulwich.io/code/dulwich/blob/master/dulwich/porcelain.py
-	def format_commit(self, commit: Commit) -> StringList:
+	def format_commit(self, commit: Commit, colour: bool = True) -> StringList:
 		"""
 		Write a human-readable commit log entry.
 
 		:param commit: A `Commit` object
+		:param colour: Show coloured output.
 		"""
 
 		buf = StringList()
@@ -182,6 +192,7 @@ class Log:
 			reverse: bool = False,
 			from_date: Optional[datetime] = None,
 			from_tag: Optional[str] = None,
+			colour: bool = True
 			) -> str:
 		"""
 		Write commit logs.
@@ -191,6 +202,7 @@ class Log:
 		:param reverse: Print entries in reverse order.
 		:param from_date: Show commits after the given date.
 		:param from_tag: Show commits after the given tag.
+		:param colour: Show coloured output.
 		"""
 
 		kwargs: Mapping[str, Union[None, int, bool]] = dict(max_entries=max_entries, reverse=reverse)
@@ -217,3 +229,74 @@ class Log:
 						break
 
 		return "\n".join(buf)
+
+
+def assert_clean(repo: PathPlus, allow_config: bool = False) -> bool:
+	"""
+	Returns :py:obj:`True` if the working directory is clean.
+
+	If not, returns :py:obj:`False` and prints a helpful error message to stderr.
+
+	:param repo:
+	:param allow_config:
+	"""
+
+	status, lines = check_git_status(repo)
+
+	if status:
+		return True
+
+	else:
+		if allow_config and lines in (
+				["M repo_helper.yml"],
+				["A repo_helper.yml"],
+				["AM repo_helper.yml"],
+				["M git_helper.yml"],
+				["A git_helper.yml"],
+				["D git_helper.yml"],
+				["AM git_helper.yml"],
+				):
+			return True
+
+		else:
+			click.echo(Fore.RED("Git working directory is not clean:"), err=True)
+
+			for line in lines:
+				click.echo(Fore.RED(f"  {line}"), err=True)
+
+			return False
+
+
+def check_git_status(repo_path: PathLike) -> Tuple[bool, List[str]]:
+	"""
+	Check the ``git`` status of the given repository.
+
+	:param repo_path: Path to the repository root.
+
+	:return: Whether the git working directory is clean, and the list of uncommitted files if it isn't.
+	"""
+
+	with in_directory(repo_path):
+
+		lines = [
+				line.strip()
+				for line in subprocess.check_output(["git", "status", "--porcelain"]).splitlines()
+				if not line.strip().startswith(b"??")
+				]
+
+	str_lines = [line.decode("UTF-8") for line in lines]
+	return not bool(str_lines), str_lines
+
+
+#
+# def get_git_status(repo_path: PathLike) -> str:
+# 	"""
+# 	Returns the output of ``git status``
+#
+# 	:param repo_path: Path to the repository root.
+# 	"""
+#
+# 	with in_directory(repo_path):
+# 		return subprocess.check_output(["git", "status"]).decode("UTF-8")
+
+#
