@@ -54,9 +54,11 @@ from repo_helper.blocks import (
 		shields_regex,
 		short_desc_regex
 		)
+from repo_helper.configupdater2 import ConfigUpdater
 from repo_helper.files import management
+from repo_helper.requirements_tools import read_requirements
 from repo_helper.templates import init_repo_template_dir, template_dir
-from repo_helper.utils import normalize, pformat_tabs, read_requirements, reformat_file
+from repo_helper.utils import normalize, pformat_tabs, reformat_file
 
 __all__ = [
 		"ensure_doc_requirements",
@@ -222,10 +224,25 @@ def make_docutils_conf(repo_path: pathlib.Path, templates: jinja2.Environment) -
 
 	docs_dir = PathPlus(repo_path / templates.globals["docs_dir"])
 	docs_dir.maybe_make(parents=True)
-	(docs_dir / "docutils.conf").write_clean(f"""\
-[restructuredtext parser]
-tab_width: 4
-""")
+	docutils_conf_file = docs_dir / "docutils.conf"
+
+	if not docutils_conf_file.is_file():
+		docutils_conf_file.write_lines([
+				"[restructuredtext parser]",
+				"tab_width = 4",
+				])
+
+	conf = ConfigUpdater()
+	conf.read(str(docutils_conf_file))
+	required_sections = ["restructuredtext parser"]
+
+	for section in required_sections:
+		if section not in conf.sections():
+			conf.add_section(section)
+
+	conf["restructuredtext parser"]["tab_width"] = 4
+
+	docutils_conf_file.write_clean(str(conf))
 
 	return [os.path.join(templates.globals["docs_dir"], "docutils.conf")]
 
