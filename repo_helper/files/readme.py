@@ -45,11 +45,10 @@ __all__ = ["rewrite_readme"]
 @management.register("readme")
 def rewrite_readme(repo_path: pathlib.Path, templates: jinja2.Environment) -> List[str]:
 	"""
-	Update blocks in the README.rst file.
+	Update blocks in the ``README.rst`` file.
 
 	:param repo_path: Path to the repository root.
 	:param templates:
-	:type templates: jinja2.Environment
 	"""
 
 	readme_file = PathPlus(repo_path / "README.rst")

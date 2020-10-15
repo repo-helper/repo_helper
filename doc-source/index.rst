@@ -100,6 +100,8 @@ This project is in an early stage, and some things might not work correctly or b
 
 .. end shields
 
+|
+
 Installation
 ----------------
 

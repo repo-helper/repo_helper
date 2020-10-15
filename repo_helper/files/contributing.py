@@ -35,7 +35,12 @@ from domdf_python_tools.paths import PathPlus
 # this package
 from repo_helper.files import management
 
-__all__ = ["make_contributing", "make_docs_contributing", "make_issue_templates", "github_bash_block"]
+__all__ = [
+		"make_contributing",
+		"make_docs_contributing",
+		"make_issue_templates",
+		"github_bash_block",
+		]
 
 
 def github_bash_block(*commands: str) -> str:
@@ -82,7 +87,6 @@ def make_contributing(repo_path: pathlib.Path, templates: jinja2.Environment) ->
 
 	:param repo_path: Path to the repository root.
 	:param templates:
-	:type templates: jinja2.Environment
 	"""
 
 	contributing = templates.get_template("CONTRIBUTING.rst")
@@ -102,7 +106,6 @@ def make_docs_contributing(repo_path: pathlib.Path, templates: jinja2.Environmen
 
 	:param repo_path: Path to the repository root.
 	:param templates:
-	:type templates: jinja2.Environment
 	"""
 
 	contributing = templates.get_template("CONTRIBUTING.rst")
@@ -124,7 +127,6 @@ def make_issue_templates(repo_path: pathlib.Path, templates: jinja2.Environment)
 
 	:param repo_path: Path to the repository root.
 	:param templates:
-	:type templates: jinja2.Environment
 	"""
 
 	managed_files = []

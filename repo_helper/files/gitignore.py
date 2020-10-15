@@ -227,11 +227,10 @@ ignores.extend((
 @management.register("gitignore")
 def make_gitignore(repo_path: pathlib.Path, templates: jinja2.Environment) -> List[str]:
 	"""
-	Add .gitignore file to the given repository
+	Add .gitignore file to the given repository.
 
 	:param repo_path: Path to the repository root.
 	:param templates:
-	:type templates: jinja2.Environment
 	"""
 
 	all_ignores = [

@@ -58,7 +58,6 @@ def make_travis(repo_path: pathlib.Path, templates: jinja2.Environment) -> List[
 
 	:param repo_path: Path to the repository root.
 	:param templates:
-	:type templates: jinja2.Environment
 	"""
 
 	# TODO: Use travis matrix rather than tox-travis; see humanity for example
@@ -82,7 +81,6 @@ def remove_copy_pypi_2_github(repo_path: pathlib.Path, templates: jinja2.Environ
 
 	:param repo_path: Path to the repository root.
 	:param templates:
-	:type templates: jinja2.Environment
 	"""
 
 	copier = repo_path / ".ci" / "copy_pypi_2_github.py"
@@ -99,7 +97,6 @@ def make_make_conda_recipe(repo_path: pathlib.Path, templates: jinja2.Environmen
 
 	:param repo_path: Path to the repository root.
 	:param templates:
-	:type templates: jinja2.Environment
 	"""
 
 	script = (template_dir / "make_conda_recipe._py").read_text()
@@ -115,7 +112,6 @@ def make_travis_deploy_conda(repo_path: pathlib.Path, templates: jinja2.Environm
 
 	:param repo_path: Path to the repository root.
 	:param templates:
-	:type templates: jinja2.Environment
 	"""
 
 	travis_deploy_conda = templates.get_template("travis_deploy_conda.sh")
@@ -136,7 +132,6 @@ def make_github_ci(repo_path: pathlib.Path, templates: jinja2.Environment) -> Li
 
 	:param repo_path: Path to the repository root.
 	:param templates:
-	:type templates: jinja2.Environment
 	"""
 
 	# Matrix of OSs: https://youtu.be/KKJL8bM4cis?t=536
@@ -200,7 +195,6 @@ def make_github_manylinux(repo_path: pathlib.Path, templates: jinja2.Environment
 
 	:param repo_path: Path to the repository root.
 	:param templates:
-	:type templates: jinja2.Environment
 	"""
 
 	dot_github = PathPlus(repo_path / ".github")
@@ -240,7 +234,6 @@ def make_github_docs_test(repo_path: pathlib.Path, templates: jinja2.Environment
 
 	:param repo_path: Path to the repository root.
 	:param templates:
-	:type templates: jinja2.Environment
 	"""
 
 	actions = templates.get_template("docs_test_action.yml")
@@ -259,7 +252,6 @@ def make_github_octocheese(repo_path: pathlib.Path, templates: jinja2.Environmen
 
 	:param repo_path: Path to the repository root.
 	:param templates:
-	:type templates: jinja2.Environment
 	"""
 
 	actions = templates.get_template("octocheese.yml")
@@ -284,7 +276,6 @@ def ensure_bumpversion(repo_path: pathlib.Path, templates: jinja2.Environment) -
 
 	:param repo_path: Path to the repository root.
 	:param templates:
-	:type templates: jinja2.Environment
 	"""
 
 	bumpversion_file = PathPlus(repo_path / ".bumpversion.cfg")

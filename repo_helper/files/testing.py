@@ -56,6 +56,7 @@ __all__ = [
 
 class ToxConfig:
 	"""
+	Generates the ``tox.ini`` configuration file.
 
 	:param repo_path:
 	:param templates:
@@ -512,7 +513,6 @@ def make_tox(repo_path: pathlib.Path, templates: jinja2.Environment) -> List[str
 
 	:param repo_path: Path to the repository root.
 	:param templates:
-	:type templates: jinja2.Environment
 	"""
 
 	ToxConfig(repo_path=repo_path, templates=templates).write_out()
@@ -528,7 +528,6 @@ def make_yapf(repo_path: pathlib.Path, templates: jinja2.Environment) -> List[st
 
 	:param repo_path: Path to the repository root.
 	:param templates:
-	:type templates: jinja2.Environment
 	"""
 
 	yapf = templates.get_template("style.yapf")
@@ -546,7 +545,6 @@ def make_isort(repo_path: pathlib.Path, templates: jinja2.Environment) -> List[s
 
 	:param repo_path: Path to the repository root.
 	:param templates:
-	:type templates: jinja2.Environment
 	"""
 
 	# if templates.globals["enable_docs"]:
@@ -621,7 +619,6 @@ def ensure_tests_requirements(repo_path: pathlib.Path, templates: jinja2.Environ
 
 	:param repo_path: Path to the repository root.
 	:param templates:
-	:type templates: jinja2.Environment
 	"""
 
 	target_requirements = {
@@ -677,7 +674,6 @@ def make_pre_commit(repo_path: pathlib.Path, templates: jinja2.Environment) -> L
 
 	:param repo_path: Path to the repository root.
 	:param templates:
-	:type templates: jinja2.Environment
 	"""
 
 	pre_commit = templates.get_template("pre-commit-config.yaml")

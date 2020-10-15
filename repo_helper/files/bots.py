@@ -42,13 +42,12 @@ __all__ = ["make_dependabot", "make_auto_assign_action", "make_stale_bot", "make
 @management.register("stale_bot")
 def make_stale_bot(repo_path: pathlib.Path, templates: jinja2.Environment) -> List[str]:
 	"""
-	Add configuration for ``stale`` to the desired repo
+	Add configuration for ``stale`` to the desired repo.
 
 	https://probot.github.io/apps/stale/
 
 	:param repo_path: Path to the repository root.
 	:param templates:
-	:type templates: jinja2.Environment
 	"""
 
 	dot_github = PathPlus(repo_path / ".github")
@@ -61,13 +60,12 @@ def make_stale_bot(repo_path: pathlib.Path, templates: jinja2.Environment) -> Li
 @management.register("auto_assign")
 def make_auto_assign_action(repo_path: pathlib.Path, templates: jinja2.Environment) -> List[str]:
 	"""
-	Add configuration for ``auto-assign`` to the desired repo
+	Add configuration for ``auto-assign`` to the desired repo.
 
 	https://github.com/kentaro-m/auto-assign
 
 	:param repo_path: Path to the repository root.
 	:param templates:
-	:type templates: jinja2.Environment
 	"""
 
 	dot_github = PathPlus(repo_path / ".github")
@@ -117,13 +115,12 @@ numberOfReviewers: 0
 @management.register("dependabot")
 def make_dependabot(repo_path: pathlib.Path, templates: jinja2.Environment) -> List[str]:
 	"""
-	Add configuration for ``dependabot`` to the desired repo
+	Add configuration for ``dependabot`` to the desired repo.
 
 	https://dependabot.com/
 
 	:param repo_path: Path to the repository root.
 	:param templates:
-	:type templates: jinja2.Environment
 	"""
 
 	dependabot_dir = PathPlus(repo_path / ".dependabot")
@@ -153,13 +150,12 @@ def make_dependabot(repo_path: pathlib.Path, templates: jinja2.Environment) -> L
 @management.register("imgbot")
 def make_imgbot(repo_path: pathlib.Path, templates: jinja2.Environment) -> List[str]:
 	"""
-	Add configuration for ``imgbot`` to the desired repo
+	Add configuration for ``imgbot`` to the desired repo.
 
 	https://imgbot.net/
 
 	:param repo_path: Path to the repository root.
 	:param templates:
-	:type templates: jinja2.Environment
 	"""
 
 	imgbot_file = PathPlus(repo_path / ".imgbotconfig")

@@ -59,7 +59,6 @@ def make_manifest(repo_path: pathlib.Path, templates: jinja2.Environment) -> Lis
 
 	:param repo_path: Path to the repository root.
 	:param templates:
-	:type templates: jinja2.Environment
 	"""
 
 	manifest_entries = [
@@ -92,11 +91,10 @@ def make_manifest(repo_path: pathlib.Path, templates: jinja2.Environment) -> Lis
 @management.register("pyproject")
 def make_pyproject(repo_path: pathlib.Path, templates: jinja2.Environment) -> List[str]:
 	"""
-	Create the pyproject.toml file for pep517
+	Create the ``pyproject.toml`` file for :pep:`517`.
 
 	:param repo_path: Path to the repository root.
 	:param templates:
-	:type templates: jinja2.Environment
 	"""
 
 	pyproject_file = PathPlus(repo_path / "pyproject.toml")
@@ -141,7 +139,6 @@ def make_setup(repo_path: pathlib.Path, templates: jinja2.Environment) -> List[s
 
 	:param repo_path: Path to the repository root.
 	:param templates:
-	:type templates: jinja2.Environment
 	"""
 
 	setup = templates.get_template("setup._py")
@@ -172,7 +169,6 @@ def make_setup_cfg(repo_path: pathlib.Path, templates: jinja2.Environment) -> Li
 
 	:param repo_path: Path to the repository root.
 	:param templates:
-	:type templates: jinja2.Environment
 	"""
 
 	setup_cfg_file = PathPlus(repo_path / "setup.cfg")
@@ -268,11 +264,10 @@ Source_Code = https://github.com/{username}/{repo_name}""".format(**templates.gl
 @management.register("pkginfo")
 def make_pkginfo(repo_path: pathlib.Path, templates: jinja2.Environment) -> List[str]:
 	"""
-	Update the ``__pkginfo__.py`` file that contains the configuration used by
+	Update the ``__pkginfo__.py`` file.
 
 	:param repo_path: Path to the repository root.
 	:param templates:
-	:type templates: jinja2.Environment
 	"""
 
 	__pkginfo__ = templates.get_template("__pkginfo__._py")

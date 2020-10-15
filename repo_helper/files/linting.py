@@ -3,9 +3,8 @@
 #  linting.py
 """
 Configuration for various linting tools, such as
-`Flake8 <https://flake8.pycqa.org/en/latest/>`_,
-`Pylint <https://www.pylint.org/>`_, and
-`autopep8 <https://github.com/hhatto/autopep8/>`_,
+`Flake8 <https://flake8.pycqa.org/en/latest/>`_ and
+`Pylint <https://www.pylint.org/>`_.
 """
 #
 #  Copyright © 2020 Dominic Davis-Foster <dominic@davis-foster.co.uk>
@@ -264,11 +263,10 @@ code_only_warning.extend((
 @management.register("pylintrc")
 def make_pylintrc(repo_path: pathlib.Path, templates: jinja2.Environment) -> List[str]:
 	"""
-	Copy .pylintrc into the desired repository
+	Copy ``.pylintrc`` into the desired repository.
 
 	:param repo_path: Path to the repository root.
 	:param templates:
-	:type templates: jinja2.Environment
 	"""
 
 	PathPlus(repo_path / ".pylintrc").write_clean(PathPlus(template_dir / "pylintrc").read_text(), )
@@ -279,11 +277,10 @@ def make_pylintrc(repo_path: pathlib.Path, templates: jinja2.Environment) -> Lis
 @management.register("lint_roller")
 def make_lint_roller(repo_path: pathlib.Path, templates: jinja2.Environment) -> List[str]:
 	"""
-	Add the lint_roller.sh script to the desired repo
+	Add the lint_roller.sh script to the desired repo.
 
 	:param repo_path: Path to the repository root.
 	:param templates:
-	:type templates: jinja2.Environment
 	"""
 
 	lint_roller = templates.get_template("lint_roller.sh")

@@ -74,8 +74,7 @@ __all__ = [
 		"remove_autodoc_augment_defaults",
 		]
 
-# Disable logging from css_parser
-
+# Disable logging from cssutils
 logging.getLogger("CSSUTILS").addHandler(logging.NullHandler())
 logging.getLogger("CSSUTILS").propagate = False
 logging.getLogger("CSSUTILS").addFilter(lambda record: False)
@@ -88,7 +87,6 @@ def ensure_doc_requirements(repo_path: pathlib.Path, templates: jinja2.Environme
 
 	:param repo_path: Path to the repository root.
 	:param templates:
-	:type templates: jinja2.Environment
 	"""
 
 	target_requirements = {
@@ -100,7 +98,7 @@ def ensure_doc_requirements(repo_path: pathlib.Path, templates: jinja2.Environme
 			# Requirement("sphinx-gitstamp"),
 			# Requirement("gitpython"),
 			# Requirement("sphinx_autodoc_typehints>=1.11.0"),
-			Requirement("sphinx-copybutton>=0.2.12"),  # https://sphinx-copybutton.readthedocs.io/en/latest/
+			Requirement("sphinx-copybutton>=0.2.12"),
 			Requirement("sphinx-prompt>=1.1.0"),
 			Requirement("sphinx>=3.0.3"),
 			}
@@ -164,8 +162,6 @@ def ensure_doc_requirements(repo_path: pathlib.Path, templates: jinja2.Environme
 		if line.startswith("sphinx_autodoc_typehints"):
 			buf.remove(line)
 
-	# buf.insert(0, "git+git://github.com/domdfcoding/sphinx-autodoc-typehints.git@backslashes")
-
 	req_file.write_clean("\n".join(buf))
 
 	return [os.path.join(templates.globals["docs_dir"], "requirements.txt")]
@@ -174,7 +170,7 @@ def ensure_doc_requirements(repo_path: pathlib.Path, templates: jinja2.Environme
 @management.register("rtfd", ["enable_docs"])
 def make_rtfd(repo_path: pathlib.Path, templates: jinja2.Environment) -> List[str]:
 	"""
-	Add configuration for ``ReadTheDocs``
+	Add configuration for ``ReadTheDocs``.
 
 	https://readthedocs.org/
 
@@ -182,7 +178,6 @@ def make_rtfd(repo_path: pathlib.Path, templates: jinja2.Environment) -> List[st
 
 	:param repo_path: Path to the repository root.
 	:param templates:
-	:type templates: jinja2.Environment
 	"""
 
 	with (repo_path / ".readthedocs.yml").open('w', encoding="UTF-8") as fp:
@@ -219,14 +214,11 @@ python:
 @management.register("docutils_conf", ["enable_docs"])
 def make_docutils_conf(repo_path: pathlib.Path, templates: jinja2.Environment) -> List[str]:
 	"""
-	Add configuration for ``Docutils``
+	Add configuration for ``Docutils``.
 
 	:param repo_path: Path to the repository root.
 	:param templates:
-	:type templates: jinja2.Environment
 	"""
-
-	# TODO: use configupdater
 
 	docs_dir = PathPlus(repo_path / templates.globals["docs_dir"])
 	docs_dir.maybe_make(parents=True)
@@ -241,13 +233,12 @@ tab_width: 4
 @management.register("conf", ["enable_docs"])
 def make_conf(repo_path: pathlib.Path, templates: jinja2.Environment) -> List[str]:
 	"""
-	Add ``conf.py`` configuration file for ``Sphinx``
+	Add ``conf.py`` configuration file for ``Sphinx``.
 
 	https://www.sphinx-doc.org/en/master/index.html
 
 	:param repo_path: Path to the repository root.
 	:param templates:
-	:type templates: jinja2.Environment
 	"""
 
 	conf = templates.get_template("conf._py")
@@ -314,9 +305,6 @@ def make_conf(repo_path: pathlib.Path, templates: jinja2.Environment) -> List[st
 			]
 	# "sphinx_gitstamp",
 
-	# if "attr_utils.autodoc_typehints" not in templates.globals["extra_sphinx_extensions"]:
-	# 	sphinx_extensions.append("sphinx_autodoc_typehints")
-
 	sphinx_extensions.extend(templates.globals["extra_sphinx_extensions"])
 
 	conf_file.write_clean(
@@ -344,8 +332,7 @@ def make_alabaster_theming() -> str:
 	"""
 	Make the custom stylesheet for the alabaster Sphinx theme.
 
-	:return: The custom stylesheet
-	:rtype: str
+	:return: The custom stylesheet.
 	"""
 
 	sheet = StyleSheet()
@@ -477,10 +464,9 @@ def make_alabaster_theming() -> str:
 
 def make_readthedocs_theming() -> str:
 	"""
-	Make the custom stylesheet for the readthedocs Sphinx theme.
+	Make the custom stylesheet for the ReadTheDocs Sphinx theme.
 
-	:return: The custom stylesheet
-	:rtype: str
+	:return: The custom stylesheet.
 	"""
 
 	sheet = StyleSheet()
@@ -518,11 +504,10 @@ def make_readthedocs_theming() -> str:
 
 def copy_docs_styling(repo_path: pathlib.Path, templates: jinja2.Environment) -> List[str]:
 	"""
-	Copy custom styling for documentation to the desired repository
+	Copy custom styling for documentation to the desired repository.
 
 	:param repo_path: Path to the repository root.
 	:param templates:
-	:type templates: jinja2.Environment
 	"""
 
 	docs_dir = PathPlus(repo_path / templates.globals["docs_dir"])
@@ -574,7 +559,6 @@ def rewrite_docs_index(repo_path: pathlib.Path, templates: jinja2.Environment) -
 
 	:param repo_path: Path to the repository root.
 	:param templates:
-	:type templates: jinja2.Environment
 	"""
 
 	index_rst_file = repo_path / templates.globals["docs_dir"] / "index.rst"
@@ -641,7 +625,6 @@ def make_404_page(repo_path: pathlib.Path, templates: jinja2.Environment) -> Lis
 
 	:param repo_path: Path to the repository root.
 	:param templates:
-	:type templates: jinja2.Environment
 	"""
 
 	docs_dir = PathPlus(repo_path / templates.globals["docs_dir"])
@@ -668,7 +651,6 @@ def make_docs_source_rst(repo_path: pathlib.Path, templates: jinja2.Environment)
 
 	:param repo_path: Path to the repository root.
 	:param templates:
-	:type templates: jinja2.Environment
 	"""
 
 	docs_dir = PathPlus(repo_path / templates.globals["docs_dir"])
@@ -698,8 +680,6 @@ def make_style(selector: str, styles: Dict[str, Union[Sequence, str, int, None]]
 
 	:param selector:
 	:param styles:
-
-	:return:
 	"""
 
 	style = css.CSSStyleDeclaration()
@@ -720,7 +700,6 @@ def remove_autodoc_augment_defaults(repo_path: pathlib.Path, templates: jinja2.E
 
 	:param repo_path: Path to the repository root.
 	:param templates:
-	:type templates: jinja2.Environment
 	"""
 
 	docs_dir = PathPlus(repo_path / templates.globals["docs_dir"])
