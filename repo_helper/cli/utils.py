@@ -73,7 +73,7 @@ from dulwich.errors import CommitError  # type: ignore
 import repo_helper.cli.commands
 from repo_helper.core import RepoHelper
 from repo_helper.init_repo import init_repo
-from repo_helper.utils import assert_clean
+from repo_helper.utils import assert_clean, discover_entry_points
 
 __all__ = [
 		"CONTEXT_SETTINGS",
@@ -279,14 +279,20 @@ def abort(message: str) -> Exception:
 	return click.Abort()
 
 
-def run_repo_helper(path, force, initialise, commit, message):
+def run_repo_helper(
+		path,
+		force: bool,
+		initialise: bool,
+		commit: Optional[bool],
+		message: str,
+		) -> int:
 	"""
 	Run repo_helper.
 
 	:param path: The repository path.
-	:param force:
-	:param initialise:
-	:param commit:
+	:param force: Whether to force the operation if the repository is not clean.
+	:param initialise: Whether to initialise the repository.
+	:param commit: Whether to commit unchanged files.
 	:param message:
 	"""
 
@@ -340,4 +346,6 @@ def import_commands() -> List[Command]:
 	Returns a list of all commands.
 	"""
 
-	return cast(List[Command], discover(repo_helper.cli.commands, is_command))
+	local_commands = discover(repo_helper.cli.commands, is_command, exclude_side_effects=False)
+	third_party_commands = discover_entry_points("repo_helper.command", is_command)
+	return [*local_commands, *third_party_commands]
