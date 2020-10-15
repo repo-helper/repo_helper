@@ -26,7 +26,6 @@ Clean up build and test artefacts.
 # stdlib
 import pathlib
 import shutil
-import sys
 
 # 3rd party
 import click
@@ -91,6 +90,17 @@ def detox(base_dir: pathlib.Path):
 	rmdir(base_dir / ".tox")
 
 
+def crack(base_dir: pathlib.Path):
+	"""
+	Removes the ``*.egg-info`` directory.
+
+	:param base_dir:
+	"""
+
+	for dirname in base_dir.glob("*.egg-info"):
+		rmdir(dirname)
+
+
 def rmdir(directory: pathlib.Path):
 	"""
 	Removes the given directory.
@@ -114,10 +124,11 @@ def broomstick(rm_tox: bool = False):
 
 	Removes the following:
 
-	  * build
-	  * .mypy_cache
-	  * .pytest_cache
-	  * **/__pytest__
+	  build
+	  .mypy_cache
+	  .pytest_cache
+	  **/__pytest__
+	  *.egg-info
 	"""
 
 	base_dir = pathlib.Path.cwd()
@@ -126,6 +137,7 @@ def broomstick(rm_tox: bool = False):
 	demypycache(base_dir)
 	depytestcache(base_dir)
 	demolish(base_dir)
+	crack(base_dir)
 
 	if rm_tox:
 		detox(base_dir)
