@@ -9,8 +9,6 @@ hello-world
 .. start shields
 .. end shields
 
-|
-
 Installation
 --------------
 

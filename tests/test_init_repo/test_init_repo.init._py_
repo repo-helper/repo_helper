@@ -25,7 +25,6 @@ a short description
 
 __author__: str = "Joe Bloggs"
 __copyright__: str = "2020-2021 Joe Bloggs"
-
 __license__: str = "MIT License"
 __version__: str = "1.2.3"
 __email__: str = "j.bloggs@example.com"

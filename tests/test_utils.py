@@ -25,41 +25,10 @@ from textwrap import dedent
 
 # 3rd party
 import pytest
-from domdf_python_tools.paths import PathPlus
-from domdf_python_tools.pretty_print import FancyPrinter
 from domdf_python_tools.terminal_colours import Fore
-from pytest_git import GitRepo  # type: ignore
 
 # this package
-from repo_helper.utils import check_git_status, indent_with_tab, normalize, pformat_tabs, validate_classifiers
-
-
-def test_check_git_status(git_repo: GitRepo):
-	repo_path = PathPlus(git_repo.workspace)
-	clean, files = check_git_status(repo_path)
-	assert clean
-	assert files == []
-
-	(repo_path / "file.txt").write_text("Hello World")
-	clean, files = check_git_status(repo_path)
-	assert clean
-	assert files == []
-
-	git_repo.run("git add file.txt")
-	clean, files = check_git_status(repo_path)
-	assert not clean
-	assert files == ["A  file.txt"]
-
-	git_repo.api.index.commit("Initial commit")
-	clean, files = check_git_status(repo_path)
-	assert clean
-	assert files == []
-
-	(repo_path / "file.txt").write_text("Hello Again")
-	clean, files = check_git_status(repo_path)
-	assert not clean
-	assert files == ["M file.txt"]
-
+from repo_helper.utils import indent_with_tab, normalize, pformat_tabs, validate_classifiers
 
 # def test_ensure_requirements(tmpdir):
 # 	tmpdir_p = PathPlus(tmpdir)
@@ -134,28 +103,6 @@ fruit = [
 		]
 
 
-class TestFancyPrinter:
-
-	def test_list(self):
-		assert FancyPrinter().pformat([1, 2, 3, 4, 5, 6, 7, 8, 9, 10]) == "[1, 2, 3, 4, 5, 6, 7, 8, 9, 10]"
-		assert FancyPrinter().pformat(fruit) == dedent(
-				"""\
-		[
-		 'apple',
-		 'orange',
-		 'pear',
-		 'lemon',
-		 'grape',
-		 'strawberry',
-		 'banana',
-		 'plum',
-		 'tomato',
-		 'cherry',
-		 'blackcurrant',
-		 ]"""
-				)
-
-
 def test_pformat_tabs():
 	assert pformat_tabs(fruit) == dedent(
 			"""\
@@ -190,4 +137,5 @@ def test_normalize(name, expected):
 	assert normalize(name) == expected
 
 
-# TODO: read_requirements
+# TODO: reformat_file
+# TODO: discover_entry_points
