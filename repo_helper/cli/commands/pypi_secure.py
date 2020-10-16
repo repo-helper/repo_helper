@@ -50,11 +50,22 @@ def pypi_secure(password: Optional[str] = None) -> int:
 	import getpass
 	from subprocess import PIPE, Popen
 
+	# 3rd party
+	from domdf_python_tools.paths import PathPlus
+
+	# this package
+	from repo_helper.click_tools import abort
+
+	config_file = PathPlus("repo_helper.yml")
+
+	if not config_file.is_file():
+		raise abort("'repo_helper.yml' not found.")
+
 	process = Popen(["travis", "encrypt", password or getpass.getpass(), "--pro"], stdout=PIPE)
 	(output, err) = process.communicate()
 	exit_code = process.wait()
 
-	with open("repo_helper.yml", encoding="UTF-8", mode="a") as fp:
+	with config_file.open(mode="a") as fp:
 		fp.write("\n")
 		fp.write(f"travis_pypi_secure: {output.decode('UTF-8')}")
 
