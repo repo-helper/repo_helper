@@ -22,7 +22,6 @@ General utilities for working with ``git`` repositories.
 #  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
 #  MA 02110-1301, USA.
 #
-#
 #  format_commit based on https://github.com/dulwich/dulwich
 #  Copyright (C) 2013 Jelmer Vernooij <jelmer@jelmer.uk>
 #  |  Licensed under the Apache License, Version 2.0 (the "License"); you may
@@ -48,8 +47,8 @@ from typing import Dict, List, Mapping, Optional, Tuple, Union
 # 3rd party
 import click
 from domdf_python_tools.paths import PathPlus, in_directory
-from domdf_python_tools.stringlist import StringList
-from domdf_python_tools.terminal_colours import Fore
+from domdf_python_tools.stringlist import DelimitedList, StringList
+from domdf_python_tools.terminal_colours import Fore, strip_ansi
 from domdf_python_tools.typing import PathLike
 from dulwich.objects import Commit, Tag, format_timezone
 from dulwich.porcelain import open_repo_closing
@@ -108,7 +107,7 @@ class Log:
 				k.decode("UTF-8"): v.decode("UTF-8")
 				for k,
 				v in self.repo.get_refs().items()
-				if not k.decode("UTF-8").startswith("refs/tags/")
+				if not k.startswith(b"refs/tags/")
 				}
 
 		#: Mapping of local branches to the SHA of the latest commit in that branch.
@@ -127,12 +126,11 @@ class Log:
 				self.remote_branches[key[13:]] = value
 
 	# Based on https://www.dulwich.io/code/dulwich/blob/master/dulwich/porcelain.py
-	def format_commit(self, commit: Commit, colour: bool = True) -> StringList:
+	def format_commit(self, commit: Commit) -> StringList:
 		"""
 		Write a human-readable commit log entry.
 
 		:param commit: A `Commit` object
-		:param colour: Show coloured output.
 		"""
 
 		buf = StringList()
@@ -160,15 +158,15 @@ class Log:
 					break
 
 		if meta:
-			meta_string = Fore.YELLOW(" (") + Fore.YELLOW(", ").join(meta) + Fore.YELLOW(")")
+			meta_string = yellow_meta_left + yellow_meta_comma.join(meta) + yellow_meta_right
 		else:
 			meta_string = ''
 
 		buf.append(Fore.YELLOW("commit: " + commit.id.decode('UTF-8') + meta_string))
-		# TODO:  (HEAD -> master, tag: v0.3.3, origin/master)
 
 		if len(commit.parents) > 1:
-			buf.append("merge: " + "...".join([c.decode('UTF-8') for c in commit.parents[1:]]))
+			parents = DelimitedList(c.decode('UTF-8') for c in commit.parents[1:])
+			buf.append(f"merge: {parents:...}")
 
 		buf.append("Author: " + commit.author.decode("UTF-8"))
 
@@ -178,7 +176,7 @@ class Log:
 		time_tuple = time.gmtime(commit.author_time + commit.author_timezone)
 		time_str = time.strftime("%a %b %d %Y %H:%M:%S", time_tuple)
 		timezone_str = format_timezone(commit.author_timezone).decode('UTF-8')
-		buf.append("Date:   " + time_str + " " + timezone_str)
+		buf.append(f"Date:   {time_str} {timezone_str}")
 
 		buf.blankline()
 		buf.append(indent(commit.message.decode('UTF-8'), "    "))
@@ -214,7 +212,7 @@ class Log:
 		elif from_tag and not any(from_tag == tag for tag in self.tags.values()):
 			raise ValueError(f"No such tag {from_tag!r}")
 
-		buf = []
+		buf = StringList()
 		walker = self.repo.get_walker(**kwargs)
 
 		for entry in walker:
@@ -228,7 +226,10 @@ class Log:
 					else:
 						break
 
-		return "\n".join(buf)
+		if colour:
+			return str(buf)
+		else:
+			return strip_ansi(str(buf))
 
 
 def assert_clean(repo: PathPlus, allow_config: bool = False) -> bool:
@@ -300,3 +301,7 @@ def check_git_status(repo_path: PathLike) -> Tuple[bool, List[str]]:
 # 		return subprocess.check_output(["git", "status"]).decode("UTF-8")
 
 #
+
+yellow_meta_left = Fore.YELLOW(" (")
+yellow_meta_comma = Fore.YELLOW(", ")
+yellow_meta_right = Fore.YELLOW(")")
