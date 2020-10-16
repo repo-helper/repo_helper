@@ -191,7 +191,12 @@ class ToxConfig:
 		``[testenv]``
 		"""
 
-		self._ini["testenv"]["setenv"] = indent_join(["PYTHONDEVMODE = 1", "PIP_USE_FEATURE = 2020-resolver"])
+		env_vars = ["PIP_USE_FEATURE = 2020-resolver"]
+
+		if self["enable_devmode"]:
+			env_vars.append("PYTHONDEVMODE = 1")
+
+		self._ini["testenv"]["setenv"] = indent_join(env_vars)
 
 		if self["enable_tests"]:
 			self._ini["testenv"]["deps"] = f"-r{{toxinidir}}/{self['tests_dir']}/requirements.txt"
@@ -603,6 +608,7 @@ def make_isort(repo_path: pathlib.Path, templates: jinja2.Environment) -> List[s
 
 	all_requirements = {r.replace('-', "_") for r in all_requirements}
 	all_requirements.discard(templates.globals["import_name"])
+	all_requirements.discard("iniconfig")
 
 	isort["settings"]["known_third_party"] = sorted({"github", "requests", *all_requirements})
 	isort["settings"]["known_first_party"] = templates.globals["import_name"]

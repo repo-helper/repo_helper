@@ -328,6 +328,12 @@
       "items": {
         "type": "string"
       }
+    },
+    "enable_devmode": {
+      "type": [
+        "boolean",
+        "string"
+      ]
     }
   },
   "required": [

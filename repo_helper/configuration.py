@@ -27,11 +27,11 @@ import pathlib
 from typing import Any, Dict, Iterable, List, Mapping, MutableMapping, Optional, Tuple, Type, Union
 
 # 3rd party
-import importlib_resources
 from configconfig.configvar import ConfigVar
 from configconfig.metaclass import ConfigVarMeta
 from configconfig.parser import Parser
 from configconfig.utils import make_schema, optional_getter
+from domdf_python_tools.compat import importlib_resources
 from domdf_python_tools.paths import PathPlus
 from packaging.version import Version
 from typing_extensions import Literal
@@ -1407,6 +1407,27 @@ class mypy_plugins(ConfigVar):  # noqa
 	category: str = "other"
 
 
+class enable_devmode(ConfigVar):  # noqa
+	"""
+	Enable `Python Development Mode`_ when running tests.
+
+	.. _Python Development Mode: https://docs.python.org/3/library/devmode.html
+
+	Example:
+
+	.. code-block:: yaml
+
+		enable_devmode: True
+	"""
+
+	dtype = bool
+	default = True
+	category: str = "tests"
+
+
+# ---------------------
+
+
 def parse_yaml(repo_path: pathlib.Path) -> Dict:
 	"""
 	Parse configuration values from ``repo_helper.yml``.
@@ -1427,8 +1448,6 @@ def parse_yaml(repo_path: pathlib.Path) -> Dict:
 
 	return config_vars
 
-
-# ---------------------
 
 all_values: List[ConfigVarMeta] = [
 		author,
@@ -1494,6 +1513,7 @@ all_values: List[ConfigVarMeta] = [
 		stubs_package,
 		on_pypi,
 		mypy_plugins,
+		enable_devmode,
 		]
 
 
