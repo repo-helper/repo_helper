@@ -44,6 +44,7 @@ def test_make_tox(tmp_pathplus, demo_environment, file_regression: FileRegressio
 	demo_environment.globals["yapf_exclude"] = []
 	demo_environment.globals["tox_testenv_extras"] = "extra_a"
 	demo_environment.globals["enable_docs"] = True
+	demo_environment.globals["enable_devmode"] = True
 	demo_environment.globals["code_only_warning"] = code_only_warning
 	demo_environment.globals["tox_travis_versions"] = {
 			"3.6": "py36, mypy, build",

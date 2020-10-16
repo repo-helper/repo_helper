@@ -21,23 +21,13 @@
 #
 
 # stdlib
-import pathlib
 from textwrap import dedent
 
 # 3rd party
-import pytest
-from packaging.requirements import Requirement
-from pytest_regressions.file_regression import FileRegressionFixture  # type: ignore
+from pytest_regressions.file_regression import FileRegressionFixture
 
 # this package
-from repo_helper.files.packaging import (
-		ComparableRequirement,
-		make_manifest,
-		make_pkginfo,
-		make_pyproject,
-		make_setup,
-		make_setup_cfg
-		)
+from repo_helper.files.packaging import make_manifest, make_pkginfo, make_pyproject, make_setup, make_setup_cfg
 from tests.common import check_file_output
 
 

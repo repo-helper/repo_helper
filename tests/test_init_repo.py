@@ -9,7 +9,7 @@ from domdf_python_tools.paths import PathPlus
 from pytest_git import GitRepo  # type: ignore
 
 # this package
-from repo_helper.init_repo import init_repo
+from repo_helper.cli.commands.init import init_repo
 from tests.common import check_file_output, check_file_regression
 
 
