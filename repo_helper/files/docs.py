@@ -34,9 +34,9 @@ from typing import Dict, List, Sequence, Set, Union
 
 # 3rd party
 import css_parser  # type: ignore
-import importlib_resources
 import jinja2
 from css_parser import css  # type: ignore
+from domdf_python_tools.compat import importlib_resources
 from domdf_python_tools.paths import PathPlus, clean_writer
 from domdf_python_tools.utils import enquote_value
 from packaging.requirements import Requirement
@@ -125,7 +125,7 @@ def ensure_doc_requirements(repo_path: pathlib.Path, templates: jinja2.Environme
 			"seed_intersphinx_mapping": ">=0.1.1",
 			"default_values": ">=0.2.0",
 			"toctree_plus": ">=0.0.4",
-			"sphinx-toolbox": ">=1.0.0",
+			"sphinx-toolbox": ">=1.5.1",
 			}
 
 	for name, specifier in my_sphinx_extensions.items():
@@ -227,10 +227,12 @@ def make_docutils_conf(repo_path: pathlib.Path, templates: jinja2.Environment) -
 	docutils_conf_file = docs_dir / "docutils.conf"
 
 	if not docutils_conf_file.is_file():
-		docutils_conf_file.write_lines([
+		docutils_conf_file.write_text("\n".join([
 				"[restructuredtext parser]",
 				"tab_width = 4",
-				])
+				'',
+				'',
+				]))
 
 	conf = ConfigUpdater()
 	conf.read(str(docutils_conf_file))

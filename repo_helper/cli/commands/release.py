@@ -74,7 +74,7 @@ def release_options(f: Callable) -> Callable:
 	"""
 
 	commit_deco = commit_option(default=True)
-	message_deco = commit_message_option(default="Bump version {current_version} -> {new_version}")
+	message_deco = commit_message_option(default="Bump Version {current_version} -> {new_version}")
 	force_deco = force_option(help_text="Make a release even when the git working directory is not clean.")
 	return force_deco(commit_deco(message_deco(f)))
 

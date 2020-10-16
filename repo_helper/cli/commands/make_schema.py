@@ -26,7 +26,7 @@ Dump the schema for ``repo_helper.yml`` to ``repo_helper/repo_helper_schema.json
 # this package
 from repo_helper.cli import cli_command
 
-__all__ = ["pypi_secure"]
+__all__ = ["make_schema"]
 
 
 @cli_command()

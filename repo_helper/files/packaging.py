@@ -30,9 +30,9 @@ import textwrap
 from typing import List
 
 # 3rd party
-import importlib_resources
 import jinja2
 import tomlkit  # type: ignore
+from domdf_python_tools.compat import importlib_resources
 from domdf_python_tools.paths import PathPlus, clean_writer
 from packaging.requirements import Requirement
 

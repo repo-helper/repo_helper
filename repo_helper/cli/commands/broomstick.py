@@ -114,6 +114,7 @@ def rmdir(directory: pathlib.Path):
 
 @click.option(
 		"--rm-tox",
+		is_flag=True,
 		default=False,
 		help="Remove the '.tox' directory too.",
 		)

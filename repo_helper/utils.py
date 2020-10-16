@@ -44,12 +44,8 @@ if TYPE_CHECKING:
 	# this package
 	from repo_helper.core import RepoHelper
 
-if sys.version_info[:2] == (3, 7):  # pragma: no cover (py38+)
-	# 3rd party
-	import importlib_metadata  # type: ignore
-else:  # pragma: no cover (py38)
-	# stdlib
-	import importlib.metadata as importlib_metadata
+# 3rd party
+from domdf_python_tools.compat import importlib_metadata
 
 __all__ = [
 		"validate_classifiers",

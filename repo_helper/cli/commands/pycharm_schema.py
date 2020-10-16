@@ -39,9 +39,8 @@ def pycharm_schema() -> None:
 	from textwrap import indent
 
 	# 3rd party
-	import importlib_resources
+	from domdf_python_tools.compat import importlib_resources
 	from domdf_python_tools.paths import PathPlus
-	from domdf_python_tools.utils import printr
 	from lxml import etree, objectify  # type: ignore
 
 	# this package

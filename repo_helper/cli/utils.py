@@ -173,8 +173,8 @@ def run_repo_helper(
 	"""
 
 	# this package
-	from repo_helper.core import RepoHelper
 	from repo_helper.cli.commands.init import init_repo
+	from repo_helper.core import RepoHelper
 
 	try:
 		gh = RepoHelper(path)

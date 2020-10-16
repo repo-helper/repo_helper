@@ -281,12 +281,16 @@ def ensure_bumpversion(repo_path: pathlib.Path, templates: jinja2.Environment) -
 	bumpversion_file = PathPlus(repo_path / ".bumpversion.cfg")
 
 	if not bumpversion_file.is_file():
-		bumpversion_file.write_lines([
-				"[bumpversion]",
-				f"current_version = {templates.globals['version']}",
-				"commit = True",
-				"tag = True",
-				])
+		bumpversion_file.write_text(
+				"\n".join([
+						"[bumpversion]",
+						f"current_version = {templates.globals['version']}",
+						"commit = True",
+						"tag = True",
+						'',
+						'',
+						])
+				)
 
 	bv = ConfigUpdater()
 	bv.read(str(bumpversion_file))
