@@ -132,12 +132,6 @@ def ensure_doc_requirements(repo_path: pathlib.Path, templates: jinja2.Environme
 		if name != templates.globals["pypi_name"]:
 			target_requirements.add(Requirement(f"{name}{specifier}"))
 
-	lib_requirements, _ = read_requirements(repo_path / "requirements.txt")
-	lib_requirements_names = [r.name for r in lib_requirements]
-
-	# Remove requirements given in the library requirements.txt file.
-	target_requirements = {r for r in target_requirements if r.name not in lib_requirements_names}
-
 	target_requirement_names: Set[str] = {normalize(r.name) for r in target_requirements}
 
 	req_file = PathPlus(repo_path / templates.globals["docs_dir"] / "requirements.txt")
@@ -155,6 +149,12 @@ def ensure_doc_requirements(repo_path: pathlib.Path, templates: jinja2.Environme
 				target_requirements.add(req)
 
 	buf = [*comments]
+
+	lib_requirements, _ = read_requirements(repo_path / "requirements.txt")
+	lib_requirements_names = [r.name for r in lib_requirements]
+
+	# Remove requirements given in the library requirements.txt file.
+	target_requirements = {r for r in target_requirements if r.name not in lib_requirements_names}
 
 	for req in sorted(target_requirements, key=lambda r: r.name.casefold()):
 		buf.append(str(req))
