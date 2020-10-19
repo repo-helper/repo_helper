@@ -264,9 +264,10 @@ class ToxConfig(IniConfigurator):
 				"flake8-sphinx-links",
 				"flake8-dunder-all",
 				"git+https://github.com/domdfcoding/flake8-rst-docstrings.git",
-				"flake8-builtins",  # "flake8-walrus",
+				"flake8-builtins",
 				"pygments",
 				"git+https://github.com/domdfcoding/flake8-quotes.git",
+				"git+https://github.com/PyCQA/pydocstyle@5118faa7173b0e5bbc230c4adf628758e13605bf",
 				])
 		self._ini["testenv:lint"]["commands"] = f"flake8 {' '.join(self.get_source_files())}"
 
@@ -383,6 +384,11 @@ class ToxConfig(IniConfigurator):
 				"issue",
 				"asset",
 				"confval",
+				"data",
+				"py:data",
+				"py:exc",
+				"deco",
+				"regex",
 				])
 		self._ini["flake8"]["rst-directives"] = indent_join([
 				"envvar",
@@ -404,6 +410,9 @@ class ToxConfig(IniConfigurator):
 				"rst:directive:option",
 				"rst:role",
 				"pre-commit-shield",
+				"py:data",
+				"py:method",
+				"py:classmethod",
 				])
 
 		per_file_ignores = f"{self['tests_dir']}/*: {' '.join(str(e) for e in code_only_warning)}"
