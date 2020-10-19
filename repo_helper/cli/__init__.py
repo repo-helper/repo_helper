@@ -25,6 +25,7 @@ Core CLI tools.
 
 # stdlib
 from functools import partial
+from typing import Optional
 
 # 3rd party
 import click
@@ -58,7 +59,7 @@ __all__ = ["cli", "cli_command", "cli_group"]
 @commit_option(default=None)
 @commit_message_option("Updated files with 'repo_helper'.")
 @click.pass_context
-def cli(ctx, force, commit, message):
+def cli(ctx, force: bool, commit: Optional[bool], message: str) -> int:
 	"""
 	Update files in the given repositories, based on settings in 'repo_helper.yml'.
 	"""

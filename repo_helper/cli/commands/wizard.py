@@ -35,6 +35,7 @@ from domdf_python_tools.paths import PathPlus
 
 # this package
 from repo_helper.cli import cli_command
+from repo_helper.click_tools import confirm, prompt
 from repo_helper.utils import license_lookup
 
 __all__ = ["wizard"]
@@ -72,20 +73,20 @@ def wizard():
 	# ---------- intro ----------
 	click.echo("This wizard 🧙‍will guide you through creating a 'repo_helper.yml' configuration file.")
 	click.echo(f"This will be created in '{config_file}'.")
-	if not click.confirm('Do you want to continue?'):
+	if not confirm('Do you want to continue?'):
 		raise click.Abort()
 
 	# ---------- file exists warning ----------
 	if config_file.is_file():
 		click.echo(f"\nWoah! That file already exists. It will be overwritten if you continue!")
-		if not click.confirm('Are you sure you want to continue?'):
+		if not confirm('Are you sure you want to continue?'):
 			raise click.Abort()
 
 	click.echo("\nDefault options are indicated in [square brackets].")
 
 	# ---------- modname ----------
 	click.echo("\nThe name of the library/project.")
-	modname = click.prompt("Name")
+	modname = prompt("Name")
 
 	# ---------- name ----------
 	click.echo("""
@@ -101,7 +102,7 @@ The author is usually the person who wrote the library.""")
 				"GIT_AUTHOR_NAME", default=os.environ.get("GIT_COMMITTER_NAME", default=getpass.getuser())
 				)
 
-	author = click.prompt("Name", default=default_author)
+	author = prompt("Name", default=default_author)
 
 	# ---------- email ----------
 	try:
@@ -116,7 +117,7 @@ The author is usually the person who wrote the library.""")
 
 	while True:
 		try:
-			email = validate_email(click.prompt("Email", default=default_email)).email
+			email = validate_email(prompt("Email", default=default_email), check_deliverability=False).email
 			break
 		except EmailNotValidError:
 			click.echo("That is not a valid email address.")
@@ -127,16 +128,16 @@ The author is usually the person who wrote the library.""")
 The username of the author.
 (repo_helper naïvely assumes that you use the same username on GitHub as on other sites.)"""
 			)
-	username = click.prompt("Username", default=author)
+	username = prompt("Username", default=author)
 	# TODO: validate username
 
 	# ---------- version ----------
 	click.echo("\nThe version number of the library, in semver format.")
-	version = click.prompt("Version number", default="0.0.0")
+	version = prompt("Version number", default="0.0.0")
 
 	# ---------- copyright_years ----------
 	click.echo("\nThe copyright years for the library.")
-	copyright_years = click.prompt("Copyright years", default=str(datetime.today().year), type=str)
+	copyright_years = prompt("Copyright years", default=str(datetime.today().year), type=str)
 
 	# ---------- license_ ----------
 	click.echo(
@@ -145,7 +146,7 @@ The SPDX identifier for the license this library is distributed under.
 Not all SPDX identifiers are allowed as not all map to PyPI Trove classifiers."""
 			)
 	while True:
-		license_ = click.prompt("License")
+		license_ = prompt("License")
 		try:
 			license_lookup[license_]
 			break
@@ -154,7 +155,7 @@ Not all SPDX identifiers are allowed as not all map to PyPI Trove classifiers.""
 
 	# ---------- short_desc ----------
 	click.echo("\nEnter a short, one-line description for the project.")
-	short_desc = click.prompt("Description")
+	short_desc = prompt("Description")
 
 	# ---------- writeout ----------
 	config_file.write_clean(
