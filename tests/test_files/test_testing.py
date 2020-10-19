@@ -107,6 +107,7 @@ known_third_party=awesome_package
 
 
 def test_ensure_tests_requirements(tmp_pathplus, demo_environment):
+	(tmp_pathplus / "requirements.txt").touch()
 	(tmp_pathplus / "tests").mkdir()
 	(tmp_pathplus / "tests" / "requirements.txt").write_text('')
 

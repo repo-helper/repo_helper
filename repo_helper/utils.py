@@ -24,28 +24,31 @@ General utilities.
 #
 
 # stdlib
+import pathlib
 import re
-import sys
 import textwrap
-from typing import TYPE_CHECKING, Any, Callable, Iterable, List, Optional, Set, Tuple
+from typing import TYPE_CHECKING, Callable, Iterable, List, Optional
 
 # 3rd party
 import isort  # type: ignore
 import isort.settings  # type: ignore
 import trove_classifiers  # type: ignore
 import yapf_isort  # type: ignore
+from domdf_python_tools.import_tools import discover_entry_points
+from domdf_python_tools.paths import PathPlus
 from domdf_python_tools.pretty_print import FancyPrinter
 from domdf_python_tools.stringlist import StringList
 from domdf_python_tools.terminal_colours import Fore
 from domdf_python_tools.typing import PathLike
 from domdf_python_tools.utils import stderr_writer
 
+# this package
+from repo_helper.configupdater2 import ConfigUpdater  # type: ignore
+from repo_helper.requirements_tools import normalize
+
 if TYPE_CHECKING:
 	# this package
 	from repo_helper.core import RepoHelper
-
-# 3rd party
-from domdf_python_tools.compat import importlib_metadata
 
 __all__ = [
 		"validate_classifiers",
@@ -56,6 +59,7 @@ __all__ = [
 		"reformat_file",
 		"discover_entry_points",
 		"indent_join",
+		"IniConfigurator",
 		]
 
 # def ensure_requirements(requirements_list: Iterable[Requirement], requirements_file: pathlib.Path):
@@ -292,34 +296,6 @@ def reformat_file(filename: PathLike, yapf_style: str, isort_config_file: str) -
 
 	finally:
 		isort.settings.CONFIG_SECTIONS = old_isort_settings
-
-
-def discover_entry_points(
-		group_name: str,
-		match_func: Optional[Callable[[Any], bool]] = None,
-		) -> List[Any]:
-	"""
-	Returns a list of entry points in the given category,
-	optionally filtered by ``match_func``.
-
-	:param group_name: The entry point group name, e.g. ``'entry_points'``.
-	:param match_func: Function taking an object and returning true if the object is to be included in the output.
-	:default match_func: :py:obj:`None`, which includes all objects.
-
-	:return: List of matching objects.
-	"""
-
-	matching_objects = []
-
-	for entry_point in importlib_metadata.entry_points().get(group_name, ()):
-		entry_point = entry_point.load()
-
-		if match_func is not None and not match_func(entry_point):
-			continue
-
-		matching_objects.append(entry_point)
-
-	return matching_objects
 
 
 def indent_join(iterable: Iterable[str]) -> str:

@@ -571,6 +571,7 @@ def make_isort(repo_path: pathlib.Path, templates: jinja2.Environment) -> List[s
 		all_requirements = set()
 
 	for req in (*test_requirements, *main_requirements):  # *doc_requirements,
+		req.name = normalize(req.name)
 		all_requirements.add(req.name)
 
 	all_requirements = {r.replace('-', "_") for r in all_requirements}

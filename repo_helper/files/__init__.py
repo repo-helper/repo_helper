@@ -39,14 +39,14 @@ __all__ = ["Management", "management", "is_registered", "Manager"]
 Manager = Callable[[pathlib.Path, jinja2.Environment], List[str]]
 
 
-class Management(List[Tuple[Manager, str, List[str]]]):
+class Management(List[Tuple[Manager, str, Sequence[str]]]):
 	"""
 	Class to store functions that manage files.
 
 	The syntax of each entry is:
 
 	* the function,
-	* a string to use in 'exclude_files' to disable this function,
+	* a string to use in ``exclude_files`` to disable this function,
 	* a list of strings representing config values that must be true to call the function.
 	"""
 
@@ -54,7 +54,7 @@ class Management(List[Tuple[Manager, str, List[str]]]):
 		super().__init__(*args, **kwargs)
 
 	def register(
-			self: List[Tuple[Callable, str, Sequence[str]]],
+			self: List[Tuple[Manager, str, Sequence[str]]],
 			exclude_name: str,
 			exclude_unless_true: Sequence[str] = (),
 			*,

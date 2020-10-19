@@ -4,7 +4,7 @@
 set -e -x
 
 if [ "$TRAVIS_PYTHON_VERSION" == {{ python_deploy_version }} ]; then
-  if [ -z "$TRAVIS_TAG" ] && [ "$TRAVIS_COMMIT_MESSAGE" == "Bump Version*" ]; then
+  if [ -z "$TRAVIS_TAG" ] && [ "$TRAVIS_COMMIT_MESSAGE" == "Bump version*" ]; then
     echo "Deferring building conda package because this is release"
   else
 

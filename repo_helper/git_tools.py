@@ -222,7 +222,7 @@ class Log:
 				commit_id = entry.commit.id.decode("UTF-8")
 				if commit_id in self.tags and self.tags[commit_id] == from_tag:
 					if reverse:
-						buf = [str(self.format_commit(entry.commit))]
+						buf = StringList([str(self.format_commit(entry.commit))])
 					else:
 						break
 
