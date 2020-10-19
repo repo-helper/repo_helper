@@ -58,9 +58,26 @@ def version() -> int:
 
 	# 3rd party
 	from domdf_python_tools.paths import PathPlus
+	from dulwich.repo import Repo
+
+	# this package
+	from repo_helper.git_tools import get_tags
 
 	rh = RepoHelper(PathPlus.cwd())
-	click.echo(f"Current version: {rh.templates.globals['version']}")
+	version = rh.templates.globals['version']
+	click.echo(f"Current version: {version}")
+
+	repo = Repo(PathPlus.cwd())
+	for sha, tag in get_tags(repo).items():
+		if tag == f"v{version}":
+			walker = repo.get_walker()
+			for idx, entry in enumerate(walker):
+				commit_id = entry.commit.id.decode("UTF-8")
+				if commit_id == sha:
+					click.echo(f"{idx} commits since that release.")
+					break
+			break
+
 	return 0
 
 
