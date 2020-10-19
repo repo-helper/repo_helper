@@ -74,7 +74,7 @@ html_theme_options = {
 		'logo_name': 'true',
 		'github_user': 'domdfcoding',
 		'github_repo': 'repo_helper',
-		'description': 'Update multiple configuration files, build scripts etc. from a single location',
+		'description': 'Update multiple configuration files, build scripts etc. from a single location.',
 		'github_banner': 'true',
 		'github_type': 'star',
 		'badge_branch': 'master',

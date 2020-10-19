@@ -4,7 +4,7 @@ repo_helper
 
 .. start short_desc
 
-**Update multiple configuration files, build scripts etc. from a single location**
+**Update multiple configuration files, build scripts etc. from a single location.**
 
 .. end short_desc
 
