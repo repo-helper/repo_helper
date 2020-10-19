@@ -126,7 +126,7 @@ class ToxConfig(IniConfigurator):
 		Compile the list of mypy dependencies
 		"""
 
-		mypy_deps = ["mypy==0.790", "lxml"]
+		mypy_deps = [f"mypy=={self['mypy_version']}", "lxml"]
 
 		if self._globals["enable_tests"]:
 			mypy_deps.append(f"-r{{toxinidir}}/{self._globals['tests_dir']}/requirements.txt")

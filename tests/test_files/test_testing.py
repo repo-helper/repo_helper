@@ -38,6 +38,7 @@ from tests.common import check_file_output
 def test_make_tox(tmp_pathplus, demo_environment, file_regression: FileRegressionFixture):
 	# TODO: permutations to cover all branches
 	demo_environment.globals["mypy_deps"] = ["docutils-stubs"]
+	demo_environment.globals["mypy_version"] = "0.790"
 	demo_environment.globals["tox_py_versions"] = ["py36", "py37", "py38"]
 	demo_environment.globals["tox_requirements"] = []
 	demo_environment.globals["tox_build_requirements"] = []

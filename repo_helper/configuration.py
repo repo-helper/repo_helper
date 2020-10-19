@@ -1425,6 +1425,23 @@ class enable_devmode(ConfigVar):  # noqa
 	category: str = "tests"
 
 
+class mypy_version(ConfigVar):  # noqa
+	"""
+	The version of ``mypy`` to use.
+
+	Example:
+
+	.. code-block:: yaml
+
+		mypy_version: 0.790
+	"""
+
+	dtype = Union[str, float]
+	rtype = str
+	default = "0.790"
+	category: str = "tests"
+
+
 # ---------------------
 
 
@@ -1514,6 +1531,7 @@ all_values: List[ConfigVarMeta] = [
 		on_pypi,
 		mypy_plugins,
 		enable_devmode,
+		mypy_version,
 		]
 
 

@@ -334,6 +334,12 @@
         "boolean",
         "string"
       ]
+    },
+    "mypy_version": {
+      "type": [
+        "string",
+        "number"
+      ]
     }
   },
   "required": [
