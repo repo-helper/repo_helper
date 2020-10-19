@@ -26,8 +26,9 @@ Manage configuration for packaging tools.
 # stdlib
 import copy
 import pathlib
+import re
 import textwrap
-from typing import List
+from typing import Any, List
 
 # 3rd party
 import jinja2
@@ -41,7 +42,7 @@ import repo_helper.files
 from repo_helper.configupdater2 import ConfigUpdater  # type: ignore
 from repo_helper.files import management
 from repo_helper.requirements_tools import combine_requirements
-from repo_helper.utils import indent_with_tab, reformat_file
+from repo_helper.utils import IniConfigurator, indent_with_tab, reformat_file
 
 __all__ = [
 		"make_manifest",
@@ -160,6 +161,128 @@ def make_setup(repo_path: pathlib.Path, templates: jinja2.Environment) -> List[s
 		reformat_file(setup_file, yapf_style=str(yapf_style), isort_config_file=str(isort_config))
 
 	return ["setup.py"]
+
+
+class SetupCfgConfig(IniConfigurator):
+	"""
+	Generates the ``setup.cfg`` configuration file.
+
+	:param repo_path: Path to the repository root.
+	:param templates:
+	"""
+
+	filename: str = "setup.cfg"
+	managed_sections = [
+			"metadata",
+			"options",
+			"options.packages.find",
+			"mypy",
+			]
+
+	def __init__(self, repo_path: pathlib.Path, templates: jinja2.Environment):
+		self._globals = templates.globals
+
+		super().__init__(base_path=repo_path)
+
+	def __getitem__(self, item: str) -> Any:
+		"""
+		Passthrough to ``templates.globals``.
+
+		:param item:
+		"""
+
+		return self._globals[item]
+
+	def metadata(self):
+		"""
+		``[metadata]``
+		"""
+
+		self._ini["metadata"]["name"] = self["pypi_name"]
+		self._ini["metadata"]["author"] = self["author"]
+		self._ini["metadata"]["author_email"] = self["email"]
+		self._ini["metadata"]["license"] = self["license"]
+		self._ini["metadata"]["keywords"] = self["keywords"]
+		self._ini["metadata"]["long_description"] = "file: README.rst"
+		self._ini["metadata"]["long_description_content_type"] = "text/x-rst"
+		self._ini["metadata"]["platforms"] = self["platforms"]
+		self._ini["metadata"]["url"] = "https://github.com/{username}/{repo_name}".format(**self._globals)
+		self._ini["metadata"]["project_urls"] = indent_with_tab(
+				textwrap.dedent(
+						"""
+Documentation = https://{repo_name}.readthedocs.io
+Issue_Tracker = https://github.com/{username}/{repo_name}/issues
+Source_Code = https://github.com/{username}/{repo_name}""".format(**self._globals)
+						)
+				)
+		self._ini["metadata"]["classifiers"] = self["classifiers"]
+
+	def options(self):
+		"""
+		``[options]``
+		"""
+
+		self._ini["options"]["python_requires"] = ">={min_py_version}".format(**self._globals)
+		self._ini["options"]["zip_safe"] = False
+		self._ini["options"]["include_package_data"] = True
+		if self["stubs_package"]:
+			self._ini["options"]["packages"] = "{import_name}-stubs".format(**self._globals)
+		else:
+			self._ini["options"]["packages"] = "find:"
+
+	def options_packages_find(self):
+		"""
+		``[options.packages.find]``
+		"""
+
+		self._ini["options.packages.find"]["exclude"] = indent_with_tab(
+				textwrap.dedent("""
+{tests_dir}
+{tests_dir}.*
+{docs_dir}
+""".format(**self._globals))
+				)
+
+	def mypy(self):
+		"""
+		``[mypy]``
+		"""
+
+		self._ini["mypy"]["python_version"] = self["min_py_version"]
+		self._ini["mypy"]["namespace_packages"] = True
+		self._ini["mypy"]["check_untyped_defs"] = True
+		if self["mypy_plugins"]:
+			self._ini["mypy"]["plugins"] = ", ".join(self["mypy_plugins"])
+
+	def write_out(self):
+		"""
+		Write out to the ``.ini`` file.
+		"""
+
+		ini_file = PathPlus(self.base_path / self.filename)
+
+		for section in self.managed_sections:
+			getattr(self, re.sub("[:.-]", "_", section))()
+
+		if ini_file.is_file():
+			existing_config = ConfigUpdater()
+			existing_config.read(str(ini_file))
+			for section in existing_config.sections_blocks():
+				if section.name not in self.managed_sections:  # type: ignore
+					self._ini.add_section(section)
+
+		if "options.entry_points" not in self._ini.sections():
+			self._ini.add_section("options.entry_points")
+
+		if self["console_scripts"]:
+			self._ini["options.entry_points"]["console_scripts"] = self["console_scripts"]
+		else:
+			if not self._ini["options.entry_points"].options():
+				self._ini.remove_section("options.entry_points")
+
+		self._output.append(str(self._ini))
+
+		ini_file.write_clean("\n".join(self._output))
 
 
 @management.register("setup_cfg")

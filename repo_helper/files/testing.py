@@ -27,22 +27,21 @@ Configuration for testing and code formatting tools.
 import os.path
 import pathlib
 import re
-import textwrap
-from typing import Any, Iterable, List
+from typing import Any, List, Set
 
 # 3rd party
 import jinja2
 import requirements  # type: ignore
 from domdf_python_tools.paths import PathPlus
-from domdf_python_tools.stringlist import StringList
+from domdf_python_tools.typing import PathLike
 from packaging.requirements import Requirement
 
 # this package
 from repo_helper.configupdater2 import ConfigUpdater  # type: ignore
 from repo_helper.files import management
 from repo_helper.files.linting import code_only_warning, lint_fix_list, lint_warn_list
-from repo_helper.requirements_tools import read_requirements
-from repo_helper.utils import indent_join
+from repo_helper.requirements_tools import RequirementsManager, normalize
+from repo_helper.utils import IniConfigurator, indent_join
 
 __all__ = [
 		"make_tox",
@@ -54,14 +53,15 @@ __all__ = [
 		]
 
 
-class ToxConfig:
+class ToxConfig(IniConfigurator):
 	"""
 	Generates the ``tox.ini`` configuration file.
 
-	:param repo_path:
+	:param repo_path: Path to the repository root.
 	:param templates:
 	"""
 
+	filename: str = "tox.ini"
 	managed_sections = [
 			"tox",
 			"envlists",
@@ -83,20 +83,8 @@ class ToxConfig:
 			]
 
 	def __init__(self, repo_path: pathlib.Path, templates: jinja2.Environment):
-		self.repo_path = repo_path
 		self._globals = templates.globals
-		self._ini = ConfigUpdater()
-
-		self._output = StringList([
-				"# This file is managed by 'repo_helper'.",
-				"# You may add new sections, but any changes made to the following sections will be lost:",
-				])
-
-		for sec in self.managed_sections:
-			self._ini.add_section(sec)
-			self._output.append(f"#     * {sec}")
-
-		self._output.blankline(ensure_single=True)
+		super().__init__(base_path=repo_path)
 
 	def __getitem__(self, item: str) -> Any:
 		"""
@@ -143,7 +131,7 @@ class ToxConfig:
 		if self._globals["enable_tests"]:
 			mypy_deps.append(f"-r{{toxinidir}}/{self._globals['tests_dir']}/requirements.txt")
 
-		if (self.repo_path / "stubs.txt").is_file():
+		if (self.base_path / "stubs.txt").is_file():
 			mypy_deps.append("-r{toxinidir}/stubs.txt")
 
 		mypy_deps.extend(self._globals["mypy_deps"])
@@ -486,27 +474,6 @@ class ToxConfig:
 		self._ini["pytest"]["addopts"] = "--color yes --durations 25"
 		# --reruns 1 --reruns-delay 5
 		self._ini["pytest"]["timeout"] = 300
-
-	def write_out(self):
-		"""
-		Write out to the tox.ini file.
-		"""
-
-		tox_file = PathPlus(self.repo_path / "tox.ini")
-
-		for section in self.managed_sections:
-			getattr(self, re.sub("[:-]", "_", section))()
-
-		if tox_file.is_file():
-			existing_config = ConfigUpdater()
-			existing_config.read(str(tox_file))
-			for section in existing_config.sections_blocks():
-				if section.name not in self.managed_sections:  # type: ignore
-					self._ini.add_section(section)
-
-		self._output.append(str(self._ini))
-
-		tox_file.write_clean("\n".join(self._output))
 
 
 @management.register("tox")
