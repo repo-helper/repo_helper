@@ -38,6 +38,7 @@ import jinja2
 from css_parser import css  # type: ignore
 from domdf_python_tools.compat import importlib_resources
 from domdf_python_tools.paths import PathPlus, clean_writer
+from domdf_python_tools.typing import PathLike
 from domdf_python_tools.utils import enquote_value
 from packaging.requirements import Requirement
 
@@ -54,11 +55,11 @@ from repo_helper.blocks import (
 		shields_regex,
 		short_desc_regex
 		)
-from repo_helper.configupdater2 import ConfigUpdater
+from repo_helper.configupdater2 import ConfigUpdater  # type: ignore
 from repo_helper.files import management
-from repo_helper.requirements_tools import read_requirements
+from repo_helper.requirements_tools import RequirementsManager, combine_requirements, normalize, read_requirements
 from repo_helper.templates import init_repo_template_dir, template_dir
-from repo_helper.utils import normalize, pformat_tabs, reformat_file
+from repo_helper.utils import pformat_tabs, reformat_file
 
 __all__ = [
 		"ensure_doc_requirements",
@@ -82,15 +83,7 @@ logging.getLogger("CSSUTILS").propagate = False
 logging.getLogger("CSSUTILS").addFilter(lambda record: False)
 
 
-@management.register("doc_requirements", ["enable_docs"])
-def ensure_doc_requirements(repo_path: pathlib.Path, templates: jinja2.Environment) -> List[str]:
-	"""
-	Ensure ``<docs_dir>/requirements.txt`` contains the required entries.
-
-	:param repo_path: Path to the repository root.
-	:param templates:
-	"""
-
+class DocRequirementsManager(RequirementsManager):
 	target_requirements = {
 			Requirement("sphinxcontrib-httpdomain>=1.7.0"),
 			Requirement("sphinxemoji>=0.1.6"),
@@ -105,67 +98,67 @@ def ensure_doc_requirements(repo_path: pathlib.Path, templates: jinja2.Environme
 			Requirement("sphinx>=3.0.3"),
 			}
 
-	# Mapping of pypi_name to version specifier
-	theme_versions = {
-			"sphinx_rtd_theme": "<0.5",
-			"domdf_sphinx_theme": ">=0.1.0",
-			"repo_helper_sphinx_theme": ">=0.0.2",
-			}
+	def __init__(self, repo_path: PathLike, templates: jinja2.Environment):
+		self.filename = os.path.join(templates.globals["docs_dir"], "requirements.txt")
+		self._globals = templates.globals
+		super().__init__(repo_path)
 
-	for name, specifier in theme_versions.items():
-		if name == templates.globals["sphinx_html_theme"]:
-			target_requirements.add(Requirement(f"{name}{specifier}"))
-			break
-	else:
-		target_requirements.add(Requirement(templates.globals['sphinx_html_theme']))
+	def compile_target_requirements(self) -> None:
+		# Mapping of pypi_name to version specifier
+		theme_versions = {
+				"sphinx_rtd_theme": "<0.5",
+				"domdf_sphinx_theme": ">=0.1.0",
+				"repo_helper_sphinx_theme": ">=0.0.2",
+				}
 
-	# Mapping of pypi_name to version specifier
-	my_sphinx_extensions = {
-			"extras_require": ">=0.2.0",
-			"seed_intersphinx_mapping": ">=0.1.1",
-			"default_values": ">=0.2.0",
-			"toctree_plus": ">=0.0.4",
-			"sphinx-toolbox": ">=1.5.1",
-			}
+		for name, specifier in theme_versions.items():
+			if name == self._globals["sphinx_html_theme"]:
+				self.target_requirements.add(Requirement(f"{name}{specifier}"))
+				break
+		else:
+			self.target_requirements.add(Requirement(self._globals['sphinx_html_theme']))
 
-	for name, specifier in my_sphinx_extensions.items():
-		if name != templates.globals["pypi_name"]:
-			target_requirements.add(Requirement(f"{name}{specifier}"))
+		# Mapping of pypi_name to version specifier
+		my_sphinx_extensions = {
+				"extras_require": ">=0.2.0",
+				"seed_intersphinx_mapping": ">=0.1.1",
+				"default_values": ">=0.2.0",
+				"toctree_plus": ">=0.0.4",
+				"sphinx-toolbox": ">=1.5.1",
+				}
 
-	target_requirement_names: Set[str] = {normalize(r.name) for r in target_requirements}
+		for name, specifier in my_sphinx_extensions.items():
+			if name != self._globals["pypi_name"]:
+				self.target_requirements.add(Requirement(f"{name}{specifier}"))
 
-	req_file = PathPlus(repo_path / templates.globals["docs_dir"] / "requirements.txt")
-	req_file.parent.maybe_make(parents=True)
+	def merge_requirements(self) -> List[str]:
+		current_requirements, comments = read_requirements(self.req_file)
 
-	if not req_file.is_file():
-		req_file.touch()
+		for req in current_requirements:
+			req.name = normalize(req.name)
+			if req.name not in self.get_target_requirement_names():
+				if req.name == "sphinx-rtd-theme" and self._globals["sphinx_html_theme"] == "domdf_sphinx_theme":
+					self.target_requirements.add(Requirement("domdf-sphinx-theme>=0.1.0"))
+				elif req.name == "sphinx-autodoc-typehints":
+					continue
+				else:
+					self.target_requirements.add(req)
 
-	current_requirements, comments = read_requirements(req_file)
-	for req in current_requirements:
-		if normalize(req.name) not in target_requirement_names:
-			if req.name == "sphinx_rtd_theme" and templates.globals["sphinx_html_theme"] == "domdf_sphinx_theme":
-				target_requirements.add(Requirement("domdf_sphinx_theme>=0.1.0"))
-			else:
-				target_requirements.add(req)
+		self.target_requirements = set(combine_requirements(self.target_requirements))
 
-	buf = [*comments]
+		return comments
 
-	lib_requirements, _ = read_requirements(repo_path / "requirements.txt")
-	lib_requirements_names = [r.name for r in lib_requirements]
 
-	# Remove requirements given in the library requirements.txt file.
-	target_requirements = {r for r in target_requirements if r.name not in lib_requirements_names}
+@management.register("doc_requirements", ["enable_docs"])
+def ensure_doc_requirements(repo_path: pathlib.Path, templates: jinja2.Environment) -> List[str]:
+	"""
+	Ensure ``<docs_dir>/requirements.txt`` contains the required entries.
 
-	for req in sorted(target_requirements, key=lambda r: r.name.casefold()):
-		buf.append(str(req))
+	:param repo_path: Path to the repository root.
+	:param templates:
+	"""
 
-	# Temporary replacement of some libraries
-	for line in buf:
-		if line.startswith("sphinx_autodoc_typehints"):
-			buf.remove(line)
-
-	req_file.write_clean("\n".join(buf))
-
+	DocRequirementsManager(repo_path, templates).run()
 	return [os.path.join(templates.globals["docs_dir"], "requirements.txt")]
 
 

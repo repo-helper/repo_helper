@@ -585,15 +585,7 @@ def make_isort(repo_path: pathlib.Path, templates: jinja2.Environment) -> List[s
 	return [".isort.cfg"]
 
 
-@management.register("test_requirements", ["enable_tests"])
-def ensure_tests_requirements(repo_path: pathlib.Path, templates: jinja2.Environment) -> List[str]:
-	"""
-	Ensure ``tests/requirements.txt`` contains the required entries.
-
-	:param repo_path: Path to the repository root.
-	:param templates:
-	"""
-
+class TestsRequirementsManager(RequirementsManager):
 	target_requirements = {
 			Requirement("coverage>=5.1"),
 			Requirement("pytest>=6.0.0"),
@@ -603,35 +595,26 @@ def ensure_tests_requirements(repo_path: pathlib.Path, templates: jinja2.Environ
 			Requirement("iniconfig!=1.1.0,>=1.0.1"),
 			}
 
-	if templates.globals["pypi_name"] != "coverage_pyver_pragma":
-		target_requirements.add(Requirement("coverage_pyver_pragma>=0.0.6"))
+	def __init__(self, repo_path: PathLike, templates: jinja2.Environment):
+		self.filename = os.path.join(templates.globals["tests_dir"], "requirements.txt")
+		self._globals = templates.globals
+		super().__init__(repo_path)
 
-	_target_requirement_names: List[str] = [r.name.casefold() for r in target_requirements]
-	_target_requirement_names += [r.replace("-", "_").casefold() for r in _target_requirement_names]
-	_target_requirement_names += [r.replace("_", "-").casefold() for r in _target_requirement_names]
+	def compile_target_requirements(self) -> None:
+		if self._globals["pypi_name"] != "coverage_pyver_pragma":
+			self.target_requirements.add(Requirement("coverage_pyver_pragma>=0.0.6"))
 
-	target_requirement_names = set(_target_requirement_names)
 
-	req_file = PathPlus(repo_path / templates.globals["tests_dir"] / "requirements.txt")
-	req_file.parent.maybe_make(parents=True)
+@management.register("test_requirements", ["enable_tests"])
+def ensure_tests_requirements(repo_path: pathlib.Path, templates: jinja2.Environment) -> List[str]:
+	"""
+	Ensure ``tests/requirements.txt`` contains the required entries.
 
-	if not req_file.is_file():
-		req_file.touch()
+	:param repo_path: Path to the repository root.
+	:param templates:
+	"""
 
-	current_requirements, comments = read_requirements(req_file)
-	for req in current_requirements:
-		if req.name.casefold() not in target_requirement_names:
-			target_requirements.add(req)
-
-	with req_file.open('w', encoding="UTF-8") as fp:
-		for comment in comments:
-			fp.write(comment)
-			fp.write("\n")
-
-		for req in sorted(target_requirements, key=lambda r: r.name.casefold()):
-			fp.write(str(req))
-			fp.write("\n")
-
+	TestsRequirementsManager(repo_path, templates).run()
 	return [os.path.join(templates.globals["tests_dir"], "requirements.txt")]
 
 

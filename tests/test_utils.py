@@ -28,7 +28,8 @@ import pytest
 from domdf_python_tools.terminal_colours import Fore
 
 # this package
-from repo_helper.utils import indent_with_tab, normalize, pformat_tabs, validate_classifiers
+from repo_helper.requirements_tools import normalize
+from repo_helper.utils import indent_with_tab, pformat_tabs, validate_classifiers
 
 # def test_ensure_requirements(tmpdir):
 # 	tmpdir_p = PathPlus(tmpdir)

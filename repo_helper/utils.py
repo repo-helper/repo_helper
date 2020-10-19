@@ -268,20 +268,6 @@ license_lookup = {
 		"Public Domain": "Public Domain",
 		}
 
-_normalize_pattern = re.compile(r"[-_.]+")
-
-
-def normalize(name: str) -> str:
-	"""
-	Normalize the given name for PyPI et al.
-
-	From :pep:`503` (public domain).
-
-	:param name: The project name.
-	"""
-
-	return _normalize_pattern.sub("-", name).lower()
-
 
 def reformat_file(filename: PathLike, yapf_style: str, isort_config_file: str) -> int:
 	"""
@@ -349,3 +335,53 @@ def indent_join(iterable: Iterable[str]) -> str:
 		if not l[0] == '':
 			l.insert(0, '')
 	return indent_with_tab(textwrap.dedent("\n".join(l)))
+
+
+class IniConfigurator:
+	"""
+	Base class to generate ``.ini`` configuration files.
+
+	:param base_path:
+	"""
+
+	managed_sections: List[str]
+	_ini: ConfigUpdater
+	_output: StringList
+	managed_message: str = "This file is managed by 'repo_helper'."
+	filename: str
+
+	def __init__(self, base_path: pathlib.Path):
+		self.base_path = base_path
+		self._ini = ConfigUpdater()
+
+		self._output = StringList([
+				f"# {self.managed_message}",
+				"# You may add new sections, but any changes made to the following sections will be lost:",
+				])
+
+		for sec in self.managed_sections:
+			self._ini.add_section(sec)
+			self._output.append(f"#     * {sec}")
+
+		self._output.blankline(ensure_single=True)
+
+	def write_out(self):
+		"""
+		Write out to the ``.ini`` file.
+		"""
+
+		ini_file = PathPlus(self.base_path / self.filename)
+
+		for section in self.managed_sections:
+			getattr(self, re.sub("[:.-]", "_", section))()
+
+		if ini_file.is_file():
+			existing_config = ConfigUpdater()
+			existing_config.read(str(ini_file))
+			for section in existing_config.sections_blocks():
+				if section.name not in self.managed_sections:  # type: ignore
+					self._ini.add_section(section)
+
+		self._output.append(str(self._ini))
+
+		ini_file.write_clean("\n".join(self._output))

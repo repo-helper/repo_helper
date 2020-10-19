@@ -117,7 +117,7 @@ def test_ensure_tests_requirements(tmp_pathplus, demo_environment):
 			encoding="UTF-8"
 			) == """\
 coverage>=5.1
-coverage_pyver_pragma>=0.0.6
+coverage-pyver-pragma>=0.0.6
 iniconfig!=1.1.0,>=1.0.1
 pytest>=6.0.0
 pytest-cov>=2.8.1
@@ -135,7 +135,7 @@ pytest-timeout>=1.4.2
 			encoding="UTF-8"
 			) == """\
 coverage>=5.1
-coverage_pyver_pragma>=0.0.6
+coverage-pyver-pragma>=0.0.6
 iniconfig!=1.1.0,>=1.0.1
 lorem>=0.1.1
 pytest>=6.0.0
