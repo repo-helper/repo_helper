@@ -719,3 +719,7 @@ def build_sdist(sdist_directory, config_settings=None):
 	with tempfile.TemporaryDirectory() as tmpdir:
 		builder = Builder(repo_dir=PathPlus.cwd(), build_dir=tmpdir, out_dir=sdist_directory, verbose=True)
 		return builder.build_sdist()
+
+
+def get_requires_for_build_sdist(config_settings=None):
+	return []
