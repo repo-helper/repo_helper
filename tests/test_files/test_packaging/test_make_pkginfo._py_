@@ -17,22 +17,9 @@ import pathlib
 __all__ = [
 		"__copyright__",
 		"__version__",
-		"modname",
-		"pypi_name",
-		"__license__",
-		"__author__",
-		"short_desc",
-		"author",
-		"author_email",
-		"github_username",
-		"web",
-		"github_url",
 		"repo_root",
 		"install_requires",
 		"extras_require",
-		"project_urls",
-
-		"import_name",
 		]
 
 __copyright__ = """
@@ -40,30 +27,7 @@ __copyright__ = """
 """
 
 __version__ = "1.2.3"
-modname = "hello-world"
-pypi_name = "hello-world"
-import_name = "hello_world"
-__license__ = "MIT License"
-short_desc = 'a short description'
-__author__ = author = 'Joe Bloggs'
-author_email = 'j.bloggs@example.com'
-github_username = "octocat"
-web = github_url = "https://github.com/octocat/hello-world"
+
 repo_root = pathlib.Path(__file__).parent
 install_requires = (repo_root / "requirements.txt").read_text(encoding="utf-8").split('\n')
 extras_require = {}
-
-
-
-conda_description = """This is the conda description.
-
-
-Before installing please ensure you have added the following channels: conda-forge"""
-__all__.append("conda_description")
-
-
-project_urls = {
-		"Documentation": "https://hello-world.readthedocs.io",
-		"Issue Tracker": f"{github_url}/issues",
-		"Source Code": github_url,
-		}

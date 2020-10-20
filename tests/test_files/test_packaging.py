@@ -144,7 +144,6 @@ def test_make_pkginfo(tmp_pathplus, demo_environment, file_regression: FileRegre
 	demo_environment.globals["extras_require"] = {}
 	demo_environment.globals["copyright_years"] = 2020
 	demo_environment.globals["version"] = "1.2.3"
-	demo_environment.globals["conda_description"] = "This is the conda description."
 
 	managed_files = make_pkginfo(tmp_pathplus, demo_environment)
 	assert managed_files == ["__pkginfo__.py"]

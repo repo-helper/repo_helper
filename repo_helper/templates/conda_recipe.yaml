@@ -1,0 +1,45 @@
+package:
+  name: "{{ pypi_name.lower() }}"
+  version: "{{ version }}"
+
+source:
+  url: "https://pypi.io/packages/source/{{ pypi_name[0] }}/{{ pypi_name }}/{{ pypi_name }}-{{ version }}.tar.gz"
+
+build:
+  noarch: python
+  {% raw %}script: "{{ PYTHON }} -m pip install . -vv"{% endraw %}
+
+requirements:
+  build:
+    - python
+    - setuptools
+    - wheel
+  host:
+    - pip
+    - python
+{{ requirements_block }}
+  run:
+    - python
+{{ requirements_block }}
+
+test:
+  imports:
+    - {{ import_name }}
+
+about:
+  home: "https://github.com/{{ username }}/{{ repo_name }}"
+  license: "{{ license }}"
+  summary: "{{ short_desc }}"
+  description: "{{ conda_description }}
+{% if conda_channels %}
+
+
+Before installing please ensure you have added the following channels: {{ ", ".join(conda_channels) }}
+{% endif %}"
+  doc_url: https://{{ repo_name }}.readthedocs.io
+  dev_url: https://github.com/{{ username }}/{{ repo_name }}
+
+extra:
+  maintainers:
+    - {{ author }}
+    - github.com/{{ username }}

@@ -43,10 +43,6 @@ source:
   url: "https://pypi.io/packages/source/{{ pypi_name[0] }}/{{ pypi_name }}/{{ pypi_name }}-{__version__}.tar.gz"
 
 build:
-{# #  entry_points:
-#    - {{ import_name }} = {{ import_name }}:main
-#  skip_compile_pyc:
-#    - "*/templates/*.py"          # These should not (and cannot) be compiled #}
   noarch: python
   {% raw %}script: "{{{{ PYTHON }}}} -m pip install . -vv"{% endraw %}
 

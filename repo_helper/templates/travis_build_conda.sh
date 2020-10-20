@@ -6,7 +6,8 @@ set -e -x
 if [ $TRAVIS_PYTHON_VERSION == {{ python_deploy_version }} ]; then
   if [ -z "$TRAVIS_TAG" ] && [ "$TRAVIS_COMMIT_MESSAGE" != "Bump version*" ]; then
 
-    python3 ./make_conda_recipe.py || exit 1
+    python3 -m pip install git+https://github.com/domdfcoding/repo_helper || exit 1
+    python3 -m repo_helper make-recipe --outdir conda || exit 1
 
     # Switch to miniconda
     source "$HOME/miniconda/etc/profile.d/conda.sh"

@@ -98,9 +98,8 @@ def make_make_conda_recipe(repo_path: pathlib.Path, templates: jinja2.Environmen
 	:param templates:
 	"""
 
-	PathPlus(repo_path / "make_conda_recipe.py").write_clean(
-			templates.get_template("make_conda_recipe._py").render()
-			)
+	PathPlus(repo_path / "make_conda_recipe.py"
+				).write_clean(templates.get_template("make_conda_recipe._py").render())
 
 	return ["make_conda_recipe.py"]
 

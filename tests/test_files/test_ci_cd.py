@@ -181,6 +181,12 @@ def test_remove_copy_pypi_2_github(tmp_pathplus, demo_environment):
 
 
 def test_make_make_conda_recipe(tmp_pathplus, demo_environment, file_regression):
+	demo_environment.globals["conda_description"] = "This is the conda description."
+	demo_environment.globals["extras_require"] = {}
+	demo_environment.globals["license"] = "MIT License"
+	demo_environment.globals["author"] = "Joe Bloggs"
+	demo_environment.globals["email"] = "j.bloggs@example.com"
+
 	assert make_make_conda_recipe(tmp_pathplus, demo_environment) == ["make_conda_recipe.py"]
 	check_file_output(tmp_pathplus / "make_conda_recipe.py", file_regression)
 
