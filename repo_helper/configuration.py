@@ -1454,14 +1454,19 @@ def parse_yaml(repo_path: pathlib.Path) -> Dict:
 	:returns: Mapping of configuration keys to values.
 	"""
 
+	repo_path = PathPlus(repo_path)
+
 	if (repo_path / "git_helper.yml").is_file():
 		(repo_path / "git_helper.yml").rename(repo_path / "repo_helper.yml")
 
-	if not (repo_path / "repo_helper.yml").is_file():
+	config_file = repo_path / "repo_helper.yml"
+
+	if not config_file.is_file():
 		raise FileNotFoundError(f"'repo_helper.yml' not found in {repo_path}")
 
 	parser = RepoHelperParser(allow_unknown_keys=False)
-	config_vars = parser.run(repo_path / "repo_helper.yml")
+	config_vars = parser.run(config_file)
+	config_file.write_clean(config_file.read_text())
 
 	return config_vars
 

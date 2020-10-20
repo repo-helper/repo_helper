@@ -206,13 +206,13 @@ class SetupCfgConfig(IniConfigurator):
 		self._ini["metadata"]["long_description"] = "file: README.rst"
 		self._ini["metadata"]["long_description_content_type"] = "text/x-rst"
 		self._ini["metadata"]["platforms"] = self["platforms"]
-		self._ini["metadata"]["url"] = "https://github.com/{username}/{repo_name}".format(**self._globals)
+		self._ini["metadata"]["url"] = "https://github.com/{username}/{repo_name}".format_map(self._globals)
 		self._ini["metadata"]["project_urls"] = indent_with_tab(
 				textwrap.dedent(
 						"""
 Documentation = https://{repo_name}.readthedocs.io
 Issue_Tracker = https://github.com/{username}/{repo_name}/issues
-Source_Code = https://github.com/{username}/{repo_name}""".format(**self._globals)
+Source_Code = https://github.com/{username}/{repo_name}""".format_map(self._globals)
 						)
 				)
 		self._ini["metadata"]["classifiers"] = self["classifiers"]
@@ -222,11 +222,11 @@ Source_Code = https://github.com/{username}/{repo_name}""".format(**self._global
 		``[options]``
 		"""
 
-		self._ini["options"]["python_requires"] = ">={min_py_version}".format(**self._globals)
+		self._ini["options"]["python_requires"] = ">={min_py_version}".format_map(self._globals)
 		self._ini["options"]["zip_safe"] = False
 		self._ini["options"]["include_package_data"] = True
 		if self["stubs_package"]:
-			self._ini["options"]["packages"] = "{import_name}-stubs".format(**self._globals)
+			self._ini["options"]["packages"] = "{import_name}-stubs".format_map(self._globals)
 		else:
 			self._ini["options"]["packages"] = "find:"
 
@@ -240,7 +240,7 @@ Source_Code = https://github.com/{username}/{repo_name}""".format(**self._global
 {tests_dir}
 {tests_dir}.*
 {docs_dir}
-""".format(**self._globals))
+""".format_map(self._globals))
 				)
 
 	def mypy(self):

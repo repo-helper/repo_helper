@@ -94,7 +94,8 @@ from repo_helper.utils import discover_entry_points
 
 if not bool(getattr(sys, 'ps1', sys.flags.interactive)):
 	readline.set_history_length(0)
-	readline.set_auto_history(False)
+	# Ref: https://github.com/python/typeshed/pull/4688
+	readline.set_auto_history(False)  # type: ignore
 
 __all__ = [
 		"CONTEXT_SETTINGS",
@@ -406,4 +407,4 @@ def _prompt(text, err: bool, hide_input: bool):
 	elif err:
 		return stderr_input(text, file=sys.stderr)
 	else:
-		return input(text)
+		return click.termui.visible_prompt_func(text)  # type: ignore
