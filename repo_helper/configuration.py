@@ -33,6 +33,7 @@ from configconfig.parser import Parser
 from configconfig.utils import make_schema, optional_getter
 from domdf_python_tools.compat import importlib_resources
 from domdf_python_tools.paths import PathPlus
+from domdf_python_tools.typing import PathLike
 from packaging.version import Version
 from typing_extensions import Literal
 
@@ -114,6 +115,8 @@ __all__ = [
 		"username",
 		"version",
 		"yapf_exclude",
+		"mypy_version",
+		"use_experimental_backend",
 		]
 
 
@@ -381,6 +384,7 @@ class classifiers(ConfigVar):  # noqa
 			add_classifier(classifier)
 
 		lic = raw_config_vars.get("license", '')
+		# lic = license.get(raw_config_vars)
 
 		if lic in license_lookup:
 			lic = license_lookup[lic]
@@ -770,7 +774,7 @@ class extras_require(ConfigVar):  # noqa
 		  extra_a: < a filename >
 	"""
 
-	dtype = Dict[str, str]
+	dtype = Dict[str, str]  # or Dict[str, List[str]]
 	default: Dict[str, str] = {}
 	category: str = "packaging"
 
@@ -1442,10 +1446,36 @@ class mypy_version(ConfigVar):  # noqa
 	category: str = "tests"
 
 
+class use_experimental_backend(ConfigVar):  # noqa
+	r"""
+	Whether to use ``repo_helper``\'s experimental build backend,
+	rather than ``setuptools.build_meta``.
+	"""  # noqa: D400
+
+	dtype = bool
+	default = False
+	category: str = "packaging"
+
+	@classmethod
+	def validate(cls, raw_config_vars: Optional[Dict[str, Any]] = None) -> Any:
+		excluded_files = exclude_files.get(raw_config_vars)
+
+		if not pure_python.get(raw_config_vars):
+			return False
+		elif additional_setup_args.get(raw_config_vars):
+			return False
+		elif "setup" in excluded_files:
+			return False
+		elif "setup_cfg" in excluded_files:
+			return False
+		else:
+			return super().validate(raw_config_vars)
+
+
 # ---------------------
 
 
-def parse_yaml(repo_path: pathlib.Path) -> Dict:
+def parse_yaml(repo_path: PathLike) -> Dict:
 	"""
 	Parse configuration values from ``repo_helper.yml``.
 
@@ -1537,6 +1567,7 @@ all_values: List[ConfigVarMeta] = [
 		mypy_plugins,
 		enable_devmode,
 		mypy_version,
+		use_experimental_backend,
 		]
 
 
