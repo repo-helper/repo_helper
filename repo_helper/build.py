@@ -32,9 +32,12 @@ import shutil
 import tarfile
 import tempfile
 from base64 import urlsafe_b64encode
+from datetime import datetime
 from email.message import EmailMessage
 from hashlib import sha256
 from io import StringIO
+from subprocess import PIPE, Popen
+from textwrap import dedent, indent
 from typing import Optional
 from zipfile import ZipFile
 
@@ -48,7 +51,7 @@ from packaging.version import Version
 
 # this package
 from repo_helper import __version__
-from repo_helper.click_tools import resolve_color_default
+from repo_helper.click_tools import abort, resolve_color_default
 from repo_helper.configuration import parse_yaml
 from repo_helper.requirements_tools import ComparableRequirement, combine_requirements, read_requirements
 
@@ -116,6 +119,16 @@ class Builder:
 		dist_info = self.build_dir / f"{self.archive_name}.dist-info"
 		dist_info.maybe_make()
 		return dist_info
+
+	@property
+	def info_dir(self) -> PathPlus:
+		"""
+		The ``info`` directory in the build directory for Conda builds.
+		"""
+
+		info_dir = self.build_dir / "info"
+		info_dir.maybe_make()
+		return info_dir
 
 	def copy_source(self) -> None:
 		"""
@@ -340,6 +353,86 @@ class Builder:
 		metadata_file.write_lines([str(metadata), (self.repo_dir / "README.rst").read_text()])
 		self.report_written(metadata_file)
 
+	def write_conda_index(self, build_number: int = 1):
+		"""
+		Write the conda ``index.json`` file.
+
+		.. seealso:: https://docs.conda.io/projects/conda-build/en/latest/resources/package-spec.html#info-index-json
+
+		:param build_number:
+		"""  # noqa: D400
+
+		build_string = f"py_{build_number}"
+		# https://docs.conda.io/projects/conda-build/en/latest/resources/define-metadata.html#build-number-and-string
+
+		extra_requirements = []
+		all_requirements = []
+
+		for extra, requirements in self.config["extras_require"].items():
+			extra_requirements.extend([ComparableRequirement(r) for r in requirements])
+
+		for requirement in sorted(
+				combine_requirements(
+						*read_requirements(self.repo_dir / "requirements.txt")[0],
+						*extra_requirements,
+						),
+				):
+			if requirement.url:
+				continue
+
+			if requirement.extras:
+				requirement.extras = set()
+			if requirement.marker:
+				requirement.marker = None
+
+			all_requirements.append(str(requirement))
+
+		index = {
+				"name": self.config["repo_name"].lower(),
+				"version": self.config["version"],
+				"build": build_string,
+				"build_number": build_number,
+				"depends": all_requirements,
+				"arch": None,
+				"noarch": "python",
+				"platform": None,
+				"subdir": "noarch",
+				"timestamp": int(datetime.now().timestamp() * 1000)
+				}
+
+		index_json_file = self.info_dir / "index.json"
+		index_json_file.dump_json(index, indent=2)
+		self.report_written(index_json_file)
+
+	def write_conda_about(self):
+		"""
+		Write the conda ``about.json`` file.
+
+		.. seealso:: https://docs.conda.io/projects/conda-build/en/latest/resources/package-spec.html#info-about-json
+		"""
+
+		github_url = "https://github.com/{username}/{repo_name}".format_map(self.config)
+
+		conda_description = self.config["conda_description"]
+		if self.config["conda_channels"]:
+			conda_description += "\n\n\n"
+			conda_description += "Before installing please ensure you have added the following channels:"
+			conda_description += ", ".join(self.config["conda_channels"])
+
+		about = {
+				"home": github_url,
+				"dev_url": github_url,
+				"doc_url": "https://{repo_name}.readthedocs.io".format_map(self.config),  # "license_url":,
+				"license": self.config["license"],
+				"summary": self.config["short_desc"],
+				"description": conda_description,  # "license_family":,
+				"extra": {"maintainers": [self.config["author"], f"github.com/{self.config['username']}"], }
+				}
+
+		about_json_file = self.info_dir / "about.json"
+		about_json_file.dump_json(about, indent=2)
+		self.report_written(about_json_file)
+
 	def write_wheel(self) -> None:
 		"""
 		Write the metadata to the ``WHEEL`` file.
@@ -361,6 +454,8 @@ class Builder:
 
 		:return: The filename of the created archive.
 		"""
+
+		self.out_dir.maybe_make(parents=True)
 
 		def get_record_entry(path: pathlib.Path, build_dir: pathlib.Path, blocksize: int = 1 << 20) -> str:
 			sha256_hash = sha256()
@@ -399,8 +494,55 @@ class Builder:
 					wheel_archive.write(file, arcname=file.relative_to(self.build_dir))
 					self.report_written(file)
 
-		click.echo(Fore.GREEN(f"🎡 Wheel created at {wheel_filename.resolve()}"), color=resolve_color_default())
+		click.echo(
+				Fore.GREEN(f"🎡 Wheel created at {wheel_filename.resolve()}"),
+				color=resolve_color_default(),
+				)
 		return os.path.basename(wheel_filename)
+
+	def create_conda_archive(self, wheel_contents_dir: PathLike, build_number: int = 1) -> str:
+		"""
+		Create the conda archive.
+
+		:param wheel_contents_dir: The directory containing the installed contents of the wheel.
+		:param build_number:
+
+		:return: The filename of the created archive.
+		"""
+
+		build_string = f"py_{build_number}"
+
+		self.out_dir.maybe_make(parents=True)
+
+		conda_filename = self.out_dir / f"{self.config['repo_name']}-{self.config['version']}-{build_string}.tar.bz2"
+
+		site_packages = PathPlus("site-packages")
+
+		with tarfile.open(conda_filename, mode='w:bz2') as conda_archive:
+			with (self.info_dir / "files").open("w") as fp:
+
+				for file in (PathPlus(wheel_contents_dir) / self.import_name).rglob("*"):
+					if file.is_file():
+						filename = (site_packages / file.relative_to(wheel_contents_dir)).as_posix()
+						fp.write(f"{filename}\n")
+						conda_archive.add(str(file), arcname=filename)
+
+				for file in (PathPlus(wheel_contents_dir) / f"{self.archive_name}.dist-info").rglob("*"):
+					if file.name == "INSTALLER":
+						file.write_text("conda")
+
+					if file.is_file():
+						filename = (site_packages / file.relative_to(wheel_contents_dir)).as_posix()
+						fp.write(f"{filename}\n")
+						conda_archive.add(str(file), arcname=filename)
+
+			for file in self.info_dir.rglob("*"):
+				if not file.is_file():
+					continue
+
+				conda_archive.add(str(file), arcname=file.relative_to(self.build_dir).as_posix())
+
+		return os.path.basename(conda_filename)
 
 	def create_sdist_archive(self) -> str:
 		"""
@@ -409,15 +551,17 @@ class Builder:
 		:return: The filename of the created archive.
 		"""
 
+		self.out_dir.maybe_make(parents=True)
+
 		sdist_filename = self.out_dir / f"{self.archive_name}.tar.gz"
 		with tarfile.open(sdist_filename, mode='w:gz', format=tarfile.PAX_FORMAT) as sdist_archive:
 			for file in self.build_dir.rglob("*"):
 				if file.is_file():
-					sdist_archive.add(str(file), arcname=str(file.relative_to(self.build_dir)))
+					sdist_archive.add(str(file), arcname=file.relative_to(self.build_dir).as_posix())
 
 		click.echo(
 				Fore.GREEN(f"Source distribution created at {sdist_filename.resolve()}"),
-				color=resolve_color_default()
+				color=resolve_color_default(),
 				)
 		return os.path.basename(sdist_filename)
 
@@ -471,6 +615,70 @@ class Builder:
 
 		self.write_metadata(self.build_dir / "PKG-INFO")
 		return self.create_sdist_archive()
+
+	def build_conda(self) -> str:
+		"""
+		Build the Conda distribution.
+
+		:return: The filename of the created archive.
+		"""
+
+		build_number = 1
+
+		# Build the wheel first and clear the build directory
+		wheel_file = self.build_wheel()
+
+		if self.build_dir.is_dir():
+			shutil.rmtree(self.build_dir)
+		self.build_dir.maybe_make(parents=True)
+
+		for license_file in self.repo_dir.glob("LICEN[CS]E"):
+			target = self.info_dir / "license.txt"
+			target.write_clean(license_file.read_text())
+			self.report_copied(license_file, target)
+
+		self.write_conda_about()
+		self.write_conda_index(build_number=build_number)
+
+		with tempfile.TemporaryDirectory() as tmpdir:
+			if self.verbose:
+				click.echo("Installing wheel into temporary directory")
+
+			command = [
+					"pip",
+					"install",
+					str(self.out_dir / wheel_file),
+					"--target",
+					str(tmpdir),
+					"--no-deps",
+					"--no-compile"
+					]
+			process = Popen(command, stdout=PIPE)
+			(output, err) = process.communicate()
+			exit_code = process.wait()
+
+			if self.verbose:
+				click.echo((output or b'').decode("UTF-8"))
+				click.echo((err or b'').decode("UTF-8"), err=True)
+
+			if exit_code != 0:
+				raise abort(
+						dedent(
+								f"""\
+				Command '{' '.join(command)}' returned non-zero exit code {exit_code}:
+
+				{indent(err or '', '    ')}
+				"""
+								).rstrip() + "\n"
+						)
+
+			conda_filename = self.create_conda_archive(str(tmpdir), build_number=build_number)
+
+		click.echo(
+				Fore.GREEN(f"Conda package created at {(self.out_dir / conda_filename).resolve()}"),
+				color=resolve_color_default(),
+				)
+		return conda_filename
 
 
 # copy_file(repo_dir / "__pkginfo__.py")

@@ -39,8 +39,9 @@ __all__ = ["build"]
 @autocomplete_option("-v", "--verbose", is_flag=True, default=False, help="Enable verbose output.")
 @autocomplete_option("-b", "--binary", is_flag=True, default=False, help="Build a binary wheel.")
 @autocomplete_option("-s", "--source", is_flag=True, default=False, help="Build a source distribution.")
+@autocomplete_option("-c", "--conda", is_flag=True, default=False, help="Build a conda distribution.")
 @cli_command()
-def build(repository, build_dir, out_dir, binary, source, verbose) -> int:
+def build(repository, build_dir, out_dir, binary, source, verbose, conda) -> int:
 	"""
 	Build a wheel for the given repository.
 	"""
@@ -51,13 +52,15 @@ def build(repository, build_dir, out_dir, binary, source, verbose) -> int:
 	# this package
 	from repo_helper.build import Builder
 
-	if not binary and not source:
+	if not binary and not source and not conda:
 		binary = True
 		source = True
 
 	builder = Builder(repo_dir=PathPlus(repository), build_dir=build_dir, out_dir=out_dir, verbose=verbose)
 
-	if binary:
+	if conda:
+		builder.build_conda()
+	elif binary:
 		builder.build_wheel()
 	if source:
 		builder.build_sdist()
