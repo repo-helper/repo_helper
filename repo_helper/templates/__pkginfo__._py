@@ -17,8 +17,9 @@ import pathlib
 __all__ = [
 		"__copyright__",
 		"__version__",
-		"modname",
+		{# "modname",
 		"pypi_name",
+		"import_name",
 		"__license__",
 		"__author__",
 		"short_desc",
@@ -26,17 +27,10 @@ __all__ = [
 		"author_email",
 		"github_username",
 		"web",
-		"github_url",
+		"github_url",  #}
 		"repo_root",
 		"install_requires",
 		"extras_require",
-		"project_urls",
-		{# "long_description",
-		"py_modules",
-		"classifiers",
-		"keywords",
-		"entry_points", #}
-		"import_name",
 		]
 
 __copyright__ = """
@@ -44,7 +38,7 @@ __copyright__ = """
 """
 
 __version__ = "{{ version }}"
-modname = "{{ modname }}"
+{# modname = "{{ modname }}"
 pypi_name = "{{ pypi_name }}"
 import_name = "{{ import_name }}"
 __license__ = "{{ license }}"
@@ -52,37 +46,9 @@ short_desc = {{ short_desc.__repr__() }}
 __author__ = author = {{ author.__repr__() }}
 author_email = {{ email.__repr__() }}
 github_username = "{{ username }}"
-web = github_url = "https://github.com/{{ username }}/{{ repo_name }}"
+web = github_url = "https://github.com/{{ username }}/{{ repo_name }}"  #}
 repo_root = pathlib.Path(__file__).parent
 install_requires = (repo_root / "requirements.txt").read_text(encoding="utf-8").split('\n')
 extras_require = {{ extras_require }}
 
-{{ '\n'.join(pkginfo_extra) }}{% if enable_conda %}
-
-conda_description = """{{ conda_description }}
-
-
-{% if conda_channels %}Before installing please ensure you have added the following channels: {{ ", ".join(conda_channels) }}{% endif %}"""
-__all__.append("conda_description")
-{% endif %}
-
-project_urls = {
-		"Documentation": "https://{{ repo_name }}.readthedocs.io",  {# TODO: Make this link match the package version#}
-		"Issue Tracker": f"{github_url}/issues",
-		"Source Code": github_url,
-		}
-
-{# entry_points = {
-		"console_scripts": {{ console_scripts }},
-		} #}
-{# classifiers = [
-		{% for classifier in classifiers %}'{{ classifier }}',
-		{% endfor %}
-		] #}
-
-{#
-keywords = "{{ ' '.join(keywords) }}"
-py_modules = {{ py_modules }}
-#}
-
-{#long_description = (repo_root / "README.rst").read_text(encoding="utf-8").replace("{{ version }}", __version__) + '\n' #}
+{{ '\n'.join(pkginfo_extra) }}

@@ -34,7 +34,6 @@ from domdf_python_tools.paths import PathPlus
 
 # this package
 from repo_helper.files import management
-from repo_helper.templates import template_dir
 
 __all__ = [
 		"make_travis",
@@ -99,8 +98,9 @@ def make_make_conda_recipe(repo_path: pathlib.Path, templates: jinja2.Environmen
 	:param templates:
 	"""
 
-	script = (template_dir / "make_conda_recipe._py").read_text()
-	PathPlus(repo_path / "make_conda_recipe.py").write_clean(script)
+	PathPlus(repo_path / "make_conda_recipe.py").write_clean(
+			templates.get_template("make_conda_recipe._py").render()
+			)
 
 	return ["make_conda_recipe.py"]
 

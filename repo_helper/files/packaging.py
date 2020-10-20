@@ -309,7 +309,11 @@ def make_pkginfo(repo_path: pathlib.Path, templates: jinja2.Environment) -> List
 
 	__pkginfo__ = templates.get_template("__pkginfo__._py")
 
-	with (repo_path / "__pkginfo__.py").open('w', encoding="UTF-8") as fp:
-		clean_writer(__pkginfo__.render(), fp)
+	pkginfo_file = PathPlus(repo_path / "__pkginfo__.py")
+	pkginfo_file.write_clean(__pkginfo__.render())
+
+	with importlib_resources.path(repo_helper.files, "isort.cfg") as isort_config:
+		yapf_style = PathPlus(isort_config).parent.parent / "templates" / "style.yapf"
+		reformat_file(pkginfo_file, yapf_style=str(yapf_style), isort_config_file=str(isort_config))
 
 	return ["__pkginfo__.py"]
