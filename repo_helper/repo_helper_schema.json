@@ -340,6 +340,12 @@
         "string",
         "number"
       ]
+    },
+    "use_experimental_backend": {
+      "type": [
+        "boolean",
+        "string"
+      ]
     }
   },
   "required": [
