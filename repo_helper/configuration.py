@@ -24,6 +24,7 @@
 import json
 import os
 import pathlib
+import warnings
 from typing import Any, Dict, Iterable, List, Mapping, MutableMapping, Optional, Tuple, Type, Union
 
 # 3rd party
@@ -703,6 +704,16 @@ class py_modules(ConfigVar):  # noqa
 	dtype = List[str]
 	default: List[str] = []
 	category: str = "packaging"
+
+	@classmethod
+	def validate(cls, raw_config_vars: Optional[Dict[str, Any]] = None) -> Any:
+		warnings.warn(
+				"The 'py_modules' configuration value is deprecated. "
+				"Please make your module into a package instead.",
+				DeprecationWarning,
+				)
+
+		return super().validate(raw_config_vars)
 
 
 class console_scripts(ConfigVar):  # noqa
