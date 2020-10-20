@@ -259,6 +259,27 @@ code_only_warning.extend((
 		"DALL000 ",  # DALL000 Module lacks __all__.
 		))
 
+# flake8-pyi
+code_only_warning.extend([
+		"Y001,"  # Names of TypeVars in stubs should start with _.
+		"Y002",  # If test must be a simple comparison against sys.platform or sys.version_info.
+		"Y003",  # Unrecognized sys.version_info check.
+		"Y004",  # Version comparison must use only major and minor version.
+		"Y005",  # Version comparison must be against a length-n tuple.
+		"Y006",  # Use only < and >= for version comparisons.
+		"Y007",  # Unrecognized sys.platform check. Platform checks should be simple string comparisons.
+		"Y008",  # Unrecognized platform.
+		"Y009",  # Empty body should contain "...", not "pass".
+		"Y010",  # Function body must contain only "...".
+		"Y011",  # All default values for typed function arguments must be "...".
+		"Y012",  # Class body must not contain "pass".
+		"Y013",  # Non-empty class body must not contain "...".
+		"Y014",  # All default values for arguments must be "...".
+		"Y015",  # Attribute must not have a default value other than "...".
+		"Y090",  # Use explicit attributes instead of assignments in __init__.
+		"Y091",  # Function body must not contain "raise".
+		])
+
 
 @management.register("pylintrc")
 def make_pylintrc(repo_path: pathlib.Path, templates: jinja2.Environment) -> List[str]:
