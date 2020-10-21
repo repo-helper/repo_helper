@@ -1,9 +1,0 @@
-[
-  "requirements.txt",
-  "README.rst",
-  "hello_world/__init__.py",
-  "tests/requirements.txt",
-  "tests/__init__.py",
-  "doc-source/index.rst",
-  "doc-source/api/hello-world.rst"
-]

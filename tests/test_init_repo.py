@@ -1,29 +1,13 @@
-# stdlib
-import os
-import pathlib
-import types
-
 # 3rd party
-import sdjson
 from domdf_python_tools.paths import PathPlus
 from pytest_git import GitRepo  # type: ignore
 
 # this package
 from repo_helper.cli.commands.init import init_repo
-from tests.common import check_file_output, check_file_regression
+from tests.common import check_file_output
 
 
-@sdjson.register_encoder(types.GeneratorType)
-def encode_generators(value):
-	return list(value)
-
-
-@sdjson.register_encoder(pathlib.Path)
-def encode_pathlib_path(value):
-	return os.fspath(value)
-
-
-def test_init_repo(git_repo: GitRepo, demo_environment, file_regression):
+def test_init_repo(git_repo: GitRepo, demo_environment, file_regression, data_regression):
 	demo_environment.globals["copyright_years"] = "2020-2021"
 	demo_environment.globals["author"] = "Joe Bloggs"
 	demo_environment.globals["email"] = "j.bloggs@example.com"
@@ -45,10 +29,11 @@ def test_init_repo(git_repo: GitRepo, demo_environment, file_regression):
 	for path in repo_path.rglob("*.*"):
 		path = path.relative_to(repo_path)
 		if not path.parts[0] == ".git":
-			listing.append(path)
+			listing.append(str(path))
+
 	listing.sort()
 
-	check_file_regression(sdjson.dumps(listing, indent=2), file_regression, ".listdir.json")
+	data_regression.check(listing)
 	# assert set(listing) == set(managed_files)
 
 	assert (repo_path / "requirements.txt").read_text() == ''

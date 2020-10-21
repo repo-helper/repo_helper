@@ -1,0 +1,7 @@
+- README.rst
+- doc-source/api/hello-world.rst
+- doc-source/index.rst
+- hello_world/__init__.py
+- requirements.txt
+- tests/__init__.py
+- tests/requirements.txt
