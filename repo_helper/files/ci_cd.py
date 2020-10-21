@@ -29,7 +29,7 @@ from typing import List
 
 # 3rd party
 import jinja2
-from configupdater import ConfigUpdater  # type: ignore
+from repo_helper.configupdater2 import ConfigUpdater  # type: ignore
 from domdf_python_tools.paths import PathPlus
 
 # this package
