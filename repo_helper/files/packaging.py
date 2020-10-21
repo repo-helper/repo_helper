@@ -111,6 +111,12 @@ def make_pyproject(repo_path: pathlib.Path, templates: jinja2.Environment) -> Li
 			*templates.globals["tox_build_requirements"],
 			]
 
+	if templates.globals["use_experimental_backend"]:
+		build_backend = "repo_helper.build"
+		build_requirements.append("repo_helper")
+	else:
+		build_backend = "setuptools.build_meta"
+
 	if "build-system" in data:
 		build_requirements.extend(data["build-system"].get("requires", []))
 	else:
@@ -118,13 +124,8 @@ def make_pyproject(repo_path: pathlib.Path, templates: jinja2.Environment) -> Li
 
 	build_requirements = sorted(combine_requirements(Requirement(req) for req in build_requirements))
 
-	if templates.globals["use_experimental_backend"]:
-		data["build-system"]["build-backend"] = "repo_helper.build"
-		build_requirements.append("git+https://github.com/domdfcoding/repo-helper")
-	else:
-		data["build-system"]["build-backend"] = "setuptools.build_meta"
-
 	data["build-system"]["requires"] = [str(x) for x in build_requirements]
+	data["build-system"]["build-backend"] = build_backend
 
 	pyproject_file.write_clean(tomlkit.dumps(data))
 
@@ -162,7 +163,9 @@ def make_setup(repo_path: pathlib.Path, templates: jinja2.Environment) -> List[s
 
 		setup_args = sorted({**data, **templates.globals["additional_setup_args"]}.items())
 
-		setup_file.write_clean(setup.render(additional_setup_args="\n".join(f"\t\t{k}={v}," for k, v in setup_args)))
+		setup_file.write_clean(
+				setup.render(additional_setup_args="\n".join(f"\t\t{k}={v}," for k, v in setup_args))
+				)
 
 		with importlib_resources.path(repo_helper.files, "isort.cfg") as isort_config:
 			yapf_style = PathPlus(isort_config).parent.parent / "templates" / "style.yapf"
