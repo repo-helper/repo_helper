@@ -55,12 +55,16 @@ def test_make_manifest_case_2(tmp_pathplus, demo_environment, file_regression: F
 
 
 def test_make_setup_case_1(tmp_pathplus, demo_environment, file_regression: FileRegressionFixture):
+	demo_environment.globals["use_experimental_backend"] = False
+
 	managed_files = make_setup(tmp_pathplus, demo_environment)
 	assert managed_files == ["setup.py"]
 	check_file_output(tmp_pathplus / managed_files[0], file_regression)
 
 
 def test_make_setup_case_2(tmp_pathplus, demo_environment, file_regression: FileRegressionFixture):
+	demo_environment.globals["use_experimental_backend"] = False
+
 	demo_environment.globals.update(
 			dict(
 					min_py_version="3.8",
@@ -80,6 +84,7 @@ def test_make_pyproject(tmp_pathplus, demo_environment, file_regression: FileReg
 	# TODO: permutations to cover all branches
 
 	demo_environment.globals["tox_build_requirements"] = []
+	demo_environment.globals["use_experimental_backend"] = False
 
 	managed_files = make_pyproject(tmp_pathplus, demo_environment)
 	assert managed_files == ["pyproject.toml"]
@@ -96,6 +101,7 @@ def test_make_setup_cfg(tmp_pathplus, demo_environment, file_regression: FileReg
 	demo_environment.globals["classifiers"] = []
 	demo_environment.globals["console_scripts"] = []
 	demo_environment.globals["mypy_plugins"] = []
+	demo_environment.globals["use_experimental_backend"] = False
 
 	managed_files = make_setup_cfg(tmp_pathplus, demo_environment)
 	assert managed_files == ["setup.cfg"]
@@ -128,6 +134,7 @@ def test_make_setup_cfg_existing(tmp_pathplus, demo_environment, file_regression
 	demo_environment.globals["classifiers"] = []
 	demo_environment.globals["console_scripts"] = []
 	demo_environment.globals["mypy_plugins"] = []
+	demo_environment.globals["use_experimental_backend"] = False
 
 	managed_files = make_setup_cfg(tmp_pathplus, demo_environment)
 	assert managed_files == ["setup.cfg"]
