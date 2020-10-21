@@ -46,6 +46,8 @@ def test_init_repo(git_repo: GitRepo, demo_environment, file_regression):
 		path = path.relative_to(repo_path)
 		if not path.parts[0] == ".git":
 			listing.append(path)
+	listing.sort()
+
 	check_file_regression(sdjson.dumps(listing, indent=2), file_regression, ".listdir.json")
 	# assert set(listing) == set(managed_files)
 
