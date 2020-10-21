@@ -5,6 +5,7 @@ language: python
 dist: focal
 cache: pip
 python:
+  - '3.6'
   - '3.7'
   - '3.8'
   - '3.9-dev'
@@ -35,6 +36,8 @@ jobs:
     - arch: arm64
 
   exclude:
+    - python: '3.7'
+      arch: arm64
     - python: '3.8'
       arch: arm64
     - python: '3.9-dev'

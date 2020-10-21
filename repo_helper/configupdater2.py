@@ -48,6 +48,7 @@ import os
 import re
 import sys
 from abc import ABC
+from collections import OrderedDict
 from collections.abc import MutableMapping
 from configparser import (
 		ConfigParser,
@@ -61,7 +62,6 @@ from configparser import (
 		)
 from textwrap import indent
 from typing import Iterable, Mapping
-from typing import OrderedDict as _default_dict
 
 __all__ = [
 		"NoSectionError",
@@ -610,7 +610,7 @@ class ConfigUpdater(Container, MutableMapping):
 		self._filename = None
 		self._space_around_delimiters = space_around_delimiters
 
-		self._dict = _default_dict  # no reason to let the user change this
+		self._dict = OrderedDict  # no reason to let the user change this
 		# keeping _sections to keep code aligned with ConfigParser but
 		# _structure takes the actual role instead. Only use self._structure!
 		self._sections = self._dict()

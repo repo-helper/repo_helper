@@ -37,7 +37,7 @@ from repo_helper.git_tools import Log, assert_clean, check_git_status, get_tags
 
 @pytest.fixture(scope="function")
 def tmp_repo(tmp_pathplus: PathPlus) -> PathPlus:
-	shutil.unpack_archive(pathlib.Path(__file__).parent / "test_log_git.zip", tmp_pathplus)
+	shutil.unpack_archive(str(pathlib.Path(__file__).parent / "test_log_git.zip"), str(tmp_pathplus))
 	return tmp_pathplus
 
 
