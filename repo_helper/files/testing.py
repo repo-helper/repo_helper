@@ -51,6 +51,8 @@ __all__ = [
 		"make_pre_commit",
 		]
 
+allowed_rst_directives = ["envvar", "TODO", "extras-require"]
+
 
 class ToxConfig(IniConfigurator):
 	"""
@@ -267,9 +269,10 @@ class ToxConfig(IniConfigurator):
 				"git+https://github.com/PyCQA/pydocstyle@5118faa7173b0e5bbc230c4adf628758e13605bf",
 				"git+https://github.com/domdfcoding/flake8-quotes.git",
 				"git+https://github.com/domdfcoding/flake8-rst-docstrings.git",
+				"git+https://github.com/domdfcoding/flake8-rst-docstrings-sphinx.git",
 				"pygments>=2.7.1",
 				])
-		self._ini["testenv:lint"]["commands"] = f"flake8 {' '.join(self.get_source_files())}"
+		self._ini["testenv:lint"]["commands"] = f"flake8 {' '.join(self.get_source_files())} --format=rst-toolbox"
 
 	def testenv_yapf(self):
 		"""
@@ -367,53 +370,8 @@ class ToxConfig(IniConfigurator):
 
 		excludes = f".git,__pycache__,{self['docs_dir']},old,build,dist,make_conda_recipe.py,__pkginfo__.py,setup.py"
 		self._ini["flake8"]["exclude"] = excludes
-		self._ini["flake8"]["rst-roles"] = indent_join([
-				"class",
-				"func",
-				"mod",
-				"py:obj",
-				"py:class",
-				"ref",
-				"meth",
-				"exc",
-				"attr",
-				"wikipedia",
-				"rst:role",
-				"rst:dir",
-				"pull",
-				"issue",
-				"asset",
-				"confval",
-				"data",
-				"py:data",
-				"py:exc",
-				"deco",
-				"regex",
-				])
-		self._ini["flake8"]["rst-directives"] = indent_join([
-				"envvar",
-				"exception",
-				"seealso",
-				"TODO",
-				"versionadded",
-				"versionchanged",
-				"rest-example",
-				"extras-require",
-				"literalinclude",
-				"autoclass",
-				"extensions",
-				"deprecated",
-				"versionremoved",
-				"autofunction",
-				"confval",
-				"rst:directive",
-				"rst:directive:option",
-				"rst:role",
-				"pre-commit-shield",
-				"py:data",
-				"py:method",
-				"py:classmethod",
-				])
+		# self._ini["flake8"]["rst-roles"] = indent_join(sorted(allowed_rst_roles))
+		self._ini["flake8"]["rst-directives"] = indent_join(sorted(allowed_rst_directives))
 
 		per_file_ignores = f"{self['tests_dir']}/*: {' '.join(str(e) for e in code_only_warning)}"
 		self._ini["flake8"]["per-file-ignores"] = per_file_ignores
@@ -463,7 +421,7 @@ class ToxConfig(IniConfigurator):
 			if self["pure_python"]:
 				# Don't check contents for packages with binary extensions
 				self._ini["check-wheel-contents"][
-						"package"] = f"{os.path.join(self['source_dir'], self['import_name'])}-stubs"
+					"package"] = f"{os.path.join(self['source_dir'], self['import_name'])}-stubs"
 
 		else:
 			self._ini["check-wheel-contents"]["toplevel"] = f"{self['import_name'].split('.')[0]}"
