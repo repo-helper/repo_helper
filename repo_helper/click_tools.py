@@ -75,7 +75,6 @@ Additional utilities for `click <https://click.palletsprojects.com/en/7.x/>`_
 
 # stdlib
 import os
-import readline
 import sys
 from functools import partial
 from types import ModuleType
@@ -93,9 +92,15 @@ from domdf_python_tools.terminal_colours import Fore
 from repo_helper.utils import discover_entry_points
 
 if not bool(getattr(sys, 'ps1', sys.flags.interactive)):
-	readline.set_history_length(0)
-	# Ref: https://github.com/python/typeshed/pull/4688
-	readline.set_auto_history(False)  # type: ignore
+
+	try:
+		# stdlib
+		import readline
+		readline.set_history_length(0)
+		# Ref: https://github.com/python/typeshed/pull/4688
+		readline.set_auto_history(False)  # type: ignore
+	except ImportError:
+		pass
 
 __all__ = [
 		"CONTEXT_SETTINGS",
