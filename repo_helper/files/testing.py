@@ -31,7 +31,6 @@ from typing import Any, List, Set
 
 # 3rd party
 import jinja2
-import requirements  # type: ignore
 from domdf_python_tools.paths import PathPlus
 from domdf_python_tools.typing import PathLike
 from packaging.requirements import Requirement
@@ -40,7 +39,7 @@ from packaging.requirements import Requirement
 from repo_helper.configupdater2 import ConfigUpdater  # type: ignore
 from repo_helper.files import management
 from repo_helper.files.linting import code_only_warning, lint_fix_list, lint_warn_list
-from repo_helper.requirements_tools import RequirementsManager, normalize
+from repo_helper.requirements_tools import combine_requirements, read_requirements, RequirementsManager, normalize
 from repo_helper.utils import IniConfigurator, indent_join
 
 __all__ = [
@@ -564,14 +563,15 @@ def make_isort(repo_path: pathlib.Path, templates: jinja2.Environment) -> List[s
 	if "float_to_top" in isort["settings"]:
 		del isort["settings"]["float_to_top"]
 
+	def get_requirements(filename):
+		return sorted(combine_requirements(read_requirements(filename)[0]))
+
 	if templates.globals["enable_tests"]:
-		with (repo_path / templates.globals["tests_dir"] / "requirements.txt").open(encoding="UTF-8") as fp:
-			test_requirements = list(requirements.parse(fp))
+		test_requirements = get_requirements(repo_path / templates.globals["tests_dir"] / "requirements.txt")
 	else:
 		test_requirements = []
 
-	with (repo_path / "requirements.txt").open(encoding="UTF-8") as fp:
-		main_requirements = list(requirements.parse(fp))
+	main_requirements = get_requirements(repo_path / "requirements.txt")
 
 	# TODO: extras
 
@@ -584,7 +584,7 @@ def make_isort(repo_path: pathlib.Path, templates: jinja2.Environment) -> List[s
 		req.name = normalize(req.name)
 		all_requirements.add(req.name)
 
-	all_requirements = {r.replace('-', "_") for r in all_requirements}
+	all_requirements = {normalize(r) for r in all_requirements}
 	all_requirements.discard(templates.globals["import_name"])
 	all_requirements.discard("iniconfig")
 
