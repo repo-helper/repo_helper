@@ -707,13 +707,16 @@ class py_modules(ConfigVar):  # noqa
 
 	@classmethod
 	def validate(cls, raw_config_vars: Optional[Dict[str, Any]] = None) -> Any:
-		warnings.warn(
-				"The 'py_modules' configuration value is deprecated. "
-				"Please make your module into a package instead.",
-				DeprecationWarning,
-				)
+		modules = super().validate(raw_config_vars)
 
-		return super().validate(raw_config_vars)
+		if modules:
+			warnings.warn(
+					"The 'py_modules' configuration value is deprecated. "
+					"Please make your module into a package instead.",
+					DeprecationWarning,
+					)
+
+		return modules
 
 
 class console_scripts(ConfigVar):  # noqa

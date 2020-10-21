@@ -662,12 +662,14 @@ class Builder:
 				click.echo((err or b'').decode("UTF-8"), err=True)
 
 			if exit_code != 0:
+				err = err or b''
+
 				raise abort(
 						dedent(
 								f"""\
 				Command '{' '.join(command)}' returned non-zero exit code {exit_code}:
 
-				{indent(err or '', '    ')}
+				{indent(err.decode("UTF-8"), '    ')}
 				"""
 								).rstrip() + "\n"
 						)
