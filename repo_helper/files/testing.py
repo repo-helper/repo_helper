@@ -566,7 +566,7 @@ def make_isort(repo_path: pathlib.Path, templates: jinja2.Environment) -> List[s
 	if templates.globals["enable_tests"]:
 		test_requirements = read_requirements(repo_path / templates.globals["tests_dir"] / "requirements.txt")[0]
 	else:
-		test_requirements = []
+		test_requirements = set()
 
 	main_requirements = read_requirements(repo_path / "requirements.txt")[0]
 

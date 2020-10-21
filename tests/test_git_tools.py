@@ -74,7 +74,7 @@ def test_check_git_status(git_repo: GitRepo):
 	git_repo.run("git add file.txt")
 	clean, files = check_git_status(repo_path)
 	assert not clean
-	assert files == ["A  file.txt"]
+	assert files == ["A file.txt"]
 
 	git_repo.api.index.commit("Initial commit")
 	clean, files = check_git_status(repo_path)
@@ -98,7 +98,7 @@ def test_assert_clean(git_repo: GitRepo, capsys):
 	assert not assert_clean(repo_path)
 	assert capsys.readouterr().err.splitlines() == [
 			"Git working directory is not clean:",
-			"  A  file.txt",
+			"  A file.txt",
 			]
 
 	git_repo.api.index.commit("Initial commit")
