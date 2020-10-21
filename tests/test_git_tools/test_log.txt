@@ -1,0 +1,17 @@
+[33mcommit: 917e7506ea322e2358164915b687a323aba7d911[33m ([39m[34mHEAD -> [39m[32mmaster[39m[33m, [39m[33mtag: v2.0.1[39m[33m)[39m[39m
+Author: Dominic Davis-Foster <dominic@davis-foster.co.uk>
+Date:   Thu Oct 15 2020 13:34:12 +0100
+
+    Release v2.0.1
+
+[33mcommit: 3c5bcda93887311dc6d3e563c5e041a1aa654a4e[33m ([39m[33mtag: v2.0.0[39m[33m)[39m[39m
+Author: Dominic Davis-Foster <dominic@davis-foster.co.uk>
+Date:   Thu Oct 15 2020 13:34:01 +0100
+
+    Release v2
+
+[33mcommit: 8bab284588032ebdcc08ee10fe36b240fd444b05[33m ([39m[33mtag: v1.0.0[39m[33m)[39m[39m
+Author: Dominic Davis-Foster <dominic@davis-foster.co.uk>
+Date:   Thu Oct 15 2020 13:33:39 +0100
+
+    Initial Commit
