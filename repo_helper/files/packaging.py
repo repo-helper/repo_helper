@@ -116,6 +116,8 @@ def make_pyproject(repo_path: pathlib.Path, templates: jinja2.Environment) -> Li
 		build_requirements.append("repo_helper")
 	else:
 		build_backend = "setuptools.build_meta"
+		if "repo_helper" in build_requirements:
+			build_requirements.remove("repo_helper")
 
 	if "build-system" in data:
 		build_requirements.extend(data["build-system"].get("requires", []))

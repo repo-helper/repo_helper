@@ -651,7 +651,9 @@ class Builder:
 					"--target",
 					str(tmpdir),
 					"--no-deps",
-					"--no-compile"
+					"--no-compile",
+					"--no-warn-script-location",
+					"--no-warn-conflicts",
 					]
 			process = Popen(command, stdout=PIPE)
 			(output, err) = process.communicate()

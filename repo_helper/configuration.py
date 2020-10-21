@@ -1474,16 +1474,24 @@ class use_experimental_backend(ConfigVar):  # noqa
 	def validate(cls, raw_config_vars: Optional[Dict[str, Any]] = None) -> Any:
 		excluded_files = exclude_files.get(raw_config_vars)
 
-		if not pure_python.get(raw_config_vars):
-			return False
-		elif additional_setup_args.get(raw_config_vars):
-			return False
-		elif "setup" in excluded_files:
-			return False
-		elif "setup_cfg" in excluded_files:
-			return False
-		else:
-			return super().validate(raw_config_vars)
+		# Options that the backend is incompatible with
+		disallowed_keys = (
+				pure_python,
+				additional_setup_args,
+				setup_pre,
+				)
+
+		for key in disallowed_keys:
+			if not key.get(raw_config_vars):
+				return False
+
+		# Excluded files that the backend is incompatible with
+		disallowed_files = {"setup", "setup_cfg"}
+		for file in disallowed_files:
+			if file in excluded_files:
+				return False
+
+		return super().validate(raw_config_vars)
 
 
 # ---------------------

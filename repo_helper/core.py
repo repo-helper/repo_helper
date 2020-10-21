@@ -158,10 +158,10 @@ class RepoHelper:
 					self.templates.globals[req] for req in other_requirements
 					]):
 
-				print(f"{function_.__name__}{'.'*(75-len(function_.__name__))}", end='')
-				sys.stdout.flush()
+				# print(f"{function_.__name__}{'.'*(75-len(function_.__name__))}", end='')
+				# sys.stdout.flush()
 				output_filenames = function_(self.target_repo, self.templates)
-				print(f"{Back.GREEN('Done')}")
+				# print(f"{Back.GREEN('Done')}")
 
 				for filename in output_filenames:
 					all_managed_files.append(str(filename))
