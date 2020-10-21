@@ -53,7 +53,7 @@ from domdf_python_tools.stringlist import DelimitedList, StringList
 from domdf_python_tools.terminal_colours import Fore, strip_ansi
 from domdf_python_tools.typing import PathLike
 from dulwich.ignore import IgnoreFilterManager
-from dulwich.index import get_unstaged_changes, Index
+from dulwich.index import Index, get_unstaged_changes
 from dulwich.objects import Commit, Tag, format_timezone
 from dulwich.porcelain import GitStatus, get_tree_changes, open_repo_closing, path_to_tree_path
 from dulwich.repo import Repo
@@ -327,7 +327,6 @@ def check_git_status(repo_path: PathLike) -> Tuple[bool, List[str]]:
 yellow_meta_left = Fore.YELLOW(" (")
 yellow_meta_comma = Fore.YELLOW(", ")
 yellow_meta_right = Fore.YELLOW(")")
-
 
 status_excludes = {".git", ".tox", ".mypy_cache", ".pytest_cache", "venv", ".venv"}
 

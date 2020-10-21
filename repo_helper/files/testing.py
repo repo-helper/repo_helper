@@ -27,7 +27,7 @@ Configuration for testing and code formatting tools.
 import os.path
 import pathlib
 import re
-from typing import Any, List, Set
+from typing import Any, List
 
 # 3rd party
 import jinja2
@@ -39,7 +39,7 @@ from packaging.requirements import Requirement
 from repo_helper.configupdater2 import ConfigUpdater  # type: ignore
 from repo_helper.files import management
 from repo_helper.files.linting import code_only_warning, lint_fix_list, lint_warn_list
-from repo_helper.requirements_tools import combine_requirements, read_requirements, RequirementsManager, normalize
+from repo_helper.requirements_tools import RequirementsManager, normalize, read_requirements
 from repo_helper.utils import IniConfigurator, indent_join
 
 __all__ = [
@@ -563,15 +563,12 @@ def make_isort(repo_path: pathlib.Path, templates: jinja2.Environment) -> List[s
 	if "float_to_top" in isort["settings"]:
 		del isort["settings"]["float_to_top"]
 
-	def get_requirements(filename):
-		return sorted(combine_requirements(read_requirements(filename)[0]))
-
 	if templates.globals["enable_tests"]:
-		test_requirements = get_requirements(repo_path / templates.globals["tests_dir"] / "requirements.txt")
+		test_requirements = read_requirements(repo_path / templates.globals["tests_dir"] / "requirements.txt")[0]
 	else:
 		test_requirements = []
 
-	main_requirements = get_requirements(repo_path / "requirements.txt")
+	main_requirements = read_requirements(repo_path / "requirements.txt")[0]
 
 	# TODO: extras
 

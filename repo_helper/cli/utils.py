@@ -69,6 +69,8 @@ def commit_changed_files(
 
 	# 3rd party
 	import pre_commit.main  # type: ignore
+
+	# this package
 	from repo_helper.git_tools import status
 
 	repo_path = PathPlus(repo_path).absolute()
