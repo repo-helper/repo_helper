@@ -69,15 +69,14 @@ def commit_changed_files(
 
 	# 3rd party
 	import pre_commit.main  # type: ignore
-	from dulwich import porcelain
+	from repo_helper.git_tools import status
 
-	# print(repo_path)
 	repo_path = PathPlus(repo_path).absolute()
 	r = repo.Repo(str(repo_path))
 
-	status = porcelain.status(r)
-	unstaged_changes = status.unstaged
-	untracked_files = status.untracked
+	stat = status(r)
+	unstaged_changes = stat.unstaged
+	untracked_files = stat.untracked
 
 	staged_files = []
 

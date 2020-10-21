@@ -22,7 +22,8 @@ General utilities for working with ``git`` repositories.
 #  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
 #  MA 02110-1301, USA.
 #
-#  format_commit based on https://github.com/dulwich/dulwich
+#  format_commit, get_untracked_paths and status
+#  based on https://github.com/dulwich/dulwich
 #  Copyright (C) 2013 Jelmer Vernooij <jelmer@jelmer.uk>
 #  |  Licensed under the Apache License, Version 2.0 (the "License"); you may
 #  |  not use this file except in compliance with the License. You may obtain
@@ -38,20 +39,23 @@ General utilities for working with ``git`` repositories.
 #
 
 # stdlib
-import subprocess
+import os
 import time
 from datetime import datetime
+from operator import itemgetter
 from textwrap import indent
-from typing import Dict, List, Mapping, Optional, Tuple, Union
+from typing import Dict, Iterator, List, Mapping, Optional, Tuple, Union
 
 # 3rd party
 import click
-from domdf_python_tools.paths import PathPlus, in_directory
+from domdf_python_tools.paths import PathPlus
 from domdf_python_tools.stringlist import DelimitedList, StringList
 from domdf_python_tools.terminal_colours import Fore, strip_ansi
 from domdf_python_tools.typing import PathLike
+from dulwich.ignore import IgnoreFilterManager
+from dulwich.index import get_unstaged_changes, Index
 from dulwich.objects import Commit, Tag, format_timezone
-from dulwich.porcelain import open_repo_closing
+from dulwich.porcelain import GitStatus, get_tree_changes, open_repo_closing, path_to_tree_path
 from dulwich.repo import Repo
 
 __all__ = [
@@ -59,6 +63,8 @@ __all__ = [
 		"Log",
 		"check_git_status",
 		"assert_clean",
+		"get_untracked_paths",
+		"status",
 		]
 
 
@@ -242,19 +248,24 @@ def assert_clean(repo: PathPlus, allow_config: bool = False) -> bool:
 	:param allow_config:
 	"""
 
-	status, lines = check_git_status(repo)
+	stat, lines = check_git_status(repo)
 
-	if status:
+	if stat:
 		return True
 
 	else:
 		if allow_config and lines in (
 				["M repo_helper.yml"],
+				[" M repo_helper.yml"],
 				["A repo_helper.yml"],
+				[" A repo_helper.yml"],
 				["AM repo_helper.yml"],
 				["M git_helper.yml"],
+				[" M git_helper.yml"],
 				["A git_helper.yml"],
+				[" A git_helper.yml"],
 				["D git_helper.yml"],
+				[" D git_helper.yml"],
 				["AM git_helper.yml"],
 				):
 			return True
@@ -277,31 +288,106 @@ def check_git_status(repo_path: PathLike) -> Tuple[bool, List[str]]:
 	:return: Whether the git working directory is clean, and the list of uncommitted files if it isn't.
 	"""
 
-	with in_directory(repo_path):
+	stat = status(repo_path)
+	files: Dict[bytes, str] = {}
 
-		lines = [
-				line.strip()
-				for line in subprocess.check_output(["git", "status", "--porcelain"]).splitlines()
-				if not line.strip().startswith(b"??")
-				]
+	for key, code in [("add", "A"), ("delete", "D"), ("modify", "M")]:
+		for file in stat.staged[key]:
+			if file in files:
+				files[file] += code
+			else:
+				files[file] = code
 
-	str_lines = [line.decode("UTF-8") for line in lines]
+	for file in stat.unstaged:
+		if file in files:
+			files[file] += "M"
+		else:
+			files[file] = "M"
+
+	str_lines = []
+
+	for file, codes in sorted(files.items(), key=itemgetter(0)):
+		longest = max(len(v) for v in files.values()) + 1
+
+		status_code = ''.join(sorted(codes)).ljust(longest, ' ')
+		str_lines.append(f"{status_code}{file.decode('UTF-8')}")
+
+	# with in_directory(repo_path):
+	#
+	# 	lines = [
+	# 			line.strip()
+	# 			for line in subprocess.check_output(["git", "status", "--porcelain"]).splitlines()
+	# 			if not line.strip().startswith(b"??")
+	# 			]
+	#
+	# str_lines = [line.decode("UTF-8") for line in lines]
 	return not bool(str_lines), str_lines
 
-
-#
-# def get_git_status(repo_path: PathLike) -> str:
-# 	"""
-# 	Returns the output of ``git status``
-#
-# 	:param repo_path: Path to the repository root.
-# 	"""
-#
-# 	with in_directory(repo_path):
-# 		return subprocess.check_output(["git", "status"]).decode("UTF-8")
-
-#
 
 yellow_meta_left = Fore.YELLOW(" (")
 yellow_meta_comma = Fore.YELLOW(", ")
 yellow_meta_right = Fore.YELLOW(")")
+
+
+status_excludes = {".git", ".tox", ".mypy_cache", ".pytest_cache", "venv", ".venv"}
+
+
+def get_untracked_paths(path: str, index: Index) -> Iterator[str]:
+	"""
+	Returns a list of untracked files.
+
+	:param path: Path to walk.
+	:param index: Index to check against.
+	"""
+
+	for dirpath, dirnames, filenames in os.walk(path):
+
+		# Skip .git etc. and below.
+		for exclude in status_excludes:
+			if exclude in dirnames:
+				dirnames.remove(exclude)
+				if dirpath != path:
+					continue
+			if exclude in filenames:
+				filenames.remove(exclude)
+				if dirpath != path:
+					continue
+
+		if dirpath != path:
+			continue
+
+		for filename in filenames:
+			filepath = os.path.join(dirpath, filename)
+			ip = path_to_tree_path(path, filepath)
+
+			if ip not in index:
+				yield os.path.relpath(filepath, path)
+
+
+def status(repo: Union[Repo, PathLike] = ".") -> GitStatus:
+	"""
+	Returns staged, unstaged, and untracked changes relative to the HEAD.
+
+	:param repo: Path to repository or repository object.
+
+	:returns: GitStatus tuple,
+		staged -  dict with lists of staged paths (diff index/HEAD)
+		unstaged -  list of unstaged paths (diff index/working-tree)
+		untracked - list of untracked, un-ignored & non-.git paths
+	"""
+
+	with open_repo_closing(repo) as r:
+		# 1. Get status of staged
+		tracked_changes = get_tree_changes(r)
+
+		# 2. Get status of unstaged
+		index = r.open_index()
+		normalizer = r.get_blob_normalizer()
+		filter_callback = normalizer.checkin_normalize
+		unstaged_changes = list(get_unstaged_changes(index, str(r.path), filter_callback))
+
+		# Remove ignored files
+		ignore_manager = IgnoreFilterManager.from_repo(r)
+		untracked_changes = [p for p in get_untracked_paths(r.path, index) if not ignore_manager.is_ignored(p)]
+
+		return GitStatus(tracked_changes, unstaged_changes, untracked_changes)
