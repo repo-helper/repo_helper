@@ -22,11 +22,8 @@
 
 # stdlib
 import os
-import pathlib
-import tempfile
 
 # 3rd party
-from domdf_python_tools.paths import PathPlus
 from pytest_regressions.file_regression import FileRegressionFixture  # type: ignore
 
 # this package
