@@ -56,7 +56,7 @@ def build(repository, build_dir, out_dir, binary, source, verbose, conda) -> int
 		binary = True
 		source = True
 
-	if repository is ".":
+	if repository == ".":
 		repository = PathPlus.cwd()
 	else:
 		repository = PathPlus(repository)

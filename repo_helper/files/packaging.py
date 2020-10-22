@@ -116,8 +116,6 @@ def make_pyproject(repo_path: pathlib.Path, templates: jinja2.Environment) -> Li
 		build_requirements.append("repo_helper")
 	else:
 		build_backend = "setuptools.build_meta"
-		if "repo_helper" in build_requirements:
-			build_requirements.remove("repo_helper")
 
 	if "build-system" in data:
 		build_requirements.extend(data["build-system"].get("requires", []))
@@ -125,6 +123,9 @@ def make_pyproject(repo_path: pathlib.Path, templates: jinja2.Environment) -> Li
 		data["build-system"] = tomlkit.table()
 
 	build_requirements = sorted(combine_requirements(Requirement(req) for req in build_requirements))
+
+	if not templates.globals["use_experimental_backend"] and "repo-helper" in build_requirements:
+		build_requirements.remove("repo-helper")
 
 	data["build-system"]["requires"] = [str(x) for x in build_requirements]
 	data["build-system"]["build-backend"] = build_backend
@@ -152,26 +153,26 @@ def make_setup(repo_path: pathlib.Path, templates: jinja2.Environment) -> List[s
 
 	setup_file = PathPlus(repo_path / "setup.py")
 
-	if templates.globals["use_experimental_backend"]:
-		if setup_file.is_file():
-			setup_file.unlink()
+	# if templates.globals["use_experimental_backend"]:
+	# 	if setup_file.is_file():
+	# 		setup_file.unlink()
+	#
+	# else:
+	setup = templates.get_template("setup._py")
 
-	else:
-		setup = templates.get_template("setup._py")
+	data = copy.deepcopy(setup_py_defaults)
+	data["description"] = repr(templates.globals["short_desc"])
+	data["py_modules"] = templates.globals["py_modules"]
 
-		data = copy.deepcopy(setup_py_defaults)
-		data["description"] = repr(templates.globals["short_desc"])
-		data["py_modules"] = templates.globals["py_modules"]
+	setup_args = sorted({**data, **templates.globals["additional_setup_args"]}.items())
 
-		setup_args = sorted({**data, **templates.globals["additional_setup_args"]}.items())
+	setup_file.write_clean(
+			setup.render(additional_setup_args="\n".join(f"\t\t{k}={v}," for k, v in setup_args))
+			)
 
-		setup_file.write_clean(
-				setup.render(additional_setup_args="\n".join(f"\t\t{k}={v}," for k, v in setup_args))
-				)
-
-		with importlib_resources.path(repo_helper.files, "isort.cfg") as isort_config:
-			yapf_style = PathPlus(isort_config).parent.parent / "templates" / "style.yapf"
-			reformat_file(setup_file, yapf_style=str(yapf_style), isort_config_file=str(isort_config))
+	with importlib_resources.path(repo_helper.files, "isort.cfg") as isort_config:
+		yapf_style = PathPlus(isort_config).parent.parent / "templates" / "style.yapf"
+		reformat_file(setup_file, yapf_style=str(yapf_style), isort_config_file=str(isort_config))
 
 	return ["setup.py"]
 
@@ -275,8 +276,8 @@ class SetupCfgConfig(IniConfigurator):
 
 		ini_file = PathPlus(self.base_path / self.filename)
 
-		for section in self.managed_sections:
-			getattr(self, re.sub("[:.-]", "_", section))()
+		for section_name in self.managed_sections:
+			getattr(self, re.sub("[:.-]", "_", section_name))()
 
 		if ini_file.is_file():
 			existing_config = ConfigUpdater()
@@ -308,11 +309,11 @@ def make_setup_cfg(repo_path: pathlib.Path, templates: jinja2.Environment) -> Li
 	:param templates:
 	"""
 
-	if templates.globals["use_experimental_backend"]:
-		if (repo_path / SetupCfgConfig.filename).is_file():
-			(repo_path / SetupCfgConfig.filename).unlink()
-	else:
-		SetupCfgConfig(repo_path=repo_path, templates=templates).write_out()
+	# if templates.globals["use_experimental_backend"]:
+	# 	if (repo_path / SetupCfgConfig.filename).is_file():
+	# 		(repo_path / SetupCfgConfig.filename).unlink()
+	# else:
+	SetupCfgConfig(repo_path=repo_path, templates=templates).write_out()
 
 	return [SetupCfgConfig.filename]
 
