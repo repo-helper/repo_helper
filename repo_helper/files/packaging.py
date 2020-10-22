@@ -208,7 +208,7 @@ class SetupCfgConfig(IniConfigurator):
 
 	def metadata(self):
 		"""
-		``[metadata]``
+		``[metadata]``.
 		"""
 
 		self._ini["metadata"]["name"] = self["pypi_name"]
@@ -233,7 +233,7 @@ class SetupCfgConfig(IniConfigurator):
 
 	def options(self):
 		"""
-		``[options]``
+		``[options]``.
 		"""
 
 		self._ini["options"]["python_requires"] = ">={min_py_version}".format_map(self._globals)
@@ -246,7 +246,7 @@ class SetupCfgConfig(IniConfigurator):
 
 	def options_packages_find(self):
 		"""
-		``[options.packages.find]``
+		``[options.packages.find]``.
 		"""
 
 		self._ini["options.packages.find"]["exclude"] = indent_with_tab(
@@ -259,7 +259,7 @@ class SetupCfgConfig(IniConfigurator):
 
 	def mypy(self):
 		"""
-		``[mypy]``
+		``[mypy]``.
 		"""
 
 		self._ini["mypy"]["python_version"] = self["min_py_version"]

@@ -126,16 +126,14 @@ def make_dependabot(repo_path: pathlib.Path, templates: jinja2.Environment) -> L
 	dependabot_dir = PathPlus(repo_path / ".dependabot")
 	dependabot_dir.maybe_make()
 
-	config = {
-			"version":
-					1,
-			"update_configs": [{
-					"package_manager": "python",
-					"directory": "/",
-					"update_schedule": "weekly",
-					"default_reviewers": [templates.globals['username']]
-					}]
+	update_configs = {
+			"package_manager": "python",
+			"directory": '/',
+			"update_schedule": "weekly",
+			"default_reviewers": [templates.globals["username"]],
 			}
+
+	config = {"version": 1, "update_configs": [update_configs]}
 
 	(dependabot_dir / "config.yml").write_lines([
 			f"# {templates.globals['managed_message']}",

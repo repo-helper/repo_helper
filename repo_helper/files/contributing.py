@@ -49,7 +49,7 @@ def github_bash_block(*commands: str) -> str:
 	code block suitable for rendering on GitHub.
 
 	:param commands:
-	"""
+	"""  # noqa: D400
 
 	if not commands:
 		return ''
@@ -83,7 +83,7 @@ def sphinx_bash_block(*commands):
 @management.register("contributing")
 def make_contributing(repo_path: pathlib.Path, templates: jinja2.Environment) -> List[str]:
 	"""
-	Add CONTRIBUTING.rst to the desired repo
+	Add ``CONTRIBUTING.rst`` to the desired repo.
 
 	:param repo_path: Path to the repository root.
 	:param templates:
@@ -102,15 +102,18 @@ def make_contributing(repo_path: pathlib.Path, templates: jinja2.Environment) ->
 @management.register("contributing", ["enable_docs"])
 def make_docs_contributing(repo_path: pathlib.Path, templates: jinja2.Environment) -> List[str]:
 	"""
-	Add CONTRIBUTING.rst to the documentation directory of the repo
+	Add CONTRIBUTING.rst to the documentation directory of the repo.
 
 	:param repo_path: Path to the repository root.
 	:param templates:
 	"""
 
 	contributing = templates.get_template("CONTRIBUTING.rst")
-	content = "\n".join(["Overview", "---------"]
-						+ contributing.render(bash_block=sphinx_bash_block).splitlines()[3:])
+	content = "\n".join([
+			"Overview",
+			"---------",
+			*contributing.render(bash_block=sphinx_bash_block).splitlines()[3:],
+			])
 
 	docs_dir = PathPlus(repo_path / templates.globals["docs_dir"])
 	docs_dir.maybe_make(parents=True)
@@ -123,7 +126,7 @@ def make_docs_contributing(repo_path: pathlib.Path, templates: jinja2.Environmen
 @management.register("issue_templates")
 def make_issue_templates(repo_path: pathlib.Path, templates: jinja2.Environment) -> List[str]:
 	"""
-	Add issue templates for GitHub to the desired repo
+	Add issue templates for GitHub to the desired repo.
 
 	:param repo_path: Path to the repository root.
 	:param templates:

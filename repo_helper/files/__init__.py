@@ -2,7 +2,7 @@
 #
 #  __init__.py
 """
-Functions to create files
+Functions to create files.
 """
 #
 #  Copyright © 2020 Dominic Davis-Foster <dominic@davis-foster.co.uk>
@@ -107,7 +107,7 @@ management = Management()
 
 def is_registered(obj: Any) -> bool:
 	"""
-	Return whether ``obj`` is a registered function
+	Return whether ``obj`` is a registered function.
 
 	:param obj:
 

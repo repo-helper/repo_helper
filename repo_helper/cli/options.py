@@ -39,7 +39,7 @@ __all__ = [
 
 def commit_option(default: Optional[bool]) -> Callable:
 	"""
-	Decorator to add the ``--commit / --no-commit` option to a click command.
+	Decorator to add the ``--commit / --no-commit`` option to a click command.
 
 	:param default: Whether to commit automatically.
 
@@ -75,7 +75,7 @@ def commit_message_option(default: str) -> Callable:
 			"--message",
 			type=click.STRING,
 			default=default,
-			help='The commit message to use.',
+			help="The commit message to use.",
 			show_default=True,
 			)
 

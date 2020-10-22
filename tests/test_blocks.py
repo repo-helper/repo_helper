@@ -194,10 +194,7 @@ def test_create_readme_install_block(file_regression: FileRegressionFixture, kwa
 	check_file_regression(result, file_regression, extension=".rst")
 
 	with pytest.raises(ValueError):
-		create_readme_install_block(
-				modname="hello_world",
-				username="octocat",
-				)
+		create_readme_install_block(modname="hello_world", username="octocat")
 
 
 def test_create_short_desc_block(file_regression: FileRegressionFixture):

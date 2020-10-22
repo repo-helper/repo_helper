@@ -156,7 +156,7 @@ def make_requires_shield(repo_name: str, username: str) -> str:
 
 def make_coveralls_shield(repo_name: str, username: str) -> str:
 	"""
-	Create a shield to show the code coverage from `Coveralls <https://coveralls.io/>`_
+	Create a shield to show the code coverage from `Coveralls <https://coveralls.io/>`_.
 
 	:param repo_name: The name of the repository.
 	:param username: The username of the GitHub account that owns the repository.

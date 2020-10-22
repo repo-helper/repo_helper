@@ -101,7 +101,7 @@ def commit_changed_files(
 		click.echo()
 
 		if commit is None:
-			commit = confirm('Commit?', default=True)
+			commit = confirm("Commit?", default=True)
 
 		if commit:
 			# Ensure the working directory for pre-commit is correct

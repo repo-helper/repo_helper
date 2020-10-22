@@ -2,7 +2,7 @@
 #
 #  click_tools.py
 """
-Additional utilities for `click <https://click.palletsprojects.com/en/7.x/>`_
+Additional utilities for `click <https://click.palletsprojects.com/en/7.x/>`_.
 """
 #
 #  Copyright © 2020 Dominic Davis-Foster <dominic@davis-foster.co.uk>
@@ -78,7 +78,7 @@ import os
 import sys
 from functools import partial
 from types import ModuleType
-from typing import Any, Callable, List, Optional, Tuple, Union
+from typing import IO, Any, Callable, List, Optional, Tuple, Union
 
 # 3rd party
 import click
@@ -91,7 +91,7 @@ from domdf_python_tools.terminal_colours import Fore
 # this package
 from repo_helper.utils import discover_entry_points
 
-if not bool(getattr(sys, 'ps1', sys.flags.interactive)):
+if not bool(getattr(sys, "ps1", sys.flags.interactive)):
 
 	try:
 		# stdlib
@@ -116,7 +116,7 @@ __all__ = [
 		"option",
 		]
 
-CONTEXT_SETTINGS = dict(help_option_names=['-h', '--help'], max_content_width=120)
+CONTEXT_SETTINGS = dict(help_option_names=["-h", "--help"], max_content_width=120)
 click_command = partial(click.command, context_settings=CONTEXT_SETTINGS)
 click_group = partial(click.group, context_settings=CONTEXT_SETTINGS)
 
@@ -139,7 +139,7 @@ def import_commands(source: ModuleType, entry_point: str) -> List[click.Command]
 	"""
 	Returns a list of all commands.
 
-	Commands can be defined locally in the module given in ``source`,
+	Commands can be defined locally in the module given in ``source``,
 	or by third party extensions who define an entry point in the following format:
 
 	::
@@ -157,7 +157,7 @@ def import_commands(source: ModuleType, entry_point: str) -> List[click.Command]
 
 def resolve_color_default(color: Optional[bool] = None) -> Optional[bool]:
 	"""
-	Internal helper to get the default value of the color flag.  If a
+	Internal helper to get the default value of the color flag. If a
 	value is passed it's returned unchanged, otherwise it's looked up from
 	the current context.
 
@@ -166,7 +166,7 @@ def resolve_color_default(color: Optional[bool] = None) -> Optional[bool]:
 	the output will be coloured by default.
 
 	:param color:
-	"""
+	"""  # noqa: D400
 
 	if color is not None:
 		return color
@@ -205,18 +205,20 @@ def prompt(
 		default: Optional[str] = None,
 		hide_input: bool = False,
 		confirmation_prompt: bool = False,
-		type: Optional[_ConvertibleType] = None,
+		type: Optional[_ConvertibleType] = None,  # noqa: A002
 		value_proc: Optional[Callable[[Optional[str]], Any]] = None,
 		prompt_suffix: str = ": ",
 		show_default: bool = True,
 		err: bool = False,
 		show_choices: bool = True,
 		):
-	"""Prompts a user for input.  This is a convenience function that can
-	be used to prompt a user for input later.
+	"""
+	Prompts a user for input.
 
-	If the user aborts the input by sending a interrupt signal, this
-	function will catch it and raise a :exc:`Abort` exception.
+	This is a convenience function that can be used to prompt a user for input later.
+
+	If the user aborts the input by sending an interrupt signal, this
+	function will catch it and raise a :exc:`click.exceptions.Abort` exception.
 
 	:param text: The text to show for the prompt.
 	:param default: The default value to use if no input happens.
@@ -315,7 +317,7 @@ def confirm(
 			rv = True
 		elif value in ("n", "no"):
 			rv = False
-		elif value == "":
+		elif value == '':
 			rv = default
 		else:
 			click.echo("Error: invalid input", err=err)
@@ -331,11 +333,13 @@ def confirm(
 class _Option(click.Option):
 
 	def prompt_for_value(self, ctx):
-		"""This is an alternative flow that can be activated in the full
-		value processing if a value does not exist.  It will prompt the
+		"""
+		This is an alternative flow that can be activated in the full
+		value processing if a value does not exist. It will prompt the
 		user until a valid value exists and then returns the processed
 		value as result.
-		"""
+		"""  # noqa: D400
+
 		# Calculate the default before prompting anything to be stable.
 		default = self.get_default(ctx)
 
@@ -358,14 +362,14 @@ class _Option(click.Option):
 option = partial(click.option, cls=_Option)
 
 
-def stderr_input(prompt='', file=sys.stdout):
+def stderr_input(prompt: str = '', file: IO = sys.stdout) -> str:
 	"""
-	stderr_input([prompt]) -> string
+	Read a string from standard input.
 
-	Read a string from standard input. The trailing newline is stripped.
+	The trailing newline is stripped.
 	If the user hits EOF (Unix: Ctl-D, Windows: Ctl-Z+Return), raise EOFError.
 	On Unix, GNU readline is used if enabled. The prompt string, if given,
-	is printed without a trailing newline before reading.
+	is printed to stderr without a trailing newline before reading.
 	"""
 
 	if file is sys.stdout:
@@ -394,7 +398,7 @@ def stderr_input(prompt='', file=sys.stdout):
 
 	if not line:  # inputting an empty line gives line == '\n'
 		raise EOFError
-	elif line[-1] == '\n':
+	elif line[-1] == "\n":
 		return line[:-1]
 
 	return line

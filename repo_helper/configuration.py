@@ -281,11 +281,10 @@ class import_name(ConfigVar):  # noqa
 	@classmethod
 	def get(cls, raw_config_vars: Optional[Dict[str, Any]] = None) -> Any:
 		"""
-		Returns the value of this :class:`~repo_helper.config_vars.ConfigVar`
+		Returns the value of this :class:`~repo_helper.config_vars.ConfigVar`.
 
 		:param raw_config_vars: Dictionary to obtain the value from.
 
-		:return:
 		:rtype: See the ``rtype`` attribute.
 		"""
 
@@ -893,7 +892,10 @@ class preserve_custom_theme(ConfigVar):  # noqa
 
 class sphinx_html_theme(ConfigVar):  # noqa
 	"""
-	The HTML theme to use for Sphinx. Also adds the appropriate values to :conf:`extra_sphinx_extensions`, :conf:`html_theme_options`, and :conf:`html_context_options`.
+	The HTML theme to use for Sphinx.
+
+	Also adds the appropriate values to :conf:`extra_sphinx_extensions`,
+	:conf:`html_theme_options`, and :conf:`html_context_options`.
 
 	Example:
 
@@ -1702,9 +1704,7 @@ def dump_schema() -> Dict[str, Any]:
 	"""
 	Dump the schema for ``repo_helper.yml`` to ``repo_helper/repo_helper_schema.json``
 	and return the schema as a dictionary.
-
-	:rtype: str
-	"""
+	"""  # noqa: D400
 
 	schema = make_schema(*all_values)
 
@@ -1730,7 +1730,7 @@ def get_version_classifiers(python_versions: Iterable[str]) -> List[str]:
 		if str(py_version).startswith("3"):
 			py_version = py_version.replace("-dev", '')
 			for classifier in (
-					f'Programming Language :: Python :: {py_version}',
+					f"Programming Language :: Python :: {py_version}",
 					"Programming Language :: Python :: Implementation :: CPython",
 					):
 				version_classifiers.append(classifier)
@@ -1739,8 +1739,8 @@ def get_version_classifiers(python_versions: Iterable[str]) -> List[str]:
 			classifier = "Programming Language :: Python :: Implementation :: PyPy"
 			version_classifiers.append(classifier)
 
-	version_classifiers.append('Programming Language :: Python')
-	version_classifiers.append('Programming Language :: Python :: 3 :: Only')
+	version_classifiers.append("Programming Language :: Python")
+	version_classifiers.append("Programming Language :: Python :: 3 :: Only")
 
 	return version_classifiers
 

@@ -5,7 +5,7 @@
 Configuration for documentation with
 `Sphinx <https://www.sphinx-doc.org/en/master/>`_ and
 `ReadTheDocs <https://readthedocs.org/>`_.
-"""
+"""  # noqa: D400
 #
 #  Copyright © 2020 Dominic Davis-Foster <dominic@davis-foster.co.uk>
 #
@@ -116,7 +116,7 @@ class DocRequirementsManager(RequirementsManager):
 				self.target_requirements.add(Requirement(f"{name}{specifier}"))
 				break
 		else:
-			self.target_requirements.add(Requirement(self._globals['sphinx_html_theme']))
+			self.target_requirements.add(Requirement(self._globals["sphinx_html_theme"]))
 
 		# Mapping of pypi_name to version specifier
 		my_sphinx_extensions = {
@@ -274,7 +274,7 @@ def make_conf(repo_path: pathlib.Path, templates: jinja2.Environment) -> List[st
 
 		for key, val in {
 			# 'logo': 'logo.png',
-			'logo_only': False,  # True will show just the logo
+			"logo_only": False,  # True will show just the logo
 			}.items():
 			if key not in templates.globals["html_theme_options"]:
 				templates.globals["html_theme_options"][key] = val
@@ -303,9 +303,9 @@ def make_conf(repo_path: pathlib.Path, templates: jinja2.Environment) -> List[st
 			"sphinx_toolbox.more_autodoc",
 			"sphinx_toolbox.more_autosummary",
 			"sphinx_toolbox.tweaks.param_dash",
-			'sphinx.ext.intersphinx',
-			'sphinx.ext.mathjax',
-			'sphinxcontrib.httpdomain',
+			"sphinx.ext.intersphinx",
+			"sphinx.ext.mathjax",
+			"sphinxcontrib.httpdomain",
 			"sphinxcontrib.extras_require",
 			"sphinx.ext.todo",
 			"sphinxemoji.sphinxemoji",
@@ -430,7 +430,7 @@ def make_alabaster_theming() -> str:
 			"table.longtable", {"margin-bottom": (px(20), "important"), "margin-top": (px(-15), "important")}
 			)
 
-	# The following styling from Tox's documentation
+	# The following styling from Tox"s documentation
 	# https://github.com/tox-dev/tox/blob/master/docs/_static/custom.css
 	# MIT Licensed
 
@@ -533,7 +533,7 @@ def copy_docs_styling(repo_path: pathlib.Path, templates: jinja2.Environment) ->
 
 		PathPlus(dest__static_dir / "style.css").write_clean(
 				f"""\
-/* {templates.globals['managed_message']} */
+/* {templates.globals["managed_message"]} */
 
 {make_readthedocs_theming()}
 """
@@ -552,7 +552,7 @@ def copy_docs_styling(repo_path: pathlib.Path, templates: jinja2.Environment) ->
 	PathPlus(dest__templates_dir / "layout.html").write_lines([
 			f"<!--- {templates.globals['managed_message']} --->",
 			'{% extends "!layout.html" %}',
-			'{% block extrahead %}',
+			"{% block extrahead %}",
 			'	<link href="{{ pathto("_static/style.css", True) }}" rel="stylesheet" type="text/css">',
 			"{% endblock %}",
 			''

@@ -130,7 +130,7 @@ def broomstick(rm_tox: bool = False):
 	  .pytest_cache
 	  **/__pytest__
 	  *.egg-info
-	"""
+	"""  # noqa: RST
 
 	base_dir = pathlib.Path.cwd()
 

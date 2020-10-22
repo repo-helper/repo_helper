@@ -274,7 +274,8 @@ def make_github_octocheese(repo_path: pathlib.Path, templates: jinja2.Environmen
 @management.register("bumpversion")
 def ensure_bumpversion(repo_path: pathlib.Path, templates: jinja2.Environment) -> List[str]:
 	"""
-	Add configuration for ``bumpversion`` to the desired repo
+	Add configuration for ``bumpversion`` to the desired repo.
+
 	https://pypi.org/project/bumpversion/
 
 	:param repo_path: Path to the repository root.

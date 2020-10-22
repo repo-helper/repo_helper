@@ -265,7 +265,7 @@ class Builder:
 		as specified in :conf:`console_scripts`.
 
 		.. TODO:: non console-script entry points.
-		"""
+		"""  # noqa: D400
 
 		cfg_parser = configparser.ConfigParser()
 		cfg_parser.read_string("[console_scripts]\n" + "\n".join(self.config["console_scripts"]))
@@ -460,19 +460,19 @@ class Builder:
 		def get_record_entry(path: pathlib.Path, build_dir: pathlib.Path, blocksize: int = 1 << 20) -> str:
 			sha256_hash = sha256()
 			length = 0
-			with path.open('rb') as f:
-				for byte_block in iter(lambda: f.read(blocksize), b""):
+			with path.open("rb") as f:
+				for byte_block in iter(lambda: f.read(blocksize), b''):
 					sha256_hash.update(byte_block)
 					length += len(byte_block)
 					sha256_hash.update(byte_block)
 
-			digest = 'sha256=' + urlsafe_b64encode(sha256_hash.digest()).decode('latin1').rstrip('=')
+			digest = "sha256=" + urlsafe_b64encode(sha256_hash.digest()).decode("latin1").rstrip('=')
 
 			return f"{path.relative_to(build_dir)},sha256={digest},{length}"
 
 		wheel_filename = self.out_dir / f"{self.archive_name}-{self.tag}.whl"
 		with ZipFile(wheel_filename, mode='w') as wheel_archive:
-			with (self.dist_info / "RECORD").open("w") as fp:
+			with (self.dist_info / "RECORD").open('w') as fp:
 				for file in (self.build_dir / self.import_name).rglob("*"):
 					if file.is_file():
 						fp.write(get_record_entry(file, self.build_dir))
@@ -518,8 +518,8 @@ class Builder:
 
 		site_packages = PathPlus("site-packages")
 
-		with tarfile.open(conda_filename, mode='w:bz2') as conda_archive:
-			with (self.info_dir / "files").open("w") as fp:
+		with tarfile.open(conda_filename, mode="w:bz2") as conda_archive:
+			with (self.info_dir / "files").open('w') as fp:
 
 				for file in (PathPlus(wheel_contents_dir) / self.import_name).rglob("*"):
 					if file.is_file():
@@ -554,7 +554,7 @@ class Builder:
 		self.out_dir.maybe_make(parents=True)
 
 		sdist_filename = self.out_dir / f"{self.archive_name}.tar.gz"
-		with tarfile.open(sdist_filename, mode='w:gz', format=tarfile.PAX_FORMAT) as sdist_archive:
+		with tarfile.open(sdist_filename, mode="w:gz", format=tarfile.PAX_FORMAT) as sdist_archive:
 			for file in self.build_dir.rglob("*"):
 				if file.is_file():
 					sdist_archive.add(str(file), arcname=file.relative_to(self.build_dir).as_posix())

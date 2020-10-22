@@ -182,8 +182,9 @@ def test_remove_autodoc_augment_defaults(tmp_pathplus, demo_environment):
 	(tmp_pathplus / "doc-source").mkdir(parents=True)
 	(tmp_pathplus / "doc-source" / "autodoc_augment_defaults.py").touch()
 	assert (tmp_pathplus / "doc-source" / "autodoc_augment_defaults.py").is_file()
-	assert remove_autodoc_augment_defaults(tmp_pathplus,
-											demo_environment) == ["doc-source/autodoc_augment_defaults.py"]
+
+	managed_files = remove_autodoc_augment_defaults(tmp_pathplus, demo_environment)
+	assert managed_files == ["doc-source/autodoc_augment_defaults.py"]
 	assert not (tmp_pathplus / "doc-source" / "autodoc_augment_defaults.py").is_file()
 
 

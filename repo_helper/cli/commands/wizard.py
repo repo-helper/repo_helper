@@ -48,15 +48,15 @@ def wizard():
 	"""
 
 	# Import here to save time when the user calls --help or makes an error.
-	# from domdf_python_tools.utils import stderr_writer
+
 	# 3rd party
 	from domdf_python_tools.terminal_colours import Fore
-	from dulwich.errors import NotGitRepository  # type: ignore
-	from dulwich.repo import Repo  # type: ignore
+	from dulwich.errors import NotGitRepository
+	from dulwich.repo import Repo
 	from email_validator import EmailNotValidError, validate_email  # type: ignore
 
 	path = PathPlus.cwd()
-	config_file = path / 'repo_helper.yml'
+	config_file = path / "repo_helper.yml"
 
 	try:
 		r = Repo(path)
@@ -73,13 +73,13 @@ def wizard():
 	# ---------- intro ----------
 	click.echo("This wizard 🧙‍will guide you through creating a 'repo_helper.yml' configuration file.")
 	click.echo(f"This will be created in '{config_file}'.")
-	if not confirm('Do you want to continue?'):
+	if not confirm("Do you want to continue?"):
 		raise click.Abort()
 
 	# ---------- file exists warning ----------
 	if config_file.is_file():
 		click.echo(f"\nWoah! That file already exists. It will be overwritten if you continue!")
-		if not confirm('Are you sure you want to continue?'):
+		if not confirm("Are you sure you want to continue?"):
 			raise click.Abort()
 
 	click.echo("\nDefault options are indicated in [square brackets].")

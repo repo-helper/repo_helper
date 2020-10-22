@@ -87,7 +87,7 @@ def resolve_command(self, ctx, args: List[str]) -> Tuple[str, Command, List[str]
 
 	:param ctx:
 	:param args:
-	"""
+	"""  # noqa: D400
 
 	# 3rd party
 	from click.parser import split_opt
@@ -139,7 +139,7 @@ class BumpversionFileConfig(TypedDict):
 	"""
 	Represents the subset of ``bumpversion`` per-file configuration values
 	used by ``repo-helper``.
-	"""
+	"""  # noqa: D400
 
 	search: str
 	replace: str
@@ -256,7 +256,7 @@ class Bumper:
 		Returns the current version from the ``repo_helper.yml`` configuration file.
 		"""
 
-		return Version.from_str(self.repo.templates.globals['version'])
+		return Version.from_str(self.repo.templates.globals["version"])
 
 	def get_bumpversion_config(
 			self,

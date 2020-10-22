@@ -64,7 +64,7 @@ def version() -> int:
 	from repo_helper.git_tools import get_tags
 
 	rh = RepoHelper(PathPlus.cwd())
-	version = rh.templates.globals['version']
+	version = rh.templates.globals["version"]
 	click.echo(f"Current version: {version}")
 
 	repo = Repo(PathPlus.cwd())

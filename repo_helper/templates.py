@@ -4,7 +4,7 @@
 """
 Contains the :class:`pathlib.Path` objects representing the templates directory (:data:`template_dir`),
 and the directory representing the files used to initialise a new repository (:data:`init_repo_template_dir`).
-"""
+"""  # noqa: D400
 #
 #  Copyright © 2020 Dominic Davis-Foster <dominic@davis-foster.co.uk>
 #

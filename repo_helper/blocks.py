@@ -52,16 +52,17 @@ __all__ = [
 		]
 
 #: Regular expression to match the installation block placeholder.
-installation_regex = re.compile(r'(?s)(\.\. start installation)(.*?)(\.\. end installation)')
+installation_regex = re.compile(r"(?s)(\.\. start installation)(.*?)(\.\. end installation)")
 
 #: Regular expression to match the shields block placeholder.
-shields_regex = re.compile(r'(?s)(\.\. start shields)(.*?)(\.\. end shields)')
+shields_regex = re.compile(r"(?s)(\.\. start shields)(.*?)(\.\. end shields)")
 
 #: Regular expression to match the short description block placeholder.
-short_desc_regex = re.compile(r'(?s)(\.\. start short_desc)(.*?)(\.\. end short_desc)')
+short_desc_regex = re.compile(r"(?s)(\.\. start short_desc)(.*?)(\.\. end short_desc)")
 
 #: Regular expression to match the links block placeholder.
-links_regex = re.compile(r'(?s)(\.\. start links)(.*?)(\.\. end links)')
+links_regex = re.compile(r"(?s)(\.\. start links)(.*?)(\.\. end links)")
+
 
 shields_block_template: Template = Environment(
 		loader=BaseLoader(),
@@ -341,7 +342,6 @@ def create_shields_block(
 			pre_commit=pre_commit,
 			on_pypi=on_pypi,
 			)
-
 
 
 readme_installation_block_template = Environment(loader=BaseLoader, undefined=StrictUndefined).from_string(  # type: ignore

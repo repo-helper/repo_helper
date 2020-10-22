@@ -168,10 +168,10 @@ class Log:
 		else:
 			meta_string = ''
 
-		buf.append(Fore.YELLOW("commit: " + commit.id.decode('UTF-8') + meta_string))
+		buf.append(Fore.YELLOW("commit: " + commit.id.decode("UTF-8") + meta_string))
 
 		if len(commit.parents) > 1:
-			parents = DelimitedList(c.decode('UTF-8') for c in commit.parents[1:])
+			parents = DelimitedList(c.decode("UTF-8") for c in commit.parents[1:])
 			buf.append(f"merge: {parents:...}")
 
 		buf.append("Author: " + commit.author.decode("UTF-8"))
@@ -181,11 +181,11 @@ class Log:
 
 		time_tuple = time.gmtime(commit.author_time + commit.author_timezone)
 		time_str = time.strftime("%a %b %d %Y %H:%M:%S", time_tuple)
-		timezone_str = format_timezone(commit.author_timezone).decode('UTF-8')
+		timezone_str = format_timezone(commit.author_timezone).decode("UTF-8")
 		buf.append(f"Date:   {time_str} {timezone_str}")
 
 		buf.blankline()
-		buf.append(indent(commit.message.decode('UTF-8'), "    "))
+		buf.append(indent(commit.message.decode("UTF-8"), "    "))
 		buf.blankline(ensure_single=True)
 
 		return buf

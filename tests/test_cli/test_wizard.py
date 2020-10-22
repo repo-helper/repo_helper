@@ -86,12 +86,12 @@ def test_wizard_validation(git_repo: GitRepo, file_regression):
 				"joeexample.com",  # The email address of the author
 				"joe@example.com",  # The email address of the author
 				"joe",  # The username of the author
-				"",  # The version number of the library
-				"",  # The copyright years for the library.
+				'',  # The version number of the library
+				'',  # The copyright years for the library.
 				"jygjgvkj",  # The SPDX identifier for the license
 				"GPLv3",  # The SPDX identifier for the license
-				"",  # Enter a short, one-line description for the project.
-				"",
+				'',  # Enter a short, one-line description for the project.
+				'',
 				"a short, one-line description for the project",
 				]) + "\n"
 
@@ -126,11 +126,11 @@ def test_wizard_git_config(git_repo: GitRepo, file_regression):
 		stdin = "\n".join([
 				"y",  # Are you sure you want to continue?
 				"hello-world",  # The name of the library/project.
-				"",  # The name of the author.
-				"",  # The email address of the author
+				'',  # The name of the author.
+				'',  # The email address of the author
 				"joe",  # The username of the author
-				"",  # The version number of the library
-				"",  # The copyright years for the library.
+				'',  # The version number of the library
+				'',  # The copyright years for the library.
 				"GPLv3",  # The SPDX identifier for the license
 				"a short, one-line description for the project",
 				]) + "\n"
@@ -161,11 +161,11 @@ def test_wizard_env_vars(git_repo: GitRepo, file_regression, monkeypatch):
 		stdin = "\n".join([
 				"y",  # Are you sure you want to continue?
 				"hello-world",  # The name of the library/project.
-				"",  # The name of the author.
-				"",  # The email address of the author
+				'',  # The name of the author.
+				'',  # The email address of the author
 				"joe",  # The username of the author
-				"",  # The version number of the library
-				"",  # The copyright years for the library.
+				'',  # The version number of the library
+				'',  # The copyright years for the library.
 				"GPLv3",  # The SPDX identifier for the license
 				"a short, one-line description for the project",
 				]) + "\n"
@@ -193,11 +193,11 @@ def test_wizard_not_git(tmp_pathplus, file_regression, monkeypatch):
 		stdin = "\n".join([
 				"y",  # Are you sure you want to continue?
 				"hello-world",  # The name of the library/project.
-				"",  # The name of the author.
-				"",  # The email address of the author
+				'',  # The name of the author.
+				'',  # The email address of the author
 				"joe",  # The username of the author
-				"",  # The version number of the library
-				"",  # The copyright years for the library.
+				'',  # The version number of the library
+				'',  # The copyright years for the library.
 				"GPLv3",  # The SPDX identifier for the license
 				"a short, one-line description for the project",
 				]) + "\n"
@@ -208,5 +208,5 @@ def test_wizard_not_git(tmp_pathplus, file_regression, monkeypatch):
 		stdout: List[str] = result.stdout.splitlines()
 		assert re.match(r"The directory .* is not a git repository\.", stdout[0][5:])
 		assert stdout[1] == "You may need to run 'git init' in that directory first."
-		assert stdout[2] == '\x1b[39mAborted!'
+		assert stdout[2] == "\x1b[39mAborted!"
 		assert not (tmp_pathplus / "repo_helper.yml").is_file()

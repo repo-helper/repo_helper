@@ -34,7 +34,7 @@ from repo_helper.templates import template_dir
 pytest_plugins = ("domdf_python_tools.testing", )
 
 
-@pytest.fixture(scope="function")
+@pytest.fixture()
 def demo_environment():
 	templates = jinja2.Environment(
 			loader=jinja2.FileSystemLoader(str(template_dir)),

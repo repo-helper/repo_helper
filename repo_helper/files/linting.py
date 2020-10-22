@@ -5,7 +5,7 @@
 Configuration for various linting tools, such as
 `Flake8 <https://flake8.pycqa.org/en/latest/>`_ and
 `Pylint <https://www.pylint.org/>`_.
-"""
+"""  # noqa: D400
 #
 #  Copyright © 2020 Dominic Davis-Foster <dominic@davis-foster.co.uk>
 #
@@ -60,7 +60,7 @@ lint_fix_list = [
 		"E241",
 		"E231",
 		"W292",
-		'E265'
+		"E265",
 		]
 
 lint_warn_list = [

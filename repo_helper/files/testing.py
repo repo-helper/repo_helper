@@ -124,7 +124,7 @@ class ToxConfig(IniConfigurator):
 
 	def get_mypy_dependencies(self) -> List[str]:
 		"""
-		Compile the list of mypy dependencies
+		Compile the list of mypy dependencies.
 		"""
 
 		mypy_deps = [f"mypy=={self['mypy_version']}", "lxml"]
@@ -141,7 +141,7 @@ class ToxConfig(IniConfigurator):
 
 	def tox(self):
 		"""
-		``[tox]``
+		``[tox]``.
 		"""
 
 		self._ini["tox"]["envlist"] = [*self["tox_py_versions"], "mypy", "build"]
@@ -151,7 +151,7 @@ class ToxConfig(IniConfigurator):
 
 	def envlists(self):
 		"""
-		``[envlists]``
+		``[envlists]``.
 		"""
 
 		self._ini["envlists"]["test"] = self["tox_py_versions"]
@@ -161,7 +161,7 @@ class ToxConfig(IniConfigurator):
 
 	def travis(self):
 		"""
-		``[travis]``
+		``[travis]``.
 		"""
 
 		versions = (f"{py_ver}: {tox_py_ver}" for py_ver, tox_py_ver in self["tox_travis_versions"].items())
@@ -169,7 +169,7 @@ class ToxConfig(IniConfigurator):
 
 	def gh_actions(self):
 		"""
-		``[gh-actions]``
+		``[gh-actions]``.
 		"""
 
 		versions = (f"{py_ver}: {tox_py_ver}" for py_ver, tox_py_ver in self["gh_actions_versions"].items())
@@ -177,7 +177,7 @@ class ToxConfig(IniConfigurator):
 
 	def testenv(self):
 		"""
-		``[testenv]``
+		``[testenv]``.
 		"""
 
 		env_vars = ["PIP_USE_FEATURE = 2020-resolver"]
@@ -205,7 +205,7 @@ class ToxConfig(IniConfigurator):
 
 	def testenv_docs(self):
 		"""
-		``[testenv:docs]``
+		``[testenv:docs]``.
 		"""
 
 		if self["enable_docs"]:
@@ -227,7 +227,7 @@ class ToxConfig(IniConfigurator):
 
 	def testenv_build(self):
 		"""
-		``[testenv:build]``
+		``[testenv:build]``.
 		"""
 
 		self._ini["testenv:build"]["skip_install"] = True
@@ -247,7 +247,7 @@ class ToxConfig(IniConfigurator):
 
 	def testenv_lint(self):
 		"""
-		``[testenv:lint]``
+		``[testenv:lint]``.
 		"""
 
 		self._ini["testenv:lint"]["basepython"] = "python{min_py_version}".format(**self._globals)
@@ -276,7 +276,7 @@ class ToxConfig(IniConfigurator):
 
 	def testenv_yapf(self):
 		"""
-		``[testenv:yapf]``
+		``[testenv:yapf]``.
 		"""
 
 		self._ini["testenv:yapf"]["basepython"] = "python3.7"
@@ -296,7 +296,7 @@ class ToxConfig(IniConfigurator):
 
 	def testenv_mypy(self):
 		"""
-		``[testenv:mypy]``
+		``[testenv:mypy]``.
 		"""
 
 		if not (self["stubs_package"] and not self["enable_tests"]):
@@ -317,7 +317,7 @@ class ToxConfig(IniConfigurator):
 
 	def testenv_pyup(self):
 		"""
-		``[testenv:pyup]``
+		``[testenv:pyup]``.
 		"""
 
 		self._ini["testenv:pyup"]["basepython"] = "python{min_py_version}".format(**self._globals)
@@ -334,7 +334,7 @@ class ToxConfig(IniConfigurator):
 
 	def testenv_coverage(self):
 		"""
-		``[testenv:coverage]``
+		``[testenv:coverage]``.
 		"""
 
 		if self["enable_tests"]:
@@ -360,7 +360,7 @@ class ToxConfig(IniConfigurator):
 
 	def flake8(self):
 		"""
-		``[flake8]``
+		``[flake8]``.
 		"""
 
 		self._ini["flake8"]["max-line-length"] = "120"
@@ -379,10 +379,11 @@ class ToxConfig(IniConfigurator):
 		self._ini["flake8"]["inline-quotes"] = '"'
 		self._ini["flake8"]["multiline-quotes"] = '"""'
 		self._ini["flake8"]["docstring-quotes"] = '"""'
+		self._ini["flake8"]["count"] = True
 
 	def coverage_run(self):
 		"""
-		``[coverage:run]``
+		``[coverage:run]``.
 		"""
 
 		if self["import_name"] != "coverage_pyver_pragma":
@@ -393,7 +394,7 @@ class ToxConfig(IniConfigurator):
 
 	def coverage_report(self):
 		"""
-		``[coverage:report]``
+		``[coverage:report]``.
 		"""
 
 		self._ini["coverage:report"]["exclude_lines"] = indent_join([
@@ -408,7 +409,7 @@ class ToxConfig(IniConfigurator):
 
 	def check_wheel_contents(self):
 		"""
-		``[check-wheel-contents]``
+		``[check-wheel-contents]``.
 		"""
 
 		self._ini["check-wheel-contents"]["ignore"] = "W002"
@@ -420,8 +421,8 @@ class ToxConfig(IniConfigurator):
 
 			if self["pure_python"]:
 				# Don't check contents for packages with binary extensions
-				self._ini["check-wheel-contents"][
-					"package"] = f"{os.path.join(self['source_dir'], self['import_name'])}-stubs"
+				stubs_dir = f"{os.path.join(self['source_dir'], self['import_name'])}-stubs"
+				self._ini["check-wheel-contents"]["package"] = stubs_dir
 
 		else:
 			self._ini["check-wheel-contents"]["toplevel"] = f"{self['import_name'].split('.')[0]}"
@@ -435,7 +436,7 @@ class ToxConfig(IniConfigurator):
 
 	def pytest(self):
 		"""
-		``[pytest]``
+		``[pytest]``.
 		"""
 
 		self._ini["pytest"]["addopts"] = "--color yes --durations 25"
@@ -531,7 +532,7 @@ def make_isort(repo_path: pathlib.Path, templates: jinja2.Environment) -> List[s
 	# TODO: extras
 
 	if "known_third_party" in isort["settings"]:
-		all_requirements = set(re.split(r'\n|,\s*', isort["settings"]["known_third_party"].value))
+		all_requirements = set(re.split(r"\n|,\s*", isort["settings"]["known_third_party"].value))
 	else:
 		all_requirements = set()
 

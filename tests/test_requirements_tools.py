@@ -39,14 +39,14 @@ class TestComparableRequirement:
 			"other",
 			[
 					ComparableRequirement('pytest==6.0.0; python_version <= "3.9"'),
-					ComparableRequirement('pytest==6.0.0'),
-					ComparableRequirement('pytest'),
-					ComparableRequirement('pytest[extra]'),
+					ComparableRequirement("pytest==6.0.0"),
+					ComparableRequirement("pytest"),
+					ComparableRequirement("pytest[extra]"),
 					Requirement('pytest==6.0.0; python_version <= "3.9"'),
-					Requirement('pytest==6.0.0'),
-					Requirement('pytest'),
-					Requirement('pytest[extra]'),
-					'pytest',
+					Requirement("pytest==6.0.0"),
+					Requirement("pytest"),
+					Requirement("pytest[extra]"),
+					"pytest",
 					]
 			)
 	def test_eq(self, req, other):
@@ -89,15 +89,13 @@ class TestComparableRequirement:
 					Requirement("pytest-rerunfailures"),
 					Requirement("pytest-rerunfailures==1.2.3"),
 					Requirement('pytest==6.0.0; python_version <= "3.9"'),
-					ComparableRequirement('pytest==6.0.0; python_version <= "3.9"'),
-					ComparableRequirement('pytest==6.0.0'),
-					ComparableRequirement('pytest'),
-					ComparableRequirement('pytest[extra]'),
-					Requirement('pytest==6.0.0; python_version <= "3.9"'),
-					Requirement('pytest==6.0.0'),
-					Requirement('pytest'),
-					Requirement('pytest[extra]'),
-					'pytest',
+					ComparableRequirement("pytest==6.0.0"),
+					ComparableRequirement("pytest"),
+					ComparableRequirement("pytest[extra]"),
+					Requirement("pytest==6.0.0"),
+					Requirement("pytest"),
+					Requirement("pytest[extra]"),
+					"pytest",
 					]
 			)
 	def test_ge(self, req, other):
@@ -113,14 +111,14 @@ class TestComparableRequirement:
 					Requirement("apeye"),
 					Requirement("apeye==1.2.3"),
 					ComparableRequirement('pytest==6.0.0; python_version <= "3.9"'),
-					ComparableRequirement('pytest==6.0.0'),
-					ComparableRequirement('pytest'),
-					ComparableRequirement('pytest[extra]'),
+					ComparableRequirement("pytest==6.0.0"),
+					ComparableRequirement("pytest"),
+					ComparableRequirement("pytest[extra]"),
 					Requirement('pytest==6.0.0; python_version <= "3.9"'),
-					Requirement('pytest==6.0.0'),
-					Requirement('pytest'),
-					Requirement('pytest[extra]'),
-					'pytest',
+					Requirement("pytest==6.0.0"),
+					Requirement("pytest"),
+					Requirement("pytest[extra]"),
+					"pytest",
 					]
 			)
 	def test_le(self, req, other):

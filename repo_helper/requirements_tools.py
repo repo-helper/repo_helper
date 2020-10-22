@@ -135,7 +135,7 @@ class ComparableRequirement(Requirement):
 				))
 
 
-operator_symbols = ('<=', '<', '!=', '==', '>=', '>', '~=', '===')
+operator_symbols = ("<=", '<', "!=", "==", ">=", '>', "~=", "===")
 
 
 def resolve_specifiers(specifiers: Iterable[Specifier]) -> SpecifierSet:
@@ -153,28 +153,28 @@ def resolve_specifiers(specifiers: Iterable[Specifier]) -> SpecifierSet:
 		if spec.operator in operator_lookup:
 			operator_lookup[spec.operator].append(spec)
 
-	if operator_lookup['<=']:
+	if operator_lookup["<="]:
 		final_specifier_set &= SpecifierSet(f"<={min(spec.version for spec in operator_lookup['<='])}")
 
 	if operator_lookup['<']:
 		final_specifier_set &= SpecifierSet(f"<{min(spec.version for spec in operator_lookup['<'])}")
 
-	for spec in operator_lookup['!=']:
+	for spec in operator_lookup["!="]:
 		final_specifier_set &= SpecifierSet(f"!={spec.version}")
 
-	for spec in operator_lookup['==']:
+	for spec in operator_lookup["=="]:
 		final_specifier_set &= SpecifierSet(f"=={spec.version}")
 
-	if operator_lookup['>=']:
+	if operator_lookup[">="]:
 		final_specifier_set &= SpecifierSet(f">={max(spec.version for spec in operator_lookup['>='])}")
 
 	if operator_lookup['>']:
 		final_specifier_set &= SpecifierSet(f">{max(spec.version for spec in operator_lookup['>'])}")
 
-	for spec in operator_lookup['~=']:
+	for spec in operator_lookup["~="]:
 		final_specifier_set &= SpecifierSet(f"~={spec.version}")
 
-	for spec in operator_lookup['===']:
+	for spec in operator_lookup["==="]:
 		final_specifier_set &= SpecifierSet(f"==={spec.version}")
 
 	return final_specifier_set
@@ -183,7 +183,7 @@ def resolve_specifiers(specifiers: Iterable[Specifier]) -> SpecifierSet:
 def combine_requirements(
 		requirement: Union[Requirement, Iterable[Requirement]],
 		*requirements: Requirement,
-		) -> Sequence[Requirement]:
+		) -> List[ComparableRequirement]:
 	"""
 	Combine duplicated requirements in a list.
 
@@ -291,13 +291,13 @@ class RequirementsManager(ABC):
 		"""
 		Add and remove requirements depending on the configuration
 		by modifying the ``target_requirements`` attribute.
-		"""
+		"""  # noqa: D400
 
 	def get_target_requirement_names(self) -> Set[str]:
 		"""
 		Returns a list of normalized names for the target requirements,
 		including any added by ``compile_target_requirements``.
-		"""
+		"""  # noqa: D400
 
 		names = set()
 		for req in self.target_requirements:
