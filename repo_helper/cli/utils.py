@@ -163,7 +163,7 @@ def run_repo_helper(
 			return 1
 
 	if initialise:
-		r = repo.Repo(".")
+		r = repo.Repo(gh.target_repo)
 
 		for filename in init_repo(gh.target_repo, gh.templates):
 			r.stage(filename)

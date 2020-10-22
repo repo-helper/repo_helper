@@ -67,7 +67,7 @@ def version() -> int:
 	version = rh.templates.globals["version"]
 	click.echo(f"Current version: {version}")
 
-	repo = Repo(PathPlus.cwd())
+	repo = Repo(rh.target_repo)
 	for sha, tag in get_tags(repo).items():
 		if tag == f"v{version}":
 			walker = repo.get_walker()
@@ -159,8 +159,8 @@ def changelog(entries: Optional[int], reverse: bool) -> int:
 	# this package
 	from repo_helper.git_tools import Log
 
-	repo = Repo(PathPlus.cwd())
 	rh = RepoHelper(PathPlus.cwd())
+	repo = Repo(rh.target_repo)
 
 	try:
 		commit_log = Log(repo).log(

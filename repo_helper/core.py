@@ -44,9 +44,9 @@ from repo_helper.files.linting import code_only_warning, lint_fix_list, lint_war
 from repo_helper.files.testing import make_isort
 
 # this package
-from .configuration import parse_yaml
-from .templates import template_dir
-from .utils import discover_entry_points
+from repo_helper.configuration import parse_yaml
+from repo_helper.templates import template_dir
+from repo_helper.utils import discover_entry_points, traverse_to_file
 
 __all__ = [
 		"RepoHelper",
@@ -81,6 +81,10 @@ class RepoHelper:
 			managed_message="This file is managed by 'repo_helper'. Don't edit it directly."
 			):
 		self.target_repo = PathPlus(target_repo)
+
+		# Walk up the tree until a "repo_helper.yml" or "git_helper.yml" (old name) file is found.
+		self.target_repo = traverse_to_file(self.target_repo, "repo_helper.yml", "git_helper.yml")
+
 		self.templates = jinja2.Environment(
 				loader=jinja2.FileSystemLoader(str(template_dir)),
 				undefined=jinja2.StrictUndefined,

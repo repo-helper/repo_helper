@@ -54,6 +54,7 @@ from repo_helper import __version__
 from repo_helper.click_tools import abort, resolve_color_default
 from repo_helper.configuration import parse_yaml
 from repo_helper.requirements_tools import ComparableRequirement, combine_requirements, read_requirements
+from repo_helper.utils import traverse_to_file
 
 __all__ = ["Builder", "build_wheel", "build_sdist"]
 
@@ -81,11 +82,14 @@ class Builder:
 		#: The repository
 		self.repo_dir = PathPlus(repo_dir)
 
+		# Walk up the tree until a "repo_helper.yml" or "git_helper.yml" (old name) file is found.
+		self.repo_dir = traverse_to_file(self.repo_dir, "repo_helper.yml", "git_helper.yml")
+
 		#: The tag for the wheel
 		self.tag = "py3-none-any"
 
 		#: repo_helper's configuration dictionary.
-		self.config = parse_yaml(repo_dir)
+		self.config = parse_yaml(self.repo_dir)
 
 		self.config["version"] = str(Version(self.config["version"]))
 

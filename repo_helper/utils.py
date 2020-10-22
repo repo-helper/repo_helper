@@ -27,7 +27,7 @@ General utilities.
 import pathlib
 import re
 import textwrap
-from typing import TYPE_CHECKING, Callable, Iterable, List, Optional
+from typing import TYPE_CHECKING, Callable, Iterable, List, Optional, TypeVar
 
 # 3rd party
 import isort  # type: ignore
@@ -60,6 +60,7 @@ __all__ = [
 		"discover_entry_points",
 		"indent_join",
 		"IniConfigurator",
+		"traverse_to_file",
 		]
 
 # def ensure_requirements(requirements_list: Iterable[Requirement], requirements_file: pathlib.Path):
@@ -361,3 +362,28 @@ class IniConfigurator:
 		self._output.append(str(self._ini))
 
 		ini_file.write_clean("\n".join(self._output))
+
+
+_P = TypeVar("_P", bound=pathlib.Path)
+
+
+def traverse_to_file(base_directory: _P, *filename: PathLike, height: int = -1) -> _P:
+	r"""
+	Traverse the parents of the given directory until the desired file is found.
+
+	:param base_directory: The directory to start searching from
+	:param \*filename: The filename(s) to search for
+	:param height: The maximum height to traverse to.
+	"""
+
+	for level, directory in enumerate((base_directory, *base_directory.parents)):
+		if height > 0 and ((level - 1) > height):
+			break
+
+		for file in filename:
+			if (directory / file).is_file():
+				return directory
+
+	raise FileNotFoundError(f"'{filename[0]!s}' not found in {base_directory}")
+
+
