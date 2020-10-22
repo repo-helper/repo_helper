@@ -1,93 +1,113 @@
 {
-  "$schema": "http://json-schema.org/schema#",
+  "$schema": "http://json-schema.org/draft-07/schema",
   "type": "object",
   "properties": {
     "author": {
-      "type": "string"
+      "type": "string",
+      "description": "The name of the package author."
     },
     "email": {
-      "type": "string"
+      "type": "string",
+      "description": "The email address of the author or maintainer."
     },
     "username": {
-      "type": "string"
+      "type": "string",
+      "description": "The username of the GitHub account hosting the repository."
     },
     "modname": {
-      "type": "string"
+      "type": "string",
+      "description": "The name of the package."
     },
     "version": {
       "type": [
         "string",
         "number"
-      ]
+      ],
+      "description": "The version of the package."
     },
     "copyright_years": {
       "type": [
         "string",
         "number"
-      ]
+      ],
+      "description": "The copyright_years of the package."
     },
     "repo_name": {
-      "type": "string"
+      "type": "string",
+      "description": "The name of GitHub repository, if different to :conf:`modname`."
     },
     "pypi_name": {
-      "type": "string"
+      "type": "string",
+      "description": "The name of project on PyPI, if different to :conf:`modname`."
     },
     "import_name": {
-      "type": "string"
+      "type": "string",
+      "description": "The name the package is imported with, if different to :conf:`modname`."
     },
     "classifiers": {
       "type": "array",
       "items": {
         "type": "string"
-      }
+      },
+      "description": "A list of `\"trove classifiers\" <https://pypi.org/classifiers/>`_ for PyPI."
     },
     "keywords": {
       "type": "array",
       "items": {
         "type": "string"
-      }
+      },
+      "description": "A list of keywords for the project."
     },
     "license": {
-      "type": "string"
+      "type": "string",
+      "description": "The license for the project."
     },
     "short_desc": {
-      "type": "string"
+      "type": "string",
+      "description": "A short description of the project. Used by PyPI."
     },
     "source_dir": {
-      "type": "string"
+      "type": "string",
+      "description": "The directory containing the source code of the project."
     },
     "enable_tests": {
       "type": [
         "boolean",
         "string"
-      ]
+      ],
+      "description": "Whether tests should be performed with pytest."
     },
     "enable_releases": {
       "type": [
         "boolean",
         "string"
-      ]
+      ],
+      "description": "Whether packages should be copied from PyPI to GitHub Releases."
     },
     "enable_pre_commit": {
       "type": [
         "boolean",
         "string"
-      ]
+      ],
+      "description": "Whether pre-commit should be installed and configured."
     },
     "docker_shields": {
       "type": [
         "boolean",
         "string"
-      ]
+      ],
+      "description": "Whether shields for docker container image size and build status should be shown."
     },
     "docker_name": {
-      "type": "string"
+      "type": "string",
+      "description": "The name of the docker image on dockerhub."
     },
     "python_deploy_version": {
       "type": [
         "string",
         "number"
-      ]
+      ],
+      "description": "The version of Python to use on Travis when deploying to PyPI, Anaconda and GitHub releases."
     },
     "python_versions": {
       "type": "array",
@@ -96,43 +116,51 @@
           "string",
           "number"
         ]
-      }
+      },
+      "description": "A list of the version(s) of Python to use when performing tests with Tox, E.g."
     },
     "manifest_additional": {
       "type": "array",
       "items": {
         "type": "string"
-      }
+      },
+      "description": "A list of additional entries for ``MANIFEST.in``."
     },
     "py_modules": {
       "type": "array",
       "items": {
         "type": "string"
-      }
+      },
+      "description": "A list of values for ``py_modules`` in ``setup.py``, which indicate the single-file modules to include in the distributions."
     },
     "console_scripts": {
       "type": "array",
       "items": {
         "type": "string"
-      }
+      },
+      "description": "A list of entries for ``console_scripts`` in ``setup.py``. Each entry must follow the same format as required in ``setup.py``."
     },
     "additional_setup_args": {
-      "type": "object"
+      "type": "object",
+      "description": "A dictionary of additional keyword arguments for :func:`setuptools.setup()`. The values can refer to variables in ``__pkginfo__.py``. String values must be enclosed in quotes here."
     },
     "extras_require": {
-      "type": "object"
+      "type": "object",
+      "description": "A dictionary of extra requirements, where the keys are the names of the extras and the values are a list of requirements."
     },
     "additional_requirements_files": {
       "type": "array",
       "items": {
         "type": "string"
-      }
+      },
+      "description": "A list of files containing additional requirements. These may define \"extras\" (see :conf:`extras_require`). Used in ``.readthedocs.yml``."
     },
     "setup_pre": {
       "type": "array",
       "items": {
         "type": "string"
-      }
+      },
+      "description": "A list of additional python lines to insert at the beginnning of ``setup.py``."
     },
     "platforms": {
       "type": "array",
@@ -142,16 +170,19 @@
           "macOS",
           "Linux"
         ]
-      }
+      },
+      "description": "A case-insensitive list of platforms to perform tests for."
     },
     "rtfd_author": {
-      "type": "string"
+      "type": "string",
+      "description": "The name of the author to show on ReadTheDocs, if different."
     },
     "preserve_custom_theme": {
       "type": [
         "boolean",
         "string"
-      ]
+      ],
+      "description": "Whether custom documentation theme styling in ``_static/style.css`` and ``_templates/layout.html`` should be preserved."
     },
     "sphinx_html_theme": {
       "enum": [
@@ -159,67 +190,80 @@
         "alabaster",
         "repo_helper_sphinx_theme",
         "domdf_sphinx_theme"
-      ]
+      ],
+      "description": "The HTML theme to use for Sphinx."
     },
     "extra_sphinx_extensions": {
       "type": "array",
       "items": {
         "type": "string"
-      }
+      },
+      "description": "A list of additional extensions to enable for Sphinx."
     },
     "intersphinx_mapping": {
       "type": "array",
       "items": {
         "type": "string"
-      }
+      },
+      "description": "A list of additional entries for ``intersphinx_mapping`` for Sphinx. Each entry must be enclosed in double quotes."
     },
     "sphinx_conf_preamble": {
       "type": "array",
       "items": {
         "type": "string"
-      }
+      },
+      "description": "A list of lines of Python code to add to the top of ``conf.py``. These could be additional settings for Sphinx or calls to extra scripts that must be executed before building the documentation."
     },
     "sphinx_conf_epilogue": {
       "type": "array",
       "items": {
         "type": "string"
-      }
+      },
+      "description": "Like :conf:`sphinx_conf_preamble`, but the lines are inserted at the end of the file. Intent lines with a single tab to form part of the ``setup`` function."
     },
     "html_theme_options": {
-      "type": "object"
+      "type": "object",
+      "description": "A dictionary of configuration values for the documentation HTML theme. String values must be encased in quotes."
     },
     "html_context": {
-      "type": "object"
+      "type": "object",
+      "description": "A dictionary of configuration values for the documentation HTML context. String values must be encased in quotes."
     },
     "enable_docs": {
       "type": [
         "boolean",
         "string"
-      ]
+      ],
+      "description": "Whether documentation should be built and deployed."
     },
     "docs_dir": {
-      "type": "string"
+      "type": "string",
+      "description": "The directory containing the docs code of the project."
     },
     "tox_requirements": {
       "type": "array",
       "items": {
         "type": "string"
-      }
+      },
+      "description": "A list of additional Python requirements for Tox."
     },
     "tox_build_requirements": {
       "type": "array",
       "items": {
         "type": "string"
-      }
+      },
+      "description": "A list of additional Python build requirements for Tox."
     },
     "tox_testenv_extras": {
-      "type": "string"
+      "type": "string",
+      "description": "The \"Extra\" requirement to install when installing the package in the Tox testenv."
     },
     "travis_site": {
       "enum": [
         "com",
         "org"
-      ]
+      ],
+      "description": "The Travis site."
     },
     "travis_ubuntu_version": {
       "enum": [
@@ -228,124 +272,146 @@
         "xenial",
         "trusty",
         "precise"
-      ]
+      ],
+      "description": "The Travis Ubuntu version."
     },
     "travis_extra_install_pre": {
       "type": "array",
       "items": {
         "type": "string"
-      }
+      },
+      "description": "Additional steps to run in Travis before installing dependencies."
     },
     "travis_extra_install_post": {
       "type": "array",
       "items": {
         "type": "string"
-      }
+      },
+      "description": "Additional steps to run in Travis after installing dependencies."
     },
     "travis_pypi_secure": {
-      "type": "string"
+      "type": "string",
+      "description": "The secure password for PyPI, for use by Travis"
     },
     "travis_additional_requirements": {
       "type": "array",
       "items": {
         "type": "string"
-      }
+      },
+      "description": "A list of additional Python requirements for Travis."
     },
     "enable_conda": {
       "type": [
         "boolean",
         "string"
-      ]
+      ],
+      "description": "Whether conda packages should be built and deployed."
     },
     "conda_channels": {
       "type": "array",
       "items": {
         "type": "string"
-      }
+      },
+      "description": "A list of Anaconda channels required to build and use the Conda package."
     },
     "conda_description": {
-      "type": "string"
+      "type": "string",
+      "description": "A short description of the project for Anaconda."
     },
     "additional_ignore": {
       "type": "array",
       "items": {
         "type": "string"
-      }
+      },
+      "description": "A list of additional entries for ``.gitignore``."
     },
     "yapf_exclude": {
       "type": "array",
       "items": {
         "type": "string"
-      }
+      },
+      "description": "A list of additional files or directories to exclude from ``yapf`` autoformatting."
     },
     "tests_dir": {
-      "type": "string"
+      "type": "string",
+      "description": "The directory containing tests, relative to the repository root."
     },
     "pkginfo_extra": {
       "type": "array",
       "items": {
         "type": "string"
-      }
+      },
+      "description": "A list of lines of Python code to add to the top of ``conf.py``. These could be additional settings for Sphinx or calls to extra scripts that must be executed before building the documentation."
     },
     "exclude_files": {
       "type": "array",
       "items": {
         "type": "string"
-      }
+      },
+      "description": "A list of files not to manage with `repo_helper`."
     },
     "imgbot_ignore": {
       "type": "array",
       "items": {
         "type": "string"
-      }
+      },
+      "description": "A list of additional glob ignores for imgbot."
     },
     "mypy_deps": {
       "type": "array",
       "items": {
         "type": "string"
-      }
+      },
+      "description": "A list of additional packages to install in Tox when running mypy. Usually type stubs."
     },
     "pure_python": {
       "type": [
         "boolean",
         "string"
-      ]
+      ],
+      "description": "Flag to indicate the package is pure Python"
     },
     "stubs_package": {
       "type": [
         "boolean",
         "string"
-      ]
+      ],
+      "description": "Flag to indicate the package is a PEP 561 stubs package."
     },
     "on_pypi": {
       "type": [
         "boolean",
         "string"
-      ]
+      ],
+      "description": "Flag to indicate the package is available on PyPI"
     },
     "mypy_plugins": {
       "type": "array",
       "items": {
         "type": "string"
-      }
+      },
+      "description": "A list of plugins to enable for mypy."
     },
     "enable_devmode": {
       "type": [
         "boolean",
         "string"
-      ]
+      ],
+      "description": "Enable `Python Development Mode`_ when running tests."
     },
     "mypy_version": {
       "type": [
         "string",
         "number"
-      ]
+      ],
+      "description": "The version of ``mypy`` to use."
     },
     "use_experimental_backend": {
       "type": [
         "boolean",
         "string"
-      ]
+      ],
+      "description": "Whether to use ``repo_helper``\\'s experimental build backend, rather than ``setuptools.build_meta``."
     }
   },
   "required": [
