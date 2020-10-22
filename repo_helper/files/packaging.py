@@ -220,14 +220,15 @@ class SetupCfgConfig(IniConfigurator):
 		self._ini["metadata"]["long_description_content_type"] = "text/x-rst"
 		self._ini["metadata"]["platforms"] = self["platforms"]
 		self._ini["metadata"]["url"] = "https://github.com/{username}/{repo_name}".format_map(self._globals)
-		self._ini["metadata"]["project_urls"] = indent_with_tab(
-				textwrap.dedent(
-						"""
-Documentation = https://{repo_name}.readthedocs.io
-Issue_Tracker = https://github.com/{username}/{repo_name}/issues
-Source_Code = https://github.com/{username}/{repo_name}""".format_map(self._globals)
-						)
-				)
+
+		project_urls = [
+				"Issue_Tracker = https://github.com/{username}/{repo_name}/issues".format_map(self._globals),
+				"Source_Code = https://github.com/{username}/{repo_name}".format_map(self._globals),
+				]
+		if self["enable_docs"]:
+			project_urls.insert(0, "Documentation = https://{repo_name}.readthedocs.io".format_map(self._globals))
+
+		self._ini["metadata"]["project_urls"] = indent_with_tab("\n" + textwrap.dedent("\n".join(project_urls)))
 		self._ini["metadata"]["classifiers"] = self["classifiers"]
 
 	def options(self):
