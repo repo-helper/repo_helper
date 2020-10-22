@@ -147,6 +147,7 @@ pytest-timeout>=1.4.2
 def test_make_pre_commit(tmp_pathplus, demo_environment, file_regression):
 	# TODO: permutations to cover all branches
 	demo_environment.globals["yapf_exclude"] = []
+	demo_environment.globals["pre_commit_exclude"] = "^$"
 
 	managed_files = make_pre_commit(tmp_pathplus, demo_environment)
 	assert managed_files == [".pre-commit-config.yaml"]

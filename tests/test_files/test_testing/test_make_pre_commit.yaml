@@ -1,6 +1,8 @@
 # This file is managed by 'repo_helper'. Don't edit it directly.
 ---
 
+exclude: ^$
+
 repos:
  - repo: https://github.com/pre-commit/pre-commit-hooks
    rev: v2.4.0

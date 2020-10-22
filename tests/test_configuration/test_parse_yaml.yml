@@ -74,6 +74,7 @@ platforms:
 - Windows
 - macOS
 - Linux
+pre_commit_exclude: ^$
 preserve_custom_theme: true
 pure_python: true
 py_modules: []
