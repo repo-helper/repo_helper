@@ -390,7 +390,7 @@ def stderr_input(prompt: str = '', file: IO = sys.stdout) -> str:
 		flush()
 
 	try:
-		file.softspace = 0
+		file.softspace = 0  # type: ignore
 	except (AttributeError, TypeError):
 		pass
 

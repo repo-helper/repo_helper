@@ -304,13 +304,13 @@ def indent_join(iterable: Iterable[str]) -> str:
 	and indent each line with a tab if there is more then one element.
 
 	:param iterable:
-	"""
+	"""  # noqa: D400
 
-	l = list(iterable)
-	if len(l) > 1:
-		if not l[0] == '':
-			l.insert(0, '')
-	return indent_with_tab(textwrap.dedent("\n".join(l)))
+	iterable = list(iterable)
+	if len(iterable) > 1:
+		if not iterable[0] == '':
+			iterable.insert(0, '')
+	return indent_with_tab(textwrap.dedent("\n".join(iterable)))
 
 
 class IniConfigurator:
