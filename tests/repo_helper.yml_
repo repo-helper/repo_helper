@@ -1,0 +1,68 @@
+modname: repo_helper
+copyright_years: "2020"
+author: "Dominic Davis-Foster"
+email: "dominic@davis-foster.co.uk"
+version: "0.0.1"
+username: "domdfcoding"
+license: 'LGPLv3+'
+short_desc: 'Update multiple configuration files, build scripts etc. from a single location.'
+
+enable_conda: False
+
+additional_ignore:
+  - Tokens
+
+console_scripts:
+  - "repo_helper = repo_helper.__main__:main"
+  - "repo-helper = repo_helper.__main__:main"
+
+sphinx_html_theme: repo_helper_sphinx_theme
+
+python_deploy_version: 3.7
+
+# Versions to run tests for
+python_versions:
+  - '3.6'
+  - '3.7'
+  - '3.8'
+  - '3.9-dev'
+
+# travis secure password for PyPI
+#travis_pypi_secure:
+
+# additional lines for MANIFEST.in
+manifest_additional:
+  - "recursive-include repo_helper/templates *"
+  - "recursive-include repo_helper/init_repo_files *"
+  - "include repo_helper/files/isort.cfg"
+  - "include repo_helper/repo_helper_schema.json"
+
+classifiers:
+  - 'Development Status :: 4 - Beta'
+#  - "Development Status :: 5 - Production/Stable"
+#  - "Development Status :: 6 - Mature"
+#  - "Development Status :: 7 - Inactive"
+  - 'Intended Audience :: Developers'
+  - 'Topic :: Utilities'
+
+extra_sphinx_extensions:
+  - configconfig.autoconfig
+
+intersphinx_mapping:
+  - "'jinja2': ('https://jinja.palletsprojects.com/en/2.11.x/', None)"
+
+preserve_custom_theme: true
+
+imgbot_ignore:
+  - "repo_helper.png"
+
+exclude_files:
+  - pre-commit
+  - tox
+  - Source
+
+extras_require:
+  schema:
+    - lxml
+
+tox_testenv_extras: all

@@ -1,3 +1,6 @@
+# stdlib
+import pathlib
+
 # 3rd party
 import pytest
 from pytest_regressions.data_regression import DataRegressionFixture
@@ -6,7 +9,8 @@ from pytest_regressions.data_regression import DataRegressionFixture
 from repo_helper.configuration import (
 		get_gh_actions_python_versions,
 		get_tox_python_versions,
-		get_tox_travis_python_versions
+		get_tox_travis_python_versions,
+		parse_yaml
 		)
 
 
@@ -60,3 +64,8 @@ def test_get_gh_actions_python_versions(data_regression: DataRegressionFixture, 
 	data_regression.check(
 			get_gh_actions_python_versions(python_versions, get_tox_python_versions(python_versions))
 			)
+
+
+def test_parse_yaml(tmp_pathplus, data_regression):
+	(tmp_pathplus / "repo_helper.yml").write_text((pathlib.Path(__file__).parent / "repo_helper.yml_").read_text())
+	data_regression.check(parse_yaml(tmp_pathplus))

@@ -1,0 +1,120 @@
+additional_ignore:
+- Tokens
+additional_requirements_files: []
+additional_setup_args: {}
+author: Dominic Davis-Foster
+classifiers:
+- 'Development Status :: 4 - Beta'
+- 'Intended Audience :: Developers'
+- 'License :: OSI Approved :: GNU Lesser General Public License v3 or later (LGPLv3+)'
+- 'Operating System :: OS Independent'
+- 'Programming Language :: Python'
+- 'Programming Language :: Python :: 3 :: Only'
+- 'Programming Language :: Python :: 3.6'
+- 'Programming Language :: Python :: 3.7'
+- 'Programming Language :: Python :: 3.8'
+- 'Programming Language :: Python :: 3.9'
+- 'Programming Language :: Python :: Implementation :: CPython'
+- 'Topic :: Utilities'
+conda_channels: []
+conda_description: Update multiple configuration files, build scripts etc. from a
+  single location.
+console_scripts:
+- repo_helper = repo_helper.__main__:main
+- repo-helper = repo_helper.__main__:main
+copyright_years: '2020'
+docker_name: ''
+docker_shields: false
+docs_dir: doc-source
+email: dominic@davis-foster.co.uk
+enable_conda: false
+enable_devmode: true
+enable_docs: true
+enable_pre_commit: true
+enable_releases: true
+enable_tests: true
+exclude_files:
+- pre-commit
+- tox
+- Source
+extra_sphinx_extensions:
+- configconfig.autoconfig
+extras_require:
+  all:
+  - lxml
+  schema:
+  - lxml
+gh_actions_versions:
+  '3.6': py36, build
+  '3.7': py37, build
+  '3.8': py38, build
+  3.9-dev: py39-dev, build
+html_context: {}
+html_theme_options: {}
+imgbot_ignore:
+- repo_helper.png
+import_name: repo_helper
+intersphinx_mapping:
+- '''jinja2'': (''https://jinja.palletsprojects.com/en/2.11.x/'', None)'
+keywords: []
+license: GNU Lesser General Public License v3 or later (LGPLv3+)
+manifest_additional:
+- recursive-include repo_helper/templates *
+- recursive-include repo_helper/init_repo_files *
+- include repo_helper/files/isort.cfg
+- include repo_helper/repo_helper_schema.json
+min_py_version: '3.6'
+modname: repo_helper
+mypy_deps: []
+mypy_plugins: []
+mypy_version: '0.790'
+on_pypi: true
+pkginfo_extra: []
+platforms:
+- Windows
+- macOS
+- Linux
+preserve_custom_theme: true
+pure_python: true
+py_modules: []
+pypi_name: repo_helper
+python_deploy_version: '3.7'
+python_versions:
+- '3.6'
+- '3.7'
+- '3.8'
+- 3.9-dev
+repo_name: repo_helper
+rtfd_author: Dominic Davis-Foster
+setup_pre: []
+short_desc: Update multiple configuration files, build scripts etc. from a single
+  location.
+source_dir: ''
+sphinx_conf_epilogue: []
+sphinx_conf_preamble: []
+sphinx_html_theme: repo_helper_sphinx_theme
+stubs_package: false
+tests_dir: tests
+tox_build_requirements: []
+tox_py_versions:
+- py36
+- py37
+- py38
+- py39-dev
+tox_requirements: []
+tox_testenv_extras: all
+tox_travis_versions:
+  '3.6': py36, build
+  '3.7': py37, build, mypy
+  '3.8': py38, build
+  3.9-dev: py39-dev, build
+travis_additional_requirements: []
+travis_extra_install_post: []
+travis_extra_install_pre: []
+travis_pypi_secure: ''
+travis_site: com
+travis_ubuntu_version: focal
+use_experimental_backend: false
+username: domdfcoding
+version: 0.0.1
+yapf_exclude: []
