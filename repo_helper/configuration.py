@@ -23,6 +23,7 @@
 # stdlib
 import json
 import os
+import re
 import pathlib
 import warnings
 from typing import Any, Dict, Iterable, List, Mapping, MutableMapping, Optional, Tuple, Type, Union
@@ -1477,14 +1478,16 @@ class use_experimental_backend(ConfigVar):  # noqa
 		excluded_files = exclude_files.get(raw_config_vars)
 
 		# Options that the backend is incompatible with
+		if not pure_python.get(raw_config_vars):
+			return False
+
 		disallowed_keys = (
-				pure_python,
 				additional_setup_args,
 				setup_pre,
 				)
 
 		for key in disallowed_keys:
-			if not key.get(raw_config_vars):
+			if key.get(raw_config_vars):
 				return False
 
 		# Excluded files that the backend is incompatible with
@@ -1494,6 +1497,23 @@ class use_experimental_backend(ConfigVar):  # noqa
 				return False
 
 		return super().validate(raw_config_vars)
+
+
+class pre_commit_exclude(ConfigVar):  # noqa
+	"""
+	Regular expression for files that should not be checked by pre_commit.
+
+	.. code-block:: yaml
+
+		pre_commit_exclude: "^.*\._py$"
+	"""
+
+	dtype = str
+	default = "^$"
+
+	@classmethod
+	def validate(cls, raw_config_vars: Optional[Dict[str, Any]] = None) -> Any:
+		return re.compile(super().validate(raw_config_vars)).pattern
 
 
 # ---------------------
@@ -1592,6 +1612,7 @@ all_values: List[ConfigVarMeta] = [
 		enable_devmode,
 		mypy_version,
 		use_experimental_backend,
+		pre_commit_exclude,
 		]
 
 

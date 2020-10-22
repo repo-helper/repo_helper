@@ -412,6 +412,10 @@
         "string"
       ],
       "description": "Whether to use ``repo_helper``\\'s experimental build backend, rather than ``setuptools.build_meta``."
+    },
+    "pre_commit_exclude": {
+      "type": "string",
+      "description": "Regular expression for files that should not be checked by pre_commit."
     }
   },
   "required": [
