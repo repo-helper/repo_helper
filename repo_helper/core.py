@@ -38,13 +38,11 @@ from domdf_python_tools.utils import enquote_value
 
 # this package
 import repo_helper.files
+from repo_helper.configuration import parse_yaml
 from repo_helper.files import is_registered, management
 from repo_helper.files.docs import copy_docs_styling
 from repo_helper.files.linting import code_only_warning, lint_fix_list, lint_warn_list
 from repo_helper.files.testing import make_isort
-
-# this package
-from repo_helper.configuration import parse_yaml
 from repo_helper.templates import template_dir
 from repo_helper.utils import discover_entry_points, traverse_to_file
 

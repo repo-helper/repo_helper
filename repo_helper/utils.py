@@ -385,5 +385,3 @@ def traverse_to_file(base_directory: _P, *filename: PathLike, height: int = -1) 
 				return directory
 
 	raise FileNotFoundError(f"'{filename[0]!s}' not found in {base_directory}")
-
-
