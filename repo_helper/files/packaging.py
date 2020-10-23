@@ -269,6 +269,7 @@ class SetupCfgConfig(IniConfigurator):
 		self._ini["mypy"]["python_version"] = self["min_py_version"]
 		self._ini["mypy"]["namespace_packages"] = True
 		self._ini["mypy"]["check_untyped_defs"] = True
+		self._ini["mypy"]["warn_unused_ignores"] = True
 		if self["mypy_plugins"]:
 			self._ini["mypy"]["plugins"] = ", ".join(self["mypy_plugins"])
 
@@ -286,7 +287,7 @@ class SetupCfgConfig(IniConfigurator):
 			existing_config = ConfigUpdater()
 			existing_config.read(str(ini_file))
 			for section in existing_config.sections_blocks():
-				if section.name not in self.managed_sections:  # type: ignore
+				if section.name not in self.managed_sections:
 					self._ini.add_section(section)
 
 		if "options.entry_points" not in self._ini.sections():

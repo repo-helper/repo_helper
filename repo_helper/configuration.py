@@ -319,7 +319,7 @@ class import_name(ConfigVar):  # noqa
 		else:
 			obj = optional_getter(raw_config_vars, cls, cls.required)
 
-			if not isinstance(obj, cls.dtype):  # type: ignore
+			if not isinstance(obj, cls.dtype):
 				raise ValueError(f"'{cls.__name__}' must be a {cls.dtype}") from None
 
 			return cls.rtype(obj)

@@ -25,7 +25,7 @@ import sys
 
 # 3rd party
 import pytest
-from pytest_regressions.file_regression import FileRegressionFixture  # type: ignore
+from pytest_regressions.file_regression import FileRegressionFixture
 from readme_renderer.rst import render  # type: ignore
 
 # this package

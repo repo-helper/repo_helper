@@ -58,6 +58,7 @@ imgbot_ignore:
 exclude_files:
  - pre-commit
  - Source
+ - setup_cfg
 
 extras_require:
   schema:

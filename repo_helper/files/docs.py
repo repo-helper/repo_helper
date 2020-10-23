@@ -35,7 +35,7 @@ from typing import Dict, List, Sequence, Set, Union
 # 3rd party
 import css_parser  # type: ignore
 import jinja2
-from css_parser import css  # type: ignore
+from css_parser import css
 from domdf_python_tools.compat import importlib_resources
 from domdf_python_tools.paths import PathPlus, clean_writer
 from domdf_python_tools.typing import PathLike

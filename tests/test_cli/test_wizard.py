@@ -146,7 +146,7 @@ def test_wizard_git_config(git_repo: GitRepo, file_regression):
 def test_wizard_env_vars(git_repo: GitRepo, file_regression, monkeypatch):
 
 	# 3rd party
-	from dulwich.config import StackedConfig  # type: ignore
+	from dulwich.config import StackedConfig
 
 	# Monkeypatch dulwich so it doesn't try to use the global config.
 	monkeypatch.setattr(StackedConfig, "default_backends", lambda *args: [], raising=True)

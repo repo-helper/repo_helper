@@ -24,7 +24,7 @@
 import pathlib
 
 # 3rd party
-from pytest_regressions.file_regression import FileRegressionFixture  # type: ignore
+from pytest_regressions.file_regression import FileRegressionFixture
 
 # this package
 from repo_helper.files.gitignore import make_gitignore

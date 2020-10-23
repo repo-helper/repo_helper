@@ -1039,7 +1039,7 @@ class ConfigUpdater(Container, MutableMapping):
 		"""
 
 		if section in self.sections():
-			raise DuplicateSectionError(section)  # type: ignore
+			raise DuplicateSectionError(section)
 
 		if isinstance(section, str):
 			# create a new section

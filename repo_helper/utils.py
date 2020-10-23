@@ -33,7 +33,7 @@ from typing import TYPE_CHECKING, Callable, Iterable, List, Optional, TypeVar
 import isort  # type: ignore
 import isort.settings  # type: ignore
 import trove_classifiers  # type: ignore
-import yapf_isort  # type: ignore
+import yapf_isort
 from domdf_python_tools.import_tools import discover_entry_points
 from domdf_python_tools.paths import PathPlus
 from domdf_python_tools.pretty_print import FancyPrinter
@@ -356,7 +356,7 @@ class IniConfigurator:
 			existing_config = ConfigUpdater()
 			existing_config.read(str(ini_file))
 			for section in existing_config.sections_blocks():
-				if section.name not in self.managed_sections:  # type: ignore
+				if section.name not in self.managed_sections:
 					self._ini.add_section(section)
 
 		self._output.append(str(self._ini))
