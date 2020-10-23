@@ -1226,7 +1226,7 @@ class enable_conda(ConfigVar):  # noqa
 	"""
 
 	dtype = bool
-	default: bool = True
+	default: bool = True  # TODO: make this default False
 	category: str = "conda & anaconda"
 
 

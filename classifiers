@@ -1,26 +1,8 @@
-Development Status :: 1 - Planning
-Development Status :: 2 - Pre-Alpha
-Development Status :: 3 - Alpha
-Development Status :: 4 - Beta
-Development Status :: 5 - Production/Stable
-Development Status :: 6 - Mature
-Development Status :: 7 - Inactive
-
 Intended Audience :: Developers
 Intended Audience :: End Users/Desktop
 Intended Audience :: Information Technology
 Intended Audience :: Science/Research
 Intended Audience :: System Administrators
-
-Programming Language :: C
-Programming Language :: C++
-Programming Language :: Cython
-Programming Language :: JavaScript
-Programming Language :: R
-Programming Language :: Ruby
-Programming Language :: Rust
-Programming Language :: SQL
-Programming Language :: Unix Shell
 
 Environment :: Console
 Environment :: No Input/Output (Daemon)
@@ -31,44 +13,6 @@ Environment :: X11 Applications :: GTK
 Environment :: X11 Applications :: Gnome
 Topic :: Software Development :: User Interfaces
 Topic :: Software Development :: Widget Sets
-
-Framework :: Dash
-Framework :: Jupyter
-Framework :: Matplotlib
-
-
-if utility:
-	Topic :: Utilities
-
-if flake8 plugin:
-	Framework :: Flake8
-	Intended Audience :: Developers
-
-if Flask
-	Framework :: Flask
-	Topic :: Internet :: WWW/HTTP :: WSGI :: Application
-
-
-if Pytest plugin:
-	Framework :: Pytest
-	Framework :: tox
-	Topic :: Software Development :: Quality Assurance
-	Topic :: Software Development :: Testing
-	Topic :: Software Development :: Testing :: Unit
-	Intended Audience :: Developers
-
-
-if Sphinx extension:
-	Framework :: Sphinx :: Extension
-	Framework :: Sphinx :: Theme
-	Topic :: Documentation
-	Topic :: Documentation :: Sphinx
-	Topic :: Software Development :: Documentation
-	Intended Audience :: Developers
-
-if Library:
-	Topic :: Software Development :: Libraries :: Python Modules
-	Intended Audience :: Developers
 
 
 Topic :: Artistic Software
@@ -93,7 +37,6 @@ Topic :: Games/Entertainment :: Role-Playing
 Topic :: Games/Entertainment :: Side-Scrolling/Arcade Games
 Topic :: Games/Entertainment :: Simulation
 Topic :: Games/Entertainment :: Turn Based Strategy
-Topic :: Software Development :: Libraries :: pygame
 
 Topic :: Internet
 Topic :: Internet :: WWW/HTTP

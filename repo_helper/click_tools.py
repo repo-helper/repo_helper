@@ -78,7 +78,7 @@ import os
 import sys
 from functools import partial
 from types import ModuleType
-from typing import IO, Any, Callable, List, Mapping, Optional, overload, Tuple, Union
+from typing import IO, Any, Callable, List, Mapping, Optional, Tuple, Union, overload
 
 # 3rd party
 import click
@@ -430,7 +430,8 @@ def choice(
 		show_default: bool = ...,
 		err: bool = ...,
 		start_index: int = ...
-		) -> int: ...
+		) -> int:
+	...  # pragma: no cover
 
 
 @overload
@@ -442,7 +443,8 @@ def choice(
 		show_default: bool = ...,
 		err: bool = ...,
 		start_index: int = ...
-		) -> str: ...
+		) -> str:
+	...  # pragma: no cover
 
 
 def choice(

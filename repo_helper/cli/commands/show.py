@@ -37,7 +37,7 @@ from repo_helper.cli.options import autocomplete_option
 from repo_helper.click_tools import CONTEXT_SETTINGS, abort, resolve_color_default
 from repo_helper.core import RepoHelper
 
-__all__ = ["show", "show_command", "version"]
+__all__ = ["show", "show_command", "version", "log", "changelog"]
 
 
 @cli_group(invoke_without_command=False)
