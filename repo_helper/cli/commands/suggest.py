@@ -27,7 +27,6 @@ Suggest trove classifiers and keywords.
 from datetime import datetime
 from functools import partial
 from itertools import chain
-from pprint import pprint
 
 # 3rd party
 import click
@@ -95,7 +94,6 @@ def classifiers(add: bool) -> int:
 
 	rh = RepoHelper(PathPlus.cwd())
 	config = rh.templates.globals
-	pprint(config["classifiers"])
 
 	pkg_dir = rh.target_repo / config["import_name"]
 
@@ -153,7 +151,7 @@ def classifiers(add: bool) -> int:
 		suggested_classifiers.add("Topic :: Software Development :: Documentation")
 		suggested_classifiers.add("Intended Audience :: Developers")
 
-	click.echo("What is the Development Status of this project>?")
+	click.echo("What is the Development Status of this project?")
 	development_status = choice(text="Status", options=development_status_options, start_index=1)
 	status_string = f"Development Status :: {development_status + 1} - {development_status_options[development_status]}"
 	suggested_classifiers.add(status_string)
@@ -200,7 +198,8 @@ def classifiers(add: bool) -> int:
 		yaml.preserve_quotes = True  # type: ignore
 
 		data = yaml.load((rh.target_repo / "repo_helper.yml").read_text())
-		data["classifiers"] = sorted({(*data["classifiers"], *suggested_classifiers)})
+		data["classifiers"] = sorted({*data.get("classifiers", ()), *suggested_classifiers})
+		print(data["classifiers"])
 
 		with (rh.target_repo / "repo_helper.yml").open("w") as fp:
 			yaml.dump(data, fp)
