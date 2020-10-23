@@ -30,7 +30,7 @@ from typing import List
 
 # 3rd party
 import jinja2
-import yaml
+import ruamel.yaml as yaml
 from domdf_python_tools.paths import PathPlus
 
 # this package
@@ -138,8 +138,7 @@ def make_dependabot(repo_path: pathlib.Path, templates: jinja2.Environment) -> L
 	(dependabot_dir / "config.yml").write_lines([
 			f"# {templates.globals['managed_message']}",
 			"---",
-			yaml.safe_dump(config),
-			'',
+			yaml.round_trip_dump(config, default_flow_style=False),  # type: ignore
 			])
 
 	return [".dependabot/config.yml"]

@@ -9,4 +9,4 @@ version: '0.0.0'
 license: 'GPLv3'
 short_desc: 'a short, one-line description for the project'
 
-enable_conda: False
+enable_conda: false

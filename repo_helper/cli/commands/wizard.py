@@ -49,11 +49,16 @@ def wizard():
 
 	# Import here to save time when the user calls --help or makes an error.
 
+	# stdlib
+	from io import StringIO
+
 	# 3rd party
+	import ruamel.yaml as yaml
 	from domdf_python_tools.terminal_colours import Fore
 	from dulwich.errors import NotGitRepository
 	from dulwich.repo import Repo
 	from email_validator import EmailNotValidError, validate_email  # type: ignore
+	from ruamel.yaml.scalarstring import SingleQuotedScalarString
 
 	path = PathPlus.cwd()
 	config_file = path / "repo_helper.yml"
@@ -158,22 +163,28 @@ Not all SPDX identifiers are allowed as not all map to PyPI Trove classifiers.""
 	short_desc = prompt("Description")
 
 	# ---------- writeout ----------
-	config_file.write_clean(
-			f"""\
-# Configuration for 'repo_helper' (https://github.com/domdfcoding/repo_helper)
----
-modname: {modname!r}
-copyright_years: {copyright_years!r}
-author: {author!r}
-email: {email!r}
-username: {username!r}
-version: {str(version)!r}
-license: {license_!r}
-short_desc: {short_desc!r}
 
-enable_conda: False
-"""
-			)
+	data = {
+			"modname": modname,
+			"copyright_years": copyright_years,
+			"author": author,
+			"email": email,
+			"username": username,
+			"version": str(version),
+			"license": license_,
+			"short_desc": short_desc,
+			}
+
+	data = {k: SingleQuotedScalarString(v) for k, v in data.items()}
+
+	output = StringIO()
+	yaml.round_trip_dump(data, output, explicit_start=True)
+
+	config_file.write_lines([
+			"# Configuration for 'repo_helper' (https://github.com/domdfcoding/repo_helper)",
+			output.getvalue(),
+			"enable_conda: false",
+			])
 
 	click.echo(
 			f"""
