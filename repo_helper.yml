@@ -1,3 +1,4 @@
+---
 modname: repo_helper
 copyright_years: "2020"
 author: "Dominic Davis-Foster"
@@ -7,14 +8,14 @@ username: "domdfcoding"
 license: 'LGPLv3+'
 short_desc: 'Update multiple configuration files, build scripts etc. from a single location.'
 
-enable_conda: False
+enable_conda: false
 
 additional_ignore:
-  - Tokens
+ - Tokens
 
 console_scripts:
-  - "repo_helper = repo_helper.__main__:main"
-  - "repo-helper = repo_helper.__main__:main"
+ - "repo_helper = repo_helper.__main__:main"
+ - "repo-helper = repo_helper.__main__:main"
 
 sphinx_html_theme: repo_helper_sphinx_theme
 
@@ -22,46 +23,44 @@ python_deploy_version: 3.7
 
 # Versions to run tests for
 python_versions:
-  - '3.6'
-  - '3.7'
-  - '3.8'
-  - '3.9-dev'
+ - '3.6'
+ - '3.7'
+ - '3.8'
+ - '3.9-dev'
 
 # travis secure password for PyPI
 #travis_pypi_secure:
 
 # additional lines for MANIFEST.in
 manifest_additional:
-  - "recursive-include repo_helper/templates *"
-  - "recursive-include repo_helper/init_repo_files *"
-  - "include repo_helper/files/isort.cfg"
-  - "include repo_helper/repo_helper_schema.json"
+ - "recursive-include repo_helper/templates *"
+ - "recursive-include repo_helper/init_repo_files *"
+ - "include repo_helper/files/isort.cfg"
+ - "include repo_helper/repo_helper_schema.json"
 
 classifiers:
-  - 'Development Status :: 4 - Beta'
-#  - "Development Status :: 5 - Production/Stable"
-#  - "Development Status :: 6 - Mature"
-#  - "Development Status :: 7 - Inactive"
-  - 'Intended Audience :: Developers'
-  - 'Topic :: Utilities'
-
+ - 'Development Status :: 4 - Beta'
+ - 'Environment :: Console'
+ - 'Intended Audience :: Developers'
+ - 'Topic :: Software Development :: Libraries :: Python Modules'
+ - 'Topic :: Utilities'
 extra_sphinx_extensions:
-  - configconfig.autoconfig
+ - configconfig.autoconfig
 
 intersphinx_mapping:
-  - "'jinja2': ('https://jinja.palletsprojects.com/en/2.11.x/', None)"
+ - "'jinja2': ('https://jinja.palletsprojects.com/en/2.11.x/', None)"
 
 preserve_custom_theme: true
 
 imgbot_ignore:
-  - "repo_helper.png"
+ - "repo_helper.png"
 
 exclude_files:
-  - pre-commit
-  - Source
+ - pre-commit
+ - Source
 
 extras_require:
   schema:
-    - lxml
+   - lxml
 
 tox_testenv_extras: all
