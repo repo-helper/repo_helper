@@ -78,7 +78,7 @@ import os
 import sys
 from functools import partial
 from types import ModuleType
-from typing import IO, Any, Callable, List, Optional, Tuple, Union
+from typing import IO, Any, Callable, List, Mapping, Optional, overload, Tuple, Union
 
 # 3rd party
 import click
@@ -115,6 +115,7 @@ __all__ = [
 		"confirm",
 		"prompt",
 		"option",
+		"choice",
 		]
 
 CONTEXT_SETTINGS = dict(help_option_names=["-h", "--help"], max_content_width=120)
@@ -418,3 +419,95 @@ def _prompt(text, err: bool, hide_input: bool):
 		return stderr_input(text, file=sys.stderr)
 	else:
 		return click.termui.visible_prompt_func(text)  # type: ignore
+
+
+@overload
+def choice(
+		options: List[str],
+		text: str = ...,
+		default: Optional[str] = ...,
+		prompt_suffix: str = ...,
+		show_default: bool = ...,
+		err: bool = ...,
+		start_index: int = ...
+		) -> int: ...
+
+
+@overload
+def choice(
+		options: Mapping[str, str],
+		text: str = ...,
+		default: Optional[str] = ...,
+		prompt_suffix: str = ...,
+		show_default: bool = ...,
+		err: bool = ...,
+		start_index: int = ...
+		) -> str: ...
+
+
+def choice(
+		options: Union[List[str], Mapping[str, str]],
+		text: str = '',
+		default: Optional[str] = None,
+		prompt_suffix: str = ": ",
+		show_default: bool = True,
+		err: bool = False,
+		start_index: int = 0
+		) -> Union[str, int]:
+	"""
+	Prompts a user for input.
+
+	If the user aborts the input by sending an interrupt signal, this
+	function will catch it and raise a :exc:`click.exceptions.Abort` exception.
+
+	:param options:
+	:param text: The text to show for the prompt.
+	:param default: The index of the default value to use if no input happens.
+		If this is not given it will prompt until it's aborted.
+	:param prompt_suffix: A suffix that should be added to the prompt.
+	:param show_default: Shows or hides the default value in the prompt.
+	:param err: If :py:obj:`True` the file defaults to ``stderr`` instead of
+		``stdout``, the same as with echo.
+	:param start_index: If ``options`` is a list of values, sets the start index.
+	"""
+
+	# TODO: completer for numbers?
+
+	type_: click.ParamType
+
+	if isinstance(options, Mapping):
+		# (Y/I/N/O/D/Z) [default=N]
+
+		text = f"{text} ({'/'.join(options.keys())})"
+		type_ = click.STRING
+
+		for choice, descripton in options.items():
+			click.echo(f" {choice} : {descripton}")
+
+	else:
+		type_ = click.IntRange(start_index, len(options) + 1 - start_index)
+
+		for idx, descripton in enumerate(options):
+			idx += start_index
+			click.echo(f" [{idx}] {descripton}")
+
+	if default is not None and show_default:
+		text += f" [default={default}]"
+
+	while True:
+		selection = prompt(
+				text=text,
+				default=default,
+				type=type_,
+				prompt_suffix=prompt_suffix,
+				show_default=False,
+				err=err,
+				)
+		if isinstance(options, Mapping):
+			selection = selection.strip().upper()
+			if selection not in options:
+				click.echo(f"Please enter a valid option.")
+			else:
+				return selection
+		else:
+			return selection - start_index
