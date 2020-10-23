@@ -166,9 +166,7 @@ def make_setup(repo_path: pathlib.Path, templates: jinja2.Environment) -> List[s
 
 	setup_args = sorted({**data, **templates.globals["additional_setup_args"]}.items())
 
-	setup_file.write_clean(
-			setup.render(additional_setup_args="\n".join(f"\t\t{k}={v}," for k, v in setup_args))
-			)
+	setup_file.write_clean(setup.render(additional_setup_args="\n".join(f"\t\t{k}={v}," for k, v in setup_args)))
 
 	with importlib_resources.path(repo_helper.files, "isort.cfg") as isort_config:
 		yapf_style = PathPlus(isort_config).parent.parent / "templates" / "style.yapf"

@@ -349,8 +349,8 @@ class IniConfigurator:
 
 		ini_file = PathPlus(self.base_path / self.filename)
 
-		for section in self.managed_sections:
-			getattr(self, re.sub("[:.-]", "_", section))()
+		for section_name in self.managed_sections:
+			getattr(self, re.sub("[:.-]", "_", section_name))()
 
 		if ini_file.is_file():
 			existing_config = ConfigUpdater()

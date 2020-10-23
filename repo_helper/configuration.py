@@ -23,8 +23,8 @@
 # stdlib
 import json
 import os
-import re
 import pathlib
+import re
 import warnings
 from typing import Any, Dict, Iterable, List, Mapping, MutableMapping, Optional, Tuple, Type, Union
 
