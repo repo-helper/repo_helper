@@ -220,12 +220,10 @@ def make_github_manylinux(repo_path: pathlib.Path, templates: jinja2.Environment
 				wheel_py_versions.append(f"cp3{pyver}-cp3{pyver}")
 				PYVERSIONS.append(f'"3{pyver}"')
 
-		file.write_clean(
-				actions.render(
-						wheel_py_versions=wheel_py_versions,
-						PYVERSIONS=" ".join(PYVERSIONS),
-						)
-				)
+		file.write_clean(actions.render(
+				wheel_py_versions=wheel_py_versions,
+				PYVERSIONS=" ".join(PYVERSIONS),
+				))
 	elif file.is_file():
 		file.unlink()
 

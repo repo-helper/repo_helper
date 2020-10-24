@@ -22,9 +22,9 @@
 
 # stdlib
 import os
+import posixpath
 
 # 3rd party
-import posixpath
 from pytest_regressions.file_regression import FileRegressionFixture
 
 # this package

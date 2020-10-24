@@ -36,13 +36,13 @@ from typing import Dict, List, Sequence, Set, Union
 # 3rd party
 import css_parser  # type: ignore
 import jinja2
+import ruamel.yaml as yaml
 from css_parser import css
 from domdf_python_tools.compat import importlib_resources
 from domdf_python_tools.paths import PathPlus
 from domdf_python_tools.typing import PathLike
 from domdf_python_tools.utils import enquote_value
 from packaging.requirements import Requirement
-import ruamel.yaml as yaml
 
 # this package
 import repo_helper
@@ -191,15 +191,13 @@ def make_rtfd(repo_path: pathlib.Path, templates: jinja2.Environment) -> List[st
 			*templates.globals["additional_requirements_files"],
 			]
 
-	python_config = {
-			"version": 3.8,
-			"install": [{"requirements": r} for r in install_requirements]
-			}
+	python_config = {"version": 3.8, "install": [{"requirements": r} for r in install_requirements]}
 
 	# Formats: Optionally build your docs in additional formats such as PDF and ePub
 	config = {"version": 2, "sphinx": sphinx_config, "formats": "all", "python": python_config}
 
 	class Dumper(yaml.RoundTripDumper):
+
 		@functools.wraps(yaml.RoundTripDumper.__init__)
 		def __init__(self, *args, **kwargs):
 			super().__init__(*args, **kwargs)
