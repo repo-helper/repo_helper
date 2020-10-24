@@ -1500,7 +1500,7 @@ class use_experimental_backend(ConfigVar):  # noqa
 
 
 class pre_commit_exclude(ConfigVar):  # noqa
-	"""
+	r"""
 	Regular expression for files that should not be checked by pre_commit.
 
 	.. code-block:: yaml

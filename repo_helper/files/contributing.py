@@ -89,14 +89,15 @@ def make_contributing(repo_path: pathlib.Path, templates: jinja2.Environment) ->
 	:param templates:
 	"""
 
-	contributing = templates.get_template("CONTRIBUTING.rst")
+	file = PathPlus(repo_path / "CONTRIBUTING.rst")
+	old_file = repo_path / "CONTRIBUTING.md"
 
-	PathPlus(repo_path / "CONTRIBUTING.rst").write_clean(contributing.render(bash_block=github_bash_block))
+	file.write_clean(templates.get_template(file.name).render(bash_block=github_bash_block))
 
-	if (repo_path / "CONTRIBUTING.md").is_file():
-		(repo_path / "CONTRIBUTING.md").unlink()
+	if old_file.is_file():
+		old_file.unlink()
 
-	return ["CONTRIBUTING.rst", "CONTRIBUTING.md"]
+	return [file.name, old_file.name]
 
 
 @management.register("contributing", ["enable_docs"])
@@ -108,19 +109,18 @@ def make_docs_contributing(repo_path: pathlib.Path, templates: jinja2.Environmen
 	:param templates:
 	"""
 
+	file = PathPlus(repo_path / templates.globals["docs_dir"] / "contributing.rst")
+	file.parent.maybe_make(parents=True)
+
 	contributing = templates.get_template("CONTRIBUTING.rst")
-	content = "\n".join([
+
+	file.write_lines([
 			"Overview",
 			"---------",
 			*contributing.render(bash_block=sphinx_bash_block).splitlines()[3:],
 			])
 
-	docs_dir = PathPlus(repo_path / templates.globals["docs_dir"])
-	docs_dir.maybe_make(parents=True)
-	contributing_rst = (docs_dir / "contributing.rst")
-	contributing_rst.write_clean(content)
-
-	return [str(contributing_rst.relative_to(repo_path))]
+	return [file.relative_to(repo_path).as_posix()]
 
 
 @management.register("issue_templates")
@@ -140,6 +140,6 @@ def make_issue_templates(repo_path: pathlib.Path, templates: jinja2.Environment)
 	for filename in ["bug_report.md", "feature_request.md"]:
 		filepath = issue_template_dir / filename
 		filepath.write_clean(templates.get_template(filename).render())
-		managed_files.append(str(filepath.relative_to(repo_path)))
+		managed_files.append(filepath.relative_to(repo_path).as_posix())
 
 	return managed_files

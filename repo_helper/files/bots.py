@@ -26,7 +26,7 @@ Manage configuration files for bots.
 # stdlib
 import json
 import pathlib
-from typing import List
+from typing import Any, List, MutableMapping
 
 # 3rd party
 import jinja2
@@ -50,11 +50,10 @@ def make_stale_bot(repo_path: pathlib.Path, templates: jinja2.Environment) -> Li
 	:param templates:
 	"""
 
-	dot_github = PathPlus(repo_path / ".github")
-	dot_github.maybe_make()
-	(dot_github / "stale.yml").write_clean(templates.get_template("stale_bot.yaml").render())
-
-	return [".github/stale.yml"]
+	stale_file = PathPlus(repo_path) / ".github" / "stale.yml"
+	stale_file.parent.maybe_make()
+	stale_file.write_clean(templates.get_template("stale_bot.yaml").render())
+	return [stale_file.relative_to(repo_path).as_posix()]
 
 
 @management.register("auto_assign")
@@ -123,8 +122,8 @@ def make_dependabot(repo_path: pathlib.Path, templates: jinja2.Environment) -> L
 	:param templates:
 	"""
 
-	dependabot_dir = PathPlus(repo_path / ".dependabot")
-	dependabot_dir.maybe_make()
+	dependabot_file = PathPlus(repo_path / ".dependabot" / "config.yml")
+	dependabot_file.parent.maybe_make()
 
 	update_configs = {
 			"package_manager": "python",
@@ -135,13 +134,13 @@ def make_dependabot(repo_path: pathlib.Path, templates: jinja2.Environment) -> L
 
 	config = {"version": 1, "update_configs": [update_configs]}
 
-	(dependabot_dir / "config.yml").write_lines([
+	dependabot_file.write_lines([
 			f"# {templates.globals['managed_message']}",
 			"---",
 			yaml.round_trip_dump(config, default_flow_style=False),  # type: ignore
 			])
 
-	return [".dependabot/config.yml"]
+	return [dependabot_file.relative_to(repo_path).as_posix()]
 
 
 @management.register("imgbot")

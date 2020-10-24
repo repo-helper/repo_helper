@@ -456,7 +456,7 @@ def make_tox(repo_path: pathlib.Path, templates: jinja2.Environment) -> List[str
 	"""
 
 	ToxConfig(repo_path=repo_path, templates=templates).write_out()
-	return ["tox.ini"]
+	return [ToxConfig.filename]
 
 
 @management.register("yapf")
@@ -470,11 +470,9 @@ def make_yapf(repo_path: pathlib.Path, templates: jinja2.Environment) -> List[st
 	:param templates:
 	"""
 
-	yapf = templates.get_template("style.yapf")
-
-	PathPlus(repo_path / ".style.yapf").write_clean(yapf.render())
-
-	return [".style.yapf"]
+	file = PathPlus(repo_path) / ".style.yapf"
+	file.write_clean(templates.get_template("style.yapf").render())
+	return [file.name]
 
 
 def make_isort(repo_path: pathlib.Path, templates: jinja2.Environment) -> List[str]:
@@ -549,7 +547,7 @@ def make_isort(repo_path: pathlib.Path, templates: jinja2.Environment) -> List[s
 
 	isort_file.write_clean(str(isort))
 
-	return [".isort.cfg"]
+	return [isort_file.name]
 
 
 class TestsRequirementsManager(RequirementsManager):
@@ -582,7 +580,7 @@ def ensure_tests_requirements(repo_path: pathlib.Path, templates: jinja2.Environ
 	"""
 
 	TestsRequirementsManager(repo_path, templates).run()
-	return [os.path.join(templates.globals["tests_dir"], "requirements.txt")]
+	return [(PathPlus(templates.globals["tests_dir"]) / "requirements.txt").as_posix()]
 
 
 @management.register("pre-commit", ["enable_pre_commit"])

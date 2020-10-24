@@ -226,7 +226,7 @@ class Bumper:
 
 		bumpversion_config = self.get_bumpversion_config(str(self.current_version)[1:], new_version_str)
 
-		changed_files = [str(self.bumpversion_file.relative_to(self.repo.target_repo))]
+		changed_files = [self.bumpversion_file.relative_to(self.repo.target_repo).as_posix()]
 
 		for filename, config in bumpversion_config.items():
 			self.bump_version_for_file(filename, config)

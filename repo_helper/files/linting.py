@@ -135,15 +135,12 @@ lint_warn_list.extend((
 		"PT003",  # scope='function' is implied in @pytest.fixture()
 		"PT004",  # fixture '{name}' does not return anything, add leading underscore
 		"PT005",  # fixture '{name}' returns a value, remove leading underscore
-		"PT006",
-		# wrong name(s) type in @pytest.mark.parametrize, expected {expected_type} (configurable by pytest-parametrize-names-type)
-		"PT007",
-		# wrong values type in @pytest.mark.parametrize, expected {expected_type} (configurable by pytest-parametrize-values-type and pytest-parametrize-values-row-type)
+		"PT006",  # wrong name(s) type in @pytest.mark.parametrize
+		"PT007",  # wrong values type in @pytest.mark.parametrize
 		"PT008",  # use return_value= instead of patching with lambda
 		"PT009",  # use a regular assert instead of unittest-style '{assertion}'
 		"PT010",  # set the expected exception in pytest.raises()
-		"PT011",
-		# set the match parameter in pytest.raises({exception}) (configurable by pytest-raises-require-match-for)
+		"PT011",  # set the match parameter in pytest.raises.
 		"PT012",  # pytest.raises() block should contain a single simple statement
 		"PT013",  # found incorrect import of pytest, use simple 'import pytest' instead
 		"PT014",  # found duplicate test cases {indexes} in @pytest.mark.parametrize
@@ -290,9 +287,9 @@ def make_pylintrc(repo_path: pathlib.Path, templates: jinja2.Environment) -> Lis
 	:param templates:
 	"""
 
-	PathPlus(repo_path / ".pylintrc").write_clean(PathPlus(template_dir / "pylintrc").read_text(), )
-
-	return [".pylintrc"]
+	file = PathPlus(repo_path / ".pylintrc")
+	file.write_clean(PathPlus(template_dir / "pylintrc").read_text())
+	return [file.name]
 
 
 @management.register("lint_roller")
@@ -310,4 +307,4 @@ def make_lint_roller(repo_path: pathlib.Path, templates: jinja2.Environment) -> 
 	lint_file.write_clean(lint_roller.render())
 	lint_file.make_executable()
 
-	return ["lint_roller.sh"]
+	return [lint_file.name]

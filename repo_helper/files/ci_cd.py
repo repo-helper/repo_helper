@@ -82,11 +82,11 @@ def remove_copy_pypi_2_github(repo_path: pathlib.Path, templates: jinja2.Environ
 	:param templates:
 	"""
 
-	copier = repo_path / ".ci" / "copy_pypi_2_github.py"
+	copier = PathPlus(repo_path / ".ci" / "copy_pypi_2_github.py")
 	if copier.is_file():
 		copier.unlink()
 
-	return [".ci/copy_pypi_2_github.py"]
+	return [copier.relative_to(repo_path).as_posix()]
 
 
 @management.register("make_conda_recipe", ["enable_conda"])
@@ -98,10 +98,9 @@ def make_make_conda_recipe(repo_path: pathlib.Path, templates: jinja2.Environmen
 	:param templates:
 	"""
 
-	PathPlus(repo_path / "make_conda_recipe.py"
-				).write_clean(templates.get_template("make_conda_recipe._py").render())
-
-	return ["make_conda_recipe.py"]
+	file = PathPlus(repo_path / "make_conda_recipe.py")
+	file.write_clean(templates.get_template("make_conda_recipe._py").render())
+	return [file.name]
 
 
 @management.register("travis_deploy_conda", ["enable_conda"])
@@ -113,15 +112,13 @@ def make_travis_deploy_conda(repo_path: pathlib.Path, templates: jinja2.Environm
 	:param templates:
 	"""
 
-	travis_deploy_conda = templates.get_template("travis_deploy_conda.sh")
+	file = PathPlus(repo_path / ".ci" / "travis_deploy_conda.sh")
+	file.parent.maybe_make()
 
-	ci_dir = PathPlus(repo_path / ".ci")
-	ci_dir.maybe_make()
+	file.write_clean(templates.get_template(file.name).render())
+	file.make_executable()
 
-	(ci_dir / "travis_deploy_conda.sh").write_clean(travis_deploy_conda.render())
-	(ci_dir / "travis_deploy_conda.sh").make_executable()
-
-	return [".ci/travis_deploy_conda.sh"]
+	return [file.relative_to(repo_path).as_posix()]
 
 
 @management.register("actions")
@@ -137,11 +134,15 @@ def make_github_ci(repo_path: pathlib.Path, templates: jinja2.Environment) -> Li
 
 	actions = templates.get_template("github_ci.yml")
 
+	workflows_dir = PathPlus(repo_path / ".github" / "workflows")
+	workflows_dir.maybe_make(parents=True)
+
+	windows_ci_file = workflows_dir / "python_ci.yml"
+	macos_ci_file = workflows_dir / "python_ci_macos.yml"
+	linux_ci_file = workflows_dir / "python_ci_linux.yml"
+
 	def no_dev_versions(versions):
 		return [v for v in versions if not v.endswith("-dev")]
-
-	dot_github = PathPlus(repo_path / ".github")
-	(dot_github / "workflows").maybe_make(parents=True)
 
 	if "Windows" in templates.globals["platforms"]:
 		py_versions = templates.globals["python_versions"][:]
@@ -152,7 +153,7 @@ def make_github_ci(repo_path: pathlib.Path, templates: jinja2.Environment) -> Li
 			# https://github.com/domdfcoding/flake8-sphinx-links/runs/1276871725?check_suite_focus=true
 			py_versions.remove("pypy3")
 
-		(dot_github / "workflows" / "python_ci.yml").write_clean(
+		windows_ci_file.write_clean(
 				actions.render(
 						no_dev_versions=no_dev_versions,
 						ci_platform="windows-2019",
@@ -160,35 +161,36 @@ def make_github_ci(repo_path: pathlib.Path, templates: jinja2.Environment) -> Li
 						python_versions=py_versions,
 						)
 				)
-	else:
-		if (dot_github / "workflows" / "python_ci.yml").is_file():
-			(dot_github / "workflows" / "python_ci.yml").unlink()
+	elif windows_ci_file.is_file():
+		windows_ci_file.unlink()
 
 	if "macOS" in templates.globals["platforms"]:
-		(dot_github / "workflows" / "python_ci_macos.yml").write_clean(
+		macos_ci_file.write_clean(
 				actions.render(
 						no_dev_versions=no_dev_versions,
 						ci_platform="macos-latest",
 						ci_name="macOS Tests",
 						)
 				)
-	else:
-		if (dot_github / "workflows" / "python_ci_macos.yml").is_file():
-			(dot_github / "workflows" / "python_ci_macos.yml").unlink()
+	elif macos_ci_file.is_file():
+		macos_ci_file.unlink()
 
 	if "Linux" in templates.globals["platforms"] and not templates.globals["pure_python"]:
-		(dot_github / "workflows" / "python_ci_linux.yml").write_clean(
+		linux_ci_file.write_clean(
 				actions.render(
 						no_dev_versions=no_dev_versions,
 						ci_platform="ubuntu-18.04",
 						ci_name="Linux Tests",
 						)
 				)
-	else:
-		if (dot_github / "workflows" / "python_ci_linux.yml").is_file():
-			(dot_github / "workflows" / "python_ci_linux.yml").unlink()
+	elif linux_ci_file.is_file():
+		linux_ci_file.unlink()
 
-	return [".github/workflows/python_ci.yml", ".github/workflows/python_ci_macos.yml"]
+	return [
+			windows_ci_file.relative_to(repo_path).as_posix(),
+			macos_ci_file.relative_to(repo_path).as_posix(),
+			linux_ci_file.relative_to(repo_path).as_posix(),
+			]
 
 
 @management.register("manylinux")
@@ -200,17 +202,15 @@ def make_github_manylinux(repo_path: pathlib.Path, templates: jinja2.Environment
 	:param templates:
 	"""
 
-	dot_github = PathPlus(repo_path / ".github")
-	(dot_github / "workflows").maybe_make(parents=True)
+	file = PathPlus(repo_path / ".github" / "workflows" / "manylinux_build.yml")
+	file.parent.maybe_make(parents=True)
 
 	if not templates.globals["pure_python"] and "Linux" in templates.globals["platforms"]:
-
-		actions = templates.get_template("manylinux_build.yml")
-
+		actions = templates.get_template(file.name)
 		wheel_py_versions = []
 		PYVERSIONS = []
 
-		for pyver in range(5, 8):
+		for pyver in range(6, 8):
 			if f"3.{pyver}" in templates.globals["python_versions"]:
 				wheel_py_versions.append(f"cp3{pyver}-cp3{pyver}m")
 				PYVERSIONS.append(f'"3{pyver}"')
@@ -220,14 +220,16 @@ def make_github_manylinux(repo_path: pathlib.Path, templates: jinja2.Environment
 				wheel_py_versions.append(f"cp3{pyver}-cp3{pyver}")
 				PYVERSIONS.append(f'"3{pyver}"')
 
-		(dot_github / "workflows" / "manylinux_build.yml").write_clean(
-				actions.render(wheel_py_versions=wheel_py_versions, PYVERSIONS=" ".join(PYVERSIONS))
+		file.write_clean(
+				actions.render(
+						wheel_py_versions=wheel_py_versions,
+						PYVERSIONS=" ".join(PYVERSIONS),
+						)
 				)
-	else:
-		if (dot_github / "workflows" / "manylinux_build.yml").is_file():
-			(dot_github / "workflows" / "manylinux_build.yml").unlink()
+	elif file.is_file():
+		file.unlink()
 
-	return [".github/workflows/manylinux_build.yml"]
+	return [file.relative_to(repo_path).as_posix()]
 
 
 @management.register("docs_action", ["enable_docs"])
@@ -239,13 +241,10 @@ def make_github_docs_test(repo_path: pathlib.Path, templates: jinja2.Environment
 	:param templates:
 	"""
 
-	actions = templates.get_template("docs_test_action.yml")
-
-	dot_github = PathPlus(repo_path / ".github")
-	(dot_github / "workflows").maybe_make(parents=True)
-	(dot_github / "workflows" / "docs_test_action.yml").write_clean(actions.render())
-
-	return [".github/workflows/docs_test_action.yml"]
+	file = PathPlus(repo_path / ".github" / "workflows" / "docs_test_action.yml")
+	file.parent.maybe_make(parents=True)
+	file.write_clean(templates.get_template(file.name).render())
+	return [file.relative_to(repo_path).as_posix()]
 
 
 @management.register("octocheese")
@@ -257,18 +256,15 @@ def make_github_octocheese(repo_path: pathlib.Path, templates: jinja2.Environmen
 	:param templates:
 	"""
 
-	actions = templates.get_template("octocheese.yml")
-
-	dot_github = PathPlus(repo_path / ".github")
-	(dot_github / "workflows").maybe_make(parents=True)
+	file = PathPlus(repo_path / ".github" / "workflows" / "octocheese.yml")
+	file.parent.maybe_make(parents=True)
 
 	if templates.globals["on_pypi"]:
-		(dot_github / "workflows" / "octocheese.yml").write_clean(actions.render())
-	else:
-		if (dot_github / "workflows" / "octocheese.yml").is_file():
-			(dot_github / "workflows" / "octocheese.yml").unlink()
+		file.write_clean(templates.get_template(file.name).render())
+	elif file.is_file():
+		file.unlink()
 
-	return [".github/workflows/octocheese.yml"]
+	return [file.relative_to(repo_path).as_posix()]
 
 
 @management.register("bumpversion")
@@ -285,16 +281,12 @@ def ensure_bumpversion(repo_path: pathlib.Path, templates: jinja2.Environment) -
 	bumpversion_file = PathPlus(repo_path / ".bumpversion.cfg")
 
 	if not bumpversion_file.is_file():
-		bumpversion_file.write_text(
-				"\n".join([
-						"[bumpversion]",
-						f"current_version = {templates.globals['version']}",
-						"commit = True",
-						"tag = True",
-						'',
-						'',
-						])
-				)
+		bumpversion_file.write_lines([
+				"[bumpversion]",
+				f"current_version = {templates.globals['version']}",
+				"commit = True",
+				"tag = True",
+				])
 
 	bv = ConfigUpdater()
 	bv.read(str(bumpversion_file))
@@ -310,9 +302,9 @@ def ensure_bumpversion(repo_path: pathlib.Path, templates: jinja2.Environment) -
 			]
 
 	if templates.globals["enable_docs"]:
-		required_sections.append("bumpversion:file:doc-source/index.rst")
+		required_sections.append(f"bumpversion:file:{templates.globals['docs_dir']}/index.rst")
 	else:
-		old_sections.append("bumpversion:file:doc-source/index.rst")
+		old_sections.append(f"bumpversion:file:{templates.globals['docs_dir']}/index.rst")
 
 	for section in old_sections:
 		if section in bv.sections():
@@ -336,4 +328,4 @@ def ensure_bumpversion(repo_path: pathlib.Path, templates: jinja2.Environment) -
 
 	bumpversion_file.write_clean(str(bv))
 
-	return [".bumpversion.cfg"]
+	return [bumpversion_file.name]

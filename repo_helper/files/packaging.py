@@ -2,7 +2,7 @@
 #
 #  packaging.py
 """
-Manage configuration for packaging tools.
+Manage configuration files for packaging tools.
 """
 #
 #  Copyright © 2020 Dominic Davis-Foster <dominic@davis-foster.co.uk>
@@ -62,6 +62,8 @@ def make_manifest(repo_path: pathlib.Path, templates: jinja2.Environment) -> Lis
 	:param templates:
 	"""
 
+	file = PathPlus(repo_path / "MANIFEST.in")
+
 	manifest_entries = [
 			"include __pkginfo__.py",
 			"include LICENSE",
@@ -71,22 +73,23 @@ def make_manifest(repo_path: pathlib.Path, templates: jinja2.Environment) -> Lis
 			]
 
 	for item in templates.globals["additional_requirements_files"]:
-		file = pathlib.PurePosixPath(item)
-		manifest_entries.append(f"include {file.parent}/{file.name}")
+		manifest_entries.append(f"include {pathlib.PurePosixPath(item)}")
 
 	if templates.globals["stubs_package"]:
 		import_name = f"{templates.globals['import_name']}-stubs"
 	else:
 		import_name = templates.globals["import_name"].replace('.', '/')
 
+	pkg_dir = pathlib.PurePosixPath(templates.globals['source_dir']) / import_name
+
 	manifest_entries.extend([
-			f"recursive-include {templates.globals['source_dir']}{import_name} *.pyi",
-			f"include {templates.globals['source_dir']}{import_name}/py.typed",
+			f"recursive-include {pkg_dir} *.pyi",
+			f"include {pkg_dir / 'py.typed'}",
 			])
 
-	PathPlus(repo_path / "MANIFEST.in").write_clean("\n".join(manifest_entries))
+	file.write_clean("\n".join(manifest_entries))
 
-	return ["MANIFEST.in"]
+	return [file.name]
 
 
 @management.register("pyproject")
@@ -132,7 +135,7 @@ def make_pyproject(repo_path: pathlib.Path, templates: jinja2.Environment) -> Li
 
 	pyproject_file.write_clean(tomlkit.dumps(data))
 
-	return ["pyproject.toml"]
+	return [pyproject_file.name]
 
 
 setup_py_defaults = dict(
@@ -172,7 +175,7 @@ def make_setup(repo_path: pathlib.Path, templates: jinja2.Environment) -> List[s
 		yapf_style = PathPlus(isort_config).parent.parent / "templates" / "style.yapf"
 		reformat_file(setup_file, yapf_style=str(yapf_style), isort_config_file=str(isort_config))
 
-	return ["setup.py"]
+	return [setup_file.name]
 
 
 class SetupCfgConfig(IniConfigurator):
@@ -340,4 +343,4 @@ def make_pkginfo(repo_path: pathlib.Path, templates: jinja2.Environment) -> List
 		yapf_style = PathPlus(isort_config).parent.parent / "templates" / "style.yapf"
 		reformat_file(pkginfo_file, yapf_style=str(yapf_style), isort_config_file=str(isort_config))
 
-	return ["__pkginfo__.py"]
+	return [pkginfo_file.name]

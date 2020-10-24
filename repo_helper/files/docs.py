@@ -26,6 +26,7 @@ Configuration for documentation with
 #
 
 # stdlib
+import functools
 import logging
 import os.path
 import pathlib
@@ -37,10 +38,11 @@ import css_parser  # type: ignore
 import jinja2
 from css_parser import css
 from domdf_python_tools.compat import importlib_resources
-from domdf_python_tools.paths import PathPlus, clean_writer
+from domdf_python_tools.paths import PathPlus
 from domdf_python_tools.typing import PathLike
 from domdf_python_tools.utils import enquote_value
 from packaging.requirements import Requirement
+import ruamel.yaml as yaml
 
 # this package
 import repo_helper
@@ -158,8 +160,8 @@ def ensure_doc_requirements(repo_path: pathlib.Path, templates: jinja2.Environme
 	:param templates:
 	"""
 
-	DocRequirementsManager(repo_path, templates).run()
-	return [os.path.join(templates.globals["docs_dir"], "requirements.txt")]
+	req_file: PathPlus = DocRequirementsManager(repo_path, templates).run()
+	return [req_file.relative_to(repo_path).as_posix()]
 
 
 @management.register("rtfd", ["enable_docs"])
@@ -215,12 +217,11 @@ def make_docutils_conf(repo_path: pathlib.Path, templates: jinja2.Environment) -
 	:param templates:
 	"""
 
-	docs_dir = PathPlus(repo_path / templates.globals["docs_dir"])
-	docs_dir.maybe_make(parents=True)
-	docutils_conf_file = docs_dir / "docutils.conf"
+	file = PathPlus(repo_path / templates.globals["docs_dir"] / "docutils.conf")
+	file.parent.maybe_make(parents=True)
 
-	if not docutils_conf_file.is_file():
-		docutils_conf_file.write_text("\n".join([
+	if not file.is_file():
+		file.write_text("\n".join([
 				"[restructuredtext parser]",
 				"tab_width = 4",
 				'',
@@ -228,7 +229,7 @@ def make_docutils_conf(repo_path: pathlib.Path, templates: jinja2.Environment) -
 				]))
 
 	conf = ConfigUpdater()
-	conf.read(str(docutils_conf_file))
+	conf.read(str(file))
 	required_sections = ["restructuredtext parser"]
 
 	for section in required_sections:
@@ -237,9 +238,9 @@ def make_docutils_conf(repo_path: pathlib.Path, templates: jinja2.Environment) -
 
 	conf["restructuredtext parser"]["tab_width"] = 4
 
-	docutils_conf_file.write_clean(str(conf))
+	file.write_clean(str(conf))
 
-	return [os.path.join(templates.globals["docs_dir"], "docutils.conf")]
+	return [file.relative_to(repo_path).as_posix()]
 
 
 @management.register("conf", ["enable_docs"])
@@ -254,9 +255,8 @@ def make_conf(repo_path: pathlib.Path, templates: jinja2.Environment) -> List[st
 	"""
 
 	conf = templates.get_template("conf._py")
-	docs_dir = PathPlus(repo_path / templates.globals["docs_dir"])
-	docs_dir.maybe_make(parents=True)
-	conf_file = docs_dir / "conf.py"
+	file = PathPlus(repo_path / templates.globals["docs_dir"] / "conf.py")
+	file.parent.maybe_make(parents=True)
 
 	username = templates.globals["username"]
 	repo_name = templates.globals["repo_name"]
@@ -319,7 +319,7 @@ def make_conf(repo_path: pathlib.Path, templates: jinja2.Environment) -> List[st
 
 	sphinx_extensions.extend(templates.globals["extra_sphinx_extensions"])
 
-	conf_file.write_clean(
+	file.write_clean(
 			conf.render(
 					sphinx_extensions=sphinx_extensions,
 					pformat=pformat_tabs,
@@ -329,9 +329,9 @@ def make_conf(repo_path: pathlib.Path, templates: jinja2.Environment) -> List[st
 
 	with importlib_resources.path(repo_helper.files, "isort.cfg") as isort_config:
 		yapf_style = PathPlus(isort_config).parent.parent / "templates" / "style.yapf"
-		reformat_file(conf_file, yapf_style=str(yapf_style), isort_config_file=str(isort_config))
+		reformat_file(file, yapf_style=str(yapf_style), isort_config_file=str(isort_config))
 
-	return [str(conf_file.relative_to(repo_path))]
+	return [file.relative_to(repo_path).as_posix()]
 
 
 class StyleSheet(css.CSSStyleSheet):
@@ -523,33 +523,29 @@ def copy_docs_styling(repo_path: pathlib.Path, templates: jinja2.Environment) ->
 	"""
 
 	docs_dir = PathPlus(repo_path / templates.globals["docs_dir"])
-	dest__static_dir = docs_dir / "_static"
-	dest__templates_dir = docs_dir / "_templates"
+	style_css = docs_dir / "_static" / "style.css"
+	layout_html = docs_dir / "_templates" / "layout.html"
 
-	for directory in {dest__static_dir, dest__templates_dir}:
+	for directory in {style_css.parent, layout_html.parent}:
 		directory.maybe_make(parents=True)
 
 	if templates.globals["sphinx_html_theme"] == "sphinx_rtd_theme":
 
-		PathPlus(dest__static_dir / "style.css").write_clean(
-				f"""\
-/* {templates.globals["managed_message"]} */
-
-{make_readthedocs_theming()}
-"""
-				)
+		style_css.write_lines([
+				f"/* {templates.globals['managed_message']} */",
+				'',
+				make_readthedocs_theming(),
+				])
 	elif templates.globals["sphinx_html_theme"] == "alabaster":
-		PathPlus(dest__static_dir / "style.css"
-					).write_clean(f"""\
-/* {templates.globals['managed_message']} */
-
-{make_alabaster_theming()}
-""")
-
+		style_css.write_lines([
+				f"/* {templates.globals['managed_message']} */",
+				'',
+				make_alabaster_theming(),
+				])
 	else:
-		PathPlus(dest__static_dir / "style.css").write_clean('')
+		style_css.write_clean('')
 
-	PathPlus(dest__templates_dir / "layout.html").write_lines([
+	layout_html.write_lines([
 			f"<!--- {templates.globals['managed_message']} --->",
 			'{% extends "!layout.html" %}',
 			"{% block extrahead %}",
@@ -559,8 +555,8 @@ def copy_docs_styling(repo_path: pathlib.Path, templates: jinja2.Environment) ->
 			])
 
 	return [
-			str((docs_dir / "_static" / "style.css").relative_to(repo_path)),
-			str((docs_dir / "_templates" / "layout.html").relative_to(repo_path)),
+			style_css.relative_to(repo_path).as_posix(),
+			layout_html.relative_to(repo_path).as_posix(),
 			]
 
 
@@ -573,9 +569,10 @@ def rewrite_docs_index(repo_path: pathlib.Path, templates: jinja2.Environment) -
 	:param templates:
 	"""
 
-	index_rst_file = repo_path / templates.globals["docs_dir"] / "index.rst"
-	index_rst = index_rst_file.read_text(encoding="UTF-8")
+	index_rst_file = PathPlus(repo_path / templates.globals["docs_dir"] / "index.rst")
+	index_rst_file.parent.maybe_make()
 
+	# Set up the blocks
 	shields_block = create_shields_block(
 			template=docs_shields_block_template,
 			username=templates.globals["username"],
@@ -594,14 +591,10 @@ def rewrite_docs_index(repo_path: pathlib.Path, templates: jinja2.Environment) -
 			)
 
 	if templates.globals["license"] == "GNU General Public License v2 (GPLv2)":
-		shields_block.replace(
-				f"https://img.shields.io/github/license/{templates.globals['username']}/{templates.globals['repo_name']}",
-				"https://img.shields.io/badge/license-GPLv2-orange"
-				)
+		source = f"https://img.shields.io/github/license/{templates.globals['username']}/{templates.globals['repo_name']}"
+		shields_block.replace(source, "https://img.shields.io/badge/license-GPLv2-orange")
 
 	# .. image:: https://img.shields.io/badge/License-LGPL%20v3-blue.svg
-
-	index_rst = shields_regex.sub(shields_block, index_rst)
 
 	install_block = create_docs_install_block(
 			templates.globals["repo_name"],
@@ -612,23 +605,23 @@ def rewrite_docs_index(repo_path: pathlib.Path, templates: jinja2.Environment) -
 			templates.globals["conda_channels"],
 			)
 
-	index_rst = installation_regex.sub(install_block, index_rst)
-
 	links_block = create_docs_links_block(
 			templates.globals["username"],
 			templates.globals["repo_name"],
 			)
 
-	index_rst = links_regex.sub(links_block, index_rst)
-
 	short_desc_block = create_short_desc_block(templates.globals["short_desc"], )
 
+	# Do the replacement
+	index_rst = index_rst_file.read_text(encoding="UTF-8")
+	index_rst = shields_regex.sub(shields_block, index_rst)
+	index_rst = installation_regex.sub(install_block, index_rst)
+	index_rst = links_regex.sub(links_block, index_rst)
 	index_rst = short_desc_regex.sub(short_desc_block, index_rst)
 
-	with index_rst_file.open('w', encoding="UTF-8") as fp:
-		fp.write(index_rst)
+	index_rst_file.write_clean(index_rst)
 
-	return [os.path.join(templates.globals["docs_dir"], "index.rst")]
+	return [index_rst_file.relative_to(repo_path).as_posix()]
 
 
 @management.register("404", ["enable_docs"])
@@ -651,8 +644,8 @@ def make_404_page(repo_path: pathlib.Path, templates: jinja2.Environment) -> Lis
 		shutil.copy2(template_dir / "not-found.png", not_found_png)
 
 	return [
-			os.path.join(templates.globals["docs_dir"], "404.rst"),
-			os.path.join(templates.globals["docs_dir"], "not-found.png"),
+			_404_rst.relative_to(repo_path).as_posix(),
+			not_found_png.relative_to(repo_path).as_posix(),
 			]
 
 
@@ -668,21 +661,21 @@ def make_docs_source_rst(repo_path: pathlib.Path, templates: jinja2.Environment)
 	docs_dir = PathPlus(repo_path / templates.globals["docs_dir"])
 	docs_source_rst = docs_dir / "Source.rst"
 	git_download_png = docs_dir / "git_download.png"
+	docs_building_rst = docs_dir / "Building.rst"
 
-	# if not docs_source_rst.exists():
-	source_template = templates.get_template("Source.rst")
+	source_template = templates.get_template(docs_source_rst.name)
 	docs_source_rst.write_clean(source_template.render())
 
-	if (docs_dir / "Building.rst").is_file():
-		(docs_dir / "Building.rst").unlink()
+	if docs_building_rst.is_file():
+		docs_building_rst.unlink()
 
 	if not git_download_png.exists():
-		shutil.copy2(init_repo_template_dir / "git_download.png", git_download_png)
+		shutil.copy2(init_repo_template_dir / git_download_png.name, git_download_png)
 
 	return [
-			os.path.join(templates.globals["docs_dir"], "Source.rst"),
-			os.path.join(templates.globals["docs_dir"], "Building.rst"),
-			os.path.join(templates.globals["docs_dir"], "git_download.png"),
+			docs_source_rst.relative_to(repo_path).as_posix(),
+			docs_building_rst.relative_to(repo_path).as_posix(),
+			git_download_png.relative_to(repo_path).as_posix(),
 			]
 
 
@@ -714,10 +707,9 @@ def remove_autodoc_augment_defaults(repo_path: pathlib.Path, templates: jinja2.E
 	:param templates:
 	"""
 
-	docs_dir = PathPlus(repo_path / templates.globals["docs_dir"])
-	target_file = docs_dir / "autodoc_augment_defaults.py"
+	target_file = PathPlus(repo_path / templates.globals["docs_dir"] / "autodoc_augment_defaults.py")
 
 	if target_file.is_file():
 		target_file.unlink()
 
-	return [str(target_file.relative_to(repo_path))]
+	return [target_file.relative_to(repo_path).as_posix()]

@@ -52,7 +52,6 @@ def rewrite_readme(repo_path: pathlib.Path, templates: jinja2.Environment) -> Li
 	"""
 
 	readme_file = PathPlus(repo_path / "README.rst")
-	readme = readme_file.read_text(encoding="UTF-8")
 
 	shields_block = create_shields_block(
 			username=templates.globals["username"],
@@ -78,8 +77,6 @@ def rewrite_readme(repo_path: pathlib.Path, templates: jinja2.Environment) -> Li
 
 	# .. image:: https://img.shields.io/badge/License-LGPL%20v3-blue.svg
 
-	readme = shields_regex.sub(shields_block, readme)
-
 	install_block = create_readme_install_block(
 			templates.globals["modname"],
 			templates.globals["username"],
@@ -89,10 +86,12 @@ def rewrite_readme(repo_path: pathlib.Path, templates: jinja2.Environment) -> Li
 			templates.globals["conda_channels"],
 			)
 
+	readme = readme_file.read_text(encoding="UTF-8")
+	readme = shields_regex.sub(shields_block, readme)
 	readme = installation_regex.sub(install_block, readme)
 	short_desc_block = create_short_desc_block(templates.globals["short_desc"], )
 	readme = short_desc_regex.sub(short_desc_block, readme)
 
 	readme_file.write_clean(readme)
 
-	return ["README.rst"]
+	return [readme_file.name]

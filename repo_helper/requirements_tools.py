@@ -342,8 +342,14 @@ class RequirementsManager(ABC):
 
 		self.req_file.write_lines(buf)
 
-	def run(self) -> None:
+	def run(self) -> PathPlus:
+		"""
+		Update the list of requirements and return the name of the requirements file.
+		"""
+
 		self.compile_target_requirements()
 		comments = self.merge_requirements()
 		self.remove_library_requirements()
 		self.write_requirements(comments)
+
+		return self.req_file
