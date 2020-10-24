@@ -26,6 +26,7 @@ Configuration for testing and code formatting tools.
 # stdlib
 import os.path
 import pathlib
+import posixpath
 import re
 from typing import Any, List
 
@@ -600,6 +601,6 @@ def make_pre_commit(repo_path: pathlib.Path, templates: jinja2.Environment) -> L
 	pre_commit = templates.get_template("pre-commit-config.yaml")
 	pre_commit_file = PathPlus(repo_path / ".pre-commit-config.yaml")
 
-	pre_commit_file.write_clean(pre_commit.render())
+	pre_commit_file.write_clean(pre_commit.render(join_path=posixpath.join))
 
 	return [pre_commit_file.name]

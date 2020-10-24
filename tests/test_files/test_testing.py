@@ -24,6 +24,7 @@
 import os
 
 # 3rd party
+import posixpath
 from pytest_regressions.file_regression import FileRegressionFixture
 
 # this package
@@ -110,7 +111,7 @@ def test_ensure_tests_requirements(tmp_pathplus, demo_environment):
 	(tmp_pathplus / "tests" / "requirements.txt").write_text('')
 
 	managed_files = ensure_tests_requirements(tmp_pathplus, demo_environment)
-	assert managed_files == [os.path.join("tests", "requirements.txt")]
+	assert managed_files == [posixpath.join("tests", "requirements.txt")]
 
 	assert (tmp_pathplus / managed_files[0]).read_text(
 			encoding="UTF-8"

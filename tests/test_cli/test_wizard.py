@@ -64,7 +64,7 @@ def test_wizard(git_repo: GitRepo, file_regression):
 
 		stdout = result.stdout.splitlines()
 		assert stdout[0] == "This wizard 🧙‍will guide you through creating a 'repo_helper.yml' configuration file."
-		assert re.match(r"This will be created in '.*[\/]repo_helper\.yml'\.", stdout[1])
+		assert re.match(r"This will be created in '.*[\\/]repo_helper\.yml'\.", stdout[1])
 		assert stdout[2] == "Do you want to continue? [y/N]: y"
 		assert not stdout[3]
 		assert stdout[4] == "Woah! That file already exists. It will be overwritten if you continue!"

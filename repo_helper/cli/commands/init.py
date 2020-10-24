@@ -25,8 +25,8 @@ Initialise the repository with some boilerplate files.
 
 # stdlib
 import datetime
-import os.path
 import pathlib
+import posixpath
 from typing import List, Optional
 
 # 3rd party
@@ -170,11 +170,11 @@ def init_repo(repo_path: pathlib.Path, templates: jinja2.Environment) -> List[st
 	(repo_path / "requirements.txt").touch()
 
 	return [
-			os.path.join(templates.globals["import_name"], "__init__.py"),
-			os.path.join(templates.globals["tests_dir"], "__init__.py"),
-			os.path.join(templates.globals["docs_dir"], "api", f"{templates.globals['modname']}.rst"),
-			os.path.join(templates.globals["docs_dir"], "index.rst"),
-			os.path.join(templates.globals["tests_dir"], "requirements.txt"),
+			posixpath.join(templates.globals["import_name"], "__init__.py"),
+			posixpath.join(templates.globals["tests_dir"], "__init__.py"),
+			posixpath.join(templates.globals["docs_dir"], "api", f"{templates.globals['modname']}.rst"),
+			posixpath.join(templates.globals["docs_dir"], "index.rst"),
+			posixpath.join(templates.globals["tests_dir"], "requirements.txt"),
 			"requirements.txt",
 			"LICENSE",
 			"README.rst",
