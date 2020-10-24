@@ -70,45 +70,54 @@ def make_auto_assign_action(repo_path: pathlib.Path, templates: jinja2.Environme
 	dot_github = PathPlus(repo_path / ".github")
 	(dot_github / "workflows").maybe_make(parents=True)
 
-	if (dot_github / "workflow" / "assign.yml").is_file():
-		(dot_github / "workflow" / "assign.yml").unlink()
+	assign_workflow = dot_github / "workflows" / "assign.yml"
+	old_assign_workflow = dot_github / "workflow" / "assign.yml"
+	auto_assign_yml = dot_github / "auto_assign.yml"
 
-	if (dot_github / "workflow").is_dir():
-		(dot_github / "workflow").rmdir()
+	if old_assign_workflow.is_file():
+		old_assign_workflow.unlink()
 
-	if (dot_github / "workflows" / "assign.yml").is_file():
-		(dot_github / "workflows" / "assign.yml").unlink()
+	if old_assign_workflow.parent.is_dir():
+		old_assign_workflow.parent.rmdir()
 
-	(dot_github / "auto_assign.yml").write_clean(
-			f"""\
-# {templates.globals['managed_message']}
----
+	if assign_workflow.is_file():
+		assign_workflow.unlink()
 
-addReviewers: true
-addAssignees: true
+	config: MutableMapping[str, Any] = {
+			"addReviewers": True,
+			"addAssignees": True,
+			}
 
-# A list of reviewers to be added to pull requests (GitHub user name)
-reviewers:
-  - {templates.globals['username']}
+	# A list of reviewers to be added to pull requests (GitHub user name)
+	config["reviewers"] = [templates.globals["username"]]
 
-# A number of reviewers added to the pull request
-# Set 0 to add all the reviewers
-numberOfReviewers: 0
+	# A number of reviewers added to the pull request
+	# Set 0 to add all the reviewers
+	config["numberOfReviewers"] = 0
 
-# A list of assignees, overrides reviewers if set
-# assignees:
-#   - assigneeA
+	# A list of assignees, overrides reviewers if set
+	# assignees:
+	#   - assigneeA
 
-# A number of assignees to add to the pull request
-# Set to 0 to add all of the assignees.
-# Uses numberOfReviewers if unset.
-# numberOfAssignees: 2
+	# A number of assignees to add to the pull request
+	# Set to 0 to add assignees.
+	# Uses numberOfReviewers if unset.
+	# numberOfAssignees: 2
 
-# more settings at https://github.com/marketplace/actions/auto-assign-action
-"""
-			)
+	# more settings at https://github.com/marketplace/actions/auto-assign-action
 
-	return [".github/workflows/assign.yml", ".github/workflow/assign.yml", ".github/auto_assign.yml"]
+	auto_assign_yml.write_lines([
+			f"# {templates.globals['managed_message']}",
+			"---",
+			yaml.round_trip_dump(config, default_flow_style=False),  # type: ignore
+			"# more settings at https://github.com/marketplace/actions/auto-assign-action",
+			])
+
+	return [
+			assign_workflow.relative_to(repo_path).as_posix(),
+			old_assign_workflow.relative_to(repo_path).as_posix(),
+			auto_assign_yml.relative_to(repo_path).as_posix(),
+			]
 
 
 @management.register("dependabot")

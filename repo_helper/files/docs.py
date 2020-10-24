@@ -177,35 +177,43 @@ def make_rtfd(repo_path: pathlib.Path, templates: jinja2.Environment) -> List[st
 	:param templates:
 	"""
 
-	with (repo_path / ".readthedocs.yml").open('w', encoding="UTF-8") as fp:
-		clean_writer(
-				f"""\
-# {templates.globals['managed_message']}
-# Read the Docs configuration file
----
+	file = PathPlus(repo_path / ".readthedocs.yml")
+	file.parent.maybe_make()
 
-# Required
-version: 2
+	sphinx_config = {
+			"builder": "html",
+			"configuration": f"{templates.globals['docs_dir']}/conf.py",
+			}
 
-sphinx:
-  builder: html
-  configuration: {templates.globals["docs_dir"]}/conf.py
+	install_requirements = [
+			"requirements.txt",
+			f"{templates.globals['docs_dir']}/requirements.txt",
+			*templates.globals["additional_requirements_files"],
+			]
 
-# Optionally build your docs in additional formats such as PDF and ePub
-formats: all
+	python_config = {
+			"version": 3.8,
+			"install": [{"requirements": r} for r in install_requirements]
+			}
 
-python:
-  version: 3.8
-  install:
-    - requirements: requirements.txt
-    - requirements: {templates.globals["docs_dir"]}/requirements.txt
-""",
-				fp
-				)
-		for file in templates.globals["additional_requirements_files"]:
-			clean_writer(f"    - requirements: { file }", fp)
+	# Formats: Optionally build your docs in additional formats such as PDF and ePub
+	config = {"version": 2, "sphinx": sphinx_config, "formats": "all", "python": python_config}
 
-	return [".readthedocs.yml"]
+	class Dumper(yaml.RoundTripDumper):
+		@functools.wraps(yaml.RoundTripDumper.__init__)
+		def __init__(self, *args, **kwargs):
+			super().__init__(*args, **kwargs)
+			self.sequence_dash_offset = 1
+			self.best_width = 4086
+
+	file.write_lines([
+			f"# {templates.globals['managed_message']}",
+			"# Read the Docs configuration file",
+			"---",
+			yaml.round_trip_dump(config, default_flow_style=False, Dumper=Dumper),  # type: ignore
+			])
+
+	return [file.relative_to(repo_path).as_posix()]
 
 
 @management.register("docutils_conf", ["enable_docs"])

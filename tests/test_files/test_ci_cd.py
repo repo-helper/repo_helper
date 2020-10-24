@@ -101,7 +101,11 @@ def test_travis_deploy_conda(tmp_pathplus, demo_environment, file_regression: Fi
 
 def test_github_ci_case_1(tmp_pathplus, demo_environment, file_regression: FileRegressionFixture):
 	managed_files = make_github_ci(tmp_pathplus, demo_environment)
-	assert managed_files == [".github/workflows/python_ci.yml", ".github/workflows/python_ci_macos.yml"]
+	assert managed_files == [
+			".github/workflows/python_ci.yml",
+			".github/workflows/python_ci_macos.yml",
+			".github/workflows/python_ci_linux.yml",
+			]
 	assert (tmp_pathplus / managed_files[0]).is_file()
 	assert not (tmp_pathplus / managed_files[1]).is_file()
 	check_file_output(tmp_pathplus / managed_files[0], file_regression)
@@ -116,7 +120,11 @@ def test_github_ci_case_2(tmp_pathplus, demo_environment, file_regression: FileR
 			)
 
 	managed_files = make_github_ci(tmp_pathplus, demo_environment)
-	assert managed_files == [".github/workflows/python_ci.yml", ".github/workflows/python_ci_macos.yml"]
+	assert managed_files == [
+			".github/workflows/python_ci.yml",
+			".github/workflows/python_ci_macos.yml",
+			".github/workflows/python_ci_linux.yml",
+			]
 	assert not (tmp_pathplus / managed_files[0]).is_file()
 	assert (tmp_pathplus / managed_files[1]).is_file()
 	check_file_output(tmp_pathplus / managed_files[1], file_regression)
@@ -144,7 +152,11 @@ def test_github_ci_case_3(tmp_pathplus, demo_environment):
 	demo_environment.globals.update(dict(platforms=["Windows", "macOS"], ))
 
 	managed_files = make_github_ci(tmp_pathplus, demo_environment)
-	assert managed_files == [".github/workflows/python_ci.yml", ".github/workflows/python_ci_macos.yml"]
+	assert managed_files == [
+			".github/workflows/python_ci.yml",
+			".github/workflows/python_ci_macos.yml",
+			".github/workflows/python_ci_linux.yml",
+			]
 	assert (tmp_pathplus / managed_files[0]).is_file()
 	assert (tmp_pathplus / managed_files[1]).is_file()
 
@@ -155,7 +167,11 @@ def test_github_ci_case_3(tmp_pathplus, demo_environment):
 	assert (tmp_pathplus / managed_files[1]).is_file()
 
 	managed_files = make_github_ci(tmp_pathplus, demo_environment)
-	assert managed_files == [".github/workflows/python_ci.yml", ".github/workflows/python_ci_macos.yml"]
+	assert managed_files == [
+			".github/workflows/python_ci.yml",
+			".github/workflows/python_ci_macos.yml",
+			".github/workflows/python_ci_linux.yml",
+			]
 
 	assert not (tmp_pathplus / managed_files[0]).is_file()
 	assert not (tmp_pathplus / managed_files[1]).is_file()
