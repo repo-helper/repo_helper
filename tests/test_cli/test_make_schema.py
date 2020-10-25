@@ -1,4 +1,5 @@
 # stdlib
+import os
 import re
 
 # 3rd party
@@ -15,4 +16,9 @@ def test_make_schema(tmp_pathplus):
 		runner = CliRunner()
 		result: Result = runner.invoke(make_schema, catch_exceptions=False)
 		assert result.exit_code == 0
-		assert re.match("Wrote schema to .*/repo_helper/repo_helper_schema.json", result.stdout)
+		if os.sep == "/":
+			assert re.match(r"Wrote schema to .*/repo_helper/repo_helper_schema\.json", result.stdout)
+		elif os.sep == "\\":
+			assert re.match(r"Wrote schema to .*\\repo_helper\\/repo_helper_schema\.json", result.stdout)
+		else:
+			raise NotImplementedError(os.sep)

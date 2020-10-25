@@ -1,4 +1,7 @@
 # 3rd party
+import pytest
+import requests.exceptions
+from apeye.requests_url import RequestsURL
 from domdf_python_tools.paths import PathPlus
 from pytest_git import GitRepo  # type: ignore
 
@@ -6,7 +9,14 @@ from pytest_git import GitRepo  # type: ignore
 from repo_helper.cli.commands.init import init_repo
 from tests.common import check_file_output
 
+has_internet = True
+try:
+	RequestsURL("https://raw.githubusercontent.com").head(timeout=10)
+except (requests.exceptions.Timeout, requests.exceptions.ConnectionError):
+	has_internet = False
 
+
+@pytest.mark.skipif(condition=not has_internet, reason="Requires internet connection.")
 def test_init_repo(git_repo: GitRepo, demo_environment, file_regression, data_regression):
 	demo_environment.globals["copyright_years"] = "2020-2021"
 	demo_environment.globals["author"] = "Joe Bloggs"
@@ -29,7 +39,7 @@ def test_init_repo(git_repo: GitRepo, demo_environment, file_regression, data_re
 	for path in repo_path.rglob("*.*"):
 		path = path.relative_to(repo_path)
 		if not path.parts[0] == ".git":
-			listing.append(str(path))
+			listing.append(path.as_posix())
 
 	listing.sort()
 
@@ -48,8 +58,13 @@ def test_init_repo(git_repo: GitRepo, demo_environment, file_regression, data_re
 	assert (repo_path / "tests" / "__init__.py").read_text() == ''
 
 	assert (repo_path / "doc-source").is_dir()
-	check_file_output(repo_path / "doc-source/index.rst", file_regression, extension=".docs_index.rst")
+	check_file_output(
+			repo_path / "doc-source/index.rst",
+			file_regression,
+			extension=".docs_index.rst",
+			)
 	assert (repo_path / "doc-source" / "api").is_dir()
 	check_file_output(
-			repo_path / "doc-source/api/hello-world.rst", file_regression, extension=".docs_hello-world.rst"
+			repo_path / "doc-source/api/hello-world.rst",
+			file_regression, extension=".docs_hello-world.rst"
 			)

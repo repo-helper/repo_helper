@@ -103,9 +103,13 @@ The author is usually the person who wrote the library.""")
 	try:
 		default_author = git_config.get(("user", ), "name").decode("UTF-8")
 	except KeyError:
-		default_author = os.environ.get(
-				"GIT_AUTHOR_NAME", default=os.environ.get("GIT_COMMITTER_NAME", default=getpass.getuser())
-				)
+		try:
+			default_author = os.environ.get(
+					"GIT_AUTHOR_NAME", default=os.environ.get("GIT_COMMITTER_NAME", default=getpass.getuser())
+					)
+		except ImportError:
+			# Usually USERNAME is not set when trying getpass.getuser()
+			default_author = ''
 
 	author = prompt("Name", default=default_author)
 
