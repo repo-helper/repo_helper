@@ -19,6 +19,9 @@ def test_make_schema(tmp_pathplus):
 		if os.sep == "/":
 			assert re.match(r"Wrote schema to .*/repo_helper/repo_helper_schema\.json", result.stdout)
 		elif os.sep == "\\":
-			assert re.match(r"Wrote schema to .*\\repo_helper\\/repo_helper_schema\.json", result.stdout)
+			assert re.match(
+					r"Wrote schema to .*\\repo_helper\\/repo_helper_schema\.json",
+					result.stdout.splitlines()[0],
+					)
 		else:
 			raise NotImplementedError(os.sep)

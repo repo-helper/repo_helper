@@ -27,6 +27,7 @@ import shutil
 # 3rd party
 import pytest
 from domdf_python_tools.paths import PathPlus
+from domdf_python_tools.testing import not_windows
 from pytest_git import GitRepo  # type: ignore
 from pytest_regressions.data_regression import DataRegressionFixture
 from pytest_regressions.file_regression import FileRegressionFixture
@@ -60,6 +61,7 @@ def test_log_from_tag(tmp_repo, file_regression: FileRegressionFixture):
 		Log(tmp_repo).log(from_tag="v5.0.0")
 
 
+@not_windows(reason="Patchy on Windows")
 def test_check_git_status(git_repo: GitRepo):
 	repo_path = PathPlus(git_repo.workspace)
 	clean, files = check_git_status(repo_path)
