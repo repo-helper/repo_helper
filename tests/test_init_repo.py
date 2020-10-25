@@ -66,5 +66,6 @@ def test_init_repo(git_repo: GitRepo, demo_environment, file_regression, data_re
 	assert (repo_path / "doc-source" / "api").is_dir()
 	check_file_output(
 			repo_path / "doc-source/api/hello-world.rst",
-			file_regression, extension=".docs_hello-world.rst"
+			file_regression,
+			extension=".docs_hello-world.rst",
 			)

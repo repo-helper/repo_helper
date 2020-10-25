@@ -22,10 +22,9 @@
 
 # stdlib
 import os
-
-# 3rd party
 from pathlib import Path
 
+# 3rd party
 import jinja2
 import pytest
 
@@ -92,4 +91,3 @@ def demo_environment():
 def original_datadir(request):
 	# Work around pycharm confusing datadir with test file.
 	return Path(os.path.splitext(request.module.__file__)[0] + "_")
-
