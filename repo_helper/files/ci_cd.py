@@ -32,7 +32,7 @@ import jinja2
 from domdf_python_tools.paths import PathPlus
 
 # this package
-from repo_helper.configupdater2 import ConfigUpdater  # type: ignore
+from repo_helper.configupdater2 import ConfigUpdater
 from repo_helper.files import management
 
 __all__ = [

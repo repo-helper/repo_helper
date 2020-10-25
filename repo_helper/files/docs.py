@@ -57,7 +57,7 @@ from repo_helper.blocks import (
 		shields_regex,
 		short_desc_regex
 		)
-from repo_helper.configupdater2 import ConfigUpdater  # type: ignore
+from repo_helper.configupdater2 import ConfigUpdater
 from repo_helper.files import management
 from repo_helper.requirements_tools import RequirementsManager, combine_requirements, normalize, read_requirements
 from repo_helper.templates import init_repo_template_dir, template_dir

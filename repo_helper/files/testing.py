@@ -37,7 +37,7 @@ from domdf_python_tools.typing import PathLike
 from packaging.requirements import Requirement
 
 # this package
-from repo_helper.configupdater2 import ConfigUpdater  # type: ignore
+from repo_helper.configupdater2 import ConfigUpdater
 from repo_helper.files import management
 from repo_helper.files.linting import code_only_warning, lint_fix_list, lint_warn_list
 from repo_helper.requirements_tools import RequirementsManager, normalize, read_requirements

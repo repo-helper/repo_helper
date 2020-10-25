@@ -1,4 +1,3 @@
-# type: ignore
 # Based on https://github.com/pyscaffold/configupdater
 # MIT Licensed
 # Copyright © 2018 Florian Wilhelm
@@ -59,10 +58,27 @@ from configparser import (
 		MissingSectionHeaderError,
 		NoOptionError,
 		NoSectionError,
-		ParsingError
+		ParsingError,
+		RawConfigParser
 		)
 from textwrap import indent
-from typing import IO, Any, Dict, Generic, Iterable, List, Mapping, Optional, Sequence, Tuple, TypeVar, Union
+from typing import (
+		IO,
+		Any,
+		Dict,
+		Generic,
+		Iterable,
+		Iterator,
+		List,
+		Mapping,
+		Optional,
+		Sequence,
+		Set,
+		Tuple,
+		TypeVar,
+		Union,
+		cast
+		)
 
 __all__ = [
 		"NoSectionError",
@@ -127,7 +143,7 @@ class Block(ABC):
 	a reference to a container wherein the object resides.
 	"""
 
-	def __init__(self, container=None, **kwargs):
+	def __init__(self, container: Container, **kwargs):
 		self._container = container
 		self.lines: List[str] = []
 		self._updated: bool = False
@@ -156,26 +172,26 @@ class Block(ABC):
 		return self
 
 	@property
-	def container(self):
+	def container(self) -> Container:
 		return self._container
 
-	@property
-	def add_before(self) -> "BlockBuilder":
-		"""
-		Returns a builder inserting a new block before the current block.
-		"""
-
-		idx = self._container.structure.index(self)
-		return BlockBuilder(self._container, idx)
-
-	@property
-	def add_after(self) -> "BlockBuilder":
-		"""
-		Returns a builder inserting a new block after the current block.
-		"""
-
-		idx = self._container.structure.index(self)
-		return BlockBuilder(self._container, idx + 1)
+	# @property
+	# def add_before(self) -> "BlockBuilder":
+	# 	"""
+	# 	Returns a builder inserting a new block before the current block.
+	# 	"""
+	#
+	# 	idx = self._container.structure.index(self)
+	# 	return BlockBuilder(self._container, idx)
+	#
+	# @property
+	# def add_after(self) -> "BlockBuilder":
+	# 	"""
+	# 	Returns a builder inserting a new block after the current block.
+	# 	"""
+	#
+	# 	idx = self._container.structure.index(self)
+	# 	return BlockBuilder(self._container, idx + 1)
 
 
 class BlockBuilder:
@@ -183,8 +199,8 @@ class BlockBuilder:
 	Builder that injects blocks at a given index position.
 	"""
 
-	def __init__(self, container, idx):
-		self._container = container
+	def __init__(self, container: Container, idx):
+		self._container: Container = container
 		self._idx = idx
 
 	def comment(self, text: str, comment_prefix: str = '#') -> "BlockBuilder":
@@ -249,25 +265,26 @@ class BlockBuilder:
 		self._idx += 1
 		return self
 
-	def option(self, key: str, value: Optional[str] = None, **kwargs) -> "BlockBuilder":
-		r"""
-		Creates a new option inside a section.
-
-		:param key: key of the option
-		:param value: value of the option
-		:param \*\*kwargs: are passed to the constructor of :class:`~.Option`
-
-		:returns: self for chaining
-		"""
-
-		if not isinstance(self._container, Section):
-			raise ValueError("Options can only be added inside a section!")
-
-		option = Option(key, value, container=self._container, **kwargs)
-		option.value = value
-		self._container.structure.insert(self._idx, option)
-		self._idx += 1
-		return self
+	#
+	# def option(self, key: str, value: Optional[str] = None, **kwargs) -> "BlockBuilder":
+	# 	r"""
+	# 	Creates a new option inside a section.
+	#
+	# 	:param key: key of the option
+	# 	:param value: value of the option
+	# 	:param \*\*kwargs: are passed to the constructor of :class:`~.Option`
+	#
+	# 	:returns: self for chaining
+	# 	"""
+	#
+	# 	if not isinstance(self._container, Section):
+	# 		raise ValueError("Options can only be added inside a section!")
+	#
+	# 	option = Option(key, value, container=self._container, **kwargs)
+	# 	option.value = value
+	# 	self._container.structure.insert(self._idx, option)
+	# 	self._idx += 1
+	# 	return self
 
 
 class Comment(Block):
@@ -301,9 +318,9 @@ class Section(Block, Container, MutableMapping):
 	:param name: name of the section.
 	"""
 
-	def __init__(self, name: str, container: bool, **kwargs):
+	def __init__(self, name: str, container, **kwargs):
 		self._name: str = name
-		self._structure: List = list()
+		self._structure: List[Block] = []
 
 		# indicates name change or a new section.
 		self._updated = False
@@ -374,7 +391,7 @@ class Section(Block, Container, MutableMapping):
 	def __repr__(self) -> str:
 		return f"<Section: {self.name}>"
 
-	def __getitem__(self, key):
+	def __getitem__(self, key) -> "Option":
 		if key not in self.options():
 			raise KeyError(key)
 		return self._structure[self._get_option_idx(key=key)]
@@ -383,7 +400,7 @@ class Section(Block, Container, MutableMapping):
 		str_value = convert_to_string(value, key)
 
 		if key in self:
-			option = self.__getitem__(key)
+			option = self[key]
 			option.value = str_value
 		else:
 			option = Option(key, value, container=self)
@@ -423,7 +440,7 @@ class Section(Block, Container, MutableMapping):
 		"""
 		return [entry for entry in self._structure if isinstance(entry, Option)]
 
-	def options(self) -> List:
+	def options(self) -> List[str]:
 		"""
 		Returns option names.
 
@@ -438,7 +455,7 @@ class Section(Block, Container, MutableMapping):
 		:returns: dictionary with same content
 		"""
 
-		return {key: self.__getitem__(key).value for key in self.options()}
+		return {key: self[key].value for key in self.options()}
 
 	@property
 	def updated(self) -> bool:
@@ -458,31 +475,31 @@ class Section(Block, Container, MutableMapping):
 		self._name = str(value)
 		self._updated = True
 
-	def set(self, option: str, value: Optional[str] = None) -> "Section":  # noqa: A003
-		"""
-		Set an option for chaining.
-
-		:param option: option name.
-		:param value: value, default None.
-		"""
-
-		option = self._container.optionxform(option)
-
-		if option in self.options():
-			self.__getitem__(option).value = value
-		else:
-			self.__setitem__(option, value)
-
-		return self
-
-	def insert_at(self, idx: int):
-		"""
-		Returns a builder inserting a new block at the given index.
-
-		:param idx: index where to insert.
-		"""
-
-		return BlockBuilder(self, idx)
+	# def set(self, option: str, value: Optional[str] = None) -> "Section":  # noqa: A003
+	# 	"""
+	# 	Set an option for chaining.
+	#
+	# 	:param option: option name.
+	# 	:param value: value, default None.
+	# 	"""
+	#
+	# 	option = self._container.optionxform(option)
+	#
+	# 	if option in self.options():
+	# 		self[option].value = value
+	# 	else:
+	# 		self[option] = value
+	#
+	# 	return self
+	#
+	# def insert_at(self, idx: int):
+	# 	"""
+	# 	Returns a builder inserting a new block at the given index.
+	#
+	# 	:param idx: index where to insert.
+	# 	"""
+	#
+	# 	return BlockBuilder(self, idx)
 
 
 class Option(Block):
@@ -495,20 +512,20 @@ class Option(Block):
 	def __init__(
 			self,
 			key: str,
-			value: str,
+			value: Optional[str],
 			container,
 			delimiter: str = '=',
 			space_around_delimiters: bool = True,
 			line=None,
 			):
 		super().__init__(container=container)
-		self._key = key
-		self._values = [value]
+		self._key: str = key
+		self._values: List[Optional[str]] = [value]
 		self._value_is_none = value is None
 		self._delimiter = delimiter
-		self._value = None  # will be filled after join_multiline_value
-		self._updated = False  # indicates name change or a new section
-		self._multiline_value_joined = False
+		self._value: Optional[str] = None  # will be filled after join_multiline_value
+		self._updated: bool = False  # indicates name change or a new section
+		self._multiline_value_joined: bool = False
 		self._space_around_delimiters = space_around_delimiters
 		if line:
 			self.lines.append(line)
@@ -549,52 +566,53 @@ class Option(Block):
 		return self._updated or not self.lines
 
 	@property
-	def key(self):
+	def key(self) -> str:
 		return self._key
 
 	@key.setter
-	def key(self, value):
+	def key(self, value: str):
 		self._join_multiline_value()
 		self._key = value
 		self._updated = True
 
 	@property
-	def value(self):
+	def value(self) -> str:
 		self._join_multiline_value()
-		return self._value
+		return cast(str, self._value)
 
 	@value.setter
-	def value(self, value):
+	def value(self, value: str):
 		self._updated = True
 		self._multiline_value_joined = True
 		self._value = value
 		self._values = [value]
 
-	def set_values(
-			self,
-			values: Sequence[str],
-			separator: str = "\n",
-			indent: str = 4 * ' ',
-			):
-		"""
-		Sets the value to a given list of options, e.g. multi-line values.
+	#
+	# def set_values(
+	# 		self,
+	# 		values: Sequence[str],
+	# 		separator: str = "\n",
+	# 		indent: str = 4 * ' ',
+	# 		):
+	# 	"""
+	# 	Sets the value to a given list of options, e.g. multi-line values.
+	#
+	# 	:param values: list of values
+	# 	:param separator: separator for values, default: line separator
+	# 	:param indent: indentation depth in case of line separator
+	# 	"""
+	#
+	# 	values = list(values)
+	# 	self._updated = True
+	# 	self._multiline_value_joined = True
+	# 	self._values = values
+	# 	if separator == "\n":
+	# 		values.insert(0, '')
+	# 		separator = separator + indent
+	# 	self._value = separator.join(values)
 
-		:param values: list of values
-		:param separator: separator for values, default: line separator
-		:param indent: indentation depth in case of line separator
-		"""
 
-		values = list(values)
-		self._updated = True
-		self._multiline_value_joined = True
-		self._values = values
-		if separator == "\n":
-			values.insert(0, '')
-			separator = separator + indent
-		self._value = separator.join(values)
-
-
-class ConfigUpdater(Container, MutableMapping):
+class ConfigUpdater(Container[Block], MutableMapping):
 	"""
 	Parser for updating configuration files.
 
@@ -622,38 +640,24 @@ class ConfigUpdater(Container, MutableMapping):
 	:param space_around_delimiters: add a space before and after the delimiter.
 	"""
 
+	last_item: Section
+
 	# Regular expressions for parsing section headers and options
-	_SECT_TMPL = r"""
-		\[                                 # [
-		(?P<header>[^]]+)                  # very permissive!
-		\]                                 # ]
-		"""
-	_OPT_TMPL = r"""
-		(?P<option>.*?)                    # very permissive!
-		\s*(?P<vi>{delim})\s*              # any number of space/tab,
-										   # followed by any of the
-										   # allowed delimiters,
-										   # followed by any space/tab
-		(?P<value>.*)$                     # everything up to eol
-		"""
-	_OPT_NV_TMPL = r"""
-		(?P<option>.*?)                    # very permissive!
-		\s*(?:                             # any number of space/tab,
-		(?P<vi>{delim})\s*                 # optionally followed by
-										   # any of the allowed
-										   # delimiters, followed by any
-										   # space/tab
-		(?P<value>.*))?$                   # everything up to eol
-		"""
+	_OPT_TMPL = RawConfigParser._OPT_TMPL  # type: ignore
+	_OPT_NV_TMPL = RawConfigParser._OPT_NV_TMPL  # type: ignore
+
 	# Compiled regular expression for matching sections
-	SECTCRE = re.compile(_SECT_TMPL, re.VERBOSE)
+	SECTCRE = RawConfigParser.SECTCRE  # type: ignore
+
 	# Compiled regular expression for matching options with typical separators
-	OPTCRE = re.compile(_OPT_TMPL.format(delim="=|:"), re.VERBOSE)
+	OPTCRE = RawConfigParser.OPTCRE  # type: ignore
+
 	# Compiled regular expression for matching options with optional values
 	# delimited using typical separators
-	OPTCRE_NV = re.compile(_OPT_NV_TMPL.format(delim="=|:"), re.VERBOSE)
+	OPTCRE_NV = RawConfigParser.OPTCRE_NV  # type: ignore
+
 	# Compiled regular expression for matching leading whitespace in a line
-	NONSPACECRE = re.compile(r"\S")
+	NONSPACECRE = RawConfigParser.NONSPACECRE  # type: ignore
 
 	def __init__(
 			self,
@@ -666,13 +670,13 @@ class ConfigUpdater(Container, MutableMapping):
 			space_around_delimiters: bool = True
 			):
 
-		self._filename = None
+		self._filename: Optional[str] = None
 		self._space_around_delimiters = space_around_delimiters
 
 		self._dict = OrderedDict  # no reason to let the user change this
 		# keeping _sections to keep code aligned with ConfigParser but
 		# _structure takes the actual role instead. Only use self._structure!
-		self._sections = self._dict()
+		self._sections: Dict[str, MutableMapping] = self._dict()
 		self._structure = []
 		self._delimiters = tuple(delimiters)
 		if delimiters == ('=', ':'):
@@ -760,9 +764,11 @@ class ConfigUpdater(Container, MutableMapping):
 	def _add_comment(self, line):
 		if isinstance(self.last_item, Section):
 			self.last_item.add_comment(line)
-		else:
+		elif self.last_item is not None:
 			self._update_curr_block(Comment)
 			self.last_item.add_line(line)
+		else:
+			raise ValueError("Cannot add a comment without somewhere to add it to.")
 
 	def _add_section(self, sectname, line):
 		new_section = Section(sectname, container=self)
@@ -811,12 +817,15 @@ class ConfigUpdater(Container, MutableMapping):
 		"""
 
 		self._structure = []
-		elements_added = set()
-		cursect = None  # None, or a dictionary
+		elements_added: Set[Any] = set()
+		cursect: Optional[MutableMapping] = None
 		sectname = None
 		optname = None
 		lineno = 0
 		indent_level = 0
+
+		comment_start: Optional[int]
+
 		e = None  # None, or an exception
 		for lineno, line in enumerate(fp, start=1):
 			comment_start = sys.maxsize
@@ -898,7 +907,7 @@ class ConfigUpdater(Container, MutableMapping):
 							e = self._handle_error(e, fpname, lineno, line)
 						optname = self.optionxform(optname.rstrip())
 						if self._strict and (sectname, optname) in elements_added:
-							raise DuplicateOptionError(sectname, optname, fpname, lineno)
+							raise DuplicateOptionError(sectname, optname, fpname, str(lineno))  # type: ignore
 						elements_added.add((sectname, optname))
 						# This check is fine because the OPTCRE cannot
 						# match if it would set optval to None
@@ -925,7 +934,7 @@ class ConfigUpdater(Container, MutableMapping):
 		exc.append(lineno, repr(line))
 		return exc
 
-	def write(self, fp: IO):
+	def write(self, fp: IO) -> None:
 		"""
 		Write an .ini-format representation of the configuration state.
 
@@ -934,7 +943,7 @@ class ConfigUpdater(Container, MutableMapping):
 
 		fp.write(str(self))
 
-	def update_file(self):
+	def update_file(self) -> None:
 		"""
 		Update the read-in configuration file.
 		"""
@@ -944,12 +953,13 @@ class ConfigUpdater(Container, MutableMapping):
 		with open(self._filename, 'w') as fb:
 			self.write(fb)
 
-	def validate_format(self, **kwargs):
+	def validate_format(self, **kwargs: Any) -> None:
 		r"""
 		Call ConfigParser to validate config.
 
-		:param \*\*kwargs: are passed to :class:`configparser.ConfigParser`
+		:param \*\*kwargs: Keyword arguments passed to :class:`configparser.ConfigParser`
 		"""
+
 		args = dict(
 				dict_type=self._dict,
 				allow_no_value=self._allow_no_value,
@@ -958,14 +968,13 @@ class ConfigUpdater(Container, MutableMapping):
 				empty_lines_in_values=self._empty_lines_in_values
 				)
 		args.update(kwargs)
-		parser = ConfigParser(**args)
+		parser = ConfigParser(**args)  # type: ignore
 		updated_cfg = str(self)
 		parser.read_string(updated_cfg)
 
 	def sections_blocks(self) -> List[Section]:
-		"""Returns all section blocks.
-
-		:returns: list of :class:`~.Section` blocks.
+		"""
+		Returns all section blocks.
 		"""
 
 		return [block for block in self._structure if isinstance(block, Section)]
@@ -973,8 +982,6 @@ class ConfigUpdater(Container, MutableMapping):
 	def sections(self) -> List[str]:
 		"""
 		Return a list of section names.
-
-		:returns: list of section names.
 		"""
 
 		return [section.name for section in self.sections_blocks()]
@@ -982,14 +989,14 @@ class ConfigUpdater(Container, MutableMapping):
 	def __str__(self) -> str:
 		return ''.join(str(block) for block in self._structure)
 
-	def __getitem__(self, key):
+	def __getitem__(self, key: str) -> Section:
 		for section in self.sections_blocks():
 			if section.name == key:
 				return section
 		else:
 			raise KeyError(key)
 
-	def __setitem__(self, key, value):
+	def __setitem__(self, key: str, value: Section) -> None:
 		if not isinstance(value, Section):
 			raise ValueError("Value must be of type Section!")
 		if isinstance(key, str) and key in self:
@@ -1001,22 +1008,26 @@ class ConfigUpdater(Container, MutableMapping):
 			value.name = key
 			self.add_section(value)
 
-	def __delitem__(self, section):
-		if not self.has_section(section):
+	def __delitem__(self, section: str) -> None:
+		if section not in self:
 			raise KeyError(section)
 		self.remove_section(section)
 
-	def __contains__(self, key):
-		return self.has_section(key)
+	def __contains__(self, section) -> bool:
+		"""
+		Returns whether the given section exists.
+		"""
 
-	def __len__(self):
+		return section in self.sections()
+
+	def __len__(self) -> int:
 		"""
 		Number of all blocks, not just sections.
 		"""
 
 		return len(self._structure)
 
-	def __iter__(self):
+	def __iter__(self) -> Iterator[Block]:
 		"""
 		Iterate over all blocks, not just sections.
 		"""
@@ -1032,14 +1043,14 @@ class ConfigUpdater(Container, MutableMapping):
 	def add_section(self, section: Union[str, Section]):
 		"""Create a new section in the configuration.
 
-		Raise DuplicateSectionError if a section by the specified name
-		already exists. Raise ValueError if name is DEFAULT.
+		:raises: :exc:`~.DuplicateSectionError` if a section by the specified name already exists.
+		:raises: :exc:`ValueError` if name is ``DEFAULT``.
 
 		:param section:
 		"""
 
 		if section in self.sections():
-			raise DuplicateSectionError(section)
+			raise DuplicateSectionError(section)  # type: ignore
 
 		if isinstance(section, str):
 			# create a new section
@@ -1048,27 +1059,18 @@ class ConfigUpdater(Container, MutableMapping):
 			raise ValueError("Parameter must be a string or Section type!")
 		self._structure.append(section)
 
-	def has_section(self, section: str):
-		"""
-		Returns whether the given section exists.
-
-		:param section:
-		"""
-
-		return section in self.sections()
-
-	def options(self, section: str):
+	def options(self, section: str) -> List[str]:
 		"""
 		Returns list of configuration options for the given section.
 
 		:param section:
 		"""
 
-		if not self.has_section(section):
+		if section not in self:
 			raise NoSectionError(section) from None
-		return self.__getitem__(section).options()
+		return self[section].options()
 
-	def get(self, section: str, option: str):
+	def get(self, section: str, option: str):  # type: ignore
 		"""Gets an option value for a given section.
 
 		:param section: section name
@@ -1077,84 +1079,87 @@ class ConfigUpdater(Container, MutableMapping):
 		:returns: :class:`Option`: Option object holding key/value pair
 		"""
 
-		if not self.has_section(section):
+		if section not in self:
 			raise NoSectionError(section) from None
 
-		section = self.__getitem__(section)
+		section_ = self[section]
 		option = self.optionxform(option)
 		try:
-			value = section[option]
+			value = section_[option]
 		except KeyError:
-			raise NoOptionError(option, section)
+			raise NoOptionError(option, str(section_))
 
 		return value
 
-	def items(
+	def items(  # type: ignore
 			self,
-			section: str = _UNSET,
+			section: str = _UNSET,  # type: ignore
 			) -> List[Tuple[str, Any]]:
-		"""Return a list of (name, value) tuples for options or sections.
+		"""
+		Return a list of ``(name, value)`` tuples for options or sections.
 
-		If section is given, return a list of tuples with (name, value) for
+		If section is given, return a list of tuples with ``(name, value)`` for
 		each option in the section. Otherwise, return a list of tuples with
-		(section_name, section_type) for each section.
+		``(section_name, section_type)`` for each section.
 
-		:param section: optional section name, default UNSET
+		:param section: optional section name.
 		"""
 
 		if section is _UNSET:
 			return [(sect.name, sect) for sect in self.sections_blocks()]
 
-		return [(opt.key, opt) for opt in self.__getitem__(section).option_blocks()]
+		return [(opt.key, opt) for opt in self[section].option_blocks()]
 
-	def has_option(self, section: str, option: str):
-		"""
-		Returns whether the given option exists in the given section.
+	#
+	# def has_option(self, section: str, option: str):
+	# 	"""
+	# 	Returns whether the given option exists in the given section.
+	#
+	# 	:param section: name of section.
+	# 	:param option: name of option.
+	# 	"""
+	#
+	# 	if section not in self.sections():
+	# 		return False
+	# 	else:
+	# 		option = self.optionxform(option)
+	# 		return option in self[section]
+	#
+	# def set(self, section: str, option: str, value: str):  # noqa: A003
+	# 	"""
+	# 	Set an option.
+	#
+	# 	:param section: section name
+	# 	:param option: option name
+	# 	:param value: value
+	# 	"""
+	#
+	# 	try:
+	# 		section_ = self[section]
+	# 	except KeyError:
+	# 		raise NoSectionError(section) from None
+	#
+	# 	option = self.optionxform(option)
+	#
+	# 	if option in section_:
+	# 		section_[option].value = value
+	# 	else:
+	# 		section_[option] = value
+	#
+	# 	return self
 
-		:param section: name of section.
-		:param option: name of option.
-		"""
-
-		if section not in self.sections():
-			return False
-		else:
-			option = self.optionxform(option)
-			return option in self[section]
-
-	def set(self, section: str, option: str, value: Optional[str] = None):  # noqa: A003
-		"""
-		Set an option.
-
-		:param section: section name
-		:param option: option name
-		:param value: value
-		"""
-
-		try:
-			section_ = self.__getitem__(section)
-		except KeyError:
-			raise NoSectionError(section) from None
-
-		option = self.optionxform(option)
-
-		if option in section_:
-			section_[option].value = value
-		else:
-			section_[option] = value
-
-		return self
-
-	def remove_option(self, section: str, option: str):
+	def remove_option(self, section: str, option: str) -> bool:
 		"""
 		Remove an option.
 
 		:param section: section name
 		:param option: option name
 
-		:returns: bool: whether the option was actually removed
+		:returns: Thether the option was actually removed
 		"""
+
 		try:
-			section_ = self.__getitem__(section)
+			section_ = self[section]
 		except KeyError:
 			raise NoSectionError(section) from None
 
@@ -1166,16 +1171,16 @@ class ConfigUpdater(Container, MutableMapping):
 
 		return existed
 
-	def remove_section(self, name: str):
+	def remove_section(self, name: str) -> bool:
 		"""
 		Remove a file section.
 
 		:param name: name of the section
 
-		:returns: bool: whether the section was actually removed
+		:returns: Whether the section was actually removed
 		"""
 
-		existed = self.has_section(name)
+		existed = name in self
 
 		if existed:
 			idx = self._get_section_idx(name)
@@ -1190,7 +1195,7 @@ class ConfigUpdater(Container, MutableMapping):
 		:returns: dictionary with same content.
 		"""
 
-		return {sect: self.__getitem__(sect).to_dict() for sect in self.sections()}
+		return {sect: self[sect].to_dict() for sect in self.sections()}
 
 
 def convert_to_string(value, key):

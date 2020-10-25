@@ -43,7 +43,7 @@ from domdf_python_tools.typing import PathLike
 from domdf_python_tools.utils import stderr_writer
 
 # this package
-from repo_helper.configupdater2 import ConfigUpdater  # type: ignore
+from repo_helper.configupdater2 import ConfigUpdater
 from repo_helper.requirements_tools import normalize
 
 if TYPE_CHECKING:
