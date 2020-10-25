@@ -89,7 +89,9 @@ def test_check_git_status(git_repo: GitRepo):
 	assert files == ["M file.txt"]
 
 
-def test_assert_clean(git_repo: GitRepo, capsys):
+def test_assert_clean(git_repo: GitRepo, capsys, monkeypatch):
+	monkeypatch.setenv("GIT_COMMITTER_NAME", "Guido")
+
 	repo_path = PathPlus(git_repo.workspace)
 	assert assert_clean(repo_path)
 
