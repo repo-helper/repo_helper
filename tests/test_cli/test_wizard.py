@@ -1,8 +1,10 @@
 # stdlib
 import re
+import sys
 from typing import List
 
 # 3rd party
+import pytest
 from click.testing import CliRunner, Result
 from domdf_python_tools.paths import PathPlus, in_directory
 from pytest_git import GitRepo  # type: ignore
@@ -143,6 +145,10 @@ def test_wizard_git_config(git_repo: GitRepo, file_regression):
 		check_file_output((repo_path / "repo_helper.yml"), file_regression)
 
 
+@pytest.mark.xfail(
+		condition=sys.platform == "win32",
+		reason="Environment variable not being read.",
+		)
 def test_wizard_env_vars(git_repo: GitRepo, file_regression, monkeypatch):
 
 	# 3rd party
