@@ -24,6 +24,8 @@
 import os
 
 # 3rd party
+from pathlib import Path
+
 import jinja2
 import pytest
 
@@ -84,3 +86,10 @@ def demo_environment():
 			)
 
 	return templates
+
+
+@pytest.fixture
+def original_datadir(request):
+	# Work around pycharm confusing datadir with test file.
+	return Path(os.path.splitext(request.module.__file__)[0] + "_")
+

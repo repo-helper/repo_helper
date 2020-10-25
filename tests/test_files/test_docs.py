@@ -22,7 +22,6 @@
 
 # stdlib
 import os
-import pathlib
 
 # 3rd party
 import pytest
@@ -68,7 +67,7 @@ def test_make_404_page(tmp_pathplus, demo_environment):
 	(tmp_pathplus / "doc-source").mkdir()
 
 	managed_files = make_404_page(tmp_pathplus, demo_environment)
-	assert managed_files == [os.path.join("doc-source", "404.rst"), os.path.join("doc-source", "not-found.png")]
+	assert managed_files == ["doc-source/404.rst", "doc-source/not-found.png"]
 	for filename in managed_files:
 		assert (tmp_pathplus / filename).is_file()
 
@@ -78,11 +77,11 @@ def test_make_docs_source_rst(tmp_pathplus, demo_environment):
 
 	managed_files = make_docs_source_rst(tmp_pathplus, demo_environment)
 	assert managed_files == [
-			os.path.join("doc-source", "Source.rst"),
-			os.path.join("doc-source", "Building.rst"),
-			os.path.join("doc-source", "git_download.png")
+			"doc-source/Source.rst",
+			"doc-source/Building.rst",
+			"doc-source/git_download.png",
 			]
-	for filename in [os.path.join("doc-source", "Source.rst"), os.path.join("doc-source", "git_download.png")]:
+	for filename in ["doc-source/Source.rst", "doc-source/git_download.png"]:
 		assert (tmp_pathplus / filename).is_file()
 
 	assert not (tmp_pathplus / "doc-source" / "Building.rst").is_file()
@@ -99,7 +98,7 @@ def test_ensure_doc_requirements(tmp_pathplus, demo_environment):
 	(tmp_pathplus / "doc-source" / "requirements.txt").write_text('')
 
 	managed_files = ensure_doc_requirements(tmp_pathplus, demo_environment)
-	assert managed_files == [os.path.join("doc-source", "requirements.txt")]
+	assert managed_files == ["doc-source/requirements.txt"]
 
 	assert (tmp_pathplus / managed_files[0]).read_text(
 			encoding="UTF-8"
@@ -124,7 +123,7 @@ toctree-plus>=0.0.4
 		fp.write("lorem>=0.1.1")
 
 	managed_files = ensure_doc_requirements(tmp_pathplus, demo_environment)
-	assert managed_files == [os.path.join("doc-source", "requirements.txt")]
+	assert managed_files == ["doc-source/requirements.txt"]
 
 	assert (tmp_pathplus / managed_files[0]).read_text(
 			encoding="UTF-8"

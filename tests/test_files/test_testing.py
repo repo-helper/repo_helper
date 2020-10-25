@@ -129,7 +129,7 @@ pytest-timeout>=1.4.2
 		fp.write("lorem>=0.1.1")
 
 	managed_files = ensure_tests_requirements(tmp_pathplus, demo_environment)
-	assert managed_files == [os.path.join("tests", "requirements.txt")]
+	assert managed_files == ["tests/requirements.txt"]
 
 	assert (tmp_pathplus / managed_files[0]).read_text(
 			encoding="UTF-8"
