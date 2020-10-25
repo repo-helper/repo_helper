@@ -292,6 +292,8 @@ class SetupCfgConfig(IniConfigurator):
 			for section in existing_config.sections_blocks():
 				if section.name not in self.managed_sections:
 					self._ini.add_section(section)
+				elif section.name == "mypy" and "incremental" in section:
+					self._ini["mypy"]["incremental"] = section["incremental"].value
 
 		if "options.entry_points" not in self._ini.sections():
 			self._ini.add_section("options.entry_points")
