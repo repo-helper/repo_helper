@@ -92,6 +92,8 @@ def test_check_git_status(git_repo: GitRepo):
 def test_assert_clean(git_repo: GitRepo, capsys, monkeypatch):
 	monkeypatch.setenv("GIT_COMMITTER_NAME", "Guido")
 	monkeypatch.setenv("GIT_COMMITTER_EMAIL", "guido@python.org")
+	monkeypatch.setenv("GIT_AUTHOR_NAME", "Guido")
+	monkeypatch.setenv("GIT_AUTHOR_EMAIL", "guido@python.org")
 
 	repo_path = PathPlus(git_repo.workspace)
 	assert assert_clean(repo_path)
