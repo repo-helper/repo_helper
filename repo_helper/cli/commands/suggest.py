@@ -24,7 +24,6 @@ Suggest trove classifiers and keywords.
 #
 
 # stdlib
-from datetime import datetime
 from functools import partial
 from itertools import chain
 
@@ -192,16 +191,26 @@ def classifiers(add: bool) -> int:
 		from ruamel.yaml import YAML
 
 		yaml = YAML()
-		yaml.explicit_start = True  # type: ignore
 		yaml.indent(offset=1)
 		yaml.width = 4096  # type: ignore
 		yaml.preserve_quotes = True  # type: ignore
 
 		data = yaml.load((rh.target_repo / "repo_helper.yml").read_text())
-		data["classifiers"] = sorted({*data.get("classifiers", ()), *suggested_classifiers})
-		print(data["classifiers"])
 
-		with (rh.target_repo / "repo_helper.yml").open("w") as fp:
-			yaml.dump(data, fp)
+		if "classifiers" in data:
+			data["classifiers"] = sorted({*data["classifiers"], *suggested_classifiers})
+
+			yaml.explicit_start = True  # type: ignore
+
+			with (rh.target_repo / "repo_helper.yml").open("w") as fp:
+				yaml.dump(data, fp)
+
+		else:
+			yaml.explicit_start = False  # type: ignore
+
+			with (rh.target_repo / "repo_helper.yml").open("a") as fp:
+				fp.write("\n")
+				yaml.dump({"classifiers": sorted(suggested_classifiers)}, fp)
+				fp.write("\n")
 
 	return 0
