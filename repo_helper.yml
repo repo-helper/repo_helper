@@ -44,6 +44,7 @@ classifiers:
  - 'Intended Audience :: Developers'
  - 'Topic :: Software Development :: Libraries :: Python Modules'
  - 'Topic :: Utilities'
+
 extra_sphinx_extensions:
  - configconfig.autoconfig
 
