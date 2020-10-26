@@ -767,8 +767,8 @@ class ConfigUpdater(Container[Block], MutableMapping):
 		elif self.last_item is not None:
 			self._update_curr_block(Comment)
 			self.last_item.add_line(line)
-		else:
-			raise ValueError("Cannot add a comment without somewhere to add it to.")
+		# else:
+		# 	raise ValueError("Cannot add a comment without somewhere to add it to.")
 
 	def _add_section(self, sectname, line):
 		new_section = Section(sectname, container=self)
