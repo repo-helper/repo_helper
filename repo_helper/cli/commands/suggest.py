@@ -76,7 +76,7 @@ suggest_command = partial(suggest.command, context_settings=CONTEXT_SETTINGS)
 @autocomplete_option(
 		"--add",
 		is_flag=True,
-		default=False,
+		default=None,
 		help="Add the classifiers to the 'repo_helper.yml' file.",
 		)
 @suggest_command()
@@ -183,6 +183,9 @@ def classifiers(add: bool) -> int:
 	for classifier in sorted(suggested_classifiers):
 		click.echo(f" - {classifier}")
 
+	if add is None:
+		add = confirm("Do you want to add these to the 'repo_helper.yml' file?")
+
 	if add:
 
 		# 3rd party
@@ -209,6 +212,5 @@ def classifiers(add: bool) -> int:
 			with (rh.target_repo / "repo_helper.yml").open("a") as fp:
 				fp.write("\n")
 				yaml.dump({"classifiers": sorted(suggested_classifiers)}, fp)
-				fp.write("\n")
 
 	return 0
