@@ -31,6 +31,8 @@ from typing import Callable, Dict, List, Optional, Tuple, cast
 # 3rd party
 import click
 from click import Command
+from consolekit import CONTEXT_SETTINGS
+from consolekit.utils import abort
 from domdf_python_tools.paths import PathPlus
 from domdf_python_tools.terminal_colours import Fore
 from domdf_python_tools.typing import PathLike
@@ -43,7 +45,6 @@ from typing_extensions import TypedDict
 from repo_helper.cli import cli_group
 from repo_helper.cli.options import commit_message_option, commit_option, force_option
 from repo_helper.cli.utils import commit_changed_files
-from repo_helper.click_tools import CONTEXT_SETTINGS, abort
 from repo_helper.configupdater2 import ConfigUpdater
 from repo_helper.core import RepoHelper
 from repo_helper.git_tools import assert_clean

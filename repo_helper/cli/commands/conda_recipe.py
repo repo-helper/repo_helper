@@ -49,6 +49,7 @@ def make_recipe(out_dir) -> int:
 	from repo_helper.configuration import parse_yaml
 	from repo_helper.requirements_tools import ComparableRequirement, combine_requirements, read_requirements
 	from repo_helper.templates import template_dir
+	from consolekit.terminal_colours import resolve_color_default
 
 	repo_dir = PathPlus.cwd()
 	config = parse_yaml(repo_dir)
@@ -88,8 +89,6 @@ def make_recipe(out_dir) -> int:
 
 	recipe_file.write_clean(recipe_template.render(requirements_block=requirements_block, **config))
 
-	# this package
-	from repo_helper.click_tools import resolve_color_default
 	click.echo(Fore.GREEN(f"Wrote recipe to {recipe_file!s}"), color=resolve_color_default())
 
 	#  entry_points:

@@ -29,11 +29,11 @@ from itertools import chain
 
 # 3rd party
 import click
+from consolekit import CONTEXT_SETTINGS, confirm
 
 # this package
 from repo_helper.cli import cli_group
 from repo_helper.cli.options import autocomplete_option
-from repo_helper.click_tools import CONTEXT_SETTINGS
 from repo_helper.core import RepoHelper
 
 __all__ = ["suggest", "suggest_command"]
@@ -86,10 +86,8 @@ def classifiers(add: bool) -> int:
 	"""
 
 	# 3rd party
+	from consolekit.input import choice
 	from domdf_python_tools.paths import PathPlus
-
-	# this package
-	from repo_helper.click_tools import choice
 
 	rh = RepoHelper(PathPlus.cwd())
 	config = rh.templates.globals

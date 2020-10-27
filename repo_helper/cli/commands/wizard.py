@@ -31,11 +31,11 @@ from datetime import datetime
 
 # 3rd party
 import click
+from consolekit.input import confirm, prompt
 from domdf_python_tools.paths import PathPlus
 
 # this package
 from repo_helper.cli import cli_command
-from repo_helper.click_tools import confirm, prompt
 from repo_helper.utils import license_lookup
 
 __all__ = ["wizard"]

@@ -43,6 +43,8 @@ from zipfile import ZipFile
 
 # 3rd party
 import click
+from consolekit.terminal_colours import resolve_color_default
+from consolekit.utils import abort
 from domdf_python_tools.paths import PathPlus
 from domdf_python_tools.terminal_colours import Fore
 from domdf_python_tools.typing import PathLike
@@ -51,7 +53,6 @@ from packaging.version import Version
 
 # this package
 from repo_helper import __version__
-from repo_helper.click_tools import abort, resolve_color_default
 from repo_helper.configuration import parse_yaml
 from repo_helper.requirements_tools import ComparableRequirement, combine_requirements, read_requirements
 from repo_helper.utils import traverse_to_file

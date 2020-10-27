@@ -51,10 +51,8 @@ def pypi_secure(password: Optional[str] = None) -> int:
 	from subprocess import PIPE, Popen
 
 	# 3rd party
+	from consolekit.utils import abort
 	from domdf_python_tools.paths import PathPlus
-
-	# this package
-	from repo_helper.click_tools import abort
 
 	config_file = PathPlus("repo_helper.yml")
 

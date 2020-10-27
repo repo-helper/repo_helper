@@ -31,6 +31,8 @@ from typing import Iterable, Optional
 
 # 3rd party
 import click
+from consolekit.input import confirm
+from consolekit.utils import abort
 from domdf_python_tools.paths import PathPlus
 from domdf_python_tools.terminal_colours import Fore
 from domdf_python_tools.typing import PathLike
@@ -38,7 +40,6 @@ from dulwich import repo
 from dulwich.errors import CommitError
 
 # this package
-from repo_helper.click_tools import abort, confirm
 from repo_helper.git_tools import assert_clean
 
 __all__ = [
