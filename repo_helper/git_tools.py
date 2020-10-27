@@ -342,7 +342,6 @@ def get_untracked_paths(path: PathLike, index: Index) -> Iterator[str]:
 	path = str(path)
 
 	for dirpath, dirnames, filenames in os.walk(path):
-
 		# Skip .git etc. and below.
 		for exclude in status_excludes:
 			if exclude in dirnames:
