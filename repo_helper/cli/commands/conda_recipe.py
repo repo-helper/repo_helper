@@ -42,6 +42,7 @@ def make_recipe(out_dir) -> int:
 
 	# 3rd party
 	import jinja2
+	from consolekit.terminal_colours import resolve_color_default
 	from domdf_python_tools.paths import PathPlus
 	from domdf_python_tools.terminal_colours import Fore
 
@@ -49,7 +50,6 @@ def make_recipe(out_dir) -> int:
 	from repo_helper.configuration import parse_yaml
 	from repo_helper.requirements_tools import ComparableRequirement, combine_requirements, read_requirements
 	from repo_helper.templates import template_dir
-	from consolekit.terminal_colours import resolve_color_default
 
 	repo_dir = PathPlus.cwd()
 	config = parse_yaml(repo_dir)

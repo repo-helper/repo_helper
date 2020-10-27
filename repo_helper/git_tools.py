@@ -331,13 +331,15 @@ yellow_meta_right = Fore.YELLOW(")")
 status_excludes = {".git", ".tox", ".mypy_cache", ".pytest_cache", "venv", ".venv"}
 
 
-def get_untracked_paths(path: str, index: Index) -> Iterator[str]:
+def get_untracked_paths(path: PathLike, index: Index) -> Iterator[str]:
 	"""
 	Returns a list of untracked files.
 
 	:param path: Path to walk.
 	:param index: Index to check against.
 	"""
+
+	path = str(path)
 
 	for dirpath, dirnames, filenames in os.walk(path):
 
