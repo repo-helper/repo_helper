@@ -36,79 +36,93 @@ from repo_helper.cli import cli_command
 __all__ = ["depycache", "demypycache", "depytestcache", "demolish", "detox", "rmdir", "broomstick"]
 
 
-def depycache(base_dir: pathlib.Path):
+def depycache(base_dir: pathlib.Path, quiet: bool = False):
 	"""
 	Removes any ``__pycache__`` directories.
 
 	:param base_dir:
+	:param quiet:
 	"""
 
 	for dirname in base_dir.rglob("__pycache__"):
-		if dirname.parts[0] in {".tox", "venv"}:
+		if ".tox" in dirname.parts or "venv" in dirname.parts:
 			continue
+
+		if not quiet:
+			print(f"Removing {dirname}")
 
 		shutil.rmtree(dirname)
 
 
-def demypycache(base_dir: pathlib.Path):
+def demypycache(base_dir: pathlib.Path, quiet: bool = False):
 	"""
 	Removes the  ``.mypy_cache`` directory.
 
 	:param base_dir:
+	:param quiet:
 	"""
 
-	rmdir(base_dir / ".mypy_cache")
+	rmdir(base_dir / ".mypy_cache", quiet)
 
 
-def depytestcache(base_dir: pathlib.Path):
+def depytestcache(base_dir: pathlib.Path, quiet: bool = False):
 	"""
 	Removes the  ``.pytest_cache`` directory.
 
 	:param base_dir:
+	:param quiet:
 	"""
 
-	rmdir(base_dir / ".pytest_cache")
+	rmdir(base_dir / ".pytest_cache", quiet)
 
 
-def demolish(base_dir: pathlib.Path):
+def demolish(base_dir: pathlib.Path, quiet: bool = False):
 	"""
 	Removes the ``build`` directory.
 
 	:param base_dir:
+	:param quiet:
 	"""
 
-	rmdir(base_dir / "build")
+	rmdir(base_dir / "build", quiet)
 
 
-def detox(base_dir: pathlib.Path):
+def detox(base_dir: pathlib.Path, quiet: bool = False):
 	"""
 	Removes the ``.tox`` directory.
 
 	:param base_dir:
+	:param quiet:
 	"""
 
-	rmdir(base_dir / ".tox")
+	rmdir(base_dir / ".tox", quiet)
 
 
-def crack(base_dir: pathlib.Path):
+def crack(base_dir: pathlib.Path, quiet: bool = False):
 	"""
 	Removes the ``*.egg-info`` directory.
 
 	:param base_dir:
+	:param quiet:
 	"""
 
 	for dirname in base_dir.glob("*.egg-info"):
-		rmdir(dirname)
+		rmdir(dirname, quiet)
 
 
-def rmdir(directory: pathlib.Path):
+def rmdir(directory: pathlib.Path, quiet: bool = False):
 	"""
 	Removes the given directory.
 
 	:param directory:
+	:param quiet:
 	"""
 
 	if directory.is_dir():
+
+		if not quiet:
+			print(f"Removing {directory}")
+
 		shutil.rmtree(directory)
 
 
@@ -118,8 +132,15 @@ def rmdir(directory: pathlib.Path):
 		default=False,
 		help="Remove the '.tox' directory too.",
 		)
+@click.option(
+		"-v",
+		"--verbose",
+		is_flag=True,
+		default=False,
+		help="Show verbose output.",
+		)
 @cli_command()
-def broomstick(rm_tox: bool = False):
+def broomstick(rm_tox: bool = False, verbose: bool = False):
 	"""
 	Clean up build and test artefacts 🧹.
 
@@ -134,11 +155,11 @@ def broomstick(rm_tox: bool = False):
 
 	base_dir = pathlib.Path.cwd()
 
-	depycache(base_dir)
-	demypycache(base_dir)
-	depytestcache(base_dir)
-	demolish(base_dir)
-	crack(base_dir)
+	depycache(base_dir, not verbose)
+	demypycache(base_dir, not verbose)
+	depytestcache(base_dir, not verbose)
+	demolish(base_dir, not verbose)
+	crack(base_dir, not verbose)
 
 	if rm_tox:
-		detox(base_dir)
+		detox(base_dir, not verbose)
