@@ -442,6 +442,6 @@ def make_pre_commit_ci_shield(repo_name: str, username: str) -> str:
 	"""
 
 	return f"""\
-.. image:: https://https://results.pre-commit.ci/badge/github/{username}/{repo_name}/master.svg
+.. image:: https://results.pre-commit.ci/badge/github/{username}/{repo_name}/master.svg
 	:target: https://results.pre-commit.ci/latest/github/{username}/{repo_name}/master
 	:alt: pre-commit.ci status"""

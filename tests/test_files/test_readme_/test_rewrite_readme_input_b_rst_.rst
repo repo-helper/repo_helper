@@ -101,7 +101,7 @@ repo_helper
 	:target: https://github.com/pre-commit/pre-commit
 	:alt: pre-commit
 
-.. |pre_commit_ci| image:: https://https://results.pre-commit.ci/badge/github/octocat/hello-world/master.svg
+.. |pre_commit_ci| image:: https://results.pre-commit.ci/badge/github/octocat/hello-world/master.svg
 	:target: https://results.pre-commit.ci/latest/github/octocat/hello-world/master
 	:alt: pre-commit.ci status
 
