@@ -37,4 +37,5 @@ def make_schema() -> None:
 
 	# this package
 	from repo_helper.configuration import dump_schema
+
 	dump_schema()

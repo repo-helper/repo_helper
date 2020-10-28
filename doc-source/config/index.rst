@@ -25,7 +25,7 @@ Options are defined like so:
 	python versions
 	packaging
 	documentation
-	tox
+	testing
 	travis
 	conda & anaconda
 	other
