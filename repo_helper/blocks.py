@@ -81,7 +81,8 @@ shields_block_template: Template = Environment(
 {% if "Windows" in platforms %}|actions_windows{{ unique_name }}| {% endif %}\
 {% if "macOS" in platforms %}|actions_macos{{ unique_name }}| {% endif %}\
 {% if tests %}|coveralls{{ unique_name }}| {% endif %}\
-|codefactor{{ unique_name }}|
+|codefactor{{ unique_name }}|\
+{% if pre_commit %} |pre_commit_ci{{ unique_name }}|{% endif %}
 	{% if on_pypi %}* - PyPI
 	  - |pypi-version{{ unique_name }}| |supported-versions{{ unique_name }}| |supported-implementations{{ unique_name }}| |wheel{{ unique_name }}|{% endif %}
 	{% if conda %}* - Anaconda
@@ -139,6 +140,8 @@ shields_block_template: Template = Environment(
 .. |docker_size{{ unique_name }}| {{ make_docker_size_shield(docker_name, username)[3:] }}
 {% endif %}{% if pre_commit %}
 .. |pre_commit{{ unique_name }}| {{ make_pre_commit_shield()[3:] }}
+
+.. |pre_commit_ci{{ unique_name }}| {{ make_pre_commit_ci_shield(repo_name, username)[3:] }}
 {% endif %}
 .. end shields
 """,
@@ -166,6 +169,7 @@ shields_block_template: Template = Environment(
 						"make_docker_automated_build_shield": make_docker_automated_build_shield,
 						"make_docker_size_shield": make_docker_size_shield,
 						"make_pre_commit_shield": make_pre_commit_shield,
+						"make_pre_commit_ci_shield": make_pre_commit_ci_shield,
 						}
 				)
 
@@ -187,7 +191,8 @@ docs_shields_block_template: Template = Environment(
 {% if "Windows" in platforms %}|actions_windows{{ unique_name }}| {% endif %}\
 {% if "macOS" in platforms %}|actions_macos{{ unique_name }}| {% endif %}\
 {% if tests %}|coveralls{{ unique_name }}| {% endif %}\
-|codefactor{{ unique_name }}|
+|codefactor{{ unique_name }}|\
+{% if pre_commit %} |pre_commit_ci{{ unique_name }}|{% endif %}
 	{% if on_pypi %}* - PyPI
 	  - |pypi-version{{ unique_name }}| |supported-versions{{ unique_name }}| |supported-implementations{{ unique_name }}| |wheel{{ unique_name }}|{% endif %}
 	{% if conda %}* - Anaconda
@@ -245,6 +250,8 @@ docs_shields_block_template: Template = Environment(
 .. |docker_size{{ unique_name }}| {{ make_docker_size_shield(docker_name, username)[3:] }}
 {% endif %}{% if pre_commit %}
 .. |pre_commit{{ unique_name }}| {{ make_pre_commit_shield()[3:] }}
+
+.. |pre_commit_ci{{ unique_name }}| {{ make_pre_commit_ci_shield(repo_name, username)[3:] }}
 {% endif %}
 .. end shields
 """,
@@ -272,6 +279,7 @@ docs_shields_block_template: Template = Environment(
 						"make_docker_automated_build_shield": make_docs_docker_automated_build_shield,
 						"make_docker_size_shield": make_docs_docker_size_shield,
 						"make_pre_commit_shield": make_docs_pre_commit_shield,
+						"make_pre_commit_ci_shield": make_docs_pre_commit_ci_shield,
 						}
 				)
 

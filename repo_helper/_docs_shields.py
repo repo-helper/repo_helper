@@ -65,6 +65,7 @@ __all__ = [
 		"make_docs_docker_size_shield",
 		"make_docs_typing_shield",
 		"make_docs_pre_commit_shield",
+		"make_docs_pre_commit_ci_shield",
 		]
 
 
@@ -357,3 +358,18 @@ def make_docs_pre_commit_shield() -> str:
 	return """\
 .. pre-commit-shield::
 	:alt: pre-commit"""
+
+
+def make_docs_pre_commit_ci_shield(repo_name: str, username: str) -> str:
+	"""
+	Create a shield to show the `pre-commit.ci <https://pre-commit.ci/>`_ status.
+
+	:param repo_name: The name of the repository.
+	:param username: The username of the GitHub account that owns the repository.
+
+	:return: The shield.
+	"""
+
+	return f"""\
+.. pre-commit-ci-shield::
+	:alt: pre-commit.ci status"""
