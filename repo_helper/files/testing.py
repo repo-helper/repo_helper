@@ -270,7 +270,7 @@ class ToxConfig(IniConfigurator):
 				"git+https://github.com/PyCQA/pydocstyle@5118faa7173b0e5bbc230c4adf628758e13605bf",
 				"git+https://github.com/domdfcoding/flake8-quotes.git",
 				"git+https://github.com/domdfcoding/flake8-rst-docstrings.git",
-				"git+https://github.com/domdfcoding/flake8-rst-docstrings-sphinx.git@cli",
+				"git+https://github.com/domdfcoding/flake8-rst-docstrings-sphinx.git",
 				"pygments>=2.7.1",
 				])
 		# cmd = f"flake8 {' '.join(self.get_source_files())} --format=rst-toolbox"
