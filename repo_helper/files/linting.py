@@ -257,7 +257,7 @@ code_only_warning.extend((
 		))
 
 # flake8-pyi
-code_only_warning.extend([
+lint_warn_list.extend([
 		"Y001,"  # Names of TypeVars in stubs should start with _.
 		"Y002",  # If test must be a simple comparison against sys.platform or sys.version_info.
 		"Y003",  # Unrecognized sys.version_info check.

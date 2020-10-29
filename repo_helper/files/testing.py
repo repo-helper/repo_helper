@@ -376,8 +376,12 @@ class ToxConfig(IniConfigurator):
 		# self._ini["flake8"]["rst-roles"] = indent_join(sorted(allowed_rst_roles))
 		self._ini["flake8"]["rst-directives"] = indent_join(sorted(allowed_rst_directives))
 
-		per_file_ignores = f"{self['tests_dir']}/*: {' '.join(str(e) for e in code_only_warning)}"
-		self._ini["flake8"]["per-file-ignores"] = per_file_ignores
+		per_file_ignores = [
+				'',
+				f"{self['tests_dir']}/*: {' '.join(str(e) for e in code_only_warning)}",
+				f"*/*.pyi: {' '.join(str(e) for e in code_only_warning)}",
+				]
+		self._ini["flake8"]["per-file-ignores"] = indent_join(per_file_ignores)
 		self._ini["flake8"]["pytest-parametrize-names-type"] = "csv"
 		self._ini["flake8"]["inline-quotes"] = '"'
 		self._ini["flake8"]["multiline-quotes"] = '"""'
