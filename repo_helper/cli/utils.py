@@ -47,6 +47,8 @@ __all__ = [
 		"run_repo_helper",
 		]
 
+from repo_helper.utils import easter_egg
+
 
 def commit_changed_files(
 		repo_path: PathLike,
@@ -182,5 +184,7 @@ def run_repo_helper(
 		indented_error = "\n".join(f"\t{line}" for line in textwrap.wrap(str(e)))
 		click.echo(f"Unable to commit changes. The error was:\n\n{indented_error}", err=True)
 		return 1
+
+	easter_egg()
 
 	return 0

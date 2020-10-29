@@ -22,11 +22,16 @@ General utilities.
 #  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
 #  MA 02110-1301, USA.
 #
+# calc_easter from https://code.activestate.com/recipes/576517-calculate-easter-western-given-a-year/
+# Copyright © 2008 Martin Diers
+# Licensed under the MIT License
+#
 
 # stdlib
 import pathlib
 import re
 import textwrap
+from datetime import date, timedelta
 from typing import TYPE_CHECKING, Callable, Iterable, List, Optional, TypeVar
 
 # 3rd party
@@ -61,6 +66,8 @@ __all__ = [
 		"indent_join",
 		"IniConfigurator",
 		"traverse_to_file",
+		"calc_easter",
+		"easter_egg",
 		]
 
 # def ensure_requirements(requirements_list: Iterable[Requirement], requirements_file: pathlib.Path):
@@ -385,3 +392,35 @@ def traverse_to_file(base_directory: _P, *filename: PathLike, height: int = -1) 
 				return directory
 
 	raise FileNotFoundError(f"'{filename[0]!s}' not found in {base_directory}")
+
+
+def calc_easter(year: int) -> date:
+	"""
+	Returns the date of Easter in the given year.
+
+	:param year:
+	"""
+
+	a = year % 19
+	b = year // 100
+	c = year % 100
+	d = (19 * a + b - b // 4 - ((b - (b + 8) // 25 + 1) // 3) + 15) % 30
+	e = (32 + 2 * (b % 4) + 2 * (c // 4) - d - (c % 4)) % 7
+	f = d + e - 7 * ((a + 11 * d + 22 * e) // 451) + 114
+	month = f // 31
+	day = f % 31 + 1
+
+	return date(year, month, day)
+
+
+def easter_egg() -> None:
+	today = date.today()
+	easter = calc_easter(today.year)
+	easter_margin = timedelta(days=7)
+
+	if today - easter_margin <= easter <= today + easter_margin:
+		print("🐇 🐣 🥚")
+	elif date(today.year, 10, 24) <= date(today.year, 10, 31) <= date(today.year, 11, 2):
+		print("🎃 👻 🦇")
+	elif today.month == 12:
+		print("🎅 ☃️ 🎁")
