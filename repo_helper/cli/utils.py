@@ -41,13 +41,12 @@ from dulwich.errors import CommitError
 
 # this package
 from repo_helper.git_tools import assert_clean
+from repo_helper.utils import easter_egg
 
 __all__ = [
 		"commit_changed_files",
 		"run_repo_helper",
 		]
-
-from repo_helper.utils import easter_egg
 
 
 def commit_changed_files(
