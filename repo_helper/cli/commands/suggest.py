@@ -24,10 +24,13 @@ Suggest trove classifiers and keywords.
 #
 
 # stdlib
+import sys
 from functools import partial
 from itertools import chain
 
 # 3rd party
+from typing import Optional
+
 import click
 from consolekit import CONTEXT_SETTINGS, confirm
 
@@ -74,13 +77,27 @@ suggest_command = partial(suggest.command, context_settings=CONTEXT_SETTINGS)
 
 
 @autocomplete_option(
-		"--add",
+		"--add/--no-add",
 		is_flag=True,
 		default=None,
 		help="Add the classifiers to the 'repo_helper.yml' file.",
 		)
+@autocomplete_option(
+		"-s",
+		"--status",
+		type=click.IntRange(1, 7),
+		default=None,
+		help="The Development Status of this project.",
+		)
+@autocomplete_option(
+		"-l",
+		"--library/--not-library",
+		is_flag=True,
+		default=None,
+		help="Indicates this project is a library for developers.",
+		)
 @suggest_command()
-def classifiers(add: bool) -> int:
+def classifiers(add: bool, status: Optional[int], library: Optional[bool]) -> int:
 	"""
 	Suggest trove classifiers based on repository metadata.
 	"""
@@ -91,15 +108,35 @@ def classifiers(add: bool) -> int:
 
 	rh = RepoHelper(PathPlus.cwd())
 	config = rh.templates.globals
-
-	pkg_dir = rh.target_repo / config["import_name"]
-
 	suggested_classifiers = set()
+	pkg_dir = rh.target_repo / config["import_name"]
 
 	for language, patterns in programming_languages.items():
 		for _ in chain.from_iterable((pkg_dir.rglob(pattern) for pattern in patterns)):
 			suggested_classifiers.add(f"Programming Language :: {language}")
 			break
+
+	# If not a tty, assume default options are False
+	if not sys.stdout.isatty():
+		if add is None:
+			add = False
+		if library is None:
+			library = False
+
+	if status is None and sys.stdout.isatty():
+		click.echo("What is the Development Status of this project?")
+		status = choice(text="Status", options=development_status_options, start_index=1) + 1
+
+	if status is not None and not sys.stdout.isatty():
+		status_string = f"Development Status :: {status} - {development_status_options[status - 1]}"
+		suggested_classifiers.add(status_string)
+
+	if library is None:
+		library = click.confirm("Is this a library for developers?")
+
+	if library:
+		suggested_classifiers.add("Topic :: Software Development :: Libraries :: Python Modules")
+		suggested_classifiers.add("Intended Audience :: Developers")
 
 	lib_requirements = combine_requirements(read_requirements(rh.target_repo / "requirements.txt")[0])
 
@@ -148,16 +185,6 @@ def classifiers(add: bool) -> int:
 		suggested_classifiers.add("Topic :: Software Development :: Documentation")
 		suggested_classifiers.add("Intended Audience :: Developers")
 
-	click.echo("What is the Development Status of this project?")
-	development_status = choice(text="Status", options=development_status_options, start_index=1)
-	status_string = f"Development Status :: {development_status + 1} - {development_status_options[development_status]}"
-	suggested_classifiers.add(status_string)
-
-	if click.confirm("Is this a library for developers?"):
-		suggested_classifiers.add("Topic :: Software Development :: Libraries :: Python Modules")
-		suggested_classifiers.add("Intended Audience :: Developers")
-
-	#
 	# file_content = dedent(
 	# 		f"""\
 	# # Remove any classifiers you don't think are relevant.
@@ -179,9 +206,13 @@ def classifiers(add: bool) -> int:
 	# 		filter(remove_invalid_entries, (click.edit(file_content) or file_content).splitlines())
 	# 		)
 
-	click.echo("Based on what you've told us we think the following classifiers are appropriate:")
-	for classifier in sorted(suggested_classifiers):
-		click.echo(f" - {classifier}")
+	if sys.stdout.isatty():
+		click.echo("Based on what you've told us we think the following classifiers are appropriate:")
+		for classifier in sorted(suggested_classifiers):
+			click.echo(f" - {classifier}")
+	else:
+		for classifier in sorted(suggested_classifiers):
+			click.echo(classifier)
 
 	if add is None:
 		add = confirm("Do you want to add these to the 'repo_helper.yml' file?")
@@ -214,3 +245,5 @@ def classifiers(add: bool) -> int:
 				yaml.dump({"classifiers": sorted(suggested_classifiers)}, fp)
 
 	return 0
+
+# TODO: flags for interactive options, and clean output when piped
