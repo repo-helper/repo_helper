@@ -50,8 +50,9 @@ def make_recipe(out_dir) -> int:
 	from repo_helper.configuration import parse_yaml
 	from repo_helper.requirements_tools import ComparableRequirement, combine_requirements, read_requirements
 	from repo_helper.templates import template_dir
+	from repo_helper.utils import traverse_to_file
 
-	repo_dir = PathPlus.cwd()
+	repo_dir = traverse_to_file(PathPlus.cwd(), "repo_helper.yml")
 	config = parse_yaml(repo_dir)
 
 	extra_requirements = []
@@ -84,7 +85,7 @@ def make_recipe(out_dir) -> int:
 			)
 
 	recipe_template = templates.get_template("conda_recipe.yaml")
-	recipe_file = PathPlus(out_dir) / "meta.yaml"
+	recipe_file = PathPlus(out_dir).resolve() / "meta.yaml"
 	recipe_file.parent.maybe_make()
 
 	recipe_file.write_clean(recipe_template.render(requirements_block=requirements_block, **config))

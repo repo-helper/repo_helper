@@ -21,6 +21,7 @@
 #
 
 # stdlib
+from datetime import date
 from textwrap import dedent
 
 # 3rd party
@@ -29,7 +30,7 @@ from domdf_python_tools.terminal_colours import Fore
 
 # this package
 from repo_helper.requirements_tools import normalize
-from repo_helper.utils import indent_with_tab, pformat_tabs, validate_classifiers
+from repo_helper.utils import calc_easter, indent_with_tab, pformat_tabs, traverse_to_file, validate_classifiers
 
 # def test_ensure_requirements(tmpdir):
 # 	tmpdir_p = PathPlus(tmpdir)
@@ -140,3 +141,49 @@ def test_normalize(name, expected):
 
 # TODO: reformat_file
 # TODO: discover_entry_points
+
+
+@pytest.mark.parametrize(
+		"location, expected",
+		[
+				("foo.yml", ""),
+				("foo/foo.yml", "foo"),
+				("foo/bar/foo.yml", "foo/bar"),
+				("foo/bar/baz/foo.yml", "foo/bar/baz"),
+				]
+		)
+def test_traverse_to_file(tmp_pathplus, location, expected):
+	(tmp_pathplus / location).parent.maybe_make(parents=True)
+	(tmp_pathplus / location).touch()
+	assert traverse_to_file(tmp_pathplus / "foo" / "bar" / "baz", "foo.yml") == tmp_pathplus / expected
+
+
+@pytest.mark.parametrize(
+		"date",
+		[
+				date(2000, 4, 23),
+				date(2001, 4, 15),
+				date(2002, 3, 31),
+				date(2003, 4, 20),
+				date(2004, 4, 11),
+				date(2005, 3, 27),
+				date(2006, 4, 16),
+				date(2007, 4, 8),
+				date(2008, 3, 23),
+				date(2009, 4, 12),
+				date(2010, 4, 4),
+				date(2011, 4, 24),
+				date(2012, 4, 8),
+				date(2013, 3, 31),
+				date(2014, 4, 20),
+				date(2015, 4, 5),
+				date(2016, 3, 27),
+				date(2017, 4, 16),
+				date(2018, 4, 1),
+				date(2019, 4, 21),
+				date(2020, 4, 12),
+				date(2021, 4, 4),
+				]
+		)
+def test_calc_easter(date):
+	assert calc_easter(date.year) == date

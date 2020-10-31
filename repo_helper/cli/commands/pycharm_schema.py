@@ -41,14 +41,23 @@ def pycharm_schema() -> None:
 	# 3rd party
 	from domdf_python_tools.compat import importlib_resources
 	from domdf_python_tools.paths import PathPlus
-	from lxml import etree, objectify  # type: ignore
+	from consolekit.utils import abort
 
 	# this package
 	import repo_helper
 	from repo_helper.configuration import dump_schema
 
-	dump_schema()
 	schema_mapping_file = PathPlus(".idea/jsonSchemas.xml")
+
+	try:
+		from lxml import etree, objectify  # type: ignore
+	except ModuleNotFoundError:
+		raise abort("'lxml' module not found. Perhaps you need to 'pip install lxml'?")
+
+	if not schema_mapping_file.parent.is_dir():
+		raise abort("'.idea' directory not found. Perhaps this isn't a PyCharm project?")
+
+	dump_schema()
 
 	with importlib_resources.path(repo_helper, "repo_helper_schema.json") as schema_file:
 
@@ -78,7 +87,7 @@ def pycharm_schema() -> None:
 	<component name="JsonSchemaMappingsProjectConfiguration">
 		<state>
 			<map>
-				{indent(entry_xml, '				')}
+{indent(entry_xml, '			')}
 			</map>
 		</state>
 	</component>

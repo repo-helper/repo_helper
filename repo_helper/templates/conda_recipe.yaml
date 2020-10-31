@@ -30,8 +30,7 @@ about:
   home: "https://github.com/{{ username }}/{{ repo_name }}"
   license: "{{ license }}"
   summary: "{{ short_desc }}"
-  description: "{{ conda_description }}
-{% if conda_channels %}
+  description: "{{ conda_description }}{% if conda_channels %}
 
 
 Before installing please ensure you have added the following channels: {{ ", ".join(conda_channels) }}

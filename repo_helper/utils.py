@@ -384,6 +384,9 @@ def traverse_to_file(base_directory: _P, *filename: PathLike, height: int = -1) 
 	:param height: The maximum height to traverse to.
 	"""
 
+	if not filename:
+		raise TypeError("traverse_to_file expected 2 or more arguments, got 1")
+
 	for level, directory in enumerate((base_directory, *base_directory.parents)):
 		if height > 0 and ((level - 1) > height):
 			break
