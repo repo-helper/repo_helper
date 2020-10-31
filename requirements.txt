@@ -1,4 +1,5 @@
-apeye>=0.2.0
+apeye>=0.3.0
+attrs>=20.2.0
 click==7.1.2
 configconfig>=0.3.0
 consolekit>=0.1.2

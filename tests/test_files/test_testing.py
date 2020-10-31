@@ -21,7 +21,6 @@
 #
 
 # stdlib
-import os
 import posixpath
 
 # 3rd party
@@ -29,7 +28,8 @@ from pytest_regressions.file_regression import FileRegressionFixture
 
 # this package
 from repo_helper.files.linting import code_only_warning
-from repo_helper.files.testing import ensure_tests_requirements, make_isort, make_pre_commit, make_tox, make_yapf
+from repo_helper.files.pre_commit import make_pre_commit
+from repo_helper.files.testing import ensure_tests_requirements, make_isort, make_tox, make_yapf
 from tests.common import check_file_output
 
 

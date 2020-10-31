@@ -49,7 +49,6 @@ __all__ = [
 		"make_yapf",
 		"make_isort",
 		"ensure_tests_requirements",
-		"make_pre_commit",
 		]
 
 allowed_rst_directives = ["envvar", "TODO", "extras-require"]
@@ -588,25 +587,3 @@ def ensure_tests_requirements(repo_path: pathlib.Path, templates: jinja2.Environ
 
 	TestsRequirementsManager(repo_path, templates).run()
 	return [(PathPlus(templates.globals["tests_dir"]) / "requirements.txt").as_posix()]
-
-
-@management.register("pre-commit", ["enable_pre_commit"])
-def make_pre_commit(repo_path: pathlib.Path, templates: jinja2.Environment) -> List[str]:
-	"""
-	Add configuration for ``pre-commit``.
-
-	https://github.com/pre-commit/pre-commit
-
-	# See https://pre-commit.com for more information
-	# See https://pre-commit.com/hooks.html for more hooks
-
-	:param repo_path: Path to the repository root.
-	:param templates:
-	"""
-
-	pre_commit = templates.get_template("pre-commit-config.yaml")
-	pre_commit_file = PathPlus(repo_path / ".pre-commit-config.yaml")
-
-	pre_commit_file.write_clean(pre_commit.render(join_path=posixpath.join))
-
-	return [pre_commit_file.name]
