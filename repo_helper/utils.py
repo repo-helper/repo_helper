@@ -414,7 +414,7 @@ def calc_easter(year: int) -> date:
 	return date(year, month, day)
 
 
-def easter_egg() -> None:
+def easter_egg() -> None:  # noqa: D102
 	today = date.today()
 	easter = calc_easter(today.year)
 	easter_margin = timedelta(days=7)

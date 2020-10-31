@@ -25,14 +25,12 @@ Core functionality of ``repo_helper``.
 
 # stdlib
 import os.path
-import sys
-from typing import Callable, List, Sequence, Tuple, Type
+from typing import List, Tuple, Type
 
 # 3rd party
 import jinja2
 from domdf_python_tools.import_tools import discover
 from domdf_python_tools.paths import PathPlus
-from domdf_python_tools.terminal_colours import Back
 from domdf_python_tools.typing import PathLike
 from domdf_python_tools.utils import enquote_value
 

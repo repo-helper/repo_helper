@@ -140,7 +140,7 @@ class version(ConfigVar):  # noqa
 	category: str = "metadata"
 
 	@classmethod
-	def validator(cls, version_string: str) -> str:
+	def validator(cls, version_string: str) -> str:  # noqa: D102
 		v = Version(version_string)
 		return str(v)
 

@@ -242,7 +242,7 @@ class use_experimental_backend(ConfigVar):  # noqa
 	category: str = "packaging"
 
 	@classmethod
-	def validate(cls, raw_config_vars: Optional[Dict[str, Any]] = None) -> Any:
+	def validate(cls, raw_config_vars: Optional[Dict[str, Any]] = None) -> Any:  # noqa: D102
 
 		# this package
 		from repo_helper.configuration.metadata import pure_python

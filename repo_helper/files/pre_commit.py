@@ -61,7 +61,7 @@ def make_github_url(username: str, repository: str) -> URL:
 
 class _BaseHook(TypedDict):
 	#: Which hook from the repository to use.
-	id: str
+	id: str  # noqa: A003
 
 
 class Hook(_BaseHook, total=False):
