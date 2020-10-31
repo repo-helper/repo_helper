@@ -30,6 +30,7 @@ from typing import Any, Callable, List, Optional, Sequence, Tuple
 
 # 3rd party
 import jinja2
+from domdf_python_tools.bases import UserList
 
 jinja2.Environment.__module__ = "jinja2"
 
@@ -39,7 +40,7 @@ __all__ = ["Management", "management", "is_registered", "Manager"]
 Manager = Callable[[pathlib.Path, jinja2.Environment], List[str]]
 
 
-class Management(List[Tuple[Manager, str, Sequence[str]]]):
+class Management(UserList[Tuple[Manager, str, Sequence[str]]]):
 	"""
 	Class to store functions that manage files.
 
@@ -54,7 +55,7 @@ class Management(List[Tuple[Manager, str, Sequence[str]]]):
 		super().__init__(*args, **kwargs)
 
 	def register(
-			self: List[Tuple[Manager, str, Sequence[str]]],
+			self,
 			exclude_name: str,
 			exclude_unless_true: Sequence[str] = (),
 			*,

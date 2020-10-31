@@ -39,7 +39,7 @@ from domdf_python_tools.utils import enquote_value
 # this package
 import repo_helper.files
 from repo_helper.configuration import parse_yaml
-from repo_helper.files import is_registered, management
+from repo_helper.files import Management, is_registered, management
 from repo_helper.files.docs import copy_docs_styling
 from repo_helper.files.linting import code_only_warning, lint_fix_list, lint_warn_list
 from repo_helper.files.testing import make_isort
@@ -62,9 +62,6 @@ def import_registered_functions() -> List[Type]:
 	return [*local_functions, *third_party_commands]
 
 
-import_registered_functions()
-
-
 class RepoHelper:
 	"""
 	Repo Helper: Manage configuration files with ease.
@@ -73,27 +70,35 @@ class RepoHelper:
 	:param managed_message: Message placed at the top of files to indicate that they are managed by ``repo_helper``.
 	"""
 
+	#: The target repository
+	target_repo: PathPlus
+
+	#: Provides the templates and stores the configuration.
+	templates: jinja2.Environment
+
+	#: List of functions to manage files.
+	files: Management
+
 	def __init__(
 			self,
 			target_repo: PathLike,
 			managed_message="This file is managed by 'repo_helper'. Don't edit it directly."
 			):
-		self.target_repo = PathPlus(target_repo)
+		import_registered_functions()
 
 		# Walk up the tree until a "repo_helper.yml" or "git_helper.yml" (old name) file is found.
-		self.target_repo = traverse_to_file(self.target_repo, "repo_helper.yml", "git_helper.yml")
+		self.target_repo = traverse_to_file(PathPlus(target_repo), "repo_helper.yml", "git_helper.yml")
 
 		self.templates = jinja2.Environment(
 				loader=jinja2.FileSystemLoader(str(template_dir)),
 				undefined=jinja2.StrictUndefined,
 				)
+		self.templates.globals["managed_message"] = managed_message
+
 		self.load_settings()
 
-		self.files: List[Tuple[Callable, str, Sequence[str]]] = management + [
-				(make_isort, "isort", []),  # Must always run last
-				]
-
-		self.templates.globals["managed_message"] = managed_message
+		# isort must always run last
+		self.files = management + [(make_isort, "isort", [])]
 
 	@property
 	def managed_message(self) -> str:
