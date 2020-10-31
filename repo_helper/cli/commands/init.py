@@ -79,6 +79,17 @@ license_file_lookup = {
 		"MIT License": (base_license_url / "mit.txt", "mit.py"),
 		}
 
+license_init_file_lookup = {
+		# TODO: BSD 2 and 3
+		"GNU Lesser General Public License v3 (LGPLv3)": "lgpl3",
+		"GNU Lesser General Public License v3 or later (LGPLv3+)": "lgpl3_plus",
+		"GNU General Public License v3 (GPLv3)": "gpl3",
+		"GNU General Public License v3 or later (GPLv3+)": "gpl3_plus",
+		"GNU General Public License v2 (GPLv2)": "gpl2",
+		"GNU General Public License v2 or later (GPLv2+)": "gpl2_plus",
+		"MIT License": "mit",
+		}
+
 
 def init_repo(repo_path: pathlib.Path, templates: jinja2.Environment) -> List[str]:
 	"""
@@ -100,7 +111,12 @@ def init_repo(repo_path: pathlib.Path, templates: jinja2.Environment) -> List[st
 	# package
 	(repo_path / templates.globals["import_name"]).maybe_make()
 
-	__init__ = init_repo_templates.get_template("__init__.py")
+	repo_license = templates.globals["license"]
+	if repo_license in license_init_file_lookup:
+		__init__ = init_repo_templates.get_template(f"{license_init_file_lookup[repo_license]}._py")
+	else:
+		__init__ = init_repo_templates.get_template("generic._py")
+
 	__init__path = repo_path / templates.globals["import_name"] / "__init__.py"
 	__init__path.write_clean(__init__.render())
 
@@ -141,11 +157,11 @@ def init_repo(repo_path: pathlib.Path, templates: jinja2.Environment) -> List[st
 
 	# TODO: 2 vs 3 clause BSD
 
-	if templates.globals["license"] in license_file_lookup:
-		license_url = license_file_lookup[templates.globals["license"]][0]
-	elif templates.globals["license"] == "BSD License":
+	if repo_license in license_file_lookup:
+		license_url = license_file_lookup[repo_license][0]
+	elif repo_license == "BSD License":
 		license_url = base_license_url / "bsd2.txt"
-	elif templates.globals["license"] == "Apache Software License":
+	elif repo_license == "Apache Software License":
 		license_url = base_license_url / "apache.txt"
 
 	if license_url is not None:
