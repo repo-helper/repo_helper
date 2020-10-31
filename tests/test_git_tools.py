@@ -33,7 +33,8 @@ from pytest_regressions.data_regression import DataRegressionFixture
 from pytest_regressions.file_regression import FileRegressionFixture
 
 # this package
-from repo_helper.git_tools import Log, assert_clean, check_git_status, get_tags
+from southwark.log import Log
+from southwark import assert_clean, check_git_status, get_tags
 
 
 @pytest.fixture()

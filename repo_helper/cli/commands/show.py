@@ -63,7 +63,7 @@ def version() -> int:
 	from dulwich.repo import Repo
 
 	# this package
-	from repo_helper.git_tools import get_tags
+	from southwark import get_tags
 
 	rh = RepoHelper(PathPlus.cwd())
 	version = rh.templates.globals["version"]
@@ -120,7 +120,7 @@ def log(entries: Optional[int], reverse: bool, from_date: Optional[datetime], fr
 	from dulwich.repo import Repo
 
 	# this package
-	from repo_helper.git_tools import Log
+	from southwark.log import Log
 
 	repo = Repo(PathPlus.cwd())
 
@@ -159,7 +159,7 @@ def changelog(entries: Optional[int], reverse: bool) -> int:
 	from dulwich.repo import Repo
 
 	# this package
-	from repo_helper.git_tools import Log
+	from southwark.log import Log
 
 	rh = RepoHelper(PathPlus.cwd())
 	repo = Repo(rh.target_repo)

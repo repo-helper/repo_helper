@@ -40,7 +40,7 @@ from dulwich import repo
 from dulwich.errors import CommitError
 
 # this package
-from repo_helper.git_tools import assert_clean
+from southwark import assert_clean
 from repo_helper.utils import easter_egg
 
 __all__ = [
@@ -73,7 +73,7 @@ def commit_changed_files(
 	import pre_commit.main  # type: ignore
 
 	# this package
-	from repo_helper.git_tools import status
+	from southwark import status
 
 	repo_path = PathPlus(repo_path).absolute()
 	r = repo.Repo(str(repo_path))
