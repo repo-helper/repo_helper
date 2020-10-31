@@ -68,6 +68,7 @@ __all__ = [
 		"traverse_to_file",
 		"calc_easter",
 		"easter_egg",
+		"no_dev_versions",
 		]
 
 # def ensure_requirements(requirements_list: Iterable[Requirement], requirements_file: pathlib.Path):
@@ -424,3 +425,13 @@ def easter_egg() -> None:
 		print("🎃 👻 🦇")
 	elif today.month == 12:
 		print("🎅 ☃️ 🎁")
+
+
+def no_dev_versions(versions: Iterable[str]) -> List[str]:
+	"""
+	Returns the subset of ``versions`` which does not end with ``-dev``.
+
+	:param versions:
+	"""
+
+	return [v for v in versions if not v.endswith("-dev")]

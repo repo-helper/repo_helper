@@ -31,6 +31,7 @@ from configconfig.utils import make_schema
 from domdf_python_tools.compat import importlib_resources
 from domdf_python_tools.paths import PathPlus
 from domdf_python_tools.typing import PathLike
+from domdf_python_tools.versions import Version
 
 # this package
 import repo_helper
@@ -123,6 +124,7 @@ from repo_helper.configuration.utils import (
 		get_tox_travis_python_versions,
 		parse_extras
 		)
+from repo_helper.utils import no_dev_versions
 
 __all__ = [
 		"RepoHelperParser",
@@ -320,24 +322,28 @@ class RepoHelperParser(Parser):
 		parsed_config_vars["additional_requirements_files"] = additional_requirements_files
 
 		# Python Versions
-		parsed_config_vars["min_py_version"] = min_py_version = min(parsed_config_vars["python_versions"])
-		if parsed_config_vars["python_deploy_version"] < min_py_version:
+		versions = no_dev_versions(parsed_config_vars["python_versions"])
+		parsed_config_vars["min_py_version"] = min_py_version = versions[0]
+		smallest_py_version = Version.from_str(min_py_version)
+		for py_version in versions:
+			try:
+				if Version.from_str(py_version) < smallest_py_version:
+					smallest_py_version = Version.from_str(py_version)
+					parsed_config_vars["min_py_version"] = min_py_version = py_version
+			except (ValueError, TypeError):
+				pass
+
+		if Version.from_str(parsed_config_vars["python_deploy_version"]) < smallest_py_version:
 			parsed_config_vars["python_deploy_version"] = min_py_version
 
-		# Tox
-		tox_py_versions = get_tox_python_versions(parsed_config_vars["python_versions"])
+		# Tox & Travis
+		py_versions = parsed_config_vars["python_versions"]
+		tox_py_versions = get_tox_python_versions(py_versions)
 		parsed_config_vars["tox_py_versions"] = tox_py_versions
-		tox_travis_versions = get_tox_travis_python_versions(
-				parsed_config_vars["python_versions"], tox_py_versions
-				)
-		gh_actions_versions = get_gh_actions_python_versions(
-				parsed_config_vars["python_versions"], tox_py_versions
-				)
-
-		# Travis
+		tox_travis_versions = get_tox_travis_python_versions(py_versions, tox_py_versions)
 		tox_travis_versions[parsed_config_vars["python_deploy_version"]] += ", mypy"
 		parsed_config_vars["tox_travis_versions"] = tox_travis_versions
-		parsed_config_vars["gh_actions_versions"] = gh_actions_versions
+		parsed_config_vars["gh_actions_versions"] = get_gh_actions_python_versions(py_versions, tox_py_versions)
 
 		def add_classifier(classifier):
 			if classifier not in parsed_config_vars["classifiers"]:

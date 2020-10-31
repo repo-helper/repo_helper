@@ -61,8 +61,6 @@ def version() -> int:
 	# 3rd party
 	from domdf_python_tools.paths import PathPlus
 	from dulwich.repo import Repo
-
-	# this package
 	from southwark import get_tags
 
 	rh = RepoHelper(PathPlus.cwd())
@@ -118,8 +116,6 @@ def log(entries: Optional[int], reverse: bool, from_date: Optional[datetime], fr
 	# 3rd party
 	from domdf_python_tools.paths import PathPlus
 	from dulwich.repo import Repo
-
-	# this package
 	from southwark.log import Log
 
 	repo = Repo(PathPlus.cwd())
@@ -157,8 +153,6 @@ def changelog(entries: Optional[int], reverse: bool) -> int:
 	# 3rd party
 	from domdf_python_tools.paths import PathPlus
 	from dulwich.repo import Repo
-
-	# this package
 	from southwark.log import Log
 
 	rh = RepoHelper(PathPlus.cwd())

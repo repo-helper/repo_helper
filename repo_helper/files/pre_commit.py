@@ -43,7 +43,6 @@ from repo_helper.files import management
 
 __all__ = ["GITHUB_COM", "make_github_url", "Hook", "Repo", "make_pre_commit"]
 
-
 #: Instance of :class:`apeye.url.URL` that points to the GitHub website.
 GITHUB_COM: URL = URL("https://github.com")
 
@@ -96,14 +95,14 @@ class Hook(_BaseHook, total=False):
 
 	stages: List[Literal["commit", "merge-commit", "push", "prepare-commit-msg", "commit-msg", "manual"]]
 	"""
-	Confines the hook to the commit, merge-commit, push, prepare-commit-msg, commit-msg, 
-	post-checkout, or manual stage. 
+	Confines the hook to the commit, merge-commit, push, prepare-commit-msg, commit-msg,
+	post-checkout, or manual stage.
 	See https://pre-commit.com/#confining-hooks-to-run-at-certain-stages.
 	"""
 
 	additional_dependencies: List[str]
 	"""
-	A list of dependencies that will be installed in the environment where this hook gets run. 
+	A list of dependencies that will be installed in the environment where this hook gets run.
 	One useful application is to install plugins for hooks such as eslint."""
 
 	#: If :py:obj:`True`, this hook will run even if there are no matching files.

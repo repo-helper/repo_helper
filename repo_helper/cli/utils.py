@@ -38,9 +38,9 @@ from domdf_python_tools.terminal_colours import Fore
 from domdf_python_tools.typing import PathLike
 from dulwich import repo
 from dulwich.errors import CommitError
+from southwark import assert_clean
 
 # this package
-from southwark import assert_clean
 from repo_helper.utils import easter_egg
 
 __all__ = [
@@ -71,8 +71,6 @@ def commit_changed_files(
 
 	# 3rd party
 	import pre_commit.main  # type: ignore
-
-	# this package
 	from southwark import status
 
 	repo_path = PathPlus(repo_path).absolute()

@@ -34,6 +34,7 @@ from domdf_python_tools.paths import PathPlus
 # this package
 from repo_helper.configupdater2 import ConfigUpdater
 from repo_helper.files import management
+from repo_helper.utils import no_dev_versions
 
 __all__ = [
 		"make_travis",
@@ -140,9 +141,6 @@ def make_github_ci(repo_path: pathlib.Path, templates: jinja2.Environment) -> Li
 	windows_ci_file = workflows_dir / "python_ci.yml"
 	macos_ci_file = workflows_dir / "python_ci_macos.yml"
 	linux_ci_file = workflows_dir / "python_ci_linux.yml"
-
-	def no_dev_versions(versions):
-		return [v for v in versions if not v.endswith("-dev")]
 
 	if "Windows" in templates.globals["platforms"]:
 		py_versions = templates.globals["python_versions"][:]

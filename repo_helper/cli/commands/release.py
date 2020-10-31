@@ -39,6 +39,7 @@ from domdf_python_tools.typing import PathLike
 from domdf_python_tools.versions import Version
 from dulwich.porcelain import tag_create
 from dulwich.repo import Repo
+from southwark import assert_clean
 from typing_extensions import TypedDict
 
 # this package
@@ -47,7 +48,6 @@ from repo_helper.cli.options import commit_message_option, commit_option, force_
 from repo_helper.cli.utils import commit_changed_files
 from repo_helper.configupdater2 import ConfigUpdater
 from repo_helper.core import RepoHelper
-from southwark import assert_clean
 
 __all__ = [
 		"release",
