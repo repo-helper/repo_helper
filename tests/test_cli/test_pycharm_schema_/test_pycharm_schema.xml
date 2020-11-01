@@ -7,7 +7,7 @@
 					<value>
 						<SchemaInfo>
 							<option name="name" value="repo_helper_schema" />
-							<option name="relativePathToSchema" value="/home/domdf/Python/01 GitHub Repos/repo_helper/repo_helper/repo_helper_schema.json" />
+							<option name="relativePathToSchema" value="repo_helper/repo_helper_schema.json" />
 							<option name="patterns">
 								<list>
 									<Item>

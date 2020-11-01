@@ -1,12 +1,13 @@
-# 3rd party
+# stdlib
 import os
 import re
 
+# 3rd party
 from click.testing import CliRunner, Result
 from domdf_python_tools.paths import in_directory
+from pytest_regressions.file_regression import FileRegressionFixture
 
 # this package
-from pytest_regressions.file_regression import FileRegressionFixture
 from repo_helper.cli.commands.pycharm_schema import pycharm_schema
 
 
@@ -29,14 +30,21 @@ def test_pycharm_schema(tmp_pathplus, file_regression: FileRegressionFixture):
 		result: Result = runner.invoke(pycharm_schema, catch_exceptions=False)
 		assert result.exit_code == 0
 		if os.sep == "/":
-			assert re.match(r"Wrote schema to .*/repo_helper/repo_helper_schema\.json", result.stdout.splitlines()[0])
+			assert re.match(
+					r"Wrote schema to .*/repo_helper/repo_helper_schema\.json", result.stdout.splitlines()[0],
+					)
 		elif os.sep == "\\":
 			assert re.match(
 					r"Wrote schema to .*\\repo_helper\\repo_helper_schema\.json",
 					result.stdout.splitlines()[0],
 					)
 
-	file_regression.check((tmp_pathplus / ".idea/jsonSchemas.xml").read_text(), encoding="UTF-8", extension=".xml")
+	file_content = re.sub(
+			'value=".*/repo_helper/repo_helper_schema.json"',
+			'value="repo_helper/repo_helper_schema.json"',
+			(tmp_pathplus / ".idea/jsonSchemas.xml").read_text(),
+			)
+	file_regression.check(file_content, encoding="UTF-8", extension=".xml")
 
 
 # TODO: check when file exists
