@@ -208,7 +208,7 @@ Error: Invalid value for '-s' / '--status': 0 is not in the valid range of 1 to 
 				pytest.param(["pytest", "flake8"], id="pytest_flake8"),
 				]
 		)
-def test_suggest_classifiers_filetypes(tmp_pathplus, requirements, data_regression):
+def test_suggest_classifiers_requirements(tmp_pathplus, requirements, data_regression):
 	(tmp_pathplus / "repo_helper.yml").write_lines([
 			"modname: repo_helper",
 			'copyright_years: "2020"',
