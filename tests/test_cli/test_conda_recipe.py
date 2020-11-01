@@ -6,15 +6,16 @@ import re
 # 3rd party
 from click.testing import CliRunner, Result
 from domdf_python_tools.paths import in_directory
-
-# this package
 from pytest_regressions.file_regression import FileRegressionFixture
 
+# this package
 from repo_helper.cli.commands.conda_recipe import make_recipe
 
 
 def test_conda_recipe(tmp_pathplus, file_regression: FileRegressionFixture):
-	(tmp_pathplus / "repo_helper.yml").write_text((pathlib.Path(__file__).parent.parent / "repo_helper.yml_").read_text())
+	(tmp_pathplus / "repo_helper.yml").write_text(
+			(pathlib.Path(__file__).parent.parent / "repo_helper.yml_").read_text()
+			)
 	(tmp_pathplus / "requirements.txt").write_lines([
 			"apeye>=0.3.0",
 			"attrs>=20.2.0",
@@ -51,4 +52,3 @@ def test_conda_recipe(tmp_pathplus, file_regression: FileRegressionFixture):
 			raise NotImplementedError(os.sep)
 
 	file_regression.check((tmp_pathplus / "conda/meta.yaml").read_text(), encoding="UTF-8", extension=".yml")
-

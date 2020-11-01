@@ -39,9 +39,9 @@ def pycharm_schema() -> None:
 	from textwrap import indent
 
 	# 3rd party
+	from consolekit.utils import abort
 	from domdf_python_tools.compat import importlib_resources
 	from domdf_python_tools.paths import PathPlus
-	from consolekit.utils import abort
 
 	# this package
 	import repo_helper
@@ -50,6 +50,7 @@ def pycharm_schema() -> None:
 	schema_mapping_file = PathPlus(".idea/jsonSchemas.xml")
 
 	try:
+		# 3rd party
 		from lxml import etree, objectify  # type: ignore
 	except ModuleNotFoundError:
 		raise abort("'lxml' module not found. Perhaps you need to 'pip install lxml'?")

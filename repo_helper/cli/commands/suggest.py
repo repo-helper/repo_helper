@@ -27,10 +27,9 @@ Suggest trove classifiers and keywords.
 import sys
 from functools import partial
 from itertools import chain
-
-# 3rd party
 from typing import Optional
 
+# 3rd party
 import click
 from consolekit import CONTEXT_SETTINGS, confirm
 
@@ -245,5 +244,6 @@ def classifiers(add: bool, status: Optional[int], library: Optional[bool]) -> in
 				yaml.dump({"classifiers": sorted(suggested_classifiers)}, fp)
 
 	return 0
+
 
 # TODO: flags for interactive options, and clean output when piped
