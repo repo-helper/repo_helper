@@ -33,7 +33,12 @@ from tests.common import check_file_output
 
 
 @pytest.mark.parametrize("stubs_package", [True, False])
-def test_make_manifest_case_1(tmp_pathplus, demo_environment, file_regression: FileRegressionFixture, stubs_package):
+def test_make_manifest_case_1(
+		tmp_pathplus,
+		demo_environment,
+		file_regression: FileRegressionFixture,
+		stubs_package,
+		):
 	demo_environment.globals["stubs_package"] = stubs_package
 	managed_files = make_manifest(tmp_pathplus, demo_environment)
 	assert managed_files == ["MANIFEST.in"]
