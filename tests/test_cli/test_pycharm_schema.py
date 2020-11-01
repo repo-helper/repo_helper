@@ -31,7 +31,8 @@ def test_pycharm_schema(tmp_pathplus, file_regression: FileRegressionFixture):
 		assert result.exit_code == 0
 		if os.sep == "/":
 			assert re.match(
-					r"Wrote schema to .*/repo_helper/repo_helper_schema\.json", result.stdout.splitlines()[0],
+					r"Wrote schema to .*/repo_helper/repo_helper_schema\.json",
+					result.stdout.splitlines()[0],
 					)
 		elif os.sep == "\\":
 			assert re.match(
