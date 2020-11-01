@@ -350,12 +350,7 @@ class IniConfigurator:
 
 		self._output.blankline(ensure_single=True)
 
-	def write_out(self):
-		"""
-		Write out to the ``.ini`` file.
-		"""
-
-		ini_file = PathPlus(self.base_path / self.filename)
+	def merge_existing(self, ini_file):
 
 		for section_name in self.managed_sections:
 			getattr(self, re.sub("[:.-]", "_", section_name))()
@@ -367,6 +362,14 @@ class IniConfigurator:
 				if section.name not in self.managed_sections:
 					self._ini.add_section(section)
 
+	def write_out(self):
+		"""
+		Write out to the ``.ini`` file.
+		"""
+
+		ini_file = PathPlus(self.base_path / self.filename)
+
+		self.merge_existing(ini_file)
 		self._output.append(str(self._ini))
 
 		ini_file.write_clean("\n".join(self._output))
@@ -417,7 +420,7 @@ def calc_easter(year: int) -> date:
 	return date(year, month, day)
 
 
-def easter_egg() -> None:  # noqa: D102
+def easter_egg() -> None:  # noqa: D102  # pragma: no cover
 	today = date.today()
 	easter = calc_easter(today.year)
 	easter_margin = timedelta(days=7)

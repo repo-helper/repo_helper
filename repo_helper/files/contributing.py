@@ -66,8 +66,15 @@ def github_bash_block(*commands: str) -> str:
 	return buf
 
 
-def sphinx_bash_block(*commands):
-	# TODO: fix from above
+def sphinx_bash_block(*commands: str) -> str:
+	"""
+	Formats the given commands in a 
+	`sphinx-prompt <https://github.com/sbrunner/sphinx-prompt>`_
+	directive suitable for use in Sphinx documentation.
+
+	:param commands:
+	"""  # noqa: D400
+
 	if not commands:
 		return ''
 

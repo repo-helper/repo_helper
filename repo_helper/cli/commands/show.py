@@ -74,7 +74,7 @@ def version() -> int:
 			for idx, entry in enumerate(walker):
 				commit_id = entry.commit.id.decode("UTF-8")
 				if commit_id == sha:
-					click.echo(f"{idx} commits since that release.")
+					click.echo(f"{idx} commit{'s' if idx > 1 else ''} since that release.")
 					break
 			break
 

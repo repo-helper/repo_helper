@@ -69,14 +69,6 @@ def rewrite_readme(repo_path: pathlib.Path, templates: jinja2.Environment) -> Li
 			on_pypi=templates.globals["on_pypi"],
 			)
 
-	if templates.globals["license"] == "GNU General Public License v2 (GPLv2)":
-		shields_block.replace(
-				f"https://img.shields.io/github/license/{templates.globals['username']}/{templates.globals['repo_name']}",
-				"https://img.shields.io/badge/license-GPLv2-orange"
-				)
-
-	# .. image:: https://img.shields.io/badge/License-LGPL%20v3-blue.svg
-
 	install_block = create_readme_install_block(
 			templates.globals["modname"],
 			templates.globals["username"],

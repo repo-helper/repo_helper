@@ -2,7 +2,7 @@
 #
 #  builder.py
 """
-:pep:`517` build backend.
+Build source and binary distributions.
 """
 #
 #  Copyright © 2020 Dominic Davis-Foster <dominic@davis-foster.co.uk>

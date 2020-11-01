@@ -449,6 +449,20 @@ class ToxConfig(IniConfigurator):
 		# --reruns 1 --reruns-delay 5
 		self._ini["pytest"]["timeout"] = 300
 
+	def merge_existing(self, ini_file):
+
+		for section_name in self.managed_sections:
+			getattr(self, re.sub("[:.-]", "_", section_name))()
+
+		if ini_file.is_file():
+			existing_config = ConfigUpdater()
+			existing_config.read(str(ini_file))
+			for section in existing_config.sections_blocks():
+				if section.name not in self.managed_sections:
+					self._ini.add_section(section)
+				elif section.name == "coverage:report" and "omit" in section:
+					self._ini["coverage:report"]["omit"] = section["omit"].value
+
 
 @management.register("tox")
 def make_tox(repo_path: pathlib.Path, templates: jinja2.Environment) -> List[str]:

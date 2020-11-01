@@ -311,7 +311,7 @@ def make_docs_activity_shield(repo_name: str, username: str, version: Union[str,
 	:alt: GitHub commits since tagged version"""
 
 
-def make_docs_last_commit_shield(repo_name: str, username: str) -> str:
+def make_docs_last_commit_shield(repo_name: str, username: str) -> str:  # pragma: no cover
 	"""
 	Create a shield to indicate when the last commit to the GitHub repository occurred.
 
@@ -327,7 +327,7 @@ def make_docs_last_commit_shield(repo_name: str, username: str) -> str:
 	:alt: GitHub last commit"""
 
 
-def make_docs_maintained_shield() -> str:
+def make_docs_maintained_shield() -> str:  # pragma: no cover
 	"""
 	Create a shield to indicate that the project is maintained.
 
@@ -360,7 +360,7 @@ def make_docs_pre_commit_shield() -> str:
 	:alt: pre-commit"""
 
 
-def make_docs_pre_commit_ci_shield(repo_name: str, username: str) -> str:
+def make_docs_pre_commit_ci_shield(repo_name: str, username: str) -> str:  # pragma: no cover
 	"""
 	Create a shield to show the `pre-commit.ci <https://pre-commit.ci/>`_ status.
 

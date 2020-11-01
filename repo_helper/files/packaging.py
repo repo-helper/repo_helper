@@ -276,12 +276,7 @@ class SetupCfgConfig(IniConfigurator):
 		if self["mypy_plugins"]:
 			self._ini["mypy"]["plugins"] = ", ".join(self["mypy_plugins"])
 
-	def write_out(self):
-		"""
-		Write out to the ``.ini`` file.
-		"""
-
-		ini_file = PathPlus(self.base_path / self.filename)
+	def merge_existing(self, ini_file):
 
 		for section_name in self.managed_sections:
 			getattr(self, re.sub("[:.-]", "_", section_name))()
@@ -303,10 +298,6 @@ class SetupCfgConfig(IniConfigurator):
 		else:
 			if not self._ini["options.entry_points"].options():
 				self._ini.remove_section("options.entry_points")
-
-		self._output.append(str(self._ini))
-
-		ini_file.write_clean("\n".join(self._output))
 
 
 @management.register("setup_cfg")
