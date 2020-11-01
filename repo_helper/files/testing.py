@@ -302,7 +302,7 @@ class ToxConfig(IniConfigurator):
 		"""
 
 		if not (self["stubs_package"] and not self["enable_tests"]):
-			self._ini["testenv:mypy"]["basepython"] = "python{min_py_version}".format(**self._globals)
+			self._ini["testenv:mypy"]["basepython"] = "python{python_deploy_version}".format(**self._globals)
 			if self._globals["tox_testenv_extras"]:
 				self._ini["testenv:mypy"]["extras"] = self._globals["tox_testenv_extras"]
 			self._ini["testenv:mypy"]["ignore_errors"] = True
