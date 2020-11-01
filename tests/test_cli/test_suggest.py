@@ -8,6 +8,7 @@ import pytest
 from click.testing import CliRunner, Result
 from domdf_python_tools.paths import in_directory
 from pytest_regressions.data_regression import DataRegressionFixture
+from pytest_regressions.file_regression import FileRegressionFixture
 
 # this package
 from repo_helper.cli.commands import suggest
@@ -103,6 +104,60 @@ def test_suggest_classifiers_stage(tmp_pathplus, data_regression: DataRegression
 	data_regression.check(classifiers)
 
 
+def test_suggest_classifiers_add(tmp_pathplus, file_regression: FileRegressionFixture):
+	(tmp_pathplus / "repo_helper.yml").write_lines([
+			"modname: repo_helper",
+			'copyright_years: "2020"',
+			'author: "Dominic Davis-Foster"',
+			'email: "dominic@davis-foster.co.uk"',
+			'version: "0.0.1"',
+			'username: "domdfcoding"',
+			"license: 'LGPLv3+'",
+			"short_desc: 'Update multiple configuration files, build scripts etc. from a single location.'",
+			])
+
+	(tmp_pathplus / "requirements.txt").touch()
+	(tmp_pathplus / "repo_helper").mkdir()
+
+	with in_directory(tmp_pathplus):
+		runner = CliRunner()
+		result: Result = runner.invoke(
+				suggest.classifiers, catch_exceptions=False, args=["-s", "4", "-l", "--add"]
+				)
+		assert result.exit_code == 0
+
+	file_regression.check((tmp_pathplus / "repo_helper.yml").read_text(), encoding="UTF-8", extension=".yml")
+
+
+def test_suggest_classifiers_add_existing(tmp_pathplus, file_regression: FileRegressionFixture):
+	(tmp_pathplus / "repo_helper.yml").write_lines([
+			"modname: repo_helper",
+			'copyright_years: "2020"',
+			'author: "Dominic Davis-Foster"',
+			'email: "dominic@davis-foster.co.uk"',
+			'version: "0.0.1"',
+			'username: "domdfcoding"',
+			"license: 'LGPLv3+'",
+			"short_desc: 'Update multiple configuration files, build scripts etc. from a single location.'",
+			'',
+			"classifiers:",
+			" - 'Framework :: Flake8'",
+			" - 'Intended Audience :: Developers'",
+			])
+
+	(tmp_pathplus / "requirements.txt").touch()
+	(tmp_pathplus / "repo_helper").mkdir()
+
+	with in_directory(tmp_pathplus):
+		runner = CliRunner()
+		result: Result = runner.invoke(
+				suggest.classifiers, catch_exceptions=False, args=["-s", "4", "-l", "--add"]
+				)
+		assert result.exit_code == 0
+
+	file_regression.check((tmp_pathplus / "repo_helper.yml").read_text(), encoding="UTF-8", extension=".yml")
+
+
 def test_suggest_classifiers_invalid_input(tmp_pathplus, data_regression: DataRegressionFixture):
 	# TODO: other invalid values
 
@@ -126,6 +181,54 @@ Try 'classifiers -h' for help.
 
 Error: Invalid value for '-s' / '--status': 0 is not in the valid range of 1 to 7.
 """
+
+
+@pytest.mark.parametrize(
+		"requirements",
+		[
+				pytest.param(["dash"], id="dash"),
+				pytest.param(["Dash"], id="Dash"),
+				pytest.param(["jupyter"], id="jupyter"),
+				pytest.param(["Jupyter"], id="Jupyter"),
+				pytest.param(["matplotlib"], id="matplotlib"),
+				pytest.param(["Matplotlib"], id="Matplotlib"),
+				pytest.param(["pygame"], id="pygame"),
+				pytest.param(["arcade"], id="arcade"),
+				pytest.param(["flake8"], id="flake8"),
+				pytest.param(["flask"], id="flask"),
+				pytest.param(["werkzeug"], id="werkzeug"),
+				pytest.param(["click>=2.0,!=2.0.1"], id="click"),
+				pytest.param(["pytest"], id="pytest"),
+				pytest.param(["tox"], id="tox"),
+				pytest.param(["Tox==1.2.3"], id="Tox==1.2.3"),
+				pytest.param(["sphinx"], id="sphinx"),
+				pytest.param(["Sphinx>=1.3"], id="Sphinx>=1.3"),
+				pytest.param(["jupyter", "matplotlib>=3"], id="jupyter_matplotlib"),
+				pytest.param(["dash", "flask"], id="dash_flask"),
+				pytest.param(["pytest", "flake8"], id="pytest_flake8"),
+				]
+		)
+def test_suggest_classifiers_filetypes(tmp_pathplus, requirements, data_regression):
+	(tmp_pathplus / "repo_helper.yml").write_lines([
+			"modname: repo_helper",
+			'copyright_years: "2020"',
+			'author: "Dominic Davis-Foster"',
+			'email: "dominic@davis-foster.co.uk"',
+			'version: "0.0.1"',
+			'username: "domdfcoding"',
+			"license: 'LGPLv3+'",
+			"short_desc: 'Update multiple configuration files, build scripts etc. from a single location.'",
+			])
+	(tmp_pathplus / "requirements.txt").write_lines(requirements)
+	(tmp_pathplus / "repo_helper").mkdir()
+
+	with in_directory(tmp_pathplus):
+		runner = CliRunner()
+		result: Result = runner.invoke(suggest.classifiers, catch_exceptions=False, args=["-s", "4"])
+		assert result.exit_code == 0
+
+	classifiers = result.stdout.splitlines()
+	data_regression.check(classifiers)
 
 
 # TODO: requirements

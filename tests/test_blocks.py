@@ -187,6 +187,9 @@ def test_create_docs_install_block(file_regression: FileRegressionFixture, kwarg
 						id="case_2"
 						),
 				pytest.param(dict(modname="hello_world", username="octocat", conda=False), id="case_3"),
+				pytest.param(
+						dict(modname="hello_world", username="octocat", conda=False, pypi=False), id="case_4"
+						),
 				]
 		)
 def test_create_readme_install_block(file_regression: FileRegressionFixture, kwargs):

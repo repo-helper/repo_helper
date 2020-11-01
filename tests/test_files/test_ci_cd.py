@@ -252,17 +252,23 @@ def test_make_github_docs_test(tmp_pathplus, demo_environment, file_regression: 
 
 def test_make_github_octocheese(tmp_pathplus, demo_environment, file_regression: FileRegressionFixture):
 	assert make_github_octocheese(tmp_pathplus, demo_environment) == [".github/workflows/octocheese.yml"]
+	assert (tmp_pathplus / ".github/workflows/octocheese.yml").is_file()
 	check_file_output(tmp_pathplus / ".github/workflows/octocheese.yml", file_regression)
+	demo_environment.globals["on_pypi"] = False
+	assert make_github_octocheese(tmp_pathplus, demo_environment) == [".github/workflows/octocheese.yml"]
+	assert not (tmp_pathplus / ".github/workflows/octocheese.yml").exists()
 
 
 @pytest.mark.parametrize("py_versions", [["3.6", "3.7", "3.8"], ["3.6", "3.7"]])
 @pytest.mark.parametrize("enable_docs", [True, False])
+@pytest.mark.parametrize("py_modules", [["hello_world.py"], []])
 def test_ensure_bumpversion(
 		tmp_pathplus,
 		demo_environment,
 		file_regression: FileRegressionFixture,
 		enable_docs,
 		py_versions,
+		py_modules,
 		):
 	demo_environment.globals["version"] = "1.2.3"
 	demo_environment.globals["enable_docs"] = enable_docs

@@ -44,6 +44,7 @@ from tests.common import check_file_output, check_file_regression
 				["sudo apt install python3-dev"],
 				["sudo apt update", "sudo apt upgrade -y", "sudo reboot"],
 				["for i in 1 2 3 4 5", "> do", '>    echo "Welcome $i times"', "> done"],
+				[],
 				]
 		)
 def test_github_bash_block(file_regression: FileRegressionFixture, commands):

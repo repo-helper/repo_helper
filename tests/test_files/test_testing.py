@@ -24,6 +24,7 @@
 import posixpath
 
 # 3rd party
+import pytest
 from pytest_regressions.file_regression import FileRegressionFixture
 
 # this package
@@ -33,17 +34,37 @@ from repo_helper.files.testing import ensure_tests_requirements, make_isort, mak
 from tests.common import check_file_output
 
 
-def test_make_tox(tmp_pathplus, demo_environment, file_regression: FileRegressionFixture):
+@pytest.mark.parametrize("enable_docs", [True, False])
+@pytest.mark.parametrize("enable_devmode", [True, False])
+@pytest.mark.parametrize("stubs_package", [True, False])
+@pytest.mark.parametrize("tox_testenv_extras", ["extra_a", ''])
+@pytest.mark.parametrize("mypy_deps", [[], ["docutils-stubs"]])
+@pytest.mark.parametrize("mypy_version", [0.790, "0.790", "0.782"])
+@pytest.mark.parametrize("py_modules", [["hello_world"], []])
+def test_make_tox(
+		tmp_pathplus,
+		demo_environment,
+		file_regression: FileRegressionFixture,
+		enable_docs,
+		enable_devmode,
+		tox_testenv_extras,
+		mypy_deps,
+		mypy_version,
+		py_modules,
+		stubs_package,
+		):
 	# TODO: permutations to cover all branches
-	demo_environment.globals["mypy_deps"] = ["docutils-stubs"]
-	demo_environment.globals["mypy_version"] = "0.790"
+	demo_environment.globals["stubs_package"] = stubs_package
+	demo_environment.globals["py_modules"] = py_modules
+	demo_environment.globals["mypy_deps"] = mypy_deps
+	demo_environment.globals["mypy_version"] = mypy_version
 	demo_environment.globals["tox_py_versions"] = ["py36", "py37", "py38"]
 	demo_environment.globals["tox_requirements"] = []
 	demo_environment.globals["tox_build_requirements"] = []
 	demo_environment.globals["yapf_exclude"] = []
-	demo_environment.globals["tox_testenv_extras"] = "extra_a"
-	demo_environment.globals["enable_docs"] = True
-	demo_environment.globals["enable_devmode"] = True
+	demo_environment.globals["tox_testenv_extras"] = tox_testenv_extras
+	demo_environment.globals["enable_docs"] = enable_docs
+	demo_environment.globals["enable_devmode"] = enable_devmode
 	demo_environment.globals["code_only_warning"] = code_only_warning
 	demo_environment.globals["tox_travis_versions"] = {
 			"3.6": "py36, mypy, build",

@@ -1,0 +1,13 @@
+modname: repo_helper
+copyright_years: "2020"
+author: "Dominic Davis-Foster"
+email: "dominic@davis-foster.co.uk"
+version: "0.0.1"
+username: "domdfcoding"
+license: 'LGPLv3+'
+short_desc: 'Update multiple configuration files, build scripts etc. from a single location.'
+
+classifiers:
+ - 'Development Status :: 4 - Beta'
+ - 'Intended Audience :: Developers'
+ - 'Topic :: Software Development :: Libraries :: Python Modules'

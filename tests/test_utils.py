@@ -158,6 +158,18 @@ def test_traverse_to_file(tmp_pathplus, location, expected):
 	assert traverse_to_file(tmp_pathplus / "foo" / "bar" / "baz", "foo.yml") == tmp_pathplus / expected
 
 
+# TODO: height
+
+
+def test_traverse_to_file_errors(tmp_pathplus):
+	(tmp_pathplus / "foo/bar/baz").parent.maybe_make(parents=True)
+	with pytest.raises(FileNotFoundError, match="'foo.yml' not found in .*/foo/bar/baz"):
+		traverse_to_file(tmp_pathplus / "foo" / "bar" / "baz", "foo.yml")
+
+	with pytest.raises(TypeError, match="traverse_to_file expected 2 or more arguments, got 1"):
+		traverse_to_file(tmp_pathplus)
+
+
 @pytest.mark.parametrize(
 		"date",
 		[
