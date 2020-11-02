@@ -100,24 +100,23 @@ def test_ensure_doc_requirements(tmp_pathplus, demo_environment):
 	managed_files = ensure_doc_requirements(tmp_pathplus, demo_environment)
 	assert managed_files == ["doc-source/requirements.txt"]
 
-	assert (tmp_pathplus / managed_files[0]).read_text(
-			encoding="UTF-8"
-			) == """\
-alabaster
-autodocsumm>=0.2.0
-default-values>=0.2.0
-extras-require>=0.2.0
-seed-intersphinx-mapping>=0.1.1
-sphinx>=3.0.3
-sphinx-copybutton>=0.2.12
-sphinx-notfound-page>=0.5
-sphinx-prompt>=1.1.0
-sphinx-tabs>=1.1.13
-sphinx-toolbox>=1.7.0
-sphinxcontrib-httpdomain>=1.7.0
-sphinxemoji>=0.1.6
-toctree-plus>=0.0.4
-"""
+	assert (tmp_pathplus / managed_files[0]).read_lines() == [
+			"alabaster",
+			"autodocsumm>=0.2.0",
+			"default-values>=0.2.0",
+			"extras-require>=0.2.0",
+			"seed-intersphinx-mapping>=0.1.1",
+			"sphinx>=3.0.3",
+			"sphinx-copybutton>=0.2.12",
+			"sphinx-notfound-page>=0.5",
+			"sphinx-prompt>=1.1.0",
+			"sphinx-tabs>=1.1.13",
+			"sphinx-toolbox>=1.7.1",
+			"sphinxcontrib-httpdomain>=1.7.0",
+			"sphinxemoji>=0.1.6",
+			"toctree-plus>=0.0.4",
+			'',
+			]
 
 	with (tmp_pathplus / managed_files[0]).open('a', encoding="UTF-8") as fp:
 		fp.write("lorem>=0.1.1")
@@ -125,25 +124,24 @@ toctree-plus>=0.0.4
 	managed_files = ensure_doc_requirements(tmp_pathplus, demo_environment)
 	assert managed_files == ["doc-source/requirements.txt"]
 
-	assert (tmp_pathplus / managed_files[0]).read_text(
-			encoding="UTF-8"
-			) == """\
-alabaster
-autodocsumm>=0.2.0
-default-values>=0.2.0
-extras-require>=0.2.0
-lorem>=0.1.1
-seed-intersphinx-mapping>=0.1.1
-sphinx>=3.0.3
-sphinx-copybutton>=0.2.12
-sphinx-notfound-page>=0.5
-sphinx-prompt>=1.1.0
-sphinx-tabs>=1.1.13
-sphinx-toolbox>=1.7.0
-sphinxcontrib-httpdomain>=1.7.0
-sphinxemoji>=0.1.6
-toctree-plus>=0.0.4
-"""
+	assert (tmp_pathplus / managed_files[0]).read_lines() == [
+			"alabaster",
+			"autodocsumm>=0.2.0",
+			"default-values>=0.2.0",
+			"extras-require>=0.2.0",
+			"lorem>=0.1.1",
+			"seed-intersphinx-mapping>=0.1.1",
+			"sphinx>=3.0.3",
+			"sphinx-copybutton>=0.2.12",
+			"sphinx-notfound-page>=0.5",
+			"sphinx-prompt>=1.1.0",
+			"sphinx-tabs>=1.1.13",
+			"sphinx-toolbox>=1.7.1",
+			"sphinxcontrib-httpdomain>=1.7.0",
+			"sphinxemoji>=0.1.6",
+			"toctree-plus>=0.0.4",
+			'',
+			]
 
 
 def test_make_docutils_conf(tmp_pathplus, demo_environment, file_regression):
