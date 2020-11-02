@@ -5,9 +5,9 @@ import re
 from tempfile import TemporaryDirectory
 
 # 3rd party
-from domdf_python_tools.paths import PathPlus
+from domdf_python_tools.paths import PathPlus, in_directory
 from dulwich.repo import Repo
-from path import Path
+from path import Path  # type: ignore
 from pytest_regressions.data_regression import DataRegressionFixture
 from pytest_regressions.file_regression import FileRegressionFixture
 from southwark import status
@@ -59,14 +59,15 @@ def test_via_Repo_class(
 
 	path: Path = git_repo.workspace
 
-	(path / "repo_helper.yml").write_text((pathlib.Path(__file__).parent / "repo_helper.yml_").read_text())
-	(path / "requirements.txt").touch()
-	(path / "README.rst").touch()
-	(path / "doc-source").mkdir()
-	(path / "doc-source" / "index.rst").touch()
+	with in_directory(path):
+		(path / "repo_helper.yml").write_text((pathlib.Path(__file__).parent / "repo_helper.yml_").read_text())
+		(path / "requirements.txt").touch()
+		(path / "README.rst").touch()
+		(path / "doc-source").mkdir()
+		(path / "doc-source" / "index.rst").touch()
 
-	gh = RepoHelper(path)
-	managed_files = gh.run()
+		gh = RepoHelper(path)
+		managed_files = gh.run()
 
 	data_regression.check(sorted(managed_files))
 

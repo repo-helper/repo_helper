@@ -90,7 +90,7 @@ short_desc: Update multiple configuration files, build scripts etc. from a singl
 source_dir: ''
 sphinx_conf_epilogue: []
 sphinx_conf_preamble: []
-sphinx_html_theme: repo_helper_sphinx_theme
+sphinx_html_theme: alabaster
 stubs_package: false
 tests_dir: tests
 tox_build_requirements: []

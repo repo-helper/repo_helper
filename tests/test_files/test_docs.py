@@ -101,7 +101,7 @@ def test_ensure_doc_requirements(tmp_pathplus, demo_environment):
 	assert managed_files == ["doc-source/requirements.txt"]
 
 	assert (tmp_pathplus / managed_files[0]).read_lines() == [
-			"alabaster",
+			"alabaster>=0.7.12",
 			"autodocsumm>=0.2.0",
 			"default-values>=0.2.0",
 			"extras-require>=0.2.0",
@@ -125,7 +125,7 @@ def test_ensure_doc_requirements(tmp_pathplus, demo_environment):
 	assert managed_files == ["doc-source/requirements.txt"]
 
 	assert (tmp_pathplus / managed_files[0]).read_lines() == [
-			"alabaster",
+			"alabaster>=0.7.12",
 			"autodocsumm>=0.2.0",
 			"default-values>=0.2.0",
 			"extras-require>=0.2.0",

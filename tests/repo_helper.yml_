@@ -16,7 +16,7 @@ console_scripts:
   - "repo_helper = repo_helper.__main__:main"
   - "repo-helper = repo_helper.__main__:main"
 
-sphinx_html_theme: repo_helper_sphinx_theme
+sphinx_html_theme: alabaster
 
 python_deploy_version: 3.7
 

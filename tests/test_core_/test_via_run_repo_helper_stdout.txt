@@ -35,8 +35,8 @@ The following files will be committed:
   setup.py
   setup.cfg
   __pkginfo__.py
-  .pre-commit-config.yaml
   README.rst
+  .pre-commit-config.yaml
   .isort.cfg
   repo_helper.yml
 

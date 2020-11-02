@@ -108,6 +108,7 @@ class DocRequirementsManager(RequirementsManager):
 	def compile_target_requirements(self) -> None:
 		# Mapping of pypi_name to version specifier
 		theme_versions = {
+				"alabaster": ">=0.7.12",
 				"sphinx_rtd_theme": "<0.5",
 				"domdf_sphinx_theme": ">=0.1.0",
 				"repo_helper_sphinx_theme": ">=0.0.2",
