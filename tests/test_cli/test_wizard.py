@@ -6,18 +6,16 @@ from typing import List
 # 3rd party
 import pytest
 from click.testing import CliRunner, Result
-from domdf_python_tools.paths import PathPlus, in_directory
-from pytest_git import GitRepo  # type: ignore
+from domdf_python_tools.paths import in_directory
+from dulwich.config import StackedConfig
 
 # this package
 from repo_helper.cli.commands.wizard import wizard
 from tests.common import check_file_output
 
 
-def test_wizard(git_repo: GitRepo, file_regression):
-	repo_path = PathPlus(git_repo.workspace)
-
-	with in_directory(repo_path):
+def test_wizard(temp_empty_repo, file_regression):
+	with in_directory(temp_empty_repo.path):
 		runner = CliRunner()
 
 		stdin = "\n".join([
@@ -51,8 +49,8 @@ def test_wizard(git_repo: GitRepo, file_regression):
 		assert not result.exception
 		assert result.exit_code == 0
 
-		assert (repo_path / "repo_helper.yml").is_file()
-		check_file_output((repo_path / "repo_helper.yml"), file_regression)
+		assert (temp_empty_repo.path / "repo_helper.yml").is_file()
+		check_file_output((temp_empty_repo.path / "repo_helper.yml"), file_regression)
 
 		runner = CliRunner()
 
@@ -74,10 +72,8 @@ def test_wizard(git_repo: GitRepo, file_regression):
 		assert stdout[6] == "Aborted!"
 
 
-def test_wizard_validation(git_repo: GitRepo, file_regression):
-	repo_path = PathPlus(git_repo.workspace)
-
-	with in_directory(repo_path):
+def test_wizard_validation(temp_empty_repo, file_regression):
+	with in_directory(temp_empty_repo.path):
 
 		runner = CliRunner()
 
@@ -108,16 +104,14 @@ def test_wizard_validation(git_repo: GitRepo, file_regression):
 		assert stdout.count("Description: ") == 2
 		assert stdout.count("Description: a short, one-line description for the project") == 1
 
-		assert (repo_path / "repo_helper.yml").is_file()
-		check_file_output((repo_path / "repo_helper.yml"), file_regression)
+		assert (temp_empty_repo.path / "repo_helper.yml").is_file()
+		check_file_output((temp_empty_repo.path / "repo_helper.yml"), file_regression)
 
 
-def test_wizard_git_config(git_repo: GitRepo, file_regression):
-	repo_path = PathPlus(git_repo.workspace)
+def test_wizard_git_config(temp_empty_repo, file_regression):
+	with in_directory(temp_empty_repo.path):
 
-	with in_directory(repo_path):
-
-		(repo_path / ".git" / "config").write_lines([
+		(temp_empty_repo.path / ".git" / "config").write_lines([
 				"[user]",
 				"	name = Guido",
 				"	email = guido@python.org",
@@ -141,27 +135,21 @@ def test_wizard_git_config(git_repo: GitRepo, file_regression):
 		assert not result.exception
 		assert result.exit_code == 0
 
-		assert (repo_path / "repo_helper.yml").is_file()
-		check_file_output((repo_path / "repo_helper.yml"), file_regression)
+		assert (temp_empty_repo.path / "repo_helper.yml").is_file()
+		check_file_output((temp_empty_repo.path / "repo_helper.yml"), file_regression)
 
 
 @pytest.mark.xfail(
 		condition=sys.platform == "win32",
 		reason="Environment variable not being read.",
 		)
-def test_wizard_env_vars(git_repo: GitRepo, file_regression, monkeypatch):
-
-	# 3rd party
-	from dulwich.config import StackedConfig
-
+def test_wizard_env_vars(temp_empty_repo, file_regression, monkeypatch):
 	# Monkeypatch dulwich so it doesn't try to use the global config.
 	monkeypatch.setattr(StackedConfig, "default_backends", lambda *args: [], raising=True)
 	monkeypatch.setenv("GIT_COMMITTER_NAME", "Guido")
 	monkeypatch.setenv("GIT_COMMITTER_EMAIL", "guido@python.org")
 
-	repo_path = PathPlus(git_repo.workspace)
-
-	with in_directory(repo_path):
+	with in_directory(temp_empty_repo.path):
 		runner = CliRunner()
 
 		stdin = "\n".join([
@@ -180,15 +168,13 @@ def test_wizard_env_vars(git_repo: GitRepo, file_regression, monkeypatch):
 		assert not result.exception
 		assert result.exit_code == 0
 
-		assert (repo_path / "repo_helper.yml").is_file()
-		check_file_output((repo_path / "repo_helper.yml"), file_regression)
+		assert (temp_empty_repo.path / "repo_helper.yml").is_file()
+		check_file_output((temp_empty_repo.path / "repo_helper.yml"), file_regression)
 
 
 def test_wizard_not_git(tmp_pathplus, file_regression, monkeypatch):
 
 	# Monkeypatch dulwich so it doesn't try to use the global config.
-	# 3rd party
-	from dulwich.config import StackedConfig
 	monkeypatch.setattr(StackedConfig, "default_backends", lambda *args: [], raising=True)
 	monkeypatch.setenv("GIT_COMMITTER_NAME", "Guido")
 	monkeypatch.setenv("GIT_COMMITTER_EMAIL", "guido@python.org")

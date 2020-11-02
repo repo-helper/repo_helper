@@ -22,11 +22,14 @@
 
 # stdlib
 import os
+import pathlib
+import secrets
 from pathlib import Path
 
 # 3rd party
 import jinja2
 import pytest
+from dulwich.repo import Repo
 
 # this package
 from repo_helper.files.linting import lint_fix_list, lint_warn_list
@@ -91,3 +94,19 @@ def demo_environment():
 def original_datadir(request):
 	# Work around pycharm confusing datadir with test file.
 	return Path(os.path.splitext(request.module.__file__)[0] + "_")
+
+
+@pytest.fixture()
+def temp_repo(temp_empty_repo) -> Repo:
+	(temp_empty_repo.path / "repo_helper.yml").write_text(
+			(pathlib.Path(__file__).parent / "repo_helper.yml_").read_text()
+			)
+	return temp_empty_repo
+
+
+@pytest.fixture()
+def temp_empty_repo(tmp_pathplus) -> Repo:
+	repo_dir = tmp_pathplus / secrets.token_hex(8)
+	repo_dir.maybe_make(parents=True)
+	repo = Repo.init(repo_dir)
+	return repo

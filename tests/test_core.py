@@ -5,9 +5,10 @@ import re
 from tempfile import TemporaryDirectory
 
 # 3rd party
+import pytest
+from click import Abort
 from domdf_python_tools.paths import PathPlus, in_directory
 from dulwich.repo import Repo
-from path import Path  # type: ignore
 from pytest_regressions.data_regression import DataRegressionFixture
 from pytest_regressions.file_regression import FileRegressionFixture
 from southwark import status
@@ -48,7 +49,7 @@ def test_via_run_repo_helper(capsys, file_regression: FileRegressionFixture, mon
 
 
 def test_via_Repo_class(
-		git_repo,
+		temp_repo,
 		capsys,
 		file_regression: FileRegressionFixture,
 		data_regression: DataRegressionFixture,
@@ -57,19 +58,46 @@ def test_via_Repo_class(
 
 	monkeypatch.setattr(repo_helper.utils, 'today', FAKE_DATE)
 
-	path: Path = git_repo.workspace
+	with in_directory(temp_repo.path):
+		(temp_repo.path / "repo_helper.yml").write_text(
+				(pathlib.Path(__file__).parent / "repo_helper.yml_").read_text()
+				)
+		(temp_repo.path / "requirements.txt").touch()
+		(temp_repo.path / "README.rst").touch()
+		(temp_repo.path / "doc-source").mkdir()
+		(temp_repo.path / "doc-source" / "index.rst").touch()
 
-	with in_directory(path):
-		(path / "repo_helper.yml").write_text((pathlib.Path(__file__).parent / "repo_helper.yml_").read_text())
-		(path / "requirements.txt").touch()
-		(path / "README.rst").touch()
-		(path / "doc-source").mkdir()
-		(path / "doc-source" / "index.rst").touch()
-
-		gh = RepoHelper(path)
+		gh = RepoHelper(temp_repo.path)
 		managed_files = gh.run()
 
 	data_regression.check(sorted(managed_files))
 
 	assert capsys.readouterr().out == ''
 	assert capsys.readouterr().err == ''
+
+
+def test_managed_message(temp_repo):
+	rh = RepoHelper(temp_repo.path)
+	assert rh.managed_message == "This file is managed by 'repo_helper'. Don't edit it directly."
+	assert rh.templates.globals["managed_message"
+								] == "This file is managed by 'repo_helper'. Don't edit it directly."
+
+	rh.managed_message = "Different managed message"
+	assert rh.managed_message == "Different managed message"
+	assert rh.templates.globals["managed_message"] == "Different managed message"
+
+	rh = RepoHelper(temp_repo.path, managed_message="Managed message 3")
+	assert rh.managed_message == "Managed message 3"
+	assert rh.templates.globals["managed_message"] == "Managed message 3"
+
+
+def test_repo_name(temp_repo):
+	rh = RepoHelper(temp_repo.path)
+	assert rh.repo_name == "repo_helper_demo"
+
+
+def test_not_repo_dir(tmp_pathplus, capsys):
+	with pytest.raises(Abort):
+		run_repo_helper(tmp_pathplus, force=False, initialise=False, commit=False, message='')
+
+	assert capsys.readouterr().err.startswith("Unable to run 'repo_helper'.\nThe error was:\n")
