@@ -27,7 +27,9 @@ Configuration for `pre-commit <https://pre-commit.com>`_.
 import functools
 import pathlib
 import posixpath
+import re
 from io import StringIO
+from textwrap import indent
 from typing import Iterable, List, MutableMapping, Union
 
 # 3rd party
@@ -35,6 +37,7 @@ import attr
 import jinja2
 from apeye.url import URL
 from domdf_python_tools.paths import PathPlus
+from domdf_python_tools.stringlist import StringList
 from ruamel import yaml
 from typing_extensions import Literal, TypedDict
 
@@ -246,33 +249,36 @@ def make_pre_commit(repo_path: pathlib.Path, templates: jinja2.Environment) -> L
 	# 		hooks=["yamllint"]
 	# 		)
 
-	config = {
-			"repos": [
-					pre_commit_hooks.to_dict(),
-					domdfcoding_hooks.to_dict(),
-					flake8_dunder_all.to_dict(),
-					pygrep_hooks.to_dict(),
-					pyupgrade.to_dict(),
-					lucas_c_hooks.to_dict(),
-					yapf_isort.to_dict(),
-					]
-			}
-
 	pre_commit_file = PathPlus(repo_path / ".pre-commit-config.yaml")
 
 	dumper = yaml.YAML()
 	dumper.indent(mapping=2, sequence=3, offset=1)
 
-	buf = StringIO()
-	dumper.dump(config, buf)
-
-	pre_commit_file.write_lines([
+	output = StringList([
 			f"# {templates.globals['managed_message']}",
 			"---",
 			'',
 			f"exclude: {templates.globals['pre_commit_exclude']}",
 			'',
-			buf.getvalue(),
+			"repos:",
 			])
+
+	indent_re = re.compile("^ {3}")
+
+	for hook in [
+			pre_commit_hooks,
+			domdfcoding_hooks,
+			flake8_dunder_all,
+			pygrep_hooks,
+			pyupgrade,
+			lucas_c_hooks,
+			yapf_isort,
+			]:
+		buf = StringIO()
+		dumper.dump(hook.to_dict(), buf)
+		output.append(indent_re.sub(" - ", indent(buf.getvalue(), "   ")))
+		output.blankline(ensure_single=True)
+
+	pre_commit_file.write_lines(output)
 
 	return [pre_commit_file.name]
