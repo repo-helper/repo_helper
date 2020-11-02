@@ -63,6 +63,6 @@ exclude_files:
 
 extras_require:
   schema:
-   - lxml
+   - lxml>=4.6.1
 
 tox_testenv_extras: all

@@ -30,4 +30,4 @@ __version__ = "0.0.1"
 
 repo_root = pathlib.Path(__file__).parent
 install_requires = (repo_root / "requirements.txt").read_text(encoding="utf-8").split('\n')
-extras_require = {'schema': ['lxml'], 'all': ['lxml']}
+extras_require = {'schema': ['lxml>=4.6.1'], 'all': ['lxml>=4.6.1']}
