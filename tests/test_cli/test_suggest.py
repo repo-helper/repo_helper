@@ -1,8 +1,3 @@
-# stdlib
-import os
-import pathlib
-import re
-
 # 3rd party
 import pytest
 from click.testing import CliRunner, Result
@@ -186,12 +181,12 @@ Error: Invalid value for '-s' / '--status': 0 is not in the valid range of 1 to 
 @pytest.mark.parametrize(
 		"requirements",
 		[
-				pytest.param(["dash"], id="dash"),
-				pytest.param(["Dash"], id="Dash"),
-				pytest.param(["jupyter"], id="jupyter"),
-				pytest.param(["Jupyter"], id="Jupyter"),
-				pytest.param(["matplotlib"], id="matplotlib"),
-				pytest.param(["Matplotlib"], id="Matplotlib"),
+				pytest.param(["dash"], id="dash_upper"),
+				pytest.param(["Dash"], id="dash_lower"),
+				pytest.param(["jupyter"], id="jupyter_upper"),
+				pytest.param(["Jupyter"], id="jupyter_lower"),
+				pytest.param(["matplotlib"], id="matplotlib_upper"),
+				pytest.param(["Matplotlib"], id="matplotlib_lower"),
 				pytest.param(["pygame"], id="pygame"),
 				pytest.param(["arcade"], id="arcade"),
 				pytest.param(["flake8"], id="flake8"),
