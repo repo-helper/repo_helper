@@ -33,10 +33,7 @@ enable_docs: true
 enable_pre_commit: true
 enable_releases: true
 enable_tests: true
-exclude_files:
-- pre-commit
-- tox
-- Source
+exclude_files: []
 extra_sphinx_extensions:
 - configconfig.autoconfig
 extras_require:
