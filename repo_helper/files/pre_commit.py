@@ -184,7 +184,6 @@ lucas_c_hooks = Repo(
 		hooks=["remove-crlf", "forbid-crlf"],
 		)
 
-
 # shellcheck = Repo(
 # 		repo=make_github_url("shellcheck-py", "shellcheck-py"),
 # 		rev="v0.7.1.1",
@@ -247,7 +246,7 @@ def make_pre_commit(repo_path: pathlib.Path, templates: jinja2.Environment) -> L
 
 	yapf_isort = Repo(
 			repo=make_github_url("domdfcoding", "yapf-isort"),
-			rev="v0.4.3",
+			rev="v0.4.4",
 			hooks=[{"id": "yapf-isort", "exclude": fr"^({'|'.join(non_source_files)})\.py$"}]
 			)
 
