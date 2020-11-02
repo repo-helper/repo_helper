@@ -127,7 +127,12 @@ class ToxConfig(IniConfigurator):
 		Compile the list of mypy dependencies.
 		"""
 
-		mypy_deps = [f"mypy=={self['mypy_version']}", "lxml"]
+		if self["stubs_package"]:
+			mypy_deps = ["git+https://github.com/python/mypy@c1fa1ade66a053774366d3710c380cfc8b3abbb1"]
+		else:
+			mypy_deps = [f"mypy=={self['mypy_version']}"]
+
+		mypy_deps.append("lxml")
 
 		if self._globals["enable_tests"]:
 			mypy_deps.append(f"-r{{toxinidir}}/{self._globals['tests_dir']}/requirements.txt")
@@ -311,7 +316,7 @@ class ToxConfig(IniConfigurator):
 			self._ini["testenv:mypy"]["deps"] = indent_join(self.get_mypy_dependencies())
 
 			if self._globals["stubs_package"]:
-				self._ini["testenv:mypy"]["commands"] = "mypy tests {posargs}"
+				self._ini["testenv:mypy"]["commands"] = indent_join(['', f"stubtest {self['import_name']} {{posargs}}", "mypy tests"])
 			else:
 				self._ini["testenv:mypy"]["commands"] = f"mypy {' '.join(self.get_source_files())} {{posargs}}"
 		else:

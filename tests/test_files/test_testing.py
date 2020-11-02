@@ -34,12 +34,12 @@ from repo_helper.files.testing import ensure_tests_requirements, make_isort, mak
 from tests.common import check_file_output
 
 
-@pytest.mark.parametrize("enable_docs", [True, False])
-@pytest.mark.parametrize("enable_devmode", [True, False])
-@pytest.mark.parametrize("stubs_package", [True, False])
+@pytest.mark.parametrize("enable_docs", [pytest.param(True, id="docs"), pytest.param(False, id="no docs")])
+@pytest.mark.parametrize("enable_devmode", [pytest.param(True, id="devmode"), pytest.param(False, id="no devmode")])
+@pytest.mark.parametrize("stubs_package", [pytest.param(True, id="stubs"), pytest.param(False, id="no stubs")])
 @pytest.mark.parametrize("tox_testenv_extras", ["extra_a", ''])
 @pytest.mark.parametrize("mypy_deps", [[], ["docutils-stubs"]])
-@pytest.mark.parametrize("mypy_version", [0.790, "0.790", "0.782"])
+@pytest.mark.parametrize("mypy_version", ["0.790", "0.782"])
 @pytest.mark.parametrize("py_modules", [["hello_world"], []])
 def test_make_tox(
 		tmp_pathplus,
