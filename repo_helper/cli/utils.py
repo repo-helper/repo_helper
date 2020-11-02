@@ -33,7 +33,7 @@ from typing import Iterable, Optional
 import click
 from consolekit.input import confirm
 from consolekit.utils import abort
-from domdf_python_tools.paths import PathPlus
+from domdf_python_tools.paths import PathPlus, in_directory
 from domdf_python_tools.terminal_colours import Fore
 from domdf_python_tools.typing import PathLike
 from dulwich import repo
@@ -89,10 +89,8 @@ def commit_changed_files(
 
 	# Ensure pre-commit hooks are installed
 	if enable_pre_commit:
-		last_wd = os.getcwd()
-		os.chdir(str(repo_path))
-		pre_commit.main.main(["install"])
-		os.chdir(last_wd)
+		with in_directory(repo_path):
+			pre_commit.main.main(["install"])
 
 	if staged_files:
 		click.echo("\nThe following files will be committed:")
@@ -143,7 +141,7 @@ def run_repo_helper(
 	:param force: Whether to force the operation if the repository is not clean.
 	:param initialise: Whether to initialise the repository.
 	:param commit: Whether to commit unchanged files.
-	:param message:
+	:param message: The commit message.
 	"""
 
 	# this package

@@ -71,6 +71,9 @@ __all__ = [
 		"no_dev_versions",
 		]
 
+#: Under normal circumstances returns :meth:`datetime.date.today`.
+today: date = date.today()
+
 # def ensure_requirements(requirements_list: Iterable[Requirement], requirements_file: pathlib.Path):
 # 	"""
 # 	Ensure the given requirements file contains the required entries.
@@ -421,14 +424,15 @@ def calc_easter(year: int) -> date:
 
 
 def easter_egg() -> None:  # noqa: D102  # pragma: no cover
-	today = date.today()
 	easter = calc_easter(today.year)
 	easter_margin = timedelta(days=7)
 
 	if today - easter_margin <= easter <= today + easter_margin:
 		print("🐇 🐣 🥚")
-	elif date(today.year, 10, 24) <= date(today.year, 10, 31) <= date(today.year, 11, 2):
+	elif date(today.year, 10, 24) <= today <= date(today.year, 11, 2):
 		print("🎃 👻 🦇")
+	elif today == date(today.year, 11, 5):
+		print("🎆 🔥 🚀")
 	elif today.month == 12:
 		print("🎅 ☃️ 🎁")
 

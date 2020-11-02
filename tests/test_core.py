@@ -1,18 +1,21 @@
+# stdlib
 import datetime
 import pathlib
 import re
 from tempfile import TemporaryDirectory
 
+# 3rd party
 from domdf_python_tools.paths import PathPlus
+from dulwich.repo import Repo
 from path import Path
 from pytest_regressions.data_regression import DataRegressionFixture
 from pytest_regressions.file_regression import FileRegressionFixture
-
-from repo_helper.cli.utils import run_repo_helper
 from southwark import status
+
+# this package
 import repo_helper.utils
+from repo_helper.cli.utils import run_repo_helper
 from repo_helper.core import RepoHelper
-from dulwich.repo import Repo
 
 FAKE_DATE = datetime.date(2020, 7, 25)
 
@@ -44,7 +47,13 @@ def test_via_run_repo_helper(capsys, file_regression: FileRegressionFixture, mon
 		file_regression.check(capsys.readouterr().err, extension="_stderr.txt", encoding="UTF-8")
 
 
-def test_via_Repo_class(git_repo, capsys, file_regression: FileRegressionFixture, data_regression: DataRegressionFixture, monkeypatch):
+def test_via_Repo_class(
+		git_repo,
+		capsys,
+		file_regression: FileRegressionFixture,
+		data_regression: DataRegressionFixture,
+		monkeypatch
+		):
 
 	monkeypatch.setattr(repo_helper.utils, 'today', FAKE_DATE)
 
