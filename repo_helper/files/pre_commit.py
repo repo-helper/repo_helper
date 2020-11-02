@@ -145,26 +145,26 @@ class Repo:
 
 
 pre_commit_hooks = Repo(
-			repo=make_github_url("pre-commit", "pre-commit-hooks"),
-			rev="v3.3.0",
-			hooks=[
-					"check-added-large-files",
-					"check-ast",
-					"check-byte-order-marker",
-					"check-case-conflict",
-					"check-executables-have-shebangs",
-					"check-json",
-					"check-toml",
-					"check-yaml",
-					"check-merge-conflict",
-					"check-symlinks",
-					"check-vcs-permalinks",
-					"detect-private-key",
-					"end-of-file-fixer",
-					"trailing-whitespace",
-					"mixed-line-ending",
-					]
-			)
+		repo=make_github_url("pre-commit", "pre-commit-hooks"),
+		rev="v3.3.0",
+		hooks=[
+				"check-added-large-files",
+				"check-ast",
+				"check-byte-order-marker",
+				"check-case-conflict",
+				"check-executables-have-shebangs",
+				"check-json",
+				"check-toml",
+				"check-yaml",
+				"check-merge-conflict",
+				"check-symlinks",
+				"check-vcs-permalinks",
+				"detect-private-key",
+				"end-of-file-fixer",
+				"trailing-whitespace",
+				"mixed-line-ending",
+				]
+		)
 
 pygrep_hooks = Repo(
 		repo=make_github_url("pre-commit", "pygrep-hooks"),

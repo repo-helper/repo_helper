@@ -5,7 +5,7 @@ exclude: ^.*\._py$
 
 repos:
  - repo: https://github.com/pre-commit/pre-commit-hooks
-   rev: v2.4.0
+   rev: v3.3.0
    hooks:
     - id: check-added-large-files
     - id: check-ast
@@ -13,13 +13,13 @@ repos:
     - id: check-case-conflict
     - id: check-executables-have-shebangs
     - id: check-json
-    - id: check-merge-conflict
-    - id: check-symlinks
     - id: check-toml
       exclude: ^repo_helper/templates/.*\.toml$
-    - id: check-vcs-permalinks
     - id: check-yaml
       exclude: ^repo_helper/templates/.*\.(yml|yaml)$
+    - id: check-merge-conflict
+    - id: check-symlinks
+    - id: check-vcs-permalinks
     - id: detect-private-key
     - id: end-of-file-fixer
     - id: trailing-whitespace
@@ -29,13 +29,14 @@ repos:
    rev: v0.0.4
    hooks:
     - id: requirements-txt-sorter
-      args: [--allow-git]
+      args:
+       - --allow-git
     - id: check-docstring-first
       exclude: ^(doc-source/conf|__pkginfo__|make_conda_recipe|setup|tests/.*)\.py$
     - id: bind-requirements
 
  - repo: https://github.com/domdfcoding/flake8-dunder-all
-   rev: v0.0.4
+   rev: v0.1.0
    hooks:
     - id: ensure-dunder-all
       files: ^repo_helper/.*\.py$
@@ -47,20 +48,20 @@ repos:
     - id: python-use-type-annotations
 
  - repo: https://github.com/asottile/pyupgrade
-   rev: v1.5.1
+   rev: v2.7.3
    hooks:
     - id: pyupgrade
-      args: [--py36-plus]
+      args:
+       - --py36-plus
 
  - repo: https://github.com/Lucas-C/pre-commit-hooks
-   rev: v1.1.7
+   rev: v1.1.9
    hooks:
-    - id: forbid-crlf
     - id: remove-crlf
-
+    - id: forbid-crlf
 
  - repo: https://github.com/domdfcoding/yapf-isort
-   rev: v0.3.0
+   rev: v0.4.4
    hooks:
     - id: yapf-isort
       exclude: ^(doc-source/conf|__pkginfo__|make_conda_recipe|setup|repo_helper/templates/.*)\.(_)?py$

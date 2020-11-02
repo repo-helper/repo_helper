@@ -111,7 +111,7 @@ def classifiers(add: bool, status: Optional[int], library: Optional[bool]) -> in
 	pkg_dir = rh.target_repo / config["import_name"]
 
 	for language, patterns in programming_languages.items():
-		for _ in chain.from_iterable((pkg_dir.rglob(pattern) for pattern in patterns)):
+		for _ in chain.from_iterable(pkg_dir.rglob(pattern) for pattern in patterns):
 			suggested_classifiers.add(f"Programming Language :: {language}")
 			break
 
