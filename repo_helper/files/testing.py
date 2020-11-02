@@ -408,13 +408,13 @@ class ToxConfig(IniConfigurator):
 		if self["import_name"] != "coverage_pyver_pragma":
 			# TODO: allow user customisation
 			self._ini["coverage:run"]["plugins"] = "coverage_pyver_pragma"
-		elif "plugins" in self._ini["coverage:run"]:
-			del self._ini["coverage:run"]["plugins"]
+		# elif "plugins" in self._ini["coverage:run"]:
+		# 	del self._ini["coverage:run"]["plugins"]
 
-		self._ini["coverage:run"]["source"] = self["import_name"]
+		# self._ini["coverage:run"]["source"] = self["import_name"]
 
-		# else:
-		# 	self._ini.remove_section("coverage:run")
+		else:
+			self._ini.remove_section("coverage:run")
 
 	def coverage_report(self):
 		"""

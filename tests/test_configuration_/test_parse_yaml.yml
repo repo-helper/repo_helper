@@ -50,7 +50,7 @@ html_context: {}
 html_theme_options: {}
 imgbot_ignore:
 - repo_helper.png
-import_name: repo_helper
+import_name: repo_helper_demo
 intersphinx_mapping:
 - '''jinja2'': (''https://jinja.palletsprojects.com/en/2.11.x/'', None)'
 keywords: []
@@ -61,7 +61,7 @@ manifest_additional:
 - include repo_helper/files/isort.cfg
 - include repo_helper/repo_helper_schema.json
 min_py_version: '3.6'
-modname: repo_helper
+modname: repo_helper_demo
 mypy_deps: []
 mypy_plugins: []
 mypy_version: '0.790'
@@ -75,14 +75,14 @@ pre_commit_exclude: ^$
 preserve_custom_theme: true
 pure_python: true
 py_modules: []
-pypi_name: repo_helper
+pypi_name: repo_helper_demo
 python_deploy_version: '3.7'
 python_versions:
 - '3.6'
 - '3.7'
 - '3.8'
 - 3.9-dev
-repo_name: repo_helper
+repo_name: repo_helper_demo
 rtfd_author: Dominic Davis-Foster
 setup_pre: []
 short_desc: Update multiple configuration files, build scripts etc. from a single

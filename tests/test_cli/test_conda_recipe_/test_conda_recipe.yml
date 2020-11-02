@@ -1,9 +1,9 @@
 package:
-  name: "repo_helper"
+  name: "repo_helper_demo"
   version: "0.0.1"
 
 source:
-  url: "https://pypi.io/packages/source/r/repo_helper/repo_helper-0.0.1.tar.gz"
+  url: "https://pypi.io/packages/source/r/repo_helper_demo/repo_helper_demo-0.0.1.tar.gz"
 
 build:
   noarch: python
@@ -62,15 +62,15 @@ requirements:
 
 test:
   imports:
-    - repo_helper
+    - repo_helper_demo
 
 about:
-  home: "https://github.com/domdfcoding/repo_helper"
+  home: "https://github.com/domdfcoding/repo_helper_demo"
   license: "GNU Lesser General Public License v3 or later (LGPLv3+)"
   summary: "Update multiple configuration files, build scripts etc. from a single location."
   description: "Update multiple configuration files, build scripts etc. from a single location."
-  doc_url: https://repo_helper.readthedocs.io
-  dev_url: https://github.com/domdfcoding/repo_helper
+  doc_url: https://repo_helper_demo.readthedocs.io
+  dev_url: https://github.com/domdfcoding/repo_helper_demo
 
 extra:
   maintainers:
