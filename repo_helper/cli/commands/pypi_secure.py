@@ -28,6 +28,7 @@ from typing import Optional
 
 # 3rd party
 import click
+from domdf_python_tools.stringlist import StringList
 
 # this package
 from repo_helper.cli import cli_command
@@ -63,8 +64,10 @@ def pypi_secure(password: Optional[str] = None) -> int:
 	(output, err) = process.communicate()
 	exit_code = process.wait()
 
-	with config_file.open(mode="a") as fp:
-		fp.write("\n")
-		fp.write(f"travis_pypi_secure: {output.decode('UTF-8')}")
+	if output:
+		content = StringList(config_file.read_text())
+		content.blankline(ensure_single=True)
+		content.append(f"travis_pypi_secure: {output.decode('UTF-8')}")
+		config_file.write_lines(content)
 
 	return exit_code
