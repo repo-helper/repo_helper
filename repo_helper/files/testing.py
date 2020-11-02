@@ -316,7 +316,11 @@ class ToxConfig(IniConfigurator):
 			self._ini["testenv:mypy"]["deps"] = indent_join(self.get_mypy_dependencies())
 
 			if self._globals["stubs_package"]:
-				self._ini["testenv:mypy"]["commands"] = indent_join(['', f"stubtest {self['import_name']} {{posargs}}", "mypy tests"])
+				self._ini["testenv:mypy"]["commands"] = indent_join([
+						'',
+						f"stubtest {self['import_name']} {{posargs}}",
+						"mypy tests",
+						])
 			else:
 				self._ini["testenv:mypy"]["commands"] = f"mypy {' '.join(self.get_source_files())} {{posargs}}"
 		else:

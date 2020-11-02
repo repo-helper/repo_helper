@@ -34,9 +34,16 @@ from repo_helper.files.testing import ensure_tests_requirements, make_isort, mak
 from tests.common import check_file_output
 
 
-@pytest.mark.parametrize("enable_docs", [pytest.param(True, id="docs"), pytest.param(False, id="no docs")])
-@pytest.mark.parametrize("enable_devmode", [pytest.param(True, id="devmode"), pytest.param(False, id="no devmode")])
-@pytest.mark.parametrize("stubs_package", [pytest.param(True, id="stubs"), pytest.param(False, id="no stubs")])
+def boolean_option(name: str, id: str):
+	return pytest.mark.parametrize(name, [
+			pytest.param(True, id=id),
+			pytest.param(False, id=f"no {id}"),
+			])
+
+
+@boolean_option("enable_docs", "docs")
+@boolean_option("enable_devmode", "devmode")
+@boolean_option("stubs_package", "stubs")
 @pytest.mark.parametrize("tox_testenv_extras", ["extra_a", ''])
 @pytest.mark.parametrize("mypy_deps", [[], ["docutils-stubs"]])
 @pytest.mark.parametrize("mypy_version", ["0.790", "0.782"])
