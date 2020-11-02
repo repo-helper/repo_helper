@@ -144,21 +144,7 @@ class Repo:
 				}
 
 
-@management.register("pre-commit", ["enable_pre_commit"])
-def make_pre_commit(repo_path: pathlib.Path, templates: jinja2.Environment) -> List[str]:
-	"""
-	Add configuration for ``pre-commit``.
-
-	https://github.com/pre-commit/pre-commit
-
-	# See https://pre-commit.com for more information
-	# See https://pre-commit.com/hooks.html for more hooks
-
-	:param repo_path: Path to the repository root.
-	:param templates:
-	"""
-
-	pre_commit_hooks = Repo(
+pre_commit_hooks = Repo(
 			repo=make_github_url("pre-commit", "pre-commit-hooks"),
 			rev="v3.3.0",
 			hooks=[
@@ -179,6 +165,52 @@ def make_pre_commit(repo_path: pathlib.Path, templates: jinja2.Environment) -> L
 					"mixed-line-ending",
 					]
 			)
+
+pygrep_hooks = Repo(
+		repo=make_github_url("pre-commit", "pygrep-hooks"),
+		rev="v1.5.1",
+		hooks=["python-no-eval"],
+		)
+
+pyupgrade = Repo(
+		repo=make_github_url("asottile", "pyupgrade"),
+		rev="v2.7.3",
+		hooks=[{"id": "pyupgrade", "args": ["--py36-plus"]}]
+		)
+
+lucas_c_hooks = Repo(
+		repo=make_github_url("Lucas-C", "pre-commit-hooks"),
+		rev="v1.1.9",
+		hooks=["remove-crlf", "forbid-crlf"],
+		)
+
+
+# shellcheck = Repo(
+# 		repo=make_github_url("shellcheck-py", "shellcheck-py"),
+# 		rev="v0.7.1.1",
+# 		hooks=["shellcheck"]
+# 		)
+#
+# yamllint = Repo(
+# 		repo=make_github_url("adrienverge", "yamllint"),
+# 		rev="v1.23.0",
+# 		hooks=["yamllint"]
+# 		)
+
+
+@management.register("pre-commit", ["enable_pre_commit"])
+def make_pre_commit(repo_path: pathlib.Path, templates: jinja2.Environment) -> List[str]:
+	"""
+	Add configuration for ``pre-commit``.
+
+	https://github.com/pre-commit/pre-commit
+
+	# See https://pre-commit.com for more information
+	# See https://pre-commit.com/hooks.html for more hooks
+
+	:param repo_path: Path to the repository root.
+	:param templates:
+	"""
 
 	docs_dir = templates.globals["docs_dir"]
 	import_name = templates.globals["import_name"]
@@ -213,41 +245,11 @@ def make_pre_commit(repo_path: pathlib.Path, templates: jinja2.Environment) -> L
 					}]
 			)
 
-	pygrep_hooks = Repo(
-			repo=make_github_url("pre-commit", "pygrep-hooks"),
-			rev="v1.5.1",
-			hooks=["python-no-eval"],
-			)
-
-	pyupgrade = Repo(
-			repo=make_github_url("asottile", "pyupgrade"),
-			rev="v2.7.3",
-			hooks=[{"id": "pyupgrade", "args": ["--py36-plus"]}]
-			)
-
-	lucas_c_hooks = Repo(
-			repo=make_github_url("Lucas-C", "pre-commit-hooks"),
-			rev="v1.1.9",
-			hooks=["remove-crlf", "forbid-crlf"],
-			)
-
 	yapf_isort = Repo(
 			repo=make_github_url("domdfcoding", "yapf-isort"),
 			rev="v0.4.3",
 			hooks=[{"id": "yapf-isort", "exclude": fr"^({'|'.join(non_source_files)})\.py$"}]
 			)
-
-	# shellcheck = Repo(
-	# 		repo=make_github_url("shellcheck-py", "shellcheck-py"),
-	# 		rev="v0.7.1.1",
-	# 		hooks=["shellcheck"]
-	# 		)
-	#
-	# yamllint = Repo(
-	# 		repo=make_github_url("adrienverge", "yamllint"),
-	# 		rev="v1.23.0",
-	# 		hooks=["yamllint"]
-	# 		)
 
 	pre_commit_file = PathPlus(repo_path / ".pre-commit-config.yaml")
 
