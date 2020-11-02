@@ -204,6 +204,10 @@ class ToxConfig(IniConfigurator):
 			testenv_commands.append(
 					f"python -m pytest --cov={self['import_name']} -r aR {self['tests_dir']}/ {{posargs}}"
 					)
+			# TODO: for tox-isolation
+			# testenv_commands.append(
+			# 		f"python -m pytest --cov={{envsitepackagesdir}}/{self['import_name']} -r aR {self['tests_dir']}/ {{posargs}}"
+			# 		)
 			testenv_commands.insert(0, '')
 
 		self._ini["testenv"]["commands"] = indent_join(testenv_commands)
@@ -471,6 +475,12 @@ class ToxConfig(IniConfigurator):
 					self._ini.add_section(section)
 				elif section.name == "coverage:report" and "omit" in section:
 					self._ini["coverage:report"]["omit"] = section["omit"].value
+
+		# TODO: for tox-isolation
+		# [testenv:{py36,py37,py38,pypy3,py39}]
+		# isolate_dirs =
+		#     {toxinidir}/tests
+		#     tox.ini
 
 
 @management.register("tox")
