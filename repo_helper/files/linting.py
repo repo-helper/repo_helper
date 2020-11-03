@@ -301,7 +301,7 @@ def make_lint_roller(repo_path: pathlib.Path, templates: jinja2.Environment) -> 
 	:param templates:
 	"""
 
-	lint_roller = templates.get_template("lint_roller.sh")
+	lint_roller = templates.get_template("lint_roller._sh")
 	lint_file = PathPlus(repo_path / "lint_roller.sh")
 
 	lint_file.write_clean(lint_roller.render())

@@ -102,7 +102,7 @@ def init_repo(repo_path: pathlib.Path, templates: jinja2.Environment) -> List[st
 	repo_path = PathPlus(repo_path)
 	templates.globals["len"] = len
 
-	init_repo_templates = jinja2.Environment(
+	init_repo_templates = jinja2.Environment(  # nosec: B701
 			loader=jinja2.FileSystemLoader(str(init_repo_template_dir)),
 			undefined=jinja2.StrictUndefined,
 			)
@@ -169,7 +169,7 @@ def init_repo(repo_path: pathlib.Path, templates: jinja2.Environment) -> List[st
 		if response.status_code == 200:
 			license_text = response.text
 
-	license_template = Environment(
+	license_template = Environment(  # nosec: B701
 			loader=BaseLoader(),
 			undefined=StrictUndefined,
 			).from_string(license_text)

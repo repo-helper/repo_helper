@@ -60,7 +60,6 @@ def test_make_rtfd_case_2(tmp_pathplus, demo_environment, file_regression: FileR
 	managed_files = make_rtfd(tmp_pathplus, demo_environment)
 	assert managed_files == [".readthedocs.yml"]
 	check_file_output(tmp_pathplus / managed_files[0], file_regression)
-	return
 
 
 def test_make_404_page(tmp_pathplus, demo_environment):

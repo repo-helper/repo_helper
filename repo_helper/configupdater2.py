@@ -993,8 +993,8 @@ class ConfigUpdater(Container[Block], MutableMapping):
 		for section in self.sections_blocks():
 			if section.name == key:
 				return section
-		else:
-			raise KeyError(key)
+
+		raise KeyError(key)
 
 	def __setitem__(self, key: str, value: Section) -> None:
 		if not isinstance(value, Section):

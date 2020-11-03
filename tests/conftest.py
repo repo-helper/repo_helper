@@ -40,7 +40,7 @@ pytest_plugins = ("domdf_python_tools.testing", )
 
 @pytest.fixture()
 def demo_environment():
-	templates = jinja2.Environment(
+	templates = jinja2.Environment(  # nosec: B701
 			loader=jinja2.FileSystemLoader(str(template_dir)),
 			undefined=jinja2.StrictUndefined,
 			)

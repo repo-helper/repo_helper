@@ -262,7 +262,7 @@ class Builder:
 		# 				prune_file.unlink()
 		# 				self.report_removed(exclude_file)
 
-		return
+		return  # pylint: disable=useless-return
 
 	def write_entry_points(self) -> None:
 		"""

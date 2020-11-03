@@ -27,8 +27,8 @@ import datetime
 import pytest
 
 # this package
-from repo_helper._docs_shields import *
-from repo_helper.shields import *
+from repo_helper._docs_shields import *  # pylint disable=wildcard-import
+from repo_helper.shields import *  # pylint disable=wildcard-import
 
 
 def test_make_rtfd_shield():

@@ -3,6 +3,7 @@ include LICENSE
 include requirements.txt
 prune **/__pycache__
 recursive-include repo_helper/templates *
+recursive-include repo_helper/blocks *.rst
 recursive-include repo_helper/init_repo_files *
 include repo_helper/files/isort.cfg
 include repo_helper/repo_helper_schema.json

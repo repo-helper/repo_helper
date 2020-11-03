@@ -64,7 +64,7 @@ short_desc_regex = re.compile(r"(?s)(\.\. start short_desc)(.*?)(\.\. end short_
 links_regex = re.compile(r"(?s)(\.\. start links)(.*?)(\.\. end links)")
 
 
-def template_from_file(filename: str, **globals) -> Template:
+def template_from_file(filename: str, **globals) -> Template:  # pylint: disable=redefined-builtin
 	r"""
 	Returns the template for the given filename.
 
@@ -78,9 +78,9 @@ def template_from_file(filename: str, **globals) -> Template:
 	options = dict(loader=BaseLoader(), undefined=StrictUndefined)
 
 	if globals:
-		return Environment(**options).from_string(template_text, globals=globals)
+		return Environment(**options).from_string(template_text, globals=globals)  # nosec: B701
 	else:
-		return Environment(**options).from_string(template_text)
+		return Environment(**options).from_string(template_text)  # nosec: B701
 
 
 @functools.lru_cache(1)

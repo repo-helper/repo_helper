@@ -56,7 +56,7 @@ from repo_helper.configuration.metadata import (
 		email,
 		import_name,
 		keywords,
-		license,
+		license,  # pylint disable=useless-return
 		modname,
 		on_pypi,
 		pure_python,

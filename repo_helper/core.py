@@ -87,7 +87,7 @@ class RepoHelper:
 		# Walk up the tree until a "repo_helper.yml" or "git_helper.yml" (old name) file is found.
 		self.target_repo = traverse_to_file(PathPlus(target_repo), "repo_helper.yml", "git_helper.yml")
 
-		self.templates = jinja2.Environment(
+		self.templates = jinja2.Environment(  # nosec: B701
 				loader=jinja2.FileSystemLoader(str(template_dir)),
 				undefined=jinja2.StrictUndefined,
 				)

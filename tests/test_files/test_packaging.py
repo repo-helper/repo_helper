@@ -59,7 +59,7 @@ def test_make_manifest_case_2(tmp_pathplus, demo_environment, file_regression: F
 	# 		additional_requirements_files=[],
 	# 		))
 
-	return
+	return  # pylint disable=useless-return
 
 
 def test_make_setup_case_1(tmp_pathplus, demo_environment, file_regression: FileRegressionFixture):

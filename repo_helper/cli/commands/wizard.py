@@ -157,7 +157,7 @@ Not all SPDX identifiers are allowed as not all map to PyPI Trove classifiers.""
 	while True:
 		license_ = prompt("License")
 		try:
-			license_lookup[license_]
+			license_lookup[license_]  # pylint disable=pointless-statement
 			break
 		except KeyError:
 			click.echo("That is not a valid identifier.")
