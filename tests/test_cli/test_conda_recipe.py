@@ -47,7 +47,7 @@ def test_conda_recipe(tmp_pathplus, file_regression: FileRegressionFixture):
 		if os.sep == "/":
 			assert re.match(r"Wrote recipe to .*/conda/meta\.yaml", result.stdout)
 		elif os.sep == "\\":
-			assert re.match(r"Wrote recipe to .*\\conda\\meta\.yaml", result.stdout.splitlines()[0])
+			assert re.match(r"Wrote recipe to .*(\\)?conda\\meta\.yaml", result.stdout.splitlines()[0])
 		else:
 			raise NotImplementedError(os.sep)
 
