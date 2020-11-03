@@ -49,7 +49,7 @@ from repo_helper.configuration.documentation import (
 		sphinx_conf_preamble,
 		sphinx_html_theme
 		)
-from repo_helper.configuration.metadata import (  # pylint: disable=useless-return
+from repo_helper.configuration.metadata import (  # pylint: disable=redefined-builtin
 		author,
 		classifiers,
 		copyright_years,
