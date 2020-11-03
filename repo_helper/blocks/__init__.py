@@ -75,12 +75,12 @@ def template_from_file(filename: str, **globals) -> Template:  # pylint: disable
 	with importlib_resources.path("repo_helper.blocks", filename) as shields_block_template_file:
 		template_text = PathPlus(shields_block_template_file).read_text().replace("\\\n", '')
 
-	options = dict(loader=BaseLoader(), undefined=StrictUndefined)
+	environment = Environment(loader=BaseLoader(), undefined=StrictUndefined)  # nosec: B701
 
 	if globals:
-		return Environment(**options).from_string(template_text, globals=globals)  # nosec: B701
+		return environment.from_string(template_text, globals=globals)
 	else:
-		return Environment(**options).from_string(template_text)  # nosec: B701
+		return environment.from_string(template_text)
 
 
 @functools.lru_cache(1)
