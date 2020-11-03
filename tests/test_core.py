@@ -8,6 +8,7 @@ from tempfile import TemporaryDirectory
 import pytest
 from click import Abort
 from domdf_python_tools.paths import PathPlus, in_directory
+from dulwich.config import StackedConfig
 from dulwich.repo import Repo
 from pytest_regressions.data_regression import DataRegressionFixture
 from pytest_regressions.file_regression import FileRegressionFixture
@@ -23,8 +24,14 @@ FAKE_DATE = datetime.date(2020, 7, 25)
 
 def test_via_run_repo_helper(capsys, file_regression: FileRegressionFixture, monkeypatch):
 
+	# Monkeypatch dulwich so it doesn't try to use the global config.
+	monkeypatch.setattr(StackedConfig, "default_backends", lambda *args: [], raising=True)
+	monkeypatch.setenv("GIT_COMMITTER_NAME", "Guido")
+	monkeypatch.setenv("GIT_COMMITTER_EMAIL", "guido@python.org")
+
+	monkeypatch.setattr(repo_helper.utils, "today", FAKE_DATE)
+
 	with TemporaryDirectory() as tmpdir:
-		monkeypatch.setattr(repo_helper.utils, "today", FAKE_DATE)
 
 		path = PathPlus(tmpdir) / "~$tmp"
 		path.mkdir()
