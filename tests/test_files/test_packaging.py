@@ -45,25 +45,13 @@ def test_make_manifest_case_1(
 	check_file_output(tmp_pathplus / managed_files[0], file_regression)
 
 
-def test_make_manifest_case_2(
-		tmp_pathplus,
-		demo_environment,
-		file_regression: FileRegressionFixture,
-		):  # pylint: disable=useless-return
+def test_make_manifest_case_2(tmp_pathplus, demo_environment, file_regression: FileRegressionFixture):
 	demo_environment.globals["manifest_additional"] = ["recursive-include hello_world/templates *"]
 	demo_environment.globals["additional_requirements_files"] = ["hello_world/submodule/requirements.txt"]
 
 	managed_files = make_manifest(tmp_pathplus, demo_environment)
 	assert managed_files == ["MANIFEST.in"]
 	check_file_output(tmp_pathplus / managed_files[0], file_regression)
-
-	# # Reset
-	# demo_environment.globals.update(dict(
-	# 		manifest_additional=[],
-	# 		additional_requirements_files=[],
-	# 		))
-
-	return
 
 
 def test_make_setup_case_1(tmp_pathplus, demo_environment, file_regression: FileRegressionFixture):
