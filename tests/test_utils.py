@@ -147,7 +147,7 @@ def test_normalize(name, expected):
 @pytest.mark.parametrize(
 		"location, expected",
 		[
-				("foo.yml", ""),
+				("foo.yml", ''),
 				("foo/foo.yml", "foo"),
 				("foo/bar/foo.yml", "foo/bar"),
 				("foo/bar/baz/foo.yml", "foo/bar/baz"),

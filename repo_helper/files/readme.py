@@ -1,6 +1,9 @@
 #!/usr/bin/env python
 #
 #  readme.py
+"""
+Functions to update README files.
+"""
 #
 #  Copyright © 2020 Dominic Davis-Foster <dominic@davis-foster.co.uk>
 #

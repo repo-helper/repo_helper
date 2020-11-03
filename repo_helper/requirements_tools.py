@@ -279,6 +279,10 @@ class RequirementsManager(ABC):
 		self.req_file = self.prep_req_file()
 
 	def prep_req_file(self):
+		"""
+		Create the requirements file if necessary, and in any case return its filename.
+		"""
+
 		req_file = PathPlus(self.repo_path / self.filename)
 		req_file.parent.maybe_make(parents=True)
 

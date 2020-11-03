@@ -24,7 +24,7 @@ FAKE_DATE = datetime.date(2020, 7, 25)
 def test_via_run_repo_helper(capsys, file_regression: FileRegressionFixture, monkeypatch):
 
 	with TemporaryDirectory() as tmpdir:
-		monkeypatch.setattr(repo_helper.utils, 'today', FAKE_DATE)
+		monkeypatch.setattr(repo_helper.utils, "today", FAKE_DATE)
 
 		path = PathPlus(tmpdir) / "~$tmp"
 		path.mkdir()
@@ -56,7 +56,7 @@ def test_via_Repo_class(
 		monkeypatch
 		):
 
-	monkeypatch.setattr(repo_helper.utils, 'today', FAKE_DATE)
+	monkeypatch.setattr(repo_helper.utils, "today", FAKE_DATE)
 
 	with in_directory(temp_repo.path):
 		(temp_repo.path / "repo_helper.yml").write_text(

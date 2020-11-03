@@ -80,9 +80,9 @@ def make_recipe(out_dir) -> int:
 	requirements_block = "\n".join(f"    - {req}" for req in all_requirements if req)
 
 	templates = jinja2.Environment(  # nosec: B701
-			loader=jinja2.FileSystemLoader(str(template_dir)),
-			undefined=jinja2.StrictUndefined,
-			)
+		loader=jinja2.FileSystemLoader(str(template_dir)),
+		undefined=jinja2.StrictUndefined,
+		)
 
 	recipe_template = templates.get_template("conda_recipe.yaml")
 	recipe_file = PathPlus(out_dir).resolve() / "meta.yaml"

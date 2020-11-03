@@ -304,6 +304,9 @@ all_values: List[ConfigVarMeta] = [
 
 
 class RepoHelperParser(Parser):
+	"""
+	Parses the configuration fron ``repo_helper.yml``.
+	"""
 
 	config_vars: List[ConfigVarMeta] = all_values
 
@@ -313,6 +316,13 @@ class RepoHelperParser(Parser):
 			parsed_config_vars: MutableMapping[str, Any],
 			filename: PathPlus,
 			):
+		"""
+		Custom parsing step.
+
+		:param raw_config_vars:
+		:param parsed_config_vars:
+		:param filename:
+		"""
 
 		repo_path = filename.parent
 

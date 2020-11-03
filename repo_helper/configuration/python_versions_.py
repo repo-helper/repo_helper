@@ -66,8 +66,6 @@ class python_versions(ConfigVar):  # noqa
 		  - pypy3
 
 	If undefined the value of :conf:`python_deploy_version` is used instead.
-
-The lowest version of Python given above is used to set the minimum supported version for Pip, PyPI, setuptools etc.
 	"""
 
 	dtype = List[Union[str, float]]

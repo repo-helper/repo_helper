@@ -88,9 +88,9 @@ class RepoHelper:
 		self.target_repo = traverse_to_file(PathPlus(target_repo), "repo_helper.yml", "git_helper.yml")
 
 		self.templates = jinja2.Environment(  # nosec: B701
-				loader=jinja2.FileSystemLoader(str(template_dir)),
-				undefined=jinja2.StrictUndefined,
-				)
+			loader=jinja2.FileSystemLoader(str(template_dir)),
+			undefined=jinja2.StrictUndefined,
+			)
 		self.templates.globals["managed_message"] = managed_message
 
 		self.load_settings()

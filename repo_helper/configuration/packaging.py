@@ -25,7 +25,7 @@ r"""
 
 # stdlib
 import warnings
-from typing import Any, Dict, List, Optional
+from typing import Any, Dict, List, Mapping, Optional
 
 # 3rd party
 from configconfig.configvar import ConfigVar
@@ -110,7 +110,7 @@ class console_scripts(ConfigVar):  # noqa
 	category: str = "packaging"
 
 
-def parse_additional_setup_args(setup_args):
+def parse_additional_setup_args(setup_args: Mapping[str, Any]):
 	return "\n".join(["\t\t{}={},".format(*x) for x in setup_args.items()])
 
 

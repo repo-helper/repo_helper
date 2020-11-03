@@ -1,6 +1,9 @@
 #!/usr/bin/env python
 #
-#  configuration.py
+#  utils.py
+"""
+Configuration utilities.
+"""
 #
 #  Copyright © 2020 Dominic Davis-Foster <dominic@davis-foster.co.uk>
 #

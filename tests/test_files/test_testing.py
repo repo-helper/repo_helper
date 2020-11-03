@@ -34,7 +34,7 @@ from repo_helper.files.testing import ensure_tests_requirements, make_isort, mak
 from tests.common import check_file_output
 
 
-def boolean_option(name: str, id: str):  # pylint: disable=redefined-builtin
+def boolean_option(name: str, id: str):  # noqa: A002 # pylint: disable=redefined-builtin
 	return pytest.mark.parametrize(name, [
 			pytest.param(True, id=id),
 			pytest.param(False, id=f"no {id}"),
