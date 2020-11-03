@@ -173,7 +173,6 @@ def test_traverse_to_file_errors(tmp_pathplus):
 	else:
 		raise NotImplementedError
 
-
 	with pytest.raises(TypeError, match="traverse_to_file expected 2 or more arguments, got 1"):
 		traverse_to_file(tmp_pathplus)
 
