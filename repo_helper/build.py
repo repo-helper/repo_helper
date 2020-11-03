@@ -288,7 +288,7 @@ class Builder:
 		:param dest_dir: The directory to copy the files into.
 		"""
 
-		for license_file in self.repo_dir.glob("LICEN[CS]E"):
+		for license_file in self.repo_dir.glob("LICEN[CS]E*"):
 			target = dest_dir / license_file.relative_to(self.repo_dir)
 			target.parent.maybe_make(parents=True)
 			target.write_clean(license_file.read_text())

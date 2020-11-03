@@ -50,7 +50,8 @@ def test_init_repo(temp_empty_repo, demo_environment, file_regression, data_regr
 	assert (temp_empty_repo.path / "hello_world").is_dir()
 	check_file_output(
 			temp_empty_repo.path / "hello_world" / "__init__.py",
-			file_regression, extension=".init._py_",
+			file_regression,
+			extension=".init._py_",
 			)
 
 	assert (temp_empty_repo.path / "tests").is_dir()
