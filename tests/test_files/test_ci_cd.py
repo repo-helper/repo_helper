@@ -148,7 +148,7 @@ def test_github_ci_windows_38(tmp_pathplus, demo_environment, file_regression: F
 	check_file_output(tmp_pathplus / managed_files[1], file_regression)
 
 
-def test_github_ci_case_3(tmp_pathplus, demo_environment):
+def test_github_ci_case_3(tmp_pathplus, demo_environment):  # pylint: disable=useless-return
 	demo_environment.globals.update(dict(platforms=["Windows", "macOS"], ))
 
 	managed_files = make_github_ci(tmp_pathplus, demo_environment)

@@ -195,7 +195,7 @@ class Builder:
 		if self.verbose:
 			click.echo(f"Writing {written_file.relative_to(self.build_dir)}")
 
-	def copy_mainfest_additional(self) -> None:
+	def copy_manifest_additional(self) -> None:  # pylint: disable=useless-return
 		"""
 		Copy additional files to the build directory,
 		as specfied in :conf:`manifest_additional`.
@@ -262,7 +262,7 @@ class Builder:
 		# 				prune_file.unlink()
 		# 				self.report_removed(exclude_file)
 
-		return  # pylint: disable=useless-return
+		return
 
 	def write_entry_points(self) -> None:
 		"""
@@ -582,7 +582,7 @@ class Builder:
 		self.build_dir.maybe_make(parents=True)
 
 		self.copy_source()
-		self.copy_mainfest_additional()
+		self.copy_manifest_additional()
 		self.copy_license(self.dist_info)
 		self.write_entry_points()
 		self.write_metadata(self.dist_info / "METADATA")
@@ -604,7 +604,7 @@ class Builder:
 		self.build_dir.maybe_make(parents=True)
 
 		self.copy_source()
-		self.copy_mainfest_additional()
+		self.copy_manifest_additional()
 		self.copy_license(self.build_dir)
 
 		for filename in [

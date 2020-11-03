@@ -3,6 +3,19 @@
 #  __init__.py
 """
 Core CLI tools.
+
+.. note::
+
+	Enable autocompletion with:
+
+	.. prompt:: bash
+
+		_REPO_HELPER_COMPLETE=source_bash repo-helper > /usr/share/bash-completion/completions/repo-helper
+
+		_REPO_HELPER_COMPLETE=source_bash repo-helper | sudo tee /usr/share/bash-completion/completions/repo-helper
+
+
+	.. seealso:: https://click.palletsprojects.com/en/7.x/bashcomplete/#activation
 """
 #
 #  Copyright © 2020 Dominic Davis-Foster <dominic@davis-foster.co.uk>
@@ -36,19 +49,6 @@ from domdf_python_tools.paths import PathPlus
 from repo_helper import __version__
 from repo_helper.cli.options import commit_message_option, commit_option, force_option
 from repo_helper.cli.utils import run_repo_helper
-
-"""
-Enable autocompletion with:
-
-.. prompt:: bash
-
-	_REPO_HELPER_COMPLETE=source_bash repo-helper > /usr/share/bash-completion/completions/repo-helper
-
-	_REPO_HELPER_COMPLETE=source_bash repo-helper | sudo tee /usr/share/bash-completion/completions/repo-helper
-
-
-.. seealso:: https://click.palletsprojects.com/en/7.x/bashcomplete/#activation
-"""
 
 __all__ = ["cli", "cli_command", "cli_group"]
 

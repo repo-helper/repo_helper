@@ -41,7 +41,7 @@ from configconfig.testing import (
 		)
 
 # this package
-from repo_helper.configuration import *  # pylint disable=wildcard-import
+from repo_helper.configuration import *  # pylint: disable=wildcard-import
 
 
 class Test_author(RequiredStringTest):

@@ -49,14 +49,14 @@ from repo_helper.configuration.documentation import (
 		sphinx_conf_preamble,
 		sphinx_html_theme
 		)
-from repo_helper.configuration.metadata import (
+from repo_helper.configuration.metadata import (  # pylint: disable=useless-return
 		author,
 		classifiers,
 		copyright_years,
 		email,
 		import_name,
 		keywords,
-		license,  # pylint disable=useless-return
+		license,
 		modname,
 		on_pypi,
 		pure_python,
