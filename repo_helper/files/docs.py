@@ -51,7 +51,7 @@ from repo_helper.blocks import (
 		create_docs_links_block,
 		create_shields_block,
 		create_short_desc_block,
-		docs_shields_block_template,
+		get_docs_shields_block_template,
 		installation_regex,
 		links_regex,
 		shields_regex,
@@ -581,7 +581,7 @@ def rewrite_docs_index(repo_path: pathlib.Path, templates: jinja2.Environment) -
 
 	# Set up the blocks
 	shields_block = create_shields_block(
-			template=docs_shields_block_template,
+			template=get_docs_shields_block_template(),
 			username=templates.globals["username"],
 			repo_name=templates.globals["repo_name"],
 			version=templates.globals["version"],
