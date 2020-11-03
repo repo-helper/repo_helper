@@ -60,7 +60,7 @@ def test_pycharm_schema_back(tmp_pathplus, file_regression: FileRegressionFixtur
 
 	file_content = re.sub(
 			r'value=".*\\repo_helper\\repo_helper_schema.json"',
-			'value="repo_helper\\repo_helper_schema.json"',
+			r'value="repo_helper\\repo_helper_schema.json"',
 			(tmp_pathplus / ".idea/jsonSchemas.xml").read_text(),
 			)
 	file_regression.check(file_content, encoding="UTF-8", extension=".xml")
