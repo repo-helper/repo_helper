@@ -28,7 +28,6 @@ stages:
   - deploy_pypi
   - deploy_conda
 
-
 jobs:
   allow_failures:
     - arch: arm64

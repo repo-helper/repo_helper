@@ -28,8 +28,7 @@ stages:
   - test
 {% if on_pypi %}  - deploy_pypi{% endif %}
 {% if enable_conda %}  - deploy_conda{% endif %}
-{% if False %}{% if enable_releases %}  - deploy_releases{% endif %}{% endif %}
-{% if on_pypi or enable_conda %}
+
 jobs:
   allow_failures:
     - arch: arm64
@@ -70,15 +69,3 @@ jobs:
       deploy:
         provider: script
         script: .ci/travis_deploy_conda.sh || return 1;{% endif %}
-
-{% if False %}    - stage: deploy_releases
-      python: "{{ python_deploy_version }}"
-      install:
-        - pip install PyGithub requests
-      script: skip
-      deploy:
-        on:
-          repo: {{ username }}/{{ repo_name }}
-        provider: script
-        script: python .ci/copy_pypi_2_github.py || return 1;{% endif %}
-{% endif %}

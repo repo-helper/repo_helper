@@ -26,7 +26,6 @@ stages:
   - deploy_pypi
 
 
-
 jobs:
   allow_failures:
     - arch: arm64
