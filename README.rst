@@ -82,7 +82,7 @@ This project is in an early stage, and some things might not work correctly or b
 .. |language| image:: https://img.shields.io/github/languages/top/domdfcoding/repo_helper
 	:alt: GitHub top language
 
-.. |commits-since| image:: https://img.shields.io/github/commits-since/domdfcoding/repo_helper/v0.1.0
+.. |commits-since| image:: https://img.shields.io/github/commits-since/domdfcoding/repo_helper/v2020.11.4
 	:target: https://github.com/domdfcoding/repo_helper/pulse
 	:alt: GitHub commits since tagged version
 
