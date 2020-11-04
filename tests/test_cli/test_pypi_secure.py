@@ -16,4 +16,4 @@ def test_pypi_secure(tmp_pathplus):
 		runner = CliRunner()
 		result: Result = runner.invoke(pypi_secure, catch_exceptions=False)
 		assert result.exit_code == 1
-		assert re.match(".*'repo_helper.yml' not found.*", result.stdout)
+		assert re.match(r"'.*repo_helper.yml' not found in .*", result.stdout)

@@ -28,10 +28,12 @@ from typing import Optional
 
 # 3rd party
 import click
+from consolekit.utils import abort
 from domdf_python_tools.stringlist import StringList
 
 # this package
 from repo_helper.cli import cli_command
+from repo_helper.utils import traverse_to_file
 
 __all__ = ["pypi_secure"]
 
@@ -52,13 +54,12 @@ def pypi_secure(password: Optional[str] = None) -> int:
 	from subprocess import PIPE, Popen
 
 	# 3rd party
-	from consolekit.utils import abort
 	from domdf_python_tools.paths import PathPlus
 
-	config_file = PathPlus("repo_helper.yml")
-
-	if not config_file.is_file():
-		raise abort("'repo_helper.yml' not found.")
+	try:
+		config_file = traverse_to_file(PathPlus.cwd(), "repo_helper.yml") / "repo_helper.yml"
+	except FileNotFoundError as e:
+		raise abort(str(e))
 
 	process = Popen(["travis", "encrypt", password or getpass.getpass(), "--pro"], stdout=PIPE)
 	(output, err) = process.communicate()
