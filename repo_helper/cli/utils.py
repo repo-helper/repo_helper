@@ -92,13 +92,14 @@ def commit_changed_files(
 	if enable_pre_commit:
 		with in_directory(repo_path):
 			pre_commit.main.main(["install"])
+			sys.stdout.flush()
 
 	if staged_files:
 		click.echo("\nThe following files will be committed:")
 
 		# Sort staged_files and put directories first
-		for filename in sort_paths(*staged_files):
-			click.echo(f"  {filename!s}")
+		for staged_filename in sort_paths(*staged_files):
+			click.echo(f"  {staged_filename!s}")
 		click.echo()
 
 		if commit is None:

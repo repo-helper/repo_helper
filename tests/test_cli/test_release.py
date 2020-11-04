@@ -1,9 +1,8 @@
 # stdlib
 import re
-from typing import List, Optional
+from typing import TYPE_CHECKING, Callable, List, Optional
 
 # 3rd party
-from click import Command
 from click.testing import CliRunner, Result
 from domdf_python_tools.paths import in_directory
 from pytest_regressions.file_regression import FileRegressionFixture
@@ -13,6 +12,12 @@ from southwark.repo import Repo
 # this package
 from repo_helper.cli.commands.release import major, minor, patch, release
 from tests.common import check_file_output
+
+if TYPE_CHECKING:
+	Command = Callable
+else:
+	# 3rd party
+	from click import Command
 
 
 def do_test_release(
@@ -42,7 +47,7 @@ def do_test_release(
 
 	with in_directory(temp_repo.path):
 		runner = CliRunner(mix_stderr=False)
-		result: Result = runner.invoke(command, catch_exceptions=False, args=args)
+		result: Result = runner.invoke(command, catch_exceptions=False, args=args)  # type: ignore
 		assert result.exit_code == 0
 
 		if force:
@@ -115,10 +120,12 @@ def test_release_unclean(temp_repo, file_regression: FileRegressionFixture):
 	(temp_repo.path / "file.txt").write_clean("Hello World")
 	temp_repo.stage("file.txt")
 
+	result: Result
+
 	for command in (major, minor, patch):
 		with in_directory(temp_repo.path):
 			runner = CliRunner(mix_stderr=False)
-			result: Result = runner.invoke(command, catch_exceptions=False)
+			result = runner.invoke(command, catch_exceptions=False)  # type: ignore
 			assert result.exit_code == 1
 			assert result.stderr.splitlines() == [
 					"Git working directory is not clean:",
@@ -129,7 +136,7 @@ def test_release_unclean(temp_repo, file_regression: FileRegressionFixture):
 
 	with in_directory(temp_repo.path):
 		runner = CliRunner(mix_stderr=False)
-		result: Result = runner.invoke(release, catch_exceptions=False, args=["1.2.3"])
+		result = runner.invoke(release, catch_exceptions=False, args=["1.2.3"])
 		assert result.exit_code == 1
 		assert result.stderr.splitlines() == [
 				"Git working directory is not clean:",
@@ -151,10 +158,12 @@ def test_release_coward(temp_repo, file_regression: FileRegressionFixture):
 
 	(temp_repo.path / "repo_helper.yml").write_lines(output)
 
+	result: Result
+
 	for command in (major, minor, patch):
 		with in_directory(temp_repo.path):
 			runner = CliRunner(mix_stderr=False)
-			result: Result = runner.invoke(command, catch_exceptions=False)
+			result = runner.invoke(command, catch_exceptions=False)  # type: ignore
 			assert result.exit_code == 1
 			assert result.stderr.splitlines() == [
 					"Cowardly refusing to bump the version when 'travis_pypi_secure' is unset.",
@@ -164,7 +173,7 @@ def test_release_coward(temp_repo, file_regression: FileRegressionFixture):
 
 	with in_directory(temp_repo.path):
 		runner = CliRunner(mix_stderr=False)
-		result: Result = runner.invoke(release, catch_exceptions=False, args=["1.2.3"])
+		result = runner.invoke(release, catch_exceptions=False, args=["1.2.3"])
 		assert result.exit_code == 1
 		assert result.stderr.splitlines() == [
 				"Cowardly refusing to bump the version when 'travis_pypi_secure' is unset.",

@@ -32,7 +32,7 @@ import pathlib
 import re
 import textwrap
 from datetime import date, timedelta
-from typing import TYPE_CHECKING, Callable, Iterable, List, Optional, TypeVar
+from typing import TYPE_CHECKING, Callable, Dict, Iterable, List, Optional, TypeVar
 
 # 3rd party
 import isort  # type: ignore
@@ -414,9 +414,9 @@ def sort_paths(*paths: PathLike) -> List[PathPlus]:
 	:param paths:
 	"""
 
-	directories = {}
-	local_contents = []
-	files = []
+	directories: Dict[str, List[PathPlus]] = {}
+	local_contents: List[PathPlus] = []
+	files: List[PathPlus] = []
 
 	for obj in [PathPlus(path) for path in paths]:
 		if len(obj.parts) > 1:
