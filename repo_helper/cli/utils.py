@@ -25,8 +25,8 @@ CLI utility functions.
 
 # stdlib
 import datetime
+import logging
 import os
-import sys
 import textwrap
 from typing import Iterable, Optional
 
@@ -38,6 +38,7 @@ from domdf_python_tools.paths import PathPlus, in_directory
 from domdf_python_tools.terminal_colours import Fore
 from domdf_python_tools.typing import PathLike
 from dulwich.errors import CommitError
+from pre_commit.commands import install_uninstall  # type: ignore
 from southwark import assert_clean
 from southwark.repo import Repo
 
@@ -48,6 +49,11 @@ __all__ = [
 		"commit_changed_files",
 		"run_repo_helper",
 		]
+
+# Disable logging from pre-commit install command
+logging.getLogger(install_uninstall.__name__).addHandler(logging.NullHandler())
+logging.getLogger(install_uninstall.__name__).propagate = False
+logging.getLogger(install_uninstall.__name__).addFilter(lambda record: False)
 
 
 def commit_changed_files(
@@ -92,7 +98,6 @@ def commit_changed_files(
 	if enable_pre_commit:
 		with in_directory(repo_path):
 			pre_commit.main.main(["install"])
-			sys.stdout.flush()
 
 	if staged_files:
 		click.echo("\nThe following files will be committed:")
