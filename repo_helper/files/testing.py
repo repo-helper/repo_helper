@@ -26,7 +26,6 @@ Configuration for testing and code formatting tools.
 # stdlib
 import os.path
 import pathlib
-import posixpath
 import re
 from typing import Any, List
 
@@ -143,6 +142,23 @@ class ToxConfig(IniConfigurator):
 		mypy_deps.extend(self._globals["mypy_deps"])
 
 		return mypy_deps
+
+	def get_mypy_commands(self) -> List[str]:
+		"""
+		Compile the list of mypy commands.
+		"""
+
+		commands = []
+
+		if self["stubs_package"] and self["enable_tests"]:
+			commands.append(f"stubtest {self['import_name']} {{posargs}}")
+			commands.append("mypy tests")
+		elif self["stubs_package"]:
+			commands.append(f"stubtest {self['import_name']} {{posargs}}")
+		elif self["enable_tests"]:
+			commands.append(f"mypy {' '.join(self.get_source_files())} {{posargs}}")
+
+		return commands
 
 	def tox(self):
 		"""
@@ -310,25 +326,23 @@ class ToxConfig(IniConfigurator):
 		``[testenv:mypy]``.
 		"""
 
-		if not (self["stubs_package"] and not self["enable_tests"]):
+		if self["stubs_package"] or self["enable_tests"]:
 			self._ini["testenv:mypy"]["basepython"] = "python{python_deploy_version}".format(**self._globals)
-			if self._globals["tox_testenv_extras"]:
-				self._ini["testenv:mypy"]["extras"] = self._globals["tox_testenv_extras"]
 			self._ini["testenv:mypy"]["ignore_errors"] = True
 			self._ini["testenv:mypy"]["changedir"] = "{toxinidir}"
 
+			if self._globals["tox_testenv_extras"]:
+				self._ini["testenv:mypy"]["extras"] = self._globals["tox_testenv_extras"]
+
 			self._ini["testenv:mypy"]["deps"] = indent_join(self.get_mypy_dependencies())
 
-			if self._globals["stubs_package"]:
-				self._ini["testenv:mypy"]["commands"] = indent_join([
-						'',
-						f"stubtest {self['import_name']} {{posargs}}",
-						"mypy tests",
-						])
-			else:
-				self._ini["testenv:mypy"]["commands"] = f"mypy {' '.join(self.get_source_files())} {{posargs}}"
-		else:
-			self._ini.remove_section("testenv:mypy")
+			commands = self.get_mypy_commands()
+
+			if commands:
+				self._ini["testenv:mypy"]["commands"] = indent_join(commands)
+				return
+
+		self._ini.remove_section("testenv:mypy")
 
 	def testenv_pyup(self):
 		"""
