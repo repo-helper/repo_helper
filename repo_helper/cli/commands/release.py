@@ -38,8 +38,8 @@ from domdf_python_tools.terminal_colours import Fore
 from domdf_python_tools.typing import PathLike
 from domdf_python_tools.versions import Version
 from dulwich.porcelain import tag_create
-from southwark.repo import Repo
 from southwark import assert_clean
+from southwark.repo import Repo
 from typing_extensions import TypedDict
 
 # this package

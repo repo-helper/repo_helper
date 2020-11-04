@@ -38,9 +38,9 @@ from domdf_python_tools.terminal_colours import Fore
 from domdf_python_tools.typing import PathLike
 from dulwich.errors import CommitError
 from southwark import assert_clean
+from southwark.repo import Repo
 
 # this package
-from southwark.repo import Repo
 from repo_helper.utils import easter_egg
 
 __all__ = [

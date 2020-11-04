@@ -56,9 +56,9 @@ def wizard():
 	import ruamel.yaml as yaml
 	from domdf_python_tools.terminal_colours import Fore
 	from dulwich.errors import NotGitRepository
-	from southwark.repo import Repo
 	from email_validator import EmailNotValidError, validate_email  # type: ignore
 	from ruamel.yaml.scalarstring import SingleQuotedScalarString
+	from southwark.repo import Repo
 
 	path = PathPlus.cwd()
 	config_file = path / "repo_helper.yml"

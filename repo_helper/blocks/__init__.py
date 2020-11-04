@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 #
-#  blocks.py
+#  __init__.py
 """
 Reusable blocks of reStructuredText.
 """
