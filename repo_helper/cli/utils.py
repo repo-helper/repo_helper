@@ -26,6 +26,7 @@ CLI utility functions.
 # stdlib
 import datetime
 import os
+import sys
 import textwrap
 from typing import Iterable, Optional
 
@@ -84,7 +85,7 @@ def commit_changed_files(
 
 	for filename in managed_files:
 		if filename.encode("UTF-8") in unstaged_changes or filename in untracked_files:
-			r.stage(filename)
+			r.stage(os.path.normpath(filename))
 			staged_files.append(filename)
 
 	# Ensure pre-commit hooks are installed
