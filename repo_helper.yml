@@ -17,7 +17,7 @@ console_scripts:
  - "repo_helper = repo_helper.__main__:main"
  - "repo-helper = repo_helper.__main__:main"
 
-sphinx_html_theme: repo_helper_sphinx_theme
+sphinx_html_theme: domdf_sphinx_theme
 
 python_deploy_version: 3.7
 
@@ -48,18 +48,16 @@ classifiers:
 
 extra_sphinx_extensions:
  - configconfig.autoconfig
+ - sphinx_click
 
 intersphinx_mapping:
  - "'jinja2': ('https://jinja.palletsprojects.com/en/2.11.x/', None)"
-
-preserve_custom_theme: true
 
 imgbot_ignore:
  - "repo_helper.png"
 
 exclude_files:
  - pre-commit
- - Source
 
 extras_require:
   schema:

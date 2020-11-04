@@ -175,7 +175,7 @@ class Builder:
 
 			Removing {removed_file.relative_to(self.build_dir)}
 
-		:param removed_file:.
+		:param removed_file:
 		"""
 
 		if self.verbose:
@@ -189,7 +189,7 @@ class Builder:
 
 			Writing {written_file.relative_to(self.build_dir)}
 
-		:param written_file:.
+		:param written_file:
 		"""
 
 		if self.verbose:

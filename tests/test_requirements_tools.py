@@ -24,9 +24,10 @@
 # TODO: read_requirements
 import pytest
 from packaging.requirements import Requirement
+from packaging.specifiers import Specifier, SpecifierSet
 
 # this package
-from repo_helper.requirements_tools import ComparableRequirement, combine_requirements
+from repo_helper.requirements_tools import ComparableRequirement, combine_requirements, resolve_specifiers
 
 
 class TestComparableRequirement:
@@ -139,3 +140,10 @@ def test_combine_requirements():
 	assert combine_requirements(reqs) == [Requirement("foo==3.2.1,==3.2.3,==3.2.5,>2.5")]
 	assert str(combine_requirements(reqs)[0]) == "foo==3.2.1,==3.2.3,==3.2.5,>2.5"
 	assert str(combine_requirements(reqs)[0].specifier) == "==3.2.1,==3.2.3,==3.2.5,>2.5"
+
+
+@pytest.mark.parametrize("specifiers, resolved",[
+		([Specifier(">1.2.3"), Specifier(">=1.2.2"), Specifier("<2"), ], SpecifierSet(">1.2.3,>=1.2.2,<2"))
+		])
+def test_resolve_specifiers(specifiers, resolved):
+	assert resolve_specifiers(specifiers) == resolved

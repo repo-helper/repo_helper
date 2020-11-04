@@ -3,5 +3,3 @@
 ************************************
 
 .. automodule:: repo_helper.files.packaging
-	:members:
-	:autosummary:

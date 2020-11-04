@@ -56,64 +56,24 @@ if TYPE_CHECKING:
 	from repo_helper.core import RepoHelper
 
 __all__ = [
-		"validate_classifiers",
-		"license_lookup",
-		"indent_with_tab",
-		"pformat_tabs",
-		"normalize",
-		"reformat_file",
-		"discover_entry_points",
-		"indent_join",
 		"IniConfigurator",
-		"traverse_to_file",
 		"calc_easter",
+		"discover_entry_points",
 		"easter_egg",
+		"indent_join",
+		"indent_with_tab",
+		"license_lookup",
 		"no_dev_versions",
+		"normalize",
+		"pformat_tabs",
+		"reformat_file",
+		"today",
+		"traverse_to_file",
+		"validate_classifiers",
 		]
 
 #: Under normal circumstances returns :meth:`datetime.date.today`.
 today: date = date.today()
-
-# def ensure_requirements(requirements_list: Iterable[Requirement], requirements_file: pathlib.Path):
-# 	"""
-# 	Ensure the given requirements file contains the required entries.
-#
-# 	:param requirements_list: List of ``(requirement, version)`` tuples. Version can be :py:obj:`None`.
-# 	:param requirements_file: The path to the requirements file.
-# 	"""
-#
-# 	target_requirements = set(requirements_list)
-#
-# 	_target_requirement_names: List[str] = [r.name.casefold() for r in target_requirements]
-# 	_target_requirement_names += [r.replace("-", "_").casefold() for r in _target_requirement_names]
-# 	_target_requirement_names += [r.replace("_", "-").casefold() for r in _target_requirement_names]
-#
-# 	target_requirement_names = set(_target_requirement_names)
-#
-# 	req_file = PathPlus(requirements_file)
-# 	req_file.parent.maybe_make(parents=True)
-#
-# 	if not req_file.is_file():
-# 		req_file.touch()
-#
-# 	comments = []
-#
-# 	for line in req_file.read_lines():
-# 		if line.startswith("#"):
-# 			comments.append(line)
-# 		elif line:
-# 			try:
-# 				req = Requirement(line)
-# 				if req.name.casefold() not in target_requirement_names:
-# 					target_requirements.add(req)
-# 			except InvalidRequirement:
-# 				# TODO: Show warning to user
-# 				pass
-#
-# 	output = StringList(comments)
-# 	output.extend([str(r) for r in sorted(target_requirements, key=lambda r: r.name.casefold())])
-# 	output.blankline(ensure_single=True)
-# 	req_file.write_lines(output)
 
 
 def indent_with_tab(

@@ -47,6 +47,7 @@ extensions = [
 		'sphinxcontrib.toctree_plus',
 		'seed_intersphinx_mapping',
 		'configconfig.autoconfig',
+		'sphinx_click',
 		]
 
 sphinxemoji_style = 'twemoji'
@@ -68,22 +69,20 @@ intersphinx_mapping = {
 		'jinja2': ('https://jinja.palletsprojects.com/en/2.11.x/', None),
 		}
 
-html_theme = 'repo_helper_sphinx_theme'
+html_theme = 'domdf_sphinx_theme'
 html_theme_options = {
-		'page_width': '1200px',
-		'logo_name': 'true',
-		'github_user': 'domdfcoding',
-		'github_repo': 'repo_helper',
-		'description': 'Update multiple configuration files, build scripts etc. from a single location.',
-		'github_banner': 'true',
-		'github_type': 'star',
-		'badge_branch': 'master',
-		'fixed_sidebar': 'true',
+		'logo_only': False,
 		}
 html_theme_path = ["../.."]
 html_show_sourcelink = True  # True will show link to source
 
-html_context = {}
+html_context = {
+		'display_github': True,
+		'github_user': 'domdfcoding',
+		'github_repo': 'repo_helper',
+		'github_version': 'master',
+		'conf_py_path': '/doc-source/',
+		}
 
 htmlhelp_basename = slug
 

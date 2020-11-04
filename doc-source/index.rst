@@ -103,7 +103,6 @@ This project is in an early stage, and some things might not work correctly or b
 
 .. end shields
 
-|
 
 Installation
 ----------------
@@ -118,11 +117,47 @@ Installation
 
 
 .. toctree::
+	:hidden:
+
+	Home<self>
+
+
+.. toctree::
+	:caption: Configuration
 	:maxdepth: 6
 
 	config/index
-	api/index
-	contributor-guide
+	config/metadata
+	config/optional features
+	config/python versions
+	config/packaging
+	config/documentation
+	config/testing
+	config/travis
+	config/conda & anaconda
+	config/other
+
+
+.. toctree::
+	:caption: Public API
+	:maxdepth: 1
+	:glob:
+
+	api/*
+
+.. toctree::
+	:maxdepth: 2
+	:glob:
+
+	api/**/index
+
+
+.. toctree::
+	:maxdepth: 3
+	:caption: Contributing
+
+	contributing
+	Source
 
 
 .. start links

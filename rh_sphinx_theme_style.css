@@ -1,0 +1,67 @@
+
+dl.conf {
+	padding: 3px 3px 7px 5px;
+	margin-top: 7px !important;
+	margin-bottom: 13px !important;
+	border-color: rgba(180, 128, 240, 0.5);
+	border-style: solid;
+}
+
+dl.data {
+	padding: 3px 3px 7px 5px;
+	margin-top: 7px !important;
+	margin-bottom: 13px !important;
+	border-color: rgba(180, 128, 240, 0.5);
+	border-style: solid;
+}
+
+nav#rellinks {
+    width: 80%;
+    max-width: 1100px;
+}
+
+nav#rellinks ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+display: flex;
+}
+
+nav#rellinks ul li{
+    flex:1 0 auto;
+}
+
+nav#rellinks ul li div.rellinks_prev{
+    text-align: left;
+}
+nav#rellinks ul li div.rellinks_next{
+    text-align: right;
+}
+
+
+nav#rellinks li + li::before {
+    content: "";
+}
+
+
+/*div.documentwrapper {*/
+/*    width: 95%;*/
+/*    float: right;*/
+/*}*/
+/*@media screen and (min-width: 875px) {*/
+/*    div.sphinxsidebar {*/
+/*        width: 15%;*/
+/*    }*/
+/*}*/
+
+div.sphinxsidebar {
+    max-height: 100%;
+    overflow-y: auto;
+}
+
+/*div.document {*/
+/*    width: 100%;*/
+/*    max-width: 1400px;*/
+/*    margin: 30px auto 0 0;*/
+/*}*/
