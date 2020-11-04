@@ -139,6 +139,15 @@ Installation
 
 
 .. toctree::
+	:caption: Usage
+	:maxdepth: 6
+	:glob:
+
+	usage/repo-helper
+	usage/*
+
+
+.. toctree::
 	:caption: Public API
 	:maxdepth: 1
 	:glob:
