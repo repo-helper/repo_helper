@@ -25,14 +25,15 @@
 import pytest
 from packaging.requirements import Requirement
 from packaging.specifiers import Specifier, SpecifierSet
-
-# this package
 from pytest_regressions.file_regression import FileRegressionFixture
 
+# this package
 from repo_helper.requirements_tools import (
-	ComparableRequirement, combine_requirements, read_requirements,
-	resolve_specifiers,
-	)
+		ComparableRequirement,
+		combine_requirements,
+		read_requirements,
+		resolve_specifiers
+		)
 from tests.common import check_file_regression
 
 

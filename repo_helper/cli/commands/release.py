@@ -154,7 +154,7 @@ class Bumper:
 	:param force: Whether to force bumping the version when the repository is unclean.
 	"""
 
-	def __init__(self, repo_path: PathPlus, force: bool):
+	def __init__(self, repo_path: PathPlus, force: bool = False):
 		#:
 		self.repo = RepoHelper(repo_path)
 
