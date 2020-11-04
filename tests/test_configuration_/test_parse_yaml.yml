@@ -109,7 +109,7 @@ tox_travis_versions:
 travis_additional_requirements: []
 travis_extra_install_post: []
 travis_extra_install_pre: []
-travis_pypi_secure: ''
+travis_pypi_secure: somereallylongstringofcharacters
 travis_site: com
 travis_ubuntu_version: focal
 use_experimental_backend: false
