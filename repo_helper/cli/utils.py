@@ -41,7 +41,7 @@ from southwark import assert_clean
 from southwark.repo import Repo
 
 # this package
-from repo_helper.utils import easter_egg
+from repo_helper.utils import easter_egg, sort_paths
 
 __all__ = [
 		"commit_changed_files",
@@ -94,8 +94,10 @@ def commit_changed_files(
 
 	if staged_files:
 		click.echo("\nThe following files will be committed:")
-		for filename in staged_files:
-			click.echo(f"  {filename}")
+
+		# Sort staged_files and put directories first
+		for filename in sort_paths(*staged_files):
+			click.echo(f"  {filename!s}")
 		click.echo()
 
 		if commit is None:

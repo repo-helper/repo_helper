@@ -70,6 +70,7 @@ __all__ = [
 		"today",
 		"traverse_to_file",
 		"validate_classifiers",
+		"sort_paths",
 		]
 
 #: Under normal circumstances returns :meth:`datetime.date.today`.
@@ -315,9 +316,6 @@ class IniConfigurator:
 
 	def merge_existing(self, ini_file):
 
-		for section_name in self.managed_sections:
-			getattr(self, re.sub("[:.-]", "_", section_name))()
-
 		if ini_file.is_file():
 			existing_config = ConfigUpdater()
 			existing_config.read(str(ini_file))
@@ -332,10 +330,12 @@ class IniConfigurator:
 
 		ini_file = PathPlus(self.base_path / self.filename)
 
+		for section_name in self.managed_sections:
+			getattr(self, re.sub("[:.-]", "_", section_name))()
+
 		self.merge_existing(ini_file)
 		self._output.append(str(self._ini))
-
-		ini_file.write_clean("\n".join(self._output))
+		ini_file.write_lines(self._output)
 
 
 _P = TypeVar("_P", bound=pathlib.Path)
@@ -405,3 +405,34 @@ def no_dev_versions(versions: Iterable[str]) -> List[str]:
 	"""
 
 	return [v for v in versions if not v.endswith("-dev")]
+
+
+def sort_paths(*paths: PathLike) -> List[PathPlus]:
+	"""
+	Sort the list of paths by directory, then by file.
+
+	:param paths:
+	"""
+
+	directories = {}
+	local_contents = []
+	files = []
+
+	for obj in [PathPlus(path) for path in paths]:
+		if len(obj.parts) > 1:
+			key = obj.parts[0]
+			if key in directories:
+				directories[key].append(obj)
+			else:
+				directories[key] = [obj]
+		else:
+			local_contents.append(obj)
+
+	# sort directories
+	directories = {directory: directories[directory] for directory in sorted(directories.keys())}
+
+	for directory, contents in directories.items():
+		contents = [path.relative_to(directory) for path in contents]
+		files.extend(PathPlus(directory) / path for path in sort_paths(*contents))
+
+	return files + sorted(local_contents)
