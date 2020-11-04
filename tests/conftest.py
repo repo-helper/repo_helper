@@ -21,6 +21,7 @@
 #
 
 # stdlib
+import datetime
 import os
 import pathlib
 import secrets
@@ -29,9 +30,11 @@ from pathlib import Path
 # 3rd party
 import jinja2
 import pytest
+from dulwich.config import StackedConfig
 from southwark.repo import Repo
 
 # this package
+import repo_helper.utils
 from repo_helper.files.linting import lint_fix_list, lint_warn_list
 from repo_helper.templates import template_dir
 
@@ -97,10 +100,21 @@ def original_datadir(request):
 
 
 @pytest.fixture()
-def temp_repo(temp_empty_repo) -> Repo:
+def temp_repo(temp_empty_repo, monkeypatch) -> Repo:
 	(temp_empty_repo.path / "repo_helper.yml").write_text(
 			(pathlib.Path(__file__).parent / "repo_helper.yml_").read_text()
 			)
+
+	# Monkeypatch dulwich so it doesn't try to use the global config.
+	monkeypatch.setattr(StackedConfig, "default_backends", lambda *args: [], raising=True)
+	monkeypatch.setenv("GIT_COMMITTER_NAME", "Guido")
+	monkeypatch.setenv("GIT_COMMITTER_EMAIL", "guido@python.org")
+	monkeypatch.setenv("GIT_AUTHOR_NAME", "Guido")
+	monkeypatch.setenv("GIT_AUTHOR_EMAIL", "guido@python.org")
+
+	FAKE_DATE = datetime.date(2020, 7, 25)
+	monkeypatch.setattr(repo_helper.utils, "today", FAKE_DATE)
+
 	return temp_empty_repo
 
 
