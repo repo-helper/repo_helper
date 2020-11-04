@@ -164,7 +164,7 @@ def run_repo_helper(
 		r = Repo(gh.target_repo)
 
 		for filename in init_repo(gh.target_repo, gh.templates):
-			r.stage(filename)
+			r.stage(os.path.normpath(filename))
 
 	managed_files = gh.run()
 
