@@ -29,8 +29,9 @@ Utilities for working with :pep:`508` requirements.
 # stdlib
 import pathlib
 import re
+import warnings
 from abc import ABC
-from typing import Any, Dict, Iterable, List, Optional, Sequence, Set, Tuple, Union
+from typing import Any, Dict, Iterable, List, Optional, Set, Tuple, Union
 
 # 3rd party
 from domdf_python_tools.paths import PathPlus
@@ -90,7 +91,7 @@ class ComparableRequirement(Requirement):
 					_check_equal_not_none(self.specifier, other.specifier),
 					_check_marker_equality(self.marker, other.marker),
 					))
-		else:
+		else:  # pragma: no cover
 			return NotImplemented
 
 	def __gt__(self, other) -> bool:
@@ -98,7 +99,7 @@ class ComparableRequirement(Requirement):
 			return self.name > other.name
 		elif isinstance(other, str):
 			return self.name > other
-		else:
+		else:  # pragma: no cover
 			return NotImplemented
 
 	def __ge__(self, other) -> bool:
@@ -106,7 +107,7 @@ class ComparableRequirement(Requirement):
 			return self.name >= other.name
 		elif isinstance(other, str):
 			return self.name >= other
-		else:
+		else:  # pragma: no cover
 			return NotImplemented
 
 	def __le__(self, other) -> bool:
@@ -114,7 +115,7 @@ class ComparableRequirement(Requirement):
 			return self.name <= other.name
 		elif isinstance(other, str):
 			return self.name <= other
-		else:
+		else:  # pragma: no cover
 			return NotImplemented
 
 	def __lt__(self, other) -> bool:
@@ -122,7 +123,7 @@ class ComparableRequirement(Requirement):
 			return self.name < other.name
 		elif isinstance(other, str):
 			return self.name < other
-		else:
+		else:  # pragma: no cover
 			return NotImplemented
 
 	def __hash__(self) -> int:
@@ -177,6 +178,8 @@ def resolve_specifiers(specifiers: Iterable[Specifier]) -> SpecifierSet:
 	for spec in operator_lookup["==="]:
 		final_specifier_set &= SpecifierSet(f"==={spec.version}")
 
+	# TODO: merge e.g. >1.2.3 and >=1.2.2 (into >1.2.3)
+
 	return final_specifier_set
 
 
@@ -219,7 +222,7 @@ def combine_requirements(
 	return merged_requirements
 
 
-def read_requirements(req_file: pathlib.Path) -> Tuple[Set[Requirement], List[str]]:
+def read_requirements(req_file: pathlib.Path) -> Tuple[Set[ComparableRequirement], List[str]]:
 	"""
 	Reads :pep:`508` requirements from the given file.
 
@@ -229,19 +232,19 @@ def read_requirements(req_file: pathlib.Path) -> Tuple[Set[Requirement], List[st
 	"""
 
 	comments = []
-	requirements: Set[Requirement] = set()
+	requirements: Set[ComparableRequirement] = set()
 
 	for line in PathPlus(req_file).read_lines():
 		if line.startswith("#"):
 			comments.append(line)
 		elif line:
 			try:
-				req = Requirement(line)
+				req = ComparableRequirement(line)
 				req.name = normalize(req.name)
 				if req.name not in [normalize(r.name) for r in requirements]:
 					requirements.add(req)
 			except InvalidRequirement:
-				# TODO: Show warning to user
+				warnings.warn(f"Ignored invalid requirement {line!r}")
 				pass
 
 	return requirements, comments
