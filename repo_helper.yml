@@ -27,7 +27,6 @@ python_versions:
  - '3.7'
  - '3.8'
  - '3.9'
- - '3.10-dev'
 
 # additional lines for MANIFEST.in
 manifest_additional:
