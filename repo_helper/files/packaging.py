@@ -278,9 +278,6 @@ class SetupCfgConfig(IniConfigurator):
 
 	def merge_existing(self, ini_file):
 
-		for section_name in self.managed_sections:
-			getattr(self, re.sub("[:.-]", "_", section_name))()
-
 		if ini_file.is_file():
 			existing_config = ConfigUpdater()
 			existing_config.read(str(ini_file))
