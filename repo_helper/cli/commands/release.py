@@ -24,6 +24,7 @@ Make a release.
 #
 
 # stdlib
+from datetime import date
 from functools import partial
 from types import MethodType
 from typing import Callable, Dict, List, Optional, Tuple, cast
@@ -209,6 +210,20 @@ class Bumper:
 				)
 		self.bump(new_version, commit, message)
 
+	def today(self, commit: Optional[bool], message: str):
+		"""
+		Bump to the calver version for today's date.
+
+		E.g. 2020.12.25 for 25th December 2020
+
+		:param commit: Whether to commit automatically (:py:obj:`True`) or ask first (:py:obj:`None`).
+		:param message: The commit message.
+		"""
+
+		today = date.today()
+		new_version = Version(today.year, today.month, today.day)
+		self.bump(new_version, commit, message)
+
 	def bump(self, new_version: Version, commit: Optional[bool], message: str):
 		r"""
 		Bump to the given version.
@@ -331,4 +346,16 @@ def patch(commit: Optional[bool], message: str, force: bool) -> int:
 
 	bumper = Bumper(PathPlus.cwd(), force)
 	bumper.patch(commit, message)
+	return 0
+
+
+@release_options
+@release_command()
+def today(commit: Optional[bool], message: str, force: bool) -> int:
+	"""
+	Bump to the calver version for today's date (e.g. 2020.12.25).
+	"""
+
+	bumper = Bumper(PathPlus.cwd(), force)
+	bumper.today(commit, message)
 	return 0
