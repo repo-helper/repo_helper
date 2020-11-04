@@ -28,6 +28,8 @@ def test_via_run_repo_helper(capsys, file_regression: FileRegressionFixture, mon
 	monkeypatch.setattr(StackedConfig, "default_backends", lambda *args: [], raising=True)
 	monkeypatch.setenv("GIT_COMMITTER_NAME", "Guido")
 	monkeypatch.setenv("GIT_COMMITTER_EMAIL", "guido@python.org")
+	monkeypatch.setenv("GIT_AUTHOR_NAME", "Guido")
+	monkeypatch.setenv("GIT_AUTHOR_EMAIL", "guido@python.org")
 
 	monkeypatch.setattr(repo_helper.utils, "today", FAKE_DATE)
 
