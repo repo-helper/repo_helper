@@ -36,11 +36,11 @@ from consolekit.utils import abort
 from domdf_python_tools.paths import PathPlus, in_directory
 from domdf_python_tools.terminal_colours import Fore
 from domdf_python_tools.typing import PathLike
-from dulwich import repo
 from dulwich.errors import CommitError
 from southwark import assert_clean
 
 # this package
+from southwark.repo import Repo
 from repo_helper.utils import easter_egg
 
 __all__ = [
@@ -74,7 +74,7 @@ def commit_changed_files(
 	from southwark import status
 
 	repo_path = PathPlus(repo_path).absolute()
-	r = repo.Repo(str(repo_path))
+	r = Repo(str(repo_path))
 
 	stat = status(r)
 	unstaged_changes = stat.unstaged
@@ -161,7 +161,7 @@ def run_repo_helper(
 			return 1
 
 	if initialise:
-		r = repo.Repo(gh.target_repo)
+		r = Repo(gh.target_repo)
 
 		for filename in init_repo(gh.target_repo, gh.templates):
 			r.stage(filename)

@@ -29,7 +29,7 @@ from pathlib import Path
 # 3rd party
 import jinja2
 import pytest
-from dulwich.repo import Repo
+from southwark.repo import Repo
 
 # this package
 from repo_helper.files.linting import lint_fix_list, lint_warn_list
@@ -108,5 +108,5 @@ def temp_repo(temp_empty_repo) -> Repo:
 def temp_empty_repo(tmp_pathplus) -> Repo:
 	repo_dir = tmp_pathplus / secrets.token_hex(8)
 	repo_dir.maybe_make(parents=True)
-	repo = Repo.init(repo_dir)
+	repo: Repo = Repo.init(repo_dir)
 	return repo

@@ -9,7 +9,7 @@ import pytest
 from click import Abort
 from domdf_python_tools.paths import PathPlus, in_directory
 from dulwich.config import StackedConfig
-from dulwich.repo import Repo
+from southwark.repo import Repo
 from pytest_regressions.data_regression import DataRegressionFixture
 from pytest_regressions.file_regression import FileRegressionFixture
 from southwark import status
