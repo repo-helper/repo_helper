@@ -22,9 +22,9 @@ General utilities.
 #  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
 #  MA 02110-1301, USA.
 #
-# calc_easter from https://code.activestate.com/recipes/576517-calculate-easter-western-given-a-year/
-# Copyright © 2008 Martin Diers
-# Licensed under the MIT License
+#  calc_easter from https://code.activestate.com/recipes/576517-calculate-easter-western-given-a-year/
+#  Copyright © 2008 Martin Diers
+#  Licensed under the MIT License
 #
 
 # stdlib

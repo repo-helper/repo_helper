@@ -27,6 +27,7 @@
 import configparser
 import os
 import pathlib
+import posixpath
 import re
 import shutil
 import tarfile
@@ -38,7 +39,7 @@ from hashlib import sha256
 from io import StringIO
 from subprocess import PIPE, Popen
 from textwrap import dedent, indent
-from typing import Optional
+from typing import Iterator, Optional
 from zipfile import ZipFile
 
 # 3rd party
@@ -107,7 +108,7 @@ class Builder:
 		if self.build_dir.is_dir():
 			shutil.rmtree(self.build_dir)
 		self.build_dir.maybe_make(parents=True)
-		(self.build_dir / self.import_name).maybe_make()
+		(self.build_dir / self.pkg_dir).maybe_make(parents=True)
 
 		out_dir = out_dir or self.repo_dir / "dist"
 		self.out_dir = PathPlus(out_dir)
@@ -135,27 +136,39 @@ class Builder:
 		info_dir.maybe_make()
 		return info_dir
 
+	@property
+	def pkg_dir(self) -> Optional[str]:
+		"""
+		The path of the package directory.
+
+		Returns :py:obj:`None` if the project only has modules.
+		"""
+
+		if not self.config["py_modules"]:
+			if self.config["stubs_package"]:
+				return posixpath.join(self.config["source_dir"], f"{self.config['import_name'].replace('.', '/')}-stubs")
+			else:
+				return posixpath.join(self.config["source_dir"], self.config["import_name"].replace(".", "/"))
+
+		return None
+
+	def iter_source_files(self) -> Iterator[PathPlus]:
+		if self.config["py_modules"]:
+			yield from self.config["py_modules"]
+		else:
+			pkgdir = self.repo_dir / self.pkg_dir
+
+			for py_pattern in {"**/*.py", "**/*.pyi", "**/*.pyx", "**/py.typed"}:
+				for py_file in pkgdir.rglob(py_pattern):
+					if "__pycache__" not in py_file.parts:
+						yield py_file
+
 	def copy_source(self) -> None:
 		"""
 		Copy source files into the build directory.
 		"""
 
-		source_files = []
-
-		if self.config["py_modules"]:
-			source_files.extend(self.config["py_modules"])
-		else:
-			if self.config["stubs_package"]:
-				pkgdir = self.repo_dir / self.config["source_dir"] / f"{self.config['import_name'].replace('.', '/')}-stubs"
-			else:
-				pkgdir = self.repo_dir / self.config["source_dir"] / self.config["import_name"].replace(".", "/")
-
-			for py_pattern in {"**/*.py", "**/*.pyi", "**/*.pyx", "**/py.typed"}:
-				for py_file in pkgdir.rglob(py_pattern):
-					if "__pycache__" not in py_file.parts:
-						source_files.append(py_file)
-
-		for py_file in source_files:
+		for py_file in self.iter_source_files():
 			target = self.build_dir / py_file.relative_to(self.repo_dir)
 			target.parent.maybe_make(parents=True)
 			target.write_clean(py_file.read_text())
@@ -487,7 +500,7 @@ class Builder:
 		wheel_filename = self.out_dir / f"{self.archive_name}-{self.tag}.whl"
 		with ZipFile(wheel_filename, mode='w') as wheel_archive:
 			with (self.dist_info / "RECORD").open('w') as fp:
-				for file in (self.build_dir / self.import_name).rglob("*"):
+				for file in (self.build_dir / self.pkg_dir).rglob("*"):
 					if file.is_file():
 						fp.write(get_record_entry(file, self.build_dir))
 						fp.write("\n")
@@ -535,7 +548,7 @@ class Builder:
 		with tarfile.open(conda_filename, mode="w:bz2") as conda_archive:
 			with (self.info_dir / "files").open('w') as fp:
 
-				for file in (PathPlus(wheel_contents_dir) / self.import_name).rglob("*"):
+				for file in (PathPlus(wheel_contents_dir) / self.pkg_dir).rglob("*"):
 					if file.is_file():
 						filename = (site_packages / file.relative_to(wheel_contents_dir)).as_posix()
 						fp.write(f"{filename}\n")
@@ -596,7 +609,7 @@ class Builder:
 		self.write_entry_points()
 		self.write_metadata(self.dist_info / "METADATA")
 		self.write_wheel()
-		(self.dist_info / "top_level.txt").write_clean(self.import_name)
+		(self.dist_info / "top_level.txt").write_clean(posixpath.split(self.pkg_dir)[0])
 		self.report_written(self.dist_info / "top_level.txt")
 
 		return self.create_wheel_archive()
