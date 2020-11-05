@@ -141,11 +141,9 @@ class Builder:
 		"""
 
 		if self.config["stubs_package"]:
-			return posixpath.join(
-					self.config["source_dir"], f"{self.config['import_name'].replace('.', '/')}-stubs"
-					)
+			return posixpath.join(self.config["source_dir"], f"{self.config['import_name'].split('.')[0]}-stubs")
 		else:
-			return posixpath.join(self.config["source_dir"], self.config["import_name"].replace(".", "/"))
+			return posixpath.join(self.config["source_dir"], self.config["import_name"].split(".")[0])
 
 	def iter_source_files(self) -> Iterator[PathPlus]:
 		pkgdir = self.repo_dir / self.pkg_dir

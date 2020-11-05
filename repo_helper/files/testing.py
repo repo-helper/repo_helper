@@ -109,11 +109,17 @@ class ToxConfig(IniConfigurator):
 				source_files.append(posixpath.join(self._globals["source_dir"], f"{file}.py"))
 
 		elif self._globals["stubs_package"]:
-			directory = posixpath.join(self._globals["source_dir"], f"{self._globals['import_name'].replace('.', '/')}-stubs")
+			directory = posixpath.join(
+					self._globals["source_dir"],
+					f"{self._globals['import_name'].replace('.', '/')}-stubs",
+					)
 			source_files.append(directory)
 
 		else:
-			directory = posixpath.join(self._globals["source_dir"], self._globals["import_name"].replace(".", "/"))
+			directory = posixpath.join(
+					self._globals["source_dir"],
+					self._globals["import_name"].replace(".", "/"),
+					)
 			source_files.append(directory)
 
 		if self._globals["enable_tests"]:
