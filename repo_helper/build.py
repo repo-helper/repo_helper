@@ -81,11 +81,9 @@ class Builder:
 			verbose: bool = False
 			):
 
-		#: The repository
-		self.repo_dir = PathPlus(repo_dir)
-
 		# Walk up the tree until a "repo_helper.yml" or "git_helper.yml" (old name) file is found.
-		self.repo_dir = traverse_to_file(self.repo_dir, "repo_helper.yml", "git_helper.yml")
+		#: The repository
+		self.repo_dir: PathPlus = traverse_to_file(PathPlus(repo_dir), "repo_helper.yml", "git_helper.yml")
 
 		#: The tag for the wheel
 		self.tag = "py3-none-any"
@@ -137,31 +135,26 @@ class Builder:
 		return info_dir
 
 	@property
-	def pkg_dir(self) -> Optional[str]:
+	def pkg_dir(self) -> str:
 		"""
 		The path of the package directory.
-
-		Returns :py:obj:`None` if the project only has modules.
 		"""
 
-		if not self.config["py_modules"]:
-			if self.config["stubs_package"]:
-				return posixpath.join(self.config["source_dir"], f"{self.config['import_name'].replace('.', '/')}-stubs")
-			else:
-				return posixpath.join(self.config["source_dir"], self.config["import_name"].replace(".", "/"))
-
-		return None
+		if self.config["stubs_package"]:
+			return posixpath.join(
+					self.config["source_dir"], f"{self.config['import_name'].replace('.', '/')}-stubs"
+					)
+		else:
+			return posixpath.join(self.config["source_dir"], self.config["import_name"].replace(".", "/"))
 
 	def iter_source_files(self) -> Iterator[PathPlus]:
-		if self.config["py_modules"]:
-			yield from self.config["py_modules"]
-		else:
-			pkgdir = self.repo_dir / self.pkg_dir
+		pkgdir = self.repo_dir / self.pkg_dir
 
-			for py_pattern in {"**/*.py", "**/*.pyi", "**/*.pyx", "**/py.typed"}:
-				for py_file in pkgdir.rglob(py_pattern):
-					if "__pycache__" not in py_file.parts:
-						yield py_file
+		for py_pattern in {"**/*.py", "**/*.pyi", "**/*.pyx", "**/py.typed"}:
+			for py_file in pkgdir.rglob(py_pattern):
+				if "__pycache__" not in py_file.parts:
+					# ref: https://github.com/python/typeshed/issues/4746
+					yield py_file  # type: ignore
 
 	def copy_source(self) -> None:
 		"""

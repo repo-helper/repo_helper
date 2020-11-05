@@ -257,6 +257,7 @@ class use_experimental_backend(ConfigVar):  # noqa
 		disallowed_keys = (
 				additional_setup_args,
 				setup_pre,
+				py_modules,
 				)
 
 		for key in disallowed_keys:
