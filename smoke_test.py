@@ -34,43 +34,43 @@ with tempfile.TemporaryDirectory() as tmpdir:
 	tmpdir_p = PathPlus(tmpdir)
 
 	for username, repository in [
-			("domdfcoding", "default_values"),
-			("domdfcoding", "domdf_sphinx_theme"),
-			("domdfcoding", "enum_tools"),
-			("domdfcoding", "extras_require"),
-			("domdfcoding", "repo_helper_sphinx_theme"),
-			("domdfcoding", "seed_intersphinx_mapping"),
-			("domdfcoding", "sphinx-toolbox"),
-			("domdfcoding", "toctree_plus"),
-			# TODO: flake8 plugins
-			("domdfcoding", "apeye"),
-			("domdfcoding", "attr_utils"),
-			("domdfcoding", "cawdrey"),
-			("domdfcoding", "chemistry_tools"),
-			("domdfcoding", "configconfig"),
-			("domdfcoding", "consolekit"),
-			("domdfcoding", "domdf_python_tools"),
-			("domdfcoding", "domdf_spreadsheet_tools"),
-			("domdfcoding", "mathematical"),
-			("domdfcoding", "mh_utils"),
-			("domdfcoding", "octo-api"),
-			("domdfcoding", "pprint36"),
-			("domdfcoding", "pymassspec"),
-			("domdfcoding", "singledispatch-json"),
-			("domdfcoding", "southwark"),
-			("domdfcoding", "whiptail"),
-			("domdfcoding", "wordle"),
-			("domdfcoding", "ytools3"),
-			("domdfcoding", "create_redirect"),
-			("domdfcoding", "git-toggle"),
-			("domdfcoding", "octocheese"),
-			("domdfcoding", "pyupgrade-directories"),
-			("domdfcoding", "yapf-isort"),
-			("domdfcoding", "pytest-regressions-stubs"),
-			("domdfcoding", "webcolors-stubs"),
-			("domdfcoding", "pre-commit-hooks"),
-			("domdfcoding", "coverage_pyver_pragma"),
-			]:
+		("domdfcoding", "default_values"),
+		("domdfcoding", "domdf_sphinx_theme"),
+		("domdfcoding", "enum_tools"),
+		("domdfcoding", "extras_require"),
+		("domdfcoding", "repo_helper_sphinx_theme"),
+		("domdfcoding", "seed_intersphinx_mapping"),
+		("domdfcoding", "sphinx-toolbox"),
+		("domdfcoding", "toctree_plus"),
+		# TODO: flake8 plugins
+		("domdfcoding", "apeye"),
+		("domdfcoding", "attr_utils"),
+		("domdfcoding", "cawdrey"),
+		("domdfcoding", "chemistry_tools"),
+		("domdfcoding", "configconfig"),
+		("domdfcoding", "consolekit"),
+		("domdfcoding", "domdf_python_tools"),
+		("domdfcoding", "domdf_spreadsheet_tools"),
+		("domdfcoding", "mathematical"),
+		("domdfcoding", "mh_utils"),
+		("domdfcoding", "octo-api"),
+		("domdfcoding", "pprint36"),
+		("domdfcoding", "pymassspec"),
+		("domdfcoding", "singledispatch-json"),
+		("domdfcoding", "southwark"),
+		("domdfcoding", "whiptail"),
+		("domdfcoding", "wordle"),
+		("domdfcoding", "ytools3"),
+		("domdfcoding", "create_redirect"),
+		("domdfcoding", "git-toggle"),
+		("domdfcoding", "octocheese"),
+		("domdfcoding", "pyupgrade-directories"),
+		("domdfcoding", "yapf-isort"),
+		("domdfcoding", "pytest-regressions-stubs"),
+		("domdfcoding", "webcolors-stubs"),
+		("domdfcoding", "pre-commit-hooks"),
+		("domdfcoding", "coverage_pyver_pragma"),
+		]:
 
 		target_dir = tmpdir_p / f"{username}_{repository}"
 		url = GITHUB_COM / username / repository
@@ -116,7 +116,6 @@ with tempfile.TemporaryDirectory() as tmpdir:
 			ret |= exit_code
 
 		print("::endgroup::")
-
 
 print("\n")
 print(
