@@ -11,6 +11,7 @@ from subprocess import Popen
 from apeye.url import URL
 from domdf_python_tools.paths import PathPlus, in_directory
 from dulwich import porcelain
+from dulwich.porcelain import default_bytes_err_stream
 
 # this package
 from repo_helper.build import build_sdist, build_wheel
@@ -99,7 +100,7 @@ with tempfile.TemporaryDirectory() as tmpdir:
 		if is_running_on_actions():
 			errstream = BytesIO()
 		else:
-			errstream = None
+			errstream = default_bytes_err_stream
 
 		start_time = time.time()
 		porcelain.clone(str(url), target_dir, depth=1, errstream=errstream)
