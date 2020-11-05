@@ -6,10 +6,13 @@ import re
 import pytest
 from click.testing import CliRunner, Result
 from domdf_python_tools.paths import in_directory
+from domdf_python_tools.testing import not_pypy
 from pytest_regressions.file_regression import FileRegressionFixture
 
 # this package
 from repo_helper.cli.commands.pycharm_schema import pycharm_schema
+
+pytestmark = not_pypy(reason="lxml 💔 PyPy")
 
 
 def test_pycharm_schema_not_project(tmp_pathplus, file_regression: FileRegressionFixture):
