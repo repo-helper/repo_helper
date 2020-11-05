@@ -140,17 +140,26 @@ class Builder:
 		Copy source files into the build directory.
 		"""
 
-		pkgdir = self.repo_dir / self.import_name
+		source_files = []
 
-		for py_pattern in {"**/*.py", "**/*.pyi", "**/*.pyx", "**/py.typed"}:
-			for py_file in pkgdir.rglob(py_pattern):
-				if "__pycache__" in py_file.parts:
-					continue
+		if self.config["py_modules"]:
+			source_files.extend(self.config["py_modules"])
+		else:
+			if self.config["stubs_package"]:
+				pkgdir = self.repo_dir / self.config["source_dir"] / f"{self.config['import_name'].replace('.', '/')}-stubs"
+			else:
+				pkgdir = self.repo_dir / self.config["source_dir"] / self.config["import_name"].replace(".", "/")
 
-				target = self.build_dir / py_file.relative_to(self.repo_dir)
-				target.parent.maybe_make(parents=True)
-				target.write_clean(py_file.read_text())
-				self.report_copied(py_file, target)
+			for py_pattern in {"**/*.py", "**/*.pyi", "**/*.pyx", "**/py.typed"}:
+				for py_file in pkgdir.rglob(py_pattern):
+					if "__pycache__" not in py_file.parts:
+						source_files.append(py_file)
+
+		for py_file in source_files:
+			target = self.build_dir / py_file.relative_to(self.repo_dir)
+			target.parent.maybe_make(parents=True)
+			target.write_clean(py_file.read_text())
+			self.report_copied(py_file, target)
 
 	def report_copied(self, source: pathlib.Path, target: pathlib.Path):
 		"""
