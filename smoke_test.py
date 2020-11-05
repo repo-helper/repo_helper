@@ -1,8 +1,10 @@
 # stdlib
+import os
 import statistics
 import sys
 import tempfile
 import time
+from io import BytesIO
 from subprocess import Popen
 
 # 3rd party
@@ -29,6 +31,21 @@ ret = 0
 
 clone_times = []
 build_times = []
+
+
+def is_running_on_actions() -> bool:
+	"""
+	Returns :py:obj:`True` if running on GitHub Actions.
+	"""
+	# From https://github.com/ymyzk/tox-gh-actions
+	# Copyright (c) 2019 Yusuke Miyazaki
+	# MIT Licensed
+
+	# See the following document on which environ to use for this purpose.
+	# https://docs.github.com/en/free-pro-team@latest/actions/reference/environment-variables#default-environment-variables
+
+	return os.environ.get("GITHUB_ACTIONS") == "true"
+
 
 with tempfile.TemporaryDirectory() as tmpdir:
 	tmpdir_p = PathPlus(tmpdir)
@@ -74,12 +91,18 @@ with tempfile.TemporaryDirectory() as tmpdir:
 
 		target_dir = tmpdir_p / f"{username}_{repository}"
 		url = GITHUB_COM / username / repository
-		print(f"::group::{username}_{repository}")
+		if is_running_on_actions():
+			print(f"::group::{username}_{repository}")
 		print("\n\n==============================================")
 		print(f"Cloning {url!s} -> {target_dir!s}")
 
+		if is_running_on_actions():
+			errstream = BytesIO()
+		else:
+			errstream = None
+
 		start_time = time.time()
-		porcelain.clone(str(url), target_dir)
+		porcelain.clone(str(url), target_dir, depth=1, errstream=errstream)
 		clone_times.append(time.time() - start_time)
 
 		with in_directory(target_dir):
@@ -115,9 +138,13 @@ with tempfile.TemporaryDirectory() as tmpdir:
 			exit_code = check_wheel_process.wait()
 			ret |= exit_code
 
-		print("::endgroup::")
+		if is_running_on_actions():
+			print("::endgroup::")
 
 print("\n")
+if is_running_on_actions():
+	print("::group::Summary")
+
 print(
 		"Average clone time:",
 		f"{statistics.mean(clone_times)}s,",
@@ -130,5 +157,8 @@ print(
 		f"σ {statistics.stdev(build_times)}",
 		f"(n={len(build_times)})",
 		)
+
+if is_running_on_actions():
+	print("::endgroup::")
 
 sys.exit(ret)
