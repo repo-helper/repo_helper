@@ -264,9 +264,9 @@ class ToxConfig(IniConfigurator):
 		self._ini["testenv:build"]["skip_install"] = True
 		self._ini["testenv:build"]["changedir"] = "{toxinidir}"
 		self._ini["testenv:build"]["deps"] = indent_join([
-				"twine",
-				"pep517",
-				"check-wheel-contents",
+				"twine>=3.2.0",
+				"pep517>=0.9.1",
+				"check-wheel-contents>=0.1.0",
 				*self["tox_build_requirements"],
 				])
 		self._ini["testenv:build"]["commands"] = indent_join([
@@ -379,9 +379,9 @@ class ToxConfig(IniConfigurator):
 			self._ini["testenv:coverage"]["whitelist_externals"] = "/bin/bash"
 			self._ini["testenv:coverage"]["changedir"] = "{toxinidir}"
 
-			coverage_deps = ["coverage"]
+			coverage_deps = ["coverage>=5"]
 			if self["pypi_name"] != "coverage_pyver_pragma":
-				coverage_deps.append("coverage_pyver_pragma")
+				coverage_deps.append("coverage_pyver_pragma>=0.0.6")
 
 			self._ini["testenv:coverage"]["deps"] = indent_join(coverage_deps)
 

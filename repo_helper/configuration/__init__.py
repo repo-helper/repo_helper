@@ -362,6 +362,9 @@ class RepoHelperParser(Parser):
 		if (repo_path / parsed_config_vars["import_name"].replace(".", "/") / "py.typed").is_file():
 			add_classifier("Typing :: Typed")
 
+		if parsed_config_vars["use_experimental_backend"]:
+			parsed_config_vars["tox_build_requirements"].append("repo_helper")
+
 		return parsed_config_vars
 
 
