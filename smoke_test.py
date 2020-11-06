@@ -48,8 +48,6 @@ def is_running_on_actions() -> bool:
 	return "GITHUB_ACTIONS" in os.environ
 
 
-print(f"Running in GitHub Actions: {is_running_on_actions()}")
-
 with tempfile.TemporaryDirectory() as tmpdir:
 	tmpdir_p = PathPlus(tmpdir)
 
@@ -97,7 +95,7 @@ with tempfile.TemporaryDirectory() as tmpdir:
 
 		if is_running_on_actions():
 			print(f"::group::{username}_{repository}")
-		print("\n\n==============================================")
+		print("\n==============================================")
 		print(f"Cloning {url!s} -> {target_dir!s}")
 
 		if is_running_on_actions():
