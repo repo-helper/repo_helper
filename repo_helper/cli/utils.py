@@ -98,7 +98,7 @@ def commit_changed_files(
 				os.path.normpath(filename) in stat.staged["add"]
 				or os.path.normpath(filename) in stat.staged["modify"]
 				or os.path.normpath(filename) in stat.staged["delete"]
-			):
+				):
 			staged_files.append(filename)
 
 	# Ensure pre-commit hooks are installed
