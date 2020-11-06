@@ -12,6 +12,7 @@ enable_conda: false
 
 additional_ignore:
  - Tokens
+ - rh.bat
 
 console_scripts:
  - "repo_helper = repo_helper.__main__:main"
@@ -43,6 +44,11 @@ classifiers:
  - 'Intended Audience :: Developers'
  - 'Topic :: Software Development :: Libraries :: Python Modules'
  - 'Topic :: Utilities'
+ - 'Topic :: Software Development :: Build Tools'
+ - 'Topic :: Software Development :: Version Control :: Git'
+ - 'Topic :: System :: Archiving :: Packaging'
+ - 'Topic :: System :: Software Distribution'#
+ - 'Environment :: Console'
 
 extra_sphinx_extensions:
  - configconfig.autoconfig
