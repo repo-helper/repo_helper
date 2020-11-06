@@ -45,8 +45,10 @@ def is_running_on_actions() -> bool:
 	# See the following document on which environ to use for this purpose.
 	# https://docs.github.com/en/free-pro-team@latest/actions/reference/environment-variables#default-environment-variables
 
-	return os.environ.get("GITHUB_ACTIONS") == "true"
+	return "GITHUB_ACTIONS" in os.environ
 
+
+print(f"Running in GitHub Actions: {is_running_on_actions()}")
 
 with tempfile.TemporaryDirectory() as tmpdir:
 	tmpdir_p = PathPlus(tmpdir)
@@ -92,6 +94,7 @@ with tempfile.TemporaryDirectory() as tmpdir:
 
 		target_dir = tmpdir_p / f"{username}_{repository}"
 		url = GITHUB_COM / username / repository
+
 		if is_running_on_actions():
 			print(f"::group::{username}_{repository}")
 		print("\n\n==============================================")
