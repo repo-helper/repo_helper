@@ -27,6 +27,7 @@ CLI utility functions.
 import datetime
 import logging
 import os
+import platform
 import textwrap
 from typing import Iterable, Optional
 
@@ -90,12 +91,18 @@ def commit_changed_files(
 	staged_files = []
 
 	for filename in managed_files:
-		if filename.encode("UTF-8") in unstaged_changes or filename in untracked_files:
-			r.stage(os.path.normpath(filename))
+		if filename.encode("UTF-8") in unstaged_changes or os.path.normpath(filename) in untracked_files:
+			r.stage(filename)
+			staged_files.append(filename)
+		elif (
+				os.path.normpath(filename) in stat.staged["add"]
+				or os.path.normpath(filename) in stat.staged["modify"]
+				or os.path.normpath(filename) in stat.staged["delete"]
+			):
 			staged_files.append(filename)
 
 	# Ensure pre-commit hooks are installed
-	if enable_pre_commit:
+	if enable_pre_commit and platform.system() == "Linux":
 		with in_directory(repo_path):
 			pre_commit.main.main(["install"])
 

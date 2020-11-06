@@ -1,7 +1,7 @@
 apeye>=0.3.0
 attrs>=20.2.0
 click==7.1.2
-configconfig>=0.3.0
+configconfig>=0.4.0
 consolekit>=0.1.2
 css-parser==1.0.6
 domdf-python-tools>=1.1.0
