@@ -59,7 +59,7 @@ logging.getLogger(install_uninstall.__name__).addFilter(lambda record: False)
 
 def commit_changed_files(
 		repo_path: PathLike,
-		managed_files: Iterable[str],
+		managed_files: Iterable[PathLike],
 		commit: Optional[bool] = None,
 		message: bytes = b"Updated files with 'repo_helper'.",
 		enable_pre_commit: bool = True,
@@ -91,13 +91,13 @@ def commit_changed_files(
 	staged_files = []
 
 	for filename in managed_files:
-		if filename.encode("UTF-8") in unstaged_changes or os.path.normpath(filename) in untracked_files:
-			r.stage(filename)
+		filename = PathPlus(filename)
+		if filename in unstaged_changes or filename in untracked_files:
+			r.stage(os.path.normpath(filename))
 			staged_files.append(filename)
 		elif (
-				os.path.normpath(filename) in stat.staged["add"]
-				or os.path.normpath(filename) in stat.staged["modify"]
-				or os.path.normpath(filename) in stat.staged["delete"]
+				filename in stat.staged["add"] or filename in stat.staged["modify"]
+				or filename in stat.staged["delete"]
 				):
 			staged_files.append(filename)
 
@@ -111,7 +111,7 @@ def commit_changed_files(
 
 		# Sort staged_files and put directories first
 		for staged_filename in sort_paths(*staged_files):
-			click.echo(f"  {staged_filename!s}")
+			click.echo(f"  {os.path.normpath(staged_filename)!s}")
 		click.echo()
 
 		if commit is None:
