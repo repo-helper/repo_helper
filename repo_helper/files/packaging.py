@@ -192,6 +192,7 @@ class SetupCfgConfig(IniConfigurator):
 			"options",
 			"options.packages.find",
 			"mypy",
+			"options.entry_points",
 			]
 
 	def __init__(self, repo_path: pathlib.Path, templates: jinja2.Environment):
@@ -264,6 +265,17 @@ class SetupCfgConfig(IniConfigurator):
 """.format_map(self._globals))
 				)
 
+	def options_entry_points(self):
+		"""
+		``[options.entry_points]``.
+		"""
+
+		if self["console_scripts"]:
+			self._ini["options.entry_points"]["console_scripts"] = self["console_scripts"]
+
+		for group, entry_points in self["entry_points"].items():
+			self._ini["options.entry_points"][group] = entry_points
+
 	def mypy(self):
 		"""
 		``[mypy]``.
@@ -290,11 +302,11 @@ class SetupCfgConfig(IniConfigurator):
 		if "options.entry_points" not in self._ini.sections():
 			self._ini.add_section("options.entry_points")
 
-		if self["console_scripts"]:
-			self._ini["options.entry_points"]["console_scripts"] = self["console_scripts"]
-		else:
-			if not self._ini["options.entry_points"].options():
-				self._ini.remove_section("options.entry_points")
+		# if self["console_scripts"]:
+		# 	self._ini["options.entry_points"]["console_scripts"] = self["console_scripts"]
+		# else:
+		if not self._ini["options.entry_points"].options():
+			self._ini.remove_section("options.entry_points")
 
 
 @management.register("setup_cfg")

@@ -38,6 +38,7 @@ __all__ = [
 		"parse_additional_setup_args",
 		"additional_setup_args",
 		"extras_require",
+		"entry_points",
 		"additional_requirements_files",
 		"setup_pre",
 		"platforms",
@@ -107,6 +108,26 @@ class console_scripts(ConfigVar):  # noqa
 
 	dtype = List[str]
 	default: List[str] = []
+	category: str = "packaging"
+
+
+class entry_points(ConfigVar):  # noqa
+	"""
+	A mapping of entry point categories to a list of entries for each category.
+
+	Each entry should be valid as per https://packaging.python.org/specifications/entry-points/
+
+	Example:
+
+	.. code-block:: yaml
+
+		entry_points:
+		  pytest11:
+		    - "nbval = nbval.plugin"
+	"""
+
+	dtype = Dict[str, List[str]]
+	default: Dict[str, List[str]] = {}
 	category: str = "packaging"
 
 

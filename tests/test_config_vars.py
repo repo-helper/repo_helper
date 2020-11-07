@@ -42,6 +42,7 @@ from configconfig.testing import (
 
 # this package
 from repo_helper.configuration import *  # pylint: disable=wildcard-import
+from repo_helper.configuration.packaging import entry_points
 
 
 class Test_author(RequiredStringTest):
@@ -638,3 +639,8 @@ class Test_html_theme_options(DictTest):
 class Test_html_context(DictTest):
 	config_var = html_context
 	test_value = dict(key4="value4")
+
+
+class Test_entry_points(DictTest):
+	config_var = entry_points
+	test_value = {"pytest11": ["repo_helper = repo_helper.__main__:main"]}

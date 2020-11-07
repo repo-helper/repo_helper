@@ -86,6 +86,7 @@ from repo_helper.configuration.packaging import (
 		additional_requirements_files,
 		additional_setup_args,
 		console_scripts,
+		entry_points,
 		extras_require,
 		manifest_additional,
 		parse_additional_setup_args,
@@ -300,6 +301,7 @@ all_values: List[ConfigVarMeta] = [
 		mypy_version,
 		use_experimental_backend,
 		pre_commit_exclude,
+		entry_points,
 		]
 
 

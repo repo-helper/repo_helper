@@ -47,6 +47,7 @@ import click
 from consolekit.terminal_colours import resolve_color_default
 from consolekit.utils import abort
 from domdf_python_tools.paths import PathPlus
+from domdf_python_tools.stringlist import StringList
 from domdf_python_tools.terminal_colours import Fore
 from domdf_python_tools.typing import PathLike
 from packaging.specifiers import Specifier
@@ -286,7 +287,18 @@ class Builder:
 		"""  # noqa: D400
 
 		cfg_parser = configparser.ConfigParser()
-		cfg_parser.read_string("[console_scripts]\n" + "\n".join(self.config["console_scripts"]))
+
+		buf = StringList()
+		if self.config["console_scripts"]:
+			buf.append("[console_scripts]")
+			buf.extend(self.config["console_scripts"])
+
+		for group, entry_points in self.config["entry_points"].items():
+
+			buf.append(f"[{group}]")
+			buf.extend(entry_points)
+
+		cfg_parser.read_string(str(buf))
 		cfg_io = StringIO()
 		cfg_parser.write(cfg_io)
 
