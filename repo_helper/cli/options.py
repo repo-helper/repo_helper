@@ -34,6 +34,8 @@ __all__ = [
 		"commit_option",
 		"force_option",
 		"autocomplete_option",
+		"colour_option",
+		"no_pager_option",
 		]
 
 
@@ -90,6 +92,36 @@ def force_option(help_text: str) -> Callable:
 	return autocomplete_option(
 			"-f",
 			"--force",
+			is_flag=True,
+			default=False,
+			help=help_text,
+			)
+
+
+def colour_option(help_text="Whether to use coloured output.") -> Callable:
+	"""
+	Decorator to add the ``--colour / --no-colour`` options to a click command.
+
+	:param help_text: The help text for the option.
+	"""
+
+	return autocomplete_option(
+			"--colour/--no-colour",
+			is_flag=True,
+			default=None,
+			help=help_text,
+			)
+
+
+def no_pager_option(help_text="Disable the output pager.") -> Callable:
+	"""
+	Decorator to add the ``--no-pager`` option to a click command.
+
+	:param help_text: The help text for the option.
+	"""
+
+	return autocomplete_option(
+			"--no-pager",
 			is_flag=True,
 			default=False,
 			help=help_text,

@@ -31,13 +31,10 @@ from typing import Optional
 # 3rd party
 import click
 from consolekit import CONTEXT_SETTINGS
-from consolekit.terminal_colours import resolve_color_default
-from consolekit.utils import abort
 
 # this package
 from repo_helper.cli import cli_group
-from repo_helper.cli.options import autocomplete_option
-from repo_helper.core import RepoHelper
+from repo_helper.cli.options import autocomplete_option, colour_option, no_pager_option
 
 __all__ = ["show", "show_command", "version", "log", "changelog"]
 
@@ -62,6 +59,9 @@ def version() -> int:
 	from domdf_python_tools.paths import PathPlus
 	from southwark import get_tags
 	from southwark.repo import Repo
+
+	# this package
+	from repo_helper.core import RepoHelper
 
 	rh = RepoHelper(PathPlus.cwd())
 	version = rh.templates.globals["version"]
@@ -107,13 +107,24 @@ def version() -> int:
 		default=None,
 		help="Show commits after the given tag.",
 		)
+@colour_option()
+@no_pager_option()
 @show_command()
-def log(entries: Optional[int], reverse: bool, from_date: Optional[datetime], from_tag: Optional[str]) -> int:
+def log(
+		entries: Optional[int],
+		reverse: bool,
+		from_date: Optional[datetime],
+		from_tag: Optional[str],
+		colour: Optional[bool] = None,
+		no_pager: bool = False
+		) -> int:
 	"""
 	Show git commit log.
 	"""
 
 	# 3rd party
+	from consolekit.terminal_colours import resolve_color_default
+	from consolekit.utils import abort
 	from domdf_python_tools.paths import PathPlus
 	from southwark.log import Log
 	from southwark.repo import Repo
@@ -125,7 +136,10 @@ def log(entries: Optional[int], reverse: bool, from_date: Optional[datetime], fr
 	except ValueError as e:
 		raise abort(f"ERROR: {e}")
 
-	click.echo_via_pager(commit_log, resolve_color_default())
+	if no_pager:
+		click.echo(commit_log, color=resolve_color_default(colour))
+	else:
+		click.echo_via_pager(commit_log, color=resolve_color_default(colour))
 
 	return 0
 
@@ -144,16 +158,28 @@ def log(entries: Optional[int], reverse: bool, from_date: Optional[datetime], fr
 		default=False,
 		help="Print entries in reverse order.",
 		)
+@colour_option()
 @show_command()
-def changelog(entries: Optional[int], reverse: bool) -> int:
+@no_pager_option()
+def changelog(
+		entries: Optional[int],
+		reverse: bool,
+		colour: Optional[bool] = None,
+		no_pager: bool = False,
+		) -> int:
 	"""
 	Show commits since the last version tag.
 	"""
 
 	# 3rd party
+	from consolekit.terminal_colours import resolve_color_default
+	from consolekit.utils import abort
 	from domdf_python_tools.paths import PathPlus
 	from southwark.log import Log
 	from southwark.repo import Repo
+
+	# this package
+	from repo_helper.core import RepoHelper
 
 	rh = RepoHelper(PathPlus.cwd())
 	repo = Repo(rh.target_repo)
@@ -167,6 +193,53 @@ def changelog(entries: Optional[int], reverse: bool) -> int:
 	except ValueError as e:
 		raise abort(f"ERROR: {e}")
 
-	click.echo_via_pager(commit_log, resolve_color_default())
+	if no_pager:
+		click.echo(commit_log, color=resolve_color_default(colour))
+	else:
+		click.echo_via_pager(commit_log, color=resolve_color_default(colour))
+
+	return 0
+
+
+@no_pager_option()
+@autocomplete_option(
+		"-d",
+		"--depth",
+		type=click.INT,
+		default=-1,
+		help="The maximum depth to display. -1 means infinite depth.",
+		)
+@show_command()
+def requirements(no_pager: bool = False, depth: int = -1) -> int:
+	"""
+	Lists the requirements of this library, and their dependencies
+	"""
+
+	# 3rd party
+	from domdf_python_tools.iterative import make_tree
+	from domdf_python_tools.paths import PathPlus
+	from domdf_python_tools.stringlist import StringList
+	from shippinglabel.requirements import list_requirements, read_requirements
+
+	# this package
+	from repo_helper.core import RepoHelper
+
+	rh = RepoHelper(PathPlus.cwd())
+	buf = StringList([f"{rh.templates.globals['pypi_name']}=={rh.templates.globals['version']}"])
+	raw_requirements = sorted(read_requirements("requirements.txt")[0])
+	tree = []
+
+	for requirement in raw_requirements:
+		tree.append(str(requirement))
+		deps = list(list_requirements(str(requirement), depth=depth - 1))
+		if deps:
+			tree.append(deps)
+
+	buf.extend(make_tree(tree))
+
+	if no_pager:
+		click.echo(str(buf))
+	else:
+		click.echo_via_pager(str(buf))
 
 	return 0
