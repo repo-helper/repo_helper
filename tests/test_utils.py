@@ -27,11 +27,12 @@ from textwrap import dedent
 
 # 3rd party
 import pytest
-from domdf_python_tools.terminal_colours import Fore
+from pytest_regressions.data_regression import DataRegressionFixture
 from shippinglabel import normalize
 
 # this package
-from repo_helper.utils import calc_easter, indent_with_tab, pformat_tabs, traverse_to_file, validate_classifiers
+from repo_helper.configuration.utils import get_version_classifiers
+from repo_helper.utils import calc_easter, indent_with_tab, pformat_tabs, traverse_to_file
 
 # def test_ensure_requirements(tmpdir):
 # 	tmpdir_p = PathPlus(tmpdir)
@@ -55,33 +56,6 @@ from repo_helper.utils import calc_easter, indent_with_tab, pformat_tabs, traver
 # 			"foo",
 # 			'',
 # 			]
-
-
-class TestValidateClassifiers:
-
-	def test_errors(self, capsys):
-		validate_classifiers(["Foo :: Bar", "Foo :: Bar :: Baz", "Fuzzy :: Wuzzy :: Was :: A :: Bear"])
-		captured = capsys.readouterr()
-
-		stderr = captured.err.split("\n")
-		assert stderr[0].endswith(f"Unknown Classifier 'Foo :: Bar'!{Fore.RESET}")
-		assert stderr[1].endswith(f"Unknown Classifier 'Foo :: Bar :: Baz'!{Fore.RESET}")
-		assert stderr[2].endswith(f"Unknown Classifier 'Fuzzy :: Wuzzy :: Was :: A :: Bear'!{Fore.RESET}")
-		assert not captured.out
-
-	def test_deprecated(self, capsys):
-		validate_classifiers(["Natural Language :: Ukranian"])
-		captured = capsys.readouterr()
-
-		stderr = captured.err.split("\n")
-		assert stderr[0].endswith(f"Classifier 'Natural Language :: Ukranian' is deprecated!{Fore.RESET}")
-		assert not captured.out
-
-	def test_valid(self, capsys):
-		validate_classifiers(["Natural Language :: Ukrainian", "License :: OSI Approved"])
-		captured = capsys.readouterr()
-		assert not captured.out
-		assert not captured.err
 
 
 def test_indent_with_tab():
@@ -206,3 +180,21 @@ def test_traverse_to_file_errors(tmp_pathplus):
 		)
 def test_calc_easter(date):
 	assert calc_easter(date.year) == date
+
+
+@pytest.mark.parametrize(
+		"python_versions",
+		[
+				("3.6", ),
+				("3.6", "3.7", "3.8"),
+				("3.6", "3.7", "3.8", "3.9-dev"),
+				("3.6", "3.9-dev"),
+				("3.6", "pypy3"),
+				("3.6", "3.7", "3.8", "pypy3"),
+				("3.6", "3.7", "3.8", "3.9-dev", "pypy3"),
+				("3.6", "3.9-dev", "pypy3"),
+				("3.9-dev", "pypy3"),
+				]
+		)
+def test_get_version_classifiers(python_versions, data_regression: DataRegressionFixture):
+	data_regression.check(get_version_classifiers(python_versions))

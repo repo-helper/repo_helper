@@ -67,7 +67,7 @@ def make_recipe(out_dir) -> int:
 					*extra_requirements,
 					),
 			):
-		if requirement.url:
+		if requirement.url:  # pragma: no cover
 			continue
 
 		if requirement.extras:

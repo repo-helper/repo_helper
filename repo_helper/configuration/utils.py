@@ -105,7 +105,9 @@ def get_version_classifiers(python_versions: Iterable[str]) -> List[str]:
 	version_classifiers = []
 
 	for py_version in python_versions:
-		if str(py_version).startswith("3"):
+		py_version = str(py_version)
+
+		if py_version.startswith("3"):
 			py_version = py_version.replace("-dev", '')
 			for classifier in (
 					f"Programming Language :: Python :: {py_version}",
@@ -120,7 +122,7 @@ def get_version_classifiers(python_versions: Iterable[str]) -> List[str]:
 	version_classifiers.append("Programming Language :: Python")
 	version_classifiers.append("Programming Language :: Python :: 3 :: Only")
 
-	return version_classifiers
+	return sorted(set(version_classifiers))
 
 
 def parse_extras(raw_config_vars: Mapping[str, Any], repo_path: pathlib.Path) -> Tuple[Dict, List[str]]:

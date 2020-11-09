@@ -37,8 +37,8 @@ from typing import TYPE_CHECKING, Callable, Dict, Iterable, List, Optional, Type
 # 3rd party
 import isort  # type: ignore
 import isort.settings  # type: ignore
-import trove_classifiers  # type: ignore
 import yapf_isort
+from domdf_python_tools.dates import calc_easter
 from domdf_python_tools.import_tools import discover_entry_points
 from domdf_python_tools.paths import PathPlus
 from domdf_python_tools.pretty_print import FancyPrinter
@@ -120,26 +120,6 @@ def pformat_tabs(
 		buf.append(re.sub("^ {4}", r"\t", line))
 
 	return str(buf)
-
-
-def validate_classifiers(classifiers: Iterable[str]) -> bool:
-	"""
-	Validate a list of `trove classifiers <https://pypi.org/classifiers/>`_.
-
-	:param classifiers:
-	"""
-
-	invalid_classifier = False
-
-	for classifier in classifiers:
-		if classifier in trove_classifiers.deprecated_classifiers:
-			stderr_writer(Fore.YELLOW(f"Classifier '{classifier}' is deprecated!"))
-
-		elif classifier not in trove_classifiers.classifiers:
-			stderr_writer(Fore.RED(f"Unknown Classifier '{classifier}'!"))
-			invalid_classifier = True
-
-	return invalid_classifier
 
 
 #: Mapping of license short codes to license names used in trove classifiers.
@@ -362,25 +342,6 @@ def traverse_to_file(base_directory: _P, *filename: PathLike, height: int = -1) 
 				return directory
 
 	raise FileNotFoundError(f"'{filename[0]!s}' not found in {base_directory}")
-
-
-def calc_easter(year: int) -> date:
-	"""
-	Returns the date of Easter in the given year.
-
-	:param year:
-	"""
-
-	a = year % 19
-	b = year // 100
-	c = year % 100
-	d = (19 * a + b - b // 4 - ((b - (b + 8) // 25 + 1) // 3) + 15) % 30
-	e = (32 + 2 * (b % 4) + 2 * (c // 4) - d - (c % 4)) % 7
-	f = d + e - 7 * ((a + 11 * d + 22 * e) // 451) + 114
-	month = f // 31
-	day = f % 31 + 1
-
-	return date(year, month, day)
 
 
 def easter_egg() -> None:  # noqa: D102  # pragma: no cover

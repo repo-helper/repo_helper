@@ -102,7 +102,7 @@ def resolve_command(self, ctx, args: List[str]) -> Tuple[str, Command, List[str]
 
 	# If we can't find the command but there is a normalization
 	# function available, we try with that one.
-	if cmd is None and ctx.token_normalize_func is not None:
+	if cmd is None and ctx.token_normalize_func is not None:  # pragma: no cover
 		cmd_name = ctx.token_normalize_func(cmd_name)
 		cmd = self.get_command(ctx, cmd_name)
 
@@ -113,7 +113,7 @@ def resolve_command(self, ctx, args: List[str]) -> Tuple[str, Command, List[str]
 	# resolve things like --help which now should go to the main
 	# place.
 	if cmd is None and not ctx.resilient_parsing:
-		if split_opt(cmd_name)[0]:
+		if split_opt(cmd_name)[0]:  # pragma: no cover
 			self.parse_args(ctx, ctx.args)
 
 		@release_options

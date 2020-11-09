@@ -113,6 +113,22 @@ def test_short_desc_regex(value):
 								),
 						id="case_2"
 						),
+				pytest.param(
+						dict(
+								username="octocat",
+								repo_name="REPO_NAME",
+								version="1.2.3",
+								conda=False,
+								tests=False,
+								docs=False,
+								travis_site="com",
+								unique_name="UNIQUE_NAME",
+								docker_shields=True,
+								docker_name="DOCKER_NAME",
+								platforms=[],
+								),
+						id="case_3"
+						),
 				]
 		)
 def test_create_shields_block(file_regression: FileRegressionFixture, kwargs):

@@ -37,7 +37,30 @@ def test_conda_recipe(tmp_pathplus, file_regression: FileRegressionFixture):
 			"typing_extensions>=3.7.4.3",
 			"yapf-isort>=0.3.3",
 			])
-	# TODO: test with specifiers
+
+	with in_directory(tmp_pathplus):
+		runner = CliRunner()
+		result: Result = runner.invoke(make_recipe, catch_exceptions=False)
+		assert result.exit_code == 0
+
+		if os.sep == "/":
+			assert re.match(r"Wrote recipe to .*/conda/meta\.yaml", result.stdout)
+		elif os.sep == "\\":
+			assert re.match(r"Wrote recipe to .*(\\)?conda\\meta\.yaml", result.stdout.splitlines()[0])
+		else:
+			raise NotImplementedError(os.sep)
+
+	file_regression.check((tmp_pathplus / "conda/meta.yaml").read_text(), encoding="UTF-8", extension=".yml")
+
+
+def test_conda_recipe_specifiers(tmp_pathplus, file_regression: FileRegressionFixture):
+	(tmp_pathplus / "repo_helper.yml").write_text(
+			(pathlib.Path(__file__).parent.parent / "repo_helper.yml_").read_text()
+			)
+	(tmp_pathplus / "requirements.txt").write_lines([
+			'apeye>=0.3.0; python_version < "3.10"',
+			"attrs[extra]>=20.2.0",
+			])
 
 	with in_directory(tmp_pathplus):
 		runner = CliRunner()

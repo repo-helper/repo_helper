@@ -55,7 +55,7 @@ def pycharm_schema() -> None:
 	except ModuleNotFoundError:
 		raise abort("'lxml' module not found. Perhaps you need to 'pip install lxml'?")
 
-	if not schema_mapping_file.parent.is_dir():
+	if not schema_mapping_file.parent.is_dir():  # pragma: no cover
 		raise abort("'.idea' directory not found. Perhaps this isn't a PyCharm project?")
 
 	dump_schema()

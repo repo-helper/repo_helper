@@ -31,11 +31,12 @@ from typing import Any, Dict, Iterable, List, Optional, Union
 from configconfig.configvar import ConfigVar
 from configconfig.utils import optional_getter
 from packaging.version import Version
+from shippinglabel.classifiers import validate_classifiers
 
 # this package
 from repo_helper.configuration.packaging import platforms
 from repo_helper.configuration.utils import get_version_classifiers
-from repo_helper.utils import license_lookup, validate_classifiers
+from repo_helper.utils import license_lookup
 
 __all__ = [
 		"author",
