@@ -61,7 +61,7 @@ def do_test_release(
 
 		assert result.stdout.splitlines()[:-1] == [
 				f"Bump version v0.0.1 -> v{expected_version}",
-				"",
+				'',
 				"The following files will be committed:",
 				"  .bumpversion.cfg",
 				"  repo_helper.yml",

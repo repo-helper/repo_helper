@@ -8,6 +8,9 @@ if [ "$TRAVIS_PYTHON_VERSION" == {{ python_deploy_version }} ]; then
     echo "Deferring building conda package because this is release"
   else
 
+{#-    python3 -m pip install repo_helper || exit 1
+    python3 -m repo_helper make-recipe || exit 1 #}
+
     python3 ./make_conda_recipe.py || exit 1
 
     # Switch to miniconda

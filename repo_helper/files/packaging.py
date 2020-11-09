@@ -80,7 +80,7 @@ def make_manifest(repo_path: pathlib.Path, templates: jinja2.Environment) -> Lis
 	else:
 		import_name = templates.globals["import_name"].replace('.', '/')
 
-	pkg_dir = pathlib.PurePosixPath(templates.globals['source_dir']) / import_name
+	pkg_dir = pathlib.PurePosixPath(templates.globals["source_dir"]) / import_name
 
 	manifest_entries.extend([
 			f"recursive-include {pkg_dir} *.pyi",
