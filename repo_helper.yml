@@ -13,6 +13,8 @@ enable_conda: false
 additional_ignore:
  - Tokens
  - rh.bat
+ - list_requirements.py
+ - pypi_reqs.py
 
 console_scripts:
  - "repo_helper = repo_helper.__main__:main"
