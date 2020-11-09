@@ -43,9 +43,7 @@ from domdf_python_tools.import_tools import discover_entry_points
 from domdf_python_tools.paths import PathPlus
 from domdf_python_tools.pretty_print import FancyPrinter
 from domdf_python_tools.stringlist import StringList
-from domdf_python_tools.terminal_colours import Fore
 from domdf_python_tools.typing import PathLike
-from domdf_python_tools.utils import stderr_writer
 from shippinglabel import normalize
 
 # this package
@@ -69,7 +67,6 @@ __all__ = [
 		"reformat_file",
 		"today",
 		"traverse_to_file",
-		"validate_classifiers",
 		"sort_paths",
 		]
 

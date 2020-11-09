@@ -26,7 +26,7 @@ Show information about the repository.
 # stdlib
 from datetime import datetime
 from functools import partial
-from typing import Optional
+from typing import List, Optional, Union
 
 # 3rd party
 import click
@@ -227,7 +227,7 @@ def requirements(no_pager: bool = False, depth: int = -1) -> int:
 	rh = RepoHelper(PathPlus.cwd())
 	buf = StringList([f"{rh.templates.globals['pypi_name']}=={rh.templates.globals['version']}"])
 	raw_requirements = sorted(read_requirements("requirements.txt")[0])
-	tree = []
+	tree: List[Union[str, List[str], List[Union[str, List]]]] = []
 
 	for requirement in raw_requirements:
 		tree.append(str(requirement))
