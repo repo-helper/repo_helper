@@ -166,7 +166,7 @@ class Bumper:
 				raise click.Abort
 
 		pypi_secure_key = "travis_pypi_secure"
-		if not self.repo.templates.globals[pypi_secure_key]:
+		if self.repo.templates.globals["on_pypi"] and not self.repo.templates.globals[pypi_secure_key]:
 			raise abort(f"Cowardly refusing to bump the version when {pypi_secure_key!r} is unset.")
 
 		#:
