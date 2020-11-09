@@ -35,12 +35,13 @@ import jinja2
 from domdf_python_tools.paths import PathPlus
 from domdf_python_tools.typing import PathLike
 from packaging.requirements import Requirement
+from shippinglabel import normalize
+from shippinglabel.requirements import RequirementsManager, read_requirements
 
 # this package
 from repo_helper.configupdater2 import ConfigUpdater
 from repo_helper.files import management
 from repo_helper.files.linting import code_only_warning, lint_fix_list, lint_warn_list
-from repo_helper.requirements_tools import RequirementsManager, normalize, read_requirements
 from repo_helper.utils import IniConfigurator, indent_join
 
 __all__ = [

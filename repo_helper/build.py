@@ -52,11 +52,11 @@ from domdf_python_tools.terminal_colours import Fore
 from domdf_python_tools.typing import PathLike
 from packaging.specifiers import Specifier
 from packaging.version import Version
+from shippinglabel.requirements import ComparableRequirement, combine_requirements, read_requirements
 
 # this package
 from repo_helper import __version__
 from repo_helper.configuration import parse_yaml
-from repo_helper.requirements_tools import ComparableRequirement, combine_requirements, read_requirements
 from repo_helper.utils import traverse_to_file
 
 __all__ = ["Builder", "build_wheel", "build_sdist"]

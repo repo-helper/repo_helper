@@ -43,6 +43,8 @@ from domdf_python_tools.paths import PathPlus
 from domdf_python_tools.typing import PathLike
 from domdf_python_tools.utils import enquote_value
 from packaging.requirements import Requirement
+from shippinglabel import normalize
+from shippinglabel.requirements import RequirementsManager, combine_requirements, read_requirements
 
 # this package
 import repo_helper
@@ -59,7 +61,6 @@ from repo_helper.blocks import (
 		)
 from repo_helper.configupdater2 import ConfigUpdater
 from repo_helper.files import management
-from repo_helper.requirements_tools import RequirementsManager, combine_requirements, normalize, read_requirements
 from repo_helper.templates import init_repo_template_dir, template_dir
 from repo_helper.utils import pformat_tabs, reformat_file
 

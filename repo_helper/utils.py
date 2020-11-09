@@ -46,10 +46,10 @@ from domdf_python_tools.stringlist import StringList
 from domdf_python_tools.terminal_colours import Fore
 from domdf_python_tools.typing import PathLike
 from domdf_python_tools.utils import stderr_writer
+from shippinglabel import normalize
 
 # this package
 from repo_helper.configupdater2 import ConfigUpdater
-from repo_helper.requirements_tools import normalize
 
 if TYPE_CHECKING:
 	# this package

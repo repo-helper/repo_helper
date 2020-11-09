@@ -45,10 +45,10 @@ def make_recipe(out_dir) -> int:
 	from consolekit.terminal_colours import resolve_color_default
 	from domdf_python_tools.paths import PathPlus
 	from domdf_python_tools.terminal_colours import Fore
+	from shippinglabel.requirements import ComparableRequirement, combine_requirements, read_requirements
 
 	# this package
 	from repo_helper.configuration import parse_yaml
-	from repo_helper.requirements_tools import ComparableRequirement, combine_requirements, read_requirements
 	from repo_helper.templates import template_dir
 	from repo_helper.utils import traverse_to_file
 

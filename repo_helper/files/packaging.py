@@ -36,12 +36,12 @@ import tomlkit  # type: ignore
 from domdf_python_tools.compat import importlib_resources
 from domdf_python_tools.paths import PathPlus
 from packaging.requirements import Requirement
+from shippinglabel.requirements import combine_requirements
 
 # this package
 import repo_helper.files
 from repo_helper.configupdater2 import ConfigUpdater
 from repo_helper.files import management
-from repo_helper.requirements_tools import combine_requirements
 from repo_helper.utils import IniConfigurator, indent_with_tab, reformat_file
 
 __all__ = [

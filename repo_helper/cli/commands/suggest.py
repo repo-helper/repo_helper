@@ -31,7 +31,9 @@ from typing import Optional
 
 # 3rd party
 import click
-from consolekit import CONTEXT_SETTINGS, confirm
+from consolekit import CONTEXT_SETTINGS
+from consolekit.input import confirm
+from shippinglabel.requirements import combine_requirements, read_requirements
 
 # this package
 from repo_helper.cli import cli_group
@@ -40,8 +42,6 @@ from repo_helper.core import RepoHelper
 
 __all__ = ["suggest", "suggest_command"]
 
-# this package
-from repo_helper.requirements_tools import combine_requirements, read_requirements
 
 development_status_options = [
 		"Planning",

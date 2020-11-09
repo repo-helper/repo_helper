@@ -28,9 +28,9 @@ from textwrap import dedent
 # 3rd party
 import pytest
 from domdf_python_tools.terminal_colours import Fore
+from shippinglabel import normalize
 
 # this package
-from repo_helper.requirements_tools import normalize
 from repo_helper.utils import calc_easter, indent_with_tab, pformat_tabs, traverse_to_file, validate_classifiers
 
 # def test_ensure_requirements(tmpdir):
