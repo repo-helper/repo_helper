@@ -42,7 +42,6 @@ from repo_helper.core import RepoHelper
 
 __all__ = ["suggest", "suggest_command"]
 
-
 development_status_options = [
 		"Planning",
 		"Pre-Alpha",
