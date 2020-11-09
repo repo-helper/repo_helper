@@ -103,6 +103,7 @@ def test_make_setup_cfg(tmp_pathplus, demo_environment, file_regression: FileReg
 	demo_environment.globals["mypy_plugins"] = []
 	demo_environment.globals["use_experimental_backend"] = False
 	demo_environment.globals["enable_docs"] = True
+	demo_environment.globals["entry_points"] = {}
 
 	managed_files = make_setup_cfg(tmp_pathplus, demo_environment)
 	assert managed_files == ["setup.cfg"]
@@ -137,6 +138,7 @@ def test_make_setup_cfg_existing(tmp_pathplus, demo_environment, file_regression
 	demo_environment.globals["mypy_plugins"] = []
 	demo_environment.globals["use_experimental_backend"] = False
 	demo_environment.globals["enable_docs"] = True
+	demo_environment.globals["entry_points"] = {}
 
 	managed_files = make_setup_cfg(tmp_pathplus, demo_environment)
 	assert managed_files == ["setup.cfg"]

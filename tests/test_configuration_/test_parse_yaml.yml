@@ -33,6 +33,7 @@ enable_docs: true
 enable_pre_commit: true
 enable_releases: true
 enable_tests: true
+entry_points: {}
 exclude_files: []
 extra_sphinx_extensions:
 - configconfig.autoconfig
