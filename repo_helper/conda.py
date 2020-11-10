@@ -51,8 +51,12 @@ __all__ = [
 		"make_recipe",
 		]
 
-#:
 CONDA_API = SlumberURL("https://conda.anaconda.org", append_slash=False)
+"""
+Instance of :class:`apeye.slumber_url.SlumberURL` for accessing the conda API.
+
+.. versionadded:: 2020.11.10
+"""
 
 
 def get_from_cache(channel_name: str) -> List[str]:
@@ -62,6 +66,8 @@ def get_from_cache(channel_name: str) -> List[str]:
 	Responses are cached for 48 hours.
 
 	:param channel_name:
+
+	.. versionadded:: 2020.11.10
 	"""
 
 	cache_dir = PathPlus(appdirs.user_cache_dir("repo_helper", "domdfcoding")) / "conda_cache"
@@ -97,6 +103,8 @@ def compile_requirements(
 
 	:param repo_dir:
 	:param extras: Mapping of "extras" names to lists of requirements.
+
+	.. versionadded:: 2020.11.10
 	"""
 
 	extra_requirements = []
@@ -134,6 +142,8 @@ def validate_requirements(
 
 	:param requirements:
 	:param conda_channels:
+	
+	.. versionadded:: 2020.11.10
 	"""  # noqa: D400
 
 	validated_requirements = []
@@ -168,7 +178,7 @@ def make_recipe(repo_dir: PathLike, recipe_file: PathLike) -> None:
 	:param repo_dir: The repository directory.
 	:param recipe_file: The file to save the recipe as.
 
-	:return:
+	.. versionadded:: 2020.11.10
 	"""
 
 	repo_dir = PathPlus(repo_dir)
