@@ -511,6 +511,15 @@ class Test_py_modules(ListTest):
 	config_var = py_modules
 	test_value = ["domdf_spreadsheet_tools"]
 
+	def test_success(self):
+		with pytest.warns(DeprecationWarning) as record:
+			super().test_success()
+
+		# check that the message matches
+		assert record[0].message.args == (  # type: ignore
+				"The 'py_modules' configuration value is deprecated. Please make your module into a package instead.",
+				)
+
 
 class Test_console_scripts(ListTest):
 	config_var = console_scripts

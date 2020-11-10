@@ -46,7 +46,7 @@ def make_recipe(out_dir) -> int:
 	from domdf_python_tools.terminal_colours import Fore
 
 	# this package
-	from repo_helper.conda import make_recipe
+	from repo_helper import conda
 	from repo_helper.utils import traverse_to_file
 
 	repo_dir = traverse_to_file(PathPlus.cwd(), "repo_helper.yml")
@@ -54,7 +54,7 @@ def make_recipe(out_dir) -> int:
 	recipe_file = PathPlus(out_dir).resolve() / "meta.yaml"
 	recipe_file.parent.maybe_make()
 
-	make_recipe(repo_dir, recipe_file)
+	conda.make_recipe(repo_dir, recipe_file)
 
 	click.echo(Fore.GREEN(f"Wrote recipe to {recipe_file!s}"), color=resolve_color_default())
 

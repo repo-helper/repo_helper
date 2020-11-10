@@ -96,7 +96,7 @@ def get_from_cache(channel_name: str) -> List[str]:
 
 def compile_requirements(
 		repo_dir: PathPlus,
-		extras: Mapping[str, Iterable[Union[str, Requirement]]],
+		extras: Mapping[str, Iterable[str]],
 		) -> List[ComparableRequirement]:
 	"""
 	Compile a list of requirements for the package from the requirements.txt file and any extra dependencies.
@@ -142,7 +142,7 @@ def validate_requirements(
 
 	:param requirements:
 	:param conda_channels:
-	
+
 	.. versionadded:: 2020.11.10
 	"""  # noqa: D400
 
