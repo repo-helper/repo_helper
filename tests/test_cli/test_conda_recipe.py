@@ -20,9 +20,6 @@ def test_conda_recipe(tmp_pathplus, file_regression: FileRegressionFixture):
 			"apeye>=0.3.0",
 			"attrs>=20.2.0",
 			"click==7.1.2",
-			"configconfig>=0.3.0",
-			"consolekit>=0.1.2",
-			"css-parser==1.0.5",
 			"domdf-python-tools>=1.1.0",
 			"dulwich>=0.19.16",
 			"email_validator==1.1.1",
@@ -31,11 +28,8 @@ def test_conda_recipe(tmp_pathplus, file_regression: FileRegressionFixture):
 			"packaging>=20.4",
 			"pre-commit>=2.7.1",
 			"ruamel.yaml>=0.16.12",
-			"southwark>=0.1.0",
 			"tomlkit>=0.7.0",
-			"trove_classifiers>=2020.10.21",
 			"typing_extensions>=3.7.4.3",
-			"yapf-isort>=0.3.3",
 			])
 
 	with in_directory(tmp_pathplus):

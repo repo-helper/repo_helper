@@ -63,3 +63,7 @@ extras_require:
 tox_testenv_extras: all
 
 travis_pypi_secure: "somereallylongstringofcharacters"
+
+conda_channels:
+ - domdfcoding
+ - conda-forge

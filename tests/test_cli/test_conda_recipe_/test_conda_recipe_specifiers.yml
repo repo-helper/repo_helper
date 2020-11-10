@@ -34,7 +34,11 @@ about:
   home: "https://github.com/domdfcoding/repo_helper_demo"
   license: "GNU Lesser General Public License v3 or later (LGPLv3+)"
   summary: "Update multiple configuration files, build scripts etc. from a single location."
-  description: "Update multiple configuration files, build scripts etc. from a single location."
+  description: "Update multiple configuration files, build scripts etc. from a single location.
+
+
+Before installing please ensure you have added the following channels: domdfcoding, conda-forge
+"
   doc_url: https://repo_helper_demo.readthedocs.io
   dev_url: https://github.com/domdfcoding/repo_helper_demo
 

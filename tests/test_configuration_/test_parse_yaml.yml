@@ -16,7 +16,9 @@ classifiers:
 - 'Programming Language :: Python :: 3.9'
 - 'Programming Language :: Python :: Implementation :: CPython'
 - 'Topic :: Utilities'
-conda_channels: []
+conda_channels:
+- domdfcoding
+- conda-forge
 conda_description: Update multiple configuration files, build scripts etc. from a
   single location.
 console_scripts:
