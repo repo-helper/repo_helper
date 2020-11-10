@@ -3,7 +3,7 @@ modname: repo_helper
 copyright_years: "2020"
 author: "Dominic Davis-Foster"
 email: "dominic@davis-foster.co.uk"
-version: "2020.11.6"
+version: "2020.11.10"
 username: "domdfcoding"
 license: 'LGPLv3+'
 short_desc: 'Update multiple configuration files, build scripts etc. from a single location.'
