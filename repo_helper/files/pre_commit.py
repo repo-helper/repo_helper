@@ -30,7 +30,7 @@ import posixpath
 import re
 from io import StringIO
 from textwrap import indent
-from typing import Iterable, List, MutableMapping, Union
+from typing import Iterable, List, Mapping, MutableMapping, Union
 
 # 3rd party
 import attr
@@ -266,7 +266,7 @@ def make_pre_commit(repo_path: pathlib.Path, templates: jinja2.Environment) -> L
 
 	indent_re = re.compile("^ {3}")
 
-	for hook in [
+	managed_hooks = [
 			pre_commit_hooks,
 			domdfcoding_hooks,
 			flake8_dunder_all,
@@ -274,11 +274,35 @@ def make_pre_commit(repo_path: pathlib.Path, templates: jinja2.Environment) -> L
 			pyupgrade,
 			lucas_c_hooks,
 			yapf_isort,
-			]:
+			]
+	managed_hooks_urls = [str(hook.repo) for hook in managed_hooks]
+
+	custom_hooks_comment = "# Custom hooks can be added below this comment"
+
+	for hook in managed_hooks:
 		buf = StringIO()
 		dumper.dump(hook.to_dict(), buf)
 		output.append(indent_re.sub(" - ", indent(buf.getvalue(), "   ")))
 		output.blankline(ensure_single=True)
+	output.append(custom_hooks_comment)
+	output.blankline(ensure_single=True)
+
+	raw_yaml = pre_commit_file.read_text()
+
+	if custom_hooks_comment in raw_yaml:
+		custom_hooks_yaml = pre_commit_file.read_text().split(custom_hooks_comment)[1]
+
+		custom_hooks = [
+				Repo(**repo)
+				for repo in yaml.safe_load(custom_hooks_yaml) or []
+				if repo["repo"] not in managed_hooks_urls
+				]
+
+		for hook in custom_hooks:
+			buf = StringIO()
+			dumper.dump(hook.to_dict(), buf)
+			output.append(indent_re.sub(" - ", indent(buf.getvalue(), "   ")))
+			output.blankline(ensure_single=True)
 
 	pre_commit_file.write_lines(output)
 

@@ -100,10 +100,16 @@ def original_datadir(request):
 
 
 @pytest.fixture()
-def temp_repo(temp_empty_repo, monkeypatch) -> Repo:
+def temp_repo(temp_empty_repo) -> Repo:
 	(temp_empty_repo.path / "repo_helper.yml").write_text(
 			(pathlib.Path(__file__).parent / "repo_helper.yml_").read_text()
 			)
+
+	return temp_empty_repo
+
+
+@pytest.fixture()
+def temp_empty_repo(tmp_pathplus, monkeypatch) -> Repo:
 
 	# Monkeypatch dulwich so it doesn't try to use the global config.
 	monkeypatch.setattr(StackedConfig, "default_backends", lambda *args: [], raising=True)
@@ -115,12 +121,7 @@ def temp_repo(temp_empty_repo, monkeypatch) -> Repo:
 	FAKE_DATE = datetime.date(2020, 7, 25)
 	monkeypatch.setattr(repo_helper.utils, "today", FAKE_DATE)
 
-	return temp_empty_repo
-
-
-@pytest.fixture()
-def temp_empty_repo(tmp_pathplus) -> Repo:
-	repo_dir = tmp_pathplus / secrets.token_hex(8)
+	repo_dir = tmp_pathplus / secrets.token_hex(8) / "~$tmp"
 	repo_dir.maybe_make(parents=True)
 	repo: Repo = Repo.init(repo_dir)
 	return repo

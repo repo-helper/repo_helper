@@ -24,7 +24,7 @@ FAKE_DATE = datetime.date(2020, 7, 25)
 
 
 @pytest.mark.skipif(condition=os.sep == "\\", reason="Different test for platforms where os.sep == \\")
-def test_via_run_repo_helper_forward(capsys, file_regression: FileRegressionFixture, monkeypatch):
+def test_via_run_repo_helper_forward(temp_empty_repo, capsys, file_regression: FileRegressionFixture, monkeypatch):
 
 	# Monkeypatch dulwich so it doesn't try to use the global config.
 	monkeypatch.setattr(StackedConfig, "default_backends", lambda *args: [], raising=True)
@@ -35,32 +35,32 @@ def test_via_run_repo_helper_forward(capsys, file_regression: FileRegressionFixt
 
 	monkeypatch.setattr(repo_helper.utils, "today", FAKE_DATE)
 
-	with TemporaryDirectory() as tmpdir:
+	(temp_empty_repo.path / ".pre-commit-config.yaml").touch()
 
-		path = PathPlus(tmpdir) / "~$tmp"
-		path.mkdir()
-		Repo.init(path)
+	(temp_empty_repo.path / "repo_helper.yml").write_text(
+			(pathlib.Path(__file__).parent / "repo_helper.yml_").read_text()
+			)
 
-		(path / "repo_helper.yml").write_text((pathlib.Path(__file__).parent / "repo_helper.yml_").read_text())
+	run_repo_helper(temp_empty_repo.path, force=False, initialise=True, commit=True, message="Testing Testing")
 
-		run_repo_helper(path, force=False, initialise=True, commit=True, message="Testing Testing")
+	assert not status(temp_empty_repo.path).untracked
+	assert not status(temp_empty_repo.path).unstaged
 
-		assert not status(path).untracked
-		assert not status(path).unstaged
+	run_repo_helper(temp_empty_repo.path, force=False, initialise=False, commit=True, message="Updated")
 
-		run_repo_helper(path, force=False, initialise=False, commit=True, message="Updated")
+	assert not status(temp_empty_repo.path).untracked
+	assert not status(temp_empty_repo.path).unstaged
 
-		assert not status(path).untracked
-		assert not status(path).unstaged
-
-		sha = "6d8cf72fff6adc4e570cb046ca417db7f2e10a3b"
-		stdout = re.sub(f"Committed as [A-Za-z0-9]{{{len(sha)}}}", f"Committed as {sha}", capsys.readouterr().out)
-		file_regression.check(stdout, extension="_stdout.txt", encoding="UTF-8")
-		file_regression.check(capsys.readouterr().err, extension="_stderr.txt", encoding="UTF-8")
+	sha = "6d8cf72fff6adc4e570cb046ca417db7f2e10a3b"
+	stdout = re.sub(f"Committed as [A-Za-z0-9]{{{len(sha)}}}", f"Committed as {sha}", capsys.readouterr().out)
+	file_regression.check(stdout, extension="_stdout.txt", encoding="UTF-8")
+	file_regression.check(capsys.readouterr().err, extension="_stderr.txt", encoding="UTF-8")
 
 
 @pytest.mark.skipif(condition=os.sep == "/", reason="Different test for platforms where os.sep == /")
-def test_via_run_repo_helper_backward(capsys, file_regression: FileRegressionFixture, monkeypatch):
+def test_via_run_repo_helper_backward(
+		temp_empty_repo, capsys, file_regression: FileRegressionFixture, monkeypatch
+		):
 
 	# Monkeypatch dulwich so it doesn't try to use the global config.
 	monkeypatch.setattr(StackedConfig, "default_backends", lambda *args: [], raising=True)
@@ -71,28 +71,26 @@ def test_via_run_repo_helper_backward(capsys, file_regression: FileRegressionFix
 
 	monkeypatch.setattr(repo_helper.utils, "today", FAKE_DATE)
 
-	with TemporaryDirectory() as tmpdir:
+	(temp_empty_repo.path / ".pre-commit-config.yaml").touch()
 
-		path = PathPlus(tmpdir) / "~$tmp"
-		path.mkdir()
-		Repo.init(path)
+	(temp_empty_repo.path / "repo_helper.yml").write_text(
+			(pathlib.Path(__file__).parent / "repo_helper.yml_").read_text()
+			)
 
-		(path / "repo_helper.yml").write_text((pathlib.Path(__file__).parent / "repo_helper.yml_").read_text())
+	run_repo_helper(temp_empty_repo.path, force=False, initialise=True, commit=True, message="Testing Testing")
 
-		run_repo_helper(path, force=False, initialise=True, commit=True, message="Testing Testing")
+	assert not status(temp_empty_repo.path).untracked
+	assert not status(temp_empty_repo.path).unstaged
 
-		assert not status(path).untracked
-		assert not status(path).unstaged
+	run_repo_helper(temp_empty_repo.path, force=False, initialise=False, commit=True, message="Updated")
 
-		run_repo_helper(path, force=False, initialise=False, commit=True, message="Updated")
+	assert not status(temp_empty_repo.path).untracked
+	assert not status(temp_empty_repo.path).unstaged
 
-		assert not status(path).untracked
-		assert not status(path).unstaged
-
-		sha = "6d8cf72fff6adc4e570cb046ca417db7f2e10a3b"
-		stdout = re.sub(f"Committed as [A-Za-z0-9]{{{len(sha)}}}", f"Committed as {sha}", capsys.readouterr().out)
-		file_regression.check(stdout, extension="_stdout.txt", encoding="UTF-8")
-		file_regression.check(capsys.readouterr().err, extension="_stderr.txt", encoding="UTF-8")
+	sha = "6d8cf72fff6adc4e570cb046ca417db7f2e10a3b"
+	stdout = re.sub(f"Committed as [A-Za-z0-9]{{{len(sha)}}}", f"Committed as {sha}", capsys.readouterr().out)
+	file_regression.check(stdout, extension="_stdout.txt", encoding="UTF-8")
+	file_regression.check(capsys.readouterr().err, extension="_stderr.txt", encoding="UTF-8")
 
 
 def test_via_Repo_class(
@@ -113,6 +111,7 @@ def test_via_Repo_class(
 		(temp_repo.path / "README.rst").touch()
 		(temp_repo.path / "doc-source").mkdir()
 		(temp_repo.path / "doc-source" / "index.rst").touch()
+		(temp_repo.path / ".pre-commit-config.yaml").touch()
 
 		gh = RepoHelper(temp_repo.path)
 		managed_files = gh.run()

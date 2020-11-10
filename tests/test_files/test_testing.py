@@ -178,6 +178,8 @@ def test_make_pre_commit(tmp_pathplus, demo_environment, file_regression):
 	demo_environment.globals["yapf_exclude"] = []
 	demo_environment.globals["pre_commit_exclude"] = "^$"
 
+	(tmp_pathplus / ".pre-commit-config.yaml").touch()
+
 	managed_files = make_pre_commit(tmp_pathplus, demo_environment)
 	assert managed_files == [".pre-commit-config.yaml"]
 	check_file_output(tmp_pathplus / managed_files[0], file_regression)
