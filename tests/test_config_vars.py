@@ -517,8 +517,8 @@ class Test_py_modules(ListTest):
 
 		# check that the message matches
 		assert record[0].message.args == (  # type: ignore
-				"The 'py_modules' configuration value is deprecated. Please make your module into a package instead.",
-				)
+			"The 'py_modules' configuration value is deprecated. Please make your module into a package instead.",
+			)
 
 
 class Test_console_scripts(ListTest):
