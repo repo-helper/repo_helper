@@ -191,6 +191,36 @@ def make_github_ci(repo_path: pathlib.Path, templates: jinja2.Environment) -> Li
 			]
 
 
+@management.register("conda_actions", ["enable_conda"])
+def make_conda_actions_ci(repo_path: pathlib.Path, templates: jinja2.Environment) -> List[str]:
+	"""
+	Add configuration for testing conda paclages on `Github Actions` to the desired repo.
+
+	:param repo_path: Path to the repository root.
+	:param templates:
+	"""
+
+	actions = templates.get_template("github_conda_ci.yml")
+
+	workflows_dir = PathPlus(repo_path / ".github" / "workflows")
+	workflows_dir.maybe_make(parents=True)
+
+	conda_ci_file = workflows_dir / "conda_ci.yml"
+
+	def no_pypy_versions(versions):
+		"""
+		Returns the subset of ``versions`` which does not end with ``-dev``.
+
+		:param versions:
+		"""
+
+		return [v for v in no_dev_versions(versions) if not "pypy" in v.lower()]
+
+	conda_ci_file.write_clean(actions.render(no_dev_versions=no_pypy_versions))
+
+	return [conda_ci_file.relative_to(repo_path).as_posix()]
+
+
 @management.register("manylinux")
 def make_github_manylinux(repo_path: pathlib.Path, templates: jinja2.Environment) -> List[str]:
 	"""

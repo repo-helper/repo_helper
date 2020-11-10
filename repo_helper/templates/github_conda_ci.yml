@@ -1,0 +1,54 @@
+# {{ managed_message }}
+---
+name: Conda Tests
+
+on:
+  push:
+  pull_request:
+    branches: ["master"]
+
+jobs:
+  tests:
+    name: "Python ${{ "{{" }} matrix.python-version {{ "}}" }}"
+    runs-on: ubuntu-latest
+
+    strategy:
+      fail-fast: False
+      matrix:
+        python-version: ["{{ '","'.join(no_dev_versions(python_versions)) }}"]
+
+    steps:
+      - name: Checkout 🛎️
+        uses: "actions/checkout@v2"
+      - name: Setup Python 🐍
+        uses: "actions/setup-python@v2"
+        with:
+          python-version: "${{ "{{" }} matrix.python-version {{ "}}" }}"
+      - name: Install dependencies 🔧
+        run: |
+          python -VV
+          python -m site
+          python -m pip install --upgrade pip setuptools wheel
+          python -m pip install --upgrade repo_helper
+          # $CONDA is an environment variable pointing to the root of the miniconda directory
+          $CONDA/bin/conda update -q conda
+          {% for channel in conda_channels %}
+          $CONDA/bin/conda config --add channels {{ channel }}
+          {% endfor %}
+
+      - name: "Build and install package"
+        run: |
+          # This mess is only necessary because conda won't fix it themselves
+          # https://github.com/conda/conda/issues/1884
+          python -m repo_helper build --conda --out-dir conda-bld/noarch
+           $CONDA/bin/conda install {{ pypi_name }} -c local -y || exit 1
+
+{#      - name: "Run Tests for Python ${{ "{{" }} matrix.python-version {{ "}}" }}"
+        run: |
+          rm -rf {{ import_name }}
+          $CONDA/bin/conda install pytest
+          $CONDA/bin/conda install --file {{ tests_dir }}/requirements.txt -y
+          $CONDA/bin/pytest {{ tests_dir }}/
+
+# See also https://github.com/domdfcoding/repo_helper/new/master?filename=.github%2Fworkflows%2Fpython-package-conda.yml&workflow_template=python-package-conda
+#}
