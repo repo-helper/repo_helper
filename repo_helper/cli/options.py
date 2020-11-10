@@ -50,18 +50,20 @@ def commit_option(default: Optional[bool]) -> Callable:
 	* :py:obj:`False` -- Don't commit
 	"""
 
+	help_text = "Commit or do not commit any changed files.  [default: {default}]"
+
 	if default is True:
-		help_text = "Commit or do not commit any changed files.  [default: Commit automatically]"
+		default_text = "Commit automatically"
 	elif default is False:
-		help_text = "Commit or do not commit any changed files.  [default: Don't commit]"
+		default_text = "Don't commit"
 	else:
-		help_text = "Commit or do not commit any changed files.  [default: Ask first]"
+		default_text = "Ask first"
 
 	return autocomplete_option(
 			"-y/-n",
 			"--commit/--no-commit",
 			default=default,
-			help=help_text,
+			help=help_text.format(default=default_text),
 			)
 
 
