@@ -218,7 +218,7 @@ def make_conda_actions_ci(repo_path: pathlib.Path, templates: jinja2.Environment
 		:param versions:
 		"""
 
-		return [v for v in no_dev_versions(versions) if not "pypy" in v.lower()]
+		return [v for v in no_dev_versions(versions) if "pypy" not in v.lower()]
 
 	conda_ci_file.write_clean(actions.render(no_dev_versions=no_pypy_versions))
 
