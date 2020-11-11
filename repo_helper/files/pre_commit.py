@@ -244,10 +244,12 @@ def make_pre_commit(repo_path: pathlib.Path, templates: jinja2.Environment) -> L
 					}]
 			)
 
+	yapf_isort_excludes = fr"^({'|'.join([*templates.globals['yapf_exclude'], *non_source_files])})\.py$"
+
 	yapf_isort = Repo(
 			repo=make_github_url("domdfcoding", "yapf-isort"),
 			rev="v0.4.4",
-			hooks=[{"id": "yapf-isort", "exclude": fr"^({'|'.join(non_source_files)})\.py$"}]
+			hooks=[{"id": "yapf-isort", "exclude": yapf_isort_excludes}],
 			)
 
 	dep_checker = Repo(
@@ -257,6 +259,9 @@ def make_pre_commit(repo_path: pathlib.Path, templates: jinja2.Environment) -> L
 			)
 
 	pre_commit_file = PathPlus(repo_path / ".pre-commit-config.yaml")
+
+	if not pre_commit_file.is_file():
+		pre_commit_file.touch()
 
 	dumper = ruamel.yaml.YAML()
 	dumper.indent(mapping=2, sequence=3, offset=1)

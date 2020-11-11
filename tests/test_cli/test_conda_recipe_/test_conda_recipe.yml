@@ -28,7 +28,7 @@ requirements:
     - lxml
     - packaging>=20.4
     - pre-commit>=2.7.1
-    - ruamel_yaml>=0.16.12
+    - ruamel.yaml>=0.16.12
     - tomlkit>=0.7.0
     - typing-extensions>=3.7.4.3
   run:
@@ -44,7 +44,7 @@ requirements:
     - lxml
     - packaging>=20.4
     - pre-commit>=2.7.1
-    - ruamel_yaml>=0.16.12
+    - ruamel.yaml>=0.16.12
     - tomlkit>=0.7.0
     - typing-extensions>=3.7.4.3
 
