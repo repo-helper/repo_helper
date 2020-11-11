@@ -156,6 +156,12 @@ def validate_requirements(
 			conda_packages.add(package)
 
 	for requirement in requirements:
+
+		# Check alias_mapping first
+		if requirement.name in alias_mapping:
+			requirement.name = alias_mapping[requirement.name]
+			continue
+
 		matches = difflib.get_close_matches(requirement.name, conda_packages)
 		for match in matches:
 			if normalize(match) == requirement.name:
@@ -205,3 +211,10 @@ def make_recipe(repo_dir: PathLike, recipe_file: PathLike) -> None:
 	#    - {{ import_name }} = {{ import_name }}:main
 	#  skip_compile_pyc:
 	#    - "*/templates/*.py"          # These should not (and cannot) be compiled
+
+
+#: Mapping of normalised names to names on conda, if they differ for some reason
+alias_mapping = {
+		"ruamel_yaml": "ruamel.yaml"
+		}
+# Really just due to https://github.com/conda-forge/ruamel.yaml-feedstock/issues/7
