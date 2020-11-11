@@ -160,6 +160,7 @@ def validate_requirements(
 		# Check alias_mapping first
 		if requirement.name in alias_mapping:
 			requirement.name = alias_mapping[requirement.name]
+			validated_requirements.append(requirement)
 			continue
 
 		matches = difflib.get_close_matches(requirement.name, conda_packages)
@@ -214,7 +215,5 @@ def make_recipe(repo_dir: PathLike, recipe_file: PathLike) -> None:
 
 
 #: Mapping of normalised names to names on conda, if they differ for some reason
-alias_mapping = {
-		"ruamel_yaml": "ruamel.yaml"
-		}
+alias_mapping = {"ruamel-yaml": "ruamel.yaml"}
 # Really just due to https://github.com/conda-forge/ruamel.yaml-feedstock/issues/7
