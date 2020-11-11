@@ -73,7 +73,6 @@ class ToxConfig(IniConfigurator):
 			"testenv:docs",
 			"testenv:build",
 			"testenv:lint",
-			"testenv:yapf",
 			"testenv:mypy",
 			"testenv:pyup",
 			"testenv:coverage",
@@ -308,26 +307,6 @@ class ToxConfig(IniConfigurator):
 		# cmd = f"flake8 {' '.join(self.get_source_files())} --format=rst-toolbox"
 		cmd = f"python3 -m flake8_rst_docstrings_sphinx {' '.join(self.get_source_files())} --allow-toolbox"
 		self._ini["testenv:lint"]["commands"] = cmd
-
-	def testenv_yapf(self):
-		"""
-		``[testenv:yapf]``.
-		"""
-
-		self._ini["testenv:yapf"]["basepython"] = "python3.7"
-		self._ini["testenv:yapf"]["changedir"] = "{toxinidir}"
-		self._ini["testenv:yapf"]["skip_install"] = True
-		self._ini["testenv:yapf"]["ignore_errors"] = True
-		self._ini["testenv:yapf"]["deps"] = "yapf"
-
-		yapf_commands = [f"yapf -i --recursive {' '.join(self.get_source_files())}"]
-		if self["yapf_exclude"]:
-			yapf_commands.append("--exclude")
-
-			for exclude in self["yapf_exclude"]:
-				yapf_commands.append(f'"{exclude}"')
-
-		self._ini["testenv:yapf"]["commands"] = ' '.join(yapf_commands)
 
 	def testenv_mypy(self):
 		"""
