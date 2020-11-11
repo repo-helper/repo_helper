@@ -330,7 +330,7 @@
       "items": {
         "type": "string"
       },
-      "description": "A list of additional files or directories to exclude from ``yapf`` autoformatting."
+      "description": "A list of regular expressions to use to exclude files and directories from ``yapf-isort``."
     },
     "tests_dir": {
       "type": "string",

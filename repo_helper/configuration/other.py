@@ -58,14 +58,14 @@ class additional_ignore(ConfigVar):  # noqa
 
 class yapf_exclude(ConfigVar):  # noqa
 	"""
-	A list of additional files or directories to exclude from ``yapf`` autoformatting.
+	A list of regular expressions to use to exclude files and directories from ``yapf-isort``.
 
 	Example:
 
 	.. code-block:: yaml
 
 		yapf_exclude:
-		  - "**/templates/"
+		  - ".*/templates/.*"
 	"""
 
 	dtype = List[str]
