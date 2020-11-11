@@ -50,7 +50,7 @@ show_command = partial(show.command, context_settings=CONTEXT_SETTINGS)
 
 
 @show_command()
-def version() -> int:
+def version() -> None:
 	"""
 	Show the repository version.
 	"""
@@ -77,8 +77,6 @@ def version() -> int:
 					click.echo(f"{idx} commit{'s' if idx > 1 else ''} since that release.")
 					break
 			break
-
-	return 0
 
 
 @autocomplete_option(
@@ -166,7 +164,7 @@ def changelog(
 		reverse: bool,
 		colour: Optional[bool] = None,
 		no_pager: bool = False,
-		) -> int:
+		):
 	"""
 	Show commits since the last version tag.
 	"""
@@ -198,8 +196,6 @@ def changelog(
 	else:
 		click.echo_via_pager(commit_log, color=resolve_color_default(colour))
 
-	return 0
-
 
 @no_pager_option()
 @autocomplete_option(
@@ -210,7 +206,7 @@ def changelog(
 		help="The maximum depth to display. -1 means infinite depth.",
 		)
 @show_command()
-def requirements(no_pager: bool = False, depth: int = -1) -> int:
+def requirements(no_pager: bool = False, depth: int = -1):
 	"""
 	Lists the requirements of this library, and their dependencies
 	"""
@@ -241,5 +237,3 @@ def requirements(no_pager: bool = False, depth: int = -1) -> int:
 		click.echo(str(buf))
 	else:
 		click.echo_via_pager(str(buf))
-
-	return 0

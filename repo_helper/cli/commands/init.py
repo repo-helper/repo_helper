@@ -27,6 +27,7 @@ Initialise the repository with some boilerplate files.
 import datetime
 import pathlib
 import posixpath
+import sys
 from typing import List, Optional
 
 # 3rd party
@@ -51,7 +52,7 @@ __all__ = ["init", "init_repo", "base_license_url", "license_file_lookup"]
 @commit_message_option(default="Initialised repository with 'repo_helper'.")
 @cli_command()
 @click.pass_context
-def init(ctx, force, commit, message):
+def init(ctx, force: bool, commit: bool, message: str):
 	"""
 	Initialise the repository with some boilerplate files.
 	"""
@@ -63,7 +64,7 @@ def init(ctx, force, commit, message):
 
 	path = PathPlus.cwd()
 
-	return run_repo_helper(path=path, force=force, initialise=True, commit=commit, message=message)
+	sys.exit(run_repo_helper(path=path, force=force, initialise=True, commit=commit, message=message))
 
 
 base_license_url = RequestsURL("https://raw.githubusercontent.com/licenses/license-templates/master/templates/")

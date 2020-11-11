@@ -23,6 +23,9 @@ Build source and binary distributions.
 #  MA 02110-1301, USA.
 #
 
+# stdlib
+from typing import Optional
+
 # 3rd party
 import click
 
@@ -33,7 +36,7 @@ from repo_helper.cli.options import autocomplete_option
 __all__ = ["build"]
 
 
-@click.argument("repository", type=click.STRING, default=".")
+@click.argument("repository", type=click.STRING, default='.')
 @autocomplete_option("--build-dir", type=click.STRING, default=None, help="The temporary build directory.")
 @autocomplete_option("-o", "--out-dir", type=click.STRING, default=None, help="The output directory.")
 @autocomplete_option("-v", "--verbose", is_flag=True, default=False, help="Enable verbose output.")
@@ -41,7 +44,15 @@ __all__ = ["build"]
 @autocomplete_option("-s", "--source", is_flag=True, default=False, help="Build a source distribution.")
 @autocomplete_option("-c", "--conda", is_flag=True, default=False, help="Build a conda distribution.")
 @cli_command()
-def build(repository, build_dir, out_dir, binary, source, verbose, conda) -> int:
+def build(
+		repository: str = '.',
+		build_dir: Optional[str] = None,
+		out_dir: Optional[str] = None,
+		binary: bool = False,
+		source: bool = False,
+		verbose: bool = False,
+		conda: bool = False,
+		):
 	"""
 	Build a wheel for the given repository.
 	"""
@@ -69,5 +80,3 @@ def build(repository, build_dir, out_dir, binary, source, verbose, conda) -> int
 		builder.build_wheel()
 	if source:
 		builder.build_sdist()
-
-	return 0

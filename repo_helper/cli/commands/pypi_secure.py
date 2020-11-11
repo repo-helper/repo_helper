@@ -24,7 +24,7 @@ Add the encrypted PyPI password for Travis.
 #
 
 # stdlib
-from typing import Optional
+import sys
 
 # 3rd party
 import click
@@ -40,11 +40,11 @@ __all__ = ["pypi_secure"]
 
 @click.argument(
 		"password",
-		type=str,
+		type=click.STRING,
 		default='',
 		)
 @cli_command()
-def pypi_secure(password: Optional[str] = None) -> int:
+def pypi_secure(password: str = ''):
 	"""
 	Add the encrypted PyPI password for Travis to 'repo_helper.yml'.
 	"""
@@ -71,4 +71,4 @@ def pypi_secure(password: Optional[str] = None) -> int:
 		content.append(f"travis_pypi_secure: {output.decode('UTF-8')}")
 		config_file.write_lines(content)
 
-	return exit_code
+	sys.exit(exit_code)

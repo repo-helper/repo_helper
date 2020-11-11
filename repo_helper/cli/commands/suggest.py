@@ -95,7 +95,7 @@ suggest_command = partial(suggest.command, context_settings=CONTEXT_SETTINGS)
 		help="Indicates this project is a library for developers.",
 		)
 @suggest_command()
-def classifiers(add: bool, status: Optional[int], library: Optional[bool]) -> int:
+def classifiers(add: bool, status: Optional[int], library: Optional[bool]):
 	"""
 	Suggest trove classifiers based on repository metadata.
 	"""
@@ -241,8 +241,6 @@ def classifiers(add: bool, status: Optional[int], library: Optional[bool]) -> in
 			with (rh.target_repo / "repo_helper.yml").open("a") as fp:
 				fp.write("\n")
 				yaml.dump({"classifiers": sorted(suggested_classifiers)}, fp)
-
-	return 0
 
 
 # TODO: flags for interactive options, and clean output when piped

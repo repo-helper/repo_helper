@@ -122,10 +122,9 @@ def resolve_command(self, ctx, args: List[str]) -> Tuple[str, Command, List[str]
 				type=click.STRING,
 				)
 		@release_command()
-		def version(version: str, commit: Optional[bool], message: str, force: bool) -> int:
+		def version(version: str, commit: Optional[bool], message: str, force: bool):
 			bumper = Bumper(PathPlus.cwd(), force)
 			bumper.bump(Version.from_str(version), commit, message)
-			return 0
 
 		return "version", cast(Command, version), args
 
@@ -315,47 +314,43 @@ class Bumper:
 
 @release_options
 @release_command()
-def major(commit: Optional[bool], message: str, force: bool) -> int:
+def major(commit: Optional[bool], message: str, force: bool):
 	"""
 	Bump to the next major version.
 	"""
 
 	bumper = Bumper(PathPlus.cwd(), force)
 	bumper.major(commit, message)
-	return 0
 
 
 @release_options
 @release_command()
-def minor(commit: Optional[bool], message: str, force: bool) -> int:
+def minor(commit: Optional[bool], message: str, force: bool):
 	"""
 	Bump to the next minor version.
 	"""
 
 	bumper = Bumper(PathPlus.cwd(), force)
 	bumper.minor(commit, message)
-	return 0
 
 
 @release_options
 @release_command()
-def patch(commit: Optional[bool], message: str, force: bool) -> int:
+def patch(commit: Optional[bool], message: str, force: bool):
 	"""
 	Bump to the next patch version.
 	"""
 
 	bumper = Bumper(PathPlus.cwd(), force)
 	bumper.patch(commit, message)
-	return 0
 
 
 @release_options
 @release_command()
-def today(commit: Optional[bool], message: str, force: bool) -> int:
+def today(commit: Optional[bool], message: str, force: bool):
 	"""
 	Bump to the calver version for today's date (e.g. 2020.12.25).
 	"""
 
 	bumper = Bumper(PathPlus.cwd(), force)
 	bumper.today(commit, message)
-	return 0

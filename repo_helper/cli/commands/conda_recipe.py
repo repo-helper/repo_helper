@@ -35,7 +35,7 @@ __all__ = ["make_recipe"]
 
 @autocomplete_option("-o", "--out-dir", type=click.STRING, default="./conda/", help="The output directory.")
 @cli_command()
-def make_recipe(out_dir) -> int:
+def make_recipe(out_dir: str = "./conda/"):
 	"""
 	Make a Conda ``meta.yaml`` recipe.
 	"""
@@ -57,5 +57,3 @@ def make_recipe(out_dir) -> int:
 	conda.make_recipe(repo_dir, recipe_file)
 
 	click.echo(Fore.GREEN(f"Wrote recipe to {recipe_file!s}"), color=resolve_color_default())
-
-	return 0

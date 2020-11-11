@@ -37,6 +37,7 @@ Core CLI tools.
 #
 
 # stdlib
+import sys
 from functools import partial
 from typing import Optional
 
@@ -59,7 +60,7 @@ __all__ = ["cli", "cli_command", "cli_group"]
 @commit_option(default=None)
 @commit_message_option("Updated files with 'repo_helper'.")
 @click.pass_context
-def cli(ctx, force: bool, commit: Optional[bool], message: str) -> int:
+def cli(ctx, force: bool, commit: Optional[bool], message: str):
 	"""
 	Update files in the given repositories, based on settings in 'repo_helper.yml'.
 	"""
@@ -69,8 +70,10 @@ def cli(ctx, force: bool, commit: Optional[bool], message: str) -> int:
 	ctx.obj["commit"] = commit
 	ctx.obj["force"] = force
 
+	ret = 0
+
 	if ctx.invoked_subcommand is None:
-		return run_repo_helper(path=path, force=force, initialise=False, commit=commit, message=message)
+		ret |= run_repo_helper(path=path, force=force, initialise=False, commit=commit, message=message)
 
 	else:
 		if message != "Updated files with 'repo_helper'.":
@@ -79,7 +82,7 @@ def cli(ctx, force: bool, commit: Optional[bool], message: str) -> int:
 					f"Perhaps you meant 'repo_helper {ctx.invoked_subcommand} --message'?"
 					)
 
-	return 0
+	sys.exit(ret)
 
 
 cli_command = partial(cli.command, context_settings=CONTEXT_SETTINGS)

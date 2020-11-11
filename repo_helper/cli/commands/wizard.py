@@ -42,7 +42,7 @@ __all__ = ["wizard"]
 
 
 @cli_command()
-def wizard():
+def wizard() -> None:
 	"""
 	Run the wizard 🧙 to create a 'repo_helper.yml' file.
 	"""
@@ -72,8 +72,6 @@ def wizard():
 			click.echo("You may need to run 'git init' in that directory first.")
 
 		raise click.Abort
-
-	ret = 0
 
 	# ---------- intro ----------
 	click.echo("This wizard 🧙‍will guide you through creating a 'repo_helper.yml' configuration file.")
@@ -204,5 +202,3 @@ repo_helper can now be run with the 'repo_helper' command in the repository root
 Be seeing you!
 """
 			)
-
-	return ret
