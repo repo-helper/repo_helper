@@ -26,17 +26,6 @@ FAKE_DATE = datetime.date(2020, 7, 25)
 @pytest.mark.skipif(condition=os.sep == "\\", reason="Different test for platforms where os.sep == \\")
 def test_via_run_repo_helper_forward(temp_empty_repo, capsys, file_regression: FileRegressionFixture, monkeypatch):
 
-	# Monkeypatch dulwich so it doesn't try to use the global config.
-	monkeypatch.setattr(StackedConfig, "default_backends", lambda *args: [], raising=True)
-	monkeypatch.setenv("GIT_COMMITTER_NAME", "Guido")
-	monkeypatch.setenv("GIT_COMMITTER_EMAIL", "guido@python.org")
-	monkeypatch.setenv("GIT_AUTHOR_NAME", "Guido")
-	monkeypatch.setenv("GIT_AUTHOR_EMAIL", "guido@python.org")
-
-	monkeypatch.setattr(repo_helper.utils, "today", FAKE_DATE)
-
-	(temp_empty_repo.path / ".pre-commit-config.yaml").touch()
-
 	(temp_empty_repo.path / "repo_helper.yml").write_text(
 			(pathlib.Path(__file__).parent / "repo_helper.yml_").read_text()
 			)
@@ -70,8 +59,6 @@ def test_via_run_repo_helper_backward(
 	monkeypatch.setenv("GIT_AUTHOR_EMAIL", "guido@python.org")
 
 	monkeypatch.setattr(repo_helper.utils, "today", FAKE_DATE)
-
-	(temp_empty_repo.path / ".pre-commit-config.yaml").touch()
 
 	(temp_empty_repo.path / "repo_helper.yml").write_text(
 			(pathlib.Path(__file__).parent / "repo_helper.yml_").read_text()

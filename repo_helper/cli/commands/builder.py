@@ -28,6 +28,7 @@ from typing import Optional
 
 # 3rd party
 import click
+from domdf_python_tools.typing import PathLike
 
 # this package
 from repo_helper.cli import cli_command
@@ -45,7 +46,7 @@ __all__ = ["build"]
 @autocomplete_option("-c", "--conda", is_flag=True, default=False, help="Build a conda distribution.")
 @cli_command()
 def build(
-		repository: str = '.',
+		repository: PathLike = '.',
 		build_dir: Optional[str] = None,
 		out_dir: Optional[str] = None,
 		binary: bool = False,
