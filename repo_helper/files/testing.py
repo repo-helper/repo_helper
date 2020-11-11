@@ -273,7 +273,8 @@ class ToxConfig(IniConfigurator):
 		self._ini["testenv:build"]["commands"] = indent_join([
 				'python -m pep517.build --source --binary "{toxinidir}"',
 				# python setup.py {posargs} sdist bdist_wheel
-				"twine check dist/*",
+				# "twine check dist/*",
+				"twine check dist/*.tar.gz dist/*.whl",  # source
 				"check-wheel-contents dist/",
 				])
 
