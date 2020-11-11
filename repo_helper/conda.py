@@ -215,5 +215,7 @@ def make_recipe(repo_dir: PathLike, recipe_file: PathLike) -> None:
 
 
 #: Mapping of normalised names to names on conda, if they differ for some reason
-alias_mapping = {"ruamel-yaml": "ruamel.yaml"}
+alias_mapping = {
+		"ruamel-yaml": "ruamel.yaml",
+		}
 # Really just due to https://github.com/conda-forge/ruamel.yaml-feedstock/issues/7
