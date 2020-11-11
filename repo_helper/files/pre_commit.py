@@ -250,6 +250,12 @@ def make_pre_commit(repo_path: pathlib.Path, templates: jinja2.Environment) -> L
 			hooks=[{"id": "yapf-isort", "exclude": fr"^({'|'.join(non_source_files)})\.py$"}]
 			)
 
+	dep_checker = Repo(
+			repo=make_github_url("domdfcoding", "dep_checker"),
+			rev="v0.3.1",
+			hooks=[{"id": "dep_checker", "args": [templates.globals["import_name"].replace(".", "/")]}]
+			)
+
 	pre_commit_file = PathPlus(repo_path / ".pre-commit-config.yaml")
 
 	dumper = yaml.YAML()
@@ -274,6 +280,7 @@ def make_pre_commit(repo_path: pathlib.Path, templates: jinja2.Environment) -> L
 			pyupgrade,
 			lucas_c_hooks,
 			yapf_isort,
+			dep_checker,
 			]
 	managed_hooks_urls = [str(hook.repo) for hook in managed_hooks]
 
