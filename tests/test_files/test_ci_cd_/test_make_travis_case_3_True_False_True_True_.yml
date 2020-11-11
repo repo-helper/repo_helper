@@ -26,12 +26,11 @@ after_success:
 stages:
   - test
   - deploy_pypi
-  - deploy_conda
+
 
 jobs:
   allow_failures:
     - arch: arm64
-
   exclude:
     - python: '3.7'
       arch: arm64
@@ -54,16 +53,3 @@ jobs:
           secure: 1234abcd
         distributions: "sdist bdist_wheel"
         skip_existing: true
-    - stage: deploy_conda
-      python: "3.6"
-      addons:
-        apt:
-          update: true
-      install:
-        - wget https://repo.continuum.io/miniconda/Miniconda3-latest-Linux-x86_64.sh -O miniconda.sh
-        - bash miniconda.sh -b -p $HOME/miniconda
-        - chmod +x .ci/travis_deploy_conda.sh
-      script: skip
-      deploy:
-        provider: script
-        script: .ci/travis_deploy_conda.sh || return 1;

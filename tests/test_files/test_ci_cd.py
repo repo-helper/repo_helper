@@ -42,13 +42,13 @@ from repo_helper.files.ci_cd import (
 from tests.common import check_file_output
 
 
-def test_travis_case_1(tmp_pathplus, demo_environment, file_regression: FileRegressionFixture):
+def test_make_travis_case_1(tmp_pathplus, demo_environment, file_regression: FileRegressionFixture):
 	managed_files = make_travis(tmp_pathplus, demo_environment)
 	assert managed_files == [".travis.yml"]
 	check_file_output(tmp_pathplus / managed_files[0], file_regression)
 
 
-def test_travis_case_2(tmp_pathplus, demo_environment, file_regression):
+def test_make_travis_case_2(tmp_pathplus, demo_environment, file_regression):
 	demo_environment.globals.update(
 			dict(
 					travis_ubuntu_version="bionic",
@@ -70,7 +70,7 @@ def test_travis_case_2(tmp_pathplus, demo_environment, file_regression):
 @pytest.mark.parametrize("enable_conda", [True, False])
 @pytest.mark.parametrize("enable_tests", [True, False])
 @pytest.mark.parametrize("enable_releases", [True, False])
-def test_travis_case_3(
+def test_make_travis_case_3(
 		tmp_pathplus,
 		demo_environment,
 		file_regression,
@@ -85,6 +85,25 @@ def test_travis_case_3(
 					enable_tests=enable_conda,
 					enable_conda=enable_tests,
 					enable_releases=enable_releases,
+					)
+			)
+
+	managed_files = make_travis(tmp_pathplus, demo_environment)
+	assert managed_files == [".travis.yml"]
+	check_file_output(tmp_pathplus / managed_files[0], file_regression)
+
+
+def test_make_travis_case_4(tmp_pathplus, demo_environment, file_regression):
+	demo_environment.globals.update(
+			dict(
+					travis_ubuntu_version="bionic",
+					travis_extra_install_pre=["sudo apt update"],
+					travis_extra_install_post=["sudo apt install python3-gi"],
+					travis_additional_requirements=["isort", "black"],
+					enable_tests=False,
+					enable_conda=False,
+					enable_releases=False,
+					python_versions=["3.6", "3.7", "3.8", "3.9", "3.10-dev"],
 					)
 			)
 

@@ -31,8 +31,9 @@ stages:
 
 jobs:
   allow_failures:
-    - arch: arm64
-
+    - arch: arm64{% if dev_versions %}
+    - python: {{ dev_versions }}
+    {% endif %}
   exclude:
     {% for version in python_versions[1:] %}- python: '{{ version }}'
       arch: arm64

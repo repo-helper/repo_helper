@@ -67,7 +67,11 @@ def make_travis(repo_path: pathlib.Path, templates: jinja2.Environment) -> List[
 	else:
 		travis = templates.get_template("travis_not_pure_python.yml")
 
-	PathPlus(repo_path / ".travis.yml").write_clean(travis.render())
+	python_versions = templates.globals["python_versions"]
+	no_dev_versions_ = no_dev_versions(python_versions)
+	dev_versions = [v for v in python_versions if v not in no_dev_versions_]
+
+	PathPlus(repo_path / ".travis.yml").write_clean(travis.render(dev_versions=dev_versions))
 
 	return [".travis.yml"]
 

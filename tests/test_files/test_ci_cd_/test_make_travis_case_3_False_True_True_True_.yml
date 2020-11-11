@@ -15,10 +15,12 @@ install:
 
   - pip install --upgrade pip
   - pip install tox tox-travis
-
+  - pip install coveralls coverage_pyver_pragma
 
 script:
   - tox -vv
+after_success:
+  - coveralls
 
 
 stages:
@@ -29,7 +31,6 @@ stages:
 jobs:
   allow_failures:
     - arch: arm64
-
   exclude:
     - python: '3.7'
       arch: arm64

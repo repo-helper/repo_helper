@@ -70,10 +70,8 @@ def cli(ctx, force: bool, commit: Optional[bool], message: str):
 	ctx.obj["commit"] = commit
 	ctx.obj["force"] = force
 
-	ret = 0
-
 	if ctx.invoked_subcommand is None:
-		ret |= run_repo_helper(path=path, force=force, initialise=False, commit=commit, message=message)
+		sys.exit(run_repo_helper(path=path, force=force, initialise=False, commit=commit, message=message))
 
 	else:
 		if message != "Updated files with 'repo_helper'.":
@@ -81,8 +79,6 @@ def cli(ctx, force: bool, commit: Optional[bool], message: str):
 					f"--message cannot be used before a command. "
 					f"Perhaps you meant 'repo_helper {ctx.invoked_subcommand} --message'?"
 					)
-
-	sys.exit(ret)
 
 
 cli_command = partial(cli.command, context_settings=CONTEXT_SETTINGS)
