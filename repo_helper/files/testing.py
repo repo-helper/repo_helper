@@ -292,7 +292,7 @@ class ToxConfig(IniConfigurator):
 				"flake8-2020 >= 1.6.0",
 				"flake8-builtins>=1.5.3",
 				"flake8-docstrings>=1.5.0",
-				"flake8-dunder-all>=0.0.4",
+				"flake8-dunder-all>=0.1.1",
 				"flake8-pyi>=20.10.0",
 				"flake8-pytest-style>=1.3.0",
 				"flake8-sphinx-links>=0.0.4",

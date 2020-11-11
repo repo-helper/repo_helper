@@ -248,7 +248,7 @@ def make_pre_commit(repo_path: pathlib.Path, templates: jinja2.Environment) -> L
 
 	yapf_isort = Repo(
 			repo=make_github_url("domdfcoding", "yapf-isort"),
-			rev="v0.4.4",
+			rev="v0.5.0",
 			hooks=[{"id": "yapf-isort", "exclude": yapf_isort_excludes}],
 			)
 

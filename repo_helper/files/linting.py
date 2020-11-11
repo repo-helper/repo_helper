@@ -192,7 +192,6 @@ lint_warn_list.extend((
 
 # flake8-quotes
 lint_warn_list.extend((
-		"Q000",  # Remove bad quotes
 		"Q001",  # Remove bad quotes from multiline string
 		"Q002",  # Remove bad quotes from docstring
 		"Q003",  # Change outer quotes to avoid escaping inner quotes
