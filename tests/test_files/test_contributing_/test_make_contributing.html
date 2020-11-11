@@ -5,12 +5,11 @@ $ pre-commit install
 </pre>
 <div id="coding-style">
 <h2>Coding style</h2>
-<p><a href="https://github.com/google/yapf" rel="nofollow">Yapf</a> is used for code formatting, and <a href="https://timothycrosley.github.io/isort/" rel="nofollow">isort</a> is used to sort imports.</p>
-<p><tt>yapf</tt> and <tt>isort</tt> can be run manually via <tt><span class="pre">pre-commit</span></tt>:</p>
-<pre>$ pre-commit run yapf -a
-$ pre-commit run isort -a
+<p><a href="https://pypi.org/project/yapf-isort/" rel="nofollow">yapf-isort</a> is used for code formatting.</p>
+<p>It can be run manually via <tt><span class="pre">pre-commit</span></tt>:</p>
+<pre>$ pre-commit run yapf-isort -a
 </pre>
-<p>The complete autoformatting suite can be run with <tt><span class="pre">pre-commit</span></tt>:</p>
+<p>Or, to run the complete autoformatting suite:</p>
 <pre>$ pre-commit run -a
 </pre>
 </div>
