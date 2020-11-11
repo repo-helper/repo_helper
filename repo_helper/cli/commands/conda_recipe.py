@@ -41,9 +41,8 @@ def make_recipe(out_dir: str = "./conda/"):
 	"""
 
 	# 3rd party
-	from consolekit.terminal_colours import resolve_color_default
+	from consolekit.terminal_colours import Fore, resolve_color_default
 	from domdf_python_tools.paths import PathPlus
-	from domdf_python_tools.terminal_colours import Fore
 
 	# this package
 	from repo_helper import conda

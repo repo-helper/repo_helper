@@ -44,11 +44,10 @@ from zipfile import ZipFile
 
 # 3rd party
 import click
-from consolekit.terminal_colours import resolve_color_default
+from consolekit.terminal_colours import Fore, resolve_color_default
 from consolekit.utils import abort
 from domdf_python_tools.paths import PathPlus
 from domdf_python_tools.stringlist import StringList
-from domdf_python_tools.terminal_colours import Fore
 from domdf_python_tools.typing import PathLike
 from packaging.specifiers import Specifier
 from packaging.version import Version

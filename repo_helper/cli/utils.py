@@ -34,9 +34,9 @@ from typing import Iterable, Optional
 # 3rd party
 import click
 from consolekit.input import confirm
+from consolekit.terminal_colours import Fore
 from consolekit.utils import abort
 from domdf_python_tools.paths import PathPlus, in_directory
-from domdf_python_tools.terminal_colours import Fore
 from domdf_python_tools.typing import PathLike
 from dulwich.errors import CommitError
 from pre_commit.commands import install_uninstall  # type: ignore

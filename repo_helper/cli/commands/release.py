@@ -33,9 +33,9 @@ from typing import Callable, Dict, List, Optional, Tuple, cast
 import click
 from click import Command
 from consolekit import CONTEXT_SETTINGS
+from consolekit.terminal_colours import Fore
 from consolekit.utils import abort
 from domdf_python_tools.paths import PathPlus
-from domdf_python_tools.terminal_colours import Fore
 from domdf_python_tools.typing import PathLike
 from domdf_python_tools.versions import Version
 from dulwich.porcelain import tag_create
