@@ -16,6 +16,5 @@ ruamel-yaml>=0.16.12
 shippinglabel>=0.1.0
 southwark>=0.4.0
 tomlkit>=0.7.0
-trove-classifiers>=2020.10.21
 typing-extensions>=3.7.4.3
 yapf-isort>=0.3.3

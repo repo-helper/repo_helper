@@ -35,10 +35,10 @@ from typing import Iterable, List, Mapping, MutableMapping, Union
 # 3rd party
 import attr
 import jinja2
+import ruamel.yaml
 from apeye.url import URL
 from domdf_python_tools.paths import PathPlus
 from domdf_python_tools.stringlist import StringList
-from ruamel import yaml
 from typing_extensions import Literal, TypedDict
 
 # this package
@@ -258,7 +258,7 @@ def make_pre_commit(repo_path: pathlib.Path, templates: jinja2.Environment) -> L
 
 	pre_commit_file = PathPlus(repo_path / ".pre-commit-config.yaml")
 
-	dumper = yaml.YAML()
+	dumper = ruamel.yaml.YAML()
 	dumper.indent(mapping=2, sequence=3, offset=1)
 
 	output = StringList([
@@ -301,7 +301,7 @@ def make_pre_commit(repo_path: pathlib.Path, templates: jinja2.Environment) -> L
 
 		custom_hooks = [
 				Repo(**repo)
-				for repo in yaml.safe_load(custom_hooks_yaml) or []
+				for repo in ruamel.yaml.safe_load(custom_hooks_yaml) or []
 				if repo["repo"] not in managed_hooks_urls
 				]
 
