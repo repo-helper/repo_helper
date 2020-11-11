@@ -27,7 +27,7 @@ import pathlib
 from pytest_regressions.file_regression import FileRegressionFixture
 
 # this package
-from repo_helper.files.linting import make_lint_roller, make_pylintrc
+from repo_helper.files.linting import make_lint_roller, make_pylintrc, remove_lint_roller
 from tests.common import check_file_output
 
 
@@ -35,6 +35,13 @@ def test_pylintrc(tmp_pathplus, demo_environment, file_regression: FileRegressio
 	managed_files = make_pylintrc(tmp_pathplus, demo_environment)
 	assert managed_files == [".pylintrc"]
 	check_file_output(tmp_pathplus / managed_files[0], file_regression)
+
+
+def test_lint_roller_removal(tmp_pathplus, demo_environment):
+	managed_files = remove_lint_roller(tmp_pathplus, demo_environment)
+	assert managed_files == ["lint_roller.sh"]
+	assert not (tmp_pathplus / managed_files[0]).exists()
+	assert not (tmp_pathplus / managed_files[0]).is_file()
 
 
 def test_lint_roller_case_1(tmp_pathplus, demo_environment, file_regression: FileRegressionFixture):

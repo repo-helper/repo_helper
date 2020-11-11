@@ -32,7 +32,6 @@ The following files will be committed:
   MANIFEST.in
   README.rst
   __pkginfo__.py
-  lint_roller.sh
   pyproject.toml
   repo_helper.yml
   setup.cfg
