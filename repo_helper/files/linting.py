@@ -134,7 +134,6 @@ lint_warn_list.extend((
 		"PT001",  # use @pytest.fixture() over @pytest.fixture (configurable by pytest-fixture-no-parentheses)
 		"PT002",  # configuration for fixture '{name}' specified via positional args, use kwargs
 		"PT003",  # scope='function' is implied in @pytest.fixture()
-		"PT004",  # fixture '{name}' does not return anything, add leading underscore
 		"PT005",  # fixture '{name}' returns a value, remove leading underscore
 		"PT006",  # wrong name(s) type in @pytest.mark.parametrize
 		"PT007",  # wrong values type in @pytest.mark.parametrize
