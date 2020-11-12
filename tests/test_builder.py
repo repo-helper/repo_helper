@@ -152,4 +152,4 @@ This is the readme.
 	builder.write_metadata(metadata_file=builder.build_dir / "METADATA")
 	assert (builder.build_dir / "METADATA").exists()
 	assert (builder.build_dir / "METADATA").is_file()
-	check_file_output(builder.dist_info / "METADATA", file_regression)
+	check_file_output(builder.build_dir / "METADATA", file_regression)
