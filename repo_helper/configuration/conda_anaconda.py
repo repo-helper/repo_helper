@@ -100,8 +100,11 @@ class conda_extras(ConfigVar):  # noqa
 		if "all" in extras and len(extras) > 1:
 			raise ValueError("'all' cannot be used alongside other values.")
 
-		if "none" in extras and len(extras) > 1:
-			raise ValueError("'none' cannot be used alongside other values.")
+		if "none" in extras:
+			if len(extras) > 1:
+				raise ValueError("'none' cannot be used alongside other values.")
+			else:
+				extras = []
 
 		return extras
 
