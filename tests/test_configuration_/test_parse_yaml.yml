@@ -21,6 +21,8 @@ conda_channels:
 - conda-forge
 conda_description: Update multiple configuration files, build scripts etc. from a
   single location.
+conda_extras:
+- all
 console_scripts:
 - repo_helper = repo_helper.__main__:main
 - repo-helper = repo_helper.__main__:main

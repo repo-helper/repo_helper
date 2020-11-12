@@ -24,7 +24,7 @@ r"""
 #
 
 # stdlib
-from typing import List
+from typing import Any, Dict, List, Optional
 
 # 3rd party
 from configconfig.configvar import ConfigVar
@@ -32,7 +32,7 @@ from configconfig.configvar import ConfigVar
 # this package
 from repo_helper.configuration import metadata
 
-__all__ = ["enable_conda", "conda_channels", "conda_description"]
+__all__ = ["enable_conda", "conda_channels", "conda_description", "conda_extras"]
 
 
 class enable_conda(ConfigVar):  # noqa
@@ -68,6 +68,42 @@ class conda_channels(ConfigVar):  # noqa
 	dtype = List[str]
 	default: List[str] = []
 	category: str = "conda & anaconda"
+
+
+class conda_extras(ConfigVar):  # noqa
+	"""
+	A list of extras (see :conf:`extras_require`) to include as requirements in the Conda package.
+
+	| The special keyword ``all`` indicates all extras should be included.
+	| The special keyword ``none`` indicates no extras should be included.
+
+	Example:
+
+	.. code-block:: yaml
+
+		conda_extras:
+		  - plotting
+		  - xml
+	"""
+
+	dtype = List[str]
+	default: List[str] = ["all"]
+	category: str = "conda & anaconda"
+
+	@classmethod
+	def validate(cls, raw_config_vars: Optional[Dict[str, Any]] = None) -> List[str]:
+		extras = list(filter(None, super().validate(raw_config_vars)))
+
+		if "all" in extras and "none" in extras:
+			raise ValueError("'all' and 'none' are mutually exclusive.")
+
+		if "all" in extras and len(extras) > 1:
+			raise ValueError("'all' cannot be used alongside other values.")
+
+		if "none" in extras and len(extras) > 1:
+			raise ValueError("'none' cannot be used alongside other values.")
+
+		return extras
 
 
 class conda_description(ConfigVar):  # noqa

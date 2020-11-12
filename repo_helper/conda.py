@@ -96,7 +96,7 @@ def get_from_cache(channel_name: str) -> List[str]:
 
 def compile_requirements(
 		repo_dir: PathPlus,
-		extras: Mapping[str, Iterable[str]],
+		extras: Iterable[str],
 		) -> List[ComparableRequirement]:
 	"""
 	Compile a list of requirements for the package from the requirements.txt file and any extra dependencies.
@@ -105,13 +105,12 @@ def compile_requirements(
 	:param extras: Mapping of "extras" names to lists of requirements.
 
 	.. versionadded:: 2020.11.10
+
+	.. versionadded:: 2020.11.12  ``extras`` is not an iterable of strings.
 	"""
 
-	extra_requirements = []
 	all_requirements: List[ComparableRequirement] = []
-
-	for extra, requirements in extras.items():
-		extra_requirements.extend([ComparableRequirement(r) for r in requirements])
+	extra_requirements = [ComparableRequirement(r) for r in extras]
 
 	for requirement in sorted(
 			combine_requirements(
@@ -193,8 +192,13 @@ def make_recipe(repo_dir: PathLike, recipe_file: PathLike) -> None:
 
 	config = parse_yaml(repo_dir)
 
+	extras = []
+
+	for extra in config["conda_extras"]:
+		extras.extend(config["extras_require"][extra])
+
 	all_requirements = validate_requirements(
-			compile_requirements(repo_dir, config["extras_require"]),
+			compile_requirements(repo_dir, extras),
 			config["conda_channels"],
 			)
 

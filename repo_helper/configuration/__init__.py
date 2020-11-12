@@ -35,7 +35,7 @@ from domdf_python_tools.versions import Version
 
 # this package
 import repo_helper
-from repo_helper.configuration.conda_anaconda import conda_channels, conda_description, enable_conda
+from repo_helper.configuration.conda_anaconda import conda_channels, conda_description, conda_extras, enable_conda
 from repo_helper.configuration.documentation import (
 		docs_dir,
 		enable_docs,
@@ -135,6 +135,7 @@ __all__ = [
 		"author",
 		"classifiers",
 		"conda_channels",
+		"conda_extras",
 		"conda_description",
 		"console_scripts",
 		"copyright_years",
@@ -285,6 +286,7 @@ all_values: List[ConfigVarMeta] = [
 		travis_additional_requirements,
 		enable_conda,
 		conda_channels,
+		conda_extras,
 		conda_description,
 		additional_ignore,
 		yapf_exclude,

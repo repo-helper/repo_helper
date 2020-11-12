@@ -314,6 +314,13 @@
       },
       "description": "A list of Anaconda channels required to build and use the Conda package."
     },
+    "conda_extras": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "A list of extras (see :conf:`extras_require`) to include as requirements in the Conda package."
+    },
     "conda_description": {
       "type": "string",
       "description": "A short description of the project for Anaconda."

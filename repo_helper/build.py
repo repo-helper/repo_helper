@@ -395,8 +395,14 @@ class Builder:
 		build_string = f"py_{build_number}"
 		# https://docs.conda.io/projects/conda-build/en/latest/resources/define-metadata.html#build-number-and-string
 
+		extras = []
+
+		for extra in self.config["conda_extras"]:
+			extras.extend(self.config["extras_require"][extra])
+
 		all_requirements = validate_requirements(
-				compile_requirements(self.repo_dir, self.config["extras_require"]), self.config["conda_channels"]
+				compile_requirements(self.repo_dir, extras),
+				self.config["conda_channels"],
 				)
 
 		index = {
