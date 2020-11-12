@@ -6,7 +6,7 @@ import re
 import pytest
 from click.testing import CliRunner, Result
 from domdf_python_tools.paths import in_directory
-from domdf_python_tools.testing import not_pypy
+from domdf_python_tools.testing import check_file_regression, not_pypy
 from pytest_regressions.file_regression import FileRegressionFixture
 
 # this package
@@ -44,7 +44,7 @@ def test_pycharm_schema_forward(tmp_pathplus, file_regression: FileRegressionFix
 			'value="repo_helper/repo_helper_schema.json"',
 			(tmp_pathplus / ".idea/jsonSchemas.xml").read_text(),
 			)
-	file_regression.check(file_content, encoding="UTF-8", extension=".xml")
+	check_file_regression(file_content, file_regression, extension=".xml")
 
 
 @pytest.mark.skipif(condition=os.sep == "/", reason="Different test for platforms where os.sep == /")
@@ -66,7 +66,7 @@ def test_pycharm_schema_back(tmp_pathplus, file_regression: FileRegressionFixtur
 			r'value="repo_helper\\repo_helper_schema.json"',
 			(tmp_pathplus / ".idea/jsonSchemas.xml").read_text(),
 			)
-	file_regression.check(file_content, encoding="UTF-8", extension=".xml")
+	check_file_regression(file_content, file_regression, extension=".xml")
 
 
 # TODO: check when file exists

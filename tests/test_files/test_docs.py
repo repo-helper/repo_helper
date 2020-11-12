@@ -20,11 +20,9 @@
 #  MA 02110-1301, USA.
 #
 
-# stdlib
-import os
-
 # 3rd party
 import pytest
+from domdf_python_tools.testing import check_file_output, check_file_regression
 from pytest_regressions.file_regression import FileRegressionFixture
 
 # this package
@@ -40,7 +38,6 @@ from repo_helper.files.docs import (
 		make_rtfd,
 		remove_autodoc_augment_defaults
 		)
-from tests.common import check_file_output, check_file_regression
 
 
 def test_make_rtfd_case_1(tmp_pathplus, demo_environment, file_regression: FileRegressionFixture):

@@ -7,11 +7,11 @@ from typing import List
 import pytest
 from click.testing import CliRunner, Result
 from domdf_python_tools.paths import in_directory
+from domdf_python_tools.testing import check_file_output
 from dulwich.config import StackedConfig
 
 # this package
 from repo_helper.cli.commands.wizard import wizard
-from tests.common import check_file_output
 
 
 def test_wizard(temp_empty_repo, file_regression):

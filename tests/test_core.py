@@ -8,7 +8,8 @@ from tempfile import TemporaryDirectory
 # 3rd party
 import pytest
 from click import Abort
-from domdf_python_tools.paths import PathPlus, in_directory
+from domdf_python_tools.paths import in_directory
+from domdf_python_tools.testing import check_file_regression
 from dulwich.config import StackedConfig
 from pytest_regressions.data_regression import DataRegressionFixture
 from pytest_regressions.file_regression import FileRegressionFixture
@@ -42,8 +43,8 @@ def test_via_run_repo_helper_forward(temp_empty_repo, capsys, file_regression: F
 
 	sha = "6d8cf72fff6adc4e570cb046ca417db7f2e10a3b"
 	stdout = re.sub(f"Committed as [A-Za-z0-9]{{{len(sha)}}}", f"Committed as {sha}", capsys.readouterr().out)
-	file_regression.check(stdout, extension="_stdout.txt", encoding="UTF-8")
-	file_regression.check(capsys.readouterr().err, extension="_stderr.txt", encoding="UTF-8")
+	check_file_regression(stdout, file_regression, extension="_stdout.txt")
+	check_file_regression(capsys.readouterr().err, file_regression, extension="_stderr.txt")
 
 
 @pytest.mark.skipif(condition=os.sep == "/", reason="Different test for platforms where os.sep == /")
@@ -76,8 +77,8 @@ def test_via_run_repo_helper_backward(
 
 	sha = "6d8cf72fff6adc4e570cb046ca417db7f2e10a3b"
 	stdout = re.sub(f"Committed as [A-Za-z0-9]{{{len(sha)}}}", f"Committed as {sha}", capsys.readouterr().out)
-	file_regression.check(stdout, extension="_stdout.txt", encoding="UTF-8")
-	file_regression.check(capsys.readouterr().err, extension="_stderr.txt", encoding="UTF-8")
+	check_file_regression(stdout, file_regression, extension="_stdout.txt")
+	check_file_regression(capsys.readouterr().err, file_regression, extension="_stderr.txt")
 
 
 def test_via_Repo_class(

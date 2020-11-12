@@ -6,6 +6,7 @@ import re
 # 3rd party
 from click.testing import CliRunner, Result
 from domdf_python_tools.paths import in_directory
+from domdf_python_tools.testing import check_file_output
 from pytest_regressions.file_regression import FileRegressionFixture
 
 # this package
@@ -44,7 +45,7 @@ def test_conda_recipe(tmp_pathplus, file_regression: FileRegressionFixture):
 		else:
 			raise NotImplementedError(os.sep)
 
-	file_regression.check((tmp_pathplus / "conda/meta.yaml").read_text(), encoding="UTF-8", extension=".yml")
+	check_file_output((tmp_pathplus / "conda/meta.yaml").read_text(), file_regression)
 
 
 def test_conda_recipe_specifiers(tmp_pathplus, file_regression: FileRegressionFixture):
@@ -68,4 +69,4 @@ def test_conda_recipe_specifiers(tmp_pathplus, file_regression: FileRegressionFi
 		else:
 			raise NotImplementedError(os.sep)
 
-	file_regression.check((tmp_pathplus / "conda/meta.yaml").read_text(), encoding="UTF-8", extension=".yml")
+	check_file_output(tmp_pathplus / "conda/meta.yaml", file_regression)

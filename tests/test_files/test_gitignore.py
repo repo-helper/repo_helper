@@ -20,15 +20,12 @@
 #  MA 02110-1301, USA.
 #
 
-# stdlib
-import pathlib
-
 # 3rd party
+from domdf_python_tools.testing import check_file_output
 from pytest_regressions.file_regression import FileRegressionFixture
 
 # this package
 from repo_helper.files.gitignore import make_gitignore
-from tests.common import check_file_output
 
 
 def test_make_gitignore(tmp_pathplus, demo_environment, file_regression: FileRegressionFixture):

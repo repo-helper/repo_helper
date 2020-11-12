@@ -22,11 +22,11 @@
 
 # 3rd party
 import pytest
+from domdf_python_tools.testing import check_file_output
 from pytest_regressions.file_regression import FileRegressionFixture
 
 # this package
 from repo_helper.files.bots import make_auto_assign_action, make_dependabot, make_imgbot, make_stale_bot
-from tests.common import check_file_output
 
 
 def test_stale_bot(tmp_pathplus, demo_environment, file_regression: FileRegressionFixture):

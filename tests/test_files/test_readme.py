@@ -27,13 +27,13 @@ import sys
 import pytest
 from domdf_python_tools.compat import importlib_resources
 from domdf_python_tools.paths import PathPlus
+from domdf_python_tools.testing import check_file_output, check_file_regression
 from pytest_regressions.file_regression import FileRegressionFixture
 from readme_renderer.rst import render  # type: ignore
 
 # this package
 import tests.test_files.test_readme_input
 from repo_helper.files.readme import rewrite_readme
-from tests.common import check_file_output, check_file_regression
 
 
 @pytest.mark.parametrize("filename", [

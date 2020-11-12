@@ -2,6 +2,7 @@
 import pytest
 from click.testing import CliRunner, Result
 from domdf_python_tools.paths import in_directory
+from domdf_python_tools.testing import check_file_output
 from pytest_regressions.data_regression import DataRegressionFixture
 from pytest_regressions.file_regression import FileRegressionFixture
 
@@ -121,7 +122,7 @@ def test_suggest_classifiers_add(tmp_pathplus, file_regression: FileRegressionFi
 				)
 		assert result.exit_code == 0
 
-	file_regression.check((tmp_pathplus / "repo_helper.yml").read_text(), encoding="UTF-8", extension=".yml")
+	check_file_output(tmp_pathplus / "repo_helper.yml", file_regression)
 
 
 def test_suggest_classifiers_add_existing(tmp_pathplus, file_regression: FileRegressionFixture):
@@ -150,7 +151,7 @@ def test_suggest_classifiers_add_existing(tmp_pathplus, file_regression: FileReg
 				)
 		assert result.exit_code == 0
 
-	file_regression.check((tmp_pathplus / "repo_helper.yml").read_text(), encoding="UTF-8", extension=".yml")
+	check_file_output(tmp_pathplus / "repo_helper.yml", file_regression)
 
 
 def test_suggest_classifiers_invalid_input(tmp_pathplus, data_regression: DataRegressionFixture):

@@ -2,10 +2,10 @@
 import pytest
 import requests.exceptions
 from apeye.requests_url import RequestsURL
+from domdf_python_tools.testing import check_file_output
 
 # this package
 from repo_helper.cli.commands.init import init_repo
-from tests.common import check_file_output
 
 has_internet = True
 try:

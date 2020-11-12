@@ -1,6 +1,7 @@
 # 3rd party
 from click.testing import CliRunner, Result
 from domdf_python_tools.paths import in_directory
+from domdf_python_tools.testing import check_file_regression
 from pytest_regressions.file_regression import FileRegressionFixture
 
 # this package
@@ -25,7 +26,7 @@ def test_version(tmp_repo, file_regression: FileRegressionFixture):
 		result: Result = runner.invoke(show.version, catch_exceptions=False)
 
 	assert result.exit_code == 0
-	file_regression.check(result.stdout.rstrip(), encoding="UTF-8", extension=".txt")
+	check_file_regression(result.stdout.rstrip(), file_regression)
 
 
 def test_changelog(tmp_repo, file_regression: FileRegressionFixture):
@@ -49,7 +50,7 @@ def test_changelog(tmp_repo, file_regression: FileRegressionFixture):
 		result: Result = runner.invoke(show.changelog, catch_exceptions=False)
 
 	assert result.exit_code == 0
-	file_regression.check(result.stdout.rstrip(), encoding="UTF-8", extension=".txt")
+	check_file_regression(result.stdout.rstrip(), file_regression)
 
 
 def test_log(tmp_repo, file_regression: FileRegressionFixture):
@@ -64,4 +65,4 @@ def test_log(tmp_repo, file_regression: FileRegressionFixture):
 		result: Result = runner.invoke(show.log, catch_exceptions=False)
 
 	assert result.exit_code == 0
-	file_regression.check(result.stdout.rstrip(), encoding="UTF-8", extension=".txt")
+	check_file_regression(result.stdout.rstrip(), file_regression)

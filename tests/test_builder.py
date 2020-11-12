@@ -6,6 +6,7 @@ from email import message_from_file
 # 3rd party
 import pytest
 from domdf_python_tools.paths import PathPlus
+from domdf_python_tools.testing import check_file_output
 from pytest_regressions.data_regression import DataRegressionFixture
 from pytest_regressions.file_regression import FileRegressionFixture
 
@@ -79,7 +80,7 @@ def test_write_entry_points(builder, file_regression: FileRegressionFixture):
 	builder.config["console_scripts"] = ["foo = bar:baz"]
 	builder.write_entry_points()
 	assert (builder.dist_info / "entry_points.txt").is_file()
-	file_regression.check((builder.dist_info / "entry_points.txt").read_text(), encoding="UTF-8")
+	check_file_output(builder.dist_info / "entry_points.txt", file_regression)
 
 
 @pytest.mark.parametrize(
@@ -113,7 +114,7 @@ def test_copy_license(builder, filename):
 
 def test_write_wheel(builder, file_regression: FileRegressionFixture, data_regression: DataRegressionFixture):
 	builder.write_wheel()
-	file_regression.check((builder.dist_info / "WHEEL").read_text(), encoding="UTF-8")
+	check_file_output(builder.dist_info / "WHEEL", file_regression)
 	# Check the file can be read by EmailMessage
 	with (builder.dist_info / "WHEEL").open() as fp:
 		data = message_from_file(fp)
@@ -151,4 +152,4 @@ This is the readme.
 	builder.write_metadata(metadata_file=builder.build_dir / "METADATA")
 	assert (builder.build_dir / "METADATA").exists()
 	assert (builder.build_dir / "METADATA").is_file()
-	file_regression.check((builder.build_dir / "METADATA").read_text(), encoding="UTF-8")
+	check_file_output(builder.dist_info / "METADATA", file_regression)

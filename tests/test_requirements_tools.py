@@ -25,6 +25,7 @@ from typing import Sequence, Union
 
 # 3rd party
 import pytest
+from domdf_python_tools.testing import check_file_regression
 from packaging.requirements import Requirement
 from packaging.specifiers import Specifier, SpecifierSet
 from pytest_regressions.file_regression import FileRegressionFixture
@@ -34,9 +35,6 @@ from shippinglabel.requirements import (
 		read_requirements,
 		resolve_specifiers
 		)
-
-# this package
-from tests.common import check_file_regression
 
 
 class TestComparableRequirement:

@@ -25,6 +25,7 @@ import sys
 
 # 3rd party
 import pytest
+from domdf_python_tools.testing import check_file_output, check_file_regression
 from pytest_regressions.file_regression import FileRegressionFixture
 from readme_renderer.rst import render  # type: ignore
 
@@ -35,7 +36,6 @@ from repo_helper.files.contributing import (
 		make_docs_contributing,
 		make_issue_templates
 		)
-from tests.common import check_file_output, check_file_regression
 
 
 @pytest.mark.parametrize(

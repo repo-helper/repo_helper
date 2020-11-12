@@ -5,13 +5,13 @@ from typing import TYPE_CHECKING, Callable, List, Optional
 # 3rd party
 from click.testing import CliRunner, Result
 from domdf_python_tools.paths import in_directory
+from domdf_python_tools.testing import check_file_output
 from pytest_regressions.file_regression import FileRegressionFixture
 from southwark import get_tags
 from southwark.repo import Repo
 
 # this package
 from repo_helper.cli.commands.release import major, minor, patch, release
-from tests.common import check_file_output
 
 if TYPE_CHECKING:
 	Command = Callable

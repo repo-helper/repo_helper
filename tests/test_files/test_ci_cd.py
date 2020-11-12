@@ -20,11 +20,9 @@
 #  MA 02110-1301, USA.
 #
 
-# stdlib
-import pathlib
-
 # 3rd party
 import pytest
+from domdf_python_tools.testing import check_file_output
 from pytest_regressions.file_regression import FileRegressionFixture
 
 # this package
@@ -39,7 +37,6 @@ from repo_helper.files.ci_cd import (
 		make_travis_deploy_conda,
 		remove_copy_pypi_2_github
 		)
-from tests.common import check_file_output
 
 
 def test_make_travis_case_1(tmp_pathplus, demo_environment, file_regression: FileRegressionFixture):
