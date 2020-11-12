@@ -92,7 +92,7 @@ class conda_extras(ConfigVar):  # noqa
 
 	@classmethod
 	def validate(cls, raw_config_vars: Optional[Dict[str, Any]] = None) -> List[str]:
-		extras = list(filter(None, super().validate(raw_config_vars)))
+		extras: List[str] = list(filter(None, super().validate(raw_config_vars)))
 
 		if "all" in extras and "none" in extras:
 			raise ValueError("'all' and 'none' are mutually exclusive.")
