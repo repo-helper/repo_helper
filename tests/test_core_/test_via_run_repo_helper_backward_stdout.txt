@@ -30,7 +30,6 @@ The following files will be committed:
   .travis.yml
   __pkginfo__.py
   CONTRIBUTING.rst
-  lint_roller.sh
   MANIFEST.in
   pyproject.toml
   README.rst
