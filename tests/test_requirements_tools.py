@@ -149,18 +149,6 @@ def test_combine_requirements():
 	assert str(combine_requirements(reqs)[0].specifier) == "==3.2.1,==3.2.3,==3.2.5,>2.5"
 
 
-@pytest.mark.parametrize(
-		"specifiers, resolved",
-		[([
-				Specifier(">1.2.3"),
-				Specifier(">=1.2.2"),
-				Specifier("<2"),
-				], SpecifierSet(">1.2.3,>=1.2.2,<2"))]
-		)
-def test_resolve_specifiers(specifiers, resolved):
-	assert resolve_specifiers(specifiers) == resolved
-
-
 def test_read_requirements(tmp_pathplus, file_regression: FileRegressionFixture):
 	(tmp_pathplus / "requirements.txt").write_lines([
 			"autodocsumm>=0.2.0",
