@@ -69,16 +69,27 @@ def init(ctx, force: bool, commit: bool, message: str):
 
 base_license_url = RequestsURL("https://raw.githubusercontent.com/licenses/license-templates/master/templates/")
 
-license_file_lookup = {
-		"GNU Lesser General Public License v3 (LGPLv3)": (base_license_url / "lgpl.txt", "lgpl3.py"),
-		"GNU Lesser General Public License v3 or later (LGPLv3+)":
-				(base_license_url / "lgpl.txt", "lgpl3_plus.py"),
-		"GNU General Public License v3 (GPLv3)": (base_license_url / "gpl3.txt", "gpl3.py"),
-		"GNU General Public License v3 or later (GPLv3+)": (base_license_url / "gpl3.txt", "gpl3_plus.py"),
-		"GNU General Public License v2 (GPLv2)": (base_license_url / "gpl2.txt", "gpl2.py"),
-		"GNU General Public License v2 or later (GPLv2+)": (base_license_url / "gpl2.txt", "gpl2_plus.py"),
-		"MIT License": (base_license_url / "mit.txt", "mit.py"),
-		}
+license_file_lookup = dict([
+		(
+				"GNU Lesser General Public License v3 (LGPLv3)",
+				(base_license_url / "lgpl.txt", "lgpl3.py"),
+				),
+		(
+				"GNU Lesser General Public License v3 or later (LGPLv3+)",
+				(base_license_url / "lgpl.txt", "lgpl3_plus.py")
+				),
+		("GNU General Public License v3 (GPLv3)", (base_license_url / "gpl3.txt", "gpl3.py")),
+		("GNU General Public License v3 or later (GPLv3+)", (base_license_url / "gpl3.txt", "gpl3_plus.py")),
+		(
+				"GNU General Public License v2 (GPLv2)",
+				(RequestsURL("https://www.gnu.org/licenses/old-licenses/gpl-2.0.txt"), "gpl2.py"),
+				),
+		(
+				"GNU General Public License v2 or later (GPLv2+)",
+				(RequestsURL("https://www.gnu.org/licenses/old-licenses/gpl-2.0.txt"), "gpl2_plus.py")
+				),
+		("MIT License", (base_license_url / "mit.txt", "mit.py")),
+		])
 
 license_init_file_lookup = {
 		# TODO: BSD 2 and 3
