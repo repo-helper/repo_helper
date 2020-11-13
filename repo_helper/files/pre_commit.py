@@ -185,12 +185,6 @@ lucas_c_hooks = Repo(
 		hooks=["remove-crlf", "forbid-crlf"],
 		)
 
-safety = Repo(
-		repo=make_github_url("Lucas-C", "pre-commit-hooks-safety"),
-		rev="v1.1.3",
-		hooks=["python-safety-dependencies-check"],
-		)
-
 # shellcheck = Repo(
 # 		repo=make_github_url("shellcheck-py", "shellcheck-py"),
 # 		rev="v0.7.1.1",
@@ -291,7 +285,6 @@ def make_pre_commit(repo_path: pathlib.Path, templates: jinja2.Environment) -> L
 			pygrep_hooks,
 			pyupgrade,
 			lucas_c_hooks,
-			safety,
 			yapf_isort,
 			dep_checker,
 			]

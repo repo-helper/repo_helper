@@ -71,8 +71,3 @@ repos:
     - id: dep_checker
       args:
        - repo_helper
-
- - repo: https://github.com/Lucas-C/pre-commit-hooks-safety
-   sha: v1.1.3
-   hooks:
-    - id: python-safety-dependencies-check
