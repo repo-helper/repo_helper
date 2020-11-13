@@ -164,7 +164,6 @@ pre_commit_hooks = Repo(
 				"trailing-whitespace",
 				"mixed-line-ending",
 				"end-of-file-fixer",
-				{"id": "name-tests-test", "args": ['--django']},
 				]
 		)
 
@@ -226,7 +225,7 @@ def make_pre_commit(repo_path: pathlib.Path, templates: jinja2.Environment) -> L
 
 	domdfcoding_hooks = Repo(
 			repo=make_github_url("domdfcoding", "pre-commit-hooks"),
-			rev="v0.1.1",
+			rev="v0.1.2",
 			hooks=[
 					{"id": "requirements-txt-sorter", "args": ["--allow-git"]},
 					{

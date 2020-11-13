@@ -23,12 +23,9 @@ repos:
     - id: trailing-whitespace
     - id: mixed-line-ending
     - id: end-of-file-fixer
-    - id: name-tests-test
-      args:
-       - --django
 
  - repo: https://github.com/domdfcoding/pre-commit-hooks
-   rev: v0.1.1
+   rev: v0.1.2
    hooks:
     - id: requirements-txt-sorter
       args:
