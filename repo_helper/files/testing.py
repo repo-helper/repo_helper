@@ -600,7 +600,6 @@ class TestsRequirementsManager(RequirementsManager):
 			Requirement("pytest-randomly>=3.3.1"),
 			Requirement("pytest-timeout>=1.4.2"),  # Requirement("pytest-rerunfailures>=9.0"),
 			Requirement("iniconfig!=1.1.0,>=1.0.1"),
-			Requirement("domdf-python-tools[testing]>=1.5.0"),
 			}
 
 	def __init__(self, repo_path: PathLike, templates: jinja2.Environment):
@@ -610,7 +609,9 @@ class TestsRequirementsManager(RequirementsManager):
 
 	def compile_target_requirements(self) -> None:
 		if self._globals["pypi_name"] != "coverage_pyver_pragma":
-			self.target_requirements.add(Requirement("coverage_pyver_pragma>=0.0.6"))
+			self.target_requirements.add(Requirement("coverage-pyver-pragma>=0.0.6"))
+		if self._globals["pypi_name"] != "domdf_python_tools":
+			self.target_requirements.add(Requirement("domdf-python-tools[testing]>=1.5.0"))
 
 
 @management.register("test_requirements", ["enable_tests"])
