@@ -1,6 +1,7 @@
 # This file is managed by 'repo_helper'. Don't edit it directly.
 ---
 
+os: linux
 language: python
 dist: bionic
 cache: pip
@@ -59,7 +60,7 @@ jobs:
           tags: true
           repo: octocat/hello-world
         provider: pypi
-        user: "DomDF"
+        username: "DomDF"
         password:
           secure: 1234abcd
         distributions: "sdist bdist_wheel"

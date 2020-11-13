@@ -1,6 +1,7 @@
 # {{ managed_message }}
 ---
 
+os: linux
 language: python
 dist: {{ travis_ubuntu_version }}
 cache: pip

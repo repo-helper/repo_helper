@@ -1,6 +1,7 @@
 # {{ managed_message }}
 ---
 
+os: linux
 language: python
 dist: {{ travis_ubuntu_version }}
 cache: pip
@@ -51,7 +52,7 @@ jobs:
           tags: true
           repo: {{ username }}/{{ repo_name }}
         provider: pypi
-        user: "DomDF"
+        username: "DomDF"
         password:
           secure: {{ travis_pypi_secure }}
         distributions: "sdist bdist_wheel"

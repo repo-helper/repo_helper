@@ -1,6 +1,7 @@
 # This file is managed by 'repo_helper'. Don't edit it directly.
 ---
 
+os: linux
 language: python
 dist: xenial
 cache: pip

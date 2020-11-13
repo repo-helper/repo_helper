@@ -150,6 +150,7 @@ pre_commit_hooks = Repo(
 		hooks=[
 				"check-added-large-files",
 				"check-ast",
+				"fix-byte-order-marker",
 				"check-byte-order-marker",
 				"check-case-conflict",
 				"check-executables-have-shebangs",
@@ -160,9 +161,10 @@ pre_commit_hooks = Repo(
 				"check-symlinks",
 				"check-vcs-permalinks",
 				"detect-private-key",
-				"end-of-file-fixer",
 				"trailing-whitespace",
 				"mixed-line-ending",
+				"end-of-file-fixer",
+				{"id": "name-tests-test", "args": ['--django']},
 				]
 		)
 

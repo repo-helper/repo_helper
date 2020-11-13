@@ -84,6 +84,8 @@ class conda_extras(ConfigVar):  # noqa
 		conda_extras:
 		  - plotting
 		  - xml
+
+	.. versionadded:: 2020.11.12
 	"""
 
 	dtype = List[str]
