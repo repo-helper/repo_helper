@@ -294,7 +294,7 @@ def create_readme_install_block(
 				conda_channels=conda_channels,
 				)
 	else:
-		return "\n.. start installation\n.. end installation\n"
+		return ".. start installation\n.. end installation\n"
 
 
 def create_short_desc_block(short_desc: str) -> str:
