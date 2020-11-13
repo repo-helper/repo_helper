@@ -600,6 +600,7 @@ class TestsRequirementsManager(RequirementsManager):
 			Requirement("pytest-randomly>=3.3.1"),
 			Requirement("pytest-timeout>=1.4.2"),  # Requirement("pytest-rerunfailures>=9.0"),
 			Requirement("iniconfig!=1.1.0,>=1.0.1"),
+			Requirement("domdf-python-tools[testing]>=1.5.0"),
 			}
 
 	def __init__(self, repo_path: PathLike, templates: jinja2.Environment):

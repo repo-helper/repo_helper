@@ -146,6 +146,7 @@ def test_ensure_tests_requirements(tmp_pathplus, demo_environment):
 			) == """\
 coverage>=5.1
 coverage-pyver-pragma>=0.0.6
+domdf-python-tools[testing]>=1.5.0
 iniconfig!=1.1.0,>=1.0.1
 pytest>=6.0.0
 pytest-cov>=2.8.1
@@ -164,12 +165,36 @@ pytest-timeout>=1.4.2
 			) == """\
 coverage>=5.1
 coverage-pyver-pragma>=0.0.6
+domdf-python-tools[testing]>=1.5.0
 iniconfig!=1.1.0,>=1.0.1
 lorem>=0.1.1
 pytest>=6.0.0
 pytest-cov>=2.8.1
 pytest-randomly>=3.3.1
 pytest-timeout>=1.4.2
+"""
+
+
+def test_ensure_tests_requirements_extras(tmp_pathplus, demo_environment):
+	(tmp_pathplus / "requirements.txt").write_text('domdf_python_tools>=1.5.0')
+	(tmp_pathplus / "tests").mkdir()
+	(tmp_pathplus / "tests" / "requirements.txt").write_text('some_package[extra]>=1.5.0')
+
+	managed_files = ensure_tests_requirements(tmp_pathplus, demo_environment)
+	assert managed_files == [posixpath.join("tests", "requirements.txt")]
+
+	assert (tmp_pathplus / managed_files[0]).read_text(
+			encoding="UTF-8"
+			) == """\
+coverage>=5.1
+coverage-pyver-pragma>=0.0.6
+domdf-python-tools[testing]>=1.5.0
+iniconfig!=1.1.0,>=1.0.1
+pytest>=6.0.0
+pytest-cov>=2.8.1
+pytest-randomly>=3.3.1
+pytest-timeout>=1.4.2
+some-package[extra]>=1.5.0
 """
 
 
