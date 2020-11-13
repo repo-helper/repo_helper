@@ -204,8 +204,14 @@ def classifiers(add: bool, status: Optional[int], library: Optional[bool]):
 	# 		filter(remove_invalid_entries, (click.edit(file_content) or file_content).splitlines())
 	# 		)
 
+	if not suggested_classifiers:
+		if sys.stdout.isatty():
+			click.echo("Sorry, I've nothing to suggest 😢")
+
+		sys.exit(1)
+
 	if sys.stdout.isatty():
-		click.echo("Based on what you've told us we think the following classifiers are appropriate:")
+		click.echo("Based on what you've told me I think the following classifiers are appropriate:")
 		for classifier in sorted(suggested_classifiers):
 			click.echo(f" - {classifier}")
 	else:
