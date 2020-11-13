@@ -45,7 +45,7 @@ def test_conda_recipe(tmp_pathplus, file_regression: FileRegressionFixture):
 		else:
 			raise NotImplementedError(os.sep)
 
-	check_file_output((tmp_pathplus / "conda/meta.yaml").read_text(), file_regression)
+	check_file_output(tmp_pathplus / "conda/meta.yaml", file_regression)
 
 
 def test_conda_recipe_specifiers(tmp_pathplus, file_regression: FileRegressionFixture):
