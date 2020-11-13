@@ -282,6 +282,7 @@ class ToxConfig(IniConfigurator):
 		``[testenv:lint]``.
 		"""
 
+		# TODO: https://github.com/asottile/yesqa
 		self._ini["testenv:lint"]["basepython"] = "python{min_py_version}".format(**self._globals)
 		self._ini["testenv:lint"]["changedir"] = "{toxinidir}"
 		self._ini["testenv:lint"]["ignore_errors"] = True
