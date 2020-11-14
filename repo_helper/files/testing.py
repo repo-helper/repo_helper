@@ -161,7 +161,7 @@ class ToxConfig(IniConfigurator):
 			commands.append("mypy tests")
 		elif self["stubs_package"]:
 			commands.append(f"stubtest {self['import_name']} {{posargs}}")
-		elif self["enable_tests"]:
+		else:
 			commands.append(f"mypy {' '.join(self.get_source_files())} {{posargs}}")
 
 		return commands
@@ -314,7 +314,7 @@ class ToxConfig(IniConfigurator):
 		``[testenv:mypy]``.
 		"""
 
-		if self["stubs_package"] or self["enable_tests"]:
+		if not (self["stubs_package"] and not self["enable_tests"]):
 			self._ini["testenv:mypy"]["basepython"] = "python{python_deploy_version}".format(**self._globals)
 			self._ini["testenv:mypy"]["ignore_errors"] = True
 			self._ini["testenv:mypy"]["changedir"] = "{toxinidir}"
