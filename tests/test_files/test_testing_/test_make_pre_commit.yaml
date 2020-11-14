@@ -25,7 +25,7 @@ repos:
     - id: end-of-file-fixer
 
  - repo: https://github.com/domdfcoding/pre-commit-hooks
-   rev: v0.1.4
+   rev: v0.1.5
    hooks:
     - id: requirements-txt-sorter
       args:
@@ -59,7 +59,7 @@ repos:
     - id: forbid-crlf
 
  - repo: https://github.com/domdfcoding/yapf-isort
-   rev: v0.5.1
+   rev: v0.5.2
    hooks:
     - id: yapf-isort
       exclude: ^(doc-source/conf|__pkginfo__|make_conda_recipe|setup)\.py$
