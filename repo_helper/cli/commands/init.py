@@ -177,9 +177,10 @@ def init_repo(repo_path: pathlib.Path, templates: jinja2.Environment) -> List[st
 		license_url = base_license_url / "apache.txt"
 
 	if license_url is not None:
-		response = license_url.get()
-		if response.status_code == 200:
-			license_text = response.text
+		for attempt in [1, 2]:
+			response = license_url.get()
+			if response.status_code == 200:
+				license_text = response.text
 
 	license_template = Environment(  # nosec: B701
 			loader=BaseLoader(),
