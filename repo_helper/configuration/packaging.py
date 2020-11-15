@@ -266,6 +266,7 @@ class use_experimental_backend(ConfigVar):  # noqa
 	def validate(cls, raw_config_vars: Optional[Dict[str, Any]] = None) -> Any:  # noqa: D102
 
 		# this package
+		from repo_helper.configuration import desktopfile
 		from repo_helper.configuration.metadata import pure_python
 		from repo_helper.configuration.other import exclude_files
 
@@ -279,6 +280,7 @@ class use_experimental_backend(ConfigVar):  # noqa
 				additional_setup_args,
 				setup_pre,
 				py_modules,
+				desktopfile,
 				)
 
 		for key in disallowed_keys:

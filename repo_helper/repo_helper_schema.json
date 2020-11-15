@@ -427,6 +427,10 @@
     "entry_points": {
       "type": "object",
       "description": "A mapping of entry point categories to a list of entries for each category."
+    },
+    "desktopfile": {
+      "type": "object",
+      "description": "A key value mapping of entries for a Linux ``.desktop`` file."
     }
   },
   "required": [

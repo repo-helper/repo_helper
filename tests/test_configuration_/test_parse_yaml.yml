@@ -27,6 +27,7 @@ console_scripts:
 - repo_helper = repo_helper.__main__:main
 - repo-helper = repo_helper.__main__:main
 copyright_years: '2020'
+desktopfile: {}
 docker_name: ''
 docker_shields: false
 docs_dir: doc-source

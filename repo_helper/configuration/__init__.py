@@ -76,6 +76,7 @@ from repo_helper.configuration.optional_features import (
 		)
 from repo_helper.configuration.other import (
 		additional_ignore,
+		desktopfile,
 		exclude_files,
 		imgbot_ignore,
 		pkginfo_extra,
@@ -205,6 +206,7 @@ __all__ = [
 		"enable_devmode",
 		"pre_commit_exclude",
 		"dump_schema",
+		"desktopfile",
 		]
 
 
@@ -304,6 +306,7 @@ all_values: List[ConfigVarMeta] = [
 		use_experimental_backend,
 		pre_commit_exclude,
 		entry_points,
+		desktopfile,
 		]
 
 

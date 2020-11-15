@@ -56,6 +56,7 @@ def test_make_manifest_case_2(tmp_pathplus, demo_environment, file_regression: F
 
 def test_make_setup_case_1(tmp_pathplus, demo_environment, file_regression: FileRegressionFixture):
 	demo_environment.globals["use_experimental_backend"] = False
+	demo_environment.globals["desktopfile"] = {}
 
 	managed_files = make_setup(tmp_pathplus, demo_environment)
 	assert managed_files == ["setup.py"]
@@ -64,6 +65,7 @@ def test_make_setup_case_1(tmp_pathplus, demo_environment, file_regression: File
 
 def test_make_setup_case_2(tmp_pathplus, demo_environment, file_regression: FileRegressionFixture):
 	demo_environment.globals["use_experimental_backend"] = False
+	demo_environment.globals["desktopfile"] = {}
 
 	demo_environment.globals.update(
 			dict(

@@ -167,6 +167,9 @@ def make_setup(repo_path: pathlib.Path, templates: jinja2.Environment) -> List[s
 	data["description"] = repr(templates.globals["short_desc"])
 	data["py_modules"] = templates.globals["py_modules"]
 
+	if templates.globals["desktopfile"]:
+		data["data_files"] = "[('share/applications', ['{modname}.desktop'])]".format_map(templates.globals)
+
 	setup_args = sorted({**data, **templates.globals["additional_setup_args"]}.items())
 
 	setup_file.write_clean(setup.render(additional_setup_args="\n".join(f"\t\t{k}={v}," for k, v in setup_args)))

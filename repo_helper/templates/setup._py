@@ -12,6 +12,19 @@ sys.path.append('.')
 # this package
 from __pkginfo__ import *  # pylint: disable=wildcard-import
 
+{% if desktopfile %}
+from textwrap import dedent
+with open('{{ modname }}.desktop', 'w') as desktop:
+	desktop.write(dedent(f"""\
+[Desktop Entry]
+Version={__version__}
+Name={{ modname }}
+Comment={{ short_desc }}
+{% for k, v in desktopfile.items() %}{{ k }}={{ v }}
+{% endfor %}"""
+		))
+{% endif %}
+
 {{ "\n".join(setup_pre) }}
 
 setup(

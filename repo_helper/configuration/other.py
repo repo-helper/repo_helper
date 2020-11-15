@@ -36,7 +36,8 @@ __all__ = [
 		"imgbot_ignore",
 		"pkginfo_extra",
 		"exclude_files",
-		"pre_commit_exclude"
+		"pre_commit_exclude",
+		"desktopfile",
 		]
 
 
@@ -163,3 +164,20 @@ class pre_commit_exclude(ConfigVar):  # noqa
 	@classmethod
 	def validate(cls, raw_config_vars: Optional[Dict[str, Any]] = None) -> Any:
 		return re.compile(super().validate(raw_config_vars)).pattern
+
+
+class desktopfile(ConfigVar):  # noqa
+	"""
+	A key value mapping of entries for a Linux ``.desktop`` file.
+
+	.. code-block:: yaml
+
+		desktopfile:
+		  Exec: wxIconSaver
+		  Icon: document-save
+
+	``Version``, ``Name`` and ``Comment`` are pre-populated from :conf:`version`, :conf:`modname` and :conf:`short_desc`.
+	"""
+
+	dtype = Dict[str, str]
+	default: Dict[str, str] = {}
