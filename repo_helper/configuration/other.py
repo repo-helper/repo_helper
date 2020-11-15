@@ -177,6 +177,8 @@ class desktopfile(ConfigVar):  # noqa
 		  Icon: document-save
 
 	``Version``, ``Name`` and ``Comment`` are pre-populated from :conf:`version`, :conf:`modname` and :conf:`short_desc`.
+
+	.. versionadded:: 2020.11.15
 	"""
 
 	dtype = Dict[str, str]
