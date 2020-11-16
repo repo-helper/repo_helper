@@ -31,6 +31,7 @@ import logging
 import os.path
 import pathlib
 import shutil
+import warnings
 from typing import Dict, List, Sequence, Union
 
 # 3rd party
@@ -140,7 +141,13 @@ class DocRequirementsManager(RequirementsManager):
 				self.target_requirements.add(ComparableRequirement(f"{name}{specifier}"))
 
 	def merge_requirements(self) -> List[str]:
-		current_requirements, comments = read_requirements(self.req_file)
+		current_requirements, comments, invalid_lines = read_requirements(self.req_file, include_invalid=True)
+
+		for line in invalid_lines:
+			if line.startswith("git+"):
+				comments.append(line)
+			else:
+				warnings.warn(f"Ignored invalid requirement {line!r}")
 
 		for req in current_requirements:
 			req.name = normalize(req.name)
