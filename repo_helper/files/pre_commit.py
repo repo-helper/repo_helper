@@ -169,13 +169,13 @@ pre_commit_hooks = Repo(
 
 pygrep_hooks = Repo(
 		repo=make_github_url("pre-commit", "pygrep-hooks"),
-		rev="v1.5.1",
+		rev="v1.7.0",
 		hooks=["python-no-eval"],
 		)
 
 pyupgrade = Repo(
 		repo=make_github_url("asottile", "pyupgrade"),
-		rev="v2.7.3",
+		rev="v2.7.4",
 		hooks=[{"id": "pyupgrade", "args": ["--py36-plus"]}]
 		)
 
@@ -238,7 +238,7 @@ def make_pre_commit(repo_path: pathlib.Path, templates: jinja2.Environment) -> L
 
 	flake8_dunder_all = Repo(
 			repo=make_github_url("domdfcoding", "flake8-dunder-all"),
-			rev="v0.1.0",
+			rev="v0.1.3",
 			hooks=[{
 					"id": "ensure-dunder-all",
 					"files": fr"^{import_name}{'-stubs' if stubs_package else ''}/.*\.py$"
