@@ -173,3 +173,65 @@ def make_imgbot(repo_path: pathlib.Path, templates: jinja2.Environment) -> List[
 	imgbot_file.write_clean(json.dumps(imgbot_config, indent=4))
 
 	return [imgbot_file.name]
+
+
+# @management.register("automerge")
+def make_automerge_action(repo_path: pathlib.Path, templates: jinja2.Environment) -> List[str]:
+	"""
+	Add configuration for https://github.com/pascalgn/automerge-action to the desired repo.
+
+	:param repo_path: Path to the repository root.
+	:param templates:
+	"""
+
+	dot_github = PathPlus(repo_path / ".github")
+	(dot_github / "workflows").maybe_make(parents=True)
+
+	automerge_workflow = dot_github / "workflows" / "automerge.yml"
+
+	config: MutableMapping[str, Any] = {
+			"name": "automerge",
+			"on": {
+					"pull_request": {
+							"types": [
+									"labeled",
+									"unlabeled",
+									"synchronize",
+									"opened",
+									"edited",
+									"ready_for_review",
+									"reopened",
+									"unlocked",
+									],
+							},
+					"pull_request_review": {
+							"types": ["submitted"],
+							},
+					"check_suite": {
+							"types": ["completed"],
+							},
+					"status": {},
+					},
+			"jobs": {
+					"automerge": {
+							"runs-on": "ubuntu-latest",
+							"steps": [{
+									"name": "automerge",
+									"uses": "pascalgn/automerge-action@v0.12.0",
+									"env": {
+											"GITHUB_TOKEN": "${{ secrets.GITHUB_TOKEN }}",
+											"MERGE_METHOD": "squash",
+											},
+									}]
+							}
+					}
+			}
+
+	automerge_workflow.write_lines([
+			f"# {templates.globals['managed_message']}",
+			"---",
+			yaml.round_trip_dump(config, default_flow_style=False),  # type: ignore
+			])
+
+	return [automerge_workflow.relative_to(repo_path).as_posix()]
+
