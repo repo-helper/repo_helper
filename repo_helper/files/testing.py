@@ -34,9 +34,8 @@ from typing import Any, List
 import jinja2
 from domdf_python_tools.paths import PathPlus
 from domdf_python_tools.typing import PathLike
-from packaging.requirements import Requirement
 from shippinglabel import normalize
-from shippinglabel.requirements import RequirementsManager, read_requirements
+from shippinglabel.requirements import ComparableRequirement, RequirementsManager, read_requirements
 
 # this package
 from repo_helper.configupdater2 import ConfigUpdater
@@ -595,12 +594,12 @@ def make_isort(repo_path: pathlib.Path, templates: jinja2.Environment) -> List[s
 
 class TestsRequirementsManager(RequirementsManager):
 	target_requirements = {
-			Requirement("coverage>=5.1"),
-			Requirement("pytest>=6.0.0"),
-			Requirement("pytest-cov>=2.8.1"),
-			Requirement("pytest-randomly>=3.3.1"),
-			Requirement("pytest-timeout>=1.4.2"),  # Requirement("pytest-rerunfailures>=9.0"),
-			Requirement("iniconfig!=1.1.0,>=1.0.1"),
+			ComparableRequirement("coverage>=5.1"),
+			ComparableRequirement("pytest>=6.0.0"),
+			ComparableRequirement("pytest-cov>=2.8.1"),
+			ComparableRequirement("pytest-randomly>=3.3.1"),
+			ComparableRequirement("pytest-timeout>=1.4.2"),  # ComparableRequirement("pytest-rerunfailures>=9.0"),
+			ComparableRequirement("iniconfig!=1.1.0,>=1.0.1"),
 			}
 
 	def __init__(self, repo_path: PathLike, templates: jinja2.Environment):
@@ -610,9 +609,9 @@ class TestsRequirementsManager(RequirementsManager):
 
 	def compile_target_requirements(self) -> None:
 		if self._globals["pypi_name"] != "coverage_pyver_pragma":
-			self.target_requirements.add(Requirement("coverage-pyver-pragma>=0.0.6"))
+			self.target_requirements.add(ComparableRequirement("coverage-pyver-pragma>=0.0.6"))
 		if self._globals["pypi_name"] != "domdf_python_tools":
-			self.target_requirements.add(Requirement("domdf-python-tools[testing]>=1.5.0"))
+			self.target_requirements.add(ComparableRequirement("domdf-python-tools[testing]>=1.5.0"))
 
 
 @management.register("test_requirements", ["enable_tests"])

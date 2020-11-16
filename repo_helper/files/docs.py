@@ -31,7 +31,7 @@ import logging
 import os.path
 import pathlib
 import shutil
-from typing import Dict, List, Sequence, Set, Union
+from typing import Dict, List, Sequence, Union
 
 # 3rd party
 import css_parser  # type: ignore
@@ -42,9 +42,13 @@ from domdf_python_tools.compat import importlib_resources
 from domdf_python_tools.paths import PathPlus
 from domdf_python_tools.typing import PathLike
 from domdf_python_tools.utils import enquote_value
-from packaging.requirements import Requirement
 from shippinglabel import normalize
-from shippinglabel.requirements import RequirementsManager, combine_requirements, read_requirements
+from shippinglabel.requirements import (
+		ComparableRequirement,
+		RequirementsManager,
+		combine_requirements,
+		read_requirements
+		)
 
 # this package
 import repo_helper
@@ -88,17 +92,17 @@ logging.getLogger("CSSUTILS").addFilter(lambda record: False)
 
 class DocRequirementsManager(RequirementsManager):
 	target_requirements = {
-			Requirement("sphinxcontrib-httpdomain>=1.7.0"),
-			Requirement("sphinxemoji>=0.1.6"),
-			Requirement("sphinx-notfound-page>=0.5"),
-			Requirement("sphinx-tabs>=1.1.13"),
-			Requirement("autodocsumm>=0.2.0"),
-			# Requirement("sphinx-gitstamp"),
-			# Requirement("gitpython"),
-			# Requirement("sphinx_autodoc_typehints>=1.11.0"),
-			Requirement("sphinx-copybutton>=0.2.12"),
-			Requirement("sphinx-prompt>=1.1.0"),
-			Requirement("sphinx>=3.0.3"),
+			ComparableRequirement("sphinxcontrib-httpdomain>=1.7.0"),
+			ComparableRequirement("sphinxemoji>=0.1.6"),
+			ComparableRequirement("sphinx-notfound-page>=0.5"),
+			ComparableRequirement("sphinx-tabs>=1.1.13"),
+			ComparableRequirement("autodocsumm>=0.2.0"),
+			# ComparableRequirement("sphinx-gitstamp"),
+			# ComparableRequirement("gitpython"),
+			# ComparableRequirement("sphinx_autodoc_typehints>=1.11.0"),
+			ComparableRequirement("sphinx-copybutton>=0.2.12"),
+			ComparableRequirement("sphinx-prompt>=1.1.0"),
+			ComparableRequirement("sphinx>=3.0.3"),
 			}
 
 	def __init__(self, repo_path: PathLike, templates: jinja2.Environment):
@@ -117,10 +121,10 @@ class DocRequirementsManager(RequirementsManager):
 
 		for name, specifier in theme_versions.items():
 			if name == self._globals["sphinx_html_theme"]:
-				self.target_requirements.add(Requirement(f"{name}{specifier}"))
+				self.target_requirements.add(ComparableRequirement(f"{name}{specifier}"))
 				break
 		else:
-			self.target_requirements.add(Requirement(self._globals["sphinx_html_theme"]))
+			self.target_requirements.add(ComparableRequirement(self._globals["sphinx_html_theme"]))
 
 		# Mapping of pypi_name to version specifier
 		my_sphinx_extensions = {
@@ -133,7 +137,7 @@ class DocRequirementsManager(RequirementsManager):
 
 		for name, specifier in my_sphinx_extensions.items():
 			if name != self._globals["pypi_name"]:
-				self.target_requirements.add(Requirement(f"{name}{specifier}"))
+				self.target_requirements.add(ComparableRequirement(f"{name}{specifier}"))
 
 	def merge_requirements(self) -> List[str]:
 		current_requirements, comments = read_requirements(self.req_file)
@@ -142,7 +146,7 @@ class DocRequirementsManager(RequirementsManager):
 			req.name = normalize(req.name)
 			if req.name not in self.get_target_requirement_names():
 				if req.name == "sphinx-rtd-theme" and self._globals["sphinx_html_theme"] == "domdf_sphinx_theme":
-					self.target_requirements.add(Requirement("domdf-sphinx-theme>=0.1.0"))
+					self.target_requirements.add(ComparableRequirement("domdf-sphinx-theme>=0.1.0"))
 				elif req.name == "sphinx-autodoc-typehints":
 					continue
 				else:
