@@ -132,7 +132,7 @@ class entry_points(ConfigVar):  # noqa
 
 
 def parse_additional_setup_args(setup_args: Mapping[str, Any]):
-	return "\n".join(["\t\t{}={},".format(*x) for x in setup_args.items()])
+	return '\n'.join(["\t\t{}={},".format(*x) for x in setup_args.items()])
 
 
 class additional_setup_args(ConfigVar):  # noqa

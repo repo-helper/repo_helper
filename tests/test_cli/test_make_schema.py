@@ -16,9 +16,9 @@ def test_make_schema(tmp_pathplus):
 		runner = CliRunner()
 		result: Result = runner.invoke(make_schema, catch_exceptions=False)
 		assert result.exit_code == 0
-		if os.sep == "/":
+		if os.sep == '/':
 			assert re.match(r"Wrote schema to .*/repo_helper/repo_helper_schema\.json", result.stdout)
-		elif os.sep == "\\":
+		elif os.sep == '\\':
 			assert re.match(
 					r"Wrote schema to .*\\repo_helper\\repo_helper_schema\.json",
 					result.stdout.splitlines()[0],

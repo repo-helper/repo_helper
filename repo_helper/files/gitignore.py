@@ -239,6 +239,6 @@ def make_gitignore(repo_path: pathlib.Path, templates: jinja2.Environment) -> Li
 			*templates.globals["additional_ignore"],
 			]
 
-	PathPlus(repo_path / ".gitignore").write_clean("\n".join(all_ignores))
+	PathPlus(repo_path / ".gitignore").write_clean('\n'.join(all_ignores))
 
 	return [".gitignore"]

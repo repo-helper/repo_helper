@@ -172,7 +172,7 @@ def test_read_requirements(tmp_pathplus, file_regression: FileRegressionFixture)
 
 	requirements, comments = read_requirements(tmp_pathplus / "requirements.txt")
 
-	check_file_regression("\n".join(str(x) for x in sorted(requirements)), file_regression, extension="._txt")
+	check_file_regression('\n'.join(str(x) for x in sorted(requirements)), file_regression, extension="._txt")
 
 
 def test_read_requirements_invalid(tmp_pathplus, file_regression: FileRegressionFixture):
@@ -197,7 +197,7 @@ def test_read_requirements_invalid(tmp_pathplus, file_regression: FileRegression
 	assert record[0].message.args[0] == "Ignored invalid requirement 'domdf-sphinx-theme!!!0.1.0'"  # type: ignore
 	assert record[1].message.args[0] == "Ignored invalid requirement 'https://bbc.co.uk'"  # type: ignore
 
-	check_file_regression("\n".join(str(x) for x in sorted(requirements)), file_regression, extension="._txt")
+	check_file_regression('\n'.join(str(x) for x in sorted(requirements)), file_regression, extension="._txt")
 	assert comments == [
 			"# another comment",
 			"# a comment",

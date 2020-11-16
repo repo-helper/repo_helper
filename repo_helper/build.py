@@ -97,7 +97,7 @@ class Builder:
 		#: The archive name, without the tag
 		self.archive_name = re.sub(
 				r"[^\w\d.]+",
-				"_",
+				'_',
 				self.config["pypi_name"],
 				re.UNICODE,
 				) + f"-{self.config['version']}"
@@ -144,7 +144,7 @@ class Builder:
 		if self.config["stubs_package"]:
 			return posixpath.join(self.config["source_dir"], f"{self.config['import_name'].split('.')[0]}-stubs")
 		else:
-			return posixpath.join(self.config["source_dir"], self.config["import_name"].split(".")[0])
+			return posixpath.join(self.config["source_dir"], self.config["import_name"].split('.')[0])
 
 	def iter_source_files(self) -> Iterator[PathPlus]:
 		pkgdir = self.repo_dir / self.pkg_dir
@@ -222,7 +222,7 @@ class Builder:
 			self.report_copied(filename, target)
 
 		for entry in self.config["manifest_additional"]:
-			parts = entry.split(" ")
+			parts = entry.split(' ')
 
 			if parts[0] == "include":
 				for include_pat in parts[1:]:
@@ -350,7 +350,7 @@ class Builder:
 		metadata["License"] = self.config["license"]
 
 		if self.config["keywords"]:
-			metadata["Keywords"] = ",".join(self.config["keywords"])
+			metadata["Keywords"] = ','.join(self.config["keywords"])
 
 		metadata["Project-URL"] = "Documentation, https://{repo_name}.readthedocs.io".format_map(self.config)
 		# TODO: Make this link match the package version
@@ -491,20 +491,20 @@ class Builder:
 		wheel_filename = self.out_dir / f"{self.archive_name}-{self.tag}.whl"
 		with ZipFile(wheel_filename, mode='w') as wheel_archive:
 			with (self.dist_info / "RECORD").open('w') as fp:
-				for file in (self.build_dir / self.pkg_dir).rglob("*"):
+				for file in (self.build_dir / self.pkg_dir).rglob('*'):
 					if file.is_file():
 						fp.write(get_record_entry(file, self.build_dir))
-						fp.write("\n")
+						fp.write('\n')
 						wheel_archive.write(file, arcname=file.relative_to(self.build_dir))
 
-				for file in self.dist_info.rglob("*"):
+				for file in self.dist_info.rglob('*'):
 					if "RECORD" in file.name and self.dist_info.name in file.parts:
 						continue
 					if not file.is_file():
 						continue
 
 					fp.write(get_record_entry(file, self.build_dir))
-					fp.write("\n")
+					fp.write('\n')
 					wheel_archive.write(file, arcname=file.relative_to(self.build_dir))
 
 			for file in self.dist_info.rglob("RECORD*"):
@@ -539,13 +539,13 @@ class Builder:
 		with tarfile.open(conda_filename, mode="w:bz2") as conda_archive:
 			with (self.info_dir / "files").open('w') as fp:
 
-				for file in (PathPlus(wheel_contents_dir) / self.pkg_dir).rglob("*"):
+				for file in (PathPlus(wheel_contents_dir) / self.pkg_dir).rglob('*'):
 					if file.is_file():
 						filename = (site_packages / file.relative_to(wheel_contents_dir)).as_posix()
 						fp.write(f"{filename}\n")
 						conda_archive.add(str(file), arcname=filename)
 
-				for file in (PathPlus(wheel_contents_dir) / f"{self.archive_name}.dist-info").rglob("*"):
+				for file in (PathPlus(wheel_contents_dir) / f"{self.archive_name}.dist-info").rglob('*'):
 					if file.name == "INSTALLER":
 						file.write_text("conda")
 
@@ -554,7 +554,7 @@ class Builder:
 						fp.write(f"{filename}\n")
 						conda_archive.add(str(file), arcname=filename)
 
-			for file in self.info_dir.rglob("*"):
+			for file in self.info_dir.rglob('*'):
 				if not file.is_file():
 					continue
 
@@ -573,7 +573,7 @@ class Builder:
 
 		sdist_filename = self.out_dir / f"{self.archive_name}.tar.gz"
 		with tarfile.open(sdist_filename, mode="w:gz", format=tarfile.PAX_FORMAT) as sdist_archive:
-			for file in self.build_dir.rglob("*"):
+			for file in self.build_dir.rglob('*'):
 				if file.is_file():
 					sdist_archive.add(str(file), arcname=file.relative_to(self.build_dir).as_posix())
 
@@ -691,7 +691,7 @@ class Builder:
 
 				{indent(err.decode("UTF-8"), '    ')}
 				"""
-								).rstrip() + "\n"
+								).rstrip() + '\n'
 						)
 
 			conda_filename = self.create_conda_archive(str(tmpdir), build_number=build_number)

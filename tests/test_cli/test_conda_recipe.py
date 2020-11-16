@@ -38,9 +38,9 @@ def test_conda_recipe(tmp_pathplus, file_regression: FileRegressionFixture):
 		result: Result = runner.invoke(make_recipe, catch_exceptions=False)
 		assert result.exit_code == 0
 
-		if os.sep == "/":
+		if os.sep == '/':
 			assert re.match(r"Wrote recipe to .*/conda/meta\.yaml", result.stdout)
-		elif os.sep == "\\":
+		elif os.sep == '\\':
 			assert re.match(r"Wrote recipe to .*(\\)?conda\\meta\.yaml", result.stdout.splitlines()[0])
 		else:
 			raise NotImplementedError(os.sep)
@@ -62,9 +62,9 @@ def test_conda_recipe_specifiers(tmp_pathplus, file_regression: FileRegressionFi
 		result: Result = runner.invoke(make_recipe, catch_exceptions=False)
 		assert result.exit_code == 0
 
-		if os.sep == "/":
+		if os.sep == '/':
 			assert re.match(r"Wrote recipe to .*/conda/meta\.yaml", result.stdout)
-		elif os.sep == "\\":
+		elif os.sep == '\\':
 			assert re.match(r"Wrote recipe to .*(\\)?conda\\meta\.yaml", result.stdout.splitlines()[0])
 		else:
 			raise NotImplementedError(os.sep)

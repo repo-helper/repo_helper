@@ -138,10 +138,10 @@ def test_traverse_to_file(tmp_pathplus, location, expected):
 
 def test_traverse_to_file_errors(tmp_pathplus):
 	(tmp_pathplus / "foo/bar/baz").parent.maybe_make(parents=True)
-	if os.sep == "/":
+	if os.sep == '/':
 		with pytest.raises(FileNotFoundError, match="'foo.yml' not found in .*/foo/bar/baz"):
 			traverse_to_file(tmp_pathplus / "foo" / "bar" / "baz", "foo.yml")
-	elif os.sep == "\\":
+	elif os.sep == '\\':
 		with pytest.raises(FileNotFoundError, match=r"'foo.yml' not found in .*\\foo\\bar\\baz"):
 			traverse_to_file(tmp_pathplus / "foo" / "bar" / "baz", "foo.yml")
 	else:

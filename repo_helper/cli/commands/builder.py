@@ -68,7 +68,7 @@ def build(
 		binary = True
 		source = True
 
-	if repository == ".":
+	if repository == '.':
 		repository = PathPlus.cwd()
 	else:
 		repository = PathPlus(repository)

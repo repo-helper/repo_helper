@@ -25,7 +25,7 @@ def test_pycharm_schema_not_project(tmp_pathplus, file_regression: FileRegressio
 		assert not result.stdout
 
 
-@pytest.mark.skipif(condition=os.sep == "\\", reason="Different test for platforms where os.sep == \\")
+@pytest.mark.skipif(condition=os.sep == '\\', reason="Different test for platforms where os.sep == \\")
 def test_pycharm_schema_forward(tmp_pathplus, file_regression: FileRegressionFixture):
 
 	(tmp_pathplus / ".idea").maybe_make()
@@ -47,7 +47,7 @@ def test_pycharm_schema_forward(tmp_pathplus, file_regression: FileRegressionFix
 	check_file_regression(file_content, file_regression, extension=".xml")
 
 
-@pytest.mark.skipif(condition=os.sep == "/", reason="Different test for platforms where os.sep == /")
+@pytest.mark.skipif(condition=os.sep == '/', reason="Different test for platforms where os.sep == /")
 def test_pycharm_schema_back(tmp_pathplus, file_regression: FileRegressionFixture):
 
 	(tmp_pathplus / ".idea").maybe_make()

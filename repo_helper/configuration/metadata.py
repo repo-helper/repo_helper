@@ -263,9 +263,9 @@ class import_name(ConfigVar):  # noqa
 
 	@classmethod
 	def validator(cls, name: str) -> str:
-		name = name.replace("-", "_")  # replace hyphens with underscores
-		name = name.replace("/", ".")
-		for part in name.split("."):
+		name = name.replace('-', '_')  # replace hyphens with underscores
+		name = name.replace('/', '.')
+		for part in name.split('.'):
 			if not part.isidentifier():
 				raise ValueError(
 						"""\
@@ -387,7 +387,7 @@ class license(ConfigVar):  # noqa  # pylint: disable=redefined-builtin
 
 	@classmethod
 	def validator(cls, value):
-		value = value.replace(" ", '')
+		value = value.replace(' ', '')
 
 		if value in license_lookup:
 			value = license_lookup[value]
