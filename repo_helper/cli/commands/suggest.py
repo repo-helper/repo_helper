@@ -34,7 +34,7 @@ from typing import Collection, Iterator, Optional
 import click
 from consolekit import CONTEXT_SETTINGS
 from consolekit.input import confirm
-from shippinglabel.requirements import combine_requirements, ComparableRequirement, read_requirements
+from shippinglabel.requirements import ComparableRequirement, combine_requirements, read_requirements
 
 # this package
 from repo_helper.cli import cli_group
@@ -206,6 +206,7 @@ def classifiers(add: bool, status: Optional[int], library: Optional[bool]):
 
 
 # TODO: flags for interactive options, and clean output when piped
+
 
 def detect_languages(directory: pathlib.Path) -> Iterator[str]:
 	"""

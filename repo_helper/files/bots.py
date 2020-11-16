@@ -204,17 +204,14 @@ def make_automerge_action(repo_path: pathlib.Path, templates: jinja2.Environment
 									"unlocked",
 									],
 							},
-					"pull_request_review": {
-							"types": ["submitted"],
-							},
-					"check_suite": {
-							"types": ["completed"],
-							},
+					"pull_request_review": {"types": ["submitted"]},
+					"check_suite": {"types": ["completed"]},
 					"status": {},
 					},
 			"jobs": {
 					"automerge": {
-							"runs-on": "ubuntu-latest",
+							"runs-on":
+									"ubuntu-latest",
 							"steps": [{
 									"name": "automerge",
 									"uses": "pascalgn/automerge-action@v0.12.0",
@@ -234,4 +231,3 @@ def make_automerge_action(repo_path: pathlib.Path, templates: jinja2.Environment
 			])
 
 	return [automerge_workflow.relative_to(repo_path).as_posix()]
-
