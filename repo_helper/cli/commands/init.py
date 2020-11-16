@@ -28,7 +28,7 @@ import datetime
 import pathlib
 import posixpath
 import sys
-from typing import List, Optional
+from typing import List, Optional, Sequence
 
 # 3rd party
 import click
@@ -139,24 +139,12 @@ def init_repo(repo_path: pathlib.Path, templates: jinja2.Environment) -> List[st
 		(repo_path / templates.globals["tests_dir"] / "requirements.txt").touch()
 
 	# docs
+	docs_files: Sequence[str]
+
 	if templates.globals["enable_docs"]:
-		docs_dir = repo_path / templates.globals["docs_dir"]
-		docs_dir.maybe_make()
-		(docs_dir / "api").maybe_make()
-
-		for filename in {"index.rst"}:
-			template = init_repo_templates.get_template(filename)
-			(docs_dir / filename).write_clean(template.render())
-
-		api_buf = StringList()
-		api_buf.append('=' * (len(templates.globals["import_name"]) + 1))
-		api_buf.append(templates.globals["import_name"])
-		api_buf.append('=' * (len(templates.globals["import_name"]) + 1))
-		api_buf.blankline(ensure_single=True)
-		api_buf.append(f".. automodule:: {templates.globals['import_name']}")
-		api_buf.blankline(ensure_single=True)
-
-		(docs_dir / "api" / templates.globals["modname"]).with_suffix(".rst").write_lines(api_buf)
+		docs_files = enable_docs(repo_path, templates, init_repo_templates)
+	else:
+		docs_files = ()
 
 	# other
 	for filename in {"README.rst"}:
@@ -201,10 +189,38 @@ def init_repo(repo_path: pathlib.Path, templates: jinja2.Environment) -> List[st
 	return [
 			posixpath.join(templates.globals["import_name"], "__init__.py"),
 			posixpath.join(templates.globals["tests_dir"], "__init__.py"),
-			posixpath.join(templates.globals["docs_dir"], "api", f"{templates.globals['modname']}.rst"),
-			posixpath.join(templates.globals["docs_dir"], "index.rst"),
+			*docs_files,
 			posixpath.join(templates.globals["tests_dir"], "requirements.txt"),
 			"requirements.txt",
 			"LICENSE",
 			"README.rst",
+			]
+
+
+def enable_docs(
+		repo_path: pathlib.Path,
+		templates: jinja2.Environment,
+		init_repo_templates: jinja2.Environment,
+		) -> List[str]:
+	docs_dir = repo_path / templates.globals["docs_dir"]
+	docs_dir.maybe_make()
+	(docs_dir / "api").maybe_make()
+
+	for filename in {"index.rst"}:
+		template = init_repo_templates.get_template(filename)
+		(docs_dir / filename).write_clean(template.render())
+
+	api_buf = StringList()
+	api_buf.append('=' * (len(templates.globals["import_name"]) + 1))
+	api_buf.append(templates.globals["import_name"])
+	api_buf.append('=' * (len(templates.globals["import_name"]) + 1))
+	api_buf.blankline(ensure_single=True)
+	api_buf.append(f".. automodule:: {templates.globals['import_name']}")
+	api_buf.blankline(ensure_single=True)
+
+	(docs_dir / "api" / templates.globals["modname"]).with_suffix(".rst").write_lines(api_buf)
+
+	return [
+			posixpath.join(templates.globals["docs_dir"], "api", f"{templates.globals['modname']}.rst"),
+			posixpath.join(templates.globals["docs_dir"], "index.rst"),
 			]

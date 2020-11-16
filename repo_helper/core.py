@@ -41,7 +41,7 @@ from repo_helper.files import Management, is_registered, management
 from repo_helper.files.docs import copy_docs_styling
 from repo_helper.files.linting import code_only_warning, lint_fix_list, lint_warn_list
 from repo_helper.files.testing import make_isort
-from repo_helper.templates import template_dir
+from repo_helper.templates import init_repo_template_dir, template_dir
 from repo_helper.utils import discover_entry_points, traverse_to_file
 
 __all__ = [
@@ -152,10 +152,26 @@ class RepoHelper:
 			removed or modified.
 		"""
 
+		all_managed_files = []
+
+		if (
+				self.templates.globals["enable_docs"]
+				and not (self.target_repo / self.templates.globals["docs_dir"]).exists()
+				):
+
+			# this package
+			from repo_helper.cli.commands.init import enable_docs
+
+			init_repo_templates = jinja2.Environment(  # nosec: B701
+				loader=jinja2.FileSystemLoader(str(init_repo_template_dir)),
+				undefined=jinja2.StrictUndefined,
+				)
+			init_repo_templates.globals.update(self.templates.globals)
+
+			all_managed_files.extend(enable_docs(self.target_repo, self.templates, init_repo_templates))
+
 		if not self.templates.globals["preserve_custom_theme"] and self.templates.globals["enable_docs"]:
-			all_managed_files = copy_docs_styling(self.target_repo, self.templates)
-		else:
-			all_managed_files = []
+			all_managed_files.extend(copy_docs_styling(self.target_repo, self.templates))
 
 		# TODO: this isn't respecting "enable_docs"
 		for function_, exclude_name, other_requirements in self.files:
