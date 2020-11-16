@@ -31,10 +31,11 @@ from typing import List, Optional, Union
 # 3rd party
 import click
 from consolekit import CONTEXT_SETTINGS
+from consolekit.options import colour_option
 
 # this package
 from repo_helper.cli import cli_group
-from repo_helper.cli.options import autocomplete_option, colour_option, no_pager_option
+from repo_helper.cli.options import autocomplete_option, no_pager_option
 
 __all__ = ["show", "show_command", "version", "log", "changelog"]
 
