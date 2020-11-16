@@ -24,23 +24,24 @@ Suggest trove classifiers and keywords.
 #
 
 # stdlib
+import pathlib
 import sys
 from functools import partial
 from itertools import chain
-from typing import Optional
+from typing import Collection, Iterator, Optional
 
 # 3rd party
 import click
 from consolekit import CONTEXT_SETTINGS
 from consolekit.input import confirm
-from shippinglabel.requirements import combine_requirements, read_requirements
+from shippinglabel.requirements import combine_requirements, ComparableRequirement, read_requirements
 
 # this package
 from repo_helper.cli import cli_group
 from repo_helper.cli.options import autocomplete_option
 from repo_helper.core import RepoHelper
 
-__all__ = ["suggest", "suggest_command"]
+__all__ = ["suggest", "suggest_command", "detect_languages", "classifiers_from_requirements"]
 
 development_status_options = [
 		"Planning",
@@ -109,10 +110,8 @@ def classifiers(add: bool, status: Optional[int], library: Optional[bool]):
 	suggested_classifiers = set()
 	pkg_dir = rh.target_repo / config["import_name"]
 
-	for language, patterns in programming_languages.items():
-		for _ in chain.from_iterable(pkg_dir.rglob(pattern) for pattern in patterns):
-			suggested_classifiers.add(f"Programming Language :: {language}")
-			break
+	for language in detect_languages(pkg_dir):
+		suggested_classifiers.add(f"Programming Language :: {language}")
 
 	# If not a tty, assume default options are False
 	if not sys.stdout.isatty():
@@ -138,50 +137,7 @@ def classifiers(add: bool, status: Optional[int], library: Optional[bool]):
 
 	lib_requirements = combine_requirements(read_requirements(rh.target_repo / "requirements.txt")[0])
 
-	if "dash" in lib_requirements:
-		suggested_classifiers.add("Framework :: Dash")
-	if "jupyter" in lib_requirements:
-		suggested_classifiers.add("Framework :: Jupyter")
-	if "matplotlib" in lib_requirements:
-		suggested_classifiers.add("Framework :: Matplotlib")
-	if "pygame" in lib_requirements:
-		suggested_classifiers.add("Topic :: Software Development :: Libraries :: pygame")
-		suggested_classifiers.add("Topic :: Games/Entertainment")
-	if "arcade" in lib_requirements:
-		suggested_classifiers.add("Topic :: Games/Entertainment")
-	if "flake8" in lib_requirements:
-		suggested_classifiers.add("Framework :: Flake8")
-		suggested_classifiers.add("Intended Audience :: Developers")
-	if "flask" in lib_requirements:
-		suggested_classifiers.add("Framework :: Flask")
-		suggested_classifiers.add("Topic :: Internet :: WWW/HTTP :: WSGI :: Application")
-		suggested_classifiers.add("Topic :: Internet :: WWW/HTTP :: Dynamic Content")
-	if "werkzeug" in lib_requirements:
-		suggested_classifiers.add("Topic :: Internet :: WWW/HTTP :: WSGI :: Application")
-	if "click" in lib_requirements or "typer" in lib_requirements:
-		suggested_classifiers.add("Environment :: Console")
-	if "pytest" in lib_requirements:
-		# TODO: pytest-*
-		suggested_classifiers.add("Framework :: Pytest")
-		suggested_classifiers.add("Topic :: Software Development :: Quality Assurance")
-		suggested_classifiers.add("Topic :: Software Development :: Testing")
-		suggested_classifiers.add("Topic :: Software Development :: Testing :: Unit")
-		suggested_classifiers.add("Intended Audience :: Developers")
-	if "tox" in lib_requirements:
-		# TODO: tox-*
-		suggested_classifiers.add("Framework :: tox")
-		suggested_classifiers.add("Topic :: Software Development :: Quality Assurance")
-		suggested_classifiers.add("Topic :: Software Development :: Testing")
-		suggested_classifiers.add("Topic :: Software Development :: Testing :: Unit")
-		suggested_classifiers.add("Intended Audience :: Developers")
-	if "sphinx" in lib_requirements:
-		# TODO: sphinx-*
-		suggested_classifiers.add("Framework :: Sphinx :: Extension")
-		# TODO: suggested_classifiers.add("Framework :: Sphinx :: Theme")
-		suggested_classifiers.add("Topic :: Documentation")
-		suggested_classifiers.add("Topic :: Documentation :: Sphinx")
-		suggested_classifiers.add("Topic :: Software Development :: Documentation")
-		suggested_classifiers.add("Intended Audience :: Developers")
+	suggested_classifiers.update(classifiers_from_requirements(lib_requirements))
 
 	# file_content = dedent(
 	# 		f"""\
@@ -250,3 +206,68 @@ def classifiers(add: bool, status: Optional[int], library: Optional[bool]):
 
 
 # TODO: flags for interactive options, and clean output when piped
+
+def detect_languages(directory: pathlib.Path) -> Iterator[str]:
+	"""
+	Returns an iterator over programming languages detected in the given directory.
+
+	:param directory:
+	"""
+
+	for language, patterns in programming_languages.items():
+		for _ in chain.from_iterable(directory.rglob(pattern) for pattern in patterns):
+			yield language
+			break
+
+
+def classifiers_from_requirements(requirements: Collection[ComparableRequirement]) -> Iterator[str]:
+	"""
+	Returns an iterator over suggested trove classifiers based on the given requirements.
+
+	:param requirements:
+	"""
+
+	if "dash" in requirements:
+		yield "Framework :: Dash"
+	if "jupyter" in requirements:
+		yield "Framework :: Jupyter"
+	if "matplotlib" in requirements:
+		yield "Framework :: Matplotlib"
+	if "pygame" in requirements:
+		yield "Topic :: Software Development :: Libraries :: pygame"
+		yield "Topic :: Games/Entertainment"
+	if "arcade" in requirements:
+		yield "Topic :: Games/Entertainment"
+	if "flake8" in requirements:
+		yield "Framework :: Flake8"
+		yield "Intended Audience :: Developers"
+	if "flask" in requirements:
+		yield "Framework :: Flask"
+		yield "Topic :: Internet :: WWW/HTTP :: WSGI :: Application"
+		yield "Topic :: Internet :: WWW/HTTP :: Dynamic Content"
+	if "werkzeug" in requirements:
+		yield "Topic :: Internet :: WWW/HTTP :: WSGI :: Application"
+	if "click" in requirements or "typer" in requirements:
+		yield "Environment :: Console"
+	if "pytest" in requirements:
+		# TODO: pytest-*
+		yield "Framework :: Pytest"
+		yield "Topic :: Software Development :: Quality Assurance"
+		yield "Topic :: Software Development :: Testing"
+		yield "Topic :: Software Development :: Testing :: Unit"
+		yield "Intended Audience :: Developers"
+	if "tox" in requirements:
+		# TODO: tox-*
+		yield "Framework :: tox"
+		yield "Topic :: Software Development :: Quality Assurance"
+		yield "Topic :: Software Development :: Testing"
+		yield "Topic :: Software Development :: Testing :: Unit"
+		yield "Intended Audience :: Developers"
+	if "sphinx" in requirements:
+		# TODO: sphinx-*
+		yield "Framework :: Sphinx :: Extension"
+		# TODO: yield "Framework :: Sphinx :: Theme"
+		yield "Topic :: Documentation"
+		yield "Topic :: Documentation :: Sphinx"
+		yield "Topic :: Software Development :: Documentation"
+		yield "Intended Audience :: Developers"
