@@ -170,7 +170,7 @@ def run_repo_helper(
 		error_block = textwrap.indent(str(e), '\t')
 		raise abort(f"Unable to run 'repo_helper'.\nThe error was:\n{error_block}")
 
-	if not assert_clean(gh.target_repo, allow_config=True):
+	if not assert_clean(gh.target_repo, allow_config=("repo_helper.yml", "git_helper.yml")):
 		if force:
 			click.echo(Fore.RED("Proceeding anyway"), err=True)
 		else:

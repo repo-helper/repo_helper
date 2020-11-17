@@ -564,7 +564,6 @@ def make_isort(repo_path: pathlib.Path, templates: jinja2.Environment) -> List[s
 	# isort["settings"]["float_to_top"] = True  # TODO: Doesn't work properly; No imports get sorted or floated to the top
 	isort["settings"]["remove_redundant_aliases"] = True
 	isort["settings"]["default_section"] = "THIRDPARTY"
-	# isort["settings"]["no_lines_before"] = "LOCALFOLDER"
 	if "float_to_top" in isort["settings"]:
 		del isort["settings"]["float_to_top"]
 
