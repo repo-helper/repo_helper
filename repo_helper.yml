@@ -34,6 +34,7 @@ python_versions:
 
 # additional lines for MANIFEST.in
 manifest_additional:
+ - "include repo_helper/testing/repo_helper_example.yml"
  - "recursive-include repo_helper/templates *"
  - "recursive-include repo_helper/blocks *.rst"
  - "recursive-include repo_helper/init_repo_files *"
@@ -55,6 +56,7 @@ classifiers:
 extra_sphinx_extensions:
  - configconfig.autoconfig
  - sphinx_click
+ - sphinx_autofixture
 
 intersphinx_mapping:
  - "'jinja2': ('https://jinja.palletsprojects.com/en/2.11.x/', None)"
@@ -68,6 +70,9 @@ exclude_files:
 extras_require:
   schema:
    - lxml>=4.6.1
+  testing:
+   - pytest>=6.0.0
+   - domdf-python-tools[testing]>=1.5.0
 
 tox_testenv_extras: all
 
@@ -78,3 +83,6 @@ travis_pypi_secure: "aB17VofHqBsFpQFeEvXov5FuQh4bKtuZ4w3pUqfNS472bJJJcYXefog3sEY
 conda_channels:
  - conda-forge
  - domdfcoding
+
+conda_extras:
+ - schema

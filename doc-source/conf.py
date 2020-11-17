@@ -48,6 +48,7 @@ extensions = [
 		'seed_intersphinx_mapping',
 		'configconfig.autoconfig',
 		'sphinx_click',
+		'sphinx_autofixture',
 		]
 
 sphinxemoji_style = 'twemoji'

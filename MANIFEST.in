@@ -2,6 +2,7 @@ include __pkginfo__.py
 include LICENSE
 include requirements.txt
 prune **/__pycache__
+include repo_helper/testing/repo_helper_example.yml
 recursive-include repo_helper/templates *
 recursive-include repo_helper/blocks *.rst
 recursive-include repo_helper/init_repo_files *

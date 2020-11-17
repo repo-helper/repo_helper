@@ -30,4 +30,8 @@ __version__ = "2020.11.15"
 
 repo_root = pathlib.Path(__file__).parent
 install_requires = (repo_root / "requirements.txt").read_text(encoding="utf-8").split('\n')
-extras_require = {'schema': ['lxml>=4.6.1'], 'all': ['lxml>=4.6.1']}
+extras_require = {
+		'schema': ['lxml>=4.6.1'],
+		'testing': ['pytest>=6.0.0', 'domdf-python-tools[testing]>=1.5.0'],
+		'all': ['domdf-python-tools[testing]>=1.5.0', 'lxml>=4.6.1', 'pytest>=6.0.0']
+		}
