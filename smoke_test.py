@@ -111,7 +111,7 @@ with tempfile.TemporaryDirectory() as tmpdir:
 			# Run their tests
 			# make_pyproject(target_dir, templates)
 			# print((target_dir / "pyproject.toml").read_text())
-			# test_process = Popen(["tox", "-n", "test"])
+			# test_process = Popen(["python3", "-m", "tox", "-n", "test"])
 			# (output, err) = test_process.communicate()
 			# exit_code = test_process.wait()
 			# ret |= exit_code
@@ -119,7 +119,7 @@ with tempfile.TemporaryDirectory() as tmpdir:
 			# Test pyp517
 			# make_pyproject(target_dir, templates)
 			# print((target_dir / "pyproject.toml").read_text())
-			# tox_process = Popen(["tox", "-e", "build"])
+			# tox_process = Popen(["python3", "-m", "tox", "-e", "build"])
 			# (output, err) = tox_process.communicate()
 			# exit_code = tox_process.wait()
 			# ret |= exit_code
@@ -130,12 +130,12 @@ with tempfile.TemporaryDirectory() as tmpdir:
 			build_sdist(target_dir / "dist")
 			build_times.append(time.time() - start_time)
 
-			twine_process = Popen(["twine", "check", "dist/*"])
+			twine_process = Popen(["python3", "-m", "twine", "check", "dist/*"])
 			(output, err) = twine_process.communicate()
 			exit_code = twine_process.wait()
 			ret |= exit_code
 
-			check_wheel_process = Popen(["check-wheel-contents", "dist/"])
+			check_wheel_process = Popen(["python3", "-m", "check_wheel_contents", "dist/"])
 			(output, err) = check_wheel_process.communicate()
 			exit_code = check_wheel_process.wait()
 			ret |= exit_code
