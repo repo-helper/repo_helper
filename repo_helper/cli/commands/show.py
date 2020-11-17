@@ -209,10 +209,14 @@ def changelog(
 @show_command()
 def requirements(no_pager: bool = False, depth: int = -1):
 	"""
-	Lists the requirements of this library, and their dependencies
+	Lists the requirements of this library, and their dependencies.
 	"""
 
+	# stdlib
+	import shutil
+
 	# 3rd party
+	from domdf_python_tools.compat import importlib_metadata
 	from domdf_python_tools.iterative import make_tree
 	from domdf_python_tools.paths import PathPlus
 	from domdf_python_tools.stringlist import StringList
@@ -225,6 +229,16 @@ def requirements(no_pager: bool = False, depth: int = -1):
 	buf = StringList([f"{rh.templates.globals['pypi_name']}=={rh.templates.globals['version']}"])
 	raw_requirements = sorted(read_requirements("requirements.txt")[0])
 	tree: List[Union[str, List[str], List[Union[str, List]]]] = []
+	venv_dir = (rh.target_repo / "venv")
+
+	if venv_dir.is_dir():
+		# Use virtualenv as it exists
+		search_path = []
+
+		for directory in (venv_dir / "lib").glob("python3.*"):
+			search_path.append(str(directory / "site-packages"))
+
+		importlib_metadata.DistributionFinder.Context.path = search_path
 
 	for requirement in raw_requirements:
 		tree.append(str(requirement))
@@ -233,6 +247,10 @@ def requirements(no_pager: bool = False, depth: int = -1):
 			tree.append(deps)
 
 	buf.extend(make_tree(tree))
+
+	if shutil.get_terminal_size().lines >= len(buf):
+		# Don't use pager if fewer lines that terminal height
+		no_pager = True
 
 	if no_pager:
 		click.echo(str(buf))
