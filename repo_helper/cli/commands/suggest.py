@@ -217,6 +217,7 @@ def detect_languages(directory: pathlib.Path) -> Iterator[str]:
 	:param directory:
 	"""
 
+	# stdlib
 	from itertools import chain
 
 	for language, patterns in programming_languages.items():

@@ -64,4 +64,3 @@ def no_pager_option(help_text="Disable the output pager.") -> Callable:
 			default=False,
 			help=help_text,
 			)
-
