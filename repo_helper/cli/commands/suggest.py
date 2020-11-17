@@ -25,23 +25,17 @@ Suggest trove classifiers and keywords.
 
 # stdlib
 import pathlib
-import sys
 from functools import partial
-from itertools import chain
-from typing import Collection, Iterator, Optional
+from typing import Iterator, Optional
 
 # 3rd party
 import click
 from consolekit import CONTEXT_SETTINGS
-from consolekit.input import confirm
-from shippinglabel.requirements import ComparableRequirement, combine_requirements, read_requirements
 
 # this package
 from repo_helper.cli import cli_group
-from repo_helper.cli.options import autocomplete_option
-from repo_helper.core import RepoHelper
 
-__all__ = ["suggest", "suggest_command", "detect_languages", "classifiers_from_requirements"]
+__all__ = ["suggest", "suggest_command", "detect_languages"]
 
 development_status_options = [
 		"Planning",
@@ -75,20 +69,20 @@ def suggest() -> None:
 suggest_command = partial(suggest.command, context_settings=CONTEXT_SETTINGS)
 
 
-@autocomplete_option(
+@click.option(
 		"--add/--no-add",
 		is_flag=True,
 		default=None,
 		help="Add the classifiers to the 'repo_helper.yml' file.",
 		)
-@autocomplete_option(
+@click.option(
 		"-s",
 		"--status",
 		type=click.IntRange(1, 7),
 		default=None,
 		help="The Development Status of this project.",
 		)
-@autocomplete_option(
+@click.option(
 		"-l",
 		"--library/--not-library",
 		is_flag=True,
@@ -101,9 +95,17 @@ def classifiers(add: bool, status: Optional[int], library: Optional[bool]):
 	Suggest trove classifiers based on repository metadata.
 	"""
 
+	# stdlib
+	import sys
+
 	# 3rd party
-	from consolekit.input import choice
+	from consolekit.input import choice, confirm
 	from domdf_python_tools.paths import PathPlus
+	from shippinglabel.classifiers import classifiers_from_requirements
+	from shippinglabel.requirements import combine_requirements, read_requirements
+
+	# this package
+	from repo_helper.core import RepoHelper
 
 	rh = RepoHelper(PathPlus.cwd())
 	config = rh.templates.globals
@@ -215,60 +217,9 @@ def detect_languages(directory: pathlib.Path) -> Iterator[str]:
 	:param directory:
 	"""
 
+	from itertools import chain
+
 	for language, patterns in programming_languages.items():
 		for _ in chain.from_iterable(directory.rglob(pattern) for pattern in patterns):
 			yield language
 			break
-
-
-def classifiers_from_requirements(requirements: Collection[ComparableRequirement]) -> Iterator[str]:
-	"""
-	Returns an iterator over suggested trove classifiers based on the given requirements.
-
-	:param requirements:
-	"""
-
-	if "dash" in requirements:
-		yield "Framework :: Dash"
-	if "jupyter" in requirements:
-		yield "Framework :: Jupyter"
-	if "matplotlib" in requirements:
-		yield "Framework :: Matplotlib"
-	if "pygame" in requirements:
-		yield "Topic :: Software Development :: Libraries :: pygame"
-		yield "Topic :: Games/Entertainment"
-	if "arcade" in requirements:
-		yield "Topic :: Games/Entertainment"
-	if "flake8" in requirements:
-		yield "Framework :: Flake8"
-		yield "Intended Audience :: Developers"
-	if "flask" in requirements:
-		yield "Framework :: Flask"
-		yield "Topic :: Internet :: WWW/HTTP :: WSGI :: Application"
-		yield "Topic :: Internet :: WWW/HTTP :: Dynamic Content"
-	if "werkzeug" in requirements:
-		yield "Topic :: Internet :: WWW/HTTP :: WSGI :: Application"
-	if "click" in requirements or "typer" in requirements:
-		yield "Environment :: Console"
-	if "pytest" in requirements:
-		# TODO: pytest-*
-		yield "Framework :: Pytest"
-		yield "Topic :: Software Development :: Quality Assurance"
-		yield "Topic :: Software Development :: Testing"
-		yield "Topic :: Software Development :: Testing :: Unit"
-		yield "Intended Audience :: Developers"
-	if "tox" in requirements:
-		# TODO: tox-*
-		yield "Framework :: tox"
-		yield "Topic :: Software Development :: Quality Assurance"
-		yield "Topic :: Software Development :: Testing"
-		yield "Topic :: Software Development :: Testing :: Unit"
-		yield "Intended Audience :: Developers"
-	if "sphinx" in requirements:
-		# TODO: sphinx-*
-		yield "Framework :: Sphinx :: Extension"
-		# TODO: yield "Framework :: Sphinx :: Theme"
-		yield "Topic :: Documentation"
-		yield "Topic :: Documentation :: Sphinx"
-		yield "Topic :: Software Development :: Documentation"
-		yield "Intended Audience :: Developers"

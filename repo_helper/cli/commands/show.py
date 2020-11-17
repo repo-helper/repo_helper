@@ -35,7 +35,7 @@ from consolekit.options import colour_option
 
 # this package
 from repo_helper.cli import cli_group
-from repo_helper.cli.options import autocomplete_option, no_pager_option
+from repo_helper.cli.options import no_pager_option
 
 __all__ = ["show", "show_command", "version", "log", "changelog"]
 
@@ -80,27 +80,27 @@ def version() -> None:
 			break
 
 
-@autocomplete_option(
+@click.option(
 		"-n",
 		"--entries",
 		type=click.INT,
 		default=None,
 		help="Maximum number of entries to display.",
 		)
-@autocomplete_option(
+@click.option(
 		"-r",
 		"--reverse",
 		is_flag=True,
 		default=False,
 		help="Print entries in reverse order.",
 		)
-@autocomplete_option(
+@click.option(
 		"--from-date",
 		type=click.DateTime(),
 		default=None,
 		help="Show commits after the given date.",
 		)
-@autocomplete_option(
+@click.option(
 		"--from-tag",
 		type=click.STRING,
 		default=None,
@@ -143,14 +143,14 @@ def log(
 	return 0
 
 
-@autocomplete_option(
+@click.option(
 		"-n",
 		"--entries",
 		type=click.INT,
 		default=None,
 		help="Maximum number of entries to display.",
 		)
-@autocomplete_option(
+@click.option(
 		"-r",
 		"--reverse",
 		is_flag=True,
@@ -199,7 +199,7 @@ def changelog(
 
 
 @no_pager_option()
-@autocomplete_option(
+@click.option(
 		"-d",
 		"--depth",
 		type=click.INT,

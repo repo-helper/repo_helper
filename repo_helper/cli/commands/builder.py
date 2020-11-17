@@ -32,18 +32,17 @@ from domdf_python_tools.typing import PathLike
 
 # this package
 from repo_helper.cli import cli_command
-from repo_helper.cli.options import autocomplete_option
 
 __all__ = ["build"]
 
 
 @click.argument("repository", type=click.STRING, default='.')
-@autocomplete_option("--build-dir", type=click.STRING, default=None, help="The temporary build directory.")
-@autocomplete_option("-o", "--out-dir", type=click.STRING, default=None, help="The output directory.")
-@autocomplete_option("-v", "--verbose", is_flag=True, default=False, help="Enable verbose output.")
-@autocomplete_option("-b", "--binary", is_flag=True, default=False, help="Build a binary wheel.")
-@autocomplete_option("-s", "--source", is_flag=True, default=False, help="Build a source distribution.")
-@autocomplete_option("-c", "--conda", is_flag=True, default=False, help="Build a conda distribution.")
+@click.option("--build-dir", type=click.STRING, default=None, help="The temporary build directory.")
+@click.option("-o", "--out-dir", type=click.STRING, default=None, help="The output directory.")
+@click.option("-v", "--verbose", is_flag=True, default=False, help="Enable verbose output.")
+@click.option("-b", "--binary", is_flag=True, default=False, help="Build a binary wheel.")
+@click.option("-s", "--source", is_flag=True, default=False, help="Build a source distribution.")
+@click.option("-c", "--conda", is_flag=True, default=False, help="Build a conda distribution.")
 @cli_command()
 def build(
 		repository: PathLike = '.',

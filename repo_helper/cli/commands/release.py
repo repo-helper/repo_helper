@@ -45,7 +45,8 @@ from typing_extensions import TypedDict
 
 # this package
 from repo_helper.cli import cli_group
-from repo_helper.cli.options import commit_message_option, commit_option, force_option
+from repo_helper.cli.options import force_option
+from southwark.click import commit_option, commit_message_option
 from repo_helper.cli.utils import commit_changed_files
 from repo_helper.configupdater2 import ConfigUpdater
 from repo_helper.core import RepoHelper

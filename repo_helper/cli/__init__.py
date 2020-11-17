@@ -48,7 +48,8 @@ from domdf_python_tools.paths import PathPlus
 
 # this package
 from repo_helper import __version__
-from repo_helper.cli.options import commit_message_option, commit_option, force_option
+from repo_helper.cli.options import force_option
+from southwark.click import commit_option, commit_message_option
 from repo_helper.cli.utils import run_repo_helper
 
 __all__ = ["cli", "cli_command", "cli_group"]

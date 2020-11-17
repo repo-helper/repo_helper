@@ -24,63 +24,15 @@ Decorators to add options to click commands.
 #
 
 # stdlib
-from typing import Callable, Optional
+from typing import Callable
 
 # 3rd party
 import click
 
 __all__ = [
-		"commit_message_option",
-		"commit_option",
 		"force_option",
-		"autocomplete_option",
 		"no_pager_option",
 		]
-
-
-def commit_option(default: Optional[bool]) -> Callable:
-	"""
-	Decorator to add the ``--commit / --no-commit`` option to a click command.
-
-	:param default: Whether to commit automatically.
-
-	* :py:obj:`None` -- Ask first
-	* :py:obj:`True` -- Commit automatically
-	* :py:obj:`False` -- Don't commit
-	"""
-
-	help_text = "Commit or do not commit any changed files.  [default: {default}]"
-
-	if default is True:
-		default_text = "Commit automatically"
-	elif default is False:
-		default_text = "Don't commit"
-	else:
-		default_text = "Ask first"
-
-	return autocomplete_option(
-			"-y/-n",
-			"--commit/--no-commit",
-			default=default,
-			help=help_text.format(default=default_text),
-			)
-
-
-def commit_message_option(default: str) -> Callable:
-	"""
-	Decorator to add the ``-m / --message`` option to a click command.
-
-	:param default: The default commit message.
-	"""
-
-	return autocomplete_option(
-			"-m",
-			"--message",
-			type=click.STRING,
-			default=default,
-			help="The commit message to use.",
-			show_default=True,
-			)
 
 
 def force_option(help_text: str) -> Callable:
@@ -90,7 +42,7 @@ def force_option(help_text: str) -> Callable:
 	:param help_text: The help text for the option.
 	"""
 
-	return autocomplete_option(
+	return click.option(
 			"-f",
 			"--force",
 			is_flag=True,
@@ -106,13 +58,10 @@ def no_pager_option(help_text="Disable the output pager.") -> Callable:
 	:param help_text: The help text for the option.
 	"""
 
-	return autocomplete_option(
+	return click.option(
 			"--no-pager",
 			is_flag=True,
 			default=False,
 			help=help_text,
 			)
 
-
-# autocomplete_option = partial(click.option, autocompletion=get_env_vars)
-autocomplete_option = click.option

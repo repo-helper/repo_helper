@@ -40,7 +40,9 @@ from jinja2 import BaseLoader, Environment, StrictUndefined
 
 # this package
 from repo_helper.cli import cli_command
-from repo_helper.cli.options import commit_message_option, commit_option, force_option
+from repo_helper.cli.options import force_option
+from southwark.click import commit_option, commit_message_option
+
 from repo_helper.cli.utils import run_repo_helper
 from repo_helper.templates import init_repo_template_dir
 

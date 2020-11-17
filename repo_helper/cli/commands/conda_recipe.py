@@ -28,12 +28,11 @@ import click
 
 # this package
 from repo_helper.cli import cli_command
-from repo_helper.cli.options import autocomplete_option
 
 __all__ = ["make_recipe"]
 
 
-@autocomplete_option("-o", "--out-dir", type=click.STRING, default="./conda/", help="The output directory.")
+@click.option("-o", "--out-dir", type=click.STRING, default="./conda/", help="The output directory.")
 @cli_command()
 def make_recipe(out_dir: str = "./conda/"):
 	"""
