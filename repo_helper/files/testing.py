@@ -28,6 +28,7 @@ import os.path
 import pathlib
 import posixpath
 import re
+import warnings
 from typing import Any, List
 
 # 3rd party
@@ -35,7 +36,12 @@ import jinja2
 from domdf_python_tools.paths import PathPlus
 from domdf_python_tools.typing import PathLike
 from shippinglabel import normalize
-from shippinglabel.requirements import ComparableRequirement, RequirementsManager, read_requirements
+from shippinglabel.requirements import (
+		ComparableRequirement,
+		RequirementsManager,
+		combine_requirements,
+		read_requirements
+		)
 
 # this package
 from repo_helper.configupdater2 import ConfigUpdater
@@ -563,7 +569,10 @@ def make_isort(repo_path: pathlib.Path, templates: jinja2.Environment) -> List[s
 		del isort["settings"]["float_to_top"]
 
 	if templates.globals["enable_tests"]:
-		test_requirements = read_requirements(repo_path / templates.globals["tests_dir"] / "requirements.txt")[0]
+		test_requirements = read_requirements(
+				repo_path / templates.globals["tests_dir"] / "requirements.txt",
+				include_invalid=True,
+				)[0]
 	else:
 		test_requirements = set()
 
@@ -612,6 +621,19 @@ class TestsRequirementsManager(RequirementsManager):
 			self.target_requirements.add(ComparableRequirement("coverage-pyver-pragma>=0.0.6"))
 		if self._globals["pypi_name"] != "domdf_python_tools":
 			self.target_requirements.add(ComparableRequirement("domdf-python-tools[testing]>=1.5.0"))
+
+	def merge_requirements(self) -> List[str]:
+		current_requirements, comments, invalid_lines = read_requirements(self.req_file, include_invalid=True)
+
+		for line in invalid_lines:
+			if line.startswith("git+"):
+				comments.append(line)
+			else:
+				warnings.warn(f"Ignored invalid requirement {line!r}")
+
+		self.target_requirements = set(combine_requirements(*current_requirements, *self.target_requirements))
+
+		return comments
 
 
 @management.register("test_requirements", ["enable_tests"])
