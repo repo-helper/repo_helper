@@ -44,12 +44,12 @@ from typing import Optional
 # 3rd party
 import click
 from consolekit import CONTEXT_SETTINGS, click_group
+from consolekit.options import force_option
 from domdf_python_tools.paths import PathPlus
 from southwark.click import commit_message_option, commit_option
 
 # this package
 from repo_helper import __version__
-from repo_helper.cli.options import force_option
 from repo_helper.cli.utils import run_repo_helper
 
 __all__ = ["cli", "cli_command", "cli_group"]

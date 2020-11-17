@@ -33,6 +33,7 @@ from typing import Callable, Dict, List, Optional, Tuple, cast
 import click
 from click import Command
 from consolekit import CONTEXT_SETTINGS
+from consolekit.options import force_option
 from consolekit.terminal_colours import Fore
 from consolekit.utils import abort
 from domdf_python_tools.paths import PathPlus
@@ -46,7 +47,6 @@ from typing_extensions import TypedDict
 
 # this package
 from repo_helper.cli import cli_group
-from repo_helper.cli.options import force_option
 from repo_helper.cli.utils import commit_changed_files
 from repo_helper.configupdater2 import ConfigUpdater
 from repo_helper.core import RepoHelper
