@@ -25,11 +25,15 @@ FAKE_DATE = datetime.date(2020, 7, 25)
 
 
 @pytest.mark.skipif(condition=os.sep == '\\', reason="Different test for platforms where os.sep == \\")
-def test_via_run_repo_helper_forward(temp_empty_repo, capsys, file_regression: FileRegressionFixture, monkeypatch):
+def test_via_run_repo_helper_forward(
+		temp_empty_repo,
+		capsys,
+		file_regression: FileRegressionFixture,
+		monkeypatch,
+		example_config,
+		):
 
-	(temp_empty_repo.path / "repo_helper.yml").write_text(
-			(pathlib.Path(__file__).parent / "repo_helper.yml_").read_text()
-			)
+	(temp_empty_repo.path / "repo_helper.yml").write_text(example_config)
 
 	run_repo_helper(temp_empty_repo.path, force=False, initialise=True, commit=True, message="Testing Testing")
 
@@ -49,7 +53,11 @@ def test_via_run_repo_helper_forward(temp_empty_repo, capsys, file_regression: F
 
 @pytest.mark.skipif(condition=os.sep == '/', reason="Different test for platforms where os.sep == /")
 def test_via_run_repo_helper_backward(
-		temp_empty_repo, capsys, file_regression: FileRegressionFixture, monkeypatch
+		temp_empty_repo,
+		capsys,
+		file_regression: FileRegressionFixture,
+		monkeypatch,
+		example_config,
 		):
 
 	# Monkeypatch dulwich so it doesn't try to use the global config.
@@ -61,9 +69,7 @@ def test_via_run_repo_helper_backward(
 
 	monkeypatch.setattr(repo_helper.utils, "today", FAKE_DATE)
 
-	(temp_empty_repo.path / "repo_helper.yml").write_text(
-			(pathlib.Path(__file__).parent / "repo_helper.yml_").read_text()
-			)
+	(temp_empty_repo.path / "repo_helper.yml").write_text(example_config)
 
 	run_repo_helper(temp_empty_repo.path, force=False, initialise=True, commit=True, message="Testing Testing")
 
@@ -86,15 +92,14 @@ def test_via_Repo_class(
 		capsys,
 		file_regression: FileRegressionFixture,
 		data_regression: DataRegressionFixture,
-		monkeypatch
+		monkeypatch,
+		example_config,
 		):
 
 	monkeypatch.setattr(repo_helper.utils, "today", FAKE_DATE)
 
 	with in_directory(temp_repo.path):
-		(temp_repo.path / "repo_helper.yml").write_text(
-				(pathlib.Path(__file__).parent / "repo_helper.yml_").read_text()
-				)
+		(temp_repo.path / "repo_helper.yml").write_text(example_config)
 		(temp_repo.path / "requirements.txt").touch()
 		(temp_repo.path / "README.rst").touch()
 		(temp_repo.path / "doc-source").mkdir()

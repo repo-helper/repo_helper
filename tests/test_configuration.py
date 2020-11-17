@@ -66,6 +66,6 @@ def test_get_gh_actions_python_versions(data_regression: DataRegressionFixture, 
 			)
 
 
-def test_parse_yaml(tmp_pathplus, data_regression):
-	(tmp_pathplus / "repo_helper.yml").write_text((pathlib.Path(__file__).parent / "repo_helper.yml_").read_text())
+def test_parse_yaml(tmp_pathplus, data_regression, example_config):
+	(tmp_pathplus / "repo_helper.yml").write_text(example_config)
 	data_regression.check(parse_yaml(tmp_pathplus))

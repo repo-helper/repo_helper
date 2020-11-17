@@ -13,10 +13,12 @@ from pytest_regressions.file_regression import FileRegressionFixture
 from repo_helper.cli.commands.conda_recipe import make_recipe
 
 
-def test_conda_recipe(tmp_pathplus, file_regression: FileRegressionFixture):
-	(tmp_pathplus / "repo_helper.yml").write_text(
-			(pathlib.Path(__file__).parent.parent / "repo_helper.yml_").read_text()
-			)
+def test_conda_recipe(
+		tmp_pathplus,
+		file_regression: FileRegressionFixture,
+		example_config,
+		):
+	(tmp_pathplus / "repo_helper.yml").write_text(example_config)
 	(tmp_pathplus / "requirements.txt").write_lines([
 			"apeye>=0.3.0",
 			"attrs>=20.2.0",
@@ -48,10 +50,12 @@ def test_conda_recipe(tmp_pathplus, file_regression: FileRegressionFixture):
 	check_file_output(tmp_pathplus / "conda/meta.yaml", file_regression)
 
 
-def test_conda_recipe_specifiers(tmp_pathplus, file_regression: FileRegressionFixture):
-	(tmp_pathplus / "repo_helper.yml").write_text(
-			(pathlib.Path(__file__).parent.parent / "repo_helper.yml_").read_text()
-			)
+def test_conda_recipe_specifiers(
+		tmp_pathplus,
+		file_regression: FileRegressionFixture,
+		example_config,
+		):
+	(tmp_pathplus / "repo_helper.yml").write_text(example_config)
 	(tmp_pathplus / "requirements.txt").write_lines([
 			'apeye>=0.3.0; python_version < "3.10"',
 			"attrs[extra]>=20.2.0",

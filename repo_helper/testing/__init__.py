@@ -47,7 +47,7 @@ import repo_helper.utils
 from repo_helper.files.linting import lint_fix_list, lint_warn_list
 from repo_helper.templates import template_dir
 
-__all__ = ["demo_environment", "original_datadir", "temp_repo", "temp_empty_repo"]
+__all__ = ["demo_environment", "original_datadir", "temp_repo", "temp_empty_repo", "example_config"]
 
 
 @pytest.fixture()
@@ -188,8 +188,8 @@ def temp_empty_repo(tmp_pathplus, monkeypatch) -> Repo:
 	return repo
 
 
-@pytest.fixture
-def temp_repo(temp_empty_repo) -> Repo:
+@pytest.fixture()
+def temp_repo(temp_empty_repo, example_config) -> Repo:
 	"""
 	Pytest fixture to return a git repository in a temporary location.
 
@@ -199,8 +199,15 @@ def temp_repo(temp_empty_repo) -> Repo:
 	:data:`repo_helper.utils.today` is monkeypatched to return 25th July 2020.
 	"""
 
-	(temp_empty_repo.path / "repo_helper.yml").write_text(
-			(pathlib.Path(__file__).parent / "repo_helper_example.yml").read_text()
-			)
+	(temp_empty_repo.path / "repo_helper.yml").write_text(example_config)
 
 	return temp_empty_repo
+
+
+@pytest.fixture(scope="session")
+def example_config() -> str:
+	"""
+	Returns the contents of the example ``repo_helper.yml`` file.
+	"""
+
+	return (pathlib.Path(__file__).parent / "repo_helper_example.yml").read_text()
