@@ -40,7 +40,6 @@ import jinja2
 import pytest  # nodep
 from domdf_python_tools.paths import PathPlus
 from dulwich.config import StackedConfig
-from pytest import fixture  # nodep
 from southwark.repo import Repo
 
 # this package
@@ -48,11 +47,11 @@ import repo_helper.utils
 from repo_helper.files.linting import lint_fix_list, lint_warn_list
 from repo_helper.templates import template_dir
 
-__all__ = ["demo_environment", "original_datadir", "temp_repo", "temp_empty_repo", "foo", "bar", "baz"]
+__all__ = ["demo_environment", "original_datadir", "temp_repo", "temp_empty_repo"]
 
 
 @pytest.fixture()
-def demo_environment():
+def demo_environment() -> jinja2.Environment:
 	"""
 	Pytest fixture to create a jinja2 environment for use in tests.
 
