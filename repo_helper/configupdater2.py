@@ -215,7 +215,7 @@ class BlockBuilder:
 		comment = Comment(self._container)
 		if not text.startswith(comment_prefix):
 			text = f"{comment_prefix} {text}"
-		if not text.endswith("\n"):
+		if not text.endswith('\n'):
 			text = f"{text}\n"
 		comment.add_line(text)
 		self._container.structure.insert(self._idx, comment)
@@ -259,7 +259,7 @@ class BlockBuilder:
 		space = Space()
 
 		for line in range(newlines):
-			space.add_line("\n")
+			space.add_line('\n')
 
 		self._container.structure.insert(self._idx, space)
 		self._idx += 1
@@ -384,7 +384,7 @@ class Section(Block, Container, MutableMapping):
 			s += str(entry)
 
 		if s.splitlines()[-1].strip():
-			s += "\n"
+			s += '\n'
 
 		return s
 
@@ -537,7 +537,7 @@ class Option(Block):
 	def _join_multiline_value(self):
 		if not self._multiline_value_joined and not self._value_is_none:
 			# do what `_join_multiline_value` in ConfigParser would do
-			self._value = "\n".join(x for x in self._values if x and not x.lstrip()[0] in ";#").rstrip()
+			self._value = '\n'.join(x for x in self._values if x and not x.lstrip()[0] in ";#").rstrip()
 			self._multiline_value_joined = True
 
 	def __str__(self) -> str:
@@ -547,7 +547,7 @@ class Option(Block):
 			return f"{self._key}\n"
 		if self._space_around_delimiters:
 			# no space is needed if we use multi-line arguments
-			suffix = '' if str(self._value).startswith("\n") else ' '
+			suffix = '' if str(self._value).startswith('\n') else ' '
 			delim = f" {self._delimiter}{suffix}"
 		else:
 			delim = self._delimiter
@@ -682,7 +682,7 @@ class ConfigUpdater(Container[Block], MutableMapping):
 		if delimiters == ('=', ':'):
 			self._optcre = self.OPTCRE_NV if allow_no_value else self.OPTCRE
 		else:
-			d = "|".join(re.escape(d) for d in delimiters)
+			d = '|'.join(re.escape(d) for d in delimiters)
 			if allow_no_value:
 				self._optcre = re.compile(self._OPT_NV_TMPL.format(delim=d), re.VERBOSE)
 			else:
@@ -873,7 +873,7 @@ class ConfigUpdater(Container[Block], MutableMapping):
 			if (cursect is not None and optname and cur_indent_level > indent_level):
 				cursect[optname].append(value)
 				self.last_item.last_item.add_line(line)  # HOOK
-			elif (cursect is not None and optname and line[0] in {";", "#"}):
+			elif (cursect is not None and optname and line[0] in {';', '#'}):
 				cursect[optname].append(value)
 				self.last_item.last_item.add_line(line)  # HOOK
 			# a section header or option header?
@@ -1201,22 +1201,22 @@ class ConfigUpdater(Container[Block], MutableMapping):
 def convert_to_string(value, key):
 	if isinstance(value, str):
 
-		split_lines = value.split("\n")
+		split_lines = value.split('\n')
 		buf = [split_lines[0].lstrip()]
 		for line in split_lines[1:]:
 			buf.append(re.sub(r"^\s*", "    ", line))
 
-		return "\n".join(buf)
+		return '\n'.join(buf)
 
 	elif isinstance(value, Mapping):
 		colon_joined_mapping = [f"{k}: {convert_to_string(v, key)}" for k, v in value.items()]
 
-		return indent("\n" + "\n".join(colon_joined_mapping), "    ")
+		return indent('\n' + '\n'.join(colon_joined_mapping), "    ")
 
 	elif isinstance(value, Iterable):
 		comma_joined_value = ", ".join(value)
 		if (len(comma_joined_value) + len(key)) > 75:
-			return indent("\n" + "\n".join(value), "    ")
+			return indent('\n' + '\n'.join(value), "    ")
 		else:
 			return comma_joined_value
 

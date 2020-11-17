@@ -143,7 +143,7 @@ with tempfile.TemporaryDirectory() as tmpdir:
 		if is_running_on_actions():
 			print("::endgroup::")
 
-print("\n")
+print('\n')
 if is_running_on_actions():
 	print("::group::Summary")
 

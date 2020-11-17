@@ -18,9 +18,9 @@ def test_wizard(temp_empty_repo, file_regression):
 	with in_directory(temp_empty_repo.path):
 		runner = CliRunner()
 
-		stdin = "\n".join([
-				"n",  # Are you sure you want to continue?
-				]) + "\n"
+		stdin = '\n'.join([
+				'n',  # Are you sure you want to continue?
+				]) + '\n'
 
 		result: Result = runner.invoke(wizard, catch_exceptions=False, input=stdin, obj={})
 		assert result.exit_code == 1
@@ -33,8 +33,8 @@ def test_wizard(temp_empty_repo, file_regression):
 
 		runner = CliRunner()
 
-		stdin = "\n".join([
-				"y",  # Are you sure you want to continue?
+		stdin = '\n'.join([
+				'y',  # Are you sure you want to continue?
 				"hello-world",  # The name of the library/project.
 				"Joe Bloggs",  # The name of the author.
 				"joe@example.com",  # The email address of the author
@@ -43,7 +43,7 @@ def test_wizard(temp_empty_repo, file_regression):
 				"2020-2021",  # The copyright years for the library.
 				"MIT",  # The SPDX identifier for the license
 				"a short, one-line description for the project",  # Enter a short, one-line description for the project.
-				]) + "\n"
+				]) + '\n'
 
 		result = runner.invoke(wizard, catch_exceptions=False, input=stdin, obj={})
 		assert not result.exception
@@ -54,10 +54,10 @@ def test_wizard(temp_empty_repo, file_regression):
 
 		runner = CliRunner()
 
-		stdin = "\n".join([
-				"y",  # Are you sure you want to continue?
-				"n",  # Are you sure you want to continue?
-				]) + "\n"
+		stdin = '\n'.join([
+				'y',  # Are you sure you want to continue?
+				'n',  # Are you sure you want to continue?
+				]) + '\n'
 
 		result = runner.invoke(wizard, catch_exceptions=False, input=stdin, obj={})
 		assert result.exit_code == 1
@@ -77,8 +77,8 @@ def test_wizard_validation(temp_empty_repo, file_regression):
 
 		runner = CliRunner()
 
-		stdin = "\n".join([
-				"y",  # Are you sure you want to continue?
+		stdin = '\n'.join([
+				'y',  # Are you sure you want to continue?
 				"hello-world",  # The name of the library/project.
 				"Joe Bloggs",  # The name of the author.
 				"joeexample.com",  # The email address of the author
@@ -91,7 +91,7 @@ def test_wizard_validation(temp_empty_repo, file_regression):
 				'',  # Enter a short, one-line description for the project.
 				'',
 				"a short, one-line description for the project",
-				]) + "\n"
+				]) + '\n'
 
 		result: Result = runner.invoke(wizard, catch_exceptions=False, input=stdin, obj={})
 		stdout: List[str] = result.stdout.splitlines()
@@ -113,14 +113,14 @@ def test_wizard_git_config(temp_empty_repo, file_regression):
 
 		(temp_empty_repo.path / ".git" / "config").write_lines([
 				"[user]",
-				"	name = Guido",
-				"	email = guido@python.org",
+				"\tname = Guido",
+				"\temail = guido@python.org",
 				])
 
 		runner = CliRunner()
 
-		stdin = "\n".join([
-				"y",  # Are you sure you want to continue?
+		stdin = '\n'.join([
+				'y',  # Are you sure you want to continue?
 				"hello-world",  # The name of the library/project.
 				'',  # The name of the author.
 				'',  # The email address of the author
@@ -129,7 +129,7 @@ def test_wizard_git_config(temp_empty_repo, file_regression):
 				'',  # The copyright years for the library.
 				"GPLv3",  # The SPDX identifier for the license
 				"a short, one-line description for the project",
-				]) + "\n"
+				]) + '\n'
 
 		result: Result = runner.invoke(wizard, catch_exceptions=False, input=stdin, obj={})
 		assert not result.exception
@@ -152,8 +152,8 @@ def test_wizard_env_vars(temp_empty_repo, file_regression, monkeypatch):
 	with in_directory(temp_empty_repo.path):
 		runner = CliRunner()
 
-		stdin = "\n".join([
-				"y",  # Are you sure you want to continue?
+		stdin = '\n'.join([
+				'y',  # Are you sure you want to continue?
 				"hello-world",  # The name of the library/project.
 				'',  # The name of the author.
 				'',  # The email address of the author
@@ -162,7 +162,7 @@ def test_wizard_env_vars(temp_empty_repo, file_regression, monkeypatch):
 				'',  # The copyright years for the library.
 				"GPLv3",  # The SPDX identifier for the license
 				"a short, one-line description for the project",
-				]) + "\n"
+				]) + '\n'
 
 		result: Result = runner.invoke(wizard, catch_exceptions=False, input=stdin, obj={})
 		assert not result.exception
@@ -182,8 +182,8 @@ def test_wizard_not_git(tmp_pathplus, file_regression, monkeypatch):
 	with in_directory(tmp_pathplus):
 		runner = CliRunner()
 
-		stdin = "\n".join([
-				"y",  # Are you sure you want to continue?
+		stdin = '\n'.join([
+				'y',  # Are you sure you want to continue?
 				"hello-world",  # The name of the library/project.
 				'',  # The name of the author.
 				'',  # The email address of the author
@@ -192,7 +192,7 @@ def test_wizard_not_git(tmp_pathplus, file_regression, monkeypatch):
 				'',  # The copyright years for the library.
 				"GPLv3",  # The SPDX identifier for the license
 				"a short, one-line description for the project",
-				]) + "\n"
+				]) + '\n'
 
 		result: Result = runner.invoke(wizard, catch_exceptions=False, input=stdin, obj={})
 		assert result.exit_code == 1
@@ -200,5 +200,5 @@ def test_wizard_not_git(tmp_pathplus, file_regression, monkeypatch):
 		stdout: List[str] = result.stdout.splitlines()
 		assert re.match(r"The directory .* is not a git repository\.", stdout[0][5:])
 		assert stdout[1] == "You may need to run 'git init' in that directory first."
-		assert stdout[2] == "\x1b[39mAborted!"
+		assert stdout[2] == "\u001b[39mAborted!"
 		assert not (tmp_pathplus / "repo_helper.yml").is_file()

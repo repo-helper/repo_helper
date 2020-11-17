@@ -167,7 +167,7 @@ def run_repo_helper(
 	try:
 		gh = RepoHelper(path)
 	except FileNotFoundError as e:
-		error_block = textwrap.indent(str(e), "	")
+		error_block = textwrap.indent(str(e), '\t')
 		raise abort(f"Unable to run 'repo_helper'.\nThe error was:\n{error_block}")
 
 	if not assert_clean(gh.target_repo, allow_config=True):
@@ -192,7 +192,7 @@ def run_repo_helper(
 				message=message.encode("UTF-8"),
 				)
 	except CommitError as e:
-		indented_error = "\n".join(f"\t{line}" for line in textwrap.wrap(str(e)))
+		indented_error = '\n'.join(f"\t{line}" for line in textwrap.wrap(str(e)))
 		click.echo(f"Unable to commit changes. The error was:\n\n{indented_error}", err=True)
 		return 1
 

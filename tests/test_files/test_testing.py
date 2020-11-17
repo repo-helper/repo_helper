@@ -176,9 +176,9 @@ pytest-timeout>=1.4.2
 
 
 def test_ensure_tests_requirements_extras(tmp_pathplus, demo_environment):
-	(tmp_pathplus / "requirements.txt").write_text('domdf_python_tools>=1.5.0')
+	(tmp_pathplus / "requirements.txt").write_text("domdf_python_tools>=1.5.0")
 	(tmp_pathplus / "tests").mkdir()
-	(tmp_pathplus / "tests" / "requirements.txt").write_text('some_package[extra]>=1.5.0')
+	(tmp_pathplus / "tests" / "requirements.txt").write_text("some_package[extra]>=1.5.0")
 
 	managed_files = ensure_tests_requirements(tmp_pathplus, demo_environment)
 	assert managed_files == [posixpath.join("tests", "requirements.txt")]

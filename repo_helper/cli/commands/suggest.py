@@ -53,11 +53,11 @@ development_status_options = [
 		]
 
 programming_languages = {
-		"C": ["*.[cChH]"],
+		'C': ["*.[cChH]"],
 		"C++": ["*.cpp", "*.CPP"],
 		"Cython": ["*.pyx", "*.PYX"],
 		"JavaScript": ["*.js", "*.JS"],
-		"R": ["*.[rR]"],
+		'R': ["*.[rR]"],
 		"Ruby": ["*.rb", "*.RB"],
 		"Rust": ["*.rs", "*.RS"],
 		"Unix Shell": ["*.sh", "*.SH"],  # TODO: SQL
@@ -238,14 +238,14 @@ def classifiers(add: bool, status: Optional[int], library: Optional[bool]):
 
 			yaml.explicit_start = True  # type: ignore
 
-			with (rh.target_repo / "repo_helper.yml").open("w") as fp:
+			with (rh.target_repo / "repo_helper.yml").open('w') as fp:
 				yaml.dump(data, fp)
 
 		else:
 			yaml.explicit_start = False  # type: ignore
 
-			with (rh.target_repo / "repo_helper.yml").open("a") as fp:
-				fp.write("\n")
+			with (rh.target_repo / "repo_helper.yml").open('a') as fp:
+				fp.write('\n')
 				yaml.dump({"classifiers": sorted(suggested_classifiers)}, fp)
 
 

@@ -89,7 +89,7 @@ def indent_with_tab(
 		to all non-empty lines that do not consist solely of whitespace characters.
 	"""
 
-	return textwrap.indent(text, "\t" * depth, predicate=predicate)
+	return textwrap.indent(text, '\t' * depth, predicate=predicate)
 
 
 def pformat_tabs(
@@ -260,7 +260,7 @@ def indent_join(iterable: Iterable[str]) -> str:
 	if len(iterable) > 1:
 		if not iterable[0] == '':
 			iterable.insert(0, '')
-	return indent_with_tab(textwrap.dedent("\n".join(iterable)))
+	return indent_with_tab(textwrap.dedent('\n'.join(iterable)))
 
 
 class IniConfigurator:
@@ -308,7 +308,7 @@ class IniConfigurator:
 		ini_file = PathPlus(self.base_path / self.filename)
 
 		for section_name in self.managed_sections:
-			getattr(self, re.sub("[:.-]", "_", section_name))()
+			getattr(self, re.sub("[:.-]", '_', section_name))()
 
 		self.merge_existing(ini_file)
 		self._output.append(str(self._ini))

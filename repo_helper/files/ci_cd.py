@@ -254,7 +254,7 @@ def make_github_manylinux(repo_path: pathlib.Path, templates: jinja2.Environment
 
 		file.write_clean(actions.render(
 				wheel_py_versions=wheel_py_versions,
-				PYVERSIONS=" ".join(PYVERSIONS),
+				PYVERSIONS=' '.join(PYVERSIONS),
 				))
 	elif file.is_file():
 		file.unlink()

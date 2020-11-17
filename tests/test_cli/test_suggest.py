@@ -13,11 +13,11 @@ from repo_helper.cli.commands import suggest
 @pytest.mark.parametrize(
 		"filename, language",
 		[
-				("file.c", "C"),
-				("file.src.c", "C"),
-				("file.src.C", "C"),
-				("file.h", "C"),
-				("file.H", "C"),
+				("file.c", 'C'),
+				("file.src.c", 'C'),
+				("file.src.C", 'C'),
+				("file.h", 'C'),
+				("file.H", 'C'),
 				("file.cpp", "C++"),
 				("file.CPP", "C++"),
 				("file.src.cpp", "C++"),
@@ -30,10 +30,10 @@ from repo_helper.cli.commands import suggest
 				("file.JS", "JavaScript"),
 				("file.src.js", "JavaScript"),
 				("file.src.JS", "JavaScript"),
-				("file.r", "R"),
-				("file.R", "R"),
-				("file.src.r", "R"),
-				("file.src.R", "R"),
+				("file.r", 'R'),
+				("file.R", 'R'),
+				("file.src.r", 'R'),
+				("file.src.R", 'R'),
 				("file.rb", "Ruby"),
 				("file.RB", "Ruby"),
 				("file.src.rb", "Ruby"),
@@ -65,7 +65,7 @@ def test_suggest_classifiers_filetypes(tmp_pathplus, filename, language):
 
 	with in_directory(tmp_pathplus):
 		runner = CliRunner()
-		result: Result = runner.invoke(suggest.classifiers, catch_exceptions=False, args=["-s", "4", "-l"])
+		result: Result = runner.invoke(suggest.classifiers, catch_exceptions=False, args=["-s", '4', "-l"])
 		assert result.exit_code == 0
 
 	print(result.stdout)
@@ -118,7 +118,7 @@ def test_suggest_classifiers_add(tmp_pathplus, file_regression: FileRegressionFi
 	with in_directory(tmp_pathplus):
 		runner = CliRunner()
 		result: Result = runner.invoke(
-				suggest.classifiers, catch_exceptions=False, args=["-s", "4", "-l", "--add"]
+				suggest.classifiers, catch_exceptions=False, args=["-s", '4', "-l", "--add"]
 				)
 		assert result.exit_code == 0
 
@@ -147,7 +147,7 @@ def test_suggest_classifiers_add_existing(tmp_pathplus, file_regression: FileReg
 	with in_directory(tmp_pathplus):
 		runner = CliRunner()
 		result: Result = runner.invoke(
-				suggest.classifiers, catch_exceptions=False, args=["-s", "4", "-l", "--add"]
+				suggest.classifiers, catch_exceptions=False, args=["-s", '4', "-l", "--add"]
 				)
 		assert result.exit_code == 0
 
@@ -159,7 +159,7 @@ def test_suggest_classifiers_invalid_input(tmp_pathplus, data_regression: DataRe
 
 	with in_directory(tmp_pathplus):
 		runner = CliRunner()
-		result: Result = runner.invoke(suggest.classifiers, catch_exceptions=False, args=["-s", "8", "-l"])
+		result: Result = runner.invoke(suggest.classifiers, catch_exceptions=False, args=["-s", '8', "-l"])
 		assert result.exit_code == 2
 		assert result.stdout == """\
 Usage: classifiers [OPTIONS]
@@ -169,7 +169,7 @@ Error: Invalid value for '-s' / '--status': 8 is not in the valid range of 1 to 
 """
 
 		runner = CliRunner()
-		result = runner.invoke(suggest.classifiers, catch_exceptions=False, args=["-s", "0", "-l"])
+		result = runner.invoke(suggest.classifiers, catch_exceptions=False, args=["-s", '0', "-l"])
 		assert result.exit_code == 2
 		assert result.stdout == """\
 Usage: classifiers [OPTIONS]
@@ -220,7 +220,7 @@ def test_suggest_classifiers_requirements(tmp_pathplus, requirements, data_regre
 
 	with in_directory(tmp_pathplus):
 		runner = CliRunner()
-		result: Result = runner.invoke(suggest.classifiers, catch_exceptions=False, args=["-s", "4"])
+		result: Result = runner.invoke(suggest.classifiers, catch_exceptions=False, args=["-s", '4'])
 		assert result.exit_code == 0
 
 	classifiers = result.stdout.splitlines()

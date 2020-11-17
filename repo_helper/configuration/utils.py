@@ -46,7 +46,7 @@ def get_tox_python_versions(python_versions: Iterable[str]) -> List[str]:
 	tox_py_versions = []
 
 	for py_version in python_versions:
-		py_version = str(py_version).replace(".", '')
+		py_version = str(py_version).replace('.', '')
 		if not py_version.startswith("py"):
 			py_version = f"py{py_version}"
 		tox_py_versions.append(py_version)
@@ -107,7 +107,7 @@ def get_version_classifiers(python_versions: Iterable[str]) -> List[str]:
 	for py_version in python_versions:
 		py_version = str(py_version)
 
-		if py_version.startswith("3"):
+		if py_version.startswith('3'):
 			py_version = py_version.replace("-dev", '')
 			for classifier in (
 					f"Programming Language :: Python :: {py_version}",
@@ -145,7 +145,7 @@ def parse_extras(raw_config_vars: Mapping[str, Any], repo_path: pathlib.Path) ->
 			if (repo_path / requires).is_file():
 				# a path to the requirements file from the repo root
 				extras_require[extra] = [
-						x for x in (repo_path / requires).read_text(encoding="UTF-8").split("\n") if x
+						x for x in (repo_path / requires).read_text(encoding="UTF-8").split('\n') if x
 						]
 				if requires not in additional_requirements_files:
 					additional_requirements_files.append(requires)
@@ -153,7 +153,7 @@ def parse_extras(raw_config_vars: Mapping[str, Any], repo_path: pathlib.Path) ->
 				# A single requirement
 				extras_require[extra] = [requires]
 
-		all_extras += [x.replace(" ", '') for x in extras_require[extra]]
+		all_extras += [x.replace(' ', '') for x in extras_require[extra]]
 
 	all_extras = sorted(set(all_extras))
 

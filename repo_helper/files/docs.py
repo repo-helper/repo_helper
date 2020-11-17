@@ -233,7 +233,7 @@ def make_docutils_conf(repo_path: pathlib.Path, templates: jinja2.Environment) -
 	file.parent.maybe_make(parents=True)
 
 	if not file.is_file():
-		file.write_text("\n".join([
+		file.write_text('\n'.join([
 				"[restructuredtext parser]",
 				"tab_width = 4",
 				'',
@@ -367,7 +367,7 @@ def make_alabaster_theming() -> str:
 	# Formatting preferences
 	css_parser.ser.prefs.omitLastSemicolon = False
 	css_parser.ser.prefs.indentClosingBrace = False
-	css_parser.ser.prefs.indent = "	"
+	css_parser.ser.prefs.indent = '\t'
 
 	# Helpers
 	important = "important"
@@ -453,16 +453,16 @@ def make_alabaster_theming() -> str:
 	# No end-of-line hyphenation
 	sheet.add_style("div.body p, ol > li, div.body td", {"hyphens": None})
 
-	sheet.add_style("img, div.figure", {"margin": ("0", important)})
+	sheet.add_style("img, div.figure", {"margin": ('0', important)})
 	sheet.add_style("ul > li", {"text-align": "justify"})
-	sheet.add_style("ul > li > p", {"margin-bottom": "0"})
-	sheet.add_style("ol > li > p", {"margin-bottom": "0"})
+	sheet.add_style("ul > li > p", {"margin-bottom": '0'})
+	sheet.add_style("ol > li > p", {"margin-bottom": '0'})
 	sheet.add_style("div.body code.descclassname", {"display": None})
 	sheet.add_style(".wy-table-responsive table td", {"white-space": ("normal", important)})
 	sheet.add_style(".wy-table-responsive", {"overflow": ("visible", important)})
 	sheet.add_style("div.toctree-wrapper.compound > ul > li", {
-			"margin": "0",
-			"padding": "0",
+			"margin": '0',
+			"padding": '0',
 			})
 	# TODO
 	# code.docutils.literal {{
@@ -470,7 +470,7 @@ def make_alabaster_theming() -> str:
 	#     padding: 0 1px;
 	# }}
 
-	stylesheet = sheet.cssText.decode("UTF-8").replace("}", "}\n")
+	stylesheet = sheet.cssText.decode("UTF-8").replace('}', "}\n")
 
 	# Reset CSS Parser to defaults
 	css_parser.ser.prefs.useDefaults()
@@ -501,7 +501,7 @@ def make_readthedocs_theming() -> str:
 	# Formatting preferences
 	css_parser.ser.prefs.omitLastSemicolon = False
 	css_parser.ser.prefs.indentClosingBrace = False
-	css_parser.ser.prefs.indent = "	"
+	css_parser.ser.prefs.indent = '\t'
 
 	# Helpers
 	important = "important"
@@ -518,7 +518,7 @@ def make_readthedocs_theming() -> str:
 	# Smooth scrolling between sections
 	sheet.add_style("html", {"scroll-behavior": "smooth"})
 
-	stylesheet = sheet.cssText.decode("UTF-8").replace("}", "}\n")
+	stylesheet = sheet.cssText.decode("UTF-8").replace('}', "}\n")
 
 	# Reset CSS Parser to defaults
 	css_parser.ser.prefs.useDefaults()
@@ -561,7 +561,7 @@ def copy_docs_styling(repo_path: pathlib.Path, templates: jinja2.Environment) ->
 			f"<!--- {templates.globals['managed_message']} --->",
 			'{% extends "!layout.html" %}',
 			"{% block extrahead %}",
-			'	<link href="{{ pathto("_static/style.css", True) }}" rel="stylesheet" type="text/css">',
+			'\t<link href="{{ pathto("_static/style.css", True) }}" rel="stylesheet" type="text/css">',
 			"{% endblock %}",
 			''
 			])

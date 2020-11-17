@@ -202,7 +202,7 @@ def make_recipe(repo_dir: PathLike, recipe_file: PathLike) -> None:
 			config["conda_channels"],
 			)
 
-	requirements_block = "\n".join(f"    - {req}" for req in all_requirements if req)
+	requirements_block = '\n'.join(f"    - {req}" for req in all_requirements if req)
 
 	templates = jinja2.Environment(  # nosec: B701
 		loader=jinja2.FileSystemLoader(str(template_dir)),

@@ -24,7 +24,7 @@ from repo_helper.core import RepoHelper
 FAKE_DATE = datetime.date(2020, 7, 25)
 
 
-@pytest.mark.skipif(condition=os.sep == "\\", reason="Different test for platforms where os.sep == \\")
+@pytest.mark.skipif(condition=os.sep == '\\', reason="Different test for platforms where os.sep == \\")
 def test_via_run_repo_helper_forward(temp_empty_repo, capsys, file_regression: FileRegressionFixture, monkeypatch):
 
 	(temp_empty_repo.path / "repo_helper.yml").write_text(
@@ -47,7 +47,7 @@ def test_via_run_repo_helper_forward(temp_empty_repo, capsys, file_regression: F
 	check_file_regression(capsys.readouterr().err, file_regression, extension="_stderr.txt")
 
 
-@pytest.mark.skipif(condition=os.sep == "/", reason="Different test for platforms where os.sep == /")
+@pytest.mark.skipif(condition=os.sep == '/', reason="Different test for platforms where os.sep == /")
 def test_via_run_repo_helper_backward(
 		temp_empty_repo, capsys, file_regression: FileRegressionFixture, monkeypatch
 		):

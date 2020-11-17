@@ -117,7 +117,7 @@ class ToxConfig(IniConfigurator):
 		else:
 			directory = posixpath.join(
 					self._globals["source_dir"],
-					self._globals["import_name"].replace(".", "/"),
+					self._globals["import_name"].replace('.', '/'),
 					)
 			source_files.append(directory)
 
@@ -380,7 +380,7 @@ class ToxConfig(IniConfigurator):
 		"""
 
 		self._ini["flake8"]["max-line-length"] = "120"
-		self._ini["flake8"]["select"] = " ".join(
+		self._ini["flake8"]["select"] = ' '.join(
 				str(x) for x in lint_fix_list + lint_warn_list + code_only_warning
 				)
 
@@ -544,7 +544,7 @@ def make_isort(repo_path: pathlib.Path, templates: jinja2.Environment) -> List[s
 
 	isort["settings"]["line_length"] = 115
 	isort["settings"]["force_to_top"] = True
-	isort["settings"]["indent"] = '"		"'  # To match what yapf uses
+	isort["settings"]["indent"] = '"\t\t"'  # To match what yapf uses
 
 	# Undocumented 8th option with the closing bracket indented
 	isort["settings"]["multi_line_output"] = 8

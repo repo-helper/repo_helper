@@ -231,7 +231,7 @@ def create_shields_block(
 	:return: The shields block created from the above settings.
 	"""
 
-	if unique_name and not unique_name.startswith("_"):
+	if unique_name and not unique_name.startswith('_'):
 		unique_name = f"_{unique_name}"
 
 	if not pypi_name:
