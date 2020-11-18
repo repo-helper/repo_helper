@@ -10,7 +10,7 @@ repo_helper
 
 This project is in an early stage, and some things might not work correctly or break in a new release.
 
-Note: The autocommit functionality is currently broken on Windows, but works ok on Linux and macOS.
+Note: The autocommit functionality is currently broken on Windows, but works OK on Linux and macOS.
 
 .. start shields
 

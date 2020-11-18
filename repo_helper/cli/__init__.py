@@ -43,6 +43,7 @@ from typing import Optional
 
 # 3rd party
 import click
+from click import Context
 from consolekit import CONTEXT_SETTINGS, click_group
 from consolekit.options import force_option
 from domdf_python_tools.paths import PathPlus
@@ -61,7 +62,7 @@ __all__ = ["cli", "cli_command", "cli_group"]
 @commit_option(default=None)
 @commit_message_option("Updated files with 'repo_helper'.")
 @click.pass_context
-def cli(ctx, force: bool, commit: Optional[bool], message: str):
+def cli(ctx: Context, force: bool, commit: Optional[bool], message: str):
 	"""
 	Update files in the given repositories, based on settings in 'repo_helper.yml'.
 	"""
