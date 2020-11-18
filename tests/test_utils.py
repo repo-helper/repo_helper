@@ -22,40 +22,15 @@
 
 # stdlib
 import os
-from datetime import date
 from textwrap import dedent
 
 # 3rd party
 import pytest
 from pytest_regressions.data_regression import DataRegressionFixture
-from shippinglabel import normalize
 
 # this package
 from repo_helper.configuration.utils import get_version_classifiers
-from repo_helper.utils import calc_easter, indent_with_tab, pformat_tabs, traverse_to_file
-
-# def test_ensure_requirements(tmpdir):
-# 	tmpdir_p = PathPlus(tmpdir)
-# 	req_file = tmpdir_p / "requirements.txt"
-# 	req_file.write_lines([
-# 			"foo",
-# 			"bar",
-# 			"baz",
-# 			])
-# 	ensure_requirements([], req_file)
-# 	assert req_file.read_lines() == [
-# 			"bar",
-# 			"baz",
-# 			"foo",
-# 			'',
-# 			]
-# 	ensure_requirements([("virtualenv", "20.0.33")], req_file)
-# 	assert req_file.read_lines() == [
-# 			"bar",
-# 			"baz",
-# 			"foo",
-# 			'',
-# 			]
+from repo_helper.utils import indent_with_tab, pformat_tabs, traverse_to_file
 
 
 def test_indent_with_tab():
@@ -99,23 +74,7 @@ def test_pformat_tabs():
 			)
 
 
-@pytest.mark.parametrize(
-		"name, expected",
-		[
-				("foo", "foo"),
-				("bar", "bar"),
-				("baz", "baz"),
-				("baz-extensions", "baz-extensions"),
-				("baz_extensions", "baz-extensions"),
-				("baz.extensions", "baz-extensions"),
-				]
-		)
-def test_normalize(name, expected):
-	assert normalize(name) == expected
-
-
 # TODO: reformat_file
-# TODO: discover_entry_points
 
 
 @pytest.mark.parametrize(
@@ -149,37 +108,6 @@ def test_traverse_to_file_errors(tmp_pathplus):
 
 	with pytest.raises(TypeError, match="traverse_to_file expected 2 or more arguments, got 1"):
 		traverse_to_file(tmp_pathplus)
-
-
-@pytest.mark.parametrize(
-		"date",
-		[
-				date(2000, 4, 23),
-				date(2001, 4, 15),
-				date(2002, 3, 31),
-				date(2003, 4, 20),
-				date(2004, 4, 11),
-				date(2005, 3, 27),
-				date(2006, 4, 16),
-				date(2007, 4, 8),
-				date(2008, 3, 23),
-				date(2009, 4, 12),
-				date(2010, 4, 4),
-				date(2011, 4, 24),
-				date(2012, 4, 8),
-				date(2013, 3, 31),
-				date(2014, 4, 20),
-				date(2015, 4, 5),
-				date(2016, 3, 27),
-				date(2017, 4, 16),
-				date(2018, 4, 1),
-				date(2019, 4, 21),
-				date(2020, 4, 12),
-				date(2021, 4, 4),
-				]
-		)
-def test_calc_easter(date):
-	assert calc_easter(date.year) == date
 
 
 @pytest.mark.parametrize(
