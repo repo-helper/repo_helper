@@ -189,6 +189,10 @@ def test_remove_autodoc_augment_defaults(tmp_pathplus, demo_environment):
 def test_copy_docs_styling(tmp_pathplus, demo_environment, file_regression, theme):
 	demo_environment.globals["sphinx_html_theme"] = theme
 	managed_files = copy_docs_styling(tmp_pathplus, demo_environment)
-	assert managed_files == ["doc-source/_static/style.css", "doc-source/_templates/layout.html"]
+	assert managed_files == [
+			"doc-source/_static/style.css",
+			"doc-source/_templates/layout.html",
+			"doc-source/_templates/sidebar/navigation.html",
+			]
 	check_file_output(tmp_pathplus / managed_files[0], file_regression, "style.css")
 	check_file_output(tmp_pathplus / managed_files[1], file_regression, "layout.html")
