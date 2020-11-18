@@ -32,6 +32,7 @@ import os.path
 import pathlib
 import shutil
 import warnings
+from textwrap import dedent
 from typing import Dict, List, Sequence, Union
 
 # 3rd party
@@ -66,6 +67,7 @@ from repo_helper.blocks import (
 		)
 from repo_helper.configupdater2 import ConfigUpdater
 from repo_helper.files import management
+from repo_helper.files.pre_commit import make_github_url
 from repo_helper.templates import init_repo_template_dir, template_dir
 from repo_helper.utils import pformat_tabs, reformat_file
 
@@ -544,6 +546,7 @@ def copy_docs_styling(repo_path: pathlib.Path, templates: jinja2.Environment) ->
 	docs_dir = PathPlus(repo_path / templates.globals["docs_dir"])
 	style_css = docs_dir / "_static" / "style.css"
 	layout_html = docs_dir / "_templates" / "layout.html"
+	furo_navigation = docs_dir / "_templates" / "sidebar" / "navigation.html"
 
 	for directory in {style_css.parent, layout_html.parent}:
 		directory.maybe_make(parents=True)
@@ -563,6 +566,37 @@ def copy_docs_styling(repo_path: pathlib.Path, templates: jinja2.Environment) ->
 				])
 	else:
 		style_css.write_clean('')
+
+	if templates.globals["sphinx_html_theme"] == "furo":
+		furo_navigation.parent.maybe_make()
+		github_url = make_github_url(templates.globals["username"], templates.globals["repo_name"])
+
+		buf = [dedent("""\
+<div class="sidebar-tree">
+  {{ furo_navigation_tree }}
+</div>
+
+<div class="sidebar-tree">
+  <p class="caption"><span class="caption-text">Links</span></p>
+  <ul>""")]
+
+		buf.append(f'    <li class="toctree-l1"><a class="reference external" href="{github_url}">GitHub</a></li>')
+
+		if templates.globals["on_pypi"]:
+			buf.append(
+					f'    <li class="toctree-l1"><a class="reference external" '
+					f'href="https://pypi.org/project/{templates.globals["pypi_name"]}">PyPI</a></li>'
+					)
+
+		buf.append(dedent("  </ul>\n</div>\n"))
+
+		furo_navigation.write_lines(buf)
+	else:
+		try:
+			shutil.rmtree(furo_navigation.parent)
+		except FileNotFoundError:
+			pass
+
 
 	layout_html.write_lines([
 			f"<!--- {templates.globals['managed_message']} --->",
