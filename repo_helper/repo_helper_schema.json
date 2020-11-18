@@ -152,11 +152,11 @@
     },
     "html_context": {
       "type": "object",
-      "description": "A dictionary of configuration values for the documentation HTML context. String values must be encased in quotes."
+      "description": "A dictionary of configuration values for the documentation HTML context."
     },
     "html_theme_options": {
       "type": "object",
-      "description": "A dictionary of configuration values for the documentation HTML theme. String values must be encased in quotes."
+      "description": "A dictionary of configuration values for the documentation HTML theme."
     },
     "imgbot_ignore": {
       "type": "array",
@@ -174,7 +174,7 @@
       "items": {
         "type": "string"
       },
-      "description": "A list of additional entries for ``intersphinx_mapping`` for Sphinx. Each entry must be enclosed in double quotes."
+      "description": "A list of additional entries for ``intersphinx_mapping`` for Sphinx."
     },
     "keywords": {
       "type": "array",
@@ -318,21 +318,22 @@
       "items": {
         "type": "string"
       },
-      "description": "Like :conf:`sphinx_conf_preamble`, but the lines are inserted at the end of the file. Intent lines with a single tab to form part of the ``setup`` function."
+      "description": "Like :conf:`sphinx_conf_preamble`, but the lines are inserted at the end of the file."
     },
     "sphinx_conf_preamble": {
       "type": "array",
       "items": {
         "type": "string"
       },
-      "description": "A list of lines of Python code to add to the top of ``conf.py``. These could be additional settings for Sphinx or calls to extra scripts that must be executed before building the documentation."
+      "description": "A list of lines of Python code to add to the top of ``conf.py``."
     },
     "sphinx_html_theme": {
       "enum": [
         "sphinx_rtd_theme",
         "alabaster",
         "repo_helper_sphinx_theme",
-        "domdf_sphinx_theme"
+        "domdf_sphinx_theme",
+        "furo"
       ],
       "description": "The HTML theme to use for Sphinx."
     },
