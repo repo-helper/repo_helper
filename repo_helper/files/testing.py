@@ -395,7 +395,7 @@ class ToxConfig(IniConfigurator):
 				str(x) for x in lint_fix_list + lint_warn_list + code_only_warning
 				)
 
-		excludes = f".git,__pycache__,{self['docs_dir']},old,build,dist,make_conda_recipe.py,__pkginfo__.py,setup.py"
+		excludes = f".git,__pycache__,{self['docs_dir']},old,build,dist,make_conda_recipe.py,__pkginfo__.py,setup.py,.tox,venv"
 		self._ini["flake8"]["exclude"] = excludes
 		# self._ini["flake8"]["rst-roles"] = indent_join(sorted(allowed_rst_roles))
 		self._ini["flake8"]["rst-directives"] = indent_join(sorted(allowed_rst_directives))
