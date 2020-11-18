@@ -268,6 +268,8 @@ for module in [
 		if isinstance(confvar, ConfigVarMeta):
 			all_values.append(confvar)
 
+all_values.sort(key=lambda v: v.__name__)
+
 
 class RepoHelperParser(Parser):
 	"""
