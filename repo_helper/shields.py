@@ -406,7 +406,7 @@ def make_docker_size_shield(docker_name: str, username: str) -> str:
 
 def make_typing_shield() -> str:
 	"""
-	Create a shield to show that a library has :pep`484` Type Hints / Annotations.
+	Create a shield to show that a library has :pep:`484` Type Hints / Annotations.
 
 	:return: The shield.
 	:rtype: str

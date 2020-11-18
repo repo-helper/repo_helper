@@ -610,6 +610,7 @@ def copy_docs_styling(repo_path: pathlib.Path, templates: jinja2.Environment) ->
 	return [
 			style_css.relative_to(repo_path).as_posix(),
 			layout_html.relative_to(repo_path).as_posix(),
+			furo_navigation.relative_to(repo_path).as_posix(),
 			]
 
 

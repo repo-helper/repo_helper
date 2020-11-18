@@ -132,7 +132,9 @@ class extra_sphinx_extensions(ConfigVar):  # noqa
 
 class intersphinx_mapping(ConfigVar):  # noqa
 	"""
-	A list of additional entries for ``intersphinx_mapping`` for Sphinx. Each entry must be enclosed in double quotes.
+	A list of additional entries for ``intersphinx_mapping`` for Sphinx.
+
+	Each entry must be enclosed in double quotes.
 
 	Example:
 
@@ -149,7 +151,10 @@ class intersphinx_mapping(ConfigVar):  # noqa
 
 class sphinx_conf_preamble(ConfigVar):  # noqa
 	"""
-	A list of lines of Python code to add to the top of ``conf.py``. These could be additional settings for Sphinx or calls to extra scripts that must be executed before building the documentation.
+	A list of lines of Python code to add to the top of ``conf.py``.
+
+	These could be additional settings for Sphinx or calls to extra scripts
+	that must be executed before building the documentation.
 
 	Example:
 
@@ -169,7 +174,9 @@ class sphinx_conf_preamble(ConfigVar):  # noqa
 
 class sphinx_conf_epilogue(ConfigVar):  # noqa
 	"""
-	Like :conf:`sphinx_conf_preamble`, but the lines are inserted at the end of the file. Intent lines with a single tab to form part of the ``setup`` function.
+	Like :conf:`sphinx_conf_preamble`, but the lines are inserted at the end of the file.
+
+	Indent lines with a single tab to form part of the ``setup`` function.
 	"""
 
 	dtype = List[str]
@@ -179,7 +186,9 @@ class sphinx_conf_epilogue(ConfigVar):  # noqa
 
 class html_theme_options(ConfigVar):  # noqa
 	"""
-	A dictionary of configuration values for the documentation HTML theme. String values must be encased in quotes.
+	A dictionary of configuration values for the documentation HTML theme.
+
+	String values must be encased in quotes.
 
 	Example:
 
@@ -198,7 +207,9 @@ class html_theme_options(ConfigVar):  # noqa
 
 class html_context(ConfigVar):  # noqa
 	"""
-	A dictionary of configuration values for the documentation HTML context. String values must be encased in quotes.
+	A dictionary of configuration values for the documentation HTML context.
+
+	String values must be encased in quotes.
 
 	Example:
 
