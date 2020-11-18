@@ -68,6 +68,7 @@ def test_make_tox(
 	demo_environment.globals["tox_py_versions"] = ["py36", "py37", "py38"]
 	demo_environment.globals["tox_requirements"] = []
 	demo_environment.globals["tox_build_requirements"] = []
+	demo_environment.globals["tox_unmanaged"] = []
 	demo_environment.globals["yapf_exclude"] = []
 	demo_environment.globals["tox_testenv_extras"] = tox_testenv_extras
 	demo_environment.globals["enable_docs"] = enable_docs

@@ -35,6 +35,17 @@ from domdf_python_tools.versions import Version
 
 # this package
 import repo_helper
+from repo_helper.configuration import (
+		conda_anaconda,
+		documentation,
+		metadata,
+		optional_features,
+		other,
+		packaging,
+		python_versions_,
+		testing,
+		travis
+		)
 from repo_helper.configuration.conda_anaconda import conda_channels, conda_description, conda_extras, enable_conda
 from repo_helper.configuration.documentation import (
 		docs_dir,
@@ -110,7 +121,8 @@ from repo_helper.configuration.testing import (
 		tests_dir,
 		tox_build_requirements,
 		tox_requirements,
-		tox_testenv_extras
+		tox_testenv_extras,
+		tox_unmanaged
 		)
 from repo_helper.configuration.travis import (
 		travis_additional_requirements,
@@ -207,6 +219,7 @@ __all__ = [
 		"pre_commit_exclude",
 		"dump_schema",
 		"desktopfile",
+		"tox_unmanaged",
 		]
 
 
@@ -236,78 +249,24 @@ def parse_yaml(repo_path: PathLike) -> Dict:
 	return config_vars
 
 
-all_values: List[ConfigVarMeta] = [
-		author,
-		email,
-		username,
-		modname,
-		version,
-		copyright_years,
-		repo_name,
-		pypi_name,
-		import_name,
-		classifiers,
-		keywords,
-		license,
-		short_desc,
-		source_dir,
-		enable_tests,
-		enable_releases,
-		enable_pre_commit,
-		docker_shields,
-		docker_name,
-		python_deploy_version,
-		python_versions,
-		manifest_additional,
-		py_modules,
-		console_scripts,
-		additional_setup_args,
-		extras_require,
-		additional_requirements_files,
-		setup_pre,
-		platforms,
-		rtfd_author,
-		preserve_custom_theme,
-		sphinx_html_theme,
-		extra_sphinx_extensions,
-		intersphinx_mapping,
-		sphinx_conf_preamble,
-		sphinx_conf_epilogue,
-		html_theme_options,
-		html_context,
-		enable_docs,
-		docs_dir,
-		tox_requirements,
-		tox_build_requirements,
-		tox_testenv_extras,
-		travis_site,
-		travis_ubuntu_version,
-		travis_extra_install_pre,
-		travis_extra_install_post,
-		travis_pypi_secure,
-		travis_additional_requirements,
-		enable_conda,
-		conda_channels,
-		conda_extras,
-		conda_description,
-		additional_ignore,
-		yapf_exclude,
-		tests_dir,
-		pkginfo_extra,
-		exclude_files,
-		imgbot_ignore,
-		mypy_deps,
-		pure_python,
-		stubs_package,
-		on_pypi,
-		mypy_plugins,
-		enable_devmode,
-		mypy_version,
-		use_experimental_backend,
-		pre_commit_exclude,
-		entry_points,
-		desktopfile,
-		]
+all_values: List[ConfigVarMeta] = []
+
+for module in [
+		conda_anaconda,
+		documentation,
+		metadata,
+		optional_features,
+		other,
+		packaging,
+		python_versions_,
+		testing,
+		travis,
+		]:
+
+	for item in module.__all__:  # type: ignore
+		confvar = getattr(module, item)
+		if isinstance(confvar, ConfigVarMeta):
+			all_values.append(confvar)
 
 
 class RepoHelperParser(Parser):

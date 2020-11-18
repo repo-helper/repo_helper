@@ -90,6 +90,11 @@ class ToxConfig(IniConfigurator):
 
 	def __init__(self, repo_path: pathlib.Path, templates: jinja2.Environment):
 		self._globals = templates.globals
+
+		for section_name in self["tox_unmanaged"]:
+			if section_name in self.managed_sections:
+				del self.managed_sections[self.managed_sections.index(section_name)]
+
 		super().__init__(base_path=repo_path)
 
 	def __getitem__(self, item: str) -> Any:

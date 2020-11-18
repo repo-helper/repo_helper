@@ -285,6 +285,8 @@ class IniConfigurator:
 				"# You may add new sections, but any changes made to the following sections will be lost:",
 				])
 
+		self.managed_sections = self.managed_sections[:]
+
 		for sec in self.managed_sections:
 			self._ini.add_section(sec)
 			self._output.append(f"#     * {sec}")

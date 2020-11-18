@@ -38,7 +38,8 @@ __all__ = [
 		"mypy_deps",
 		"mypy_plugins",
 		"enable_devmode",
-		"mypy_version"
+		"mypy_version",
+		"tox_unmanaged",
 		]
 
 
@@ -196,4 +197,22 @@ class mypy_version(ConfigVar):  # noqa
 	dtype = Union[str, float]
 	rtype = str
 	default = "0.790"
+	category: str = "testing"
+
+
+class tox_unmanaged(ConfigVar):  # noqa
+	"""
+	A list of section names in ``tox.ini`` which should not be managed by ``repo-helper.
+
+	Example:
+
+	.. code-block:: yaml
+
+		tox_unmanaged:
+		  - "testenv"
+		  - "flake8"
+	"""
+
+	dtype = List[str]
+	default: List[str] = []
 	category: str = "testing"
