@@ -337,6 +337,13 @@
       ],
       "description": "The HTML theme to use for Sphinx."
     },
+    "standalone_contrib_guide": {
+      "type": [
+        "boolean",
+        "string"
+      ],
+      "description": "Whether the contributing guide for the documentation should be a standlone page."
+    },
     "stubs_package": {
       "type": [
         "boolean",

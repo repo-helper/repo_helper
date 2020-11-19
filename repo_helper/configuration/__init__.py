@@ -58,7 +58,8 @@ from repo_helper.configuration.documentation import (
 		rtfd_author,
 		sphinx_conf_epilogue,
 		sphinx_conf_preamble,
-		sphinx_html_theme
+		sphinx_html_theme,
+		standalone_contrib_guide
 		)
 from repo_helper.configuration.metadata import (  # pylint: disable=redefined-builtin
 		author,
@@ -220,6 +221,7 @@ __all__ = [
 		"dump_schema",
 		"desktopfile",
 		"tox_unmanaged",
+		"standalone_contrib_guide",
 		]
 
 

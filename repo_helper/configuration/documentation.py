@@ -44,7 +44,8 @@ __all__ = [
 		"html_theme_options",
 		"html_context",
 		"enable_docs",
-		"docs_dir"
+		"docs_dir",
+		"standalone_contrib_guide",
 		]
 
 
@@ -255,4 +256,20 @@ class docs_dir(ConfigVar):  # noqa
 	dtype = str
 	required = False
 	default = "doc-source"
+	category: str = "documentation"
+
+
+class standalone_contrib_guide(ConfigVar):  # noqa
+	"""
+	Whether the contributing guide for the documentation should be a standlone page.
+
+	Example:
+
+	.. code-block:: yaml
+
+		standalone_contrib_guide: True
+	"""
+
+	dtype = bool
+	default = False
 	category: str = "documentation"

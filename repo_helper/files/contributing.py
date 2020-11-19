@@ -121,11 +121,15 @@ def make_docs_contributing(repo_path: pathlib.Path, templates: jinja2.Environmen
 
 	contributing = templates.get_template("CONTRIBUTING.rst")
 
-	file.write_lines([
-			"Overview",
-			"---------",
-			*contributing.render(bash_block=sphinx_bash_block).splitlines()[3:],
-			])
+	if templates.globals["standalone_contrib_guide"]:
+		file.write_clean(contributing.render(bash_block=sphinx_bash_block))
+
+	else:
+		file.write_lines([
+				"Overview",
+				"---------",
+				*contributing.render(bash_block=sphinx_bash_block).splitlines()[3:],
+				])
 
 	return [file.relative_to(repo_path).as_posix()]
 

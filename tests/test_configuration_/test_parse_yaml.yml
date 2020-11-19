@@ -97,6 +97,7 @@ source_dir: ''
 sphinx_conf_epilogue: []
 sphinx_conf_preamble: []
 sphinx_html_theme: alabaster
+standalone_contrib_guide: false
 stubs_package: false
 tests_dir: tests
 tox_build_requirements: []

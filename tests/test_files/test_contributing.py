@@ -67,7 +67,14 @@ def test_make_contributing(tmp_pathplus, demo_environment, file_regression: File
 	check_file_regression(rendered, file_regression, extension=".html")
 
 
-def test_make_docs_contributing(tmp_pathplus, demo_environment, file_regression: FileRegressionFixture):
+@pytest.mark.parametrize("standlone_contrib", [True, False])
+def test_make_docs_contributing(
+		tmp_pathplus,
+		demo_environment,
+		file_regression: FileRegressionFixture,
+		standlone_contrib,
+		):
+	demo_environment.globals["standalone_contrib_guide"] = standlone_contrib
 	assert make_docs_contributing(tmp_pathplus, demo_environment) == ["doc-source/contributing.rst"]
 	assert (tmp_pathplus / "doc-source/contributing.rst").is_file()
 	check_file_output(tmp_pathplus / "doc-source/contributing.rst", file_regression)
