@@ -56,7 +56,7 @@ intersphinx_mapping = {
 		{#"sarge": ('https://sarge.readthedocs.io/en/latest/', None),#}
 		{% for mapping in intersphinx_mapping %}{{ mapping }},{{ '\n' }}		{% endfor %}}
 
-html_theme = '{{ sphinx_html_theme }}'
+html_theme = '{{ sphinx_html_theme.replace("-", "_") }}'
 html_theme_options = {{ pformat(html_theme_options) }}
 html_theme_path = ["../.."]
 html_show_sourcelink = True  # True will show link to source

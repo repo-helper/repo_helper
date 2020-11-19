@@ -119,7 +119,7 @@ class DocRequirementsManager(RequirementsManager):
 			"sphinx-rtd-theme": "<0.5",
 			"domdf-sphinx-theme": ">=0.1.0",
 			"repo-helper-sphinx_theme": ">=0.0.2",
-			"furo": "==2020.11.10b15",
+			"furo": ">=2020.11.19b18",
 			}
 
 	def compile_target_requirements(self) -> None:
@@ -568,6 +568,7 @@ def copy_docs_styling(repo_path: pathlib.Path, templates: jinja2.Environment) ->
 	docs_dir = PathPlus(repo_path / templates.globals["docs_dir"])
 	style_css = docs_dir / "_static" / "style.css"
 	layout_html = docs_dir / "_templates" / "layout.html"
+	base_html = docs_dir / "_templates" / "base.html"
 	furo_navigation = docs_dir / "_templates" / "sidebar" / "navigation.html"
 
 	for directory in {style_css.parent, layout_html.parent}:
@@ -585,6 +586,15 @@ def copy_docs_styling(repo_path: pathlib.Path, templates: jinja2.Environment) ->
 				f"/* {templates.globals['managed_message']} */",
 				'',
 				make_alabaster_theming(),
+				])
+	elif templates.globals["sphinx_html_theme"] == "furo":
+		style_css.write_lines([
+				f"/* {templates.globals['managed_message']} */",
+				'',
+				"div.highlight {",
+				"    -moz-tab-size: 4; /* Firefox */",
+				"    tab-size: 4;",
+				'}',
 				])
 	else:
 		style_css.write_clean('')
@@ -618,24 +628,39 @@ def copy_docs_styling(repo_path: pathlib.Path, templates: jinja2.Environment) ->
 		buf.append(dedent("  </ul>\n</div>\n"))
 
 		furo_navigation.write_lines(buf)
+
+		base_html.write_lines([
+				f"<!--- {templates.globals['managed_message']} --->",
+				'{% extends "!base.html" %}',
+				"{% block extrahead %}",
+				'\t<link href="{{ pathto("_static/style.css", True) }}" rel="stylesheet" type="text/css">',
+				"{% endblock %}",
+				''
+				])
+
+		layout_html.unlink(missing_ok=True)
+
 	else:
 		try:
 			shutil.rmtree(furo_navigation.parent)
 		except FileNotFoundError:
 			pass
 
-	layout_html.write_lines([
-			f"<!--- {templates.globals['managed_message']} --->",
-			'{% extends "!layout.html" %}',
-			"{% block extrahead %}",
-			'\t<link href="{{ pathto("_static/style.css", True) }}" rel="stylesheet" type="text/css">',
-			"{% endblock %}",
-			''
-			])
+		layout_html.write_lines([
+				f"<!--- {templates.globals['managed_message']} --->",
+				'{% extends "!layout.html" %}',
+				"{% block extrahead %}",
+				'\t<link href="{{ pathto("_static/style.css", True) }}" rel="stylesheet" type="text/css">',
+				"{% endblock %}",
+				''
+				])
+
+		base_html.unlink(missing_ok=True)
 
 	return [
 			style_css.relative_to(repo_path).as_posix(),
 			layout_html.relative_to(repo_path).as_posix(),
+			base_html.relative_to(repo_path).as_posix(),
 			furo_navigation.relative_to(repo_path).as_posix(),
 			]
 
