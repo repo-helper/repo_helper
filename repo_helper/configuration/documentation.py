@@ -101,22 +101,20 @@ class sphinx_html_theme(ConfigVar):  # noqa
 	and `furo <https://pradyunsg.me/furo>`_.
 	"""
 
-	dtype = Literal[
-		"sphinx_rtd_theme",
-		"sphinx-rtd-theme",
-		"alabaster",
-		"repo_helper_sphinx_theme",
-		"repo-helper-sphinx-theme",
-		"domdf_sphinx_theme",
-		"domdf-sphinx-theme",
-		"furo",
-		]
+	dtype = Literal["sphinx_rtd_theme",
+					"sphinx-rtd-theme",
+					"alabaster",
+					"repo_helper_sphinx_theme",
+					"repo-helper-sphinx-theme",
+					"domdf_sphinx_theme",
+					"domdf-sphinx-theme",
+					"furo", ]
 	default = "domdf-sphinx-theme"
 	category: str = "documentation"
 
 	@classmethod
 	def validator(cls, value: Any) -> Any:
-		return str(value).replace("_", "-")
+		return str(value).replace('_', '-')
 
 
 class extra_sphinx_extensions(ConfigVar):  # noqa

@@ -323,21 +323,23 @@ def make_conf(repo_path: pathlib.Path, templates: jinja2.Environment) -> List[st
 		# See https://github.com/bitprophet/alabaster/blob/master/alabaster/theme.conf
 		# and https://alabaster.readthedocs.io/en/latest/customization.html
 		for key, val in {
-				"light_css_variables": {
-						"toc-title-font-size": "12pt",
-						"toc-font-size": "12pt",
-						"admonition-font-size": "12pt",
-						},
-				"dark_css_variables": {
-						"toc-title-font-size": "12pt",
-						"toc-font-size": "12pt",
-						"admonition-font-size": "12pt",
-						},
+			"light_css_variables": {
+			"toc-title-font-size": "12pt",
+			"toc-font-size": "12pt",
+			"admonition-font-size": "12pt",
+			},
+			"dark_css_variables": {
+			"toc-title-font-size": "12pt",
+			"toc-font-size": "12pt",
+			"admonition-font-size": "12pt",
+			},
 			}.items():
 			if key not in templates.globals["html_theme_options"]:
 				templates.globals["html_theme_options"][key] = val
 			else:
-				templates.globals["html_theme_options"][key] = {**val, **templates.globals["html_theme_options"][key]}
+				templates.globals["html_theme_options"][key] = {
+						**val, **templates.globals["html_theme_options"][key]
+						}
 
 	sphinx_extensions = [
 			"sphinx_toolbox",
@@ -591,7 +593,8 @@ def copy_docs_styling(repo_path: pathlib.Path, templates: jinja2.Environment) ->
 		furo_navigation.parent.maybe_make()
 		github_url = make_github_url(templates.globals["username"], templates.globals["repo_name"])
 
-		buf = ["<!---{managed_message}--->".format_map(templates.globals),
+		buf = [
+				"<!---{managed_message}--->".format_map(templates.globals),
 				dedent(
 						"""\
 <div class="sidebar-tree">
