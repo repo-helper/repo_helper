@@ -319,6 +319,26 @@ def make_conf(repo_path: pathlib.Path, templates: jinja2.Environment) -> List[st
 			if key not in templates.globals["html_theme_options"]:
 				templates.globals["html_theme_options"][key] = val
 
+	elif templates.globals["sphinx_html_theme"] in {"furo"}:
+		# See https://github.com/bitprophet/alabaster/blob/master/alabaster/theme.conf
+		# and https://alabaster.readthedocs.io/en/latest/customization.html
+		for key, val in {
+				"light_css_variables": {
+						"toc-title-font-size": "12pt",
+						"toc-font-size": "12pt",
+						"admonition-font-size": "12pt",
+						},
+				"dark_css_variables": {
+						"toc-title-font-size": "12pt",
+						"toc-font-size": "12pt",
+						"admonition-font-size": "12pt",
+						},
+			}.items():
+			if key not in templates.globals["html_theme_options"]:
+				templates.globals["html_theme_options"][key] = val
+			else:
+				templates.globals["html_theme_options"][key] = {**val, **templates.globals["html_theme_options"][key]}
+
 	sphinx_extensions = [
 			"sphinx_toolbox",
 			"sphinx_toolbox.more_autodoc",
@@ -571,14 +591,18 @@ def copy_docs_styling(repo_path: pathlib.Path, templates: jinja2.Environment) ->
 		furo_navigation.parent.maybe_make()
 		github_url = make_github_url(templates.globals["username"], templates.globals["repo_name"])
 
-		buf = [dedent("""\
+		buf = ["<!---{managed_message}--->".format_map(templates.globals),
+				dedent(
+						"""\
 <div class="sidebar-tree">
   {{ furo_navigation_tree }}
 </div>
 
 <div class="sidebar-tree">
   <p class="caption"><span class="caption-text">Links</span></p>
-  <ul>""")]
+  <ul>"""
+						)
+				]
 
 		buf.append(f'    <li class="toctree-l1"><a class="reference external" href="{github_url}">GitHub</a></li>')
 
