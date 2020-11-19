@@ -14,6 +14,7 @@ except (requests.exceptions.Timeout, requests.exceptions.ConnectionError):
 	has_internet = False
 
 
+@pytest.mark.flaky(reruns=2, reruns_delay=10)
 @pytest.mark.skipif(condition=not has_internet, reason="Requires internet connection.")
 def test_init_repo(temp_empty_repo, demo_environment, file_regression, data_regression):
 	demo_environment.globals["copyright_years"] = "2020-2021"

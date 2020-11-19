@@ -12,6 +12,7 @@ isort>=5.0.0
 jinja2>=2.11.2
 packaging>=20.4
 pre-commit>=2.7.1
+requests>=2.25.0
 ruamel-yaml>=0.16.12
 shippinglabel>=0.5.0
 southwark>=0.5.1
