@@ -201,7 +201,9 @@ def test_copy_docs_styling(tmp_pathplus, demo_environment, file_regression, them
 	assert managed_files == [
 			"doc-source/_static/style.css",
 			"doc-source/_templates/layout.html",
+			"doc-source/_templates/base.html",
 			"doc-source/_templates/sidebar/navigation.html",
 			]
-	check_file_output(tmp_pathplus / managed_files[0], file_regression, "style.css")
-	check_file_output(tmp_pathplus / managed_files[1], file_regression, "layout.html")
+	for file in managed_files:
+		if (tmp_pathplus / file).exists():
+			check_file_output(tmp_pathplus / file, file_regression, (tmp_pathplus / file).name)
