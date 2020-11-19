@@ -35,7 +35,6 @@ __all__ = [
 		"manifest_additional",
 		"py_modules",
 		"console_scripts",
-		"parse_additional_setup_args",
 		"additional_setup_args",
 		"extras_require",
 		"entry_points",
@@ -131,8 +130,8 @@ class entry_points(ConfigVar):  # noqa
 	category: str = "packaging"
 
 
-def parse_additional_setup_args(setup_args: Mapping[str, Any]):
-	return '\n'.join(["\t\t{}={},".format(*x) for x in setup_args.items()])
+# def parse_additional_setup_args(setup_args: Mapping[str, Any]):
+# 	return '\n'.join(["\t\t{}={},".format(*x) for x in setup_args.items()])
 
 
 class additional_setup_args(ConfigVar):  # noqa
