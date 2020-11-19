@@ -146,7 +146,15 @@ def test_make_docutils_conf(tmp_pathplus, demo_environment, file_regression):
 	check_file_output(tmp_pathplus / managed_files[0], file_regression)
 
 
-def test_make_conf(tmp_pathplus, demo_environment, file_regression):
+@pytest.mark.parametrize("theme", [
+		"sphinx-rtd-theme",
+		"alabaster",
+		"domdf-sphinx-theme",
+		"furo",
+		])
+def test_make_conf(tmp_pathplus, demo_environment, file_regression, theme):
+	demo_environment.globals["sphinx_html_theme"] = theme
+
 	# TODO: with values for these
 	demo_environment.globals["html_theme_options"] = {}
 	demo_environment.globals["extra_sphinx_extensions"] = []

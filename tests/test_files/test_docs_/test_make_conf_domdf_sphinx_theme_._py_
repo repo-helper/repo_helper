@@ -66,23 +66,18 @@ intersphinx_mapping = {
 		"sphinx": ("https://www.sphinx-doc.org/en/stable/", None),
 		}
 
-html_theme = "alabaster"
-html_theme_options = {
-		"page_width": "1200px",
-		"logo_name": "true",
-		"github_user": "octocat",
-		"github_repo": "hello-world",
-		"description": "a short description",
-		"github_banner": "true",
-		"github_type": "star",
-		"badge_branch": "master",
-		"fixed_sidebar": "true",
-		}
+html_theme = "domdf_sphinx_theme"
+html_theme_options = {"logo_only": False}
 html_theme_path = ["../.."]
 html_show_sourcelink = True  # True will show link to source
 
-html_context = {}
-
+html_context = {
+		"display_github": True,
+		"github_user": "octocat",
+		"github_repo": "hello-world",
+		"github_version": "master",
+		"conf_py_path": "/doc-source/",
+		}
 htmlhelp_basename = slug
 
 latex_documents = [("index", f'{slug}.tex', project, author, "manual")]
