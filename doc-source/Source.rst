@@ -3,7 +3,7 @@ Downloading source code
 =========================
 
 The ``repo_helper`` source code is available on GitHub,
-and can be accessed from the following URL: https://github.com/domdfcoding/repo_helper"
+and can be accessed from the following URL: https://github.com/domdfcoding/repo_helper
 
 If you have ``git`` installed, you can clone the repository with the following command:
 

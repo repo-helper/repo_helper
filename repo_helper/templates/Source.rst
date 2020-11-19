@@ -3,7 +3,7 @@ Downloading source code
 =========================
 
 The ``{{ modname }}`` source code is available on GitHub,
-and can be accessed from the following URL: https://github.com/{{ username }}/{{ repo_name }}"
+and can be accessed from the following URL: https://github.com/{{ username }}/{{ repo_name }}
 
 If you have ``git`` installed, you can clone the repository with the following command:
 
