@@ -182,9 +182,10 @@ def test_remove_autodoc_augment_defaults(tmp_pathplus, demo_environment):
 
 
 @pytest.mark.parametrize("theme", [
-		"sphinx_rtd_theme",
+		"sphinx-rtd-theme",
 		"alabaster",
-		"domdf_sphinx_theme",
+		"domdf-sphinx-theme",
+		"furo",
 		])
 def test_copy_docs_styling(tmp_pathplus, demo_environment, file_regression, theme):
 	demo_environment.globals["sphinx_html_theme"] = theme

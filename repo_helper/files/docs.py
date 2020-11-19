@@ -113,16 +113,18 @@ class DocRequirementsManager(RequirementsManager):
 		self._globals = templates.globals
 		super().__init__(repo_path)
 
-	def compile_target_requirements(self) -> None:
-		# Mapping of pypi_name to version specifier
-		theme_versions = {
-				"alabaster": ">=0.7.12",
-				"sphinx_rtd_theme": "<0.5",
-				"domdf_sphinx_theme": ">=0.1.0",
-				"repo_helper_sphinx_theme": ">=0.0.2",
-				}
+	# Mapping of pypi_name to version specifier
+	theme_versions = {
+			"alabaster": ">=0.7.12",
+			"sphinx-rtd-theme": "<0.5",
+			"domdf-sphinx-theme": ">=0.1.0",
+			"repo-helper-sphinx_theme": ">=0.0.2",
+			"furo": ">=2020.11.15b17",
+			}
 
-		for name, specifier in theme_versions.items():
+	def compile_target_requirements(self) -> None:
+
+		for name, specifier in self.theme_versions.items():
 			if name == self._globals["sphinx_html_theme"]:
 				self.target_requirements.add(ComparableRequirement(f"{name}{specifier}"))
 				break
@@ -131,10 +133,10 @@ class DocRequirementsManager(RequirementsManager):
 
 		# Mapping of pypi_name to version specifier
 		my_sphinx_extensions = {
-				"extras_require": ">=0.2.0",
-				"seed_intersphinx_mapping": ">=0.1.1",
-				"default_values": ">=0.2.0",
-				"toctree_plus": ">=0.0.4",
+				"extras-require": ">=0.2.0",
+				"seed-intersphinx-mapping": ">=0.1.1",
+				"default-values": ">=0.2.0",
+				"toctree-plus": ">=0.0.4",
 				"sphinx-toolbox": ">=1.7.2",
 				}
 
@@ -153,10 +155,8 @@ class DocRequirementsManager(RequirementsManager):
 
 		for req in current_requirements:
 			req.name = normalize(req.name)
-			if req.name not in self.get_target_requirement_names():
-				if req.name == "sphinx-rtd-theme" and self._globals["sphinx_html_theme"] == "domdf_sphinx_theme":
-					self.target_requirements.add(ComparableRequirement("domdf-sphinx-theme>=0.1.0"))
-				elif req.name == "sphinx-autodoc-typehints":
+			if req.name not in self.get_target_requirement_names() and req.name not in self.theme_versions.keys():
+				if req.name == "sphinx-autodoc-typehints":
 					continue
 				else:
 					self.target_requirements.add(req)
@@ -282,7 +282,7 @@ def make_conf(repo_path: pathlib.Path, templates: jinja2.Environment) -> List[st
 	username = templates.globals["username"]
 	repo_name = templates.globals["repo_name"]
 
-	if templates.globals["sphinx_html_theme"] in {"sphinx_rtd_theme", "domdf_sphinx_theme"}:
+	if templates.globals["sphinx_html_theme"] in {"sphinx-rtd-theme", "domdf-sphinx-theme"}:
 		for key, val in {
 			"display_github": True,  # Integrate GitHub
 			"github_user": username,  # Username
@@ -300,7 +300,7 @@ def make_conf(repo_path: pathlib.Path, templates: jinja2.Environment) -> List[st
 			if key not in templates.globals["html_theme_options"]:
 				templates.globals["html_theme_options"][key] = val
 
-	elif templates.globals["sphinx_html_theme"] in {"alabaster", "repo_helper_sphinx_theme"}:
+	elif templates.globals["sphinx_html_theme"] in {"alabaster", "repo-helper-sphinx-theme"}:
 		# See https://github.com/bitprophet/alabaster/blob/master/alabaster/theme.conf
 		# and https://alabaster.readthedocs.io/en/latest/customization.html
 		for key, val in {
@@ -551,7 +551,7 @@ def copy_docs_styling(repo_path: pathlib.Path, templates: jinja2.Environment) ->
 	for directory in {style_css.parent, layout_html.parent}:
 		directory.maybe_make(parents=True)
 
-	if templates.globals["sphinx_html_theme"] == "sphinx_rtd_theme":
+	if templates.globals["sphinx_html_theme"] == "sphinx-rtd-theme":
 
 		style_css.write_lines([
 				f"/* {templates.globals['managed_message']} */",
@@ -596,7 +596,6 @@ def copy_docs_styling(repo_path: pathlib.Path, templates: jinja2.Environment) ->
 			shutil.rmtree(furo_navigation.parent)
 		except FileNotFoundError:
 			pass
-
 
 	layout_html.write_lines([
 			f"<!--- {templates.globals['managed_message']} --->",
