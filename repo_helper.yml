@@ -68,8 +68,6 @@ exclude_files:
  - pre-commit
 
 extras_require:
-  schema:
-   - lxml>=4.6.1
   testing:
    - pytest>=6.0.0
    - domdf-python-tools[testing]>=1.5.0
@@ -85,4 +83,4 @@ conda_channels:
  - domdfcoding
 
 conda_extras:
- - schema
+ - none
