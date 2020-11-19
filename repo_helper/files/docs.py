@@ -119,7 +119,7 @@ class DocRequirementsManager(RequirementsManager):
 			"sphinx-rtd-theme": "<0.5",
 			"domdf-sphinx-theme": ">=0.1.0",
 			"repo-helper-sphinx_theme": ">=0.0.2",
-			"furo": ">=2020.11.15b17",
+			"furo": "==2020.11.10b15",
 			}
 
 	def compile_target_requirements(self) -> None:
