@@ -330,9 +330,12 @@
     "sphinx_html_theme": {
       "enum": [
         "sphinx_rtd_theme",
+        "sphinx-rtd-theme",
         "alabaster",
         "repo_helper_sphinx_theme",
+        "repo-helper-sphinx-theme",
         "domdf_sphinx_theme",
+        "domdf-sphinx-theme",
         "furo"
       ],
       "description": "The HTML theme to use for Sphinx."
