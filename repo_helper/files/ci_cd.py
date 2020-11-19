@@ -39,7 +39,7 @@ from repo_helper.utils import no_dev_versions
 __all__ = [
 		"make_travis",
 		"remove_copy_pypi_2_github",
-		"make_make_conda_recipe",
+		"remove_make_conda_recipe",
 		"make_travis_deploy_conda",
 		"make_github_ci",
 		"make_github_docs_test",
@@ -95,18 +95,33 @@ def remove_copy_pypi_2_github(repo_path: pathlib.Path, templates: jinja2.Environ
 
 
 @management.register("make_conda_recipe", ["enable_conda"])
-def make_make_conda_recipe(repo_path: pathlib.Path, templates: jinja2.Environment) -> List[str]:
+def remove_make_conda_recipe(repo_path: pathlib.Path, templates: jinja2.Environment) -> List[str]:
 	"""
-	Add script to create a Conda recipe for the package.
+	Remove the old script to create a Conda recipe.
 
 	:param repo_path: Path to the repository root.
 	:param templates:
 	"""
 
 	file = PathPlus(repo_path / "make_conda_recipe.py")
-	file.write_clean(templates.get_template("make_conda_recipe._py").render())
+	file.unlink(missing_ok=True)
 	return [file.name]
 
+#
+#
+# @management.register("make_conda_recipe", ["enable_conda"])
+# def make_make_conda_recipe(repo_path: pathlib.Path, templates: jinja2.Environment) -> List[str]:
+# 	"""
+# 	Add script to create a Conda recipe for the package.
+#
+# 	:param repo_path: Path to the repository root.
+# 	:param templates:
+# 	"""
+#
+# 	file = PathPlus(repo_path / "make_conda_recipe.py")
+# 	file.write_clean(templates.get_template("make_conda_recipe._py").render())
+# 	return [file.name]
+#
 
 @management.register("travis_deploy_conda", ["enable_conda"])
 def make_travis_deploy_conda(repo_path: pathlib.Path, templates: jinja2.Environment) -> List[str]:
