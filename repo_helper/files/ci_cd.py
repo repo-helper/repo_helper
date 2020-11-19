@@ -107,8 +107,7 @@ def remove_make_conda_recipe(repo_path: pathlib.Path, templates: jinja2.Environm
 	file.unlink(missing_ok=True)
 	return [file.name]
 
-#
-#
+
 # @management.register("make_conda_recipe", ["enable_conda"])
 # def make_make_conda_recipe(repo_path: pathlib.Path, templates: jinja2.Environment) -> List[str]:
 # 	"""
@@ -121,7 +120,7 @@ def remove_make_conda_recipe(repo_path: pathlib.Path, templates: jinja2.Environm
 # 	file = PathPlus(repo_path / "make_conda_recipe.py")
 # 	file.write_clean(templates.get_template("make_conda_recipe._py").render())
 # 	return [file.name]
-#
+
 
 @management.register("travis_deploy_conda", ["enable_conda"])
 def make_travis_deploy_conda(repo_path: pathlib.Path, templates: jinja2.Environment) -> List[str]:

@@ -39,7 +39,7 @@ __all__ = ["main"]
 import_commands(repo_helper.cli.commands, entry_point="repo_helper.command")
 
 
-def main():
+def main():  # noqa: D103
 	return cli(obj={})
 
 

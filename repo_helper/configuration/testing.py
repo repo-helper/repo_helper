@@ -202,7 +202,7 @@ class mypy_version(ConfigVar):  # noqa
 
 class tox_unmanaged(ConfigVar):  # noqa
 	"""
-	A list of section names in ``tox.ini`` which should not be managed by ``repo-helper.
+	A list of section names in ``tox.ini`` which should not be managed by ``repo-helper``.
 
 	Example:
 

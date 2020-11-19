@@ -137,6 +137,10 @@ class Repo:
 	hooks: List[Hook] = attr.ib(converter=_hook_converter)
 
 	def to_dict(self) -> MutableMapping[str, Union[str, List[Hook]]]:
+		"""
+		Returns a dictionary representation of the :class:`~.Repo`.
+		"""
+
 		return {
 				"repo": str(self.repo),
 				"rev": self.rev,

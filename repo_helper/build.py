@@ -147,6 +147,10 @@ class Builder:
 			return posixpath.join(self.config["source_dir"], self.config["import_name"].split('.')[0])
 
 	def iter_source_files(self) -> Iterator[PathPlus]:
+		"""
+		Iterate over the files in the source directory.
+		"""
+
 		pkgdir = self.repo_dir / self.pkg_dir
 
 		for py_pattern in {"**/*.py", "**/*.pyi", "**/*.pyx", "**/py.typed"}:

@@ -293,7 +293,12 @@ class IniConfigurator:
 
 		self._output.blankline(ensure_single=True)
 
-	def merge_existing(self, ini_file):
+	def merge_existing(self, ini_file: pathlib.Path):
+		"""
+		Merge existing sections in the configuration file into the new configuration.
+
+		:param ini_file: The existing ``.ini`` file.
+		"""
 
 		if ini_file.is_file():
 			existing_config = ConfigUpdater()
@@ -343,7 +348,7 @@ def traverse_to_file(base_directory: _P, *filename: PathLike, height: int = -1) 
 	raise FileNotFoundError(f"'{filename[0]!s}' not found in {base_directory}")
 
 
-def easter_egg() -> None:  # noqa: D102  # pragma: no cover
+def easter_egg() -> None:  # noqa: D102,D103  # pragma: no cover
 	easter = calc_easter(today.year)
 	easter_margin = timedelta(days=7)
 
@@ -353,6 +358,8 @@ def easter_egg() -> None:  # noqa: D102  # pragma: no cover
 		print("🎃 👻 🦇")
 	elif today == date(today.year, 11, 5):
 		print("🎆 🔥 🚀")
+	elif today == date(today.year, 11, 11):
+		print("We will remember them.")
 	elif today.month == 12:
 		print("🎅 ☃️ 🎁")
 

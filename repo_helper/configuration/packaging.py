@@ -79,7 +79,7 @@ class py_modules(ConfigVar):  # noqa
 	category: str = "packaging"
 
 	@classmethod
-	def validate(cls, raw_config_vars: Optional[Dict[str, Any]] = None) -> Any:
+	def validate(cls, raw_config_vars: Optional[Dict[str, Any]] = None) -> List[str]:  # noqa: D102
 		modules = super().validate(raw_config_vars)
 
 		if modules:
@@ -188,7 +188,9 @@ class extras_require(ConfigVar):  # noqa
 
 class additional_requirements_files(ConfigVar):  # noqa
 	"""
-	A list of files containing additional requirements. These may define "extras" (see :conf:`extras_require`). Used in ``.readthedocs.yml``.
+	A list of files containing additional requirements.
+
+	These may define "extras" (see :conf:`extras_require`). Used in ``.readthedocs.yml``.
 
 	Example:
 

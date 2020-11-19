@@ -160,7 +160,7 @@ def demo_environment() -> jinja2.Environment:
 
 
 @pytest.fixture()
-def original_datadir(request) -> Path:
+def original_datadir(request) -> Path:  # noqa: D103
 	# Work around pycharm confusing datadir with test file.
 	return PathPlus(os.path.splitext(request.module.__file__)[0] + '_')
 

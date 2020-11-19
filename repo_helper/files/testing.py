@@ -482,6 +482,11 @@ class ToxConfig(IniConfigurator):
 		self._ini["pytest"]["timeout"] = 300
 
 	def merge_existing(self, ini_file):
+		"""
+		Merge existing sections in the configuration file into the new configuration.
+
+		:param ini_file: The existing ``.ini`` file.
+		"""
 
 		if ini_file.is_file():
 			existing_config = ConfigUpdater()

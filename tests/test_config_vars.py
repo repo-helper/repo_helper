@@ -22,6 +22,7 @@
 
 # stdlib
 import os
+import re
 from typing import Any, Dict, Type
 
 # 3rd party
@@ -105,45 +106,45 @@ class Test_rtfd_author:
 		assert rtfd_author.get(value) == expects
 
 	def test_no_value(self):
-		with pytest.raises(ValueError):
+		with pytest.raises(ValueError, match="A value for 'author' is required."):
 			rtfd_author.get()
 
 	@pytest.mark.parametrize(
-			"wrong_value",
+			"wrong_value, match",
 			[
-					{"rtfd_author": 1234},
-					{"rtfd_author": True},
-					{"rtfd_author": test_list_int},
-					{"rtfd_author": test_list_str},
-					{"modname": "repo_helper"},
-					{},
+					({"rtfd_author": 1234}, "'rtfd_author' must be a <class 'str'>"),
+					({"rtfd_author": True}, "'rtfd_author' must be a <class 'str'>"),
+					({"rtfd_author": test_list_int}, "'rtfd_author' must be a <class 'str'>"),
+					({"rtfd_author": test_list_str}, "'rtfd_author' must be a <class 'str'>"),
+					({"modname": "repo_helper"}, "A value for 'author' is required."),
+					({}, "A value for 'author' is required."),
 					]
 			)
-	def test_errors(self, wrong_value: Dict[str, Any]):
-		with pytest.raises(ValueError):
+	def test_errors(self, wrong_value: Dict[str, Any], match: str):
+		with pytest.raises(ValueError, match=match):
 			rtfd_author.get(wrong_value)
 
 
 def test_modname():
 	assert modname.get({"modname": "repo_helper"}) == "repo_helper"
 
-	with pytest.raises(ValueError):
+	with pytest.raises(ValueError, match="A value for 'modname' is required."):
 		modname.get()
 
 
 @pytest.mark.parametrize(
-		"wrong_value",
+		"wrong_value, match",
 		[
-				{"modname": 1234},
-				{"modname": True},
-				{"modname": test_list_int},
-				{"modname": test_list_str},
-				{"username": "domdfcoding"},
-				{},
+				({"modname": 1234}, "'modname' must be a <class 'str'>"),
+				({"modname": True}, "'modname' must be a <class 'str'>"),
+				({"modname": test_list_int}, "'modname' must be a <class 'str'>"),
+				({"modname": test_list_str}, "'modname' must be a <class 'str'>"),
+				({"username": "domdfcoding"}, "A value for 'modname' is required."),
+				({}, "A value for 'modname' is required."),
 				]
 		)
-def test_modname_errors(wrong_value):
-	with pytest.raises(ValueError):
+def test_modname_errors(wrong_value, match):
+	with pytest.raises(ValueError, match=match):
 		modname.get(wrong_value)
 
 
@@ -151,22 +152,22 @@ def test_version():
 	assert version.get({"version": "0.1.2"}) == "0.1.2"
 	assert version.get({"version": 1.2}) == "1.2"
 
-	with pytest.raises(ValueError):
+	with pytest.raises(ValueError, match="A value for 'version' is required."):
 		version.get()
 
 
 @pytest.mark.parametrize(
-		"wrong_value",
+		"wrong_value, match",
 		[
-				{"version": True},
-				{"version": test_list_int},
-				{"version": test_list_str},
-				{"username": "domdfcoding"},
-				{},
+				({"version": True}, "'version' must be one of <class 'str'>"),
+				({"version": test_list_int}, "'version' must be one of <class 'str'>"),
+				({"version": test_list_str}, "'version' must be one of <class 'str'>"),
+				({"username": "domdfcoding"}, "A value for 'version' is required."),
+				({}, "A value for 'version' is required."),
 				]
 		)
-def test_version_errors(wrong_value):
-	with pytest.raises(ValueError):
+def test_version_errors(wrong_value, match):
+	with pytest.raises(ValueError, match=match):
 		version.get(wrong_value)
 
 
@@ -194,22 +195,22 @@ class Test_conda_description:
 		assert conda_description.get(value) == expects
 
 	def test_no_value(self):
-		with pytest.raises(ValueError):
+		with pytest.raises(ValueError, match="A value for 'short_desc' is required."):
 			conda_description.get()
 
 	@pytest.mark.parametrize(
-			"wrong_value",
+			"wrong_value, match",
 			[
-					{"conda_description": 1234},
-					{"conda_description": True},
-					{"conda_description": test_list_int},
-					{"conda_description": test_list_str},
-					{"modname": "repo_helper"},
-					{},
+					({"conda_description": 1234}, "'conda_description' must be a <class 'str'>"),
+					({"conda_description": True}, "'conda_description' must be a <class 'str'>"),
+					({"conda_description": test_list_int}, "'conda_description' must be a <class 'str'>"),
+					({"conda_description": test_list_str}, "'conda_description' must be a <class 'str'>"),
+					({"modname": "repo_helper"}, "A value for 'short_desc' is required."),
+					({}, "A value for 'short_desc' is required."),
 					]
 			)
-	def test_errors(self, wrong_value: Dict[str, Any]):
-		with pytest.raises(ValueError):
+	def test_errors(self, wrong_value: Dict[str, Any], match):
+		with pytest.raises(ValueError, match=match):
 			conda_description.get(wrong_value)
 
 
@@ -217,20 +218,20 @@ def test_copyright_years():
 	assert copyright_years.get({"copyright_years": "2014-2019"}) == "2014-2019"
 	assert copyright_years.get({"copyright_years": 2020}) == "2020"
 
-	with pytest.raises(ValueError):
+	with pytest.raises(ValueError, match="A value for 'copyright_years' is required."):
 		copyright_years.get()
 
 
 @pytest.mark.parametrize(
-		"wrong_value", [
-				{"copyright_years": test_list_int},
-				{"copyright_years": test_list_str},
-				{"username": "domdfcoding"},
-				{},
+		"wrong_value, match", [
+				({"copyright_years": test_list_int}, "'copyright_years' must be one of <class 'str'>"),
+				({"copyright_years": test_list_str}, "'copyright_years' must be one of <class 'str'>"),
+				({"username": "domdfcoding"}, "A value for 'copyright_years' is required."),
+				({}, "A value for 'copyright_years' is required."),
 				]
 		)
-def test_copyright_years_errors(wrong_value):
-	with pytest.raises(ValueError):
+def test_copyright_years_errors(wrong_value, match):
+	with pytest.raises(ValueError, match=match):
 		copyright_years.get(wrong_value)
 
 
@@ -240,23 +241,23 @@ def test_repo_name():
 	assert repo_name.get({"modname": "the_modname"}) == "the_modname"
 	assert repo_name.get({"modname": "the_modname", "repo_name": "repo_helper"}) == "repo_helper"
 
-	with pytest.raises(ValueError):
+	with pytest.raises(ValueError, match="A value for 'modname' is required."):
 		repo_name.get()
 
 
 @pytest.mark.parametrize(
-		"wrong_value",
+		"wrong_value, match",
 		[
-				{"repo_name": 1234},
-				{"repo_name": True},
-				{"repo_name": test_list_int},
-				{"repo_name": test_list_str},
-				{"username": "domdfcoding"},
-				{},
+				({"repo_name": 1234}, "'repo_name' must be a <class 'str'>"),
+				({"repo_name": True}, "'repo_name' must be a <class 'str'>"),
+				({"repo_name": test_list_int}, "'repo_name' must be a <class 'str'>"),
+				({"repo_name": test_list_str}, "'repo_name' must be a <class 'str'>"),
+				({"username": "domdfcoding"}, "A value for 'modname' is required."),
+				({}, "A value for 'modname' is required."),
 				]
 		)
-def test_repo_name_errors(wrong_value):
-	with pytest.raises(ValueError):
+def test_repo_name_errors(wrong_value, match):
+	with pytest.raises(ValueError, match=match):
 		repo_name.get(wrong_value)
 
 
@@ -266,21 +267,21 @@ def test_pypi_name():
 	assert pypi_name.get({"modname": "the_modname"}) == "the_modname"
 	assert pypi_name.get({"modname": "the_modname", "pypi_name": "repo_helper"}) == "repo_helper"
 
-	with pytest.raises(ValueError):
+	with pytest.raises(ValueError, match="A value for 'modname' is required."):
 		pypi_name.get()
 
 
 @pytest.mark.parametrize(
-		"wrong_value", [
-				{"pypi_name": 1234},
-				{"pypi_name": True},
-				{"pypi_name": test_list_int},
-				{"pypi_name": test_list_str},
-				{},
+		"wrong_value, match", [
+				({"pypi_name": 1234}, "'pypi_name' must be a <class 'str'>"),
+				({"pypi_name": True}, "'pypi_name' must be a <class 'str'>"),
+				({"pypi_name": test_list_int}, "'pypi_name' must be a <class 'str'>"),
+				({"pypi_name": test_list_str}, "'pypi_name' must be a <class 'str'>"),
+				({}, "A value for 'modname' is required."),
 				]
 		)
-def test_pypi_name_errors(wrong_value):
-	with pytest.raises(ValueError):
+def test_pypi_name_errors(wrong_value, match):
+	with pytest.raises(ValueError, match=match):
 		pypi_name.get(wrong_value)
 
 
@@ -292,22 +293,22 @@ def test_import_name():
 	assert import_name.get({"modname": "the_modname"}) == "the_modname"
 	assert import_name.get({"modname": "the_modname", "import_name": "repo_helper"}) == "repo_helper"
 
-	with pytest.raises(ValueError):
+	with pytest.raises(ValueError, match="A value for 'modname' is required."):
 		import_name.get()
 
 
 @pytest.mark.parametrize(
-		"wrong_value",
+		"wrong_value, match",
 		[
-				{"import_name": 1234},
-				{"import_name": True},
-				{"import_name": test_list_int},
-				{"import_name": test_list_str},
-				{},
+				({"import_name": 1234}, "'import_name' must be a <class 'str'>"),
+				({"import_name": True}, "'import_name' must be a <class 'str'>"),
+				({"import_name": test_list_int}, "'import_name' must be a <class 'str'>"),
+				({"import_name": test_list_str}, "'import_name' must be a <class 'str'>"),
+				({}, "A value for 'modname' is required."),
 				]
 		)
-def test_import_name_errors(wrong_value):
-	with pytest.raises(ValueError):
+def test_import_name_errors(wrong_value, match):
+	with pytest.raises(ValueError, match=match):
 		import_name.get(wrong_value)
 
 
@@ -362,7 +363,7 @@ def test_classifiers():
 				]
 		)
 def test_classifiers_errors(wrong_value):
-	with pytest.raises(ValueError):
+	with pytest.raises(ValueError, match="'classifiers' must be a List of <class 'str'>"):
 		classifiers.get(wrong_value)
 
 
@@ -571,7 +572,7 @@ class Test_platforms:
 
 	def test_non_enum(self):
 		for non_enum in self.non_enum_values:
-			with pytest.raises(ValueError):
+			with pytest.raises(ValueError, match=r"Elements of 'platforms' must be one of \('Windows', 'macOS', 'Linux'\)"):
 				self.config_var.get({self.config_var.__name__: non_enum})
 
 	def test_success(self):
@@ -582,21 +583,21 @@ class Test_platforms:
 		assert self.config_var.get({"platforms": ["macOS", "Windows"]}) == ["macOS", "Windows"]
 		assert self.config_var.get({"platforms": ["Windows", "macOS", "Linux"]}) == ["Windows", "macOS", "Linux"]
 
-	def test_errors(self):
-		for wrong_value in [
-				{self.config_var.__name__: "a string"},
-				{self.config_var.__name__: "Windows"},
-				{self.config_var.__name__: "windows"},
-				{self.config_var.__name__: "Linux"},
-				{self.config_var.__name__: "linux"},
-				{self.config_var.__name__: "macOS"},
-				{self.config_var.__name__: "macos"},
-				{self.config_var.__name__: 1234},
-				{self.config_var.__name__: True},
-				{self.config_var.__name__: test_list_int},
-				]:
-			with pytest.raises(ValueError):
-				self.config_var.get(wrong_value)  # type: ignore
+	@pytest.mark.parametrize("wrong_value, match", [
+				({"platforms": "a string"}, "'platforms' must be a List of typing.Literal['Windows', 'macOS', 'Linux']"),
+				({"platforms": "Windows"}, "'platforms' must be a List of typing.Literal['Windows', 'macOS', 'Linux']"),
+				({"platforms": "windows"}, "'platforms' must be a List of typing.Literal['Windows', 'macOS', 'Linux']"),
+				({"platforms": "Linux"}, "'platforms' must be a List of typing.Literal['Windows', 'macOS', 'Linux']"),
+				({"platforms": "linux"}, "'platforms' must be a List of typing.Literal['Windows', 'macOS', 'Linux']"),
+				({"platforms": "macOS"}, "'platforms' must be a List of typing.Literal['Windows', 'macOS', 'Linux']"),
+				({"platforms": "macos"}, "'platforms' must be a List of typing.Literal['Windows', 'macOS', 'Linux']"),
+				({"platforms": 1234}, "'platforms' must be a List of typing.Literal['Windows', 'macOS', 'Linux']"),
+				({"platforms": True}, "'platforms' must be a List of typing.Literal['Windows', 'macOS', 'Linux']"),
+				({"platforms": test_list_int}, "Elements of 'platforms' must be one of ('Windows', 'macOS', 'Linux')"),
+				])
+	def test_errors(self, wrong_value, match):
+		with pytest.raises(ValueError, match=re.escape(match)):
+			self.config_var.get(wrong_value)  # type: ignore
 
 
 class Test_python_deploy_version(OptionalStringTest):

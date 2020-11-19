@@ -32,10 +32,10 @@ from repo_helper.files.ci_cd import (
 		make_github_docs_test,
 		make_github_manylinux,
 		make_github_octocheese,
-		remove_make_conda_recipe,
 		make_travis,
 		make_travis_deploy_conda,
-		remove_copy_pypi_2_github
+		remove_copy_pypi_2_github,
+		remove_make_conda_recipe
 		)
 
 
@@ -216,7 +216,7 @@ def test_remove_make_conda_recipe(tmp_pathplus, demo_environment):
 	assert remove_make_conda_recipe(tmp_pathplus, demo_environment) == ["make_conda_recipe.py"]
 	assert not (tmp_pathplus / "make_conda_recipe.py").is_file()
 
-#
+
 # def test_make_make_conda_recipe(tmp_pathplus, demo_environment, file_regression):
 # 	demo_environment.globals["conda_description"] = "This is the conda description."
 # 	demo_environment.globals["extras_require"] = {}
@@ -226,7 +226,7 @@ def test_remove_make_conda_recipe(tmp_pathplus, demo_environment):
 #
 # 	assert make_make_conda_recipe(tmp_pathplus, demo_environment) == ["make_conda_recipe.py"]
 # 	check_file_output(tmp_pathplus / "make_conda_recipe.py", file_regression)
-#
+
 
 @pytest.mark.parametrize("py_versions", [["3.6", "3.7", "3.8"], ["3.6", "3.7"]])
 @pytest.mark.parametrize("platforms", [["Linux"], ["Linux", "Windows"]])

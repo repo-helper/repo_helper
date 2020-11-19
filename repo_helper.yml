@@ -84,3 +84,6 @@ conda_channels:
 
 conda_extras:
  - none
+
+tox_unmanaged:
+ - flake8

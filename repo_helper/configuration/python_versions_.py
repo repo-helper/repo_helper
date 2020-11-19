@@ -24,7 +24,7 @@ r"""
 #
 
 # stdlib
-from typing import Iterable, List, Union
+from typing import Any, Dict, Iterable, List, Optional, Union
 
 # 3rd party
 from configconfig.configvar import ConfigVar
@@ -45,11 +45,17 @@ class python_deploy_version(ConfigVar):  # noqa
 
 	dtype = Union[str, float]
 	rtype = str
-	default = 3.6
+	default: float = 3.6
 	category: str = "python versions"
 
 
-def default_python_versions(raw_config_vars):
+def default_python_versions(raw_config_vars: Optional[Dict[str, Any]]) -> List[str]:
+	"""
+	Function to return the default value for :conf:`python_versions`.
+
+	:param raw_config_vars:
+	"""
+
 	return [python_deploy_version(raw_config_vars)]
 
 
@@ -74,5 +80,5 @@ class python_versions(ConfigVar):  # noqa
 	category: str = "python versions"
 
 	@classmethod
-	def validator(cls, value: Iterable[str]) -> List[str]:
+	def validator(cls, value: Iterable[str]) -> List[str]:  # noqa: D102
 		return [str(ver) for ver in value if ver]

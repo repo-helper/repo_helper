@@ -173,7 +173,7 @@ def test_create_docs_install_block(file_regression: FileRegressionFixture, kwarg
 	result = create_docs_install_block(**kwargs)
 	check_file_regression(result, file_regression, extension=".rst")
 
-	with pytest.raises(ValueError):
+	with pytest.raises(ValueError, match="Please supply a list of 'conda_channels' if Conda builds are supported"):
 		create_docs_install_block(
 				repo_name="hello_world",
 				username="octocat",
@@ -212,7 +212,7 @@ def test_create_readme_install_block(file_regression: FileRegressionFixture, kwa
 	result = create_readme_install_block(**kwargs)
 	check_file_regression(result, file_regression, extension=".rst")
 
-	with pytest.raises(ValueError):
+	with pytest.raises(ValueError, match="Please supply a list of 'conda_channels' if Conda builds are supported"):
 		create_readme_install_block(modname="hello_world", username="octocat")
 
 

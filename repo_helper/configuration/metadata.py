@@ -241,8 +241,7 @@ class import_name(ConfigVar):  # noqa
 			return cls.validator(cls.validate(raw_config_vars))
 
 	@classmethod
-	def validate(cls, raw_config_vars: Optional[Dict[str, Any]] = None):
-
+	def validate(cls, raw_config_vars: Optional[Dict[str, Any]] = None):  # noqa: D102
 		if raw_config_vars is None:
 			raw_config_vars = {}
 
@@ -262,17 +261,26 @@ class import_name(ConfigVar):  # noqa
 			return cls.rtype(obj)
 
 	@classmethod
-	def validator(cls, name: str) -> str:
+	def validator(cls, name: str) -> str:  # noqa: D102
 		name = name.replace('-', '_')  # replace hyphens with underscores
 		name = name.replace('/', '.')
 		for part in name.split('.'):
 			if not part.isidentifier():
-				raise ValueError(
-						"""\
-	'import_name' must only contain contains letters, numbers, underscores and fullstops.
-	It cannot cannot start with a number, or contain any spaces."""
-						)
+				raise InvalidName()
+
 		return name
+
+
+class InvalidName(SyntaxError):
+	"""
+	Error raised when an invalid value is given for :conf:`import_name`.
+	"""
+
+	def __init__(self):
+		super().__init__(
+				"'import_name' must only contain contains letters, numbers, underscores and fullstops.\n"
+				"It cannot cannot start with a number, or contain any spaces."
+				)
 
 
 class classifiers(ConfigVar):  # noqa
@@ -294,7 +302,7 @@ class classifiers(ConfigVar):  # noqa
 	category: str = "metadata"
 
 	@classmethod
-	def validate(cls, raw_config_vars: Optional[Dict[str, Any]] = None):
+	def validate(cls, raw_config_vars: Optional[Dict[str, Any]] = None):  # noqa: D102
 
 		# this package
 		from repo_helper.configuration import python_versions
@@ -386,7 +394,7 @@ class license(ConfigVar):  # noqa  # pylint: disable=redefined-builtin
 	category: str = "metadata"
 
 	@classmethod
-	def validator(cls, value):
+	def validator(cls, value):  # noqa: D102
 		value = value.replace(' ', '')
 
 		if value in license_lookup:
@@ -430,7 +438,7 @@ class source_dir(ConfigVar):  # noqa
 	category: str = "metadata"
 
 	@classmethod
-	def validator(cls, value: str) -> str:
+	def validator(cls, value: str) -> str:  # noqa: D102
 		return os.path.join(value, '')
 
 

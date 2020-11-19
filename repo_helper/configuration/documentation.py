@@ -28,10 +28,8 @@ from typing import Any, Dict, List
 
 # 3rd party
 from configconfig.configvar import ConfigVar
-from typing_extensions import Literal
-
-# this package
 from repo_helper.configuration.metadata import author
+from typing_extensions import Literal
 
 __all__ = [
 		"rtfd_author",
@@ -101,19 +99,21 @@ class sphinx_html_theme(ConfigVar):  # noqa
 	and `furo <https://pradyunsg.me/furo>`_.
 	"""
 
-	dtype = Literal["sphinx_rtd_theme",
-					"sphinx-rtd-theme",
-					"alabaster",
-					"repo_helper_sphinx_theme",
-					"repo-helper-sphinx-theme",
-					"domdf_sphinx_theme",
-					"domdf-sphinx-theme",
-					"furo", ]
+	dtype = Literal[
+		"sphinx_rtd_theme",
+		"sphinx-rtd-theme",
+		"alabaster",
+		"repo_helper_sphinx_theme",
+		"repo-helper-sphinx-theme",
+		"domdf_sphinx_theme",
+		"domdf-sphinx-theme",
+		"furo"
+		]
 	default = "domdf-sphinx-theme"
 	category: str = "documentation"
 
 	@classmethod
-	def validator(cls, value: Any) -> Any:
+	def validator(cls, value: str) -> str:  # noqa: D102
 		return str(value).replace('_', '-')
 
 

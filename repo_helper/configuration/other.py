@@ -159,10 +159,10 @@ class pre_commit_exclude(ConfigVar):  # noqa
 	"""
 
 	dtype = str
-	default = "^$"
+	default: str = "^$"
 
 	@classmethod
-	def validate(cls, raw_config_vars: Optional[Dict[str, Any]] = None) -> Any:
+	def validate(cls, raw_config_vars: Optional[Dict[str, Any]] = None) -> Any:  # noqa: D102
 		return re.compile(super().validate(raw_config_vars)).pattern
 
 

@@ -378,8 +378,18 @@ def make_conf(repo_path: pathlib.Path, templates: jinja2.Environment) -> List[st
 
 
 class StyleSheet(css.CSSStyleSheet):
+	"""
+	Represents a CSS style sheet.
+	"""
 
-	def add_style(self, selector: str, styles: Dict[str, Union[Sequence, str, int, None]]):
+	def add_style(self, selector: str, styles: Dict[str, Union[Sequence, str, int, None]]) -> None:
+		"""
+		Add a style to the stylesheet.
+
+		:param selector:
+		:param styles:
+		"""
+
 		self.add(make_style(selector, styles))
 
 
