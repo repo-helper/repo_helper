@@ -33,6 +33,7 @@ import datetime
 import os
 import pathlib
 import secrets
+import sys
 from pathlib import Path
 
 # 3rd party
@@ -182,7 +183,11 @@ def temp_empty_repo(tmp_pathplus, monkeypatch) -> Repo:
 	FAKE_DATE = datetime.date(2020, 7, 25)
 	monkeypatch.setattr(repo_helper.utils, "today", FAKE_DATE)
 
-	repo_dir = tmp_pathplus / secrets.token_hex(8) / "%%tmp"
+	repo_dir = tmp_pathplus / secrets.token_hex(8)
+
+	if sys.platform == "linux":
+		repo_dir /= "%%tmp"
+
 	repo_dir.maybe_make(parents=True)
 	repo: Repo = Repo.init(repo_dir)
 	return repo
