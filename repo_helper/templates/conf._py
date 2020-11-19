@@ -57,14 +57,11 @@ intersphinx_mapping = {
 		{% for mapping in intersphinx_mapping %}{{ mapping }},{{ '\n' }}		{% endfor %}}
 
 html_theme = '{{ sphinx_html_theme }}'
-html_theme_options = {
-		{% for option, value in html_theme_options.items() %}'{{ option }}': {{ enquote_value(value) }},{{ '\n' }}		{% endfor %}}
+html_theme_options = {{ pformat(html_theme_options) }}
 html_theme_path = ["../.."]
 html_show_sourcelink = True  # True will show link to source
 
-html_context = {
-		{% for option, value in html_context.items() %}'{{ option }}': {{ enquote_value(value) }},{{ '\n' }}		{% endfor %}}
-
+html_context = {{ pformat(html_context) }}
 htmlhelp_basename = slug
 
 latex_documents = [('index', f'{slug}.tex', project, author, 'manual')]
