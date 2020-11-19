@@ -137,7 +137,7 @@ class DocRequirementsManager(RequirementsManager):
 				"seed-intersphinx-mapping": ">=0.1.1",
 				"default-values": ">=0.2.0",
 				"toctree-plus": ">=0.0.4",
-				"sphinx-toolbox": ">=1.7.2",
+				"sphinx-toolbox": ">=1.7.3",
 				}
 
 		for name, specifier in my_sphinx_extensions.items():
