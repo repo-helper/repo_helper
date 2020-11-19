@@ -32,8 +32,6 @@ from typing import Any, List, MutableMapping
 import jinja2
 import ruamel.yaml as yaml
 from domdf_python_tools.paths import PathPlus
-
-# this package
 from repo_helper.files import management
 
 __all__ = ["make_dependabot", "make_auto_assign_action", "make_stale_bot", "make_imgbot"]
@@ -189,39 +187,34 @@ def make_automerge_action(repo_path: pathlib.Path, templates: jinja2.Environment
 
 	automerge_workflow = dot_github / "workflows" / "automerge.yml"
 
+	pr_types = [
+			"labeled",
+			"unlabeled",
+			"synchronize",
+			"opened",
+			"edited",
+			"ready_for_review",
+			"reopened",
+			"unlocked",
+			]
+	steps = [{
+			"name": "automerge",
+			"uses": "pascalgn/automerge-action@v0.12.0",
+			"env": {
+					"GITHUB_TOKEN": "${{ secrets.GITHUB_TOKEN }}",
+					"MERGE_METHOD": "squash",
+					},
+			}]
+
 	config: MutableMapping[str, Any] = {
 			"name": "automerge",
 			"on": {
-					"pull_request": {
-							"types": [
-									"labeled",
-									"unlabeled",
-									"synchronize",
-									"opened",
-									"edited",
-									"ready_for_review",
-									"reopened",
-									"unlocked",
-									],
-							},
+					"pull_request": {"types": pr_types},
 					"pull_request_review": {"types": ["submitted"]},
 					"check_suite": {"types": ["completed"]},
 					"status": {},
 					},
-			"jobs": {
-					"automerge": {
-							"runs-on":
-									"ubuntu-latest",
-							"steps": [{
-									"name": "automerge",
-									"uses": "pascalgn/automerge-action@v0.12.0",
-									"env": {
-											"GITHUB_TOKEN": "${{ secrets.GITHUB_TOKEN }}",
-											"MERGE_METHOD": "squash",
-											},
-									}]
-							}
-					}
+			"jobs": {"automerge": {"runs-on": "ubuntu-latest", "steps": steps}}
 			}
 
 	automerge_workflow.write_lines([
