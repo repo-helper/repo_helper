@@ -14,7 +14,7 @@
       "items": {
         "type": "string"
       },
-      "description": "A list of files containing additional requirements. These may define \"extras\" (see :conf:`extras_require`). Used in ``.readthedocs.yml``."
+      "description": "A list of files containing additional requirements."
     },
     "additional_setup_args": {
       "type": "object",
@@ -381,7 +381,7 @@
       "items": {
         "type": "string"
       },
-      "description": "A list of section names in ``tox.ini`` which should not be managed by ``repo-helper."
+      "description": "A list of section names in ``tox.ini`` which should not be managed by ``repo-helper``."
     },
     "travis_additional_requirements": {
       "type": "array",
