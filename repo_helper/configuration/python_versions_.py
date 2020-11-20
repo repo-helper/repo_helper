@@ -56,7 +56,7 @@ def default_python_versions(raw_config_vars: Optional[Dict[str, Any]]) -> List[s
 	:param raw_config_vars:
 	"""
 
-	return [python_deploy_version(raw_config_vars)]
+	return [python_deploy_version(raw_config_vars)]  # type: ignore
 
 
 class python_versions(ConfigVar):  # noqa

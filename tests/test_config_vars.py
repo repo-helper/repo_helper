@@ -223,7 +223,8 @@ def test_copyright_years():
 
 
 @pytest.mark.parametrize(
-		"wrong_value, match", [
+		"wrong_value, match",
+		[
 				({"copyright_years": test_list_int}, "'copyright_years' must be one of <class 'str'>"),
 				({"copyright_years": test_list_str}, "'copyright_years' must be one of <class 'str'>"),
 				({"username": "domdfcoding"}, "A value for 'copyright_years' is required."),
@@ -272,7 +273,8 @@ def test_pypi_name():
 
 
 @pytest.mark.parametrize(
-		"wrong_value, match", [
+		"wrong_value, match",
+		[
 				({"pypi_name": 1234}, "'pypi_name' must be a <class 'str'>"),
 				({"pypi_name": True}, "'pypi_name' must be a <class 'str'>"),
 				({"pypi_name": test_list_int}, "'pypi_name' must be a <class 'str'>"),
@@ -572,7 +574,9 @@ class Test_platforms:
 
 	def test_non_enum(self):
 		for non_enum in self.non_enum_values:
-			with pytest.raises(ValueError, match=r"Elements of 'platforms' must be one of \('Windows', 'macOS', 'Linux'\)"):
+			with pytest.raises(
+					ValueError, match=r"Elements of 'platforms' must be one of \('Windows', 'macOS', 'Linux'\)"
+					):
 				self.config_var.get({self.config_var.__name__: non_enum})
 
 	def test_success(self):
@@ -583,21 +587,34 @@ class Test_platforms:
 		assert self.config_var.get({"platforms": ["macOS", "Windows"]}) == ["macOS", "Windows"]
 		assert self.config_var.get({"platforms": ["Windows", "macOS", "Linux"]}) == ["Windows", "macOS", "Linux"]
 
-	@pytest.mark.parametrize("wrong_value, match", [
-				({"platforms": "a string"}, "'platforms' must be a List of typing.Literal['Windows', 'macOS', 'Linux']"),
-				({"platforms": "Windows"}, "'platforms' must be a List of typing.Literal['Windows', 'macOS', 'Linux']"),
-				({"platforms": "windows"}, "'platforms' must be a List of typing.Literal['Windows', 'macOS', 'Linux']"),
-				({"platforms": "Linux"}, "'platforms' must be a List of typing.Literal['Windows', 'macOS', 'Linux']"),
-				({"platforms": "linux"}, "'platforms' must be a List of typing.Literal['Windows', 'macOS', 'Linux']"),
-				({"platforms": "macOS"}, "'platforms' must be a List of typing.Literal['Windows', 'macOS', 'Linux']"),
-				({"platforms": "macos"}, "'platforms' must be a List of typing.Literal['Windows', 'macOS', 'Linux']"),
-				({"platforms": 1234}, "'platforms' must be a List of typing.Literal['Windows', 'macOS', 'Linux']"),
-				({"platforms": True}, "'platforms' must be a List of typing.Literal['Windows', 'macOS', 'Linux']"),
-				({"platforms": test_list_int}, "Elements of 'platforms' must be one of ('Windows', 'macOS', 'Linux')"),
-				])
+	@pytest.mark.parametrize(
+			"wrong_value, match",
+			[
+					({"platforms": "a string"},
+						r"'platforms' must be a List of typing.*\.Literal\['Windows', 'macOS', 'Linux']"),
+					({"platforms": "Windows"},
+						r"'platforms' must be a List of typing.*\.Literal\['Windows', 'macOS', 'Linux']"),
+					({"platforms": "windows"},
+						r"'platforms' must be a List of typing.*\.Literal\['Windows', 'macOS', 'Linux']"),
+					({"platforms": "Linux"},
+						r"'platforms' must be a List of typing.*\.Literal\['Windows', 'macOS', 'Linux']"),
+					({"platforms": "linux"},
+						r"'platforms' must be a List of typing.*\.Literal\['Windows', 'macOS', 'Linux']"),
+					({"platforms": "macOS"},
+						r"'platforms' must be a List of typing.*\.Literal\['Windows', 'macOS', 'Linux']"),
+					({"platforms": "macos"},
+						r"'platforms' must be a List of typing.*\.Literal\['Windows', 'macOS', 'Linux']"),
+					({"platforms": 1234},
+						r"'platforms' must be a List of typing.*\.Literal\['Windows', 'macOS', 'Linux']"),
+					({"platforms": True},
+						r"'platforms' must be a List of typing.*\.Literal\['Windows', 'macOS', 'Linux']"),
+					({"platforms": test_list_int},
+						r"Elements of 'platforms' must be one of \('Windows', 'macOS', 'Linux'\)"),
+					]
+			)
 	def test_errors(self, wrong_value, match):
-		with pytest.raises(ValueError, match=re.escape(match)):
-			self.config_var.get(wrong_value)  # type: ignore
+		with pytest.raises(ValueError, match=match):
+			self.config_var.get(wrong_value)
 
 
 class Test_python_deploy_version(OptionalStringTest):
