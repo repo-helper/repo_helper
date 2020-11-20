@@ -63,7 +63,6 @@ def rewrite_readme(repo_path: pathlib.Path, templates: jinja2.Environment) -> Li
 			conda=templates.globals["enable_conda"],
 			tests=templates.globals["enable_tests"],
 			docs=templates.globals["enable_docs"],
-			travis_site=templates.globals["travis_site"],
 			pypi_name=templates.globals["pypi_name"],
 			docker_shields=templates.globals["docker_shields"],
 			docker_name=templates.globals["docker_name"],

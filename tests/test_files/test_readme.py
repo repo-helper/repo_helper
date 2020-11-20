@@ -45,7 +45,6 @@ from repo_helper.files.readme import rewrite_readme
 def test_rewrite_readme(tmp_pathplus, demo_environment, file_regression: FileRegressionFixture, filename):
 	demo_environment.globals["version"] = "1.2.3"
 	demo_environment.globals["enable_docs"] = True
-	demo_environment.globals["travis_site"] = "com"
 	demo_environment.globals["docker_shields"] = False
 	demo_environment.globals["docker_name"] = ''
 	demo_environment.globals["enable_pre_commit"] = True

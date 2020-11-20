@@ -31,28 +31,11 @@ from configconfig.configvar import ConfigVar
 from typing_extensions import Literal
 
 __all__ = [
-		"travis_site",
 		"travis_ubuntu_version",
 		"travis_extra_install_pre",
 		"travis_extra_install_post",
 		"travis_additional_requirements"
 		]
-
-
-class travis_site(ConfigVar):  # noqa
-	"""
-	The Travis site.
-
-	Example:
-
-	.. code-block:: yaml
-
-		travis_site: "org"
-	"""
-
-	dtype = Literal["com", "org"]
-	default = "com"
-	category: str = "travis"
 
 
 class travis_ubuntu_version(ConfigVar):  # noqa

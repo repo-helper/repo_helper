@@ -91,7 +91,7 @@ def make_docs_check_shield(repo_name: str, username: str) -> str:
 	:alt: Docs Check Status"""
 
 
-def make_actions_linux_shield(repo_name: str, username: str, travis_site: Literal["com", "org"] = "com") -> str:
+def make_actions_linux_shield(repo_name: str, username: str) -> str:
 	"""
 	Create a shield to indicate the status of the tests on Linux.
 

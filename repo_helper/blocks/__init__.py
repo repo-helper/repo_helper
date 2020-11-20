@@ -246,7 +246,6 @@ def create_shields_block(
 			tests=tests,
 			conda=conda,
 			docs=docs,
-			travis_site=travis_site,
 			pypi_name=pypi_name,
 			version=version,
 			unique_name=unique_name,

@@ -125,21 +125,21 @@ def test_make_docs_docs_check_shield():
 
 def test_make_actions_linux_shield():
 	assert make_actions_linux_shield(
-			"hello-world", "octocat", "com"
+			"hello-world", "octocat"
 			) == f"""\
 .. image:: https://github.com/octocat/hello-world/workflows/Linux%20Tests/badge.svg
 	:target: https://github.com/octocat/hello-world/actions?query=workflow%3A%22Linux+Tests%22
 	:alt: Linux Test Status"""
 
 	assert make_actions_linux_shield(
-			"HELLO-WORLD", "octocat", "com"
+			"HELLO-WORLD", "octocat"
 			) == f"""\
 .. image:: https://github.com/octocat/HELLO-WORLD/workflows/Linux%20Tests/badge.svg
 	:target: https://github.com/octocat/HELLO-WORLD/actions?query=workflow%3A%22Linux+Tests%22
 	:alt: Linux Test Status"""
 
 	assert make_actions_linux_shield(
-			"hello_world", "octocat", "com"
+			"hello_world", "octocat"
 			) == f"""\
 .. image:: https://github.com/octocat/hello_world/workflows/Linux%20Tests/badge.svg
 	:target: https://github.com/octocat/hello_world/actions?query=workflow%3A%22Linux+Tests%22
@@ -148,21 +148,21 @@ def test_make_actions_linux_shield():
 
 def test_make_docs_actions_linux_shield():
 	assert make_docs_actions_linux_shield(
-			"hello-world", "octocat", "com"
+			"hello-world", "octocat"
 			) == """\
 .. actions-shield::
 	:workflow: Linux Tests
 	:alt: Linux Test Status"""
 
 	assert make_docs_actions_linux_shield(
-			"HELLO-WORLD", "octocat", "com"
+			"HELLO-WORLD", "octocat"
 			) == """\
 .. actions-shield::
 	:workflow: Linux Tests
 	:alt: Linux Test Status"""
 
 	assert make_docs_actions_linux_shield(
-			"hello_world", "octocat", "com"
+			"hello_world", "octocat"
 			) == """\
 .. actions-shield::
 	:workflow: Linux Tests

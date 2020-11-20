@@ -29,7 +29,7 @@
 
 .. |docs_check{{ unique_name }}| {{ make_docs_check_shield(repo_name, username)[3:] }}{% endif %}
 
-.. |travis{{ unique_name }}| {{ make_actions_linux_shield(repo_name, username, travis_site)[3:] }}
+.. |travis{{ unique_name }}| {{ make_actions_linux_shield(repo_name, username)[3:] }}
 {% if "Windows" in platforms %}
 .. |actions_windows{{ unique_name }}| {{ make_actions_windows_shield(repo_name, username)[3:] }}
 {% endif %}{% if "macOS" in platforms %}

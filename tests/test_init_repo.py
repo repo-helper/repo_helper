@@ -23,7 +23,6 @@ def test_init_repo(temp_empty_repo, demo_environment, file_regression, data_regr
 	demo_environment.globals["license"] = "MIT License"
 	demo_environment.globals["version"] = "1.2.3"
 	demo_environment.globals["enable_docs"] = True
-	demo_environment.globals["travis_site"] = "com"
 	demo_environment.globals["docker_shields"] = False
 	demo_environment.globals["docker_name"] = ''
 	demo_environment.globals["enable_pre_commit"] = True

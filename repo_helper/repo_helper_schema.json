@@ -404,13 +404,6 @@
       },
       "description": "Additional steps to run in Travis before installing dependencies."
     },
-    "travis_site": {
-      "enum": [
-        "com",
-        "org"
-      ],
-      "description": "The Travis site."
-    },
     "travis_ubuntu_version": {
       "enum": [
         "focal",

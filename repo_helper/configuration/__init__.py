@@ -132,7 +132,6 @@ from repo_helper.configuration.travis import (
 		travis_additional_requirements,
 		travis_extra_install_post,
 		travis_extra_install_pre,
-		travis_site,
 		travis_ubuntu_version
 		)
 from repo_helper.configuration.utils import (
@@ -209,7 +208,6 @@ __all__ = [
 		"travis_additional_requirements",
 		"travis_extra_install_post",
 		"travis_extra_install_pre",
-		"travis_site",
 		"travis_ubuntu_version",
 		"username",
 		"version",
@@ -245,7 +243,7 @@ def parse_yaml(repo_path: PathLike) -> Dict:
 		raise FileNotFoundError(f"'repo_helper.yml' not found in {repo_path}")
 
 	config_file.write_lines([
-			line for line in config_file.read_lines() if not re.match("^(use_travis|travis_pypi_secure)", line)
+			line for line in config_file.read_lines() if not re.match("^(use_travis|travis_pypi_secure|travis_site)", line)
 			])
 
 	parser = RepoHelperParser(allow_unknown_keys=False)

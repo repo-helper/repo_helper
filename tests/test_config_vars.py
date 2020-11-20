@@ -537,13 +537,6 @@ class Test_sphinx_html_theme(EnumTest):
 	non_enum_values = ["sphinx-typo3-theme", "a string"]
 
 
-class Test_travis_site(EnumTest):
-	config_var = travis_site
-	test_value = "org"
-	default_value = "com"
-	non_enum_values = ["net", "a string"]
-
-
 class Test_travis_ubuntu_version(EnumTest):
 	config_var = travis_ubuntu_version
 	test_value = "bionic"

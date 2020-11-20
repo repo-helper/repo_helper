@@ -104,7 +104,6 @@ def make_docs_docs_check_shield(repo_name: str, username: str) -> str:
 def make_docs_actions_linux_shield(
 		repo_name: str,
 		username: str,
-		travis_site: Literal["com", "org"] = "com",
 		) -> str:
 	"""
 	Create a shield to indicate the status of the tests on Linux.

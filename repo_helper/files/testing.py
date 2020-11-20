@@ -72,7 +72,6 @@ class ToxConfig(IniConfigurator):
 	managed_sections = [
 			"tox",
 			"envlists",
-			"travis",
 			"gh-actions",
 			"testenv",
 			"testenv:docs",
@@ -195,14 +194,6 @@ class ToxConfig(IniConfigurator):
 		self._ini["envlists"]["qa"] = ["mypy", "lint"]
 		if self["enable_tests"]:
 			self._ini["envlists"]["cov"] = [self["tox_py_versions"][0], "coverage"]
-
-	def travis(self):
-		"""
-		``[travis]``.
-		"""
-
-		versions = (f"{py_ver}: {tox_py_ver}" for py_ver, tox_py_ver in self["tox_travis_versions"].items())
-		self._ini["travis"]["python"] = indent_join(versions)
 
 	def gh_actions(self):
 		"""
