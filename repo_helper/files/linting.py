@@ -41,8 +41,6 @@ __all__ = [
 		"lint_fix_list",
 		"lint_warn_list",
 		"make_pylintrc",
-		"make_lint_roller",
-		"remove_lint_roller",
 		"code_only_warning",
 		]
 
@@ -289,37 +287,3 @@ def make_pylintrc(repo_path: pathlib.Path, templates: jinja2.Environment) -> Lis
 	file = PathPlus(repo_path / ".pylintrc")
 	file.write_clean(PathPlus(template_dir / "pylintrc").read_text())
 	return [file.name]
-
-
-@management.register("lint_roller")
-def remove_lint_roller(repo_path: pathlib.Path, templates: jinja2.Environment) -> List[str]:
-	"""
-	Remove the old lint_roller.sh script to the desired repo.
-
-	:param repo_path: Path to the repository root.
-	:param templates:
-	"""
-
-	lint_file = PathPlus(repo_path / "lint_roller.sh")
-	if lint_file.is_file():
-		lint_file.unlink()
-
-	return [lint_file.name]
-
-
-# @management.register("lint_roller")
-def make_lint_roller(repo_path: pathlib.Path, templates: jinja2.Environment) -> List[str]:
-	"""
-	Add the lint_roller.sh script to the desired repo.
-
-	:param repo_path: Path to the repository root.
-	:param templates:
-	"""
-
-	lint_roller = templates.get_template("lint_roller._sh")
-	lint_file = PathPlus(repo_path / "lint_roller.sh")
-
-	lint_file.write_clean(lint_roller.render())
-	lint_file.make_executable()
-
-	return [lint_file.name]

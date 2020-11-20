@@ -35,9 +35,9 @@ from repo_helper.files.docs import (
 		make_docs_source_rst,
 		make_docutils_conf,
 		make_readthedocs_theming,
-		make_rtfd,
-		remove_autodoc_augment_defaults
+		make_rtfd
 		)
+from repo_helper.files.old import remove_autodoc_augment_defaults
 
 
 def test_make_rtfd_case_1(tmp_pathplus, demo_environment, file_regression: FileRegressionFixture):

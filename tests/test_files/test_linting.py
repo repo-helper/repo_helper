@@ -3,7 +3,8 @@ from domdf_python_tools.testing import check_file_output
 from pytest_regressions.file_regression import FileRegressionFixture
 
 # this package
-from repo_helper.files.linting import make_lint_roller, make_pylintrc, remove_lint_roller
+from repo_helper.files.linting import make_pylintrc
+from repo_helper.files.old import make_lint_roller, remove_lint_roller
 
 
 def test_pylintrc(tmp_pathplus, demo_environment, file_regression: FileRegressionFixture):

@@ -84,7 +84,6 @@ __all__ = [
 		"make_404_page",
 		"make_docs_source_rst",
 		"make_style",
-		"remove_autodoc_augment_defaults",
 		]
 
 # Disable logging from cssutils
@@ -811,20 +810,3 @@ def make_style(selector: str, styles: Dict[str, Union[Sequence, str, int, None]]
 			style[name] = str(properties)
 
 	return css.CSSStyleRule(selectorText=selector, style=style)
-
-
-@management.register("autodoc_augment_defaults", ["enable_docs"])
-def remove_autodoc_augment_defaults(repo_path: pathlib.Path, templates: jinja2.Environment) -> List[str]:
-	"""
-	Remove the redundant "autodoc_augment_defaults" extension.
-
-	:param repo_path: Path to the repository root.
-	:param templates:
-	"""
-
-	target_file = PathPlus(repo_path / templates.globals["docs_dir"] / "autodoc_augment_defaults.py")
-
-	if target_file.is_file():
-		target_file.unlink()
-
-	return [target_file.relative_to(repo_path).as_posix()]

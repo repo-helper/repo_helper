@@ -37,73 +37,13 @@ from repo_helper.files import management
 from repo_helper.utils import no_dev_versions
 
 __all__ = [
-		"travis_bad",
-		"remove_copy_pypi_2_github",
-		"remove_make_conda_recipe",
 		"make_github_ci",
 		"make_github_docs_test",
 		"make_github_octocheese",
 		"make_github_manylinux",
 		"ensure_bumpversion",
+		"make_actions_deploy_conda",
 		]
-
-
-@management.register("travis")
-def travis_bad(repo_path: pathlib.Path, templates: jinja2.Environment) -> List[str]:
-	if PathPlus(repo_path / ".travis.yml").is_file():
-		PathPlus(repo_path / ".travis.yml").unlink()
-
-	conda_file = PathPlus(repo_path / ".ci" / "travis_deploy_conda.sh")
-	if conda_file.is_file():
-		conda_file.unlink()
-
-	return [".travis.yml", conda_file.relative_to(repo_path).as_posix()]
-
-
-@management.register("copy_pypi_2_github", ["enable_releases"])
-def remove_copy_pypi_2_github(repo_path: pathlib.Path, templates: jinja2.Environment) -> List[str]:
-	"""
-	Remove deprecated copy_pypi_2_github.py script.
-
-	Uue octocheese and its GitHub Action instead.
-
-	:param repo_path: Path to the repository root.
-	:param templates:
-	"""
-
-	copier = PathPlus(repo_path / ".ci" / "copy_pypi_2_github.py")
-	if copier.is_file():
-		copier.unlink()
-
-	return [copier.relative_to(repo_path).as_posix()]
-
-
-@management.register("make_conda_recipe", ["enable_conda"])
-def remove_make_conda_recipe(repo_path: pathlib.Path, templates: jinja2.Environment) -> List[str]:
-	"""
-	Remove the old script to create a Conda recipe.
-
-	:param repo_path: Path to the repository root.
-	:param templates:
-	"""
-
-	file = PathPlus(repo_path / "make_conda_recipe.py")
-	file.unlink(missing_ok=True)
-	return [file.name]
-
-
-# @management.register("make_conda_recipe", ["enable_conda"])
-# def make_make_conda_recipe(repo_path: pathlib.Path, templates: jinja2.Environment) -> List[str]:
-# 	"""
-# 	Add script to create a Conda recipe for the package.
-#
-# 	:param repo_path: Path to the repository root.
-# 	:param templates:
-# 	"""
-#
-# 	file = PathPlus(repo_path / "make_conda_recipe.py")
-# 	file.write_clean(templates.get_template("make_conda_recipe._py").render())
-# 	return [file.name]
 
 
 @management.register("actions_deploy_conda", ["enable_conda"])
