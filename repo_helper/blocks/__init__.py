@@ -64,7 +64,7 @@ short_desc_regex = re.compile(r"(?s)(\.\. start short_desc)(.*?)(\.\. end short_
 links_regex = re.compile(r"(?s)(\.\. start links)(.*?)(\.\. end links)")
 
 
-def template_from_file(filename: str, **globals) -> Environment:  # pylint: disable=redefined-builtin
+def template_from_file(filename: str, **globals) -> Template:  # pylint: disable=redefined-builtin
 	r"""
 	Returns the template for the given filename.
 
@@ -84,7 +84,7 @@ def template_from_file(filename: str, **globals) -> Environment:  # pylint: disa
 
 
 @functools.lru_cache(1)
-def get_shields_block_template() -> Environment:
+def get_shields_block_template() -> Template:
 	"""
 	Loads the shields_block template from file
 	and returns a jinja2 :class:`jinja2.environment.Template` for it.
@@ -123,7 +123,7 @@ def get_shields_block_template() -> Environment:
 
 
 @functools.lru_cache(1)
-def get_docs_shields_block_template() -> Environment:
+def get_docs_shields_block_template() -> Template:
 	"""
 	Loads the docs_shields_block template from file
 	and returns a jinja2 :class:`jinja2.environment.Template` for it.
