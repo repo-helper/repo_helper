@@ -28,8 +28,10 @@ from typing import Any, Dict, List
 
 # 3rd party
 from configconfig.configvar import ConfigVar
-from repo_helper.configuration.metadata import author
 from typing_extensions import Literal
+
+# this package
+from repo_helper.configuration.metadata import author
 
 __all__ = [
 		"rtfd_author",

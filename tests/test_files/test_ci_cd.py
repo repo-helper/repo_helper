@@ -27,14 +27,15 @@ from pytest_regressions.file_regression import FileRegressionFixture
 
 # this package
 from repo_helper.files.ci_cd import (
-	ensure_bumpversion,
-	make_actions_deploy_conda, make_github_ci,
-	make_github_docs_test,
-	make_github_manylinux,
-	make_github_octocheese,
-	remove_copy_pypi_2_github,
-	remove_make_conda_recipe,
-	)
+		ensure_bumpversion,
+		make_actions_deploy_conda,
+		make_github_ci,
+		make_github_docs_test,
+		make_github_manylinux,
+		make_github_octocheese,
+		remove_copy_pypi_2_github,
+		remove_make_conda_recipe
+		)
 
 #
 # def test_make_travis_case_1(tmp_pathplus, demo_environment, file_regression: FileRegressionFixture):
@@ -107,9 +108,13 @@ from repo_helper.files.ci_cd import (
 # 	check_file_output(tmp_pathplus / managed_files[0], file_regression)
 #
 
+
 def test_actions_deploy_conda(tmp_pathplus, demo_environment, file_regression: FileRegressionFixture):
 	managed_files = make_actions_deploy_conda(tmp_pathplus, demo_environment)
-	assert managed_files == [".github/actions_build_conda.sh", ".github/actions_deploy_conda.sh", ]
+	assert managed_files == [
+			".github/actions_build_conda.sh",
+			".github/actions_deploy_conda.sh",
+			]
 	check_file_output(tmp_pathplus / managed_files[0], file_regression, extension="_build.sh")
 	check_file_output(tmp_pathplus / managed_files[1], file_regression, extension="_deploy.sh")
 

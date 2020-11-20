@@ -117,17 +117,17 @@ from repo_helper.configuration.python_versions_ import (
 		python_versions
 		)
 from repo_helper.configuration.testing import (
-	enable_devmode,
-	enable_tests,
-	mypy_deps,
-	mypy_plugins,
-	mypy_version,
-	tests_dir,
-	tox_build_requirements,
-	tox_requirements,
-	tox_testenv_extras,
-	tox_unmanaged,
-	)
+		enable_devmode,
+		enable_tests,
+		mypy_deps,
+		mypy_plugins,
+		mypy_version,
+		tests_dir,
+		tox_build_requirements,
+		tox_requirements,
+		tox_testenv_extras,
+		tox_unmanaged
+		)
 from repo_helper.configuration.travis import (
 		travis_additional_requirements,
 		travis_extra_install_post,
@@ -245,9 +245,7 @@ def parse_yaml(repo_path: PathLike) -> Dict:
 		raise FileNotFoundError(f"'repo_helper.yml' not found in {repo_path}")
 
 	config_file.write_lines([
-			line
-			for line in config_file.read_lines()
-			if not re.match("^(use_travis|travis_pypi_secure)", line)
+			line for line in config_file.read_lines() if not re.match("^(use_travis|travis_pypi_secure)", line)
 			])
 
 	parser = RepoHelperParser(allow_unknown_keys=False)

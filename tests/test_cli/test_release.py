@@ -145,6 +145,7 @@ def test_release_unclean(temp_repo, file_regression: FileRegressionFixture):
 				]
 		assert not result.stdout
 
+
 #
 # def test_release_coward(temp_repo, file_regression: FileRegressionFixture):
 #
