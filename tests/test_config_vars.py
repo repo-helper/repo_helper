@@ -74,12 +74,6 @@ class Test_short_desc(RequiredStringTest):
 	config_var = short_desc
 	test_value = "This is a short description of my project."
 
-
-class Test_travis_pypi_secure(OptionalStringTest):
-	config_var = travis_pypi_secure
-	test_value = "123abc"
-
-
 class Test_tox_testenv_extras(OptionalStringTest):
 	config_var = tox_testenv_extras
 	test_value = "docs"

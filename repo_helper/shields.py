@@ -31,6 +31,7 @@ from typing import Union
 from typing_extensions import Literal
 
 __all__ = [
+		"make_actions_linux_shield",
 		"make_actions_macos_shield",
 		"make_actions_windows_shield",
 		"make_activity_shield",
@@ -53,7 +54,7 @@ __all__ = [
 		"make_python_versions_shield",
 		"make_requires_shield",
 		"make_rtfd_shield",
-		"make_travis_shield",
+		"make_actions_linux_shield",
 		"make_typing_shield",
 		"make_wheel_shield",
 		]
@@ -90,21 +91,21 @@ def make_docs_check_shield(repo_name: str, username: str) -> str:
 	:alt: Docs Check Status"""
 
 
-def make_travis_shield(repo_name: str, username: str, travis_site: Literal["com", "org"] = "com") -> str:
+def make_actions_linux_shield(repo_name: str, username: str, travis_site: Literal["com", "org"] = "com") -> str:
 	"""
-	Create a shield to show the Travis test and build status.
+	Create a shield to indicate the status of the tests on Linux.
 
 	:param repo_name: The name of the repository.
 	:param username: The username of the GitHub account that owns the repository.
-	:param travis_site:
 
 	:return: The shield.
 	"""
 
 	return f"""\
-.. image:: https://img.shields.io/travis/{'com/' if travis_site == "com" else ''}{username}/{repo_name}/master?logo=travis
-	:target: https://travis-ci.{travis_site}/{username}/{repo_name}
-	:alt: Travis Build Status"""
+.. image:: https://github.com/{username}/{repo_name}/workflows/Linux%20Tests/badge.svg
+	:target: https://github.com/{username}/{repo_name}/actions?query=workflow%3A%22Linux+Tests%22
+	:alt: Linux Test Status"""
+
 
 
 def make_actions_windows_shield(repo_name: str, username: str) -> str:
@@ -120,7 +121,7 @@ def make_actions_windows_shield(repo_name: str, username: str) -> str:
 	return f"""\
 .. image:: https://github.com/{ username }/{ repo_name }/workflows/Windows%20Tests/badge.svg
 	:target: https://github.com/{ username }/{ repo_name }/actions?query=workflow%3A%22Windows+Tests%22
-	:alt: Windows Tests Status"""
+	:alt: Windows Test Status"""
 
 
 def make_actions_macos_shield(repo_name: str, username: str) -> str:
@@ -136,7 +137,7 @@ def make_actions_macos_shield(repo_name: str, username: str) -> str:
 	return f"""\
 .. image:: https://github.com/{ username }/{ repo_name }/workflows/macOS%20Tests/badge.svg
 	:target: https://github.com/{ username }/{ repo_name }/actions?query=workflow%3A%22macOS+Tests%22
-	:alt: macOS Tests Status"""
+	:alt: macOS Test Status"""
 
 
 def make_requires_shield(repo_name: str, username: str) -> str:

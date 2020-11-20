@@ -25,6 +25,7 @@ Configuration options.
 
 # stdlib
 import json
+import re
 from typing import Any, Dict, List, Mapping, MutableMapping
 
 # 3rd party
@@ -116,22 +117,21 @@ from repo_helper.configuration.python_versions_ import (
 		python_versions
 		)
 from repo_helper.configuration.testing import (
-		enable_devmode,
-		enable_tests,
-		mypy_deps,
-		mypy_plugins,
-		mypy_version,
-		tests_dir,
-		tox_build_requirements,
-		tox_requirements,
-		tox_testenv_extras,
-		tox_unmanaged
-		)
+	enable_devmode,
+	enable_tests,
+	mypy_deps,
+	mypy_plugins,
+	mypy_version,
+	tests_dir,
+	tox_build_requirements,
+	tox_requirements,
+	tox_testenv_extras,
+	tox_unmanaged,
+	)
 from repo_helper.configuration.travis import (
 		travis_additional_requirements,
 		travis_extra_install_post,
 		travis_extra_install_pre,
-		travis_pypi_secure,
 		travis_site,
 		travis_ubuntu_version
 		)
@@ -209,7 +209,6 @@ __all__ = [
 		"travis_additional_requirements",
 		"travis_extra_install_post",
 		"travis_extra_install_pre",
-		"travis_pypi_secure",
 		"travis_site",
 		"travis_ubuntu_version",
 		"username",
@@ -244,6 +243,12 @@ def parse_yaml(repo_path: PathLike) -> Dict:
 
 	if not config_file.is_file():
 		raise FileNotFoundError(f"'repo_helper.yml' not found in {repo_path}")
+
+	config_file.write_lines([
+			line
+			for line in config_file.read_lines()
+			if not re.match("^(use_travis|travis_pypi_secure)", line)
+			])
 
 	parser = RepoHelperParser(allow_unknown_keys=False)
 	config_vars = parser.run(config_file)
@@ -324,7 +329,7 @@ class RepoHelperParser(Parser):
 		tox_travis_versions = get_tox_travis_python_versions(py_versions, tox_py_versions)
 		tox_travis_versions[parsed_config_vars["python_deploy_version"]] += ", mypy"
 		parsed_config_vars["tox_travis_versions"] = tox_travis_versions
-		parsed_config_vars["gh_actions_versions"] = get_gh_actions_python_versions(py_versions, tox_py_versions)
+		parsed_config_vars["gh_actions_versions"] = tox_travis_versions
 
 		def add_classifier(classifier):
 			if classifier not in parsed_config_vars["classifiers"]:

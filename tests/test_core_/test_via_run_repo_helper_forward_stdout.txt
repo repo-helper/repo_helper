@@ -6,6 +6,7 @@ The following files will be committed:
   .github/workflows/docs_test_action.yml
   .github/workflows/octocheese.yml
   .github/workflows/python_ci.yml
+  .github/workflows/python_ci_linux.yml
   .github/workflows/python_ci_macos.yml
   .github/auto_assign.yml
   .github/stale.yml
@@ -27,7 +28,6 @@ The following files will be committed:
   .pylintrc
   .readthedocs.yml
   .style.yapf
-  .travis.yml
   CONTRIBUTING.rst
   MANIFEST.in
   README.rst

@@ -35,13 +35,13 @@ repo_helper
 	:target: https://github.com/octocat/hello-world/actions?query=workflow%3A%22Docs+Check%22
 	:alt: Docs Check Status
 
-.. |travis| image:: https://img.shields.io/travis/com/octocat/hello-world/master?logo=travis
-	:target: https://travis-ci.com/octocat/hello-world
-	:alt: Travis Build Status
+.. |travis| image:: https://github.com/octocat/hello-world/workflows/Linux%20Tests/badge.svg
+	:target: https://github.com/octocat/hello-world/actions?query=workflow%3A%22Linux+Tests%22
+	:alt: Linux Test Status
 
 .. |actions_windows| image:: https://github.com/octocat/hello-world/workflows/Windows%20Tests/badge.svg
 	:target: https://github.com/octocat/hello-world/actions?query=workflow%3A%22Windows+Tests%22
-	:alt: Windows Tests Status
+	:alt: Windows Test Status
 
 .. |requires| image:: https://requires.io/github/octocat/hello-world/requirements.svg?branch=master
 	:target: https://requires.io/github/octocat/hello-world/requirements/?branch=master

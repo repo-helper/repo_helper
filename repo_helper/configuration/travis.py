@@ -35,7 +35,6 @@ __all__ = [
 		"travis_ubuntu_version",
 		"travis_extra_install_pre",
 		"travis_extra_install_post",
-		"travis_pypi_secure",
 		"travis_additional_requirements"
 		]
 
@@ -105,29 +104,6 @@ class travis_extra_install_post(ConfigVar):  # noqa
 	category: str = "travis"
 	dtype = List[str]
 	default: List[str] = []
-
-
-class travis_pypi_secure(ConfigVar):  # noqa
-	"""
-	The secure password for PyPI, for use by Travis
-
-	.. code-block:: yaml
-
-		travis_pypi_secure: "<long string of characters>"
-
-	To generate this password run:
-
-	.. code-block:: bash
-
-		$ travis encrypt <your_password> --add deploy.password --pro
-
-	See https://docs.travis-ci.com/user/deployment/pypi/ for more information.
-
-	Tokens are not currently supported.
-	"""
-
-	dtype = str
-	category: str = "travis"
 
 
 class travis_additional_requirements(ConfigVar):  # noqa

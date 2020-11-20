@@ -37,10 +37,9 @@ from repo_helper.files import management
 from repo_helper.utils import no_dev_versions
 
 __all__ = [
-		"make_travis",
+		"travis_bad",
 		"remove_copy_pypi_2_github",
 		"remove_make_conda_recipe",
-		"make_travis_deploy_conda",
 		"make_github_ci",
 		"make_github_docs_test",
 		"make_github_octocheese",
@@ -50,30 +49,15 @@ __all__ = [
 
 
 @management.register("travis")
-def make_travis(repo_path: pathlib.Path, templates: jinja2.Environment) -> List[str]:
-	"""
-	Add configuration for ``Travis-CI`` to the desired repo.
+def travis_bad(repo_path: pathlib.Path, templates: jinja2.Environment) -> List[str]:
+	if PathPlus(repo_path / ".travis.yml").is_file():
+		PathPlus(repo_path / ".travis.yml").unlink()
 
-	https://travis-ci.com/
+	conda_file = PathPlus(repo_path / ".ci" / "travis_deploy_conda.sh")
+	if conda_file.is_file():
+		conda_file.unlink()
 
-	:param repo_path: Path to the repository root.
-	:param templates:
-	"""
-
-	# TODO: Use travis matrix rather than tox-travis; see humanity for example
-
-	if templates.globals["pure_python"]:
-		travis = templates.get_template("travis.yml")
-	else:
-		travis = templates.get_template("travis_not_pure_python.yml")
-
-	python_versions = templates.globals["python_versions"]
-	no_dev_versions_ = no_dev_versions(python_versions)
-	dev_versions = [v for v in python_versions if v not in no_dev_versions_]
-
-	PathPlus(repo_path / ".travis.yml").write_clean(travis.render(dev_versions=dev_versions))
-
-	return [".travis.yml"]
+	return [".travis.yml", conda_file.relative_to(repo_path).as_posix()]
 
 
 @management.register("copy_pypi_2_github", ["enable_releases"])
@@ -122,8 +106,8 @@ def remove_make_conda_recipe(repo_path: pathlib.Path, templates: jinja2.Environm
 # 	return [file.name]
 
 
-@management.register("travis_deploy_conda", ["enable_conda"])
-def make_travis_deploy_conda(repo_path: pathlib.Path, templates: jinja2.Environment) -> List[str]:
+@management.register("actions_deploy_conda", ["enable_conda"])
+def make_actions_deploy_conda(repo_path: pathlib.Path, templates: jinja2.Environment) -> List[str]:
 	"""
 	Add script to build Conda package and deploy to Anaconda.
 
@@ -131,13 +115,24 @@ def make_travis_deploy_conda(repo_path: pathlib.Path, templates: jinja2.Environm
 	:param templates:
 	"""
 
-	file = PathPlus(repo_path / ".ci" / "travis_deploy_conda.sh")
-	file.parent.maybe_make()
+	old_deploy_file = PathPlus(repo_path / ".ci" / "actions_deploy_conda.sh")
+	old_build_file = PathPlus(repo_path / ".ci" / "actions_build_conda.sh")
+	old_deploy_file.unlink(missing_ok=True)
+	old_build_file.unlink(missing_ok=True)
 
-	file.write_clean(templates.get_template(file.name).render())
-	file.make_executable()
+	deploy_file = PathPlus(repo_path / ".github" / "actions_deploy_conda.sh")
+	build_file = PathPlus(repo_path / ".github" / "actions_build_conda.sh")
+	deploy_file.parent.maybe_make()
 
-	return [file.relative_to(repo_path).as_posix()]
+	build_file.write_clean(templates.get_template(build_file.name).render())
+	build_file.make_executable()
+	deploy_file.write_clean(templates.get_template(deploy_file.name).render())
+	deploy_file.make_executable()
+
+	return [
+			build_file.relative_to(repo_path).as_posix(),
+			deploy_file.relative_to(repo_path).as_posix(),
+			]
 
 
 @management.register("actions")
@@ -191,7 +186,7 @@ def make_github_ci(repo_path: pathlib.Path, templates: jinja2.Environment) -> Li
 	elif macos_ci_file.is_file():
 		macos_ci_file.unlink()
 
-	if "Linux" in templates.globals["platforms"] and not templates.globals["pure_python"]:
+	if "Linux" in templates.globals["platforms"]:
 		linux_ci_file.write_clean(
 				actions.render(
 						no_dev_versions=no_dev_versions,

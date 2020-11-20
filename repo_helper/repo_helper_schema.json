@@ -404,10 +404,6 @@
       },
       "description": "Additional steps to run in Travis before installing dependencies."
     },
-    "travis_pypi_secure": {
-      "type": "string",
-      "description": "The secure password for PyPI, for use by Travis"
-    },
     "travis_site": {
       "enum": [
         "com",

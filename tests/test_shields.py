@@ -123,64 +123,50 @@ def test_make_docs_docs_check_shield():
 	:alt: Docs Check Status"""
 
 
-def test_make_travis_shield():
-	assert make_travis_shield(
+def test_make_actions_linux_shield():
+	assert make_actions_linux_shield(
 			"hello-world", "octocat", "com"
 			) == f"""\
-.. image:: https://img.shields.io/travis/com/octocat/hello-world/master?logo=travis
-	:target: https://travis-ci.com/octocat/hello-world
-	:alt: Travis Build Status"""
+.. image:: https://github.com/octocat/hello-world/workflows/Linux%20Tests/badge.svg
+	:target: https://github.com/octocat/hello-world/actions?query=workflow%3A%22Linux+Tests%22
+	:alt: Linux Test Status"""
 
-	assert make_travis_shield(
+	assert make_actions_linux_shield(
 			"HELLO-WORLD", "octocat", "com"
 			) == f"""\
-.. image:: https://img.shields.io/travis/com/octocat/HELLO-WORLD/master?logo=travis
-	:target: https://travis-ci.com/octocat/HELLO-WORLD
-	:alt: Travis Build Status"""
+.. image:: https://github.com/octocat/HELLO-WORLD/workflows/Linux%20Tests/badge.svg
+	:target: https://github.com/octocat/HELLO-WORLD/actions?query=workflow%3A%22Linux+Tests%22
+	:alt: Linux Test Status"""
 
-	assert make_travis_shield(
+	assert make_actions_linux_shield(
 			"hello_world", "octocat", "com"
 			) == f"""\
-.. image:: https://img.shields.io/travis/com/octocat/hello_world/master?logo=travis
-	:target: https://travis-ci.com/octocat/hello_world
-	:alt: Travis Build Status"""
-
-	assert make_travis_shield(
-			"hello-world", "octocat", "org"
-			) == f"""\
-.. image:: https://img.shields.io/travis/octocat/hello-world/master?logo=travis
-	:target: https://travis-ci.org/octocat/hello-world
-	:alt: Travis Build Status"""
+.. image:: https://github.com/octocat/hello_world/workflows/Linux%20Tests/badge.svg
+	:target: https://github.com/octocat/hello_world/actions?query=workflow%3A%22Linux+Tests%22
+	:alt: Linux Test Status"""
 
 
-def test_make_docs_travis_shield():
-	assert make_docs_travis_shield(
+def test_make_docs_actions_linux_shield():
+	assert make_docs_actions_linux_shield(
 			"hello-world", "octocat", "com"
 			) == """\
-.. travis-shield::
-	:travis-site: com
-	:alt: Travis Build Status"""
+.. actions-shield::
+	:workflow: Linux Tests
+	:alt: Linux Test Status"""
 
-	assert make_docs_travis_shield(
+	assert make_docs_actions_linux_shield(
 			"HELLO-WORLD", "octocat", "com"
 			) == """\
-.. travis-shield::
-	:travis-site: com
-	:alt: Travis Build Status"""
+.. actions-shield::
+	:workflow: Linux Tests
+	:alt: Linux Test Status"""
 
-	assert make_docs_travis_shield(
+	assert make_docs_actions_linux_shield(
 			"hello_world", "octocat", "com"
 			) == """\
-.. travis-shield::
-	:travis-site: com
-	:alt: Travis Build Status"""
-
-	assert make_docs_travis_shield(
-			"hello-world", "octocat", "org"
-			) == """\
-.. travis-shield::
-	:travis-site: org
-	:alt: Travis Build Status"""
+.. actions-shield::
+	:workflow: Linux Tests
+	:alt: Linux Test Status"""
 
 
 def test_make_actions_windows_shield():
@@ -189,21 +175,21 @@ def test_make_actions_windows_shield():
 			) == f"""\
 .. image:: https://github.com/octocat/hello-world/workflows/Windows%20Tests/badge.svg
 	:target: https://github.com/octocat/hello-world/actions?query=workflow%3A%22Windows+Tests%22
-	:alt: Windows Tests Status"""
+	:alt: Windows Test Status"""
 
 	assert make_actions_windows_shield(
 			"hello_world", "octocat"
 			) == f"""\
 .. image:: https://github.com/octocat/hello_world/workflows/Windows%20Tests/badge.svg
 	:target: https://github.com/octocat/hello_world/actions?query=workflow%3A%22Windows+Tests%22
-	:alt: Windows Tests Status"""
+	:alt: Windows Test Status"""
 
 	assert make_actions_windows_shield(
 			"HELLO-WORLD", "octocat"
 			) == f"""\
 .. image:: https://github.com/octocat/HELLO-WORLD/workflows/Windows%20Tests/badge.svg
 	:target: https://github.com/octocat/HELLO-WORLD/actions?query=workflow%3A%22Windows+Tests%22
-	:alt: Windows Tests Status"""
+	:alt: Windows Test Status"""
 
 
 def test_make_docs_actions_windows_shield():
@@ -212,21 +198,21 @@ def test_make_docs_actions_windows_shield():
 			) == """\
 .. actions-shield::
 	:workflow: Windows Tests
-	:alt: Windows Tests Status"""
+	:alt: Windows Test Status"""
 
 	assert make_docs_actions_windows_shield(
 			"hello_world", "octocat"
 			) == """\
 .. actions-shield::
 	:workflow: Windows Tests
-	:alt: Windows Tests Status"""
+	:alt: Windows Test Status"""
 
 	assert make_docs_actions_windows_shield(
 			"HELLO-WORLD", "octocat"
 			) == """\
 .. actions-shield::
 	:workflow: Windows Tests
-	:alt: Windows Tests Status"""
+	:alt: Windows Test Status"""
 
 
 def test_make_actions_macos_shield():
@@ -235,21 +221,21 @@ def test_make_actions_macos_shield():
 			) == f"""\
 .. image:: https://github.com/octocat/hello-world/workflows/macOS%20Tests/badge.svg
 	:target: https://github.com/octocat/hello-world/actions?query=workflow%3A%22macOS+Tests%22
-	:alt: macOS Tests Status"""
+	:alt: macOS Test Status"""
 
 	assert make_actions_macos_shield(
 			"hello_world", "octocat"
 			) == f"""\
 .. image:: https://github.com/octocat/hello_world/workflows/macOS%20Tests/badge.svg
 	:target: https://github.com/octocat/hello_world/actions?query=workflow%3A%22macOS+Tests%22
-	:alt: macOS Tests Status"""
+	:alt: macOS Test Status"""
 
 	assert make_actions_macos_shield(
 			"HELLO-WORLD", "octocat"
 			) == f"""\
 .. image:: https://github.com/octocat/HELLO-WORLD/workflows/macOS%20Tests/badge.svg
 	:target: https://github.com/octocat/HELLO-WORLD/actions?query=workflow%3A%22macOS+Tests%22
-	:alt: macOS Tests Status"""
+	:alt: macOS Test Status"""
 
 
 def test_make_docs_actions_macos_shield():
@@ -258,21 +244,21 @@ def test_make_docs_actions_macos_shield():
 			) == """\
 .. actions-shield::
 	:workflow: macOS Tests
-	:alt: macOS Tests Status"""
+	:alt: macOS Test Status"""
 
 	assert make_docs_actions_macos_shield(
 			"hello_world", "octocat"
 			) == """\
 .. actions-shield::
 	:workflow: macOS Tests
-	:alt: macOS Tests Status"""
+	:alt: macOS Test Status"""
 
 	assert make_docs_actions_macos_shield(
 			"HELLO-WORLD", "octocat"
 			) == """\
 .. actions-shield::
 	:workflow: macOS Tests
-	:alt: macOS Tests Status"""
+	:alt: macOS Test Status"""
 
 
 def test_make_requires_shield():

@@ -54,12 +54,12 @@ def get_tox_python_versions(python_versions: Iterable[str]) -> List[str]:
 	return tox_py_versions
 
 
-def get_tox_travis_python_versions(
+def get_gh_actions_python_versions(
 		python_versions: Iterable[str],
 		tox_py_versions: Iterable[str],
 		) -> Dict[str, str]:
 	"""
-	Prepares the mapping of Python versions to tox testenvs for use with Travis.
+	Prepares the mapping of Python versions to tox testenvs for use with GitHub Actions.
 
 	:param python_versions: List of Python versions to run tests for.
 	:param tox_py_versions: The list of tox testenvs for the Python versions.
@@ -73,24 +73,7 @@ def get_tox_travis_python_versions(
 	return tox_travis_matrix
 
 
-def get_gh_actions_python_versions(
-		python_versions: Iterable[str],
-		tox_py_versions: Iterable[str],
-		) -> Dict[str, str]:
-	"""
-	Prepares the mapping of Python versions to tox testenvs for use with GitHub actions.
-
-	:param python_versions: List of Python versions to run tests for.
-	:param tox_py_versions: The list of tox testenvs for the Python versions.
-	"""
-
-	tox_travis_matrix: Dict[str, str] = {}
-
-	for py_version, tox_py_version in zip(python_versions, tox_py_versions):
-		if tox_py_version != "docs":
-			tox_travis_matrix[str(py_version)] = f"{tox_py_version}, build"
-
-	return tox_travis_matrix
+get_tox_travis_python_versions = get_gh_actions_python_versions
 
 
 def get_version_classifiers(python_versions: Iterable[str]) -> List[str]:

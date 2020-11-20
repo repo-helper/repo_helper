@@ -145,42 +145,42 @@ def test_release_unclean(temp_repo, file_regression: FileRegressionFixture):
 				]
 		assert not result.stdout
 
-
-def test_release_coward(temp_repo, file_regression: FileRegressionFixture):
-
-	config_file_content = (temp_repo.path / "repo_helper.yml").read_lines()
-
-	output = []
-
-	for line in config_file_content:
-		if not line.startswith("travis_pypi_secure"):
-			output.append(line)
-
-	(temp_repo.path / "repo_helper.yml").write_lines(output)
-
-	result: Result
-
-	for command in (major, minor, patch):
-		with in_directory(temp_repo.path):
-			runner = CliRunner(mix_stderr=False)
-			result = runner.invoke(command, catch_exceptions=False)  # type: ignore
-			assert result.exit_code == 1
-			assert result.stderr.splitlines() == [
-					"Cowardly refusing to bump the version when 'travis_pypi_secure' is unset.",
-					"Aborted!",
-					]
-			assert not result.stdout
-
-	with in_directory(temp_repo.path):
-		runner = CliRunner(mix_stderr=False)
-		result = runner.invoke(release, catch_exceptions=False, args=["1.2.3"])
-		assert result.exit_code == 1
-		assert result.stderr.splitlines() == [
-				"Cowardly refusing to bump the version when 'travis_pypi_secure' is unset.",
-				"Aborted!",
-				]
-		assert not result.stdout
-
+#
+# def test_release_coward(temp_repo, file_regression: FileRegressionFixture):
+#
+# 	config_file_content = (temp_repo.path / "repo_helper.yml").read_lines()
+#
+# 	output = []
+#
+# 	for line in config_file_content:
+# 		if not line.startswith("travis_pypi_secure"):
+# 			output.append(line)
+#
+# 	(temp_repo.path / "repo_helper.yml").write_lines(output)
+#
+# 	result: Result
+#
+# 	for command in (major, minor, patch):
+# 		with in_directory(temp_repo.path):
+# 			runner = CliRunner(mix_stderr=False)
+# 			result = runner.invoke(command, catch_exceptions=False)  # type: ignore
+# 			assert result.exit_code == 1
+# 			assert result.stderr.splitlines() == [
+# 					"Cowardly refusing to bump the version when 'travis_pypi_secure' is unset.",
+# 					"Aborted!",
+# 					]
+# 			assert not result.stdout
+#
+# 	with in_directory(temp_repo.path):
+# 		runner = CliRunner(mix_stderr=False)
+# 		result = runner.invoke(release, catch_exceptions=False, args=["1.2.3"])
+# 		assert result.exit_code == 1
+# 		assert result.stderr.splitlines() == [
+# 				"Cowardly refusing to bump the version when 'travis_pypi_secure' is unset.",
+# 				"Aborted!",
+# 				]
+# 		assert not result.stdout
+#
 
 # def test_bumper(temp_repo):
 # 	with in_directory(temp_repo.path):

@@ -17,9 +17,9 @@
 
 
 
-.. |travis_UNIQUE_NAME| image:: https://img.shields.io/travis/com/octocat/REPO_NAME/master?logo=travis
-	:target: https://travis-ci.com/octocat/REPO_NAME
-	:alt: Travis Build Status
+.. |travis_UNIQUE_NAME| image:: https://github.com/octocat/REPO_NAME/workflows/Linux%20Tests/badge.svg
+	:target: https://github.com/octocat/REPO_NAME/actions?query=workflow%3A%22Linux+Tests%22
+	:alt: Linux Test Status
 
 .. |requires_UNIQUE_NAME| image:: https://requires.io/github/octocat/REPO_NAME/requirements.svg?branch=master
 	:target: https://requires.io/github/octocat/REPO_NAME/requirements/?branch=master

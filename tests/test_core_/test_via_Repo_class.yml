@@ -1,5 +1,6 @@
 - .bumpversion.cfg
 - .ci/copy_pypi_2_github.py
+- .ci/travis_deploy_conda.sh
 - .dependabot/config.yml
 - .github/ISSUE_TEMPLATE/bug_report.md
 - .github/ISSUE_TEMPLATE/feature_request.md

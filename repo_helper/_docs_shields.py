@@ -43,7 +43,8 @@ from repo_helper.shields import (
 __all__ = [
 		"make_docs_rtfd_shield",
 		"make_docs_docs_check_shield",
-		"make_docs_travis_shield",
+		"make_docs_actions_linux_shield",
+		"make_docs_actions_linux_shield",
 		"make_docs_actions_windows_shield",
 		"make_docs_actions_macos_shield",
 		"make_docs_requires_shield",
@@ -100,21 +101,23 @@ def make_docs_docs_check_shield(repo_name: str, username: str) -> str:
 	:alt: Docs Check Status"""
 
 
-def make_docs_travis_shield(repo_name: str, username: str, travis_site: Literal["com", "org"] = "com") -> str:
+def make_docs_actions_linux_shield(repo_name: str, username: str, travis_site: Literal["com", "org"] = "com") -> str:
 	"""
-	Create a shield to show the Travis test and build status.
+	Create a shield to indicate the status of the tests on Linux.
 
 	:param repo_name: The name of the repository.
 	:param username: The username of the GitHub account that owns the repository.
-	:param travis_site:
 
 	:return: The shield.
 	"""
 
-	return f"""\
-.. travis-shield::
-	:travis-site: {travis_site}
-	:alt: Travis Build Status"""
+	return """\
+.. actions-shield::
+	:workflow: Linux Tests
+	:alt: Linux Test Status"""
+
+
+make_docs_actions_linux_shield = make_docs_actions_linux_shield
 
 
 def make_docs_actions_windows_shield(repo_name: str, username: str) -> str:
@@ -130,7 +133,7 @@ def make_docs_actions_windows_shield(repo_name: str, username: str) -> str:
 	return """\
 .. actions-shield::
 	:workflow: Windows Tests
-	:alt: Windows Tests Status"""
+	:alt: Windows Test Status"""
 
 
 def make_docs_actions_macos_shield(repo_name: str, username: str) -> str:
@@ -146,7 +149,7 @@ def make_docs_actions_macos_shield(repo_name: str, username: str) -> str:
 	return """\
 .. actions-shield::
 	:workflow: macOS Tests
-	:alt: macOS Tests Status"""
+	:alt: macOS Test Status"""
 
 
 def make_docs_requires_shield(repo_name: str, username: str) -> str:

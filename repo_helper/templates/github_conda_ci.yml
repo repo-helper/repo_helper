@@ -9,21 +9,20 @@ on:
 
 jobs:
   tests:
-    name: "Python ${{ "{{" }} matrix.python-version {{ "}}" }}"
+    name: "Conda"
     runs-on: ubuntu-latest
 
     strategy:
-      fail-fast: False
-      matrix:
-        python-version: ["{{ '","'.join(no_dev_versions(python_versions)) }}"]
 
     steps:
       - name: Checkout 🛎️
         uses: "actions/checkout@v2"
+
       - name: Setup Python 🐍
         uses: "actions/setup-python@v2"
         with:
-          python-version: "${{ "{{" }} matrix.python-version {{ "}}" }}"
+          python-version: "3.8"
+
       - name: Install dependencies 🔧
         run: |
           python -VV
@@ -41,7 +40,7 @@ jobs:
           # This mess is only necessary because conda won't fix it themselves
           # https://github.com/conda/conda/issues/1884
           python -m repo_helper build --conda --out-dir conda-bld/noarch
-           $CONDA/bin/conda install {{ pypi_name }} -c local -y || exit 1
+          $CONDA/bin/conda install {{ pypi_name }} -c local -y || exit 1
 
 {#      - name: "Run Tests for Python ${{ "{{" }} matrix.python-version {{ "}}" }}"
         run: |

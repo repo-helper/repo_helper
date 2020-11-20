@@ -49,7 +49,7 @@ extras_require:
   - lxml
 gh_actions_versions:
   '3.6': py36, build
-  '3.7': py37, build
+  '3.7': py37, build, mypy
   '3.8': py38, build
   3.9-dev: py39-dev, build
 html_context: {}
@@ -117,7 +117,6 @@ tox_unmanaged: []
 travis_additional_requirements: []
 travis_extra_install_post: []
 travis_extra_install_pre: []
-travis_pypi_secure: somereallylongstringofcharacters
 travis_site: com
 travis_ubuntu_version: focal
 use_experimental_backend: false

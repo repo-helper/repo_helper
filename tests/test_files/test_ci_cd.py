@@ -27,92 +27,91 @@ from pytest_regressions.file_regression import FileRegressionFixture
 
 # this package
 from repo_helper.files.ci_cd import (
-		ensure_bumpversion,
-		make_github_ci,
-		make_github_docs_test,
-		make_github_manylinux,
-		make_github_octocheese,
-		make_travis,
-		make_travis_deploy_conda,
-		remove_copy_pypi_2_github,
-		remove_make_conda_recipe
-		)
+	ensure_bumpversion,
+	make_actions_deploy_conda, make_github_ci,
+	make_github_docs_test,
+	make_github_manylinux,
+	make_github_octocheese,
+	remove_copy_pypi_2_github,
+	remove_make_conda_recipe,
+	)
 
+#
+# def test_make_travis_case_1(tmp_pathplus, demo_environment, file_regression: FileRegressionFixture):
+# 	managed_files = travis_bad(tmp_pathplus, demo_environment)
+# 	assert managed_files == [".travis.yml"]
+# 	check_file_output(tmp_pathplus / managed_files[0], file_regression)
+#
+#
+# def test_make_travis_case_2(tmp_pathplus, demo_environment, file_regression):
+# 	demo_environment.globals.update(
+# 			dict(
+# 					travis_ubuntu_version="bionic",
+# 					travis_extra_install_pre=["sudo apt update"],
+# 					travis_extra_install_post=["sudo apt install python3-gi"],
+# 					travis_additional_requirements=["isort", "black"],
+# 					enable_tests=False,
+# 					enable_conda=False,
+# 					enable_releases=False,
+# 					)
+# 			)
+#
+# 	managed_files = make_travis(tmp_pathplus, demo_environment)
+# 	assert managed_files == [".travis.yml"]
+# 	check_file_output(tmp_pathplus / managed_files[0], file_regression)
+#
+#
+# @pytest.mark.parametrize("pure_python", [True, False])
+# @pytest.mark.parametrize("enable_conda", [True, False])
+# @pytest.mark.parametrize("enable_tests", [True, False])
+# @pytest.mark.parametrize("enable_releases", [True, False])
+# def test_make_travis_case_3(
+# 		tmp_pathplus,
+# 		demo_environment,
+# 		file_regression,
+# 		pure_python,
+# 		enable_conda,
+# 		enable_tests,
+# 		enable_releases,
+# 		):
+# 	demo_environment.globals.update(
+# 			dict(
+# 					pure_python=pure_python,
+# 					enable_tests=enable_conda,
+# 					enable_conda=enable_tests,
+# 					enable_releases=enable_releases,
+# 					)
+# 			)
+#
+# 	managed_files = make_travis(tmp_pathplus, demo_environment)
+# 	assert managed_files == [".travis.yml"]
+# 	check_file_output(tmp_pathplus / managed_files[0], file_regression)
+#
+#
+# def test_make_travis_case_4(tmp_pathplus, demo_environment, file_regression):
+# 	demo_environment.globals.update(
+# 			dict(
+# 					travis_ubuntu_version="bionic",
+# 					travis_extra_install_pre=["sudo apt update"],
+# 					travis_extra_install_post=["sudo apt install python3-gi"],
+# 					travis_additional_requirements=["isort", "black"],
+# 					enable_tests=False,
+# 					enable_conda=False,
+# 					enable_releases=False,
+# 					python_versions=["3.6", "3.7", "3.8", "3.9", "3.10-dev"],
+# 					)
+# 			)
+#
+# 	managed_files = make_travis(tmp_pathplus, demo_environment)
+# 	assert managed_files == [".travis.yml"]
+# 	check_file_output(tmp_pathplus / managed_files[0], file_regression)
+#
 
-def test_make_travis_case_1(tmp_pathplus, demo_environment, file_regression: FileRegressionFixture):
-	managed_files = make_travis(tmp_pathplus, demo_environment)
-	assert managed_files == [".travis.yml"]
-	check_file_output(tmp_pathplus / managed_files[0], file_regression)
-
-
-def test_make_travis_case_2(tmp_pathplus, demo_environment, file_regression):
-	demo_environment.globals.update(
-			dict(
-					travis_ubuntu_version="bionic",
-					travis_extra_install_pre=["sudo apt update"],
-					travis_extra_install_post=["sudo apt install python3-gi"],
-					travis_additional_requirements=["isort", "black"],
-					enable_tests=False,
-					enable_conda=False,
-					enable_releases=False,
-					)
-			)
-
-	managed_files = make_travis(tmp_pathplus, demo_environment)
-	assert managed_files == [".travis.yml"]
-	check_file_output(tmp_pathplus / managed_files[0], file_regression)
-
-
-@pytest.mark.parametrize("pure_python", [True, False])
-@pytest.mark.parametrize("enable_conda", [True, False])
-@pytest.mark.parametrize("enable_tests", [True, False])
-@pytest.mark.parametrize("enable_releases", [True, False])
-def test_make_travis_case_3(
-		tmp_pathplus,
-		demo_environment,
-		file_regression,
-		pure_python,
-		enable_conda,
-		enable_tests,
-		enable_releases,
-		):
-	demo_environment.globals.update(
-			dict(
-					pure_python=pure_python,
-					enable_tests=enable_conda,
-					enable_conda=enable_tests,
-					enable_releases=enable_releases,
-					)
-			)
-
-	managed_files = make_travis(tmp_pathplus, demo_environment)
-	assert managed_files == [".travis.yml"]
-	check_file_output(tmp_pathplus / managed_files[0], file_regression)
-
-
-def test_make_travis_case_4(tmp_pathplus, demo_environment, file_regression):
-	demo_environment.globals.update(
-			dict(
-					travis_ubuntu_version="bionic",
-					travis_extra_install_pre=["sudo apt update"],
-					travis_extra_install_post=["sudo apt install python3-gi"],
-					travis_additional_requirements=["isort", "black"],
-					enable_tests=False,
-					enable_conda=False,
-					enable_releases=False,
-					python_versions=["3.6", "3.7", "3.8", "3.9", "3.10-dev"],
-					)
-			)
-
-	managed_files = make_travis(tmp_pathplus, demo_environment)
-	assert managed_files == [".travis.yml"]
-	check_file_output(tmp_pathplus / managed_files[0], file_regression)
-
-
-def test_travis_deploy_conda(tmp_pathplus, demo_environment, file_regression: FileRegressionFixture):
-	managed_files = make_travis_deploy_conda(tmp_pathplus, demo_environment)
-	assert managed_files == [".ci/travis_deploy_conda.sh"]
-	check_file_output(tmp_pathplus / managed_files[0], file_regression)
+def test_actions_deploy_conda(tmp_pathplus, demo_environment, file_regression: FileRegressionFixture):
+	managed_files = make_actions_deploy_conda(tmp_pathplus, demo_environment)
+	assert managed_files == [".github/actions_build_conda.sh", ".github/actions_deploy_conda.sh", ]
+	check_file_output(tmp_pathplus / managed_files[0], file_regression, extension="_build.sh")
+	check_file_output(tmp_pathplus / managed_files[1], file_regression, extension="_deploy.sh")
 
 
 def test_github_ci_case_1(tmp_pathplus, demo_environment, file_regression: FileRegressionFixture):
