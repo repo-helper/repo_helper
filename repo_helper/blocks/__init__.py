@@ -31,6 +31,7 @@ from typing import Iterable, Optional, Sequence, Union
 # 3rd party
 from domdf_python_tools.compat import importlib_resources
 from domdf_python_tools.paths import PathPlus
+from domdf_python_tools.stringlist import DelimitedList, StringList
 from jinja2 import BaseLoader, Environment, StrictUndefined, Template
 from typing_extensions import Literal
 
@@ -341,15 +342,29 @@ def create_docs_install_block(
 	if not pypi_name:
 		pypi_name = repo_name
 
-	if conda_channels is None:
-		conda_channels = []
+	conda_channels = DelimitedList(conda_channels or [])
 
-	return get_docs_installation_block_template().render(
-			conda=conda,
-			pypi=pypi,
-			pypi_name=pypi_name,
-			conda_channels=", ".join(conda_channels),
-			)
+	block = StringList([
+			".. start installation",
+			"",
+			f".. installation:: {pypi_name}"
+			])
+
+	with block.with_indent_size(1):
+
+		if pypi:
+			block.append(":pypi:")
+
+		block.append(":github:")
+
+		if conda:
+			block.append(":anaconda:")
+			block.append(f":conda-channels: {conda_channels:, }")
+
+	block.blankline()
+	block.append(".. end installation")
+
+	return str(block)
 
 
 @functools.lru_cache(20)

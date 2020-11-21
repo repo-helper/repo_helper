@@ -117,7 +117,6 @@ tox_unmanaged: []
 travis_additional_requirements: []
 travis_extra_install_post: []
 travis_extra_install_pre: []
-travis_site: com
 travis_ubuntu_version: focal
 use_experimental_backend: false
 username: domdfcoding
