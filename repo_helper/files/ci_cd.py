@@ -183,6 +183,8 @@ def make_github_manylinux(repo_path: pathlib.Path, templates: jinja2.Environment
 	:param templates:
 	"""
 
+	# TODO: deploys from other supported platforms for not pure python
+
 	file = PathPlus(repo_path / ".github" / "workflows" / "manylinux_build.yml")
 	file.parent.maybe_make(parents=True)
 

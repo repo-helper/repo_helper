@@ -257,10 +257,15 @@ def make_pre_commit(repo_path: pathlib.Path, templates: jinja2.Environment) -> L
 			hooks=[{"id": "yapf-isort", "exclude": yapf_isort_excludes}],
 			)
 
+	dep_checker_args = [templates.globals["import_name"].replace('.', '/')]
+
+	if templates.globals["source_dir"]:
+		dep_checker_args.extend(["--work-dir", templates.globals["source_dir"]])
+
 	dep_checker = Repo(
 			repo=make_github_url("domdfcoding", "dep_checker"),
-			rev="v0.3.1",
-			hooks=[{"id": "dep_checker", "args": [templates.globals["import_name"].replace('.', '/')]}]
+			rev="v0.4.1",
+			hooks=[{"id": "dep_checker", "args": dep_checker_args}]
 			)
 
 	pre_commit_file = PathPlus(repo_path / ".pre-commit-config.yaml")
