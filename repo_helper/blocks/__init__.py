@@ -344,11 +344,7 @@ def create_docs_install_block(
 
 	conda_channels = DelimitedList(conda_channels or [])
 
-	block = StringList([
-			".. start installation",
-			"",
-			f".. installation:: {pypi_name}"
-			])
+	block = StringList([".. start installation", '', f".. installation:: {pypi_name}"])
 
 	with block.with_indent_size(1):
 

@@ -243,7 +243,8 @@ def parse_yaml(repo_path: PathLike) -> Dict:
 		raise FileNotFoundError(f"'repo_helper.yml' not found in {repo_path}")
 
 	config_file.write_lines([
-			line for line in config_file.read_lines() if not re.match("^(use_travis|travis_pypi_secure|travis_site)", line)
+			line for line in config_file.read_lines()
+			if not re.match("^(use_travis|travis_pypi_secure|travis_site)", line)
 			])
 
 	parser = RepoHelperParser(allow_unknown_keys=False)
