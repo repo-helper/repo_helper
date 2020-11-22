@@ -55,7 +55,8 @@ __all__ = [
 		"source_dir",
 		"pure_python",
 		"on_pypi",
-		"stubs_package"
+		"stubs_package",
+		"assignee"
 		]
 
 
@@ -105,6 +106,27 @@ class username(ConfigVar):  # noqa
 
 	dtype = str
 	required = True
+	category: str = "metadata"
+
+
+class assignee(ConfigVar):  # noqa
+	"""
+	The username of the GitHub account to assign issues to.
+
+	Defaults to :conf:`username` if unset.
+
+	Example:
+
+	.. code-block:: yaml
+
+		username: repo-helper
+		assignee: domdfcoding
+
+	.. versionadded:: 2020.11.23
+	"""
+
+	dtype = str
+	default = username
 	category: str = "metadata"
 
 

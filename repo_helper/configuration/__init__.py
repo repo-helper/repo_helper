@@ -66,6 +66,7 @@ from repo_helper.configuration.documentation import (
 		standalone_contrib_guide
 		)
 from repo_helper.configuration.metadata import (  # pylint: disable=redefined-builtin
+		assignee,
 		author,
 		classifiers,
 		copyright_years,
@@ -220,6 +221,7 @@ __all__ = [
 		"desktopfile",
 		"tox_unmanaged",
 		"standalone_contrib_guide",
+		"assignee",
 		]
 
 

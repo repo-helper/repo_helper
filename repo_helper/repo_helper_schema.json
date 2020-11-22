@@ -20,6 +20,10 @@
       "type": "object",
       "description": "A dictionary of additional keyword arguments for :func:`setuptools.setup()`. The values can refer to variables in ``__pkginfo__.py``. String values must be enclosed in quotes here."
     },
+    "assignee": {
+      "type": "string",
+      "description": "The username of the GitHub account to assign issues to."
+    },
     "author": {
       "type": "string",
       "description": "The name of the package author."
