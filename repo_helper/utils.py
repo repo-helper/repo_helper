@@ -28,13 +28,16 @@ General utilities.
 #
 
 # stdlib
+import datetime
+import os
 import pathlib
 import re
 import textwrap
 from datetime import date, timedelta
-from typing import TYPE_CHECKING, Callable, Dict, Iterable, List, Optional, TypeVar
+from typing import TYPE_CHECKING, Callable, Dict, Iterable, List, Optional, TypeVar, Union
 
 # 3rd party
+import dulwich.repo
 import isort  # type: ignore
 import isort.settings  # type: ignore
 import yapf_isort
@@ -44,7 +47,9 @@ from domdf_python_tools.paths import PathPlus
 from domdf_python_tools.pretty_print import FancyPrinter
 from domdf_python_tools.stringlist import StringList
 from domdf_python_tools.typing import PathLike
+from dulwich.porcelain import open_repo_closing
 from shippinglabel import normalize
+from southwark import status
 
 # this package
 from repo_helper.configupdater2 import ConfigUpdater
@@ -68,6 +73,8 @@ __all__ = [
 		"today",
 		"traverse_to_file",
 		"sort_paths",
+		"commit_changes",
+		"stage_changes",
 		]
 
 #: Under normal circumstances returns :meth:`datetime.date.today`.
@@ -403,3 +410,69 @@ def sort_paths(*paths: PathLike) -> List[PathPlus]:
 		files.extend(PathPlus(directory) / path for path in sort_paths(*contents))
 
 	return files + sorted(local_contents)
+
+
+def stage_changes(
+		repo: Union[PathLike, dulwich.repo.Repo],
+		files: Iterable[PathLike],
+		) -> List[PathPlus]:
+	"""
+	Stage any files that have been updated, added or removed.
+
+	:param repo: The repository.
+	:param files: List of files to stage.
+
+	:returns: A list of staged files.
+		Not all files in ``files`` will have been changed, and only changes are staged.
+
+	.. versionadded:: 2020.11.23
+	"""
+
+	with open_repo_closing(repo) as repo:
+		stat = status(repo)
+		unstaged_changes = stat.unstaged
+		untracked_files = stat.untracked
+
+		staged_files = []
+
+		for filename in files:
+			filename = PathPlus(filename)
+
+			if filename in unstaged_changes or filename in untracked_files:
+				repo.stage(os.path.normpath(filename))
+				staged_files.append(filename)
+			elif (
+					filename in stat.staged["add"] or filename in stat.staged["modify"]
+					or filename in stat.staged["delete"]
+					):
+				staged_files.append(filename)
+
+	return staged_files
+
+
+def commit_changes(
+		repo: Union[PathLike, dulwich.repo.Repo],
+		message: Optional[str] = "Updated files with 'repo_helper'.",
+		) -> str:
+	"""
+	Commit staged changes.
+
+	:param repo: The repository to commit in.
+	:param message: The commit message to use.
+
+	:returns: The SHA of the commit.
+
+	.. versionadded:: 2020.11.23
+	"""
+
+	with open_repo_closing(repo) as repo:
+		current_time = datetime.datetime.now(datetime.timezone.utc).astimezone()
+		current_timezone = current_time.tzinfo.utcoffset(None).total_seconds()  # type: ignore
+
+		commit_sha = repo.do_commit(
+				message=message.encode("UTF-8"),
+				commit_timestamp=current_time.timestamp(),
+				commit_timezone=current_timezone,
+				)
+
+		return commit_sha.decode("UTF-8")

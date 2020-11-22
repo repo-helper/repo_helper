@@ -75,29 +75,14 @@ def commit_changed_files(
 
 	# 3rd party
 	import pre_commit.main  # type: ignore
-	from southwark import status
-	from repo_helper.utils import sort_paths
-	import datetime
+
+	# this package
+	from repo_helper.utils import sort_paths, commit_changes, stage_changes
 
 	repo_path = PathPlus(repo_path).absolute()
 	r = Repo(str(repo_path))
 
-	stat = status(r)
-	unstaged_changes = stat.unstaged
-	untracked_files = stat.untracked
-
-	staged_files = []
-
-	for filename in managed_files:
-		filename = PathPlus(filename)
-		if filename in unstaged_changes or filename in untracked_files:
-			r.stage(os.path.normpath(filename))
-			staged_files.append(filename)
-		elif (
-				filename in stat.staged["add"] or filename in stat.staged["modify"]
-				or filename in stat.staged["delete"]
-				):
-			staged_files.append(filename)
+	staged_files = stage_changes(r.path, managed_files)
 
 	# Ensure pre-commit hooks are installed
 	if enable_pre_commit and platform.system() == "Linux":
@@ -119,18 +104,11 @@ def commit_changed_files(
 			# Ensure the working directory for pre-commit is correct
 			r.hooks["pre-commit"].cwd = str(repo_path.absolute())  # type: ignore
 
-			current_time = datetime.datetime.now(datetime.timezone.utc).astimezone()
-			current_timezone = current_time.tzinfo.utcoffset(None).total_seconds()  # type: ignore
-
 			try:
-				commit_id = r.do_commit(
-						message=message,
-						commit_timestamp=current_time.timestamp(),
-						commit_timezone=current_timezone,
-						)
-
-				click.echo(f"Committed as {commit_id.decode('UTF-8')}")
+				commit_id = commit_changes(r, message.decode("UTF-8"))
+				click.echo(f"Committed as {commit_id}")
 				return True
+
 			except CommitError as e:
 				click.echo(f"Unable to commit: {e}", err=True)
 		else:
