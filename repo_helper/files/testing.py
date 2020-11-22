@@ -595,7 +595,7 @@ def make_isort(repo_path: pathlib.Path, templates: jinja2.Environment) -> List[s
 	all_requirements.discard(templates.globals["import_name"])
 	all_requirements.discard("iniconfig")
 
-	known_third_party = [req.replace("-", "_") for req in sorted({"github", "requests", *all_requirements})]
+	known_third_party = [req.replace('-', '_') for req in sorted({"github", "requests", *all_requirements})]
 	isort["settings"]["known_third_party"] = known_third_party
 	isort["settings"]["known_first_party"] = templates.globals["import_name"]
 

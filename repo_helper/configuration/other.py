@@ -120,7 +120,6 @@ class exclude_files(ConfigVar):  # noqa
 		:header: "Value", "File(s) that will not be managed"
 		:widths: 20, 80
 
-		copy_pypi_2_github, ``.ci/copy_pypi_2_github.py``
 		lint_roller, ``lint_roller.sh``
 		stale_bot, ``.github/stale.yml``
 		auto_assign, ``.github/workflow/assign.yml`` and ``.github/auto_assign.yml``
@@ -137,7 +136,6 @@ class exclude_files(ConfigVar):  # noqa
 		tox, ``tox.ini``
 		test_requirements, :conf:`tests_dir` ``/requirements.txt``
 		dependabot, ``.dependabot/config.yml``
-		travis_deploy_conda, ``.ci/travis_deploy_conda.sh``
 		make_conda_recipe, ``make_conda_recipe.py``
 		bumpversion, ``.bumpversion.cfg``
 		issue_templates, ``.github/ISSUE_TEMPLATE/bug_report.md`` and ``.github/ISSUE_TEMPLATE/feature_request.md``

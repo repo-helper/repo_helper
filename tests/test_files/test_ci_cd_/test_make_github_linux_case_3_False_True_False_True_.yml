@@ -94,13 +94,13 @@ jobs:
 
       - name: Build Conda 📦
         run: |
-          chmod +x .ci/actions_build_conda.sh
-          bash .ci/actions_build_conda.sh
+          chmod +x .github/actions_build_conda.sh
+          bash .github/actions_build_conda.sh
 
       - name: Deploy Conda 🚀
         if: startsWith(github.ref, 'refs/tags/')
         run: |
-          chmod +x .ci/actions_deploy_conda.sh
-          bash .ci/actions_deploy_conda.sh
+          chmod +x .github/actions_deploy_conda.sh
+          bash .github/actions_deploy_conda.sh
         env:
           ANACONDA_TOKEN: ${{ secrets.ANACONDA_TOKEN }}
