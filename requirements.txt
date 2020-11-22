@@ -5,7 +5,7 @@ click==7.1.2
 configconfig>=0.4.0
 consolekit>=0.5.0
 css-parser==1.0.6
-domdf-python-tools>=1.5.0
+domdf-python-tools>=1.6.0
 dulwich>=0.19.16
 email-validator==1.1.2
 isort>=5.0.0

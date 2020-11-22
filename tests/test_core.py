@@ -35,20 +35,37 @@ def test_via_run_repo_helper_forward(
 
 	(temp_empty_repo.path / "repo_helper.yml").write_text(example_config)
 
-	run_repo_helper(temp_empty_repo.path, force=False, initialise=True, commit=True, message="Testing Testing")
+	assert run_repo_helper(
+			temp_empty_repo.path,
+			force=False,
+			initialise=True,
+			commit=True,
+			message="Testing Testing",
+			) == 0
 
 	assert not status(temp_empty_repo.path).untracked
 	assert not status(temp_empty_repo.path).unstaged
 
-	run_repo_helper(temp_empty_repo.path, force=False, initialise=False, commit=True, message="Updated")
+	assert run_repo_helper(
+			temp_empty_repo.path,
+			force=False,
+			initialise=False,
+			commit=True,
+			message="Updated",
+			) == 0
 
-	assert not status(temp_empty_repo.path).untracked
-	assert not status(temp_empty_repo.path).unstaged
+	stat = status(temp_empty_repo.path)
+
+	assert not stat.untracked
+	assert not stat.unstaged
+	assert not stat.staged["add"]
+	assert not stat.staged["modify"]
+	assert not stat.staged["delete"]
 
 	sha = "6d8cf72fff6adc4e570cb046ca417db7f2e10a3b"
 	stdout = re.sub(f"Committed as [A-Za-z0-9]{{{len(sha)}}}", f"Committed as {sha}", capsys.readouterr().out)
-	check_file_regression(stdout, file_regression, extension="_stdout.txt")
 	check_file_regression(capsys.readouterr().err, file_regression, extension="_stderr.txt")
+	check_file_regression(stdout, file_regression, extension="_stdout.txt")
 
 
 @pytest.mark.skipif(condition=os.sep == '/', reason="Different test for platforms where os.sep == /")

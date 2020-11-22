@@ -41,10 +41,12 @@ def test_actions_deploy_conda(tmp_pathplus, demo_environment, file_regression: F
 	managed_files = make_actions_deploy_conda(tmp_pathplus, demo_environment)
 	assert managed_files == [
 			".github/actions_build_conda.sh",
+			".ci/actions_build_conda.sh",
 			".github/actions_deploy_conda.sh",
+			".ci/actions_deploy_conda.sh",
 			]
 	check_file_output(tmp_pathplus / managed_files[0], file_regression, extension="_build.sh")
-	check_file_output(tmp_pathplus / managed_files[1], file_regression, extension="_deploy.sh")
+	check_file_output(tmp_pathplus / managed_files[2], file_regression, extension="_deploy.sh")
 
 
 def test_github_ci_case_1(tmp_pathplus, demo_environment, file_regression: FileRegressionFixture):

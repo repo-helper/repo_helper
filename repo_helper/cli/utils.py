@@ -24,7 +24,6 @@ CLI utility functions.
 #
 
 # stdlib
-import datetime
 import logging
 import os
 import platform
@@ -42,9 +41,6 @@ from dulwich.errors import CommitError
 from pre_commit.commands import install_uninstall  # type: ignore
 from southwark import assert_clean
 from southwark.repo import Repo
-
-# this package
-from repo_helper.utils import easter_egg, sort_paths
 
 __all__ = [
 		"commit_changed_files",
@@ -80,6 +76,8 @@ def commit_changed_files(
 	# 3rd party
 	import pre_commit.main  # type: ignore
 	from southwark import status
+	from repo_helper.utils import sort_paths
+	import datetime
 
 	repo_path = PathPlus(repo_path).absolute()
 	r = Repo(str(repo_path))
@@ -163,30 +161,30 @@ def run_repo_helper(
 	# this package
 	from repo_helper.cli.commands.init import init_repo
 	from repo_helper.core import RepoHelper
+	from repo_helper.utils import easter_egg
 
 	try:
-		gh = RepoHelper(path)
+		rh = RepoHelper(path)
 	except FileNotFoundError as e:
 		error_block = textwrap.indent(str(e), '\t')
 		raise abort(f"Unable to run 'repo_helper'.\nThe error was:\n{error_block}")
 
-	if not assert_clean(gh.target_repo, allow_config=("repo_helper.yml", "git_helper.yml")):
+	if not assert_clean(rh.target_repo, allow_config=("repo_helper.yml", "git_helper.yml")):
 		if force:
 			click.echo(Fore.RED("Proceeding anyway"), err=True)
 		else:
 			return 1
 
 	if initialise:
-		r = Repo(gh.target_repo)
-
-		for filename in init_repo(gh.target_repo, gh.templates):
+		r = Repo(rh.target_repo)
+		for filename in init_repo(rh.target_repo, rh.templates):
 			r.stage(os.path.normpath(filename))
 
-	managed_files = gh.run()
+	managed_files = rh.run()
 
 	try:
 		commit_changed_files(
-				repo_path=gh.target_repo,
+				repo_path=rh.target_repo,
 				managed_files=managed_files,
 				commit=commit,
 				message=message.encode("UTF-8"),

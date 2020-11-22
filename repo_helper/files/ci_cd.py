@@ -71,7 +71,9 @@ def make_actions_deploy_conda(repo_path: pathlib.Path, templates: jinja2.Environ
 
 	return [
 			build_file.relative_to(repo_path).as_posix(),
+			old_build_file.relative_to(repo_path).as_posix(),
 			deploy_file.relative_to(repo_path).as_posix(),
+			old_deploy_file.relative_to(repo_path).as_posix(),
 			]
 
 
