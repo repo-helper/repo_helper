@@ -89,7 +89,7 @@ def make_auto_assign_action(repo_path: pathlib.Path, templates: jinja2.Environme
 			}
 
 	# A list of reviewers to be added to pull requests (GitHub user name)
-	config["reviewers"] = [templates.globals["username"]]
+	config["reviewers"] = [templates.globals["assignee"]]
 
 	# A number of reviewers added to the pull request
 	# Set 0 to add all the reviewers
@@ -138,7 +138,7 @@ def make_dependabot(repo_path: pathlib.Path, templates: jinja2.Environment) -> L
 			"package_manager": "python",
 			"directory": '/',
 			"update_schedule": "weekly",
-			"default_reviewers": [templates.globals["username"]],
+			"default_reviewers": [templates.globals["assignee"]],
 			}
 
 	config = {"version": 1, "update_configs": [update_configs]}

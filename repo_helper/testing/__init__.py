@@ -62,6 +62,7 @@ def demo_environment() -> jinja2.Environment:
 
 		{
 			"username": "octocat",
+			"assignee": "octocat",
 			"imgbot_ignore": [],
 			"travis_ubuntu_version": "xenial",
 			"travis_extra_install_pre": [],
@@ -116,6 +117,7 @@ def demo_environment() -> jinja2.Environment:
 	templates.globals.update(
 			dict(
 					username="octocat",
+					assignee="octocat",
 					imgbot_ignore=[],
 					travis_ubuntu_version="xenial",
 					travis_extra_install_pre=[],
