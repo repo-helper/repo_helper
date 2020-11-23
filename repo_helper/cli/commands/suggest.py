@@ -182,30 +182,11 @@ def classifiers(add: bool, status: Optional[int], library: Optional[bool]):
 
 	if add:
 
-		# 3rd party
-		from ruamel.yaml import YAML
+		# this package
+		from repo_helper.configuration import YamlEditor
 
-		yaml = YAML()
-		yaml.indent(offset=1)
-		yaml.width = 4096  # type: ignore
-		yaml.preserve_quotes = True  # type: ignore
-
-		data = yaml.load((rh.target_repo / "repo_helper.yml").read_text())
-
-		if "classifiers" in data:
-			data["classifiers"] = natsorted({*data["classifiers"], *suggested_classifiers})
-
-			yaml.explicit_start = True  # type: ignore
-
-			with (rh.target_repo / "repo_helper.yml").open('w') as fp:
-				yaml.dump(data, fp)
-
-		else:
-			yaml.explicit_start = False  # type: ignore
-
-			with (rh.target_repo / "repo_helper.yml").open('a') as fp:
-				fp.write('\n')
-				yaml.dump({"classifiers": natsorted(suggested_classifiers)}, fp)
+		yaml = YamlEditor()
+		yaml.update_key(rh.target_repo / "repo_helper.yml", "classifiers", suggested_classifiers, sort=True)
 
 
 # TODO: flags for interactive options, and clean output when piped

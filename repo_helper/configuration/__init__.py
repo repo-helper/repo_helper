@@ -26,7 +26,7 @@ Configuration options.
 # stdlib
 import json
 import re
-from typing import Any, Dict, List, Mapping, MutableMapping
+from typing import Any, Dict, List, Mapping, MutableMapping, Optional, Sequence, Set, Union
 
 # 3rd party
 from configconfig.metaclass import ConfigVarMeta
@@ -36,7 +36,8 @@ from domdf_python_tools.compat import importlib_resources
 from domdf_python_tools.paths import PathPlus
 from domdf_python_tools.typing import PathLike
 from domdf_python_tools.versions import Version
-from natsort import natsorted
+from natsort import natsorted  # type: ignore
+from ruamel.yaml import YAML
 
 # this package
 import repo_helper
@@ -223,6 +224,7 @@ __all__ = [
 		"tox_unmanaged",
 		"standalone_contrib_guide",
 		"assignee",
+		"YamlEditor",
 		]
 
 
@@ -355,3 +357,97 @@ def dump_schema() -> Dict[str, Any]:
 		print(f"Wrote schema to {schema_file}")
 
 	return schema
+
+
+class YamlEditor(YAML):
+	"""
+	Class to read, dump and edit YAML files.
+	"""
+
+	width: Optional[int]  # type: ignore
+
+	#: Whether to preserve quotes when writing to file.
+	preserve_quotes: Optional[bool]  # type: ignore
+
+	#: Whether to include an explicit start to the document when writing to file.
+	explicit_start: Optional[bool]  # type: ignore
+
+	def __init__(self, **kwargs):
+		super().__init__(**kwargs)
+
+		self.indent(offset=1)
+		self.width = 4096
+		self.preserve_quotes = True
+
+	def load_file(self, filename: PathLike) -> Union[Dict, List]:
+		"""
+		Load the given YAML file and return its contents.
+
+		:param filename:
+		"""
+
+		filename = PathPlus(filename)
+		return self.load(filename.read_text())
+
+	def dump_to_file(self, data: Union[MutableMapping, Sequence], filename: PathLike, mode: str = 'w'):
+		"""
+		Dump the given data to the specified file.
+
+		:param data:
+		:param filename:
+		:param mode:
+		"""
+
+		# TODO: dump to StringIO and use write_clean
+
+		explicit_start = self.explicit_start
+
+		try:
+			filename = PathPlus(filename)
+
+			with filename.open(mode) as fp:
+
+				if 'w' in mode:
+					self.explicit_start = True
+				elif 'a' in mode:
+					self.explicit_start = False
+					fp.write('\n')
+
+				self.dump(data, fp)
+
+		finally:
+			self.explicit_start = explicit_start
+
+	def update_key(
+			self,
+			filename: PathLike,
+			key: str,
+			new_value: Union[MutableMapping, Sequence, Set, str, float],
+			*,
+			sort: bool = False,
+			):
+		"""
+		Set ``key`` in ``filename`` to ``new_value``.
+
+		:param filename:
+		:param key:
+		:param new_value:
+		:param sort: Whether to sort the updated value.
+		"""
+		data = self.load_file(filename)
+
+		if sort:
+			sort_func = natsorted
+		else:
+
+			def sort_func(values):
+				if isinstance(values, Set):
+					return list(values)
+				else:
+					return values
+
+		if key in data:
+			data[key] = sort_func({*data[key], *new_value})  # type: ignore
+			self.dump_to_file(data, filename, mode='w')
+		else:
+			self.dump_to_file({key: sort_func(new_value)}, filename, mode='a')
