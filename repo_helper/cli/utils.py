@@ -77,7 +77,7 @@ def commit_changed_files(
 	import pre_commit.main  # type: ignore
 
 	# this package
-	from repo_helper.utils import sort_paths, commit_changes, stage_changes
+	from repo_helper.utils import commit_changes, sort_paths, stage_changes
 
 	repo_path = PathPlus(repo_path).absolute()
 	r = Repo(str(repo_path))
