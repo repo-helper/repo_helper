@@ -8,6 +8,7 @@
 - .github/stale.yml
 - .github/workflow/assign.yml
 - .github/workflows/assign.yml
+- .github/workflows/cleanup.yml
 - .github/workflows/docs_test_action.yml
 - .github/workflows/manylinux_build.yml
 - .github/workflows/octocheese.yml

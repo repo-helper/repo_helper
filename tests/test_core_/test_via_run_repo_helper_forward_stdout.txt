@@ -3,6 +3,7 @@ The following files will be committed:
   .dependabot/config.yml
   .github/ISSUE_TEMPLATE/bug_report.md
   .github/ISSUE_TEMPLATE/feature_request.md
+  .github/workflows/cleanup.yml
   .github/workflows/docs_test_action.yml
   .github/workflows/octocheese.yml
   .github/workflows/python_ci.yml

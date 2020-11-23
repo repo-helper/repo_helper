@@ -259,7 +259,7 @@ def make_artefact_cleaner(repo_path: pathlib.Path, templates: jinja2.Environment
 
 	config: MutableMapping[str, Any] = {
 			"name": "Artefact Cleaner",
-			"on": {"schedule": {"cron": "0 9 1 * *"}},  # 9 AM on the first of every month.
+			"on": {"schedule": [{"cron": "0 9 1 * *"}]},  # 9 AM on the 1st of every month.
 			"jobs": {"Clean": {"runs-on": "ubuntu-latest", "steps": steps}}
 			}
 
