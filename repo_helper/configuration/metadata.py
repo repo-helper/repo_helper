@@ -30,6 +30,7 @@ from typing import Any, Dict, Iterable, List, Optional, Union
 # 3rd party
 from configconfig.configvar import ConfigVar
 from configconfig.utils import optional_getter
+from natsort import natsorted
 from packaging.version import Version
 from shippinglabel.classifiers import validate_classifiers
 
@@ -376,7 +377,7 @@ class classifiers(ConfigVar):  # noqa
 
 		validate_classifiers(classifier_list)
 
-		return sorted(classifier_list)
+		return natsorted(classifier_list)
 
 
 class keywords(ConfigVar):  # noqa

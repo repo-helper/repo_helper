@@ -31,6 +31,7 @@ from typing import Iterator, Optional
 # 3rd party
 import click
 from consolekit import CONTEXT_SETTINGS
+from natsort import natsorted
 
 # this package
 from repo_helper.cli import cli_group
@@ -147,7 +148,7 @@ def classifiers(add: bool, status: Optional[int], library: Optional[bool]):
 	# # Lines starting with a # will be discarded.
 	# """
 	# 		)
-	# file_content += "\n".join(sorted(suggested_classifiers))
+	# file_content += "\n".join(natsorted(suggested_classifiers))
 	#
 	# def remove_invalid_entries(line):
 	# 	line = line.strip()
@@ -170,10 +171,10 @@ def classifiers(add: bool, status: Optional[int], library: Optional[bool]):
 
 	if sys.stdout.isatty():
 		click.echo("Based on what you've told me I think the following classifiers are appropriate:")
-		for classifier in sorted(suggested_classifiers):
+		for classifier in natsorted(suggested_classifiers):
 			click.echo(f" - {classifier}")
 	else:
-		for classifier in sorted(suggested_classifiers):
+		for classifier in natsorted(suggested_classifiers):
 			click.echo(classifier)
 
 	if add is None:
@@ -192,7 +193,7 @@ def classifiers(add: bool, status: Optional[int], library: Optional[bool]):
 		data = yaml.load((rh.target_repo / "repo_helper.yml").read_text())
 
 		if "classifiers" in data:
-			data["classifiers"] = sorted({*data["classifiers"], *suggested_classifiers})
+			data["classifiers"] = natsorted({*data["classifiers"], *suggested_classifiers})
 
 			yaml.explicit_start = True  # type: ignore
 
@@ -204,7 +205,7 @@ def classifiers(add: bool, status: Optional[int], library: Optional[bool]):
 
 			with (rh.target_repo / "repo_helper.yml").open('a') as fp:
 				fp.write('\n')
-				yaml.dump({"classifiers": sorted(suggested_classifiers)}, fp)
+				yaml.dump({"classifiers": natsorted(suggested_classifiers)}, fp)
 
 
 # TODO: flags for interactive options, and clean output when piped

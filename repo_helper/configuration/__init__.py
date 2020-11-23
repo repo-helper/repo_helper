@@ -36,6 +36,7 @@ from domdf_python_tools.compat import importlib_resources
 from domdf_python_tools.paths import PathPlus
 from domdf_python_tools.typing import PathLike
 from domdf_python_tools.versions import Version
+from natsort import natsorted
 
 # this package
 import repo_helper
@@ -330,15 +331,13 @@ class RepoHelperParser(Parser):
 		parsed_config_vars["tox_travis_versions"] = tox_travis_versions
 		parsed_config_vars["gh_actions_versions"] = tox_travis_versions
 
-		def add_classifier(classifier):
-			if classifier not in parsed_config_vars["classifiers"]:
-				parsed_config_vars["classifiers"].append(classifier)
-
 		if (repo_path / parsed_config_vars["import_name"].replace('.', '/') / "py.typed").is_file():
-			add_classifier("Typing :: Typed")
+			parsed_config_vars["classifiers"].append("Typing :: Typed")
 
 		if parsed_config_vars["use_experimental_backend"]:
 			parsed_config_vars["tox_build_requirements"].append("repo_helper")
+
+		parsed_config_vars["classifiers"] = natsorted(set(parsed_config_vars["classifiers"]))
 
 		return parsed_config_vars
 

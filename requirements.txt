@@ -10,6 +10,7 @@ dulwich>=0.19.16
 email-validator==1.1.2
 isort>=5.0.0
 jinja2>=2.11.2
+natsort>=7.1.0
 packaging>=20.4
 pre-commit>=2.7.1
 requests>=2.25.0

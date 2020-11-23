@@ -27,6 +27,9 @@ Configuration utilities.
 import pathlib
 from typing import Any, Dict, Iterable, List, Mapping, Tuple
 
+# 3rd party
+from natsort import natsorted
+
 __all__ = [
 		"get_tox_python_versions",
 		"get_tox_travis_python_versions",
@@ -105,7 +108,7 @@ def get_version_classifiers(python_versions: Iterable[str]) -> List[str]:
 	version_classifiers.append("Programming Language :: Python")
 	version_classifiers.append("Programming Language :: Python :: 3 :: Only")
 
-	return sorted(set(version_classifiers))
+	return natsorted(set(version_classifiers))
 
 
 def parse_extras(raw_config_vars: Mapping[str, Any], repo_path: pathlib.Path) -> Tuple[Dict, List[str]]:
