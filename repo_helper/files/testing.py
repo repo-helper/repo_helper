@@ -243,7 +243,7 @@ class ToxConfig(IniConfigurator):
 		"""
 
 		if self["enable_docs"]:
-			envvars = ["SHOW_TODOS = 1", "PIP_USE_FEATURE = 2020-resolver"]
+			envvars = ["SHOW_TODOS = 1"]  # , "PIP_USE_FEATURE = 2020-resolver"
 			self._ini["testenv:docs"]["setenv"] = indent_join(envvars)
 
 			self._ini["testenv:docs"]["basepython"] = "python3.8"
