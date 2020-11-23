@@ -452,7 +452,7 @@ def stage_changes(
 
 def commit_changes(
 		repo: Union[PathLike, dulwich.repo.Repo],
-		message: Optional[str] = "Updated files with 'repo_helper'.",
+		message: str = "Updated files with 'repo_helper'.",
 		) -> str:
 	"""
 	Commit staged changes.

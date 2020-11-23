@@ -28,7 +28,7 @@ import pathlib
 from typing import Any, Dict, Iterable, List, Mapping, Tuple
 
 # 3rd party
-from natsort import natsorted
+from natsort import natsorted  # type: ignore
 
 __all__ = [
 		"get_tox_python_versions",

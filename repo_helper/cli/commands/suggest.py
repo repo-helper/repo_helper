@@ -31,7 +31,7 @@ from typing import Iterator, Optional
 # 3rd party
 import click
 from consolekit import CONTEXT_SETTINGS
-from natsort import natsorted
+from natsort import natsorted  # type: ignore
 
 # this package
 from repo_helper.cli import cli_group
