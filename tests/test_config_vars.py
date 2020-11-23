@@ -22,7 +22,6 @@
 
 # stdlib
 import os
-import re
 from typing import Any, Dict, Type
 
 # 3rd party
