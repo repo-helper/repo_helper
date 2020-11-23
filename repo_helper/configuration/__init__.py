@@ -362,6 +362,8 @@ def dump_schema() -> Dict[str, Any]:
 class YamlEditor(YAML):
 	"""
 	Class to read, dump and edit YAML files.
+
+	.. versionadded:: 2020.11.23
 	"""
 
 	width: Optional[int]  # type: ignore
