@@ -36,7 +36,13 @@ from domdf_python_tools.paths import PathPlus
 # this package
 from repo_helper.files import management
 
-__all__ = ["make_dependabot", "make_auto_assign_action", "make_stale_bot", "make_imgbot"]
+__all__ = [
+		"make_dependabot",
+		"make_auto_assign_action",
+		"make_stale_bot",
+		"make_imgbot",
+		"make_artefact_cleaner",
+		]
 
 
 @management.register("stale_bot")
@@ -226,3 +232,41 @@ def make_automerge_action(repo_path: pathlib.Path, templates: jinja2.Environment
 			])
 
 	return [automerge_workflow.relative_to(repo_path).as_posix()]
+
+
+@management.register("artefact_cleaner")
+def make_artefact_cleaner(repo_path: pathlib.Path, templates: jinja2.Environment) -> List[str]:
+	"""
+	Add configuration for https://github.com/marketplace/actions/github-actions-artifact-cleaner
+	to the desired repo.
+
+	:param repo_path: Path to the repository root.
+	:param templates:
+
+	.. versionadded:: 2020.11.23
+	"""  # noqa: D400
+
+	dot_github = PathPlus(repo_path / ".github")
+	(dot_github / "workflows").maybe_make(parents=True)
+
+	cleanup_workflow = dot_github / "workflows" / "cleanup.yml"
+
+	steps = [{
+			"name": "cleanup",
+			"uses": "glassechidna/artifact-cleaner@v2",
+			"with": {"minimumAge": 1e6},  # about 14 days
+			}]
+
+	config: MutableMapping[str, Any] = {
+			"name": "Artefact Cleaner",
+			"on": {"schedule": {"cron": "0 9 1 * *"}},  # 9 AM on the first of every month.
+			"jobs": {"Clean": {"runs-on": "ubuntu-latest", "steps": steps}}
+			}
+
+	cleanup_workflow.write_lines([
+			f"# {templates.globals['managed_message']}",
+			"---",
+			yaml.round_trip_dump(config, default_flow_style=False),  # type: ignore
+			])
+
+	return [cleanup_workflow.relative_to(repo_path).as_posix()]

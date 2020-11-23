@@ -26,7 +26,13 @@ from domdf_python_tools.testing import check_file_output
 from pytest_regressions.file_regression import FileRegressionFixture
 
 # this package
-from repo_helper.files.bots import make_auto_assign_action, make_dependabot, make_imgbot, make_stale_bot
+from repo_helper.files.bots import (
+		make_artefact_cleaner,
+		make_auto_assign_action,
+		make_dependabot,
+		make_imgbot,
+		make_stale_bot
+		)
 
 
 def test_stale_bot(tmp_pathplus, demo_environment, file_regression: FileRegressionFixture):
@@ -60,6 +66,12 @@ def test_auto_assign_action(tmp_pathplus, demo_environment, file_regression: Fil
 def test_dependabot(tmp_pathplus, demo_environment, file_regression: FileRegressionFixture):
 	managed_files = make_dependabot(tmp_pathplus, demo_environment)
 	assert managed_files == [".dependabot/config.yml"]
+	check_file_output(tmp_pathplus / managed_files[0], file_regression)
+
+
+def test_artefact_cleaner(tmp_pathplus, demo_environment, file_regression: FileRegressionFixture):
+	managed_files = make_artefact_cleaner(tmp_pathplus, demo_environment)
+	assert managed_files == [".github/workflows/cleanup.yml"]
 	check_file_output(tmp_pathplus / managed_files[0], file_regression)
 
 
