@@ -112,6 +112,8 @@ def make_github_ci(repo_path: pathlib.Path, templates: jinja2.Environment) -> Li
 						ci_platform="windows-2019",
 						ci_name="Windows Tests",
 						python_versions=py_versions,
+						travis_extra_install_pre=(),
+						travis_extra_install_post=(),
 						)
 				)
 	elif windows_ci_file.is_file():
@@ -123,6 +125,8 @@ def make_github_ci(repo_path: pathlib.Path, templates: jinja2.Environment) -> Li
 						no_dev_versions=no_dev_versions,
 						ci_platform="macos-latest",
 						ci_name="macOS Tests",
+						travis_extra_install_pre=(),
+						travis_extra_install_post=(),
 						)
 				)
 	elif macos_ci_file.is_file():
