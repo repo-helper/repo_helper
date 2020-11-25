@@ -295,8 +295,11 @@ def make_pre_commit(repo_path: pathlib.Path, templates: jinja2.Environment) -> L
 			pyupgrade,
 			lucas_c_hooks,
 			yapf_isort,
-			dep_checker,
 			]
+
+	if not templates.globals["stubs_package"]:
+		managed_hooks.append(dep_checker)
+
 	managed_hooks_urls = [str(hook.repo) for hook in managed_hooks]
 
 	custom_hooks_comment = "# Custom hooks can be added below this comment"

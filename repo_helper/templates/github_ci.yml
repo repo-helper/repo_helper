@@ -41,7 +41,7 @@ jobs:
       - name: "Run Tests for Python ${{ "{{" }} matrix.python-version {{ "}}" }}"
         run: "python -m tox"
 {% if ci_name == "Linux Tests" %}
-{% if enable_tests %}
+{% if enable_tests and not stubs_package %}
       - name: "Upload Coverage"
         uses: actions/upload-artifact@v2
         with:

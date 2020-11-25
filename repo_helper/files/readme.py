@@ -61,7 +61,7 @@ def rewrite_readme(repo_path: pathlib.Path, templates: jinja2.Environment) -> Li
 			repo_name=templates.globals["repo_name"],
 			version=templates.globals["version"],
 			conda=templates.globals["enable_conda"],
-			tests=templates.globals["enable_tests"],
+			tests=templates.globals["enable_tests"] and not templates.globals["stubs_package"],
 			docs=templates.globals["enable_docs"],
 			pypi_name=templates.globals["pypi_name"],
 			docker_shields=templates.globals["docker_shields"],
