@@ -124,11 +124,11 @@ class DocRequirementsManager(RequirementsManager):
 	def compile_target_requirements(self) -> None:
 
 		for name, specifier in self.theme_versions.items():
-			if name == self._globals["sphinx_html_theme"]:
+			if normalize(name) == normalize(self._globals["sphinx_html_theme"]):
 				self.target_requirements.add(ComparableRequirement(f"{name}{specifier}"))
 				break
 		else:
-			self.target_requirements.add(ComparableRequirement(self._globals["sphinx_html_theme"]))
+			self.target_requirements.add(ComparableRequirement(normalize(self._globals["sphinx_html_theme"])))
 
 		# Mapping of pypi_name to version specifier
 		my_sphinx_extensions = {
