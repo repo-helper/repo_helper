@@ -30,6 +30,7 @@ from typing import List
 # 3rd party
 import jinja2
 from domdf_python_tools.paths import PathPlus
+from domdf_python_tools.stringlist import DelimitedList, StringList
 
 # this package
 from repo_helper.configupdater2 import ConfigUpdater
@@ -97,6 +98,13 @@ def make_github_ci(repo_path: pathlib.Path, templates: jinja2.Environment) -> Li
 	macos_ci_file = workflows_dir / "python_ci_macos.yml"
 	linux_ci_file = workflows_dir / "python_ci_linux.yml"
 
+	standard_python_install_lines = [
+			"python -VV",
+			"python -m site",
+			"python -m pip install --upgrade pip setuptools wheel",
+			"python -m pip install --upgrade tox tox-gh-actions virtualenv",
+			]
+
 	if "Windows" in templates.globals["platforms"]:
 		py_versions = templates.globals["python_versions"][:]
 		if not templates.globals["pure_python"] and "3.8" in py_versions:
@@ -106,38 +114,60 @@ def make_github_ci(repo_path: pathlib.Path, templates: jinja2.Environment) -> Li
 			# https://github.com/domdfcoding/flake8-sphinx-links/runs/1276871725?check_suite_focus=true
 			py_versions.remove("pypy3")
 
+		dependency_lines = StringList(standard_python_install_lines)
+		if templates.globals["travis_additional_requirements"]:
+			travis_additional_requirements = DelimitedList(templates.globals["travis_additional_requirements"])
+			dependency_lines.append(f"python -m pip install --upgrade {travis_additional_requirements: }")
+
 		windows_ci_file.write_clean(
 				actions.render(
 						no_dev_versions=no_dev_versions,
 						ci_platform="windows-2019",
 						ci_name="Windows Tests",
 						python_versions=py_versions,
-						travis_extra_install_pre=(),
-						travis_extra_install_post=(),
+						dependency_lines=dependency_lines,
 						)
 				)
 	elif windows_ci_file.is_file():
 		windows_ci_file.unlink()
 
 	if "macOS" in templates.globals["platforms"]:
+
+		dependency_lines = StringList(standard_python_install_lines)
+		if templates.globals["travis_additional_requirements"]:
+			travis_additional_requirements = DelimitedList(templates.globals["travis_additional_requirements"])
+			dependency_lines.append(f"python -m pip install --upgrade {travis_additional_requirements: }")
+
 		macos_ci_file.write_clean(
 				actions.render(
 						no_dev_versions=no_dev_versions,
 						ci_platform="macos-latest",
 						ci_name="macOS Tests",
-						travis_extra_install_pre=(),
-						travis_extra_install_post=(),
+						dependency_lines=dependency_lines,
 						)
 				)
 	elif macos_ci_file.is_file():
 		macos_ci_file.unlink()
 
 	if "Linux" in templates.globals["platforms"]:
+		dependency_lines = StringList(templates.globals["travis_extra_install_pre"])
+		dependency_lines.extend(standard_python_install_lines)
+
+		if templates.globals["enable_tests"]:
+			dependency_lines.append("python -m pip install --upgrade coverage_pyver_pragma")
+
+		if templates.globals["travis_additional_requirements"]:
+			travis_additional_requirements = DelimitedList(templates.globals["travis_additional_requirements"])
+			dependency_lines.append(f"python -m pip install --upgrade {travis_additional_requirements: }")
+
+		dependency_lines.extend(templates.globals["travis_extra_install_post"])
+
 		linux_ci_file.write_clean(
 				actions.render(
 						no_dev_versions=no_dev_versions,
 						ci_platform="ubuntu-18.04",
 						ci_name="Linux Tests",
+						dependency_lines=dependency_lines,
 						)
 				)
 	elif linux_ci_file.is_file():
