@@ -30,6 +30,7 @@ import pathlib
 import posixpath
 import re
 import shutil
+import sys
 import tarfile
 import tempfile
 from base64 import urlsafe_b64encode
@@ -516,8 +517,9 @@ class Builder:
 					wheel_archive.write(file, arcname=file.relative_to(self.build_dir))
 					self.report_written(file)
 
+		emoji = "🎡 " if sys.platform != 'win32' else ''
 		click.echo(
-				Fore.GREEN(f"🎡 Wheel created at {wheel_filename.resolve()}"),
+				Fore.GREEN(f"{emoji}Wheel created at {wheel_filename.resolve()}"),
 				color=resolve_color_default(),
 				)
 		return os.path.basename(wheel_filename)
