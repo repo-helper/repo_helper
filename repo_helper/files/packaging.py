@@ -42,7 +42,7 @@ from shippinglabel.requirements import combine_requirements
 import repo_helper.files
 from repo_helper.configupdater2 import ConfigUpdater
 from repo_helper.files import management
-from repo_helper.utils import IniConfigurator, indent_with_tab, reformat_file
+from repo_helper.utils import indent_join, IniConfigurator, indent_with_tab, reformat_file
 
 __all__ = [
 		"make_manifest",
@@ -260,13 +260,8 @@ class SetupCfgConfig(IniConfigurator):
 		``[options.packages.find]``.
 		"""
 
-		self._ini["options.packages.find"]["exclude"] = indent_with_tab(
-				textwrap.dedent("""
-{tests_dir}
-{tests_dir}.*
-{docs_dir}
-""".format_map(self._globals))
-				)
+		excludes = [self["tests_dir"], f"{self['tests_dir']}.*", self["docs_dir"]]
+		self._ini["options.packages.find"]["exclude"] = indent_join(sorted(set(excludes)))
 
 	def options_entry_points(self):
 		"""
@@ -296,7 +291,21 @@ class SetupCfgConfig(IniConfigurator):
 		if ini_file.is_file():
 			existing_config = ConfigUpdater()
 			existing_config.read(str(ini_file))
+
+			def strip(string: str) -> str:
+				return string.strip()
+
 			for section in existing_config.sections_blocks():
+				if section.name == "options.packages.find" and "exclude" in section:
+
+					all_excludes = (
+							*section["exclude"].value.splitlines(),
+							*self._ini["options.packages.find"]["exclude"].value.splitlines(),
+							)
+
+					exclude_packages = sorted(set(filter(bool, map(strip, all_excludes))))
+					self._ini["options.packages.find"]["exclude"] = indent_join(exclude_packages)
+
 				if section.name not in self.managed_sections:
 					self._ini.add_section(section)
 				elif section.name == "mypy" and "incremental" in section:
