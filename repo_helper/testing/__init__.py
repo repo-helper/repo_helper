@@ -165,6 +165,9 @@ def original_datadir(request) -> Path:  # noqa: D103
 	return PathPlus(os.path.splitext(request.module.__file__)[0] + '_')
 
 
+FAKE_DATE = datetime.date(2020, 7, 25)
+
+
 @pytest.fixture()
 def temp_empty_repo(tmp_pathplus, monkeypatch) -> Repo:
 	"""
@@ -180,7 +183,6 @@ def temp_empty_repo(tmp_pathplus, monkeypatch) -> Repo:
 	monkeypatch.setenv("GIT_AUTHOR_NAME", "Guido")
 	monkeypatch.setenv("GIT_AUTHOR_EMAIL", "guido@python.org")
 
-	FAKE_DATE = datetime.date(2020, 7, 25)
 	monkeypatch.setattr(repo_helper.utils, "today", FAKE_DATE)
 
 	repo_dir = tmp_pathplus / secrets.token_hex(8)

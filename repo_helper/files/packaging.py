@@ -42,7 +42,7 @@ from shippinglabel.requirements import combine_requirements
 import repo_helper.files
 from repo_helper.configupdater2 import ConfigUpdater
 from repo_helper.files import management
-from repo_helper.utils import indent_join, IniConfigurator, indent_with_tab, reformat_file
+from repo_helper.utils import IniConfigurator, indent_join, indent_with_tab, reformat_file
 
 __all__ = [
 		"make_manifest",

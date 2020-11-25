@@ -10,18 +10,13 @@ import pytest
 from click import Abort
 from domdf_python_tools.paths import in_directory
 from domdf_python_tools.testing import check_file_regression
-from dulwich.config import StackedConfig
 from pytest_regressions.data_regression import DataRegressionFixture
 from pytest_regressions.file_regression import FileRegressionFixture
 from southwark import status
-from southwark.repo import Repo
 
 # this package
-import repo_helper.utils
 from repo_helper.cli.utils import run_repo_helper
 from repo_helper.core import RepoHelper
-
-FAKE_DATE = datetime.date(2020, 7, 25)
 
 
 @pytest.mark.skipif(condition=os.sep == '\\', reason="Different test for platforms where os.sep == \\")
@@ -43,8 +38,12 @@ def test_via_run_repo_helper_forward(
 			message="Testing Testing",
 			) == 0
 
-	assert not status(temp_empty_repo.path).untracked
-	assert not status(temp_empty_repo.path).unstaged
+	stat = status(temp_empty_repo.path)
+	assert not stat.untracked
+	assert not stat.unstaged
+	assert not stat.staged["add"]
+	assert not stat.staged["modify"]
+	assert not stat.staged["delete"]
 
 	assert run_repo_helper(
 			temp_empty_repo.path,
@@ -55,7 +54,6 @@ def test_via_run_repo_helper_forward(
 			) == 0
 
 	stat = status(temp_empty_repo.path)
-
 	assert not stat.untracked
 	assert not stat.unstaged
 	assert not stat.staged["add"]
@@ -77,26 +75,25 @@ def test_via_run_repo_helper_backward(
 		example_config,
 		):
 
-	# Monkeypatch dulwich so it doesn't try to use the global config.
-	monkeypatch.setattr(StackedConfig, "default_backends", lambda *args: [], raising=True)
-	monkeypatch.setenv("GIT_COMMITTER_NAME", "Guido")
-	monkeypatch.setenv("GIT_COMMITTER_EMAIL", "guido@python.org")
-	monkeypatch.setenv("GIT_AUTHOR_NAME", "Guido")
-	monkeypatch.setenv("GIT_AUTHOR_EMAIL", "guido@python.org")
-
-	monkeypatch.setattr(repo_helper.utils, "today", FAKE_DATE)
-
 	(temp_empty_repo.path / "repo_helper.yml").write_text(example_config)
 
 	run_repo_helper(temp_empty_repo.path, force=False, initialise=True, commit=True, message="Testing Testing")
 
-	assert not status(temp_empty_repo.path).untracked
-	assert not status(temp_empty_repo.path).unstaged
+	stat = status(temp_empty_repo.path)
+	assert not stat.untracked
+	assert not stat.unstaged
+	assert not stat.staged["add"]
+	assert not stat.staged["modify"]
+	assert not stat.staged["delete"]
 
 	run_repo_helper(temp_empty_repo.path, force=False, initialise=False, commit=True, message="Updated")
 
-	assert not status(temp_empty_repo.path).untracked
-	assert not status(temp_empty_repo.path).unstaged
+	stat = status(temp_empty_repo.path)
+	assert not stat.untracked
+	assert not stat.unstaged
+	assert not stat.staged["add"]
+	assert not stat.staged["modify"]
+	assert not stat.staged["delete"]
 
 	sha = "6d8cf72fff6adc4e570cb046ca417db7f2e10a3b"
 	stdout = re.sub(f"Committed as [A-Za-z0-9]{{{len(sha)}}}", f"Committed as {sha}", capsys.readouterr().out)
@@ -112,8 +109,6 @@ def test_via_Repo_class(
 		monkeypatch,
 		example_config,
 		):
-
-	monkeypatch.setattr(repo_helper.utils, "today", FAKE_DATE)
 
 	with in_directory(temp_repo.path):
 		(temp_repo.path / "repo_helper.yml").write_text(example_config)
