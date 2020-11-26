@@ -252,7 +252,7 @@ def make_github_manylinux(repo_path: pathlib.Path, templates: jinja2.Environment
 @management.register("docs_action", ["enable_docs"])
 def make_github_docs_test(repo_path: pathlib.Path, templates: jinja2.Environment) -> List[str]:
 	"""
-	Add configuration for `Github Actions` documentation check to the desired repo.
+	Add configuration for Github Actions documentation check to the desired repo.
 
 	:param repo_path: Path to the repository root.
 	:param templates:
@@ -267,7 +267,7 @@ def make_github_docs_test(repo_path: pathlib.Path, templates: jinja2.Environment
 @management.register("octocheese")
 def make_github_octocheese(repo_path: pathlib.Path, templates: jinja2.Environment) -> List[str]:
 	"""
-	Add configuration for the OctoCheese `Github Action`.
+	Add configuration for the OctoCheese Github Action.
 
 	:param repo_path: Path to the repository root.
 	:param templates:
