@@ -491,7 +491,7 @@ class Builder:
 
 			digest = "sha256=" + urlsafe_b64encode(sha256_hash.digest()).decode("latin1").rstrip('=')
 
-			return f"{path.relative_to(build_dir)},sha256={digest},{length}"
+			return f"{path.relative_to(build_dir).as_posix()},sha256={digest},{length}"
 
 		wheel_filename = self.out_dir / f"{self.archive_name}-{self.tag}.whl"
 		with ZipFile(wheel_filename, mode='w') as wheel_archive:
