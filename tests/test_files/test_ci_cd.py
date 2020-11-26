@@ -31,6 +31,7 @@ from repo_helper.files.ci_cd import (
 		make_actions_deploy_conda,
 		make_github_ci,
 		make_github_docs_test,
+		make_github_flake8,
 		make_github_manylinux,
 		make_github_octocheese
 		)
@@ -212,6 +213,12 @@ def test_make_github_octocheese(tmp_pathplus, demo_environment, file_regression:
 	demo_environment.globals["on_pypi"] = False
 	assert make_github_octocheese(tmp_pathplus, demo_environment) == [".github/workflows/octocheese.yml"]
 	assert not (tmp_pathplus / ".github/workflows/octocheese.yml").exists()
+
+
+def test_make_github_flake8(tmp_pathplus, demo_environment, file_regression: FileRegressionFixture):
+	assert make_github_flake8(tmp_pathplus, demo_environment) == [".github/workflows/flake8.yml"]
+	assert (tmp_pathplus / ".github/workflows/flake8.yml").is_file()
+	check_file_output(tmp_pathplus / ".github/workflows/flake8.yml", file_regression)
 
 
 @pytest.mark.parametrize("py_versions", [["3.6", "3.7", "3.8"], ["3.6", "3.7"]])

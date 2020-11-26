@@ -41,6 +41,7 @@ __all__ = [
 		"make_github_ci",
 		"make_github_docs_test",
 		"make_github_octocheese",
+		"make_github_flake8",
 		"make_github_manylinux",
 		"ensure_bumpversion",
 		"make_actions_deploy_conda",
@@ -280,6 +281,23 @@ def make_github_octocheese(repo_path: pathlib.Path, templates: jinja2.Environmen
 		file.write_clean(templates.get_template(file.name).render())
 	elif file.is_file():
 		file.unlink()
+
+	return [file.relative_to(repo_path).as_posix()]
+
+
+@management.register("flake8_action")
+def make_github_flake8(repo_path: pathlib.Path, templates: jinja2.Environment) -> List[str]:
+	"""
+	Add configuration for the Flake8 Github Action.
+
+	:param repo_path: Path to the repository root.
+	:param templates:
+	"""
+
+	file = PathPlus(repo_path / ".github" / "workflows" / "flake8.yml")
+	file.parent.maybe_make(parents=True)
+
+	file.write_clean(templates.get_template(file.name).render())
 
 	return [file.relative_to(repo_path).as_posix()]
 
