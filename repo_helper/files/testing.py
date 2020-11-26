@@ -307,11 +307,12 @@ class ToxConfig(IniConfigurator):
 				"git+https://github.com/PyCQA/pydocstyle@5118faa7173b0e5bbc230c4adf628758e13605bf",
 				"git+https://github.com/domdfcoding/flake8-quotes.git",
 				"git+https://github.com/domdfcoding/flake8-rst-docstrings.git",
-				"git+https://github.com/domdfcoding/flake8-rst-docstrings-sphinx.git",
+				"git+https://github.com/domdfcoding/flake8-rst-docstrings-sphinx.git@v2",
+				"git+https://github.com/domdfcoding/flake8-github-actions",
 				"pygments>=2.7.1",
 				])
 		# cmd = f"flake8 {' '.join(self.get_source_files())} --format=rst-toolbox"
-		cmd = f"python3 -m flake8_rst_docstrings_sphinx {' '.join(self.get_source_files())} --allow-toolbox"
+		cmd = f"python3 -m flake8_rst_docstrings_sphinx {' '.join(self.get_source_files())} --allow-toolbox {{posargs}}"
 		self._ini["testenv:lint"]["commands"] = cmd
 
 	def testenv_mypy(self):
