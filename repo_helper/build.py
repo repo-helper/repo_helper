@@ -517,7 +517,7 @@ class Builder:
 					wheel_archive.write(file, arcname=file.relative_to(self.build_dir))
 					self.report_written(file)
 
-		emoji = "🎡 " if sys.platform != 'win32' else ''
+		emoji = "🎡 " if sys.platform != "win32" else ''
 		click.echo(
 				Fore.GREEN(f"{emoji}Wheel created at {wheel_filename.resolve()}"),
 				color=resolve_color_default(),
