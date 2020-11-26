@@ -716,7 +716,7 @@ def rewrite_docs_index(repo_path: pathlib.Path, templates: jinja2.Environment) -
 			templates.globals["on_pypi"],
 			templates.globals["pypi_name"],
 			templates.globals["conda_channels"],
-			) + "\n"
+			) + '\n'
 
 	links_block = create_docs_links_block(
 			templates.globals["username"],
