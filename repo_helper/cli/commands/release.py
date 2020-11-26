@@ -37,7 +37,7 @@ from consolekit import CONTEXT_SETTINGS
 from consolekit.options import force_option
 from consolekit.terminal_colours import Fore
 from consolekit.utils import abort
-from domdf_python_tools.paths import PathPlus
+from domdf_python_tools.paths import PathPlus, traverse_to_file
 from domdf_python_tools.typing import PathLike
 from domdf_python_tools.versions import Version
 from dulwich.porcelain import tag_create
@@ -158,7 +158,7 @@ class Bumper:
 
 	def __init__(self, repo_path: PathPlus, force: bool = False):
 		#:
-		self.repo = RepoHelper(repo_path)
+		self.repo = RepoHelper(traverse_to_file(PathPlus(repo_path), "repo_helper.yml"))
 
 		if not assert_clean(self.repo.target_repo):
 			if force:
