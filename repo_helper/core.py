@@ -30,7 +30,7 @@ from typing import List, Tuple, Type
 # 3rd party
 import jinja2
 from domdf_python_tools.import_tools import discover
-from domdf_python_tools.paths import PathPlus
+from domdf_python_tools.paths import PathPlus, traverse_to_file
 from domdf_python_tools.typing import PathLike
 from domdf_python_tools.utils import enquote_value
 
@@ -42,7 +42,7 @@ from repo_helper.files.docs import copy_docs_styling
 from repo_helper.files.linting import code_only_warning, lint_fix_list, lint_warn_list
 from repo_helper.files.testing import make_isort
 from repo_helper.templates import init_repo_template_dir, template_dir
-from repo_helper.utils import discover_entry_points, traverse_to_file
+from repo_helper.utils import discover_entry_points
 
 __all__ = [
 		"RepoHelper",

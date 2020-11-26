@@ -47,7 +47,7 @@ from zipfile import ZipFile
 import click
 from consolekit.terminal_colours import Fore, resolve_color_default
 from consolekit.utils import abort
-from domdf_python_tools.paths import PathPlus
+from domdf_python_tools.paths import PathPlus, traverse_to_file
 from domdf_python_tools.stringlist import StringList
 from domdf_python_tools.typing import PathLike
 from packaging.specifiers import Specifier
@@ -58,7 +58,6 @@ from shippinglabel.requirements import ComparableRequirement, combine_requiremen
 from repo_helper import __version__
 from repo_helper.conda import compile_requirements, validate_requirements
 from repo_helper.configuration import parse_yaml
-from repo_helper.utils import traverse_to_file
 
 __all__ = ["Builder", "build_wheel", "build_sdist"]
 

@@ -41,11 +41,10 @@ def make_recipe(out_dir: str = "./conda/"):
 
 	# 3rd party
 	from consolekit.terminal_colours import Fore, resolve_color_default
-	from domdf_python_tools.paths import PathPlus
+	from domdf_python_tools.paths import PathPlus, traverse_to_file
 
 	# this package
 	from repo_helper import conda
-	from repo_helper.utils import traverse_to_file
 
 	repo_dir = traverse_to_file(PathPlus.cwd(), "repo_helper.yml")
 
