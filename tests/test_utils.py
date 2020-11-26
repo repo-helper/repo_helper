@@ -21,7 +21,6 @@
 #
 
 # stdlib
-import os
 from textwrap import dedent
 
 # 3rd party
@@ -30,7 +29,7 @@ from pytest_regressions.data_regression import DataRegressionFixture
 
 # this package
 from repo_helper.configuration.utils import get_version_classifiers
-from repo_helper.utils import indent_with_tab, pformat_tabs, traverse_to_file
+from repo_helper.utils import indent_with_tab, pformat_tabs
 
 
 def test_indent_with_tab():
@@ -75,39 +74,6 @@ def test_pformat_tabs():
 
 
 # TODO: reformat_file
-
-
-@pytest.mark.parametrize(
-		"location, expected",
-		[
-				("foo.yml", ''),
-				("foo/foo.yml", "foo"),
-				("foo/bar/foo.yml", "foo/bar"),
-				("foo/bar/baz/foo.yml", "foo/bar/baz"),
-				]
-		)
-def test_traverse_to_file(tmp_pathplus, location, expected):
-	(tmp_pathplus / location).parent.maybe_make(parents=True)
-	(tmp_pathplus / location).touch()
-	assert traverse_to_file(tmp_pathplus / "foo" / "bar" / "baz", "foo.yml") == tmp_pathplus / expected
-
-
-# TODO: height
-
-
-def test_traverse_to_file_errors(tmp_pathplus):
-	(tmp_pathplus / "foo/bar/baz").parent.maybe_make(parents=True)
-	if os.sep == '/':
-		with pytest.raises(FileNotFoundError, match="'foo.yml' not found in .*/foo/bar/baz"):
-			traverse_to_file(tmp_pathplus / "foo" / "bar" / "baz", "foo.yml")
-	elif os.sep == '\\':
-		with pytest.raises(FileNotFoundError, match=r"'foo.yml' not found in .*\\foo\\bar\\baz"):
-			traverse_to_file(tmp_pathplus / "foo" / "bar" / "baz", "foo.yml")
-	else:
-		raise NotImplementedError
-
-	with pytest.raises(TypeError, match="traverse_to_file expected 2 or more arguments, got 1"):
-		traverse_to_file(tmp_pathplus)
 
 
 @pytest.mark.parametrize(
