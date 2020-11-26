@@ -78,7 +78,7 @@ def rewrite_readme(repo_path: pathlib.Path, templates: jinja2.Environment) -> Li
 			templates.globals["on_pypi"],
 			templates.globals["pypi_name"],
 			templates.globals["conda_channels"],
-			)
+			) + "\n"
 
 	readme = readme_file.read_text(encoding="UTF-8")
 	readme = shields_regex.sub(shields_block, readme)
