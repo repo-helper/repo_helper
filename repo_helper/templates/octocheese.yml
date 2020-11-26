@@ -16,3 +16,4 @@ jobs:
           pypi_name: "{{ pypi_name }}"
         env:
           GITHUB_TOKEN: ${{ "{{" }}secrets.GITHUB_TOKEN{{ "}}" }}
+        if: startsWith(github.ref, 'refs/tags/') != true

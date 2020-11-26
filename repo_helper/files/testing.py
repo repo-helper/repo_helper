@@ -299,6 +299,7 @@ class ToxConfig(IniConfigurator):
 				"flake8-builtins>=1.5.3",
 				"flake8-docstrings>=1.5.0",
 				"flake8-dunder-all>=0.1.1",
+				"flake8-github-actions>=0.1.0",
 				"flake8-pyi>=20.10.0",
 				"flake8-pytest-style>=1.3.0",
 				"flake8-sphinx-links>=0.0.4",
@@ -308,7 +309,6 @@ class ToxConfig(IniConfigurator):
 				"git+https://github.com/domdfcoding/flake8-quotes.git",
 				"git+https://github.com/domdfcoding/flake8-rst-docstrings.git",
 				"git+https://github.com/domdfcoding/flake8-rst-docstrings-sphinx.git@v2",
-				"git+https://github.com/domdfcoding/flake8-github-actions",
 				"pygments>=2.7.1",
 				])
 		# cmd = f"flake8 {' '.join(self.get_source_files())} --format=rst-toolbox"
