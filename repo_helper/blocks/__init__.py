@@ -53,7 +53,7 @@ __all__ = [
 		]
 
 #: Regular expression to match the installation block placeholder.
-installation_regex = re.compile(r"(?s)(\.\. start installation)(.*?)(\.\. end installation)")
+installation_regex = re.compile(r"(?s)(\.\. start installation)(.*?)(\.\. end installation)\n")
 
 #: Regular expression to match the shields block placeholder.
 shields_regex = re.compile(r"(?s)(\.\. start shields)(.*?)(\.\. end shields)")
