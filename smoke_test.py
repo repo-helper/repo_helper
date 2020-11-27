@@ -7,13 +7,14 @@ import tempfile
 import time
 from io import BytesIO
 from subprocess import Popen
+from typing import Optional
 
 # 3rd party
+import southwark.repo
 from apeye.url import URL
 from domdf_python_tools.paths import PathPlus, in_directory
 from dulwich.config import StackedConfig
 from dulwich.porcelain import DEFAULT_ENCODING, Error, default_bytes_err_stream, fetch
-from southwark.repo import Repo
 
 # this package
 from repo_helper.build import build_sdist, build_wheel
@@ -26,6 +27,23 @@ class Templates:
 			"tox_build_requirements": [],
 			"use_experimental_backend": True,
 			}
+
+
+class Repo(southwark.repo.Repo):
+
+	def _get_user_identity(
+			self,
+			config: "StackedConfig",
+			kind: Optional[str] = None,
+			) -> bytes:
+		"""
+		Determine the identity to use for new commits.
+
+		:param config:
+		:param kind:
+		"""
+
+		return southwark.repo.get_user_identity(config)
 
 
 templates = Templates()
