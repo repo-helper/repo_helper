@@ -11,6 +11,7 @@ from subprocess import Popen
 from apeye.url import URL
 from domdf_python_tools.paths import PathPlus, in_directory
 from dulwich import porcelain
+from dulwich.config import StackedConfig
 from dulwich.porcelain import default_bytes_err_stream
 
 # this package
@@ -32,6 +33,13 @@ ret = 0
 
 clone_times = []
 build_times = []
+
+
+# Monkeypatch dulwich so it doesn't try to use the global config.
+StackedConfig.default_backends = lambda *args: []
+os.environ["GIT_AUTHOR_NAME"] = os.environ["GIT_COMMITTER_NAME"] = "repo-helper[bot]"
+os.environ["GIT_COMMITTER_EMAIL"] = "74742576+repo-helper[bot]@users.noreply.github.com"
+os.environ["GIT_AUTHOR_EMAIL"] = os.environ["GIT_COMMITTER_EMAIL"]
 
 
 def is_running_on_actions() -> bool:
