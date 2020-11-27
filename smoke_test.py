@@ -13,6 +13,7 @@ from domdf_python_tools.paths import PathPlus, in_directory
 from dulwich.config import StackedConfig
 from dulwich.porcelain import default_bytes_err_stream
 from southwark import clone
+import southwark.repo
 
 # this package
 from repo_helper.build import build_sdist, build_wheel
@@ -36,9 +37,10 @@ build_times = []
 
 # Monkeypatch dulwich so it doesn't try to use the global config.
 StackedConfig.default_backends = lambda *args: []
-os.environ["GIT_AUTHOR_NAME"] = os.environ["GIT_COMMITTER_NAME"] = "repo-helper[bot]"
-os.environ["GIT_COMMITTER_EMAIL"] = "74742576+repo-helper[bot]@users.noreply.github.com"
-os.environ["GIT_AUTHOR_EMAIL"] = os.environ["GIT_COMMITTER_EMAIL"]
+# os.environ["GIT_AUTHOR_NAME"] = os.environ["GIT_COMMITTER_NAME"] = "repo-helper[bot]"
+# os.environ["GIT_COMMITTER_EMAIL"] = "74742576+repo-helper[bot]@users.noreply.github.com"
+# os.environ["GIT_AUTHOR_EMAIL"] = os.environ["GIT_COMMITTER_EMAIL"]
+southwark.repo.get_user_identity = lambda *args: b"repo-helper[bot] <74742576+repo-helper[bot]@users.noreply.github.com>"
 
 
 def is_running_on_actions() -> bool:
