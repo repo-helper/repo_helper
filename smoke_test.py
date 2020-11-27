@@ -1,20 +1,18 @@
 # stdlib
 import os
-import shutil
 import statistics
 import sys
 import tempfile
 import time
 from io import BytesIO
 from subprocess import Popen
-from typing import Optional
 
 # 3rd party
-import southwark.repo
 from apeye.url import URL
 from domdf_python_tools.paths import PathPlus, in_directory
 from dulwich.config import StackedConfig
-from dulwich.porcelain import DEFAULT_ENCODING, Error, default_bytes_err_stream, fetch
+from dulwich.porcelain import default_bytes_err_stream
+from southwark import clone
 
 # this package
 from repo_helper.build import build_sdist, build_wheel
@@ -29,23 +27,6 @@ class Templates:
 			}
 
 
-class Repo(southwark.repo.Repo):
-
-	def _get_user_identity(
-			self,
-			config: "StackedConfig",
-			kind: Optional[str] = None,
-			) -> bytes:
-		"""
-		Determine the identity to use for new commits.
-
-		:param config:
-		:param kind:
-		"""
-
-		return southwark.repo.get_user_identity(config)
-
-
 templates = Templates()
 
 ret = 0
@@ -58,77 +39,6 @@ StackedConfig.default_backends = lambda *args: []
 os.environ["GIT_AUTHOR_NAME"] = os.environ["GIT_COMMITTER_NAME"] = "repo-helper[bot]"
 os.environ["GIT_COMMITTER_EMAIL"] = "74742576+repo-helper[bot]@users.noreply.github.com"
 os.environ["GIT_AUTHOR_EMAIL"] = os.environ["GIT_COMMITTER_EMAIL"]
-
-
-# Based on dulwich.
-# Licensed under the Apache 2.0 License
-def clone(
-		source,
-		target=None,
-		bare=False,
-		checkout=None,
-		errstream=default_bytes_err_stream,
-		origin=b"origin",
-		depth=None,
-		**kwargs,
-		):
-	"""Clone a local or remote git repository.
-
-	:param source: Path or URL for source repository
-	:param target: Path to target repository (optional)
-	:param bare: Whether or not to create a bare repository
-	:param checkout: Whether or not to check-out HEAD after cloning
-	:param errstream: Optional stream to write progress to
-	:param origin: Name of remote from the repository used to clone
-	:param depth: Depth to fetch at
-
-	:returns: The new repository
-	"""
-
-	# TODO(jelmer): This code overlaps quite a bit with Repo.clone
-
-	if checkout is None:
-		checkout = (not bare)
-	if checkout and bare:
-		raise Error("checkout and bare are incompatible")
-
-	if target is None:
-		target = source.split('/')[-1]
-
-	if not os.path.exists(target):
-		os.mkdir(target)
-
-	if bare:
-		r = Repo.init_bare(target)
-	else:
-		r = Repo.init(target)
-
-	reflog_message = b'clone: from ' + source.encode("utf-8")
-	try:
-		target_config = r.get_config()
-		if not isinstance(source, bytes):
-			source = source.encode(DEFAULT_ENCODING)
-		target_config.set((b'remote', origin), b'url', source)
-		target_config.set((b'remote', origin), b'fetch', b'+refs/heads/*:refs/remotes/' + origin + b'/*')
-		target_config.write_to_path()
-		fetch_result = fetch(r, origin, errstream=errstream, message=reflog_message, depth=depth, **kwargs)
-		# TODO(jelmer): Support symref capability,
-		# https://github.com/jelmer/dulwich/issues/485
-		try:
-			head = r[fetch_result.refs[b'HEAD']]
-		except KeyError:
-			head = None
-		else:
-			r[b'HEAD'] = head.id
-		if checkout and not bare and head is not None:
-			errstream.write(b'Checking out ' + head.id + b'\n')
-			r.reset_index(head.tree)
-	except BaseException:
-		shutil.rmtree(target)
-		r.close()
-		raise
-
-	return r
 
 
 def is_running_on_actions() -> bool:
