@@ -139,12 +139,12 @@ with tempfile.TemporaryDirectory() as tmpdir:
 			build_sdist(target_dir / "dist")
 			build_times.append(time.time() - start_time)
 
-			twine_process = Popen(["python3", "-m", "twine", "check", "dist/*"])
+			twine_process = Popen(["python3", "-m", "twine", "check", os.path.join("dist", '*')])
 			(output, err) = twine_process.communicate()
 			exit_code = twine_process.wait()
 			ret |= exit_code
 
-			check_wheel_process = Popen(["python3", "-m", "check_wheel_contents", "dist/"])
+			check_wheel_process = Popen(["python3", "-m", "check_wheel_contents", os.path.join("dist", '')])
 			(output, err) = check_wheel_process.communicate()
 			exit_code = check_wheel_process.wait()
 			ret |= exit_code
