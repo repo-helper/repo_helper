@@ -8,12 +8,12 @@ from io import BytesIO
 from subprocess import Popen
 
 # 3rd party
+import southwark.repo
 from apeye.url import URL
 from domdf_python_tools.paths import PathPlus, in_directory
 from dulwich.config import StackedConfig
 from dulwich.porcelain import default_bytes_err_stream
 from southwark import clone
-import southwark.repo
 
 # this package
 from repo_helper.build import build_sdist, build_wheel
@@ -139,12 +139,12 @@ with tempfile.TemporaryDirectory() as tmpdir:
 			build_sdist(target_dir / "dist")
 			build_times.append(time.time() - start_time)
 
-			twine_process = Popen(["python3", "-m", "twine", "check", os.path.join("dist", '*')])
+			twine_process = Popen(["python", "-m", "twine", "check", os.path.join("dist", '*')])
 			(output, err) = twine_process.communicate()
 			exit_code = twine_process.wait()
 			ret |= exit_code
 
-			check_wheel_process = Popen(["python3", "-m", "check_wheel_contents", os.path.join("dist", '')])
+			check_wheel_process = Popen(["python", "-m", "check_wheel_contents", os.path.join("dist", '')])
 			(output, err) = check_wheel_process.communicate()
 			exit_code = check_wheel_process.wait()
 			ret |= exit_code
