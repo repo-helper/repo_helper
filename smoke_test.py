@@ -152,11 +152,12 @@ with tempfile.TemporaryDirectory() as tmpdir:
 			print("check_wheel_contents")
 			runner = CliRunner()
 			result: Result = runner.invoke(
-					check_wheel_contents.__main__.main, catch_exceptions=False, args=["dist"]
+					check_wheel_contents.__main__.main,
+					catch_exceptions=False,
+					args=["dist"],
 					)
 			ret |= result.exit_code
-			print(result.stdout)
-			sys.stdout.flush()
+			print(result.stdout, flush=True)
 
 		if is_running_on_actions():
 			print("::endgroup::")
