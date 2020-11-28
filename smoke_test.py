@@ -5,11 +5,13 @@ import sys
 import tempfile
 import time
 from io import BytesIO
-from subprocess import Popen
 
 # 3rd party
+import check_wheel_contents.__main__
 import southwark.repo
+import twine.cli
 from apeye.url import URL
+from click.testing import CliRunner, Result
 from domdf_python_tools.paths import PathPlus, in_directory
 from dulwich.config import StackedConfig
 from dulwich.porcelain import default_bytes_err_stream
@@ -139,15 +141,22 @@ with tempfile.TemporaryDirectory() as tmpdir:
 			build_sdist(target_dir / "dist")
 			build_times.append(time.time() - start_time)
 
-			twine_process = Popen(["python", "-m", "twine", "check", os.path.join("dist", '*')])
-			(output, err) = twine_process.communicate()
-			exit_code = twine_process.wait()
-			ret |= exit_code
+			sys.stdout.flush()
 
-			check_wheel_process = Popen(["python", "-m", "check_wheel_contents", os.path.join("dist", '')])
-			(output, err) = check_wheel_process.communicate()
-			exit_code = check_wheel_process.wait()
-			ret |= exit_code
+			# Twine check
+			print("twine check")
+			ret |= twine.cli.dispatch(["check", os.path.join("dist", '*')])
+			sys.stdout.flush()
+
+			# check_wheel_contents
+			print("check_wheel_contents")
+			runner = CliRunner()
+			result: Result = runner.invoke(
+					check_wheel_contents.__main__.main, catch_exceptions=False, args=["dist"]
+					)
+			ret |= result.exit_code
+			print(result.stdout)
+			sys.stdout.flush()
 
 		if is_running_on_actions():
 			print("::endgroup::")
