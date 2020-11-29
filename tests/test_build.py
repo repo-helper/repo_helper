@@ -4,7 +4,7 @@ import sys
 import tempfile
 
 # 3rd party
-import check_wheel_contents.__main__
+import check_wheel_contents.__main__  # type: ignore
 import pytest
 import twine.cli
 from apeye import URL
