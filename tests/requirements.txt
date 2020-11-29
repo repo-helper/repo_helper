@@ -1,3 +1,4 @@
+check-wheel-contents>=0.2.0
 coverage>=5.1
 coverage-pyver-pragma>=0.0.6
 domdf-python-tools[testing]>=1.5.0
@@ -10,3 +11,4 @@ pytest-regressions>=2.0.1
 pytest-rerunfailures>=9.1.1
 pytest-timeout>=1.4.2
 readme-renderer>=26.0
+twine>=3.2.0

@@ -29,6 +29,7 @@ from pytest_regressions.file_regression import FileRegressionFixture
 from repo_helper.files.ci_cd import (
 		ensure_bumpversion,
 		make_actions_deploy_conda,
+		make_conda_actions_ci,
 		make_github_ci,
 		make_github_docs_test,
 		make_github_flake8,
@@ -359,3 +360,16 @@ def test_make_github_linux_case_4(
 	assert (tmp_pathplus / managed_files[2]).is_file()
 
 	check_file_output(tmp_pathplus / managed_files[2], file_regression)
+
+
+def test_make_conda_actions_ci(tmp_pathplus, demo_environment, file_regression: FileRegressionFixture):
+	managed_files = make_conda_actions_ci(tmp_pathplus, demo_environment)
+	assert managed_files == [".github/workflows/conda_ci.yml"]
+	assert (tmp_pathplus / managed_files[0]).is_file()
+
+	check_file_output(tmp_pathplus / managed_files[0], file_regression)
+
+	demo_environment.globals["enable_conda"] = False
+	managed_files = make_conda_actions_ci(tmp_pathplus, demo_environment)
+	assert managed_files == [".github/workflows/conda_ci.yml"]
+	assert not (tmp_pathplus / managed_files[0]).is_file()
