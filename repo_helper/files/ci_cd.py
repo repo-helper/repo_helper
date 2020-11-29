@@ -45,6 +45,7 @@ __all__ = [
 		"make_github_manylinux",
 		"ensure_bumpversion",
 		"make_actions_deploy_conda",
+		"make_conda_actions_ci",
 		]
 
 
@@ -190,23 +191,26 @@ def make_conda_actions_ci(repo_path: pathlib.Path, templates: jinja2.Environment
 	:param templates:
 	"""
 
-	actions = templates.get_template("github_conda_ci.yml")
-
 	workflows_dir = PathPlus(repo_path / ".github" / "workflows")
-	workflows_dir.maybe_make(parents=True)
-
 	conda_ci_file = workflows_dir / "conda_ci.yml"
 
-	def no_pypy_versions(versions):
-		"""
-		Returns the subset of ``versions`` which does not end with ``-dev``.
+	if templates.globals["enable_conda"]:
+		actions = templates.get_template("github_conda_ci.yml")
+		workflows_dir.maybe_make(parents=True)
 
-		:param versions:
-		"""
+		def no_pypy_versions(versions):
+			"""
+			Returns the subset of ``versions`` which does not end with ``-dev``.
 
-		return [v for v in no_dev_versions(versions) if "pypy" not in v.lower()]
+			:param versions:
+			"""
 
-	conda_ci_file.write_clean(actions.render(no_dev_versions=no_pypy_versions))
+			return [v for v in no_dev_versions(versions) if "pypy" not in v.lower()]
+
+		conda_ci_file.write_clean(actions.render(no_dev_versions=no_pypy_versions))
+
+	else:
+		conda_ci_file.unlink(missing_ok=True)
 
 	return [conda_ci_file.relative_to(repo_path).as_posix()]
 
