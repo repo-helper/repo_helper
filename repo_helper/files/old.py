@@ -46,6 +46,12 @@ __all__ = [
 
 @management.register("travis")
 def travis_bad(repo_path: pathlib.Path, templates: jinja2.Environment) -> List[str]:
+	"""
+	Removes Travis CI configuration.
+
+	:param repo_path: Path to the repository root.
+	:param templates:
+	"""
 	if PathPlus(repo_path / ".travis.yml").is_file():
 		PathPlus(repo_path / ".travis.yml").unlink()
 
