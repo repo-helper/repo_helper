@@ -6,10 +6,12 @@ import tempfile
 # 3rd party
 import check_wheel_contents.__main__  # type: ignore
 import pytest
+import southwark.repo
 import twine.cli
 from apeye import URL
 from click.testing import CliRunner, Result
 from domdf_python_tools.paths import PathPlus, in_directory
+from dulwich.config import StackedConfig
 from southwark import clone
 
 # this package
@@ -25,7 +27,12 @@ GITHUB_COM = URL("https://github.com")
 				("domdfcoding", "mathematical"),
 				]
 		)
-def test_build(username, repository, tmp_pathplus):
+def test_build(username, repository, tmp_pathplus, monkeypatch):
+	# Monkeypatch dulwich so it doesn't try to use the global config.
+	monkeypatch.setattr(StackedConfig, "default_backends", lambda *args: [])
+	email = b"repo-helper[bot] <74742576+repo-helper[bot]@users.noreply.github.com>"
+	monkeypatch.setattr(southwark.repo, "get_user_identity", lambda *args: email)
+
 	target_dir = tmp_pathplus / f"{username}_{repository}"
 
 	url = GITHUB_COM / username / repository
