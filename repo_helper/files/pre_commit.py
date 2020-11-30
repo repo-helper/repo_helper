@@ -174,7 +174,12 @@ pre_commit_hooks = Repo(
 pygrep_hooks = Repo(
 		repo=make_github_url("pre-commit", "pygrep-hooks"),
 		rev="v1.7.0",
-		hooks=["python-no-eval"],
+		hooks=[
+				"python-no-eval",
+				"rst-backticks",
+				"rst-directive-colons",
+				"rst-inline-touching-normal",
+				],
 		)
 
 pyupgrade = Repo(
