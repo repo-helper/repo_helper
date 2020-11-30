@@ -50,6 +50,7 @@ __all__ = [
 		"create_docs_install_block",
 		"get_docs_links_block_template",
 		"create_docs_links_block",
+		"get_readme_installation_block_no_pypi_template",
 		]
 
 #: Regular expression to match the installation block placeholder.
@@ -170,6 +171,18 @@ def get_readme_installation_block_template() -> Template:
 	"""  # noqa: D400
 
 	return template_from_file("readme_installation_block_template.rst")
+
+
+@functools.lru_cache(1)
+def get_readme_installation_block_no_pypi_template() -> Template:
+	"""
+	Loads the readme_installation_block_no_pypi template from file
+	and returns a jinja2 :class:`jinja2.environment.Template` for it.
+
+	.. versionadded:: 2020.12.1
+	"""  # noqa: D400
+
+	return template_from_file("readme_installation_block_no_pypi_template.rst")
 
 
 @functools.lru_cache(1)

@@ -36,6 +36,7 @@ from repo_helper.blocks import (
 		create_readme_install_block,
 		create_shields_block,
 		create_short_desc_block,
+		get_readme_installation_block_no_pypi_template,
 		installation_regex,
 		shields_regex,
 		short_desc_regex
@@ -71,14 +72,21 @@ def rewrite_readme(repo_path: pathlib.Path, templates: jinja2.Environment) -> Li
 			on_pypi=templates.globals["on_pypi"],
 			)
 
-	install_block = create_readme_install_block(
-			templates.globals["modname"],
-			templates.globals["username"],
-			templates.globals["enable_conda"],
-			templates.globals["on_pypi"],
-			templates.globals["pypi_name"],
-			templates.globals["conda_channels"],
-			) + '\n'
+	if templates.globals["on_pypi"]:
+		install_block = create_readme_install_block(
+				templates.globals["modname"],
+				templates.globals["username"],
+				templates.globals["enable_conda"],
+				templates.globals["on_pypi"],
+				templates.globals["pypi_name"],
+				templates.globals["conda_channels"],
+				) + '\n'
+	else:
+		install_block = get_readme_installation_block_no_pypi_template().render(
+				modname=templates.globals["modname"],
+				username=templates.globals["username"],
+				repo_name=templates.globals["repo_name"],
+				)
 
 	readme = readme_file.read_text(encoding="UTF-8")
 	readme = shields_regex.sub(shields_block, readme)
