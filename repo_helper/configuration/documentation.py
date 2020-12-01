@@ -308,7 +308,9 @@ class docs_url(ConfigVar):  # noqa
 		:rtype: See the ``rtype`` attribute.
 		"""
 
-		if "docs_url" not in raw_config_vars:
+		if raw_config_vars is None:
+			return None
+		elif "docs_url" not in raw_config_vars:
 			return None
 		else:
 			return super().validator(raw_config_vars)

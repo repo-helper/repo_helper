@@ -18,11 +18,22 @@ from southwark import status
 from repo_helper.cli.utils import run_repo_helper
 from repo_helper.core import RepoHelper
 
+os_sep_forward = pytest.mark.skipif(
+		condition=os.sep == '\\',
+		reason="Different test for platforms where os.sep == \\",
+		)
+os_sep_backward = pytest.mark.skipif(
+		condition=os.sep == '/',
+		reason="Different test for platforms where os.sep == /",
+		)
 
-@pytest.mark.parametrize("os_sep", [
-		pytest.param("forward", marks=pytest.mark.skipif(condition=os.sep == '\\', reason="Different test for platforms where os.sep == \\")),
-		pytest.param("backward", marks=pytest.mark.skipif(condition=os.sep == '/', reason="Different test for platforms where os.sep == /")),
-		])
+
+@pytest.mark.parametrize(
+		"os_sep", [
+				pytest.param("forward", marks=os_sep_forward),
+				pytest.param("backward", marks=os_sep_backward),
+				]
+		)
 @pytest.mark.skipif(condition=os.sep == '\\', reason="Different test for platforms where os.sep == \\")
 def test_via_run_repo_helper(
 		temp_empty_repo,
@@ -30,7 +41,7 @@ def test_via_run_repo_helper(
 		file_regression: FileRegressionFixture,
 		monkeypatch,
 		example_config,
-		os_sep
+		os_sep,
 		):
 
 	(temp_empty_repo.path / "repo_helper.yml").write_text(example_config)
