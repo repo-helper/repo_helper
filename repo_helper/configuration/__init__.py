@@ -55,6 +55,7 @@ from repo_helper.configuration import (
 from repo_helper.configuration.conda_anaconda import conda_channels, conda_description, conda_extras, enable_conda
 from repo_helper.configuration.documentation import (
 		docs_dir,
+		docs_url,
 		enable_docs,
 		extra_sphinx_extensions,
 		html_context,
@@ -225,6 +226,7 @@ __all__ = [
 		"standalone_contrib_guide",
 		"assignee",
 		"YamlEditor",
+		"docs_url",
 		]
 
 
@@ -340,6 +342,10 @@ class RepoHelperParser(Parser):
 			parsed_config_vars["tox_build_requirements"].append("repo_helper")
 
 		parsed_config_vars["classifiers"] = natsorted(set(parsed_config_vars["classifiers"]))
+
+		if parsed_config_vars["docs_url"] is None:
+			url = f"https://{parsed_config_vars['repo_name'].lower()}.readthedocs.io/en/latest"
+			parsed_config_vars["docs_url"] = url
 
 		return parsed_config_vars
 

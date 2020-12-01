@@ -213,7 +213,7 @@ def create_shields_block(
 		conda: bool = True,
 		tests: bool = True,
 		docs: bool = True,
-		travis_site: Literal["com", "org"] = "com",
+		docs_url: str = "https://{}.readthedocs.io/en/latest/?badge=latest",
 		pypi_name: Optional[str] = None,
 		unique_name: str = '',
 		docker_shields: bool = False,
@@ -232,7 +232,7 @@ def create_shields_block(
 	:param conda:
 	:param tests:
 	:param docs:
-	:param travis_site:
+	:param docs_url:
 	:param pypi_name: The name of the project on PyPI. Defaults to the value of ``repo_name`` if unset.
 	:param unique_name: An optional unique name for the reST substitutions.
 	:param docker_shields: Whether to show shields for Docker. Default :py:obj:`False`.
@@ -244,6 +244,8 @@ def create_shields_block(
 
 	:return: The shields block created from the above settings.
 	"""
+
+	docs_url = docs_url.format(repo_name.lower())
 
 	if unique_name and not unique_name.startswith('_'):
 		unique_name = f"_{unique_name}"
@@ -268,6 +270,7 @@ def create_shields_block(
 			platforms=platforms,
 			pre_commit=pre_commit,
 			on_pypi=on_pypi,
+			docs_url=docs_url,
 			)
 
 

@@ -24,7 +24,7 @@ r"""
 #
 
 # stdlib
-from typing import Any, Dict, List
+from typing import Any, Dict, List, Optional
 
 # 3rd party
 from configconfig.configvar import ConfigVar
@@ -46,6 +46,7 @@ __all__ = [
 		"enable_docs",
 		"docs_dir",
 		"standalone_contrib_guide",
+		"docs_url",
 		]
 
 
@@ -280,3 +281,34 @@ class standalone_contrib_guide(ConfigVar):  # noqa
 	dtype = bool
 	default = False
 	category: str = "documentation"
+
+
+class docs_url(ConfigVar):  # noqa
+	"""
+	The URL of the documentation, if it uses a custom domain. Default ``https://{repo_name}.readthedocs.io``.
+
+	Example:
+
+	.. code-block:: yaml
+
+		docs_url: docs.repo-helper.uk
+	"""
+
+	dtype = str
+	default = None
+	category: str = "documentation"
+
+	@classmethod
+	def validate(cls, raw_config_vars: Optional[Dict[str, Any]] = None) -> Any:
+		"""
+		Validate the value obtained from the ``YAML`` file and coerce into the appropriate return type.
+
+		:param raw_config_vars: Dictionary to obtain the value from.
+
+		:rtype: See the ``rtype`` attribute.
+		"""
+
+		if "docs_url" not in raw_config_vars:
+			return None
+		else:
+			return super().validator(raw_config_vars)

@@ -70,7 +70,7 @@ __all__ = [
 		]
 
 
-def make_docs_rtfd_shield(repo_name: str) -> str:
+def make_docs_rtfd_shield(repo_name: str, target: str = '') -> str:
 	"""
 	Create a shield for the ReadTheDocs documentation build status.
 

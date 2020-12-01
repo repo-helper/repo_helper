@@ -25,7 +25,7 @@
 	  - |license{{ unique_name }}| |language{{ unique_name }}| |requires{{ unique_name }}|\
 {% if pre_commit %} |pre_commit{{ unique_name }}|{% endif %}
 
-{% if docs %}.. |docs{{ unique_name }}| {{ make_rtfd_shield(repo_name)[3:] }}
+{% if docs %}.. |docs{{ unique_name }}| {{ make_rtfd_shield(repo_name, docs_url)[3:] }}
 
 .. |docs_check{{ unique_name }}| {{ make_docs_check_shield(repo_name, username)[3:] }}{% endif %}
 

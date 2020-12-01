@@ -60,18 +60,21 @@ __all__ = [
 		]
 
 
-def make_rtfd_shield(repo_name: str) -> str:
+def make_rtfd_shield(repo_name: str, target: str = "https://{}.readthedocs.io/en/latest/?badge=latest") -> str:
 	"""
 	Create a shield for the ReadTheDocs documentation build status.
 
 	:param repo_name: The name of the repository.
+	:param target:
 
 	:return: The shield.
 	"""
 
+	target = target.format(repo_name.lower())
+
 	return f"""\
 .. image:: https://img.shields.io/readthedocs/{repo_name.lower()}/latest?logo=read-the-docs
-	:target: https://{repo_name.lower()}.readthedocs.io/en/latest/?badge=latest
+	:target: {target}
 	:alt: Documentation Build Status"""
 
 

@@ -232,7 +232,7 @@ class SetupCfgConfig(IniConfigurator):
 				"Source_Code = https://github.com/{username}/{repo_name}".format_map(self._globals),
 				]
 		if self["enable_docs"]:
-			project_urls.insert(0, "Documentation = https://{repo_name}.readthedocs.io".format_map(self._globals))
+			project_urls.insert(0, "Documentation = {docs_url}".format_map(self._globals))
 
 		self._ini["metadata"]["project_urls"] = indent_with_tab('\n' + textwrap.dedent('\n'.join(project_urls)))
 		self._ini["metadata"]["classifiers"] = self["classifiers"]

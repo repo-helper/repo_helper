@@ -132,6 +132,7 @@ def demo_environment() -> jinja2.Environment:
 					min_py_version="3.6",
 					modname="hello-world",
 					repo_name="hello-world",
+					docs_url="https://hello-world.readthedocs.io/en/latest",
 					import_name="hello_world",
 					platforms=["Windows"],
 					pypi_name="hello-world",

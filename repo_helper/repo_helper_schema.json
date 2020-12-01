@@ -86,6 +86,10 @@
       "type": "string",
       "description": "The directory containing the docs code of the project."
     },
+    "docs_url": {
+      "type": "string",
+      "description": "The URL of the documentation, if it uses a custom domain. Default ``https://{repo_name}.readthedocs.io``."
+    },
     "email": {
       "type": "string",
       "description": "The email address of the author or maintainer."

@@ -356,8 +356,9 @@ class Builder:
 		if self.config["keywords"]:
 			metadata["Keywords"] = ','.join(self.config["keywords"])
 
-		metadata["Project-URL"] = "Documentation, https://{repo_name}.readthedocs.io".format_map(self.config)
-		# TODO: Make this link match the package version
+		if self.config["enable_docs"]:
+			metadata["Project-URL"] = "Documentation, {docs_url}".format_map(self.config)
+			# TODO: Make this link match the package version
 
 		metadata["Project-URL"] = f"Issue Tracker, {github_url}/issues"
 		metadata["Project-URL"] = f"Source Code, {github_url}"
@@ -444,7 +445,7 @@ class Builder:
 		about = {
 				"home": github_url,
 				"dev_url": github_url,
-				"doc_url": "https://{repo_name}.readthedocs.io".format_map(self.config),  # "license_url":,
+				"doc_url": "{docs_url}".format_map(self.config),  # "license_url":,
 				"license": self.config["license"],
 				"summary": self.config["short_desc"],
 				"description": conda_description,  # "license_family":,
