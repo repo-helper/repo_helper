@@ -313,4 +313,4 @@ class docs_url(ConfigVar):  # noqa
 		elif "docs_url" not in raw_config_vars:
 			return None
 		else:
-			return super().validator(raw_config_vars)
+			return super().validate(raw_config_vars)

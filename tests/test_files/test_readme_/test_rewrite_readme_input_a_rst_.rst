@@ -28,7 +28,7 @@ repo_helper
 	  - |license| |language| |requires| |pre_commit|
 
 .. |docs| image:: https://img.shields.io/readthedocs/hello-world/latest?logo=read-the-docs
-	:target: https://hello-world.readthedocs.io/en/latest/?badge=latest
+	:target: https://hello-world.readthedocs.io/en/latest
 	:alt: Documentation Build Status
 
 .. |docs_check| image:: https://github.com/octocat/hello-world/workflows/Docs%20Check/badge.svg

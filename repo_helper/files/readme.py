@@ -70,6 +70,7 @@ def rewrite_readme(repo_path: pathlib.Path, templates: jinja2.Environment) -> Li
 			platforms=templates.globals["platforms"],
 			pre_commit=templates.globals["enable_pre_commit"],
 			on_pypi=templates.globals["on_pypi"],
+			docs_url=templates.globals["docs_url"],
 			)
 
 	if templates.globals["on_pypi"]:
