@@ -30,7 +30,7 @@ Note: The autocommit functionality is currently broken on Windows, but works OK 
 	  - |license| |language| |requires| |pre_commit|
 
 .. |docs| image:: https://img.shields.io/readthedocs/repo_helper/latest?logo=read-the-docs
-	:target: https://repo_helper.readthedocs.io/en/latest/?badge=latest
+	:target: https://docs.repo-helper.uk
 	:alt: Documentation Build Status
 
 .. |docs_check| image:: https://github.com/domdfcoding/repo_helper/workflows/Docs%20Check/badge.svg

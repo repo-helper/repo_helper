@@ -7,6 +7,7 @@ version: "2020.11.30"
 username: "domdfcoding"
 license: 'LGPLv3+'
 short_desc: 'Update multiple configuration files, build scripts etc. from a single location.'
+docs_url: https://docs.repo-helper.uk
 
 enable_conda: false
 
