@@ -26,5 +26,5 @@ Repo Helper: Manage configuration files with ease.
 __author__: str = "Dominic Davis-Foster"
 __copyright__: str = "2020 Dominic Davis-Foster"
 __license__: str = "LGPLv3+"
-__version__: str = "2020.11.30"
+__version__: str = "2020.12.2"
 __email__: str = "dominic@davis-foster.co.uk"
