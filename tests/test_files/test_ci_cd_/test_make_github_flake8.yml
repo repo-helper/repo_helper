@@ -26,8 +26,7 @@ jobs:
           python -VV
           python -m site
           python -m pip install --upgrade pip setuptools wheel
-          python -m pip install flake8-prettycount
-          python -m pip install .
+          python -m pip install tox
 
       - name: "Run Flake8"
-        run: "python -m flake8_prettycount flake8_github_action --format github"
+        run: "python -m tox -e lint -- --format github"
