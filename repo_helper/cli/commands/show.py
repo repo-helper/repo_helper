@@ -24,9 +24,10 @@ Show information about the repository.
 #
 
 # stdlib
+import re
 from datetime import datetime
 from functools import partial
-from typing import List, Optional, Union
+from typing import Iterable, List, Optional, Union
 
 # 3rd party
 import click
@@ -34,6 +35,9 @@ from consolekit import CONTEXT_SETTINGS
 from consolekit.options import colour_option, no_pager_option
 
 # this package
+from packaging.requirements import Requirement
+from shippinglabel.requirements import combine_requirements, ComparableRequirement
+
 from repo_helper.cli import cli_group
 
 __all__ = ["show", "show_command", "version", "log", "changelog"]
@@ -205,8 +209,15 @@ def changelog(
 		default=-1,
 		help="The maximum depth to display. -1 means infinite depth.",
 		)
+@click.option(
+		"-c",
+		"--concise",
+		is_flag=True,
+		default=False,
+		help="Show a consolidated list of all dependencies.",
+		)
 @show_command()
-def requirements(no_pager: bool = False, depth: int = -1):
+def requirements(no_pager: bool = False, depth: int = -1, concise: bool = False):
 	"""
 	Lists the requirements of this library, and their dependencies.
 	"""
@@ -239,11 +250,31 @@ def requirements(no_pager: bool = False, depth: int = -1):
 
 		importlib_metadata.DistributionFinder.Context.path = search_path
 
-	for requirement in raw_requirements:
-		tree.append(str(requirement))
-		deps = list(list_requirements(str(requirement), depth=depth - 1))
-		if deps:
-			tree.append(deps)
+	if concise:
+		concise_requirements = []
+
+		def flatten(iterable: Iterable[Union[Requirement, Iterable]]):
+			for item in iterable:
+				if isinstance(item, str):
+					yield item
+				else:
+					yield from flatten(item)
+
+		for requirement in raw_requirements:
+			concise_requirements.append(requirement)
+			# TODO: remove "extra == " marker
+			for req in flatten(list_requirements(str(requirement), depth=depth - 1)):
+				concise_requirements.append(ComparableRequirement(re.sub('; extra == ".*"', "", req)))
+
+		concise_requirements = sorted(set(combine_requirements(concise_requirements)))
+		tree = list(map(str, concise_requirements))
+
+	else:
+		for requirement in raw_requirements:
+			tree.append(str(requirement))
+			deps = list(list_requirements(str(requirement), depth=depth - 1))
+			if deps:
+				tree.append(deps)
 
 	buf.extend(make_tree(tree))
 
