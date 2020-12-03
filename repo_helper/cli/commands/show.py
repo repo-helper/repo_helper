@@ -33,11 +33,10 @@ from typing import Iterable, List, Optional, Union
 import click
 from consolekit import CONTEXT_SETTINGS
 from consolekit.options import colour_option, no_pager_option
+from packaging.requirements import Requirement
+from shippinglabel.requirements import ComparableRequirement, combine_requirements
 
 # this package
-from packaging.requirements import Requirement
-from shippinglabel.requirements import combine_requirements, ComparableRequirement
-
 from repo_helper.cli import cli_group
 
 __all__ = ["show", "show_command", "version", "log", "changelog"]
@@ -264,7 +263,7 @@ def requirements(no_pager: bool = False, depth: int = -1, concise: bool = False)
 			concise_requirements.append(requirement)
 			# TODO: remove "extra == " marker
 			for req in flatten(list_requirements(str(requirement), depth=depth - 1)):
-				concise_requirements.append(ComparableRequirement(re.sub('; extra == ".*"', "", req)))
+				concise_requirements.append(ComparableRequirement(re.sub('; extra == ".*"', '', req)))
 
 		concise_requirements = sorted(set(combine_requirements(concise_requirements)))
 		tree = list(map(str, concise_requirements))
