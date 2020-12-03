@@ -31,6 +31,16 @@ __version__ = "2020.12.2"
 repo_root = pathlib.Path(__file__).parent
 install_requires = (repo_root / "requirements.txt").read_text(encoding="utf-8").split('\n')
 extras_require = {
-		"testing": ["pytest>=6.0.0", "domdf-python-tools[testing]>=1.5.0"],
-		"all": ["domdf-python-tools[testing]>=1.5.0", "pytest>=6.0.0"]
+		"testing": [
+				"pytest>=6.0.0",
+				"domdf-python-tools[testing]>=1.6.0",
+				"twine>=3.2.0",
+				"check_wheel_contents>=0.2.0"
+				],
+		"all": [
+				"check_wheel_contents>=0.2.0",
+				"domdf-python-tools[testing]>=1.6.0",
+				"pytest>=6.0.0",
+				"twine>=3.2.0"
+				]
 		}

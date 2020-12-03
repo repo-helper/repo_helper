@@ -147,7 +147,7 @@ def test_ensure_tests_requirements(tmp_pathplus, demo_environment):
 			) == """\
 coverage>=5.1
 coverage-pyver-pragma>=0.0.6
-domdf-python-tools[testing]>=1.5.0
+domdf-python-tools[testing]>=1.6.0
 iniconfig!=1.1.0,>=1.0.1
 pytest>=6.0.0
 pytest-cov>=2.8.1
@@ -166,7 +166,7 @@ pytest-timeout>=1.4.2
 			) == """\
 coverage>=5.1
 coverage-pyver-pragma>=0.0.6
-domdf-python-tools[testing]>=1.5.0
+domdf-python-tools[testing]>=1.6.0
 iniconfig!=1.1.0,>=1.0.1
 lorem>=0.1.1
 pytest>=6.0.0
@@ -189,7 +189,7 @@ def test_ensure_tests_requirements_extras(tmp_pathplus, demo_environment):
 			) == """\
 coverage>=5.1
 coverage-pyver-pragma>=0.0.6
-domdf-python-tools[testing]>=1.5.0
+domdf-python-tools[testing]>=1.6.0
 iniconfig!=1.1.0,>=1.0.1
 pytest>=6.0.0
 pytest-cov>=2.8.1
