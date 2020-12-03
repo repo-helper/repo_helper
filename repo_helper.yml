@@ -6,7 +6,7 @@ email: "dominic@davis-foster.co.uk"
 version: "2020.11.30"
 username: "domdfcoding"
 license: 'LGPLv3+'
-short_desc: 'Update multiple configuration files, build scripts etc. from a single location.'
+short_desc: 'A tool to manage configuration files, build scripts etc. across multiple projects.'
 docs_url: https://docs.repo-helper.uk
 
 enable_conda: false

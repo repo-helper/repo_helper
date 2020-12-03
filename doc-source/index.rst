@@ -4,7 +4,7 @@ repo_helper
 
 .. start short_desc
 
-**Update multiple configuration files, build scripts etc. from a single location.**
+**A tool to manage configuration files, build scripts etc. across multiple projects.**
 
 .. end short_desc
 
