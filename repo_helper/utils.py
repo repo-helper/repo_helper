@@ -71,7 +71,6 @@ __all__ = [
 		"pformat_tabs",
 		"reformat_file",
 		"today",
-		"traverse_to_file",
 		"sort_paths",
 		"commit_changes",
 		"stage_changes",

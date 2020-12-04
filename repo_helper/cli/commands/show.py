@@ -257,7 +257,7 @@ def requirements(no_pager: bool = False, depth: int = -1, concise: bool = False)
 				if isinstance(item, str):
 					yield item
 				else:
-					yield from flatten(item)
+					yield from flatten(item)  # type: ignore
 
 		for requirement in raw_requirements:
 			concise_requirements.append(requirement)
