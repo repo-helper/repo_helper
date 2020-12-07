@@ -9,7 +9,7 @@ on:
 
 jobs:
   tests:
-    name: "Python ${{ matrix.python-version }}"
+    name: "Python ${{ matrix.config.python-version }}"
     runs-on: "ubuntu-18.04"
     env:
       USING_COVERAGE: '3.6,3.7'
@@ -17,7 +17,9 @@ jobs:
     strategy:
       fail-fast: False
       matrix:
-        python-version: ["3.6","3.7"]
+        config:
+          - {python-version: "3.6", testenvs: "py36,mypy"}
+          - {python-version: "3.7", testenvs: "py37,build"}
 
     steps:
       - name: Checkout 🛎️
@@ -26,7 +28,7 @@ jobs:
       - name: Setup Python 🐍
         uses: "actions/setup-python@v2"
         with:
-          python-version: "${{ matrix.python-version }}"
+          python-version: "${{ matrix.config.python-version }}"
 
       - name: Install dependencies 🔧
         run: |
@@ -34,12 +36,12 @@ jobs:
           python -VV
           python -m site
           python -m pip install --upgrade pip setuptools wheel
-          python -m pip install --upgrade tox tox-gh-actions virtualenv
+          python -m pip install --upgrade tox virtualenv
           python -m pip install --upgrade isort black
           sudo apt install python3-gi
 
-      - name: "Run Tests for Python ${{ matrix.python-version }}"
-        run: "python -m tox"
+      - name: "Run Tests for Python ${{ matrix.config.python-version }}"
+        run: "python -m tox -e ${{ matrix.config.testenvs }}"
 
 
 

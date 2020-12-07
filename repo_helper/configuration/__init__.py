@@ -330,10 +330,9 @@ class RepoHelperParser(Parser):
 		py_versions = parsed_config_vars["python_versions"]
 		tox_py_versions = get_tox_python_versions(py_versions)
 		parsed_config_vars["tox_py_versions"] = tox_py_versions
-		tox_travis_versions = get_tox_travis_python_versions(py_versions, tox_py_versions)
-		tox_travis_versions[parsed_config_vars["python_deploy_version"]] += ", mypy"
-		parsed_config_vars["tox_travis_versions"] = tox_travis_versions
-		parsed_config_vars["gh_actions_versions"] = tox_travis_versions
+		gh_actions_versions = get_gh_actions_python_versions(py_versions, tox_py_versions)
+		parsed_config_vars["tox_travis_versions"] = gh_actions_versions
+		parsed_config_vars["gh_actions_versions"] = gh_actions_versions
 
 		if (repo_path / parsed_config_vars["import_name"].replace('.', '/') / "py.typed").is_file():
 			parsed_config_vars["classifiers"].append("Typing :: Typed")

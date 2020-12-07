@@ -34,6 +34,7 @@ from repo_helper.files.ci_cd import (
 		make_github_docs_test,
 		make_github_flake8,
 		make_github_manylinux,
+		make_github_mypy,
 		make_github_octocheese
 		)
 from repo_helper.files.old import remove_copy_pypi_2_github, remove_make_conda_recipe
@@ -52,6 +53,11 @@ def test_actions_deploy_conda(tmp_pathplus, demo_environment, file_regression: F
 
 
 def test_github_ci_case_1(tmp_pathplus, demo_environment, file_regression: FileRegressionFixture):
+	demo_environment.globals["gh_actions_versions"] = {
+			"3.6": "py36, mypy",
+			"3.7": "py37, build",
+			}
+
 	managed_files = make_github_ci(tmp_pathplus, demo_environment)
 	assert managed_files == [
 			".github/workflows/python_ci.yml",
@@ -222,6 +228,12 @@ def test_make_github_flake8(tmp_pathplus, demo_environment, file_regression: Fil
 	check_file_output(tmp_pathplus / ".github/workflows/flake8.yml", file_regression)
 
 
+def test_make_github_mypy(tmp_pathplus, demo_environment, file_regression: FileRegressionFixture):
+	assert make_github_mypy(tmp_pathplus, demo_environment) == [".github/workflows/mypy.yml"]
+	assert (tmp_pathplus / ".github/workflows/mypy.yml").is_file()
+	check_file_output(tmp_pathplus / ".github/workflows/mypy.yml", file_regression)
+
+
 @pytest.mark.parametrize("py_versions", [["3.6", "3.7", "3.8"], ["3.6", "3.7"]])
 @pytest.mark.parametrize("enable_docs", [True, False])
 @pytest.mark.parametrize("py_modules", [["hello_world.py"], []])
@@ -335,9 +347,9 @@ def test_make_github_linux_case_4(
 		file_regression: FileRegressionFixture,
 		demo_environment,
 		):
-	demo_environment.globals["platforms"] = ["Linux"]
 	demo_environment.globals.update(
 			dict(
+					platforms=["Linux"],
 					travis_ubuntu_version="bionic",
 					travis_extra_install_pre=["sudo apt update"],
 					travis_extra_install_post=["sudo apt install python3-gi"],
@@ -348,6 +360,12 @@ def test_make_github_linux_case_4(
 					python_versions=["3.6", "3.7", "3.8", "3.9", "3.10-dev"],
 					)
 			)
+	demo_environment.globals["gh_actions_versions"] = {
+			"3.6": "py36, mypy",
+			"3.7": "py37, build",
+			"3.8": "py38, build",
+			"3.9": "py39, build",
+			}
 
 	managed_files = make_github_ci(tmp_pathplus, demo_environment)
 	assert managed_files == [

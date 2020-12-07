@@ -74,11 +74,6 @@ def test_make_tox(
 	demo_environment.globals["enable_docs"] = enable_docs
 	demo_environment.globals["enable_devmode"] = enable_devmode
 	demo_environment.globals["code_only_warning"] = code_only_warning
-	demo_environment.globals["tox_travis_versions"] = {
-			"3.6": "py36, mypy, build",
-			"3.7": "py37, build",
-			"3.8": "py38, build",
-			}
 	demo_environment.globals["gh_actions_versions"] = {
 			"3.6": "py36, mypy",
 			"3.7": "py37, build",

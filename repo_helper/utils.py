@@ -449,3 +449,7 @@ def commit_changes(
 				)
 
 		return commit_sha.decode("UTF-8")
+
+
+def brace(string: str) -> str:
+	return f"{{{{ {string} }}}}"

@@ -59,6 +59,7 @@ import repo_helper.utils
 from repo_helper.build import Builder, build_sdist, build_wheel
 from repo_helper.files.linting import lint_warn_list
 from repo_helper.templates import template_dir
+from repo_helper.utils import brace
 
 __all__ = [
 		"demo_environment",
@@ -172,6 +173,11 @@ def demo_environment() -> jinja2.Environment:
 					managed_message="This file is managed by 'repo_helper'. Don't edit it directly.",
 					short_desc="a short description",
 					on_pypi=True,
+					brace=brace,
+					gh_actions_versions={
+							"3.6": "py36, mypy",
+							"3.7": "py37, build",
+							},
 					)
 			)
 

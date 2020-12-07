@@ -6,6 +6,7 @@ The following files will be committed:
   .github/workflows/cleanup.yml
   .github/workflows/docs_test_action.yml
   .github/workflows/flake8.yml
+  .github/workflows/mypy.yml
   .github/workflows/octocheese.yml
   .github/workflows/python_ci.yml
   .github/workflows/python_ci_linux.yml

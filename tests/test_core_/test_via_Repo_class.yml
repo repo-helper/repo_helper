@@ -12,6 +12,7 @@
 - .github/workflows/docs_test_action.yml
 - .github/workflows/flake8.yml
 - .github/workflows/manylinux_build.yml
+- .github/workflows/mypy.yml
 - .github/workflows/octocheese.yml
 - .github/workflows/python_ci.yml
 - .github/workflows/python_ci_linux.yml

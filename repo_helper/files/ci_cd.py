@@ -42,6 +42,7 @@ __all__ = [
 		"make_github_docs_test",
 		"make_github_octocheese",
 		"make_github_flake8",
+		"make_github_mypy",
 		"make_github_manylinux",
 		"ensure_bumpversion",
 		"make_actions_deploy_conda",
@@ -104,7 +105,8 @@ def make_github_ci(repo_path: pathlib.Path, templates: jinja2.Environment) -> Li
 			"python -VV",
 			"python -m site",
 			"python -m pip install --upgrade pip setuptools wheel",
-			"python -m pip install --upgrade tox tox-gh-actions virtualenv",
+			# "python -m pip install --upgrade tox tox-gh-actions virtualenv",
+			"python -m pip install --upgrade tox virtualenv",
 			]
 
 	if "Windows" in templates.globals["platforms"]:
@@ -299,6 +301,23 @@ def make_github_flake8(repo_path: pathlib.Path, templates: jinja2.Environment) -
 	"""
 
 	file = PathPlus(repo_path / ".github" / "workflows" / "flake8.yml")
+	file.parent.maybe_make(parents=True)
+
+	file.write_clean(templates.get_template(file.name).render())
+
+	return [file.relative_to(repo_path).as_posix()]
+
+
+@management.register("mypy_action")
+def make_github_mypy(repo_path: pathlib.Path, templates: jinja2.Environment) -> List[str]:
+	"""
+	Add configuration for the mypy Github Action.
+
+	:param repo_path: Path to the repository root.
+	:param templates:
+	"""
+
+	file = PathPlus(repo_path / ".github" / "workflows" / "mypy.yml")
 	file.parent.maybe_make(parents=True)
 
 	file.write_clean(templates.get_template(file.name).render())

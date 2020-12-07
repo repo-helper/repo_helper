@@ -42,7 +42,7 @@ from repo_helper.files.docs import copy_docs_styling
 from repo_helper.files.linting import code_only_warning, lint_warn_list
 from repo_helper.files.testing import make_isort
 from repo_helper.templates import init_repo_template_dir, template_dir
-from repo_helper.utils import discover_entry_points
+from repo_helper.utils import brace, discover_entry_points
 
 __all__ = [
 		"RepoHelper",
@@ -92,6 +92,7 @@ class RepoHelper:
 			undefined=jinja2.StrictUndefined,
 			)
 		self.templates.globals["managed_message"] = managed_message
+		self.templates.globals["brace"] = brace
 
 		self.load_settings()
 

@@ -9,7 +9,7 @@ on:
 
 jobs:
   tests:
-    name: "Python ${{ "{{" }} matrix.python-version {{ "}}" }}"
+    name: "Python ${{ brace('matrix.config.python-version')}}"
     runs-on: "{{ ci_platform }}"
     env:
       USING_COVERAGE: '{{ ",".join(no_dev_versions(python_versions)) }}'
@@ -17,7 +17,8 @@ jobs:
     strategy:
       fail-fast: False
       matrix:
-        python-version: ["{{ '","'.join(no_dev_versions(python_versions)) }}"]
+        config:{% for version in no_dev_versions(python_versions) %}
+          - {python-version: "{{ version }}", testenvs: "{{ gh_actions_versions[version].replace(' ', '') }}"}{% endfor %}
 
     steps:
       - name: Checkout 🛎️
@@ -26,20 +27,20 @@ jobs:
       - name: Setup Python 🐍
         uses: "actions/setup-python@v2"
         with:
-          python-version: "${{ "{{" }} matrix.python-version {{ "}}" }}"
+          python-version: "${{ brace('matrix.config.python-version')}}"
 
       - name: Install dependencies 🔧
         run: |
           {% for line in dependency_lines %}{{ line }}
           {% endfor %}
-      - name: "Run Tests for Python ${{ "{{" }} matrix.python-version {{ "}}" }}"
-        run: "python -m tox"
+      - name: "Run Tests for Python ${{ brace('matrix.config.python-version')}}"
+        run: "python -m tox -e ${{ brace('matrix.config.testenvs') }}"
 {% if ci_name == "Linux Tests" %}
 {% if enable_tests and not stubs_package %}
       - name: "Upload Coverage"
         uses: actions/upload-artifact@v2
         with:
-          name: "coverage-${{ "{{" }} matrix.python-version {{ "}}" }}"
+          name: "coverage-${{ brace('matrix.config.python-version')}}"
           path: .coverage
 
 
@@ -153,3 +154,5 @@ jobs:
           ANACONDA_TOKEN: ${{ "{{" }} secrets.ANACONDA_TOKEN {{ "}}" }}{% endif %}
 
 {% endif %}
+
+{# TODO: perhaps merge mypy into this workflow,  so that releases depend on it? #}
