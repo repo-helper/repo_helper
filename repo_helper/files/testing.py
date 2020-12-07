@@ -34,6 +34,7 @@ from typing import Any, List
 # 3rd party
 import jinja2
 from domdf_python_tools.paths import PathPlus
+from domdf_python_tools.stringlist import DelimitedList
 from domdf_python_tools.typing import PathLike
 from shippinglabel import normalize
 from shippinglabel.requirements import (
@@ -58,6 +59,17 @@ __all__ = [
 		]
 
 allowed_rst_directives = ["envvar", "TODO", "extras-require"]
+standard_flake8_excludes = [
+		".git",
+		"__pycache__",
+		"old",
+		"build",
+		"dist",
+		"__pkginfo__.py",
+		"setup.py",
+		".tox",
+		"venv",
+		]
 
 
 class ToxConfig(IniConfigurator):
@@ -387,19 +399,14 @@ class ToxConfig(IniConfigurator):
 		"""
 
 		self._ini["flake8"]["max-line-length"] = "120"
-		self._ini["flake8"]["select"] = ' '.join(str(x) for x in lint_warn_list + code_only_warning)
-
-		excludes = f".git,__pycache__,{self['docs_dir']},old,build,dist,make_conda_recipe.py,__pkginfo__.py,setup.py,.tox,venv"
-		self._ini["flake8"]["exclude"] = excludes
-		# self._ini["flake8"]["rst-roles"] = indent_join(sorted(allowed_rst_roles))
+		self._ini["flake8"]["select"] = f"{DelimitedList(lint_warn_list + code_only_warning): }"
+		self._ini["flake8"]["exclude"] = ','.join([self["docs_dir"], *standard_flake8_excludes])
 		self._ini["flake8"]["rst-directives"] = indent_join(sorted(allowed_rst_directives))
-
-		per_file_ignores = [
+		self._ini["flake8"]["per-file-ignores"] = indent_join([
 				'',
 				f"{self['tests_dir']}/*: {' '.join(str(e) for e in code_only_warning)}",
 				f"*/*.pyi: {' '.join(str(e) for e in code_only_warning)}",
-				]
-		self._ini["flake8"]["per-file-ignores"] = indent_join(per_file_ignores)
+				])
 		self._ini["flake8"]["pytest-parametrize-names-type"] = "csv"
 		self._ini["flake8"]["inline-quotes"] = '"'
 		self._ini["flake8"]["multiline-quotes"] = '"""'

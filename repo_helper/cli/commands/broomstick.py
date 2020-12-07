@@ -73,7 +73,8 @@ def depytestcache(base_dir: pathlib.Path, quiet: bool = False):
 	:param quiet:
 	"""
 
-	rmdir(base_dir / ".pytest_cache", quiet)
+	for dirname in base_dir.rglob(".pytest_cache"):
+		rmdir(dirname, quiet)
 
 
 def demolish(base_dir: pathlib.Path, quiet: bool = False):
