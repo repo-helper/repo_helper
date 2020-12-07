@@ -19,18 +19,18 @@ def test_lint_roller_removal(tmp_pathplus, demo_environment):
 	assert not (tmp_pathplus / managed_files[0]).exists()
 	assert not (tmp_pathplus / managed_files[0]).is_file()
 
-
-def test_lint_roller_case_1(tmp_pathplus, demo_environment, file_regression: FileRegressionFixture):
-	managed_files = make_lint_roller(tmp_pathplus, demo_environment)
-	assert managed_files == ["lint_roller.sh"]
-	check_file_output(tmp_pathplus / managed_files[0], file_regression)
-
-
-def test_lint_roller_case_2(tmp_pathplus, demo_environment, file_regression: FileRegressionFixture):
-	demo_environment.globals.update({
-			"py_modules": ["hello_world_cli"], "source_dir": "src/", "tests_dir": "testing"
-			})
-
-	managed_files = make_lint_roller(tmp_pathplus, demo_environment)
-	assert managed_files == ["lint_roller.sh"]
-	check_file_output(tmp_pathplus / managed_files[0], file_regression)
+#
+# def test_lint_roller_case_1(tmp_pathplus, demo_environment, file_regression: FileRegressionFixture):
+# 	managed_files = make_lint_roller(tmp_pathplus, demo_environment)
+# 	assert managed_files == ["lint_roller.sh"]
+# 	check_file_output(tmp_pathplus / managed_files[0], file_regression)
+#
+#
+# def test_lint_roller_case_2(tmp_pathplus, demo_environment, file_regression: FileRegressionFixture):
+# 	demo_environment.globals.update({
+# 			"py_modules": ["hello_world_cli"], "source_dir": "src/", "tests_dir": "testing"
+# 			})
+#
+# 	managed_files = make_lint_roller(tmp_pathplus, demo_environment)
+# 	assert managed_files == ["lint_roller.sh"]
+# 	check_file_output(tmp_pathplus / managed_files[0], file_regression)

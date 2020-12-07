@@ -39,7 +39,7 @@ import repo_helper.files
 from repo_helper.configuration import parse_yaml
 from repo_helper.files import Management, is_registered, management
 from repo_helper.files.docs import copy_docs_styling
-from repo_helper.files.linting import code_only_warning, lint_fix_list, lint_warn_list
+from repo_helper.files.linting import code_only_warning, lint_warn_list
 from repo_helper.files.testing import make_isort
 from repo_helper.templates import init_repo_template_dir, template_dir
 from repo_helper.utils import discover_entry_points
@@ -121,7 +121,6 @@ class RepoHelper:
 
 		config_vars = parse_yaml(self.target_repo)
 		self.templates.globals.update(config_vars)
-		self.templates.globals["lint_fix_list"] = lint_fix_list
 		self.templates.globals["lint_warn_list"] = lint_warn_list
 		self.templates.globals["code_only_warning"] = code_only_warning
 		self.templates.globals["enquote_value"] = enquote_value

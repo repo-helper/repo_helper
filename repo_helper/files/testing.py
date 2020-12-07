@@ -46,7 +46,7 @@ from shippinglabel.requirements import (
 # this package
 from repo_helper.configupdater2 import ConfigUpdater
 from repo_helper.files import management
-from repo_helper.files.linting import code_only_warning, lint_fix_list, lint_warn_list
+from repo_helper.files.linting import code_only_warning, lint_warn_list
 from repo_helper.utils import IniConfigurator, indent_join
 
 __all__ = [
@@ -387,9 +387,7 @@ class ToxConfig(IniConfigurator):
 		"""
 
 		self._ini["flake8"]["max-line-length"] = "120"
-		self._ini["flake8"]["select"] = ' '.join(
-				str(x) for x in lint_fix_list + lint_warn_list + code_only_warning
-				)
+		self._ini["flake8"]["select"] = ' '.join(str(x) for x in lint_warn_list + code_only_warning)
 
 		excludes = f".git,__pycache__,{self['docs_dir']},old,build,dist,make_conda_recipe.py,__pkginfo__.py,setup.py,.tox,venv"
 		self._ini["flake8"]["exclude"] = excludes

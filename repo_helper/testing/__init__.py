@@ -57,7 +57,7 @@ from southwark.repo import Repo
 # this package
 import repo_helper.utils
 from repo_helper.build import Builder, build_sdist, build_wheel
-from repo_helper.files.linting import lint_fix_list, lint_warn_list
+from repo_helper.files.linting import lint_warn_list
 from repo_helper.templates import template_dir
 
 __all__ = [
@@ -118,8 +118,7 @@ def demo_environment() -> jinja2.Environment:
 			"on_pypi": true
 			}
 
-	plus ``lint_fix_list`` = :py:data:`repo_helper.files.linting.lint_fix_list`
-	and ``lint_warn_list`` = :py:data:`repo_helper.files.linting.lint_warn_list`.
+	plus ``lint_warn_list`` = :py:data:`repo_helper.files.linting.lint_warn_list`.
 
 	Additional options can be set and values changed at the start of with:
 
@@ -156,7 +155,6 @@ def demo_environment() -> jinja2.Environment:
 					import_name="hello_world",
 					platforms=["Windows"],
 					pypi_name="hello-world",
-					lint_fix_list=lint_fix_list,
 					lint_warn_list=lint_warn_list,
 					py_modules=[],
 					manifest_additional=[],
