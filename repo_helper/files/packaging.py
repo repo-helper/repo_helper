@@ -228,8 +228,8 @@ class SetupCfgConfig(IniConfigurator):
 		self._ini["metadata"]["url"] = "https://github.com/{username}/{repo_name}".format_map(self._globals)
 
 		project_urls = [
-				"Issue_Tracker = https://github.com/{username}/{repo_name}/issues".format_map(self._globals),
-				"Source_Code = https://github.com/{username}/{repo_name}".format_map(self._globals),
+				"Issue Tracker = https://github.com/{username}/{repo_name}/issues".format_map(self._globals),
+				"Source Code = https://github.com/{username}/{repo_name}".format_map(self._globals),
 				]
 		if self["enable_docs"]:
 			project_urls.insert(0, "Documentation = {docs_url}".format_map(self._globals))
