@@ -196,7 +196,7 @@ class ToxConfig(IniConfigurator):
 
 		self._ini["tox"]["envlist"] = [*self["tox_py_versions"], "mypy", "build"]
 		self._ini["tox"]["skip_missing_interpreters"] = True
-		self._ini["tox"]["requires"] = indent_join(["pip>=20.2.1", *self["tox_requirements"]])
+		self._ini["tox"]["requires"] = indent_join(["pip>=20.3.1", *self["tox_requirements"]])
 		self._ini["tox"]["isolated_build"] = True
 
 	def envlists(self):
@@ -222,12 +222,8 @@ class ToxConfig(IniConfigurator):
 		``[testenv]``.
 		"""
 
-		env_vars = ["PIP_USE_FEATURE = 2020-resolver"]
-
 		if self["enable_devmode"]:
-			env_vars.append("PYTHONDEVMODE = 1")
-
-		self._ini["testenv"]["setenv"] = indent_join(env_vars)
+			self._ini["testenv"]["setenv"] = "PYTHONDEVMODE = 1"
 
 		if self["enable_tests"]:
 			self._ini["testenv"]["deps"] = f"-r{{toxinidir}}/{self['tests_dir']}/requirements.txt"
@@ -255,7 +251,7 @@ class ToxConfig(IniConfigurator):
 		"""
 
 		if self["enable_docs"]:
-			envvars = ["SHOW_TODOS = 1"]  # , "PIP_USE_FEATURE = 2020-resolver"
+			envvars = ["SHOW_TODOS = 1"]
 			self._ini["testenv:docs"]["setenv"] = indent_join(envvars)
 
 			self._ini["testenv:docs"]["basepython"] = "python3.8"
