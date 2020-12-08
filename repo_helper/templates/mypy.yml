@@ -10,11 +10,12 @@ on:
 jobs:
   Run:
     name: "mypy"
-    runs-on: ${{ "{{" }} matrix.os {{ "}}" }}
+    runs-on: ${{ brace("matrix.os") }}
 
     strategy:
       matrix:
         os: [ubuntu-latest, windows-latest, macos-latest]
+      fail-fast: false
 
     steps:
       - name: Checkout 🛎️
