@@ -81,7 +81,7 @@ def rewrite_readme(repo_path: pathlib.Path, templates: jinja2.Environment) -> Li
 				templates.globals["on_pypi"],
 				templates.globals["pypi_name"],
 				templates.globals["conda_channels"],
-				) + '\n'
+				)
 	else:
 		install_block = get_readme_installation_block_no_pypi_template().render(
 				modname=templates.globals["modname"],
@@ -91,7 +91,7 @@ def rewrite_readme(repo_path: pathlib.Path, templates: jinja2.Environment) -> Li
 
 	readme = readme_file.read_text(encoding="UTF-8")
 	readme = shields_regex.sub(shields_block, readme)
-	readme = installation_regex.sub(install_block, readme)
+	readme = installation_regex.sub(install_block + '\n', readme)
 	short_desc_block = create_short_desc_block(templates.globals["short_desc"], )
 	readme = short_desc_regex.sub(short_desc_block, readme)
 
