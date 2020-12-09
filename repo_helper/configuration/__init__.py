@@ -441,6 +441,7 @@ class YamlEditor(YAML):
 		:param new_value:
 		:param sort: Whether to sort the updated value.
 		"""
+
 		data = self.load_file(filename)
 
 		if sort:

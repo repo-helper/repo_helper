@@ -127,7 +127,7 @@ def classifiers(add: bool, status: Optional[int], library: Optional[bool]):
 		click.echo("What is the Development Status of this project?")
 		status = choice(text="Status", options=development_status_options, start_index=1) + 1
 
-	if status is not None and not sys.stdout.isatty():
+	if status is not None:
 		status_string = f"Development Status :: {status} - {development_status_options[status - 1]}"
 		suggested_classifiers.add(status_string)
 
