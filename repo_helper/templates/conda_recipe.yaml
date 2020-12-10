@@ -14,7 +14,8 @@ requirements:
     - python
     - setuptools
     - wheel
-  host:
+{% if use_experimental_backend %}    - repo_helper
+{% endif %}  host:
     - pip
     - python
 {{ requirements_block }}
