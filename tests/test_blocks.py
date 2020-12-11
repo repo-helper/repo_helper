@@ -28,10 +28,10 @@ from pytest_regressions.file_regression import FileRegressionFixture
 
 # this package
 from repo_helper.blocks import (
+		ShieldsBlock,
 		create_docs_install_block,
 		create_docs_links_block,
 		create_readme_install_block,
-		create_shields_block,
 		create_short_desc_block,
 		installation_regex,
 		links_regex,
@@ -129,7 +129,7 @@ def test_short_desc_regex(value):
 				]
 		)
 def test_create_shields_block(file_regression: FileRegressionFixture, kwargs):
-	result = create_shields_block(**kwargs)
+	result = ShieldsBlock(**kwargs).make()
 	check_file_regression(result, file_regression, extension=".rst")
 
 

@@ -33,8 +33,8 @@ from domdf_python_tools.paths import PathPlus
 
 # this package
 from repo_helper.blocks import (
+		ShieldsBlock,
 		create_readme_install_block,
-		create_shields_block,
 		create_short_desc_block,
 		get_readme_installation_block_no_pypi_template,
 		installation_regex,
@@ -57,7 +57,7 @@ def rewrite_readme(repo_path: pathlib.Path, templates: jinja2.Environment) -> Li
 
 	readme_file = PathPlus(repo_path / "README.rst")
 
-	shields_block = create_shields_block(
+	shields_block = ShieldsBlock(
 			username=templates.globals["username"],
 			repo_name=templates.globals["repo_name"],
 			version=templates.globals["version"],
@@ -71,7 +71,7 @@ def rewrite_readme(repo_path: pathlib.Path, templates: jinja2.Environment) -> Li
 			pre_commit=templates.globals["enable_pre_commit"],
 			on_pypi=templates.globals["on_pypi"],
 			docs_url=templates.globals["docs_url"],
-			)
+			).make()
 
 	if templates.globals["on_pypi"]:
 		install_block = create_readme_install_block(

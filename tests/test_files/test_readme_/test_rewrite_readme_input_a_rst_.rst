@@ -17,7 +17,7 @@ repo_helper
 	* - Docs
 	  - |docs| |docs_check|
 	* - Tests
-	  - |travis| |actions_windows| |coveralls| |codefactor| |pre_commit_ci|
+	  - |actions_windows| |coveralls| |codefactor| |pre_commit_ci|
 	* - PyPI
 	  - |pypi-version| |supported-versions| |supported-implementations| |wheel|
 	* - Anaconda
@@ -34,10 +34,6 @@ repo_helper
 .. |docs_check| image:: https://github.com/octocat/hello-world/workflows/Docs%20Check/badge.svg
 	:target: https://github.com/octocat/hello-world/actions?query=workflow%3A%22Docs+Check%22
 	:alt: Docs Check Status
-
-.. |travis| image:: https://github.com/octocat/hello-world/workflows/Linux%20Tests/badge.svg
-	:target: https://github.com/octocat/hello-world/actions?query=workflow%3A%22Linux+Tests%22
-	:alt: Linux Test Status
 
 .. |actions_windows| image:: https://github.com/octocat/hello-world/workflows/Windows%20Tests/badge.svg
 	:target: https://github.com/octocat/hello-world/actions?query=workflow%3A%22Windows+Tests%22

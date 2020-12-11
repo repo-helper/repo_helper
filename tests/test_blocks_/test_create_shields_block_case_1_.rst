@@ -7,7 +7,7 @@
 	* - Docs
 	  - |docs| |docs_check|
 	* - Tests
-	  - |travis| |actions_windows| |actions_macos| |coveralls| |codefactor|
+	  - |actions_linux| |actions_windows| |actions_macos| |coveralls| |codefactor|
 	* - PyPI
 	  - |pypi-version| |supported-versions| |supported-implementations| |wheel|
 	* - Anaconda
@@ -25,7 +25,7 @@
 	:target: https://github.com/octocat/REPO_NAME/actions?query=workflow%3A%22Docs+Check%22
 	:alt: Docs Check Status
 
-.. |travis| image:: https://github.com/octocat/REPO_NAME/workflows/Linux%20Tests/badge.svg
+.. |actions_linux| image:: https://github.com/octocat/REPO_NAME/workflows/Linux%20Tests/badge.svg
 	:target: https://github.com/octocat/REPO_NAME/actions?query=workflow%3A%22Linux+Tests%22
 	:alt: Linux Test Status
 

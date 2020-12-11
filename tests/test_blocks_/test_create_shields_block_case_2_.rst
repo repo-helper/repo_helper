@@ -5,7 +5,7 @@
 	:widths: 10 90
 
 	* - Tests
-	  - |travis_UNIQUE_NAME| |codefactor_UNIQUE_NAME|
+	  - |codefactor_UNIQUE_NAME|
 	* - PyPI
 	  - |pypi-version_UNIQUE_NAME| |supported-versions_UNIQUE_NAME| |supported-implementations_UNIQUE_NAME| |wheel_UNIQUE_NAME|
 	* - Activity
@@ -14,12 +14,6 @@
 	  - |docker_build_UNIQUE_NAME| |docker_automated_UNIQUE_NAME| |docker_size_UNIQUE_NAME|
 	* - Other
 	  - |license_UNIQUE_NAME| |language_UNIQUE_NAME| |requires_UNIQUE_NAME|
-
-
-
-.. |travis_UNIQUE_NAME| image:: https://github.com/octocat/REPO_NAME/workflows/Linux%20Tests/badge.svg
-	:target: https://github.com/octocat/REPO_NAME/actions?query=workflow%3A%22Linux+Tests%22
-	:alt: Linux Test Status
 
 .. |requires_UNIQUE_NAME| image:: https://requires.io/github/octocat/REPO_NAME/requirements.svg?branch=master
 	:target: https://requires.io/github/octocat/REPO_NAME/requirements/?branch=master

@@ -33,16 +33,66 @@ from domdf_python_tools.compat import importlib_resources
 from domdf_python_tools.paths import PathPlus
 from domdf_python_tools.stringlist import DelimitedList, StringList
 from jinja2 import BaseLoader, Environment, StrictUndefined, Template
-from typing_extensions import Literal
+
+# this package
+from repo_helper._docs_shields import (
+		make_docs_actions_linux_shield,
+		make_docs_actions_macos_shield,
+		make_docs_actions_windows_shield,
+		make_docs_activity_shield,
+		make_docs_codefactor_shield,
+		make_docs_conda_platform_shield,
+		make_docs_conda_version_shield,
+		make_docs_coveralls_shield,
+		make_docs_docker_automated_build_shield,
+		make_docs_docker_build_status_shield,
+		make_docs_docker_size_shield,
+		make_docs_docs_check_shield,
+		make_docs_language_shield,
+		make_docs_last_commit_shield,
+		make_docs_license_shield,
+		make_docs_maintained_shield,
+		make_docs_pre_commit_ci_shield,
+		make_docs_pre_commit_shield,
+		make_docs_pypi_version_shield,
+		make_docs_python_implementations_shield,
+		make_docs_python_versions_shield,
+		make_docs_requires_shield,
+		make_docs_rtfd_shield,
+		make_docs_wheel_shield
+		)
+from repo_helper.shields import (
+		make_actions_linux_shield,
+		make_actions_macos_shield,
+		make_actions_windows_shield,
+		make_activity_shield,
+		make_codefactor_shield,
+		make_conda_platform_shield,
+		make_conda_version_shield,
+		make_coveralls_shield,
+		make_docker_automated_build_shield,
+		make_docker_build_status_shield,
+		make_docker_size_shield,
+		make_docs_check_shield,
+		make_language_shield,
+		make_last_commit_shield,
+		make_license_shield,
+		make_maintained_shield,
+		make_pre_commit_ci_shield,
+		make_pre_commit_shield,
+		make_pypi_version_shield,
+		make_python_implementations_shield,
+		make_python_versions_shield,
+		make_requires_shield,
+		make_rtfd_shield,
+		make_wheel_shield
+		)
 
 __all__ = [
 		"installation_regex",
 		"shields_regex",
 		"short_desc_regex",
 		"links_regex",
-		"get_shields_block_template",
-		"get_docs_shields_block_template",
-		"create_shields_block",
 		"get_readme_installation_block_template",
 		"create_readme_install_block",
 		"create_short_desc_block",
@@ -51,6 +101,7 @@ __all__ = [
 		"get_docs_links_block_template",
 		"create_docs_links_block",
 		"get_readme_installation_block_no_pypi_template",
+		"ShieldsBlock",
 		]
 
 #: Regular expression to match the installation block placeholder.
@@ -83,84 +134,6 @@ def template_from_file(filename: str, **globals) -> Template:  # pylint: disable
 		return environment.from_string(template_text, globals=globals)
 	else:
 		return environment.from_string(template_text)
-
-
-@functools.lru_cache(1)
-def get_shields_block_template() -> Template:
-	"""
-	Loads the shields_block template from file
-	and returns a jinja2 :class:`jinja2.environment.Template` for it.
-	"""  # noqa: D400
-
-	# this package
-	from repo_helper import shields
-
-	return template_from_file(
-			"shields_block_template.rst",
-			make_maintained_shield=shields.make_maintained_shield,
-			make_rtfd_shield=shields.make_rtfd_shield,
-			make_docs_check_shield=shields.make_docs_check_shield,
-			make_actions_linux_shield=shields.make_actions_linux_shield,
-			make_actions_windows_shield=shields.make_actions_windows_shield,
-			make_actions_macos_shield=shields.make_actions_macos_shield,
-			make_requires_shield=shields.make_requires_shield,
-			make_coveralls_shield=shields.make_coveralls_shield,
-			make_codefactor_shield=shields.make_codefactor_shield,
-			make_pypi_version_shield=shields.make_pypi_version_shield,
-			make_python_versions_shield=shields.make_python_versions_shield,
-			make_python_implementations_shield=shields.make_python_implementations_shield,
-			make_wheel_shield=shields.make_wheel_shield,
-			make_conda_version_shield=shields.make_conda_version_shield,
-			make_conda_platform_shield=shields.make_conda_platform_shield,
-			make_license_shield=shields.make_license_shield,
-			make_language_shield=shields.make_language_shield,
-			make_activity_shield=shields.make_activity_shield,
-			make_last_commit_shield=shields.make_last_commit_shield,
-			make_docker_build_status_shield=shields.make_docker_build_status_shield,
-			make_docker_automated_build_shield=shields.make_docker_automated_build_shield,
-			make_docker_size_shield=shields.make_docker_size_shield,
-			make_pre_commit_shield=shields.make_pre_commit_shield,
-			make_pre_commit_ci_shield=shields.make_pre_commit_ci_shield,
-			)
-
-
-@functools.lru_cache(1)
-def get_docs_shields_block_template() -> Template:
-	"""
-	Loads the docs_shields_block template from file
-	and returns a jinja2 :class:`jinja2.environment.Template` for it.
-	"""  # noqa: D400
-
-	# this package
-	from repo_helper import _docs_shields
-
-	return template_from_file(
-			"docs_shields_block_template.rst",
-			make_maintained_shield=_docs_shields.make_docs_maintained_shield,
-			make_rtfd_shield=_docs_shields.make_docs_rtfd_shield,
-			make_docs_check_shield=_docs_shields.make_docs_docs_check_shield,
-			make_actions_linux_shield=_docs_shields.make_docs_actions_linux_shield,
-			make_actions_windows_shield=_docs_shields.make_docs_actions_windows_shield,
-			make_actions_macos_shield=_docs_shields.make_docs_actions_macos_shield,
-			make_requires_shield=_docs_shields.make_docs_requires_shield,
-			make_coveralls_shield=_docs_shields.make_docs_coveralls_shield,
-			make_codefactor_shield=_docs_shields.make_docs_codefactor_shield,
-			make_pypi_version_shield=_docs_shields.make_docs_pypi_version_shield,
-			make_python_versions_shield=_docs_shields.make_docs_python_versions_shield,
-			make_python_implementations_shield=_docs_shields.make_docs_python_implementations_shield,
-			make_wheel_shield=_docs_shields.make_docs_wheel_shield,
-			make_conda_version_shield=_docs_shields.make_docs_conda_version_shield,
-			make_conda_platform_shield=_docs_shields.make_docs_conda_platform_shield,
-			make_license_shield=_docs_shields.make_docs_license_shield,
-			make_language_shield=_docs_shields.make_docs_language_shield,
-			make_activity_shield=_docs_shields.make_docs_activity_shield,
-			make_last_commit_shield=_docs_shields.make_docs_last_commit_shield,
-			make_docker_build_status_shield=_docs_shields.make_docs_docker_build_status_shield,
-			make_docker_automated_build_shield=_docs_shields.make_docs_docker_automated_build_shield,
-			make_docker_size_shield=_docs_shields.make_docs_docker_size_shield,
-			make_pre_commit_shield=_docs_shields.make_docs_pre_commit_shield,
-			make_pre_commit_ci_shield=_docs_shields.make_docs_pre_commit_ci_shield,
-			)
 
 
 @functools.lru_cache(1)
@@ -203,75 +176,6 @@ def get_docs_installation_block_template() -> Template:
 	"""  # noqa: D400
 
 	return template_from_file("docs_installation_block_template.rst")
-
-
-def create_shields_block(
-		username: str,
-		repo_name: str,
-		version: Union[str, int],
-		*,
-		conda: bool = True,
-		tests: bool = True,
-		docs: bool = True,
-		docs_url: str = "https://{}.readthedocs.io/en/latest/?badge=latest",
-		pypi_name: Optional[str] = None,
-		unique_name: str = '',
-		docker_shields: bool = False,
-		docker_name: str = '',
-		platforms: Optional[Iterable[str]] = None,
-		pre_commit: bool = False,
-		on_pypi: bool = True,
-		template=get_shields_block_template(),
-		) -> str:
-	"""
-	Create the shields block for insertion into the README, documentation etc.
-
-	:param username: The username of the GitHub account that owns the repository.
-	:param repo_name: The name of the repository.
-	:param version:
-	:param conda:
-	:param tests:
-	:param docs:
-	:param docs_url:
-	:param pypi_name: The name of the project on PyPI. Defaults to the value of ``repo_name`` if unset.
-	:param unique_name: An optional unique name for the reST substitutions.
-	:param docker_shields: Whether to show shields for Docker. Default :py:obj:`False`.
-	:param docker_name: The name of the Docker image on DockerHub.
-	:param platforms: List of supported platforms.
-	:param pre_commit: Whether to show a shield for pre-commit
-	:param on_pypi:
-	:param template:
-
-	:return: The shields block created from the above settings.
-	"""
-
-	docs_url = docs_url.format(repo_name.lower())
-
-	if unique_name and not unique_name.startswith('_'):
-		unique_name = f"_{unique_name}"
-
-	if not pypi_name:
-		pypi_name = repo_name
-
-	if platforms:
-		platforms = set(platforms)
-
-	return template.render(
-			username=username,
-			repo_name=repo_name,
-			tests=tests,
-			conda=conda,
-			docs=docs,
-			pypi_name=pypi_name,
-			version=version,
-			unique_name=unique_name,
-			docker_name=docker_name,
-			docker_shields=docker_shields,
-			platforms=platforms,
-			pre_commit=pre_commit,
-			on_pypi=on_pypi,
-			docs_url=docs_url,
-			)
 
 
 def create_readme_install_block(
@@ -391,3 +295,266 @@ def create_docs_links_block(username: str, repo_name: str) -> str:
 	"""
 
 	return get_docs_links_block_template().render(username=username, repo_name=repo_name)
+
+
+class ShieldsBlock:
+	"""
+	Create the shields block for insertion into the README, documentation etc.
+
+	:param username: The username of the GitHub account that owns the repository.
+	:param repo_name: The name of the repository.
+	:param version:
+	:param conda:
+	:param tests:
+	:param docs:
+	:param docs_url:
+	:param pypi_name: The name of the project on PyPI. Defaults to the value of ``repo_name`` if unset.
+	:param unique_name: An optional unique name for the reST substitutions.
+	:param docker_shields: Whether to show shields for Docker. Default :py:obj:`False`.
+	:param docker_name: The name of the Docker image on DockerHub.
+	:param platforms: List of supported platforms.
+	:param pre_commit: Whether to show a shield for pre-commit
+	:param on_pypi:
+
+	.. versionadded:: 2020.12.11
+	"""
+
+	#: This list controls which sections are included, and their order.
+	sections = ("Docs", "Tests", "PyPI", "Anaconda", "Activity", "Docker", "Other")
+
+	#: This list controls which substitutions are included, and their order.
+	substitutions = (
+			"docs",
+			"docs_check",
+			"actions_linux",
+			"actions_windows",
+			"actions_macos",
+			"requires",
+			"coveralls",
+			"codefactor",
+			"pypi-version",
+			"supported-versions",
+			"supported-implementations",
+			"wheel",
+			"conda-version",
+			"conda-platform",
+			"license",
+			"language",
+			"commits-since",
+			"commits-latest",
+			"maintained",
+			"docker_build",
+			"docker_automated",
+			"docker_size",
+			"pre_commit",
+			"pre_commit_ci",
+			)
+
+	def __init__(
+			self,
+			username: str,
+			repo_name: str,
+			version: Union[str, int],
+			*,
+			conda: bool = True,
+			tests: bool = True,
+			docs: bool = True,
+			docs_url: str = "https://{}.readthedocs.io/en/latest/?badge=latest",
+			pypi_name: Optional[str] = None,
+			unique_name: str = '',
+			docker_shields: bool = False,
+			docker_name: str = '',
+			platforms: Optional[Iterable[str]] = None,
+			pre_commit: bool = False,
+			on_pypi: bool = True,
+			):
+
+		if unique_name and not unique_name.startswith('_'):
+			unique_name = f"_{unique_name}"
+
+		if not pypi_name:
+			pypi_name = repo_name
+
+		if platforms:
+			platforms = set(platforms)
+
+		self.username: str = str(username)
+		self.repo_name: str = str(repo_name)
+		self.version: Union[str, int] = str(version)
+		self.conda: bool = conda
+		self.tests: bool = tests
+		self.docs: bool = docs
+		self.docs_url: str = docs_url.format(self.repo_name.lower())
+		self.pypi_name: Optional[str] = pypi_name
+		self.unique_name: str = str(unique_name)
+		self.docker_shields: bool = docker_shields
+		self.docker_name: str = str(docker_name)
+		self.platforms: Optional[Iterable[str]] = platforms
+		self.pre_commit: bool = pre_commit
+		self.on_pypi: bool = on_pypi
+
+		self.set_readme_mode()
+
+	def set_readme_mode(self) -> None:
+		"""
+		Create shields for insertion into ``README.rst``.
+		"""
+
+		self.make_actions_linux_shield = make_actions_linux_shield
+		self.make_actions_macos_shield = make_actions_macos_shield
+		self.make_actions_windows_shield = make_actions_windows_shield
+		self.make_activity_shield = make_activity_shield
+		self.make_codefactor_shield = make_codefactor_shield
+		self.make_conda_platform_shield = make_conda_platform_shield
+		self.make_conda_version_shield = make_conda_version_shield
+		self.make_coveralls_shield = make_coveralls_shield
+		self.make_docker_automated_build_shield = make_docker_automated_build_shield
+		self.make_docker_build_status_shield = make_docker_build_status_shield
+		self.make_docker_size_shield = make_docker_size_shield
+		self.make_docs_check_shield = make_docs_check_shield
+		self.make_language_shield = make_language_shield
+		self.make_last_commit_shield = make_last_commit_shield
+		self.make_license_shield = make_license_shield
+		self.make_maintained_shield = make_maintained_shield
+		self.make_pre_commit_ci_shield = make_pre_commit_ci_shield
+		self.make_pre_commit_shield = make_pre_commit_shield
+		self.make_pypi_version_shield = make_pypi_version_shield
+		self.make_python_implementations_shield = make_python_implementations_shield
+		self.make_python_versions_shield = make_python_versions_shield
+		self.make_requires_shield = make_requires_shield
+		self.make_rtfd_shield = make_rtfd_shield
+		self.make_wheel_shield = make_wheel_shield
+
+	def set_docs_mode(self) -> None:
+		"""
+		Create shields for insertion into Sphinx documentation.
+		"""
+
+		self.make_actions_linux_shield = make_docs_actions_linux_shield
+		self.make_actions_macos_shield = make_docs_actions_macos_shield
+		self.make_actions_windows_shield = make_docs_actions_windows_shield
+		self.make_activity_shield = make_docs_activity_shield
+		self.make_codefactor_shield = make_docs_codefactor_shield
+		self.make_conda_platform_shield = make_docs_conda_platform_shield
+		self.make_conda_version_shield = make_docs_conda_version_shield
+		self.make_coveralls_shield = make_docs_coveralls_shield
+		self.make_docker_automated_build_shield = make_docs_docker_automated_build_shield
+		self.make_docker_build_status_shield = make_docs_docker_build_status_shield
+		self.make_docker_size_shield = make_docs_docker_size_shield
+		self.make_docs_check_shield = make_docs_docs_check_shield
+		self.make_language_shield = make_docs_language_shield
+		self.make_last_commit_shield = make_docs_last_commit_shield
+		self.make_license_shield = make_docs_license_shield
+		self.make_maintained_shield = make_docs_maintained_shield
+		self.make_pre_commit_ci_shield = make_docs_pre_commit_ci_shield
+		self.make_pre_commit_shield = make_docs_pre_commit_shield
+		self.make_pypi_version_shield = make_docs_pypi_version_shield
+		self.make_python_implementations_shield = make_docs_python_implementations_shield
+		self.make_python_versions_shield = make_docs_python_versions_shield
+		self.make_requires_shield = make_docs_requires_shield
+		self.make_rtfd_shield = make_docs_rtfd_shield
+		self.make_wheel_shield = make_docs_wheel_shield
+
+	def make(self) -> str:
+		"""
+		Constructs the contents of the shields block.
+		"""
+
+		buf = StringList()
+		sections = {}
+		substitutions = {}
+
+		repo_name = self.repo_name
+		username = self.username
+		pypi_name = self.pypi_name
+
+		if self.unique_name:
+			buf.append(f".. start shields {self.unique_name.lstrip('_')}")
+		else:
+			buf.append(f".. start shields")
+
+		buf.blankline(ensure_single=True)
+
+		buf.extend([".. list-table::", "\t:stub-columns: 1", "\t:widths: 10 90"])
+		buf.blankline(ensure_single=True)
+
+		sections["Activity"] = ["commits-latest", "commits-since", "maintained"]
+		substitutions["commits-since"] = self.make_activity_shield(repo_name, username, self.version)
+		substitutions["commits-latest"] = self.make_last_commit_shield(repo_name, username)
+		substitutions["maintained"] = self.make_maintained_shield()
+
+		sections["Other"] = ["license", "language", "requires"]
+		substitutions["requires"] = self.make_requires_shield(repo_name, username)
+		substitutions["license"] = self.make_license_shield(repo_name, username)
+		substitutions["language"] = self.make_language_shield(repo_name, username)
+
+		if self.docs:
+			sections["Docs"] = ["docs", "docs_check"]
+			substitutions["docs"] = self.make_rtfd_shield(repo_name, self.docs_url)
+			substitutions["docs_check"] = self.make_docs_check_shield(repo_name, username)
+
+		sections["Tests"] = []
+
+		if "Linux" in self.platforms:
+			sections["Tests"].append("actions_linux")
+			substitutions["actions_linux"] = self.make_actions_linux_shield(repo_name, username)
+		if "Windows" in self.platforms:
+			sections["Tests"].append("actions_windows")
+			substitutions["actions_windows"] = self.make_actions_windows_shield(repo_name, username)
+		if "macOS" in self.platforms:
+			sections["Tests"].append("actions_macos")
+			substitutions["actions_macos"] = self.make_actions_macos_shield(repo_name, username)
+
+		if self.tests:
+			sections["Tests"].append("coveralls")
+			substitutions["coveralls"] = self.make_coveralls_shield(repo_name, username)
+
+		sections["Tests"].append("codefactor")
+		substitutions["codefactor"] = self.make_codefactor_shield(repo_name, username)
+
+		if self.pre_commit:
+			sections["Tests"].append("pre_commit_ci")
+			substitutions["pre_commit_ci"] = self.make_pre_commit_ci_shield(repo_name, username)
+
+			sections["Other"].append("pre_commit")
+			substitutions["pre_commit"] = self.make_pre_commit_shield()
+
+		if self.on_pypi:
+			sections["PyPI"] = ["pypi-version", "supported-versions", "supported-implementations", "wheel"]
+			substitutions["pypi-version"] = self.make_pypi_version_shield(pypi_name)
+			substitutions["supported-versions"] = self.make_python_versions_shield(pypi_name)
+			substitutions["supported-implementations"] = self.make_python_implementations_shield(pypi_name)
+			substitutions["wheel"] = self.make_wheel_shield(pypi_name)
+
+		if self.conda:
+			sections["Anaconda"] = ["conda-version", "conda-platform"]
+			substitutions["conda-version"] = self.make_conda_version_shield(pypi_name, username)
+			substitutions["conda-platform"] = self.make_conda_platform_shield(pypi_name, username)
+
+		if self.docker_shields:
+			docker_name = self.docker_name
+			sections["Docker"] = ["docker_build", "docker_automated", "docker_size"]
+			substitutions["docker_build"] = self.make_docker_build_status_shield(docker_name, username)
+			substitutions["docker_automated"] = self.make_docker_automated_build_shield(docker_name, username)
+			substitutions["docker_size"] = self.make_docker_size_shield(docker_name, username)
+
+		for section in self.sections:
+			if section not in sections:
+				continue
+
+			images = DelimitedList([f"|{name}{self.unique_name}|" for name in sections[section]])
+			buf.extend([f"	* - {section}", f"	  - {images: }"])
+
+		for sub_name in self.substitutions:
+			if sub_name not in substitutions:
+				continue
+
+			buf.blankline(ensure_single=True)
+			buf.append(f".. |{sub_name}{self.unique_name}| {substitutions[sub_name][3:]}")
+
+		buf.blankline(ensure_single=True)
+
+		buf.append(".. end shields")
+		# buf.blankline(ensure_single=True)
+
+		return str(buf)

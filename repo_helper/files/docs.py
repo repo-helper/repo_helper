@@ -55,11 +55,10 @@ from shippinglabel.requirements import (
 # this package
 import repo_helper
 from repo_helper.blocks import (
+		ShieldsBlock,
 		create_docs_install_block,
 		create_docs_links_block,
-		create_shields_block,
 		create_short_desc_block,
-		get_docs_shields_block_template,
 		installation_regex,
 		links_regex,
 		shields_regex,
@@ -687,8 +686,7 @@ def rewrite_docs_index(repo_path: pathlib.Path, templates: jinja2.Environment) -
 	index_rst_file.parent.maybe_make()
 
 	# Set up the blocks
-	shields_block = create_shields_block(
-			template=get_docs_shields_block_template(),
+	sb = ShieldsBlock(
 			username=templates.globals["username"],
 			repo_name=templates.globals["repo_name"],
 			version=templates.globals["version"],
@@ -702,6 +700,8 @@ def rewrite_docs_index(repo_path: pathlib.Path, templates: jinja2.Environment) -
 			pre_commit=templates.globals["enable_pre_commit"],
 			on_pypi=templates.globals["on_pypi"],
 			)
+	sb.set_docs_mode()
+	shields_block = sb.make()
 
 	if templates.globals["license"] == "GNU General Public License v2 (GPLv2)":
 		source = f"https://img.shields.io/github/license/{templates.globals['username']}/{templates.globals['repo_name']}"
