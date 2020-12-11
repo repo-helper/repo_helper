@@ -21,7 +21,7 @@ Note: The autocommit functionality is currently broken on Windows, but works OK 
 	* - Docs
 	  - |docs| |docs_check|
 	* - Tests
-	  - |travis| |actions_windows| |actions_macos| |coveralls| |codefactor| |pre_commit_ci|
+	  - |actions_linux| |actions_windows| |actions_macos| |coveralls| |codefactor| |pre_commit_ci|
 	* - PyPI
 	  - |pypi-version| |supported-versions| |supported-implementations| |wheel|
 	* - Activity
@@ -37,7 +37,7 @@ Note: The autocommit functionality is currently broken on Windows, but works OK 
 	:target: https://github.com/domdfcoding/repo_helper/actions?query=workflow%3A%22Docs+Check%22
 	:alt: Docs Check Status
 
-.. |travis| image:: https://github.com/domdfcoding/repo_helper/workflows/Linux%20Tests/badge.svg
+.. |actions_linux| image:: https://github.com/domdfcoding/repo_helper/workflows/Linux%20Tests/badge.svg
 	:target: https://github.com/domdfcoding/repo_helper/actions?query=workflow%3A%22Linux+Tests%22
 	:alt: Linux Test Status
 
