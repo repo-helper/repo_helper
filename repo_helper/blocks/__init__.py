@@ -372,12 +372,6 @@ class ShieldsBlock:
 		if unique_name and not unique_name.startswith('_'):
 			unique_name = f"_{unique_name}"
 
-		if not pypi_name:
-			pypi_name = repo_name
-
-		if platforms:
-			platforms = set(platforms)
-
 		self.username: str = str(username)
 		self.repo_name: str = str(repo_name)
 		self.version: Union[str, int] = str(version)
@@ -385,11 +379,11 @@ class ShieldsBlock:
 		self.tests: bool = tests
 		self.docs: bool = docs
 		self.docs_url: str = docs_url.format(self.repo_name.lower())
-		self.pypi_name: Optional[str] = pypi_name
+		self.pypi_name: str = pypi_name or repo_name
 		self.unique_name: str = str(unique_name)
 		self.docker_shields: bool = docker_shields
 		self.docker_name: str = str(docker_name)
-		self.platforms: Optional[Iterable[str]] = platforms
+		self.platforms: Iterable[str] = set(platforms or ())
 		self.pre_commit: bool = pre_commit
 		self.on_pypi: bool = on_pypi
 
