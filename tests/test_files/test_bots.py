@@ -30,6 +30,7 @@ from repo_helper.files.bots import (
 		make_artefact_cleaner,
 		make_auto_assign_action,
 		make_dependabot,
+		make_dependabotv2,
 		make_imgbot,
 		make_stale_bot
 		)
@@ -66,6 +67,12 @@ def test_auto_assign_action(tmp_pathplus, demo_environment, file_regression: Fil
 def test_dependabot(tmp_pathplus, demo_environment, file_regression: FileRegressionFixture):
 	managed_files = make_dependabot(tmp_pathplus, demo_environment)
 	assert managed_files == [".dependabot/config.yml"]
+	check_file_output(tmp_pathplus / managed_files[0], file_regression)
+
+
+def test_make_dependabotv2(tmp_pathplus, demo_environment, file_regression: FileRegressionFixture):
+	managed_files = make_dependabotv2(tmp_pathplus, demo_environment)
+	assert managed_files == [".github/dependabot.yml"]
 	check_file_output(tmp_pathplus / managed_files[0], file_regression)
 
 

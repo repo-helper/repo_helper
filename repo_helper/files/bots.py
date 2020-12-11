@@ -38,6 +38,7 @@ from repo_helper.files import management
 
 __all__ = [
 		"make_dependabot",
+		"make_dependabotv2",
 		"make_auto_assign_action",
 		"make_stale_bot",
 		"make_imgbot",
@@ -135,6 +136,8 @@ def make_dependabot(repo_path: pathlib.Path, templates: jinja2.Environment) -> L
 
 	:param repo_path: Path to the repository root.
 	:param templates:
+
+	.. deprecated:: 2020.12.11
 	"""
 
 	dependabot_file = PathPlus(repo_path / ".dependabot" / "config.yml")
@@ -148,6 +151,40 @@ def make_dependabot(repo_path: pathlib.Path, templates: jinja2.Environment) -> L
 			}
 
 	config = {"version": 1, "update_configs": [update_configs]}
+
+	dependabot_file.write_lines([
+			f"# {templates.globals['managed_message']}",
+			"---",
+			yaml.round_trip_dump(config, default_flow_style=False),  # type: ignore
+			])
+
+	return [dependabot_file.relative_to(repo_path).as_posix()]
+
+
+@management.register("dependabotv2")
+def make_dependabotv2(repo_path: pathlib.Path, templates: jinja2.Environment) -> List[str]:
+	"""
+	Add configuration for ``dependabot`` to the desired repo.
+
+	https://dependabot.com/
+
+	:param repo_path: Path to the repository root.
+	:param templates:
+
+	.. versionadded:: 2020.12.11
+	"""
+
+	dependabot_file = PathPlus(repo_path / ".github" / "dependabot.yml")
+	dependabot_file.parent.maybe_make()
+
+	updates = {
+			"package-ecosystem": "pip",
+			"directory": '/',
+			"schedule": {"interval": "weekly"},
+			"reviewers": [templates.globals["assignee"]],
+			}
+
+	config = {"version": 2, "updates": [updates]}
 
 	dependabot_file.write_lines([
 			f"# {templates.globals['managed_message']}",

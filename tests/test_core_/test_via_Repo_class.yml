@@ -5,6 +5,7 @@
 - .github/ISSUE_TEMPLATE/bug_report.md
 - .github/ISSUE_TEMPLATE/feature_request.md
 - .github/auto_assign.yml
+- .github/dependabot.yml
 - .github/stale.yml
 - .github/workflow/assign.yml
 - .github/workflows/assign.yml

@@ -12,6 +12,7 @@ The following files will be committed:
   .github\workflows\python_ci_linux.yml
   .github\workflows\python_ci_macos.yml
   .github\auto_assign.yml
+  .github\dependabot.yml
   .github\stale.yml
   doc-source\404.rst
   doc-source\conf.py
