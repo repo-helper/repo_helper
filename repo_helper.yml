@@ -88,3 +88,6 @@ conda_extras:
 
 tox_unmanaged:
  - flake8
+
+keywords:
+ - configuration
