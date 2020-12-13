@@ -1,6 +1,6 @@
 # This file is managed by 'repo_helper'. Don't edit it directly.
 ---
-name: Linux Tests
+name: Linux
 
 on:
   push:

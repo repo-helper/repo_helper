@@ -116,7 +116,7 @@ def make_docs_actions_linux_shield(
 
 	return """\
 .. actions-shield::
-	:workflow: Linux Tests
+	:workflow: Linux
 	:alt: Linux Test Status"""
 
 
@@ -135,7 +135,7 @@ def make_docs_actions_windows_shield(repo_name: str, username: str) -> str:
 
 	return """\
 .. actions-shield::
-	:workflow: Windows Tests
+	:workflow: Windows
 	:alt: Windows Test Status"""
 
 
@@ -151,7 +151,7 @@ def make_docs_actions_macos_shield(repo_name: str, username: str) -> str:
 
 	return """\
 .. actions-shield::
-	:workflow: macOS Tests
+	:workflow: macOS
 	:alt: macOS Test Status"""
 
 

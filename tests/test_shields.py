@@ -151,21 +151,21 @@ def test_make_docs_actions_linux_shield():
 			"hello-world", "octocat"
 			) == """\
 .. actions-shield::
-	:workflow: Linux Tests
+	:workflow: Linux
 	:alt: Linux Test Status"""
 
 	assert make_docs_actions_linux_shield(
 			"HELLO-WORLD", "octocat"
 			) == """\
 .. actions-shield::
-	:workflow: Linux Tests
+	:workflow: Linux
 	:alt: Linux Test Status"""
 
 	assert make_docs_actions_linux_shield(
 			"hello_world", "octocat"
 			) == """\
 .. actions-shield::
-	:workflow: Linux Tests
+	:workflow: Linux
 	:alt: Linux Test Status"""
 
 
@@ -197,21 +197,21 @@ def test_make_docs_actions_windows_shield():
 			"hello-world", "octocat"
 			) == """\
 .. actions-shield::
-	:workflow: Windows Tests
+	:workflow: Windows
 	:alt: Windows Test Status"""
 
 	assert make_docs_actions_windows_shield(
 			"hello_world", "octocat"
 			) == """\
 .. actions-shield::
-	:workflow: Windows Tests
+	:workflow: Windows
 	:alt: Windows Test Status"""
 
 	assert make_docs_actions_windows_shield(
 			"HELLO-WORLD", "octocat"
 			) == """\
 .. actions-shield::
-	:workflow: Windows Tests
+	:workflow: Windows
 	:alt: Windows Test Status"""
 
 
@@ -243,21 +243,21 @@ def test_make_docs_actions_macos_shield():
 			"hello-world", "octocat"
 			) == """\
 .. actions-shield::
-	:workflow: macOS Tests
+	:workflow: macOS
 	:alt: macOS Test Status"""
 
 	assert make_docs_actions_macos_shield(
 			"hello_world", "octocat"
 			) == """\
 .. actions-shield::
-	:workflow: macOS Tests
+	:workflow: macOS
 	:alt: macOS Test Status"""
 
 	assert make_docs_actions_macos_shield(
 			"HELLO-WORLD", "octocat"
 			) == """\
 .. actions-shield::
-	:workflow: macOS Tests
+	:workflow: macOS
 	:alt: macOS Test Status"""
 
 

@@ -127,7 +127,7 @@ def make_github_ci(repo_path: pathlib.Path, templates: jinja2.Environment) -> Li
 				actions.render(
 						no_dev_versions=no_dev_versions,
 						ci_platform="windows-2019",
-						ci_name="Windows Tests",
+						ci_name="Windows",
 						python_versions=py_versions,
 						dependency_lines=dependency_lines,
 						)
@@ -146,7 +146,7 @@ def make_github_ci(repo_path: pathlib.Path, templates: jinja2.Environment) -> Li
 				actions.render(
 						no_dev_versions=no_dev_versions,
 						ci_platform="macos-latest",
-						ci_name="macOS Tests",
+						ci_name="macOS",
 						dependency_lines=dependency_lines,
 						)
 				)
@@ -170,7 +170,7 @@ def make_github_ci(repo_path: pathlib.Path, templates: jinja2.Environment) -> Li
 				actions.render(
 						no_dev_versions=no_dev_versions,
 						ci_platform="ubuntu-18.04",
-						ci_name="Linux Tests",
+						ci_name="Linux",
 						dependency_lines=dependency_lines,
 						)
 				)
