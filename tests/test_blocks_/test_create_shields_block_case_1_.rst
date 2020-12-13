@@ -26,15 +26,15 @@
 	:alt: Docs Check Status
 
 .. |actions_linux| image:: https://github.com/octocat/REPO_NAME/workflows/Linux%20Tests/badge.svg
-	:target: https://github.com/octocat/REPO_NAME/actions?query=workflow%3A%22Linux+Tests%22
+	:target: https://github.com/octocat/REPO_NAME/actions?query=workflow%3A%22Linux%22
 	:alt: Linux Test Status
 
 .. |actions_windows| image:: https://github.com/octocat/REPO_NAME/workflows/Windows%20Tests/badge.svg
-	:target: https://github.com/octocat/REPO_NAME/actions?query=workflow%3A%22Windows+Tests%22
+	:target: https://github.com/octocat/REPO_NAME/actions?query=workflow%3A%22Windows%22
 	:alt: Windows Test Status
 
 .. |actions_macos| image:: https://github.com/octocat/REPO_NAME/workflows/macOS%20Tests/badge.svg
-	:target: https://github.com/octocat/REPO_NAME/actions?query=workflow%3A%22macOS+Tests%22
+	:target: https://github.com/octocat/REPO_NAME/actions?query=workflow%3A%22macOS%22
 	:alt: macOS Test Status
 
 .. |requires| image:: https://requires.io/github/octocat/REPO_NAME/requirements.svg?branch=master

@@ -38,11 +38,11 @@ repo_helper
 	:alt: Travis Build Status
 
 .. |actions_windows| image:: https://github.com/domdfcoding/repo_helper/workflows/Windows%20Tests/badge.svg
-	:target: https://github.com/domdfcoding/repo_helper/actions?query=workflow%3A%22Windows+Tests%22
+	:target: https://github.com/domdfcoding/repo_helper/actions?query=workflow%3A%22Windows%22
 	:alt: Windows Status
 
 .. |actions_macos| image:: https://github.com/domdfcoding/repo_helper/workflows/macOS%20Tests/badge.svg
-	:target: https://github.com/domdfcoding/repo_helper/actions?query=workflow%3A%22macOS+Tests%22
+	:target: https://github.com/domdfcoding/repo_helper/actions?query=workflow%3A%22macOS%22
 	:alt: macOS Status
 
 .. |requires| image:: https://requires.io/github/domdfcoding/repo_helper/requirements.svg?branch=master

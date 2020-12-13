@@ -106,7 +106,7 @@ def make_actions_linux_shield(repo_name: str, username: str) -> str:
 
 	return f"""\
 .. image:: https://github.com/{username}/{repo_name}/workflows/Linux%20Tests/badge.svg
-	:target: https://github.com/{username}/{repo_name}/actions?query=workflow%3A%22Linux+Tests%22
+	:target: https://github.com/{username}/{repo_name}/actions?query=workflow%3A%22Linux%22
 	:alt: Linux Test Status"""
 
 
@@ -122,7 +122,7 @@ def make_actions_windows_shield(repo_name: str, username: str) -> str:
 
 	return f"""\
 .. image:: https://github.com/{ username }/{ repo_name }/workflows/Windows%20Tests/badge.svg
-	:target: https://github.com/{ username }/{ repo_name }/actions?query=workflow%3A%22Windows+Tests%22
+	:target: https://github.com/{ username }/{ repo_name }/actions?query=workflow%3A%22Windows%22
 	:alt: Windows Test Status"""
 
 
@@ -138,7 +138,7 @@ def make_actions_macos_shield(repo_name: str, username: str) -> str:
 
 	return f"""\
 .. image:: https://github.com/{ username }/{ repo_name }/workflows/macOS%20Tests/badge.svg
-	:target: https://github.com/{ username }/{ repo_name }/actions?query=workflow%3A%22macOS+Tests%22
+	:target: https://github.com/{ username }/{ repo_name }/actions?query=workflow%3A%22macOS%22
 	:alt: macOS Test Status"""
 
 
