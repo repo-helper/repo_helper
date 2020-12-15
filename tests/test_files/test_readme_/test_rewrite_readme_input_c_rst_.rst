@@ -35,7 +35,7 @@ repo_helper
 	:target: https://github.com/octocat/hello-world/actions?query=workflow%3A%22Docs+Check%22
 	:alt: Docs Check Status
 
-.. |actions_windows| image:: https://github.com/octocat/hello-world/workflows/Windows%20Tests/badge.svg
+.. |actions_windows| image:: https://github.com/octocat/hello-world/workflows/Windows/badge.svg
 	:target: https://github.com/octocat/hello-world/actions?query=workflow%3A%22Windows%22
 	:alt: Windows Test Status
 

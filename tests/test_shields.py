@@ -127,21 +127,21 @@ def test_make_actions_linux_shield():
 	assert make_actions_linux_shield(
 			"hello-world", "octocat"
 			) == f"""\
-.. image:: https://github.com/octocat/hello-world/workflows/Linux%20Tests/badge.svg
+.. image:: https://github.com/octocat/hello-world/workflows/Linux/badge.svg
 	:target: https://github.com/octocat/hello-world/actions?query=workflow%3A%22Linux%22
 	:alt: Linux Test Status"""
 
 	assert make_actions_linux_shield(
 			"HELLO-WORLD", "octocat"
 			) == f"""\
-.. image:: https://github.com/octocat/HELLO-WORLD/workflows/Linux%20Tests/badge.svg
+.. image:: https://github.com/octocat/HELLO-WORLD/workflows/Linux/badge.svg
 	:target: https://github.com/octocat/HELLO-WORLD/actions?query=workflow%3A%22Linux%22
 	:alt: Linux Test Status"""
 
 	assert make_actions_linux_shield(
 			"hello_world", "octocat"
 			) == f"""\
-.. image:: https://github.com/octocat/hello_world/workflows/Linux%20Tests/badge.svg
+.. image:: https://github.com/octocat/hello_world/workflows/Linux/badge.svg
 	:target: https://github.com/octocat/hello_world/actions?query=workflow%3A%22Linux%22
 	:alt: Linux Test Status"""
 
@@ -173,21 +173,21 @@ def test_make_actions_windows_shield():
 	assert make_actions_windows_shield(
 			"hello-world", "octocat"
 			) == f"""\
-.. image:: https://github.com/octocat/hello-world/workflows/Windows%20Tests/badge.svg
+.. image:: https://github.com/octocat/hello-world/workflows/Windows/badge.svg
 	:target: https://github.com/octocat/hello-world/actions?query=workflow%3A%22Windows%22
 	:alt: Windows Test Status"""
 
 	assert make_actions_windows_shield(
 			"hello_world", "octocat"
 			) == f"""\
-.. image:: https://github.com/octocat/hello_world/workflows/Windows%20Tests/badge.svg
+.. image:: https://github.com/octocat/hello_world/workflows/Windows/badge.svg
 	:target: https://github.com/octocat/hello_world/actions?query=workflow%3A%22Windows%22
 	:alt: Windows Test Status"""
 
 	assert make_actions_windows_shield(
 			"HELLO-WORLD", "octocat"
 			) == f"""\
-.. image:: https://github.com/octocat/HELLO-WORLD/workflows/Windows%20Tests/badge.svg
+.. image:: https://github.com/octocat/HELLO-WORLD/workflows/Windows/badge.svg
 	:target: https://github.com/octocat/HELLO-WORLD/actions?query=workflow%3A%22Windows%22
 	:alt: Windows Test Status"""
 
@@ -219,21 +219,21 @@ def test_make_actions_macos_shield():
 	assert make_actions_macos_shield(
 			"hello-world", "octocat"
 			) == f"""\
-.. image:: https://github.com/octocat/hello-world/workflows/macOS%20Tests/badge.svg
+.. image:: https://github.com/octocat/hello-world/workflows/macOS/badge.svg
 	:target: https://github.com/octocat/hello-world/actions?query=workflow%3A%22macOS%22
 	:alt: macOS Test Status"""
 
 	assert make_actions_macos_shield(
 			"hello_world", "octocat"
 			) == f"""\
-.. image:: https://github.com/octocat/hello_world/workflows/macOS%20Tests/badge.svg
+.. image:: https://github.com/octocat/hello_world/workflows/macOS/badge.svg
 	:target: https://github.com/octocat/hello_world/actions?query=workflow%3A%22macOS%22
 	:alt: macOS Test Status"""
 
 	assert make_actions_macos_shield(
 			"HELLO-WORLD", "octocat"
 			) == f"""\
-.. image:: https://github.com/octocat/HELLO-WORLD/workflows/macOS%20Tests/badge.svg
+.. image:: https://github.com/octocat/HELLO-WORLD/workflows/macOS/badge.svg
 	:target: https://github.com/octocat/HELLO-WORLD/actions?query=workflow%3A%22macOS%22
 	:alt: macOS Test Status"""
 

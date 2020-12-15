@@ -37,11 +37,11 @@ repo_helper
 	:target: https://travis-ci.com/domdfcoding/repo_helper
 	:alt: Travis Build Status
 
-.. |actions_windows| image:: https://github.com/domdfcoding/repo_helper/workflows/Windows%20Tests/badge.svg
+.. |actions_windows| image:: https://github.com/domdfcoding/repo_helper/workflows/Windows/badge.svg
 	:target: https://github.com/domdfcoding/repo_helper/actions?query=workflow%3A%22Windows%22
 	:alt: Windows Status
 
-.. |actions_macos| image:: https://github.com/domdfcoding/repo_helper/workflows/macOS%20Tests/badge.svg
+.. |actions_macos| image:: https://github.com/domdfcoding/repo_helper/workflows/macOS/badge.svg
 	:target: https://github.com/domdfcoding/repo_helper/actions?query=workflow%3A%22macOS%22
 	:alt: macOS Status
 
