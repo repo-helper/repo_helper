@@ -188,6 +188,8 @@ def make_recipe(repo_dir: PathLike, recipe_file: PathLike) -> None:
 	.. versionadded:: 2020.11.10
 	"""
 
+	# TODO: tests for this
+
 	repo_dir = PathPlus(repo_dir)
 	recipe_file = PathPlus(recipe_file)
 
@@ -206,7 +208,7 @@ def make_recipe(repo_dir: PathLike, recipe_file: PathLike) -> None:
 	requirements_entries = [f"    - {req}" for req in all_requirements if req and req != "numpy"]
 
 	if [v.specifier for v in all_requirements if v == "numpy"]:
-		requirements_entries += "    - numpy x.x"
+		requirements_entries.append("    - numpy x.x")
 
 	requirements_block = '\n'.join(requirements_entries)
 
