@@ -452,15 +452,21 @@ def brace(string: str) -> str:
 
 
 def set_gh_actions_versions(py_versions: Iterable[str]) -> List[str]:
+	"""
+	Convert development Python versions into the appropriate versions for GitHub Actions.
+
+	:param py_versions:
+	"""
+
 	py_versions = list(py_versions)
+
+	# Keep in sync with https://github.com/actions/python-versions/releases
 
 	if "3.10-dev" in py_versions:
 		py_versions.remove("3.10-dev")
-		# Keep in sync with https://github.com/actions/python-versions/releases
 		py_versions.append("3.10.0-alpha.3")
 	if "3.10" in py_versions:
 		py_versions.remove("3.10")
-		# Keep in sync with https://github.com/actions/python-versions/releases
 		py_versions.append("3.10.0-alpha.3")
 
 	return py_versions

@@ -203,16 +203,12 @@ def make_recipe(repo_dir: PathLike, recipe_file: PathLike) -> None:
 			config["conda_channels"],
 			)
 
-	numpy_versions = [v.specifier for v in all_requirements if v == "numpy"]
+	requirements_entries = [f"    - {req}" for req in all_requirements if req and req != "numpy"]
 
-	requirements_block = '\n'.join([
-			f"    - {req}"
-			for req in filter(lambda x: x != "numpy", all_requirements)
-			if req and req != "numpy"]
-			)
+	if [v.specifier for v in all_requirements if v == "numpy"]:
+		requirements_entries += "    - numpy x.x"
 
-	if numpy_versions:
-		requirements_block += "\n    - numpy x.x"
+	requirements_block = '\n'.join(requirements_entries)
 
 	templates = jinja2.Environment(  # nosec: B701
 		loader=jinja2.FileSystemLoader(str(template_dir)),
