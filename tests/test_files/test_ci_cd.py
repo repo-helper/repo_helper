@@ -365,6 +365,7 @@ def test_make_github_linux_case_4(
 			"3.7": "py37, build",
 			"3.8": "py38, build",
 			"3.9": "py39, build",
+			"3.10.0-alpha.3": "py310-dev, build",
 			}
 
 	managed_files = make_github_ci(tmp_pathplus, demo_environment)

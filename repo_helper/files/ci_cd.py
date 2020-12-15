@@ -92,6 +92,8 @@ def make_github_ci(repo_path: pathlib.Path, templates: jinja2.Environment) -> Li
 
 	# Matrix of OSs: https://youtu.be/KKJL8bM4cis?t=536
 
+	# TODO: Allowed failure for -dev versions
+
 	actions = templates.get_template("github_ci.yml")
 
 	workflows_dir = PathPlus(repo_path / ".github" / "workflows")

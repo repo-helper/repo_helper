@@ -10,9 +10,9 @@ on:
 jobs:
   tests:
     name: "Python ${{ matrix.config.python-version }}"
-    runs-on: "ubuntu-18.04"
+    runs-on: "ubuntu-20.04"
     env:
-      USING_COVERAGE: '3.6,3.7,3.8,3.9'
+      USING_COVERAGE: '3.6,3.7,3.8,3.9,3.10.0-alpha.3'
 
     strategy:
       fail-fast: False
@@ -22,6 +22,7 @@ jobs:
           - {python-version: "3.7", testenvs: "py37,build"}
           - {python-version: "3.8", testenvs: "py38,build"}
           - {python-version: "3.9", testenvs: "py39,build"}
+          - {python-version: "3.10.0-alpha.3", testenvs: "py310-dev,build"}
 
     steps:
       - name: Checkout 🛎️
@@ -50,7 +51,7 @@ jobs:
   Deploy:
     needs: tests
 
-    runs-on: "ubuntu-18.04"
+    runs-on: "ubuntu-20.04"
     steps:
       - name: Checkout 🛎️
         uses: "actions/checkout@v2"
