@@ -11,7 +11,7 @@ jobs:
   tests:
     name: "Python ${{ matrix.config.python-version }}"
     runs-on: "windows-2019"
-    continue-on-error: ${{ matrix.experimental }}
+    continue-on-error: ${{ matrix.config.experimental }}
     env:
       USING_COVERAGE: '3.6,3.7'
 
