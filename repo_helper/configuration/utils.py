@@ -25,6 +25,7 @@ Configuration utilities.
 
 # stdlib
 import pathlib
+import re
 from typing import Any, Dict, Iterable, List, Mapping, Tuple
 
 # 3rd party
@@ -89,6 +90,8 @@ def get_version_classifiers(python_versions: Iterable[str]) -> List[str]:
 	:param python_versions: Iterable of supported Python versions.
 
 	:return: List of `Trove Classifiers <https://pypi.org/classifiers/>`_
+
+	.. versionchanged:: 2020.12.15  No longer includes classifiers for ``alpha``/``beta``/``-dev`` versions.
 	"""
 
 	version_classifiers = []
@@ -96,8 +99,10 @@ def get_version_classifiers(python_versions: Iterable[str]) -> List[str]:
 	for py_version in python_versions:
 		py_version = str(py_version)
 
+		if re.match(".*(-dev|alpha|beta)", py_version):
+			continue
+
 		if py_version.startswith('3'):
-			py_version = py_version.replace("-dev", '')
 			for classifier in (
 					f"Programming Language :: Python :: {py_version}",
 					"Programming Language :: Python :: Implementation :: CPython",
