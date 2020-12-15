@@ -11,6 +11,7 @@ jobs:
   tests:
     name: "Python ${{ brace('matrix.config.python-version')}}"
     runs-on: "{{ ci_platform }}"
+    continue-on-error: ${{ brace('matrix.experimental') }}
     env:
       USING_COVERAGE: '{{ ",".join(no_dev_versions(python_versions)) }}'
 
@@ -18,7 +19,7 @@ jobs:
       fail-fast: False
       matrix:
         config:{% for version in no_dev_versions(python_versions) %}
-          - {python-version: "{{ version }}", testenvs: "{{ gh_actions_versions[version].replace(' ', '') }}"}{% endfor %}
+          - {python-version: "{{ version }}", testenvs: "{{ gh_actions_versions[version].replace(' ', '') }}", experimental: {{ "alpha" in version or "beta" in version }}}{% endfor %}
 
     steps:
       - name: Checkout 🛎️
