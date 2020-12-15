@@ -11,7 +11,7 @@ jobs:
   tests:
     name: "Python ${{ brace('matrix.config.python-version')}}"
     runs-on: "{{ ci_platform }}"
-    continue-on-error: ${{ brace('matrix.experimental') }}
+    continue-on-error: ${{ brace('matrix.config.experimental') }}
     env:
       USING_COVERAGE: '{{ ",".join(no_dev_versions(python_versions)) }}'
 
