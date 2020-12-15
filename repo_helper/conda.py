@@ -121,6 +121,7 @@ def compile_requirements(
 		if requirement.url:  # pragma: no cover
 			continue
 
+		# TODO: add the extra requirements
 		if requirement.extras:
 			requirement.extras = set()
 		if requirement.marker:
@@ -202,7 +203,16 @@ def make_recipe(repo_dir: PathLike, recipe_file: PathLike) -> None:
 			config["conda_channels"],
 			)
 
-	requirements_block = '\n'.join(f"    - {req}" for req in all_requirements if req)
+	numpy_versions = [v.specifier for v in all_requirements if v == "numpy"]
+
+	requirements_block = '\n'.join([
+			f"    - {req}"
+			for req in filter(lambda x: x != "numpy", all_requirements)
+			if req and req != "numpy"]
+			)
+
+	if numpy_versions:
+		requirements_block += "\n    - numpy x.x"
 
 	templates = jinja2.Environment(  # nosec: B701
 		loader=jinja2.FileSystemLoader(str(template_dir)),
@@ -218,7 +228,7 @@ def make_recipe(repo_dir: PathLike, recipe_file: PathLike) -> None:
 	#    - "*/templates/*.py"          # These should not (and cannot) be compiled
 
 
-#: Mapping of normalised names to names on conda, if they differ for some reason
+#: Mapping of normalised names to names on conda, if they differ for some reason.
 alias_mapping = {
 		"ruamel-yaml": "ruamel.yaml",
 		}

@@ -678,6 +678,7 @@ class Builder:
 					"--no-compile",
 					"--no-warn-script-location",
 					"--no-warn-conflicts",
+					"--disable-pip-version-check",
 					]
 			process = Popen(command, stdout=PIPE)
 			(output, err) = process.communicate()
