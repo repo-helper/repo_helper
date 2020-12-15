@@ -22,10 +22,6 @@ General utilities.
 #  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
 #  MA 02110-1301, USA.
 #
-#  calc_easter from https://code.activestate.com/recipes/576517-calculate-easter-western-given-a-year/
-#  Copyright © 2008 Martin Diers
-#  Licensed under the MIT License
-#
 
 # stdlib
 import datetime
@@ -60,7 +56,6 @@ if TYPE_CHECKING:
 
 __all__ = [
 		"IniConfigurator",
-		"calc_easter",
 		"discover_entry_points",
 		"easter_egg",
 		"indent_join",
@@ -74,6 +69,7 @@ __all__ = [
 		"sort_paths",
 		"commit_changes",
 		"stage_changes",
+		"set_gh_actions_versions",
 		]
 
 #: Under normal circumstances returns :meth:`datetime.date.today`.
@@ -453,3 +449,18 @@ def commit_changes(
 
 def brace(string: str) -> str:
 	return f"{{{{ {string} }}}}"
+
+
+def set_gh_actions_versions(py_versions: Iterable[str]) -> List[str]:
+	py_versions = list(py_versions)
+
+	if "3.10-dev" in py_versions:
+		py_versions.remove("3.10-dev")
+		# Keep in sync with https://github.com/actions/python-versions/releases
+		py_versions.append("3.10.0-alpha.3")
+	if "3.10" in py_versions:
+		py_versions.remove("3.10")
+		# Keep in sync with https://github.com/actions/python-versions/releases
+		py_versions.append("3.10.0-alpha.3")
+
+	return py_versions

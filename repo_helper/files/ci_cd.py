@@ -35,7 +35,7 @@ from domdf_python_tools.stringlist import DelimitedList, StringList
 # this package
 from repo_helper.configupdater2 import ConfigUpdater
 from repo_helper.files import management
-from repo_helper.utils import no_dev_versions
+from repo_helper.utils import no_dev_versions, set_gh_actions_versions
 
 __all__ = [
 		"make_github_ci",
@@ -110,7 +110,7 @@ def make_github_ci(repo_path: pathlib.Path, templates: jinja2.Environment) -> Li
 			]
 
 	if "Windows" in templates.globals["platforms"]:
-		py_versions = templates.globals["python_versions"][:]
+		py_versions: List[str] = templates.globals["python_versions"][:]
 		if not templates.globals["pure_python"] and "3.8" in py_versions:
 			py_versions.remove("3.8")  # FIXME: Python 3.8 tests fail on Windows for native wheels.
 		if "pypy3" in py_versions:
@@ -128,7 +128,7 @@ def make_github_ci(repo_path: pathlib.Path, templates: jinja2.Environment) -> Li
 						no_dev_versions=no_dev_versions,
 						ci_platform="windows-2019",
 						ci_name="Windows",
-						python_versions=py_versions,
+						python_versions=set_gh_actions_versions(py_versions),
 						dependency_lines=dependency_lines,
 						)
 				)
@@ -147,6 +147,7 @@ def make_github_ci(repo_path: pathlib.Path, templates: jinja2.Environment) -> Li
 						no_dev_versions=no_dev_versions,
 						ci_platform="macos-latest",
 						ci_name="macOS",
+						python_versions=set_gh_actions_versions(templates.globals["python_versions"]),
 						dependency_lines=dependency_lines,
 						)
 				)
@@ -169,7 +170,8 @@ def make_github_ci(repo_path: pathlib.Path, templates: jinja2.Environment) -> Li
 		linux_ci_file.write_clean(
 				actions.render(
 						no_dev_versions=no_dev_versions,
-						ci_platform="ubuntu-18.04",
+						python_versions=set_gh_actions_versions(templates.globals["python_versions"]),
+						ci_platform="ubuntu-20.04",
 						ci_name="Linux",
 						dependency_lines=dependency_lines,
 						)
