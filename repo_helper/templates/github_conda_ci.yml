@@ -29,9 +29,9 @@ jobs:
           python -m pip install --upgrade repo_helper
           # $CONDA is an environment variable pointing to the root of the miniconda directory
           $CONDA/bin/conda update -q conda
+          $CONDA/bin/conda install conda-build
           {% for channel in conda_channels %}
-          $CONDA/bin/conda config --add channels {{ channel }}
-          {% endfor %}
+          $CONDA/bin/conda config --add channels {{ channel }}{% endfor %}
 
       - name: "Build and install package"
         run: |
