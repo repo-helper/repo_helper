@@ -24,6 +24,8 @@ This project is in an early stage, and some things might not work correctly or b
 	  - |actions_linux| |actions_windows| |actions_macos| |coveralls| |codefactor| |pre_commit_ci|
 	* - PyPI
 	  - |pypi-version| |supported-versions| |supported-implementations| |wheel|
+	* - Anaconda
+	  - |conda-version| |conda-platform|
 	* - Activity
 	  - |commits-latest| |commits-since| |maintained|
 	* - Other
@@ -78,6 +80,14 @@ This project is in an early stage, and some things might not work correctly or b
 	:wheel:
 	:alt: PyPI - Wheel
 
+.. |conda-version| image:: https://img.shields.io/conda/v/domdfcoding/repo_helper?logo=anaconda
+	:target: https://anaconda.org/domdfcoding/repo_helper
+	:alt: Conda - Package Version
+
+.. |conda-platform| image:: https://img.shields.io/conda/pn/domdfcoding/repo_helper?label=conda%7Cplatform
+	:target: https://anaconda.org/domdfcoding/repo_helper
+	:alt: Conda - Platform
+
 .. |license| github-shield::
 	:license:
 	:alt: License
@@ -87,7 +97,7 @@ This project is in an early stage, and some things might not work correctly or b
 	:alt: GitHub top language
 
 .. |commits-since| github-shield::
-	:commits-since: v2020.12.15.1
+	:commits-since: v2020.12.15
 	:alt: GitHub commits since tagged version
 
 .. |commits-latest| github-shield::
@@ -114,6 +124,8 @@ Installation
 .. installation:: repo_helper
 	:pypi:
 	:github:
+	:anaconda:
+	:conda-channels: conda-forge, domdfcoding
 
 .. end installation
 

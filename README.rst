@@ -24,6 +24,8 @@ Note: The autocommit functionality is currently broken on Windows, but works OK 
 	  - |actions_linux| |actions_windows| |actions_macos| |coveralls| |codefactor| |pre_commit_ci|
 	* - PyPI
 	  - |pypi-version| |supported-versions| |supported-implementations| |wheel|
+	* - Anaconda
+	  - |conda-version| |conda-platform|
 	* - Activity
 	  - |commits-latest| |commits-since| |maintained|
 	* - Other
@@ -77,6 +79,14 @@ Note: The autocommit functionality is currently broken on Windows, but works OK 
 	:target: https://pypi.org/project/repo_helper/
 	:alt: PyPI - Wheel
 
+.. |conda-version| image:: https://img.shields.io/conda/v/domdfcoding/repo_helper?logo=anaconda
+	:target: https://anaconda.org/domdfcoding/repo_helper
+	:alt: Conda - Package Version
+
+.. |conda-platform| image:: https://img.shields.io/conda/pn/domdfcoding/repo_helper?label=conda%7Cplatform
+	:target: https://anaconda.org/domdfcoding/repo_helper
+	:alt: Conda - Platform
+
 .. |license| image:: https://img.shields.io/github/license/domdfcoding/repo_helper
 	:target: https://github.com/domdfcoding/repo_helper/blob/master/LICENSE
 	:alt: License
@@ -84,7 +94,7 @@ Note: The autocommit functionality is currently broken on Windows, but works OK 
 .. |language| image:: https://img.shields.io/github/languages/top/domdfcoding/repo_helper
 	:alt: GitHub top language
 
-.. |commits-since| image:: https://img.shields.io/github/commits-since/domdfcoding/repo_helper/v2020.12.15.1
+.. |commits-since| image:: https://img.shields.io/github/commits-since/domdfcoding/repo_helper/v2020.12.15
 	:target: https://github.com/domdfcoding/repo_helper/pulse
 	:alt: GitHub commits since tagged version
 
@@ -110,12 +120,27 @@ Installation
 
 .. start installation
 
-``repo_helper`` can be installed from PyPI.
+``repo_helper`` can be installed from PyPI or Anaconda.
 
 To install with ``pip``:
 
 .. code-block:: bash
 
 	$ python -m pip install repo_helper
+
+To install with ``conda``:
+
+	* First add the required channels
+
+	.. code-block:: bash
+
+		$ conda config --add channels http://conda.anaconda.org/conda-forge
+		$ conda config --add channels http://conda.anaconda.org/domdfcoding
+
+	* Then install
+
+	.. code-block:: bash
+
+		$ conda install repo_helper
 
 .. end installation
