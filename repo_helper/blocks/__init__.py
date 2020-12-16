@@ -36,9 +36,7 @@ from jinja2 import BaseLoader, Environment, StrictUndefined, Template
 
 # this package
 from repo_helper._docs_shields import (
-		make_docs_actions_linux_shield,
-		make_docs_actions_macos_shield,
-		make_docs_actions_windows_shield,
+		make_docs_actions_shield,
 		make_docs_activity_shield,
 		make_docs_codefactor_shield,
 		make_docs_conda_platform_shield,
@@ -62,9 +60,7 @@ from repo_helper._docs_shields import (
 		make_docs_wheel_shield
 		)
 from repo_helper.shields import (
-		make_actions_linux_shield,
-		make_actions_macos_shield,
-		make_actions_windows_shield,
+		make_actions_shield,
 		make_activity_shield,
 		make_codefactor_shield,
 		make_conda_platform_shield,
@@ -394,9 +390,7 @@ class ShieldsBlock:
 		Create shields for insertion into ``README.rst``.
 		"""
 
-		self.make_actions_linux_shield = make_actions_linux_shield
-		self.make_actions_macos_shield = make_actions_macos_shield
-		self.make_actions_windows_shield = make_actions_windows_shield
+		self.make_actions_shield = make_actions_shield
 		self.make_activity_shield = make_activity_shield
 		self.make_codefactor_shield = make_codefactor_shield
 		self.make_conda_platform_shield = make_conda_platform_shield
@@ -424,9 +418,7 @@ class ShieldsBlock:
 		Create shields for insertion into Sphinx documentation.
 		"""
 
-		self.make_actions_linux_shield = make_docs_actions_linux_shield
-		self.make_actions_macos_shield = make_docs_actions_macos_shield
-		self.make_actions_windows_shield = make_docs_actions_windows_shield
+		self.make_actions_shield = make_docs_actions_shield
 		self.make_activity_shield = make_docs_activity_shield
 		self.make_codefactor_shield = make_docs_codefactor_shield
 		self.make_conda_platform_shield = make_docs_conda_platform_shield
@@ -482,6 +474,13 @@ class ShieldsBlock:
 		substitutions["license"] = self.make_license_shield(repo_name, username)
 		substitutions["language"] = self.make_language_shield(repo_name, username)
 
+		sections["QA"] = ["codefactor", "actions_macos"]
+		substitutions["codefactor"] = self.make_codefactor_shield(repo_name, username)
+		sections["QA"].append("actions_flake8")
+		substitutions["actions_flake8"] = self.make_actions_shield(repo_name, username, "Flake8", "Flake8 Status")
+		sections["QA"].append("actions_mypy")
+		substitutions["actions_mypy"] = self.make_actions_shield(repo_name, username, "mypy", "mypy status")
+
 		if self.docs:
 			sections["Docs"] = ["docs", "docs_check"]
 			substitutions["docs"] = self.make_rtfd_shield(repo_name, self.docs_url)
@@ -491,22 +490,37 @@ class ShieldsBlock:
 
 		if "Linux" in self.platforms:
 			sections["Tests"].append("actions_linux")
-			substitutions["actions_linux"] = self.make_actions_linux_shield(repo_name, username)
+			substitutions["actions_linux"] = self.make_actions_shield(
+					repo_name,
+					username,
+					"Linux",
+					"Linux Test Status",
+					)
 		if "Windows" in self.platforms:
 			sections["Tests"].append("actions_windows")
-			substitutions["actions_windows"] = self.make_actions_windows_shield(repo_name, username)
+			substitutions["actions_windows"] = self.make_actions_shield(
+					repo_name,
+					username,
+					"Windows",
+					"Windows Test Status",
+					)
 		if "macOS" in self.platforms:
 			sections["Tests"].append("actions_macos")
-			substitutions["actions_macos"] = self.make_actions_macos_shield(repo_name, username)
+			substitutions["actions_macos"] = self.make_actions_shield(
+					repo_name,
+					username,
+					"macOS",
+					"macOS Test Status",
+					)
 
 		if self.tests:
 			sections["Tests"].append("coveralls")
 			substitutions["coveralls"] = self.make_coveralls_shield(repo_name, username)
 
 		sections["Tests"].append("codefactor")
-		substitutions["codefactor"] = self.make_codefactor_shield(repo_name, username)
 
 		if self.pre_commit:
+			sections["QA"].append("pre_commit_ci")
 			sections["Tests"].append("pre_commit_ci")
 			substitutions["pre_commit_ci"] = self.make_pre_commit_ci_shield(repo_name, username)
 

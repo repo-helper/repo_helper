@@ -25,10 +25,8 @@ Create a variety of shields, most powered by https://shields.io/.
 
 # stdlib
 import datetime
+import urllib.parse
 from typing import Union
-
-# 3rd party
-from typing_extensions import Literal
 
 __all__ = [
 		"make_actions_linux_shield",
@@ -57,6 +55,7 @@ __all__ = [
 		"make_actions_linux_shield",
 		"make_typing_shield",
 		"make_wheel_shield",
+		"make_actions_shield",
 		]
 
 
@@ -94,6 +93,26 @@ def make_docs_check_shield(repo_name: str, username: str) -> str:
 	:alt: Docs Check Status"""
 
 
+def make_actions_shield(repo_name: str, username: str, name: str, alt: str) -> str:
+	"""
+	Create a shield to indicate the status of the tests on Linux.
+
+	:param repo_name: The name of the repository.
+	:param username: The username of the GitHub account that owns the repository.
+	:param name: The name of the workflow.
+	:param alt: Alternative text for the image when it cannot be shown.
+
+	:return: The shield.
+
+	.. versionadded:: 2020.12.16
+	"""
+
+	return f"""\
+.. image:: https://github.com/{username}/{repo_name}/workflows/{name}/badge.svg
+	:target: https://github.com/{username}/{repo_name}/actions?query=workflow%3A%22{urllib.parse.quote(name)}%22
+	:alt: {alt}"""
+
+
 def make_actions_linux_shield(repo_name: str, username: str) -> str:
 	"""
 	Create a shield to indicate the status of the tests on Linux.
@@ -104,10 +123,7 @@ def make_actions_linux_shield(repo_name: str, username: str) -> str:
 	:return: The shield.
 	"""
 
-	return f"""\
-.. image:: https://github.com/{username}/{repo_name}/workflows/Linux/badge.svg
-	:target: https://github.com/{username}/{repo_name}/actions?query=workflow%3A%22Linux%22
-	:alt: Linux Test Status"""
+	return make_actions_shield(repo_name, username, "Linux", "Linux Test Status")
 
 
 def make_actions_windows_shield(repo_name: str, username: str) -> str:
@@ -120,10 +136,7 @@ def make_actions_windows_shield(repo_name: str, username: str) -> str:
 	:return: The shield.
 	"""
 
-	return f"""\
-.. image:: https://github.com/{ username }/{ repo_name }/workflows/Windows/badge.svg
-	:target: https://github.com/{ username }/{ repo_name }/actions?query=workflow%3A%22Windows%22
-	:alt: Windows Test Status"""
+	return make_actions_shield(repo_name, username, "Windows", "Windows Test Status")
 
 
 def make_actions_macos_shield(repo_name: str, username: str) -> str:
@@ -136,10 +149,7 @@ def make_actions_macos_shield(repo_name: str, username: str) -> str:
 	:return: The shield.
 	"""
 
-	return f"""\
-.. image:: https://github.com/{ username }/{ repo_name }/workflows/macOS/badge.svg
-	:target: https://github.com/{ username }/{ repo_name }/actions?query=workflow%3A%22macOS%22
-	:alt: macOS Test Status"""
+	return make_actions_shield(repo_name, username, "macOS", "macOS Test Status")
 
 
 def make_requires_shield(repo_name: str, username: str) -> str:
