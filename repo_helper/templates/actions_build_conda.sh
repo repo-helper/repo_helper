@@ -15,8 +15,8 @@ conda install conda-build
 conda install anaconda-client
 conda info -a
 {% for channel in conda_channels %}
-conda config --add channels {{ channel }} || exit 1
-{% endfor %}
+conda config --add channels {{ channel }} || exit 1{% endfor %}
+
 conda build conda {% for channel in conda_channels %}-c {{ channel }} {% endfor %}--output-folder conda/dist --skip-existing --numpy 1.16
 
 exit 0
