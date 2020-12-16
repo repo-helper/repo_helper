@@ -1,5 +1,4 @@
 apeye>=0.4.0
-appdirs>=1.4.4
 attrs>=20.2.0
 click==7.1.2
 configconfig>=0.4.0
@@ -15,7 +14,7 @@ packaging>=20.4
 pre-commit>=2.7.1
 requests>=2.25.0
 ruamel-yaml>=0.16.12
-shippinglabel>=0.5.2
+shippinglabel>=0.7.0
 southwark>=0.6.0
 tomlkit>=0.7.0
 typing-extensions>=3.7.4.3
