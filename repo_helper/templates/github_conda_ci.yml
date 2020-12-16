@@ -40,7 +40,7 @@ jobs:
           {# TODO: Install deps then install package, as current approach doesn't seem to work either #}
           python -m repo_helper build --conda --out-dir conda-bld/noarch
           $CONDA/bin/conda index ./conda-bld || exit 1
-          $CONDA/bin/conda install -c file://$(pwd)/conda-bld {{ pypi_name }} -y || exit 1
+          $CONDA/bin/conda install -c file://$(pwd)/conda-bld {{ pypi_name.lower() }} -y || exit 1
 
 {#      - name: "Run Tests for Python ${{ "{{" }} matrix.python-version {{ "}}" }}"
         run: |

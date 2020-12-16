@@ -12,7 +12,7 @@ conda update -q conda
 conda install anaconda-client
 conda info -a
 
-for f in conda/dist/noarch/{{ pypi_name }}-*.tar.bz2; do
+for f in conda/dist/noarch/{{ pypi_name.lower() }}-*.tar.bz2; do
   [ -e "$f" ] || continue
   echo "$f"
   conda install "$f" || exit 1

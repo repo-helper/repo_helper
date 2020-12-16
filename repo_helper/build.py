@@ -411,7 +411,7 @@ class Builder:
 				)
 
 		index = {
-				"name": self.config["repo_name"].lower(),
+				"name": self.config["pypi_name"].lower(),
 				"version": self.config["version"],
 				"build": build_string,
 				"build_number": build_number,
@@ -538,7 +538,7 @@ class Builder:
 
 		self.out_dir.maybe_make(parents=True)
 
-		conda_filename = self.out_dir / f"{self.config['repo_name']}-{self.config['version']}-{build_string}.tar.bz2"
+		conda_filename = self.out_dir / f"{self.config['pypi_name'].lower()}-{self.config['version']}-{build_string}.tar.bz2"
 
 		site_packages = PathPlus("site-packages")
 
