@@ -699,6 +699,7 @@ def rewrite_docs_index(repo_path: pathlib.Path, templates: jinja2.Environment) -
 			platforms=templates.globals["platforms"],
 			pre_commit=templates.globals["enable_pre_commit"],
 			on_pypi=templates.globals["on_pypi"],
+			primary_conda_channel=templates.globals["primary_conda_channel"],
 			)
 	sb.set_docs_mode()
 	shields_block = sb.make()

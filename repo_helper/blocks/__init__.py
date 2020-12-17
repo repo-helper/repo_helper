@@ -311,6 +311,7 @@ class ShieldsBlock:
 	:param platforms: List of supported platforms.
 	:param pre_commit: Whether to show a shield for pre-commit
 	:param on_pypi:
+	:param primary_conda_channel: The Conda channel the package can be downloaded from.
 
 	.. versionadded:: 2020.12.11
 	"""
@@ -363,6 +364,7 @@ class ShieldsBlock:
 			platforms: Optional[Iterable[str]] = None,
 			pre_commit: bool = False,
 			on_pypi: bool = True,
+			primary_conda_channel: Optional[str] = None,
 			):
 
 		if unique_name and not unique_name.startswith('_'):
@@ -382,6 +384,7 @@ class ShieldsBlock:
 		self.platforms: Iterable[str] = set(platforms or ())
 		self.pre_commit: bool = pre_commit
 		self.on_pypi: bool = on_pypi
+		self.primary_conda_channel: str = primary_conda_channel or self.username
 
 		self.set_readme_mode()
 
@@ -536,8 +539,10 @@ class ShieldsBlock:
 
 		if self.conda:
 			sections["Anaconda"] = ["conda-version", "conda-platform"]
-			substitutions["conda-version"] = self.make_conda_version_shield(pypi_name, username)
-			substitutions["conda-platform"] = self.make_conda_platform_shield(pypi_name, username)
+			substitutions["conda-version"] = self.make_conda_version_shield(pypi_name, self.primary_conda_channel)
+			substitutions["conda-platform"] = self.make_conda_platform_shield(
+					pypi_name, self.primary_conda_channel
+					)
 
 		if self.docker_shields:
 			docker_name = self.docker_name

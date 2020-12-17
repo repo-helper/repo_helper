@@ -71,6 +71,7 @@ def rewrite_readme(repo_path: pathlib.Path, templates: jinja2.Environment) -> Li
 			pre_commit=templates.globals["enable_pre_commit"],
 			on_pypi=templates.globals["on_pypi"],
 			docs_url=templates.globals["docs_url"],
+			primary_conda_channel=templates.globals["primary_conda_channel"],
 			).make()
 
 	if templates.globals["on_pypi"]:
