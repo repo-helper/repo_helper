@@ -31,11 +31,7 @@ about:
   home: "https://github.com/{{ username }}/{{ repo_name }}"
   license: "{{ license }}"
   summary: "{{ short_desc }}"
-  description: "{{ conda_description }}{% if conda_channels %}
-
-
-Before installing please ensure you have added the following channels: {{ ", ".join(conda_channels) }}
-{% endif %}"
+  description: "{{ conda_full_description }}"
   doc_url: https://{{ repo_name }}.readthedocs.io
   dev_url: https://github.com/{{ username }}/{{ repo_name }}
 

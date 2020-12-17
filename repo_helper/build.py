@@ -52,11 +52,12 @@ from domdf_python_tools.stringlist import StringList
 from domdf_python_tools.typing import PathLike
 from packaging.specifiers import Specifier
 from packaging.version import Version
+from shippinglabel.checksum import get_record_entry
 from shippinglabel.requirements import ComparableRequirement, combine_requirements, read_requirements
 
 # this package
 from repo_helper import __version__
-from repo_helper.conda import compile_requirements, validate_requirements
+from repo_helper.conda import get_conda_requirements, make_conda_description
 from repo_helper.configuration import parse_yaml
 
 __all__ = ["Builder", "build_wheel", "build_sdist"]
@@ -102,11 +103,8 @@ class Builder:
 				re.UNICODE,
 				) + f"-{self.config['version']}"
 
-		build_dir = build_dir or self.repo_dir / "build/repo_helper_build"
-		self.build_dir = PathPlus(build_dir)
-		if self.build_dir.is_dir():
-			shutil.rmtree(self.build_dir)
-		self.build_dir.maybe_make(parents=True)
+		self.build_dir = PathPlus(build_dir or self.repo_dir / "build/repo_helper_build")
+		self.clear_build_dir()
 		(self.build_dir / self.pkg_dir).maybe_make(parents=True)
 
 		out_dir = out_dir or self.repo_dir / "dist"
@@ -400,22 +398,12 @@ class Builder:
 		build_string = f"py_{build_number}"
 		# https://docs.conda.io/projects/conda-build/en/latest/resources/define-metadata.html#build-number-and-string
 
-		extras = []
-
-		for extra in self.config["conda_extras"]:
-			extras.extend(self.config["extras_require"][extra])
-
-		all_requirements = validate_requirements(
-				compile_requirements(self.repo_dir, extras),
-				self.config["conda_channels"],
-				)
-
 		index = {
 				"name": self.config["pypi_name"].lower(),
 				"version": self.config["version"],
 				"build": build_string,
 				"build_number": build_number,
-				"depends": [str(req) for req in all_requirements],
+				"depends": get_conda_requirements(self.repo_dir, self.config),
 				"arch": None,
 				"noarch": "python",
 				"platform": None,
@@ -435,12 +423,7 @@ class Builder:
 		"""
 
 		github_url = "https://github.com/{username}/{repo_name}".format_map(self.config)
-
-		conda_description = self.config["conda_description"]
-		if self.config["conda_channels"]:
-			conda_description += "\n\n\n"
-			conda_description += "Before installing please ensure you have added the following channels:"
-			conda_description += ", ".join(self.config["conda_channels"])
+		conda_description = make_conda_description(self.config["conda_description"], self.config["conda_channels"])
 
 		about = {
 				"home": github_url,
@@ -478,27 +461,14 @@ class Builder:
 		:return: The filename of the created archive.
 		"""
 
+		wheel_filename = self.out_dir / f"{self.archive_name}-{self.tag}.whl"
 		self.out_dir.maybe_make(parents=True)
 
-		def get_record_entry(path: pathlib.Path, build_dir: pathlib.Path, blocksize: int = 1 << 20) -> str:
-			sha256_hash = sha256()
-			length = 0
-			with path.open("rb") as f:
-				for byte_block in iter(lambda: f.read(blocksize), b''):
-					sha256_hash.update(byte_block)
-					length += len(byte_block)
-					sha256_hash.update(byte_block)
-
-			digest = "sha256=" + urlsafe_b64encode(sha256_hash.digest()).decode("latin1").rstrip('=')
-
-			return f"{path.relative_to(build_dir).as_posix()},sha256={digest},{length}"
-
-		wheel_filename = self.out_dir / f"{self.archive_name}-{self.tag}.whl"
 		with ZipFile(wheel_filename, mode='w') as wheel_archive:
 			with (self.dist_info / "RECORD").open('w') as fp:
 				for file in (self.build_dir / self.pkg_dir).rglob('*'):
 					if file.is_file():
-						fp.write(get_record_entry(file, self.build_dir))
+						fp.write(get_record_entry(file, relative_to=self.build_dir))
 						fp.write('\n')
 						wheel_archive.write(file, arcname=file.relative_to(self.build_dir))
 
@@ -508,7 +478,7 @@ class Builder:
 					if not file.is_file():
 						continue
 
-					fp.write(get_record_entry(file, self.build_dir))
+					fp.write(get_record_entry(file, relative_to=self.build_dir))
 					fp.write('\n')
 					wheel_archive.write(file, arcname=file.relative_to(self.build_dir))
 
@@ -522,7 +492,8 @@ class Builder:
 				Fore.GREEN(f"{emoji}Wheel created at {wheel_filename.resolve()}"),
 				color=resolve_color_default(),
 				)
-		return os.path.basename(wheel_filename)
+
+		return wheel_filename.name
 
 	def create_conda_archive(self, wheel_contents_dir: PathLike, build_number: int = 1) -> str:
 		"""
@@ -535,23 +506,22 @@ class Builder:
 		"""
 
 		build_string = f"py_{build_number}"
+		site_packages = pathlib.PurePosixPath("site-packages")
+		conda_filename = self.out_dir / f"{self.config['pypi_name'].lower()}-{self.config['version']}-{build_string}.tar.bz2"
+		wheel_contents_dir = PathPlus(wheel_contents_dir)
 
 		self.out_dir.maybe_make(parents=True)
-
-		conda_filename = self.out_dir / f"{self.config['pypi_name'].lower()}-{self.config['version']}-{build_string}.tar.bz2"
-
-		site_packages = PathPlus("site-packages")
 
 		with tarfile.open(conda_filename, mode="w:bz2") as conda_archive:
 			with (self.info_dir / "files").open('w') as fp:
 
-				for file in (PathPlus(wheel_contents_dir) / self.pkg_dir).rglob('*'):
+				for file in (wheel_contents_dir / self.pkg_dir).rglob('*'):
 					if file.is_file():
 						filename = (site_packages / file.relative_to(wheel_contents_dir)).as_posix()
 						fp.write(f"{filename}\n")
 						conda_archive.add(str(file), arcname=filename)
 
-				for file in (PathPlus(wheel_contents_dir) / f"{self.archive_name}.dist-info").rglob('*'):
+				for file in (wheel_contents_dir / f"{self.archive_name}.dist-info").rglob('*'):
 					if file.name == "INSTALLER":
 						file.write_text("conda")
 
@@ -652,9 +622,7 @@ class Builder:
 		# Build the wheel first and clear the build directory
 		wheel_file = self.build_wheel()
 
-		if self.build_dir.is_dir():
-			shutil.rmtree(self.build_dir)
-		self.build_dir.maybe_make(parents=True)
+		self.clear_build_dir()
 
 		for license_file in self.repo_dir.glob("LICEN[CS]E"):
 			target = self.info_dir / "license.txt"
@@ -668,39 +636,7 @@ class Builder:
 			if self.verbose:
 				click.echo("Installing wheel into temporary directory")
 
-			command = [
-					"pip",
-					"install",
-					str(self.out_dir / wheel_file),
-					"--target",
-					str(tmpdir),
-					"--no-deps",
-					"--no-compile",
-					"--no-warn-script-location",
-					"--no-warn-conflicts",
-					"--disable-pip-version-check",
-					]
-			process = Popen(command, stdout=PIPE)
-			(output, err) = process.communicate()
-			exit_code = process.wait()
-
-			if self.verbose:
-				click.echo((output or b'').decode("UTF-8"))
-				click.echo((err or b'').decode("UTF-8"), err=True)
-
-			if exit_code != 0:
-				err = err or b''
-
-				raise abort(
-						dedent(
-								f"""\
-				Command '{' '.join(command)}' returned non-zero exit code {exit_code}:
-
-				{indent(err.decode("UTF-8"), '    ')}
-				"""
-								).rstrip() + '\n'
-						)
-
+			pip_install_wheel(self.out_dir / wheel_file, tmpdir, self.verbose)
 			conda_filename = self.create_conda_archive(str(tmpdir), build_number=build_number)
 
 		click.echo(
@@ -708,6 +644,15 @@ class Builder:
 				color=resolve_color_default(),
 				)
 		return conda_filename
+
+	def clear_build_dir(self) -> None:
+		"""
+		Clear the build directory of any residue from previous builds.
+		"""
+
+		if self.build_dir.is_dir():
+			shutil.rmtree(self.build_dir)
+		self.build_dir.maybe_make(parents=True)
 
 
 # copy_file(repo_dir / "__pkginfo__.py")
@@ -753,3 +698,39 @@ def build_sdist(sdist_directory, config_settings=None):
 
 def get_requires_for_build_sdist(config_settings=None):
 	return []
+
+
+def pip_install_wheel(wheel_file: PathLike, target_dir: PathLike, verbose: bool = False):
+	command = [
+			"pip",
+			"install",
+			os.fspath(wheel_file),
+			"--target",
+			os.fspath(target_dir),
+			"--no-deps",
+			"--no-compile",
+			"--no-warn-script-location",
+			"--no-warn-conflicts",
+			"--disable-pip-version-check",
+			]
+
+	process = Popen(command, stdout=PIPE)
+	(output, err) = process.communicate()
+	exit_code = process.wait()
+
+	if verbose:
+		click.echo((output or b'').decode("UTF-8"))
+		click.echo((err or b'').decode("UTF-8"), err=True)
+
+	if exit_code != 0:
+		err = err or b''
+
+		message = dedent(
+				f"""\
+					Command '{' '.join(command)}' returned non-zero exit code {exit_code}:
+
+					{indent(err.decode("UTF-8"), '    ')}
+					"""
+				)
+
+		raise abort(message.rstrip() + '\n')

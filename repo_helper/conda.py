@@ -23,6 +23,9 @@ Utilities for Conda packages.
 #  MA 02110-1301, USA.
 #
 
+# stdlib
+from typing import Any, Dict, Iterable, List
+
 # 3rd party
 import jinja2
 from domdf_python_tools.paths import PathPlus
@@ -53,6 +56,51 @@ def make_recipe(repo_dir: PathLike, recipe_file: PathLike) -> None:
 
 	config = parse_yaml(repo_dir)
 
+	requirements_block = '\n'.join([f"    - {req}" for req in get_conda_requirements(repo_dir, config)])
+
+	templates = jinja2.Environment(  # nosec: B701
+		loader=jinja2.FileSystemLoader(str(template_dir)),
+		undefined=jinja2.StrictUndefined,
+		)
+
+	recipe_template = templates.get_template("conda_recipe.yaml")
+	recipe_file.write_clean(
+			recipe_template.render(
+					requirements_block=requirements_block,
+					conda_full_description=make_conda_description(
+							config["conda_description"], config["conda_channels"]
+							),
+					**config,
+					)
+			)
+
+	#  entry_points:
+	#    - {{ import_name }} = {{ import_name }}:main
+	#  skip_compile_pyc:
+	#    - "*/templates/*.py"          # These should not (and cannot) be compiled
+
+
+def make_conda_description(summary: str, conda_channels: Iterable[str] = ()) -> str:
+	"""
+	Create a description for the Conda package from its summary and a list of channels required to install it.
+
+	:param summary:
+	:param conda_channels:
+	"""
+
+	conda_description = summary
+	conda_channels = tuple(conda_channels)
+
+	if conda_channels:
+		conda_description += "\n\n\n"
+		conda_description += "Before installing please ensure you have added the following channels: "
+		conda_description += ", ".join(conda_channels)
+		conda_description += '\n'
+
+	return conda_description
+
+
+def get_conda_requirements(repo_dir: PathPlus, config: Dict[str, Any]) -> List[str]:
 	extras = []
 
 	for extra in config["conda_extras"]:
@@ -63,22 +111,9 @@ def make_recipe(repo_dir: PathLike, recipe_file: PathLike) -> None:
 			config["conda_channels"],
 			)
 
-	requirements_entries = [f"    - {req}" for req in all_requirements if req and req != "numpy"]
+	requirements_entries = [str(req) for req in all_requirements if req and req != "numpy"]
 
 	if [v.specifier for v in all_requirements if v == "numpy"]:
-		requirements_entries.append("    - numpy x.x")
+		requirements_entries.append("numpy>=1.19.0")
 
-	requirements_block = '\n'.join(requirements_entries)
-
-	templates = jinja2.Environment(  # nosec: B701
-		loader=jinja2.FileSystemLoader(str(template_dir)),
-		undefined=jinja2.StrictUndefined,
-		)
-
-	recipe_template = templates.get_template("conda_recipe.yaml")
-	recipe_file.write_clean(recipe_template.render(requirements_block=requirements_block, **config))
-
-	#  entry_points:
-	#    - {{ import_name }} = {{ import_name }}:main
-	#  skip_compile_pyc:
-	#    - "*/templates/*.py"          # These should not (and cannot) be compiled
+	return requirements_entries

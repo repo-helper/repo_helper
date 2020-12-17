@@ -17,6 +17,6 @@ conda info -a
 
 conda config --add channels conda-forge || exit 1
 
-conda build conda -c conda-forge --output-folder conda/dist --skip-existing --numpy 1.16
+conda build conda -c conda-forge --output-folder conda/dist --skip-existing
 
 exit 0
