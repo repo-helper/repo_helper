@@ -52,7 +52,13 @@ from repo_helper.configuration import (
 		testing,
 		travis
 		)
-from repo_helper.configuration.conda_anaconda import conda_channels, conda_description, conda_extras, enable_conda
+from repo_helper.configuration.conda_anaconda import (
+		conda_channels,
+		conda_description,
+		conda_extras,
+		enable_conda,
+		primary_conda_channel
+		)
 from repo_helper.configuration.documentation import (
 		docs_dir,
 		docs_url,
@@ -154,6 +160,7 @@ __all__ = [
 		"author",
 		"classifiers",
 		"conda_channels",
+		"primary_conda_channel",
 		"conda_extras",
 		"conda_description",
 		"console_scripts",
@@ -345,6 +352,11 @@ class RepoHelperParser(Parser):
 		if parsed_config_vars["docs_url"] is None:
 			url = f"https://{parsed_config_vars['repo_name'].lower()}.readthedocs.io/en/latest"
 			parsed_config_vars["docs_url"] = url
+
+		parsed_config_vars["conda_channels"] = sorted({
+				*parsed_config_vars["conda_channels"],
+				parsed_config_vars["primary_conda_channel"],
+				})
 
 		return parsed_config_vars
 

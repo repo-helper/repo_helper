@@ -32,7 +32,7 @@ from configconfig.configvar import ConfigVar
 # this package
 from repo_helper.configuration import metadata
 
-__all__ = ["enable_conda", "conda_channels", "conda_description", "conda_extras"]
+__all__ = ["enable_conda", "conda_channels", "conda_description", "conda_extras", "primary_conda_channel"]
 
 
 class enable_conda(ConfigVar):  # noqa
@@ -127,3 +127,26 @@ class conda_description(ConfigVar):  # noqa
 	dtype = str
 	default = metadata.short_desc
 	category: str = "conda & anaconda"
+
+
+class primary_conda_channel(ConfigVar):  # noqa
+	"""
+	The Conda channel the package can be downloaded from.
+
+	This is automatically added to :conf:`conda_channels`.
+
+	Defaults to :conf:`username` if unset.
+
+	Example:
+
+	.. code-block:: yaml
+
+		username: repo-helper
+		primary_conda_channel: domdfcoding
+
+	.. versionadded:: 2020.12.17
+	"""
+
+	dtype = str
+	default = metadata.username
+	category: str = "metadata"

@@ -59,7 +59,7 @@ about:
   description: "Update multiple configuration files, build scripts etc. from a single location.
 
 
-Before installing please ensure you have added the following channels: domdfcoding, conda-forge
+Before installing please ensure you have added the following channels: conda-forge, domdfcoding
 "
   doc_url: https://repo_helper_demo.readthedocs.io
   dev_url: https://github.com/domdfcoding/repo_helper_demo

@@ -263,6 +263,10 @@
       ],
       "description": "Whether custom documentation theme styling in ``_static/style.css`` and ``_templates/layout.html`` should be preserved."
     },
+    "primary_conda_channel": {
+      "type": "string",
+      "description": "The Conda channel the package can be downloaded from."
+    },
     "pure_python": {
       "type": [
         "boolean",

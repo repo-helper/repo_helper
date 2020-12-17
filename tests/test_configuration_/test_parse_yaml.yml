@@ -17,8 +17,8 @@ classifiers:
 - 'Programming Language :: Python :: Implementation :: CPython'
 - 'Topic :: Utilities'
 conda_channels:
-- domdfcoding
 - conda-forge
+- domdfcoding
 conda_description: Update multiple configuration files, build scripts etc. from a
   single location.
 conda_extras:
@@ -80,6 +80,7 @@ platforms:
 - Linux
 pre_commit_exclude: ^$
 preserve_custom_theme: true
+primary_conda_channel: domdfcoding
 pure_python: true
 py_modules: []
 pypi_name: repo_helper_demo
