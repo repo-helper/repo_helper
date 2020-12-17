@@ -30,7 +30,7 @@ def test_read_requirements(tmp_pathplus, file_regression: FileRegressionFixture)
 	(tmp_pathplus / "requirements.txt").write_lines([
 			"autodocsumm>=0.2.0",
 			"default-values>=0.2.0",
-			"domdf-sphinx-theme>=0.1.0",
+			"domdf-sphinx-theme>=0.3.0",
 			"extras-require>=0.2.0",
 			"repo-helper-sphinx-theme>=0.0.2",
 			"seed-intersphinx-mapping>=0.1.1",
