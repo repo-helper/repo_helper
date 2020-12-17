@@ -49,6 +49,7 @@ def test_rewrite_readme(tmp_pathplus, demo_environment, file_regression: FileReg
 	demo_environment.globals["docker_name"] = ''
 	demo_environment.globals["enable_pre_commit"] = True
 	demo_environment.globals["license"] = "MIT"
+	demo_environment.globals["primary_conda_channel"] = "octocat"
 
 	readme_file = tmp_pathplus / "README.rst"
 
