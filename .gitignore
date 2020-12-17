@@ -89,3 +89,4 @@ Tokens
 rh.bat
 list_requirements.py
 pypi_reqs.py
+repodata.json

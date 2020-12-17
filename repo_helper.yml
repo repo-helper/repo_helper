@@ -3,7 +3,7 @@ modname: repo_helper
 copyright_years: "2020"
 author: "Dominic Davis-Foster"
 email: "dominic@davis-foster.co.uk"
-version: "2020.12.15"
+version: "2020.12.16"
 username: "domdfcoding"
 license: 'LGPLv3+'
 short_desc: 'A tool to manage configuration files, build scripts etc. across multiple projects.'
@@ -14,6 +14,7 @@ additional_ignore:
  - rh.bat
  - list_requirements.py
  - pypi_reqs.py
+ - repodata.json
 
 console_scripts:
  - "repo_helper = repo_helper.__main__:main"
