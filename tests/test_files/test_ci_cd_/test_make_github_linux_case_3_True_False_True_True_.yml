@@ -9,7 +9,7 @@ on:
 
 jobs:
   tests:
-    name: "Python ${{ matrix.config.python-version }}"
+    name: "ubuntu-20.04 / Python ${{ matrix.config.python-version }}"
     runs-on: "ubuntu-20.04"
     continue-on-error: ${{ matrix.config.experimental }}
     env:
