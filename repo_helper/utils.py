@@ -463,13 +463,10 @@ def set_gh_actions_versions(py_versions: Iterable[str]) -> List[str]:
 	# Keep in sync with https://github.com/actions/python-versions/releases
 
 	if "3.10-dev" in py_versions:
-		py_versions.remove("3.10-dev")
-		py_versions.append("3.10.0-alpha.3")
+		py_versions[py_versions.index("3.10-dev")] = "3.10.0-alpha.3"
 	if "3.10" in py_versions:
-		py_versions.remove("3.10")
-		py_versions.append("3.10.0-alpha.3")
+		py_versions[py_versions.index("3.10")] = "3.10.0-alpha.3"
 	if "pypy3" in py_versions:
-		py_versions.remove("pypy3")
-		py_versions.append("pypy-3.6")
+		py_versions[py_versions.index("pypy3")] = "pypy-3.6"
 
 	return py_versions
