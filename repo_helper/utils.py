@@ -468,5 +468,8 @@ def set_gh_actions_versions(py_versions: Iterable[str]) -> List[str]:
 	if "3.10" in py_versions:
 		py_versions.remove("3.10")
 		py_versions.append("3.10.0-alpha.3")
+	if "pypy3" in py_versions:
+		py_versions.remove("pypy3")
+		py_versions.append("pypy-3.6")
 
 	return py_versions
