@@ -104,7 +104,7 @@ Note: The autocommit functionality is currently broken on Windows, but works OK 
 .. |language| image:: https://img.shields.io/github/languages/top/domdfcoding/repo_helper
 	:alt: GitHub top language
 
-.. |commits-since| image:: https://img.shields.io/github/commits-since/domdfcoding/repo_helper/v2020.12.17
+.. |commits-since| image:: https://img.shields.io/github/commits-since/domdfcoding/repo_helper/v2020.12.18
 	:target: https://github.com/domdfcoding/repo_helper/pulse
 	:alt: GitHub commits since tagged version
 
