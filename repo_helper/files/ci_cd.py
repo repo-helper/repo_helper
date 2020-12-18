@@ -25,7 +25,7 @@ Manage configuration files for continuous integration / continuous deployment.
 
 # stdlib
 import pathlib
-from typing import List
+from typing import Iterator, List
 
 # 3rd party
 import jinja2
@@ -47,6 +47,7 @@ __all__ = [
 		"ensure_bumpversion",
 		"make_actions_deploy_conda",
 		"make_conda_actions_ci",
+		"ActionsManager",
 		]
 
 
@@ -92,100 +93,189 @@ def make_github_ci(repo_path: pathlib.Path, templates: jinja2.Environment) -> Li
 
 	# Matrix of OSs: https://youtu.be/KKJL8bM4cis?t=536
 
-	# TODO: Allowed failure for -dev versions
+	manager = ActionsManager(repo_path, templates)
 
-	actions = templates.get_template("github_ci.yml")
-
-	workflows_dir = PathPlus(repo_path / ".github" / "workflows")
-	workflows_dir.maybe_make(parents=True)
-
-	windows_ci_file = workflows_dir / "python_ci.yml"
-	macos_ci_file = workflows_dir / "python_ci_macos.yml"
-	linux_ci_file = workflows_dir / "python_ci_linux.yml"
-
-	standard_python_install_lines = [
-			"python -VV",
-			"python -m site",
-			"python -m pip install --upgrade pip setuptools wheel",
-			# "python -m pip install --upgrade tox tox-gh-actions virtualenv",
-			"python -m pip install --upgrade tox virtualenv",
+	return [
+			manager.make_windows().relative_to(repo_path).as_posix(),
+			manager.make_macos().relative_to(repo_path).as_posix(),
+			manager.make_linux().relative_to(repo_path).as_posix(),
 			]
 
-	if "Windows" in templates.globals["platforms"]:
-		py_versions: List[str] = templates.globals["python_versions"][:]
-		if not templates.globals["pure_python"] and "3.8" in py_versions:
+
+class ActionsManager:
+	"""
+	Responsible for creating, updating and removing GitHub Actions workflows.
+
+	:param repo_path: Path to the repository root.
+	:param templates:
+
+	.. versionadded:: 2020.12.18
+	"""
+
+	def __init__(self, repo_path: pathlib.Path, templates: jinja2.Environment):
+		self.repo_path = repo_path
+		self.templates = templates
+
+		self.actions = templates.get_template("github_ci.yml")
+
+		self.workflows_dir = PathPlus(repo_path / ".github" / "workflows")
+		self.workflows_dir.maybe_make(parents=True)
+
+	def make_windows(self) -> PathPlus:
+		"""
+		Create, update or remove the Windows action, as appropriate.
+		"""
+
+		platform_name = "Windows"
+		ci_file = self.workflows_dir / "python_ci.yml"
+
+		if platform_name in self.templates.globals["platforms"]:
+			ci_file.write_clean(
+					self.actions.render(
+							no_dev_versions=no_dev_versions,
+							ci_platform=platform_ci_names[platform_name],
+							ci_name=platform_name,
+							python_versions=set_gh_actions_versions(self.get_windows_ci_versions()),
+							dependency_lines=self.get_windows_ci_requirements(),
+							)
+					)
+		elif ci_file.is_file():
+			ci_file.unlink()
+
+		return ci_file
+
+	def make_macos(self) -> PathPlus:
+		"""
+		Create, update or remove the macOS action, as appropriate.
+		"""
+
+		platform_name = "macOS"
+		ci_file = self.workflows_dir / f"python_ci_{platform_name.lower()}.yml"
+
+		if platform_name in self.templates.globals["platforms"]:
+			ci_file.write_clean(
+					self.actions.render(
+							no_dev_versions=no_dev_versions,
+							ci_platform=platform_ci_names[platform_name],
+							ci_name=platform_name,
+							python_versions=set_gh_actions_versions(self.get_macos_ci_versions()),
+							dependency_lines=self.get_macos_ci_requirements(),
+							)
+					)
+		elif ci_file.is_file():
+			ci_file.unlink()
+
+		return ci_file
+
+	def make_linux(self) -> PathPlus:
+		"""
+		Create, update or remove the Linux action, as appropriate.
+		"""
+
+		platform_name = "Linux"
+		ci_file = self.workflows_dir / f"python_ci_{platform_name.lower()}.yml"
+
+		if platform_name in self.templates.globals["platforms"]:
+			ci_file.write_clean(
+					self.actions.render(
+							no_dev_versions=no_dev_versions,
+							python_versions=set_gh_actions_versions(self.get_linux_ci_versions()),
+							ci_platform=platform_ci_names[platform_name],
+							ci_name=platform_name,
+							dependency_lines=self.get_linux_ci_requirements(),
+							)
+					)
+		elif ci_file.is_file():
+			ci_file.unlink()
+
+		return ci_file
+
+	def get_windows_ci_versions(self) -> List[str]:
+		"""
+		Returns the Python versions to run tests for on Windows.
+		"""
+
+		py_versions: List[str] = self.templates.globals["python_versions"][:]
+
+		if not self.templates.globals["pure_python"] and "3.8" in py_versions:
 			py_versions.remove("3.8")  # FIXME: Python 3.8 tests fail on Windows for native wheels.
 		if "pypy3" in py_versions:
 			# FIXME: PyPy3 tests fail on Windows.
 			# https://github.com/domdfcoding/flake8-sphinx-links/runs/1276871725?check_suite_focus=true
 			py_versions.remove("pypy3")
 
-		dependency_lines = StringList(standard_python_install_lines)
-		if templates.globals["travis_additional_requirements"]:
-			travis_additional_requirements = DelimitedList(templates.globals["travis_additional_requirements"])
-			dependency_lines.append(f"python -m pip install --upgrade {travis_additional_requirements: }")
+		return py_versions
 
-		windows_ci_file.write_clean(
-				actions.render(
-						no_dev_versions=no_dev_versions,
-						ci_platform="windows-2019",
-						ci_name="Windows",
-						python_versions=set_gh_actions_versions(py_versions),
-						dependency_lines=dependency_lines,
-						)
-				)
-	elif windows_ci_file.is_file():
-		windows_ci_file.unlink()
+	def get_linux_ci_versions(self) -> List[str]:
+		"""
+		Returns the Python versions to run tests for on Linux.
+		"""
 
-	if "macOS" in templates.globals["platforms"]:
+		return self.templates.globals["python_versions"]
 
-		dependency_lines = StringList(standard_python_install_lines)
-		if templates.globals["travis_additional_requirements"]:
-			travis_additional_requirements = DelimitedList(templates.globals["travis_additional_requirements"])
-			dependency_lines.append(f"python -m pip install --upgrade {travis_additional_requirements: }")
+	def get_macos_ci_versions(self) -> List[str]:
+		"""
+		Returns the Python versions to run tests for on macOS.
+		"""
 
-		macos_ci_file.write_clean(
-				actions.render(
-						no_dev_versions=no_dev_versions,
-						ci_platform="macos-latest",
-						ci_name="macOS",
-						python_versions=set_gh_actions_versions(templates.globals["python_versions"]),
-						dependency_lines=dependency_lines,
-						)
-				)
-	elif macos_ci_file.is_file():
-		macos_ci_file.unlink()
+		return self.templates.globals["python_versions"]
 
-	if "Linux" in templates.globals["platforms"]:
-		dependency_lines = StringList(templates.globals["travis_extra_install_pre"])
-		dependency_lines.extend(standard_python_install_lines)
+	standard_python_install_lines = [
+			"python -VV",
+			"python -m site",
+			"python -m pip install --upgrade pip setuptools wheel",
+			"python -m pip install --upgrade tox virtualenv",
+			]
 
-		if templates.globals["enable_tests"]:
+	def _get_additional_requirements(self) -> Iterator[str]:
+		if self.templates.globals["travis_additional_requirements"]:
+			additional_requirements = DelimitedList(self.templates.globals["travis_additional_requirements"])
+			yield f"python -m pip install --upgrade {additional_requirements: }"
+
+	def get_windows_ci_requirements(self) -> List[str]:
+		"""
+		Returns the Python requirements to run tests for on Windows.
+		"""
+
+		dependency_lines = StringList(self.standard_python_install_lines)
+		dependency_lines.extend(self._get_additional_requirements())
+
+		return dependency_lines
+
+	def get_linux_ci_requirements(self) -> List[str]:
+		"""
+		Returns the Python requirements to run tests for on Linux.
+		"""
+
+		dependency_lines = StringList(self.templates.globals["travis_extra_install_pre"])
+		dependency_lines.extend(self.standard_python_install_lines)
+
+		if self.templates.globals["enable_tests"]:
 			dependency_lines.append("python -m pip install --upgrade coverage_pyver_pragma")
 
-		if templates.globals["travis_additional_requirements"]:
-			travis_additional_requirements = DelimitedList(templates.globals["travis_additional_requirements"])
-			dependency_lines.append(f"python -m pip install --upgrade {travis_additional_requirements: }")
+		dependency_lines.extend(self._get_additional_requirements())
+		dependency_lines.extend(self.templates.globals["travis_extra_install_post"])
 
-		dependency_lines.extend(templates.globals["travis_extra_install_post"])
+		return dependency_lines
 
-		linux_ci_file.write_clean(
-				actions.render(
-						no_dev_versions=no_dev_versions,
-						python_versions=set_gh_actions_versions(templates.globals["python_versions"]),
-						ci_platform="ubuntu-20.04",
-						ci_name="Linux",
-						dependency_lines=dependency_lines,
-						)
-				)
-	elif linux_ci_file.is_file():
-		linux_ci_file.unlink()
+	def get_macos_ci_requirements(self) -> List[str]:
+		"""
+		Returns the Python requirements to run tests for on macOS.
+		"""
 
-	return [
-			windows_ci_file.relative_to(repo_path).as_posix(),
-			macos_ci_file.relative_to(repo_path).as_posix(),
-			linux_ci_file.relative_to(repo_path).as_posix(),
-			]
+		return self.get_windows_ci_requirements()
+
+
+platform_ci_names = {
+		"Windows": "windows-2019",
+		"macOS": "macos-latest",
+		"Linux": "ubuntu-20.04",
+		}
+"""
+Mapping of platform names to the GitHub Actions platform tags.
+
+.. versionadded:: 2020.12.18
+"""
 
 
 @management.register("conda_actions", ["enable_conda"])
