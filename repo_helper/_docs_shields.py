@@ -68,6 +68,7 @@ __all__ = [
 		"make_docs_pre_commit_shield",
 		"make_docs_pre_commit_ci_shield",
 		"make_docs_actions_shield",
+		"make_docs_pypi_downloads_shield",
 		]
 
 
@@ -228,6 +229,22 @@ def make_docs_pypi_version_shield(pypi_name: str) -> str:
 	:project: {pypi_name}
 	:version:
 	:alt: PyPI - Package Version"""
+
+
+def make_docs_pypi_downloads_shield(pypi_name: str) -> str:
+	"""
+	Create a shield to show the version on PyPI.
+
+	:param pypi_name: The name of the project on PyPI.
+
+	:return: The shield.
+	"""
+
+	return f"""\
+.. pypi-shield::
+	:project: {pypi_name}
+	:downloads: month
+	:alt: PyPI - Downloads"""
 
 
 def make_docs_python_versions_shield(pypi_name: str) -> str:

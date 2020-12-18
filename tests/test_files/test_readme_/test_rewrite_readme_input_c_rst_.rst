@@ -17,15 +17,17 @@ repo_helper
 	* - Docs
 	  - |docs| |docs_check|
 	* - Tests
-	  - |actions_windows| |coveralls| |codefactor| |pre_commit_ci|
+	  - |actions_windows| |coveralls|
 	* - PyPI
 	  - |pypi-version| |supported-versions| |supported-implementations| |wheel|
 	* - Anaconda
 	  - |conda-version| |conda-platform|
 	* - Activity
-	  - |commits-latest| |commits-since| |maintained|
+	  - |commits-latest| |commits-since| |maintained| |pypi-downloads|
+	* - QA
+	  - |codefactor| |actions_flake8| |actions_mypy| |pre_commit_ci|
 	* - Other
-	  - |license| |language| |requires| |pre_commit|
+	  - |license| |language| |requires|
 
 .. |docs| image:: https://img.shields.io/readthedocs/hello-world/latest?logo=read-the-docs
 	:target: https://hello-world.readthedocs.io/en/latest
@@ -38,6 +40,14 @@ repo_helper
 .. |actions_windows| image:: https://github.com/octocat/hello-world/workflows/Windows/badge.svg
 	:target: https://github.com/octocat/hello-world/actions?query=workflow%3A%22Windows%22
 	:alt: Windows Test Status
+
+.. |actions_flake8| image:: https://github.com/octocat/hello-world/workflows/Flake8/badge.svg
+	:target: https://github.com/octocat/hello-world/actions?query=workflow%3A%22Flake8%22
+	:alt: Flake8 Status
+
+.. |actions_mypy| image:: https://github.com/octocat/hello-world/workflows/mypy/badge.svg
+	:target: https://github.com/octocat/hello-world/actions?query=workflow%3A%22mypy%22
+	:alt: mypy status
 
 .. |requires| image:: https://requires.io/github/octocat/hello-world/requirements.svg?branch=master
 	:target: https://requires.io/github/octocat/hello-world/requirements/?branch=master
@@ -93,9 +103,9 @@ repo_helper
 .. |maintained| image:: https://img.shields.io/maintenance/yes/2020
 	:alt: Maintenance
 
-.. |pre_commit| image:: https://img.shields.io/badge/pre--commit-enabled-brightgreen?logo=pre-commit&logoColor=white
-	:target: https://github.com/pre-commit/pre-commit
-	:alt: pre-commit
+.. |pypi-downloads| image:: https://img.shields.io/pypi/dm/hello-world
+	:target: https://pypi.org/project/hello-world/
+	:alt: PyPI - Downloads
 
 .. |pre_commit_ci| image:: https://results.pre-commit.ci/badge/github/octocat/hello-world/master.svg
 	:target: https://results.pre-commit.ci/latest/github/octocat/hello-world/master

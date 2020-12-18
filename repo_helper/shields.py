@@ -56,6 +56,7 @@ __all__ = [
 		"make_typing_shield",
 		"make_wheel_shield",
 		"make_actions_shield",
+		"make_pypi_downloads_shield",
 		]
 
 
@@ -213,6 +214,21 @@ def make_pypi_version_shield(pypi_name: str) -> str:
 .. image:: https://img.shields.io/pypi/v/{ pypi_name }
 	:target: https://pypi.org/project/{ pypi_name }/
 	:alt: PyPI - Package Version"""
+
+
+def make_pypi_downloads_shield(pypi_name: str) -> str:
+	"""
+	Create a shield to show the PyPI download statistics.
+
+	:param pypi_name: The name of the project on PyPI.
+
+	:return: The shield.
+	"""
+
+	return f"""\
+.. image:: https://img.shields.io/pypi/dm/{ pypi_name }
+	:target: https://pypi.org/project/{ pypi_name }/
+	:alt: PyPI - Downloads"""
 
 
 def make_python_versions_shield(pypi_name: str) -> str:

@@ -52,6 +52,7 @@ from repo_helper._docs_shields import (
 		make_docs_maintained_shield,
 		make_docs_pre_commit_ci_shield,
 		make_docs_pre_commit_shield,
+		make_docs_pypi_downloads_shield,
 		make_docs_pypi_version_shield,
 		make_docs_python_implementations_shield,
 		make_docs_python_versions_shield,
@@ -76,6 +77,7 @@ from repo_helper.shields import (
 		make_maintained_shield,
 		make_pre_commit_ci_shield,
 		make_pre_commit_shield,
+		make_pypi_downloads_shield,
 		make_pypi_version_shield,
 		make_python_implementations_shield,
 		make_python_versions_shield,
@@ -317,7 +319,16 @@ class ShieldsBlock:
 	"""
 
 	#: This list controls which sections are included, and their order.
-	sections = ("Docs", "Tests", "PyPI", "Anaconda", "Activity", "Docker", "Other")
+	sections = (
+			"Docs",
+			"Tests",
+			"PyPI",
+			"Anaconda",
+			"Activity",
+			"QA",
+			"Docker",
+			"Other",
+			)
 
 	#: This list controls which substitutions are included, and their order.
 	substitutions = (
@@ -326,6 +337,8 @@ class ShieldsBlock:
 			"actions_linux",
 			"actions_windows",
 			"actions_macos",
+			"actions_flake8",
+			"actions_mypy",
 			"requires",
 			"coveralls",
 			"codefactor",
@@ -340,6 +353,7 @@ class ShieldsBlock:
 			"commits-since",
 			"commits-latest",
 			"maintained",
+			"pypi-downloads",
 			"docker_build",
 			"docker_automated",
 			"docker_size",
@@ -415,6 +429,7 @@ class ShieldsBlock:
 		self.make_requires_shield = make_requires_shield
 		self.make_rtfd_shield = make_rtfd_shield
 		self.make_wheel_shield = make_wheel_shield
+		self.make_pypi_downloads_shield = make_pypi_downloads_shield
 
 	def set_docs_mode(self) -> None:
 		"""
@@ -443,6 +458,7 @@ class ShieldsBlock:
 		self.make_requires_shield = make_docs_requires_shield
 		self.make_rtfd_shield = make_docs_rtfd_shield
 		self.make_wheel_shield = make_docs_wheel_shield
+		self.make_pypi_downloads_shield = make_docs_pypi_downloads_shield
 
 	def make(self) -> str:
 		"""
@@ -477,11 +493,9 @@ class ShieldsBlock:
 		substitutions["license"] = self.make_license_shield(repo_name, username)
 		substitutions["language"] = self.make_language_shield(repo_name, username)
 
-		sections["QA"] = ["codefactor", "actions_macos"]
+		sections["QA"] = ["codefactor", "actions_flake8", "actions_mypy"]
 		substitutions["codefactor"] = self.make_codefactor_shield(repo_name, username)
-		sections["QA"].append("actions_flake8")
 		substitutions["actions_flake8"] = self.make_actions_shield(repo_name, username, "Flake8", "Flake8 Status")
-		sections["QA"].append("actions_mypy")
 		substitutions["actions_mypy"] = self.make_actions_shield(repo_name, username, "mypy", "mypy status")
 
 		if self.docs:
@@ -520,15 +534,9 @@ class ShieldsBlock:
 			sections["Tests"].append("coveralls")
 			substitutions["coveralls"] = self.make_coveralls_shield(repo_name, username)
 
-		sections["Tests"].append("codefactor")
-
 		if self.pre_commit:
 			sections["QA"].append("pre_commit_ci")
-			sections["Tests"].append("pre_commit_ci")
 			substitutions["pre_commit_ci"] = self.make_pre_commit_ci_shield(repo_name, username)
-
-			sections["Other"].append("pre_commit")
-			substitutions["pre_commit"] = self.make_pre_commit_shield()
 
 		if self.on_pypi:
 			sections["PyPI"] = ["pypi-version", "supported-versions", "supported-implementations", "wheel"]
@@ -536,6 +544,9 @@ class ShieldsBlock:
 			substitutions["supported-versions"] = self.make_python_versions_shield(pypi_name)
 			substitutions["supported-implementations"] = self.make_python_implementations_shield(pypi_name)
 			substitutions["wheel"] = self.make_wheel_shield(pypi_name)
+
+		sections["Activity"].append("pypi-downloads")
+		substitutions["pypi-downloads"] = self.make_pypi_downloads_shield(pypi_name)
 
 		if self.conda:
 			sections["Anaconda"] = ["conda-version", "conda-platform"]
@@ -552,7 +563,7 @@ class ShieldsBlock:
 			substitutions["docker_size"] = self.make_docker_size_shield(docker_name, username)
 
 		for section in self.sections:
-			if section not in sections:
+			if section not in sections or not sections[section]:
 				continue
 
 			images = DelimitedList([f"|{name}{self.unique_name}|" for name in sections[section]])
