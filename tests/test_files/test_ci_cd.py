@@ -20,9 +20,10 @@
 #  MA 02110-1301, USA.
 #
 
-# 3rd party
+# stdlib
 from types import SimpleNamespace
 
+# 3rd party
 import pytest
 from domdf_python_tools.testing import check_file_output
 from pytest_regressions.data_regression import DataRegressionFixture
@@ -31,16 +32,17 @@ from pytest_regressions.file_regression import FileRegressionFixture
 # this package
 from repo_helper.configuration import get_tox_python_versions
 from repo_helper.files.ci_cd import (
-	ActionsManager, ensure_bumpversion,
-	make_actions_deploy_conda,
-	make_conda_actions_ci,
-	make_github_ci,
-	make_github_docs_test,
-	make_github_flake8,
-	make_github_manylinux,
-	make_github_mypy,
-	make_github_octocheese,
-	)
+		ActionsManager,
+		ensure_bumpversion,
+		make_actions_deploy_conda,
+		make_conda_actions_ci,
+		make_github_ci,
+		make_github_docs_test,
+		make_github_flake8,
+		make_github_manylinux,
+		make_github_mypy,
+		make_github_octocheese
+		)
 from repo_helper.files.old import remove_copy_pypi_2_github, remove_make_conda_recipe
 
 
@@ -401,7 +403,6 @@ def test_make_conda_actions_ci(tmp_pathplus, demo_environment, file_regression: 
 	managed_files = make_conda_actions_ci(tmp_pathplus, demo_environment)
 	assert managed_files == [".github/workflows/conda_ci.yml"]
 	assert not (tmp_pathplus / managed_files[0]).is_file()
-
 
 
 @pytest.mark.parametrize(

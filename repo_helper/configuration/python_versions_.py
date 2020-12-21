@@ -24,6 +24,7 @@ r"""
 #
 
 # stdlib
+from collections import Sequence
 from typing import Any, Dict, Iterable, List, Optional, Union
 
 # 3rd party
@@ -119,18 +120,18 @@ class third_party_version_matrix(ConfigVar):  # noqa
 
 	dtype = Dict[str, List[Union[str, float]]]
 	rtype = Dict[str, List[str]]
-	default = {}
+	default: Dict[str, List[str]] = {}
 	category: str = "python versions"
 
 	@classmethod
 	def validate(cls, raw_config_vars: Optional[Dict[str, Any]] = None) -> Dict[str, List[str]]:
 
-		matrix = raw_config_vars.get(cls.__name__, {})
+		matrix = (raw_config_vars or {}).get(cls.__name__, {})
 
 		if not all(isinstance(k, str) for k in matrix.keys()):
 			raise TypeError(f"All keys in {cls.__name__} must be strings.")
-		if not all(isinstance(v, list) for v in matrix.values()):
-			raise TypeError(f"All keys in {cls.__name__} must be strings.")
+		if not all(isinstance(v, Sequence) for v in matrix.values()):
+			raise TypeError(f"All values in {cls.__name__} must be sequences.")
 
 		for k, v in matrix.items():
 			matrix[k] = list(map(str, v))
