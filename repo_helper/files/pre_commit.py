@@ -150,7 +150,7 @@ class Repo:
 
 pre_commit_hooks = Repo(
 		repo=make_github_url("pre-commit", "pre-commit-hooks"),
-		rev="v3.3.0",
+		rev="v3.4.0",
 		hooks=[
 				"check-added-large-files",
 				"check-ast",
