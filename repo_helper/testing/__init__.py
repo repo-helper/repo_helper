@@ -57,6 +57,7 @@ from southwark.repo import Repo
 # this package
 import repo_helper.utils
 from repo_helper.build import Builder, build_sdist, build_wheel
+from repo_helper.configuration import get_tox_python_versions
 from repo_helper.files.linting import lint_warn_list
 from repo_helper.templates import template_dir
 from repo_helper.utils import brace
@@ -116,7 +117,8 @@ def demo_environment() -> jinja2.Environment:
 			"stubs_package": false,
 			"managed_message": "This file is managed by 'repo_helper'. Don't edit it directly.",
 			"short_desc": "a short description",
-			"on_pypi": true
+			"on_pypi": true,
+			"third_party_version_matrix": {}
 			}
 
 	plus ``lint_warn_list`` = :py:data:`repo_helper.files.linting.lint_warn_list`.
@@ -174,12 +176,15 @@ def demo_environment() -> jinja2.Environment:
 					short_desc="a short description",
 					on_pypi=True,
 					brace=brace,
+					third_party_version_matrix={},
 					gh_actions_versions={
 							"3.6": "py36, mypy",
 							"3.7": "py37, build",
 							},
 					)
 			)
+
+	templates.globals["tox_py_versions"] = get_tox_python_versions(templates.globals["python_versions"])
 
 	return templates
 

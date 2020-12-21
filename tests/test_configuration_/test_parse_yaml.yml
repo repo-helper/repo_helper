@@ -48,11 +48,6 @@ extras_require:
   - lxml
   schema:
   - lxml
-gh_actions_versions:
-  '3.6': py36, build
-  '3.7': py37, build
-  '3.8': py38, build
-  3.9-dev: py39-dev, build
 html_context: {}
 html_theme_options: {}
 imgbot_ignore:
@@ -102,6 +97,7 @@ sphinx_html_theme: alabaster
 standalone_contrib_guide: false
 stubs_package: false
 tests_dir: tests
+third_party_version_matrix: {}
 tox_build_requirements: []
 tox_py_versions:
 - py36
@@ -110,11 +106,6 @@ tox_py_versions:
 - py39-dev
 tox_requirements: []
 tox_testenv_extras: all
-tox_travis_versions:
-  '3.6': py36, build
-  '3.7': py37, build
-  '3.8': py38, build
-  3.9-dev: py39-dev, build
 tox_unmanaged: []
 travis_additional_requirements: []
 travis_extra_install_post: []

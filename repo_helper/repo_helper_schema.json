@@ -370,6 +370,10 @@
       "type": "string",
       "description": "The directory containing tests, relative to the repository root."
     },
+    "third_party_version_matrix": {
+      "type": "object",
+      "description": "A mapping of third party library names to the version number(s) to test."
+    },
     "tox_build_requirements": {
       "type": "array",
       "items": {

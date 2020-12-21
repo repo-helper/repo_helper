@@ -19,7 +19,7 @@ jobs:
       fail-fast: False
       matrix:
         config:{% for version in no_dev_versions(python_versions) %}
-          - {python-version: "{{ version }}", testenvs: "{{ gh_actions_versions[version].replace(' ', '') }}", experimental: {{ "alpha" in version or "beta" in version }}}{% endfor %}
+          - {python-version: "{{ version }}", testenvs: "{{ gh_actions_versions[version] }}", experimental: {{ "alpha" in version or "beta" in version }}}{% endfor %}
 
     steps:
       - name: Checkout 🛎️
@@ -35,7 +35,7 @@ jobs:
           {% for line in dependency_lines %}{{ line }}
           {% endfor %}
       - name: "Run Tests for Python ${{ brace('matrix.config.python-version')}}"
-        run: "python -m tox -e ${{ brace('matrix.config.testenvs') }}"
+        run: python -m tox -e "${{ brace('matrix.config.testenvs') }}"
 {% if ci_name == "Linux" %}
 {% if enable_tests and not stubs_package %}
       - name: "Upload Coverage"

@@ -25,7 +25,7 @@ Manage configuration files for continuous integration / continuous deployment.
 
 # stdlib
 import pathlib
-from typing import Iterator, List
+from typing import Dict, Iterator, List
 
 # 3rd party
 import jinja2
@@ -121,6 +121,32 @@ class ActionsManager:
 		self.workflows_dir = PathPlus(repo_path / ".github" / "workflows")
 		self.workflows_dir.maybe_make(parents=True)
 
+	def get_gh_actions_python_versions(self, ) -> Dict[str, str]:
+		"""
+		Prepares the mapping of Python versions to tox testenvs for use with GitHub Actions.
+
+		.. versionadded:: 2020.12.21
+		"""
+
+		config = self.templates.globals
+		tox_travis_matrix: Dict[str, str] = {}
+
+		python_versions = config["python_versions"]
+		tox_py_versions = config["tox_py_versions"]
+		third_party_version_matrix = config["third_party_version_matrix"]
+
+		if third_party_version_matrix:
+			third_party_library = list(third_party_version_matrix.keys())[0]
+			third_party_versions = DelimitedList(third_party_version_matrix[third_party_library])
+			matrix_testenv_string = f"-{third_party_library}{{{third_party_versions:,}}}"
+		else:
+			matrix_testenv_string = ''
+
+		for py_version, tox_py_version in zip(set_gh_actions_versions(python_versions), tox_py_versions):
+			tox_travis_matrix[str(py_version)] = f"{tox_py_version}{matrix_testenv_string},build"
+
+		return tox_travis_matrix
+
 	def make_windows(self) -> PathPlus:
 		"""
 		Create, update or remove the Windows action, as appropriate.
@@ -137,6 +163,7 @@ class ActionsManager:
 							ci_name=platform_name,
 							python_versions=set_gh_actions_versions(self.get_windows_ci_versions()),
 							dependency_lines=self.get_windows_ci_requirements(),
+							gh_actions_versions=self.get_gh_actions_python_versions(),
 							)
 					)
 		elif ci_file.is_file():
@@ -160,6 +187,7 @@ class ActionsManager:
 							ci_name=platform_name,
 							python_versions=set_gh_actions_versions(self.get_macos_ci_versions()),
 							dependency_lines=self.get_macos_ci_requirements(),
+							gh_actions_versions=self.get_gh_actions_python_versions(),
 							)
 					)
 		elif ci_file.is_file():
@@ -183,6 +211,7 @@ class ActionsManager:
 							ci_platform=platform_ci_names[platform_name],
 							ci_name=platform_name,
 							dependency_lines=self.get_linux_ci_requirements(),
+							gh_actions_versions=self.get_gh_actions_python_versions(),
 							)
 					)
 		elif ci_file.is_file():

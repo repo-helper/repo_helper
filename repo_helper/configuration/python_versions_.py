@@ -29,7 +29,7 @@ from typing import Any, Dict, Iterable, List, Optional, Union
 # 3rd party
 from configconfig.configvar import ConfigVar
 
-__all__ = ["python_deploy_version", "default_python_versions", "python_versions"]
+__all__ = ["python_deploy_version", "default_python_versions", "python_versions", "third_party_version_matrix"]
 
 
 class python_deploy_version(ConfigVar):  # noqa
@@ -82,3 +82,57 @@ class python_versions(ConfigVar):  # noqa
 	@classmethod
 	def validator(cls, value: Iterable[str]) -> List[str]:  # noqa: D102
 		return [str(ver) for ver in value if ver]
+
+
+class third_party_version_matrix(ConfigVar):  # noqa
+	"""
+	A mapping of third party library names to the version number(s) to test.
+
+	The special value "latest" indicates the latest version of the library should be used.
+
+	.. code-block:: yaml
+
+		third_party_version_matrix:
+		  attrs:
+		  - 19.3
+		  - 20.1
+		  - 20.2
+		  - latest
+
+	This would translate into the following tox testenvs::
+
+		py36-attrs{19.3,20.1,20.2,latest}
+
+	and the following tox requirements::
+
+		attrs19.3: attrs~=19.3.0
+		attrs20.1: attrs~=20.1.0
+		attrs20.2: attrs~=20.2.0
+		attrslatest: attrs
+
+	which is :file:`{<name>}~={<version>).0`.
+
+	.. versionadded:: 2020.12.21
+
+	.. note:: Currently matrices are only supported for a single third-party requirement.
+	"""
+
+	dtype = Dict[str, List[Union[str, float]]]
+	rtype = Dict[str, List[str]]
+	default = {}
+	category: str = "python versions"
+
+	@classmethod
+	def validate(cls, raw_config_vars: Optional[Dict[str, Any]] = None) -> Dict[str, List[str]]:
+
+		matrix = raw_config_vars.get(cls.__name__, {})
+
+		if not all(isinstance(k, str) for k in matrix.keys()):
+			raise TypeError(f"All keys in {cls.__name__} must be strings.")
+		if not all(isinstance(v, list) for v in matrix.values()):
+			raise TypeError(f"All keys in {cls.__name__} must be strings.")
+
+		for k, v in matrix.items():
+			matrix[k] = list(map(str, v))
+
+		return matrix

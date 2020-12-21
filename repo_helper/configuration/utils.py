@@ -31,16 +31,7 @@ from typing import Any, Dict, Iterable, List, Mapping, Tuple
 # 3rd party
 from natsort import natsorted  # type: ignore
 
-# this package
-from repo_helper.utils import set_gh_actions_versions
-
-__all__ = [
-		"get_tox_python_versions",
-		"get_tox_travis_python_versions",
-		"get_gh_actions_python_versions",
-		"get_version_classifiers",
-		"parse_extras"
-		]
+__all__ = ["get_tox_python_versions", "get_version_classifiers", "parse_extras"]
 
 
 def get_tox_python_versions(python_versions: Iterable[str]) -> List[str]:
@@ -59,28 +50,6 @@ def get_tox_python_versions(python_versions: Iterable[str]) -> List[str]:
 		tox_py_versions.append(py_version)
 
 	return tox_py_versions
-
-
-def get_gh_actions_python_versions(
-		python_versions: Iterable[str],
-		tox_py_versions: Iterable[str],
-		) -> Dict[str, str]:
-	"""
-	Prepares the mapping of Python versions to tox testenvs for use with GitHub Actions.
-
-	:param python_versions: List of Python versions to run tests for.
-	:param tox_py_versions: The list of tox testenvs for the Python versions.
-	"""
-
-	tox_travis_matrix: Dict[str, str] = {}
-
-	for py_version, tox_py_version in zip(set_gh_actions_versions(python_versions), tox_py_versions):
-		tox_travis_matrix[str(py_version)] = f"{tox_py_version}, build"
-
-	return tox_travis_matrix
-
-
-get_tox_travis_python_versions = get_gh_actions_python_versions
 
 
 def get_version_classifiers(python_versions: Iterable[str]) -> List[str]:

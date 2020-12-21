@@ -84,7 +84,6 @@ class ToxConfig(IniConfigurator):
 	managed_sections = [
 			"tox",
 			"envlists",
-			"gh-actions",
 			"testenv",
 			"testenv:docs",
 			"testenv:build",
@@ -194,7 +193,15 @@ class ToxConfig(IniConfigurator):
 		``[tox]``.
 		"""
 
-		self._ini["tox"]["envlist"] = [*self["tox_py_versions"], "mypy", "build"]
+		if self["third_party_version_matrix"]:
+			third_party_library = list(self["third_party_version_matrix"].keys())[0]
+			third_party_versions = DelimitedList(self["third_party_version_matrix"][third_party_library])
+			matrix_testenv_string = f"-{third_party_library}{{{third_party_versions:,}}}"
+			tox_envs = [v + matrix_testenv_string for v in self["tox_py_versions"]]
+		else:
+			tox_envs = self["tox_py_versions"]
+
+		self._ini["tox"]["envlist"] = [*tox_envs, "mypy", "build"]
 		self._ini["tox"]["skip_missing_interpreters"] = True
 		self._ini["tox"]["requires"] = indent_join([
 				"pip>=20.3.3",
@@ -213,14 +220,6 @@ class ToxConfig(IniConfigurator):
 		if self["enable_tests"]:
 			self._ini["envlists"]["cov"] = [self["tox_py_versions"][0], "coverage"]
 
-	def gh_actions(self):
-		"""
-		``[gh-actions]``.
-		"""
-
-		versions = (f"{py_ver}: {tox_py_ver}" for py_ver, tox_py_ver in self["gh_actions_versions"].items())
-		self._ini["gh-actions"]["python"] = indent_join(versions)
-
 	def testenv(self):
 		"""
 		``[testenv]``.
@@ -230,7 +229,19 @@ class ToxConfig(IniConfigurator):
 			self._ini["testenv"]["setenv"] = "PYTHONDEVMODE = 1"
 
 		if self["enable_tests"]:
-			self._ini["testenv"]["deps"] = f"-r{{toxinidir}}/{self['tests_dir']}/requirements.txt"
+
+			deps = [f"-r{{toxinidir}}/{self['tests_dir']}/requirements.txt"]
+
+			if self["third_party_version_matrix"]:
+				third_party_library = list(self["third_party_version_matrix"].keys())[0]
+
+				for version in self["third_party_version_matrix"][third_party_library]:
+					if version != "latest":
+						deps.append(f"{third_party_library}{version}: {third_party_library}~={version}.0")
+					else:
+						deps.append(f"{third_party_library}latest: {third_party_library}")
+
+			self._ini["testenv"]["deps"] = indent_join(deps)
 
 		if self["tox_testenv_extras"]:
 			self._ini["testenv"]["extras"] = self["tox_testenv_extras"]

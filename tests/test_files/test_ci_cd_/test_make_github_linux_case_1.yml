@@ -19,7 +19,7 @@ jobs:
       fail-fast: False
       matrix:
         config:
-          - {python-version: "3.6", testenvs: "py36,mypy", experimental: False}
+          - {python-version: "3.6", testenvs: "py36,build", experimental: False}
           - {python-version: "3.7", testenvs: "py37,build", experimental: False}
 
     steps:
@@ -40,7 +40,7 @@ jobs:
           python -m pip install --upgrade coverage_pyver_pragma
 
       - name: "Run Tests for Python ${{ matrix.config.python-version }}"
-        run: "python -m tox -e ${{ matrix.config.testenvs }}"
+        run: python -m tox -e "${{ matrix.config.testenvs }}"
 
 
       - name: "Upload Coverage"

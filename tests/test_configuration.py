@@ -1,17 +1,9 @@
-# stdlib
-import pathlib
-
 # 3rd party
 import pytest
 from pytest_regressions.data_regression import DataRegressionFixture
 
 # this package
-from repo_helper.configuration import (
-		get_gh_actions_python_versions,
-		get_tox_python_versions,
-		get_tox_travis_python_versions,
-		parse_yaml
-		)
+from repo_helper.configuration import get_tox_python_versions, parse_yaml
 
 
 @pytest.mark.parametrize(

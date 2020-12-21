@@ -124,7 +124,8 @@ from repo_helper.configuration.packaging import (
 from repo_helper.configuration.python_versions_ import (
 		default_python_versions,
 		python_deploy_version,
-		python_versions
+		python_versions,
+		third_party_version_matrix
 		)
 from repo_helper.configuration.testing import (
 		enable_devmode,
@@ -144,12 +145,7 @@ from repo_helper.configuration.travis import (
 		travis_extra_install_pre,
 		travis_ubuntu_version
 		)
-from repo_helper.configuration.utils import (
-		get_gh_actions_python_versions,
-		get_tox_python_versions,
-		get_tox_travis_python_versions,
-		parse_extras
-		)
+from repo_helper.configuration.utils import get_tox_python_versions, parse_extras
 from repo_helper.utils import no_dev_versions
 
 __all__ = [
@@ -178,9 +174,7 @@ __all__ = [
 		"exclude_files",
 		"extra_sphinx_extensions",
 		"extras_require",
-		"get_gh_actions_python_versions",
 		"get_tox_python_versions",
-		"get_tox_travis_python_versions",
 		"html_context",
 		"html_theme_options",
 		"imgbot_ignore",
@@ -234,6 +228,7 @@ __all__ = [
 		"assignee",
 		"YamlEditor",
 		"docs_url",
+		"third_party_version_matrix",
 		]
 
 
@@ -337,9 +332,6 @@ class RepoHelperParser(Parser):
 		py_versions = parsed_config_vars["python_versions"]
 		tox_py_versions = get_tox_python_versions(py_versions)
 		parsed_config_vars["tox_py_versions"] = tox_py_versions
-		gh_actions_versions = get_gh_actions_python_versions(py_versions, tox_py_versions)
-		parsed_config_vars["tox_travis_versions"] = gh_actions_versions
-		parsed_config_vars["gh_actions_versions"] = gh_actions_versions
 
 		if (repo_path / parsed_config_vars["import_name"].replace('.', '/') / "py.typed").is_file():
 			parsed_config_vars["classifiers"].append("Typing :: Typed")

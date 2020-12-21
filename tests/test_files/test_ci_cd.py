@@ -26,6 +26,7 @@ from domdf_python_tools.testing import check_file_output
 from pytest_regressions.file_regression import FileRegressionFixture
 
 # this package
+from repo_helper.configuration import get_tox_python_versions
 from repo_helper.files.ci_cd import (
 		ensure_bumpversion,
 		make_actions_deploy_conda,
@@ -360,6 +361,11 @@ def test_make_github_linux_case_4(
 					python_versions=["3.6", "3.7", "3.8", "3.9", "3.10-dev"],
 					)
 			)
+
+	demo_environment.globals["tox_py_versions"] = get_tox_python_versions(
+			demo_environment.globals["python_versions"]
+			)
+
 	demo_environment.globals["gh_actions_versions"] = {
 			"3.6": "py36, mypy",
 			"3.7": "py37, build",
