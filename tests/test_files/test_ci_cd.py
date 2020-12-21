@@ -21,23 +21,26 @@
 #
 
 # 3rd party
+from types import SimpleNamespace
+
 import pytest
 from domdf_python_tools.testing import check_file_output
+from pytest_regressions.data_regression import DataRegressionFixture
 from pytest_regressions.file_regression import FileRegressionFixture
 
 # this package
 from repo_helper.configuration import get_tox_python_versions
 from repo_helper.files.ci_cd import (
-		ensure_bumpversion,
-		make_actions_deploy_conda,
-		make_conda_actions_ci,
-		make_github_ci,
-		make_github_docs_test,
-		make_github_flake8,
-		make_github_manylinux,
-		make_github_mypy,
-		make_github_octocheese
-		)
+	ActionsManager, ensure_bumpversion,
+	make_actions_deploy_conda,
+	make_conda_actions_ci,
+	make_github_ci,
+	make_github_docs_test,
+	make_github_flake8,
+	make_github_manylinux,
+	make_github_mypy,
+	make_github_octocheese,
+	)
 from repo_helper.files.old import remove_copy_pypi_2_github, remove_make_conda_recipe
 
 
@@ -398,3 +401,56 @@ def test_make_conda_actions_ci(tmp_pathplus, demo_environment, file_regression: 
 	managed_files = make_conda_actions_ci(tmp_pathplus, demo_environment)
 	assert managed_files == [".github/workflows/conda_ci.yml"]
 	assert not (tmp_pathplus / managed_files[0]).is_file()
+
+
+
+@pytest.mark.parametrize(
+		"python_versions",
+		[
+				["3.6"],
+				["3.6", "3.7"],
+				["3.6", "3.7", "3.8"],
+				["3.6", "3.7", "3.8", "3.9-dev"],
+				["3.7", "3.8", "3.9-dev"],
+				["3.7", "3.8"],
+				["3.8"],
+				]
+		)
+def test_actions_manager_python_versions(python_versions, data_regression: DataRegressionFixture):
+
+	class FakeActionsManager:
+
+		templates = SimpleNamespace()
+		templates.globals = {
+				"python_versions": python_versions,
+				"tox_py_versions": get_tox_python_versions(python_versions),
+				"third_party_version_matrix": {},
+				}
+
+	data_regression.check(ActionsManager.get_gh_actions_python_versions(FakeActionsManager()))
+
+
+@pytest.mark.parametrize(
+		"python_versions",
+		[
+				["3.6"],
+				["3.6", "3.7"],
+				["3.6", "3.7", "3.8"],
+				["3.6", "3.7", "3.8", "3.9-dev"],
+				["3.7", "3.8", "3.9-dev"],
+				["3.7", "3.8"],
+				["3.8"],
+				]
+		)
+def test_actions_manager_python_versions_matrix(python_versions, data_regression: DataRegressionFixture):
+
+	class FakeActionsManager:
+
+		templates = SimpleNamespace()
+		templates.globals = {
+				"python_versions": python_versions,
+				"tox_py_versions": get_tox_python_versions(python_versions),
+				"third_party_version_matrix": {"attrs": ["19.3", "20.1", "20.2", "latest"]},
+				}
+
+	data_regression.check(ActionsManager.get_gh_actions_python_versions(FakeActionsManager()))

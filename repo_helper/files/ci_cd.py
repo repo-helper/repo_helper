@@ -121,7 +121,7 @@ class ActionsManager:
 		self.workflows_dir = PathPlus(repo_path / ".github" / "workflows")
 		self.workflows_dir.maybe_make(parents=True)
 
-	def get_gh_actions_python_versions(self, ) -> Dict[str, str]:
+	def get_gh_actions_python_versions(self) -> Dict[str, str]:
 		"""
 		Prepares the mapping of Python versions to tox testenvs for use with GitHub Actions.
 
