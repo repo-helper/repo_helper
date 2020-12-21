@@ -215,7 +215,15 @@ class ToxConfig(IniConfigurator):
 		``[envlists]``.
 		"""
 
-		self._ini["envlists"]["test"] = self["tox_py_versions"]
+		if self["third_party_version_matrix"]:
+			third_party_library = list(self["third_party_version_matrix"].keys())[0]
+			third_party_versions = DelimitedList(self["third_party_version_matrix"][third_party_library])
+			matrix_testenv_string = f"-{third_party_library}{{{third_party_versions:,}}}"
+			tox_envs = [v + matrix_testenv_string for v in self["tox_py_versions"]]
+		else:
+			tox_envs = self["tox_py_versions"]
+
+		self._ini["envlists"]["test"] = tox_envs
 		self._ini["envlists"]["qa"] = ["mypy", "lint"]
 		if self["enable_tests"]:
 			self._ini["envlists"]["cov"] = [self["tox_py_versions"][0], "coverage"]
