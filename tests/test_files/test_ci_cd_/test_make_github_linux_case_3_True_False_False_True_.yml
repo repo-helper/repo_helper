@@ -70,7 +70,7 @@ jobs:
 
         if: startsWith(github.ref, 'refs/tags/')
 
-      - name: Upload distribution 📦 to PyPI
+      - name: Upload distribution to PyPI 🚀
         if: startsWith(github.ref, 'refs/tags/')
         uses: pypa/gh-action-pypi-publish@master
         with:

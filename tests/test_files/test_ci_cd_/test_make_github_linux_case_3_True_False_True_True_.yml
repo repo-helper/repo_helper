@@ -43,7 +43,7 @@ jobs:
         run: python -m tox -e "${{ matrix.config.testenvs }}"
 
 
-      - name: "Upload Coverage"
+      - name: "Upload Coverage 🚀"
         uses: actions/upload-artifact@v2
         with:
           name: "coverage-${{ matrix.config.python-version }}"
@@ -67,7 +67,7 @@ jobs:
           python -m pip install --upgrade pip setuptools wheel
           python -m pip install --upgrade coveralls coverage_pyver_pragma
 
-      - name: "Download Coverage"
+      - name: "Download Coverage 🪂"
         uses: actions/download-artifact@v2
         with:
           path: coverage
@@ -76,12 +76,12 @@ jobs:
         run: ls -R
         working-directory: coverage
 
-      - name: Combine Coverage
+      - name: Combine Coverage 👷
         run: |
           shopt -s globstar
           python -m coverage combine coverage/**/.coverage
 
-      - name: "Upload Combined Coverage Artefact"
+      - name: "Upload Combined Coverage Artefact 🚀"
         uses: actions/upload-artifact@v2
         with:
           name: "combined-coverage"
@@ -120,7 +120,7 @@ jobs:
 
         if: startsWith(github.ref, 'refs/tags/')
 
-      - name: Upload distribution 📦 to PyPI
+      - name: Upload distribution to PyPI 🚀
         if: startsWith(github.ref, 'refs/tags/')
         uses: pypa/gh-action-pypi-publish@master
         with:
