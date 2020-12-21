@@ -1,0 +1,254 @@
+repo_helper==2020.12.18
+├── apeye>=0.4.0
+│   ├── appdirs>=1.4.4
+│   ├── cachecontrol[filecache]>=0.12.6
+│   │   ├── requests
+│   │   │   ├── chardet<5,>=3.0.2
+│   │   │   ├── idna<3,>=2.5
+│   │   │   ├── urllib3<1.27,>=1.21.1
+│   │   │   └── certifi>=2017.4.17
+│   │   ├── msgpack>=0.5.2
+│   │   └── lockfile>=0.9; extra == "filecache"
+│   ├── domdf-python-tools>=0.9.0
+│   │   ├── colorama>=0.4.3
+│   │   ├── deprecation>=2.1.0
+│   │   │   └── packaging
+│   │   │       └── pyparsing>=2.0.2
+│   │   ├── natsort>=7.1.0
+│   │   ├── packaging>=20.4
+│   │   │   └── pyparsing>=2.0.2
+│   │   ├── pydash>=4.7.4
+│   │   └── typing-extensions>=3.7.4.3
+│   ├── lockfile>=0.12.2
+│   ├── requests>=2.24.0
+│   │   ├── chardet<5,>=3.0.2
+│   │   ├── idna<3,>=2.5
+│   │   ├── urllib3<1.27,>=1.21.1
+│   │   └── certifi>=2017.4.17
+│   └── tldextract>=2.2.0
+│       ├── idna
+│       ├── requests>=2.1.0
+│       │   ├── chardet<5,>=3.0.2
+│       │   ├── idna<3,>=2.5
+│       │   ├── urllib3<1.27,>=1.21.1
+│       │   └── certifi>=2017.4.17
+│       ├── requests-file>=1.4
+│       │   ├── requests>=1.0.0
+│       │   │   ├── chardet<5,>=3.0.2
+│       │   │   ├── idna<3,>=2.5
+│       │   │   ├── urllib3<1.27,>=1.21.1
+│       │   │   └── certifi>=2017.4.17
+│       │   └── six
+│       └── filelock>=3.0.8
+├── attrs>=20.2.0
+├── click==7.1.2
+├── configconfig>=0.4.0
+│   ├── domdf-python-tools>=0.10.0
+│   │   ├── colorama>=0.4.3
+│   │   ├── deprecation>=2.1.0
+│   │   │   └── packaging
+│   │   │       └── pyparsing>=2.0.2
+│   │   ├── natsort>=7.1.0
+│   │   ├── packaging>=20.4
+│   │   │   └── pyparsing>=2.0.2
+│   │   ├── pydash>=4.7.4
+│   │   └── typing-extensions>=3.7.4.3
+│   ├── jsonschema>=3.2.0
+│   │   ├── attrs>=17.4.0
+│   │   ├── pyrsistent>=0.14.0
+│   │   ├── setuptools
+│   │   └── six>=1.11.0
+│   ├── ruamel.yaml>=0.16.12
+│   │   └── ruamel.yaml.clib>=0.1.2; platform_python_implementation == "CPython" and python_version < "3.9"
+│   ├── typing-extensions>=3.7.4.3
+│   └── typing-inspect>=0.6.0
+│       ├── mypy-extensions>=0.3.0
+│       └── typing-extensions>=3.7.4
+├── consolekit>=0.5.0
+│   ├── click>=7.1.2
+│   ├── colorama>=0.4.3
+│   ├── domdf-python-tools>=1.3.0
+│   │   ├── colorama>=0.4.3
+│   │   ├── deprecation>=2.1.0
+│   │   │   └── packaging
+│   │   │       └── pyparsing>=2.0.2
+│   │   ├── natsort>=7.1.0
+│   │   ├── packaging>=20.4
+│   │   │   └── pyparsing>=2.0.2
+│   │   ├── pydash>=4.7.4
+│   │   └── typing-extensions>=3.7.4.3
+│   └── typing-extensions>=3.7.4.3
+├── css-parser==1.0.6
+├── domdf-python-tools>=1.8.0
+│   ├── colorama>=0.4.3
+│   ├── deprecation>=2.1.0
+│   │   └── packaging
+│   │       └── pyparsing>=2.0.2
+│   ├── natsort>=7.1.0
+│   ├── packaging>=20.4
+│   │   └── pyparsing>=2.0.2
+│   ├── pydash>=4.7.4
+│   └── typing-extensions>=3.7.4.3
+├── dulwich>=0.19.16
+│   ├── urllib3>=1.24.1
+│   └── certifi
+├── email-validator==1.1.2
+│   ├── idna>=2.0.0
+│   └── dnspython>=1.15.0
+├── isort>=5.0.0
+├── jinja2>=2.11.2
+│   └── MarkupSafe>=0.23
+├── natsort>=7.1.0
+├── packaging>=20.4
+│   └── pyparsing>=2.0.2
+├── pre-commit>=2.7.1
+│   ├── cfgv>=2.0.0
+│   ├── identify>=1.0.0
+│   ├── nodeenv>=0.11.1
+│   ├── pyyaml>=5.1
+│   ├── toml
+│   └── virtualenv>=20.0.8
+│       ├── appdirs<2,>=1.4.3
+│       ├── distlib<1,>=0.3.1
+│       ├── filelock<4,>=3.0.0
+│       └── six<2,>=1.9.0
+├── requests>=2.25.0
+│   ├── chardet<5,>=3.0.2
+│   ├── idna<3,>=2.5
+│   ├── urllib3<1.27,>=1.21.1
+│   └── certifi>=2017.4.17
+├── ruamel-yaml>=0.16.12
+├── shippinglabel>=0.8.0
+│   ├── apeye>=0.4.0
+│   │   ├── appdirs>=1.4.4
+│   │   ├── cachecontrol[filecache]>=0.12.6
+│   │   │   ├── requests
+│   │   │   │   ├── chardet<5,>=3.0.2
+│   │   │   │   ├── idna<3,>=2.5
+│   │   │   │   ├── urllib3<1.27,>=1.21.1
+│   │   │   │   └── certifi>=2017.4.17
+│   │   │   ├── msgpack>=0.5.2
+│   │   │   └── lockfile>=0.9; extra == "filecache"
+│   │   ├── domdf-python-tools>=0.9.0
+│   │   │   ├── colorama>=0.4.3
+│   │   │   ├── deprecation>=2.1.0
+│   │   │   │   └── packaging
+│   │   │   │       └── pyparsing>=2.0.2
+│   │   │   ├── natsort>=7.1.0
+│   │   │   ├── packaging>=20.4
+│   │   │   │   └── pyparsing>=2.0.2
+│   │   │   ├── pydash>=4.7.4
+│   │   │   └── typing-extensions>=3.7.4.3
+│   │   ├── lockfile>=0.12.2
+│   │   ├── requests>=2.24.0
+│   │   │   ├── chardet<5,>=3.0.2
+│   │   │   ├── idna<3,>=2.5
+│   │   │   ├── urllib3<1.27,>=1.21.1
+│   │   │   └── certifi>=2017.4.17
+│   │   └── tldextract>=2.2.0
+│   │       ├── idna
+│   │       ├── requests>=2.1.0
+│   │       │   ├── chardet<5,>=3.0.2
+│   │       │   ├── idna<3,>=2.5
+│   │       │   ├── urllib3<1.27,>=1.21.1
+│   │       │   └── certifi>=2017.4.17
+│   │       ├── requests-file>=1.4
+│   │       │   ├── requests>=1.0.0
+│   │       │   │   ├── chardet<5,>=3.0.2
+│   │       │   │   ├── idna<3,>=2.5
+│   │       │   │   ├── urllib3<1.27,>=1.21.1
+│   │       │   │   └── certifi>=2017.4.17
+│   │       │   └── six
+│   │       └── filelock>=3.0.8
+│   ├── appdirs>=1.4.4
+│   ├── consolekit>=0.1.2
+│   │   ├── click>=7.1.2
+│   │   ├── colorama>=0.4.3
+│   │   ├── domdf-python-tools>=1.3.0
+│   │   │   ├── colorama>=0.4.3
+│   │   │   ├── deprecation>=2.1.0
+│   │   │   │   └── packaging
+│   │   │   │       └── pyparsing>=2.0.2
+│   │   │   ├── natsort>=7.1.0
+│   │   │   ├── packaging>=20.4
+│   │   │   │   └── pyparsing>=2.0.2
+│   │   │   ├── pydash>=4.7.4
+│   │   │   └── typing-extensions>=3.7.4.3
+│   │   └── typing-extensions>=3.7.4.3
+│   ├── domdf-python-tools>=1.8.0
+│   │   ├── colorama>=0.4.3
+│   │   ├── deprecation>=2.1.0
+│   │   │   └── packaging
+│   │   │       └── pyparsing>=2.0.2
+│   │   ├── natsort>=7.1.0
+│   │   ├── packaging>=20.4
+│   │   │   └── pyparsing>=2.0.2
+│   │   ├── pydash>=4.7.4
+│   │   └── typing-extensions>=3.7.4.3
+│   ├── packaging>=20.7
+│   │   └── pyparsing>=2.0.2
+│   ├── trove-classifiers>=2020.10.21
+│   └── typing-extensions>=3.7.4.3
+├── southwark>=0.6.0
+│   ├── click>=7.1.2
+│   ├── consolekit>=0.1.2
+│   │   ├── click>=7.1.2
+│   │   ├── colorama>=0.4.3
+│   │   ├── domdf-python-tools>=1.3.0
+│   │   │   ├── colorama>=0.4.3
+│   │   │   ├── deprecation>=2.1.0
+│   │   │   │   └── packaging
+│   │   │   │       └── pyparsing>=2.0.2
+│   │   │   ├── natsort>=7.1.0
+│   │   │   ├── packaging>=20.4
+│   │   │   │   └── pyparsing>=2.0.2
+│   │   │   ├── pydash>=4.7.4
+│   │   │   └── typing-extensions>=3.7.4.3
+│   │   └── typing-extensions>=3.7.4.3
+│   ├── domdf-python-tools>=1.3.0
+│   │   ├── colorama>=0.4.3
+│   │   ├── deprecation>=2.1.0
+│   │   │   └── packaging
+│   │   │       └── pyparsing>=2.0.2
+│   │   ├── natsort>=7.1.0
+│   │   ├── packaging>=20.4
+│   │   │   └── pyparsing>=2.0.2
+│   │   ├── pydash>=4.7.4
+│   │   └── typing-extensions>=3.7.4.3
+│   ├── dulwich!=0.20.7,!=0.20.8,!=0.20.9,>=0.20.5
+│   │   ├── urllib3>=1.24.1
+│   │   └── certifi
+│   ├── filelock>=3.0.12
+│   └── typing-extensions>=3.7.4.3
+├── tomlkit>=0.7.0
+├── typing-extensions>=3.7.4.3
+└── yapf-isort>=0.5.2
+    ├── asttokens>=2.0.4
+    │   └── six
+    ├── click>=7.1.2
+    ├── consolekit>=0.3.0
+    │   ├── click>=7.1.2
+    │   ├── colorama>=0.4.3
+    │   ├── domdf-python-tools>=1.3.0
+    │   │   ├── colorama>=0.4.3
+    │   │   ├── deprecation>=2.1.0
+    │   │   │   └── packaging
+    │   │   │       └── pyparsing>=2.0.2
+    │   │   ├── natsort>=7.1.0
+    │   │   ├── packaging>=20.4
+    │   │   │   └── pyparsing>=2.0.2
+    │   │   ├── pydash>=4.7.4
+    │   │   └── typing-extensions>=3.7.4.3
+    │   └── typing-extensions>=3.7.4.3
+    ├── domdf-python-tools>=0.10.0
+    │   ├── colorama>=0.4.3
+    │   ├── deprecation>=2.1.0
+    │   │   └── packaging
+    │   │       └── pyparsing>=2.0.2
+    │   ├── natsort>=7.1.0
+    │   ├── packaging>=20.4
+    │   │   └── pyparsing>=2.0.2
+    │   ├── pydash>=4.7.4
+    │   └── typing-extensions>=3.7.4.3
+    ├── isort==5.5.2
+    └── yapf==0.30.0

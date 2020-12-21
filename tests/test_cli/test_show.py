@@ -104,7 +104,7 @@ class ShowRequirementsTest:
 				result: Result = runner.invoke(show.requirements, catch_exceptions=False, args="--no-venv")
 
 			assert result.exit_code == 0
-			check_file_regression(result.stdout.rstrip(), file_regression)
+			check_file_regression(result.stdout.rstrip(), file_regression, extension=".tree")
 
 	@version_specific
 	def test_requirements_concise(self, tmp_repo, file_regression: FileRegressionFixture, py_version):
@@ -118,14 +118,14 @@ class ShowRequirementsTest:
 						)
 
 			assert result.exit_code == 0
-			check_file_regression(result.stdout.rstrip(), file_regression)
+			check_file_regression(result.stdout.rstrip(), file_regression, extension=".tree")
 
 			with in_directory(directory):
 				runner = CliRunner()
 				result = runner.invoke(show.requirements, catch_exceptions=False, args=["-c", "--no-venv"])
 
 			assert result.exit_code == 0
-			check_file_regression(result.stdout.rstrip(), file_regression)
+			check_file_regression(result.stdout.rstrip(), file_regression, extension=".tree")
 
 	@version_specific
 	def test_requirements_no_pager(self, tmp_repo, file_regression: FileRegressionFixture, py_version):
@@ -139,7 +139,7 @@ class ShowRequirementsTest:
 						)
 
 			assert result.exit_code == 0
-			check_file_regression(result.stdout.rstrip(), file_regression)
+			check_file_regression(result.stdout.rstrip(), file_regression, extension=".tree")
 
 
 @not_windows("Output differs on Windows.")
@@ -148,7 +148,7 @@ class TestShowRequirements(ShowRequirementsTest):
 	pass
 
 
-def test_log(self, tmp_repo, file_regression: FileRegressionFixture):
+def test_log(tmp_repo, file_regression: FileRegressionFixture):
 
 	# TODO: -n/--entries
 	# TODO: -r/--reverse
@@ -161,4 +161,3 @@ def test_log(self, tmp_repo, file_regression: FileRegressionFixture):
 
 	assert result.exit_code == 0
 	check_file_regression(result.stdout.rstrip(), file_regression)
-
