@@ -74,10 +74,31 @@ def test_make_tox(
 	demo_environment.globals["enable_docs"] = enable_docs
 	demo_environment.globals["enable_devmode"] = enable_devmode
 	demo_environment.globals["code_only_warning"] = code_only_warning
-	demo_environment.globals["gh_actions_versions"] = {
-			"3.6": "py36, mypy",
-			"3.7": "py37, build",
-			}
+
+	make_tox(tmp_pathplus, demo_environment)
+	check_file_output(tmp_pathplus / "tox.ini", file_regression)
+
+
+def test_make_tox_matrix(
+		tmp_pathplus,
+		demo_environment,
+		file_regression: FileRegressionFixture,
+		):
+	demo_environment.globals.update(
+			enable_devmode=False,
+			enable_docs=False,
+			tox_testenv_extras='',
+			tox_requirements=[],
+			tox_build_requirements=[],
+			tox_unmanaged=[],
+			yapf_exclude=[],
+			mypy_deps=[],
+			py_modules=["hello_world"],
+			mypy_version="0.790",
+			tox_py_versions=["py36", "py37", "py38"],
+			code_only_warning=code_only_warning,
+			third_party_version_matrix={"attrs": ["19.3", "20.1", "20.2", "latest"]},
+			)
 
 	make_tox(tmp_pathplus, demo_environment)
 	check_file_output(tmp_pathplus / "tox.ini", file_regression)
