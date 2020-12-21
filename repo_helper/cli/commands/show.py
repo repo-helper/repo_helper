@@ -33,6 +33,7 @@ from typing import Iterable, List, Optional, Union
 import click
 from consolekit import CONTEXT_SETTINGS
 from consolekit.options import colour_option, no_pager_option
+from domdf_python_tools.paths import in_directory
 from packaging.requirements import Requirement
 from shippinglabel.requirements import ComparableRequirement, combine_requirements
 
@@ -215,8 +216,14 @@ def changelog(
 		default=False,
 		help="Show a consolidated list of all dependencies.",
 		)
+@click.option(
+		"--no-venv",
+		is_flag=True,
+		default=False,
+		help="Don't search a 'venv' directory in the repository for the requirements.",
+		)
 @show_command()
-def requirements(no_pager: bool = False, depth: int = -1, concise: bool = False):
+def requirements(no_pager: bool = False, depth: int = -1, concise: bool = False, no_venv: bool = False):
 	"""
 	Lists the requirements of this library, and their dependencies.
 	"""
@@ -235,53 +242,56 @@ def requirements(no_pager: bool = False, depth: int = -1, concise: bool = False)
 	from repo_helper.core import RepoHelper
 
 	rh = RepoHelper(PathPlus.cwd())
-	buf = StringList([f"{rh.templates.globals['pypi_name']}=={rh.templates.globals['version']}"])
-	raw_requirements = sorted(read_requirements("requirements.txt")[0])
-	tree: List[Union[str, List[str], List[Union[str, List]]]] = []
-	venv_dir = (rh.target_repo / "venv")
 
-	if venv_dir.is_dir():
-		# Use virtualenv as it exists
-		search_path = []
+	with in_directory(rh.target_repo):
 
-		for directory in (venv_dir / "lib").glob("python3.*"):
-			search_path.append(str(directory / "site-packages"))
+		buf = StringList([f"{rh.templates.globals['pypi_name']}=={rh.templates.globals['version']}"])
+		raw_requirements = sorted(read_requirements("requirements.txt")[0])
+		tree: List[Union[str, List[str], List[Union[str, List]]]] = []
+		venv_dir = (rh.target_repo / "venv")
 
-		importlib_metadata.DistributionFinder.Context.path = search_path
+		if venv_dir.is_dir() and not no_venv:
+			# Use virtualenv as it exists
+			search_path = []
 
-	if concise:
-		concise_requirements = []
+			for directory in (venv_dir / "lib").glob("python3.*"):
+				search_path.append(str(directory / "site-packages"))
 
-		def flatten(iterable: Iterable[Union[Requirement, Iterable]]):
-			for item in iterable:
-				if isinstance(item, str):
-					yield item
-				else:
-					yield from flatten(item)  # type: ignore
+			importlib_metadata.DistributionFinder.Context.path = search_path
 
-		for requirement in raw_requirements:
-			concise_requirements.append(requirement)
-			# TODO: remove "extra == " marker
-			for req in flatten(list_requirements(str(requirement), depth=depth - 1)):
-				concise_requirements.append(ComparableRequirement(re.sub('; extra == ".*"', '', req)))
+		if concise:
+			concise_requirements = []
 
-		concise_requirements = sorted(set(combine_requirements(concise_requirements)))
-		tree = list(map(str, concise_requirements))
+			def flatten(iterable: Iterable[Union[Requirement, Iterable]]):
+				for item in iterable:
+					if isinstance(item, str):
+						yield item
+					else:
+						yield from flatten(item)  # type: ignore
 
-	else:
-		for requirement in raw_requirements:
-			tree.append(str(requirement))
-			deps = list(list_requirements(str(requirement), depth=depth - 1))
-			if deps:
-				tree.append(deps)
+			for requirement in raw_requirements:
+				concise_requirements.append(requirement)
+				# TODO: remove "extra == " marker
+				for req in flatten(list_requirements(str(requirement), depth=depth - 1)):
+					concise_requirements.append(ComparableRequirement(re.sub('; extra == ".*"', '', req)))
 
-	buf.extend(make_tree(tree))
+			concise_requirements = sorted(set(combine_requirements(concise_requirements)))
+			tree = list(map(str, concise_requirements))
 
-	if shutil.get_terminal_size().lines >= len(buf):
-		# Don't use pager if fewer lines that terminal height
-		no_pager = True
+		else:
+			for requirement in raw_requirements:
+				tree.append(str(requirement))
+				deps = list(list_requirements(str(requirement), depth=depth - 1))
+				if deps:
+					tree.append(deps)
 
-	if no_pager:
-		click.echo(str(buf))
-	else:
-		click.echo_via_pager(str(buf))
+		buf.extend(make_tree(tree))
+
+		if shutil.get_terminal_size().lines >= len(buf):
+			# Don't use pager if fewer lines that terminal height
+			no_pager = True
+
+		if no_pager:
+			click.echo(str(buf))
+		else:
+			click.echo_via_pager(str(buf))
