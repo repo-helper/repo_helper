@@ -129,7 +129,7 @@ def test_write_metadata(builder, file_regression: FileRegressionFixture):
 			"default-values>=0.2.0",
 			"extras-require>=0.2.0",
 			"seed-intersphinx-mapping>=0.1.1",
-			"sphinx>=3.0.3",
+			"sphinx>=3.0.3,<3.4.0",
 			"sphinx-copybutton>=0.2.12",
 			"sphinx-notfound-page>=0.5",
 			"sphinx-prompt>=1.1.0",

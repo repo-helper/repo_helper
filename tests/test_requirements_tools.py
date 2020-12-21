@@ -34,7 +34,7 @@ def test_read_requirements(tmp_pathplus, file_regression: FileRegressionFixture)
 			"extras-require>=0.2.0",
 			"repo-helper-sphinx-theme>=0.0.2",
 			"seed-intersphinx-mapping>=0.1.1",
-			"sphinx>=3.0.3",
+			"sphinx>=3.0.3,<3.4.0",
 			"sphinx-click>=2.5.0",
 			"sphinx-copybutton>=0.2.12",
 			"sphinx-notfound-page>=0.5",

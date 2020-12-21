@@ -103,7 +103,7 @@ class DocRequirementsManager(RequirementsManager):
 			# ComparableRequirement("sphinx_autodoc_typehints>=1.11.0"),
 			ComparableRequirement("sphinx-copybutton>=0.2.12"),
 			ComparableRequirement("sphinx-prompt>=1.1.0"),
-			ComparableRequirement("sphinx>=3.0.3"),
+			ComparableRequirement("sphinx>=3.0.3,<3.4.0"),
 			}
 
 	def __init__(self, repo_path: PathLike, templates: jinja2.Environment):
