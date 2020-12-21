@@ -124,7 +124,10 @@ class third_party_version_matrix(ConfigVar):  # noqa
 	category: str = "python versions"
 
 	@classmethod
-	def validate(cls, raw_config_vars: Optional[Dict[str, Any]] = None) -> Dict[str, List[str]]:
+	def validate(  # noqa: D102
+			cls,
+			raw_config_vars: Optional[Dict[str, Any]] = None,
+			) -> Dict[str, List[str]]:
 
 		matrix = (raw_config_vars or {}).get(cls.__name__, {})
 
