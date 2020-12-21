@@ -5,7 +5,7 @@ import sys
 import pytest
 from click.testing import CliRunner, Result
 from domdf_python_tools.paths import PathPlus, in_directory
-from domdf_python_tools.testing import check_file_regression, min_version
+from domdf_python_tools.testing import check_file_regression, min_version, not_pypy, not_windows, only_windows
 from pytest_regressions.file_regression import FileRegressionFixture
 
 # this package
@@ -74,7 +74,14 @@ version_specific = pytest.mark.parametrize(
 								reason="Output differs on Python 3.7",
 								)
 						),
-				pytest.param("3.8+", marks=min_version(3.8, "Output differs on Python 3.8+")),
+				pytest.param(
+						"3.8",
+						marks=pytest.mark.skipif(
+								condition=sys.version_info[:2] != (3, 8),
+								reason="Output differs on Python 3.8",
+								)
+						),
+				pytest.param("3.9+", marks=min_version(3.9, "Output differs on Python 3.9+")),
 				]
 		)
 
@@ -84,60 +91,64 @@ show_directories = [
 		]
 
 
-# class TestShowRequirements:
+class ShowRequirementsTest:
 
-@version_specific
-def test_requirements(tmp_repo, file_regression: FileRegressionFixture, py_version):
-	# TODO: depth
+	@version_specific
+	def test_requirements(self, tmp_repo, file_regression: FileRegressionFixture, py_version):
+		# TODO: depth
 
-	for directory in show_directories:
+		for directory in show_directories:
 
-		with in_directory(directory):
-			runner = CliRunner()
-			result: Result = runner.invoke(show.requirements, catch_exceptions=False, args="--no-venv")
+			with in_directory(directory):
+				runner = CliRunner()
+				result: Result = runner.invoke(show.requirements, catch_exceptions=False, args="--no-venv")
 
-		assert result.exit_code == 0
-		check_file_regression(result.stdout.rstrip(), file_regression)
+			assert result.exit_code == 0
+			check_file_regression(result.stdout.rstrip(), file_regression)
 
+	@version_specific
+	def test_requirements_concise(self, tmp_repo, file_regression: FileRegressionFixture, py_version):
 
-@version_specific
-def test_requirements_concise(tmp_repo, file_regression: FileRegressionFixture, py_version):
+		for directory in show_directories:
 
-	for directory in show_directories:
+			with in_directory(directory):
+				runner = CliRunner()
+				result: Result = runner.invoke(
+						show.requirements, catch_exceptions=False, args=["--concise", "--no-venv"]
+						)
 
-		with in_directory(directory):
-			runner = CliRunner()
-			result: Result = runner.invoke(
-					show.requirements, catch_exceptions=False, args=["--concise", "--no-venv"]
-					)
+			assert result.exit_code == 0
+			check_file_regression(result.stdout.rstrip(), file_regression)
 
-		assert result.exit_code == 0
-		check_file_regression(result.stdout.rstrip(), file_regression)
+			with in_directory(directory):
+				runner = CliRunner()
+				result = runner.invoke(show.requirements, catch_exceptions=False, args=["-c", "--no-venv"])
 
-		with in_directory(directory):
-			runner = CliRunner()
-			result = runner.invoke(show.requirements, catch_exceptions=False, args=["-c", "--no-venv"])
+			assert result.exit_code == 0
+			check_file_regression(result.stdout.rstrip(), file_regression)
 
-		assert result.exit_code == 0
-		check_file_regression(result.stdout.rstrip(), file_regression)
+	@version_specific
+	def test_requirements_no_pager(self, tmp_repo, file_regression: FileRegressionFixture, py_version):
 
+		for directory in show_directories:
 
-@version_specific
-def test_requirements_no_pager(tmp_repo, file_regression: FileRegressionFixture, py_version):
+			with in_directory(directory):
+				runner = CliRunner()
+				result: Result = runner.invoke(
+						show.requirements, catch_exceptions=False, args=["--no-pager", "--no-venv"]
+						)
 
-	for directory in show_directories:
-
-		with in_directory(directory):
-			runner = CliRunner()
-			result: Result = runner.invoke(
-					show.requirements, catch_exceptions=False, args=["--no-pager", "--no-venv"]
-					)
-
-		assert result.exit_code == 0
-		check_file_regression(result.stdout.rstrip(), file_regression)
+			assert result.exit_code == 0
+			check_file_regression(result.stdout.rstrip(), file_regression)
 
 
-def test_log(tmp_repo, file_regression: FileRegressionFixture):
+@not_windows("Output differs on Windows.")
+@not_pypy("Output differs on PyPy.")
+class TestShowRequirements(ShowRequirementsTest):
+	pass
+
+
+def test_log(self, tmp_repo, file_regression: FileRegressionFixture):
 
 	# TODO: -n/--entries
 	# TODO: -r/--reverse
@@ -150,3 +161,4 @@ def test_log(tmp_repo, file_regression: FileRegressionFixture):
 
 	assert result.exit_code == 0
 	check_file_regression(result.stdout.rstrip(), file_regression)
+
