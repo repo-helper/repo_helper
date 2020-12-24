@@ -100,9 +100,14 @@ def fixed_version_number(monkeypatch):
 
 class ShowRequirementsTest:
 
-	@pytest.mark.usefixtures("fixed_version_number")
 	@version_specific
-	def test_requirements(self, tmp_repo, file_regression: FileRegressionFixture, py_version):
+	def test_requirements(
+			self,
+			tmp_repo,
+			file_regression: FileRegressionFixture,
+			py_version,
+			fixed_version_number,
+			):
 		# TODO: depth
 
 		for directory in show_directories:
@@ -114,9 +119,14 @@ class ShowRequirementsTest:
 			assert result.exit_code == 0
 			check_file_regression(result.stdout.rstrip(), file_regression, extension=".tree")
 
-	@pytest.mark.usefixtures("fixed_version_number")
 	@version_specific
-	def test_requirements_concise(self, tmp_repo, file_regression: FileRegressionFixture, py_version):
+	def test_requirements_concise(
+			self,
+			tmp_repo,
+			file_regression: FileRegressionFixture,
+			py_version,
+			fixed_version_number,
+			):
 
 		for directory in show_directories:
 
@@ -136,9 +146,14 @@ class ShowRequirementsTest:
 			assert result.exit_code == 0
 			check_file_regression(result.stdout.rstrip(), file_regression, extension=".tree")
 
-	@pytest.mark.usefixtures("fixed_version_number")
 	@version_specific
-	def test_requirements_no_pager(self, tmp_repo, file_regression: FileRegressionFixture, py_version):
+	def test_requirements_no_pager(
+			self,
+			tmp_repo,
+			file_regression: FileRegressionFixture,
+			py_version,
+			fixed_version_number,
+			):
 
 		for directory in show_directories:
 
