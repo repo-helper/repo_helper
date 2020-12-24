@@ -20,4 +20,16 @@
 #  MA 02110-1301, USA.
 #
 
+# 3rd party
+import pytest
+
+# this package
+from repo_helper.configuration import metadata
+
 pytest_plugins = ("domdf_python_tools.testing", "repo_helper.testing")
+
+
+@pytest.fixture()
+def fixed_version_number(monkeypatch):
+	monkeypatch.setattr(metadata.version, "validator", lambda *args: "2020.12.18")
+	yield

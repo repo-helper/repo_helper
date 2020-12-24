@@ -92,12 +92,6 @@ show_directories = [
 		]
 
 
-@pytest.fixture()
-def fixed_version_number(monkeypatch):
-	monkeypatch.setattr(metadata.version, "validator", lambda *args: "2020.12.18")
-	yield
-
-
 class ShowRequirementsTest:
 
 	@version_specific
