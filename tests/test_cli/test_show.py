@@ -10,6 +10,7 @@ from pytest_regressions.file_regression import FileRegressionFixture
 
 # this package
 from repo_helper.cli.commands import show
+from repo_helper.configuration import metadata
 
 
 def test_version(tmp_repo, file_regression: FileRegressionFixture):
@@ -91,8 +92,15 @@ show_directories = [
 		]
 
 
+@pytest.fixture()
+def fixed_version_number(monkeypatch):
+	monkeypatch.setattr(metadata.version, "validator", lambda *args: "2020.12.18")
+	yield
+
+
 class ShowRequirementsTest:
 
+	@pytest.mark.usefixtures("fixed_version_number")
 	@version_specific
 	def test_requirements(self, tmp_repo, file_regression: FileRegressionFixture, py_version):
 		# TODO: depth
@@ -106,6 +114,7 @@ class ShowRequirementsTest:
 			assert result.exit_code == 0
 			check_file_regression(result.stdout.rstrip(), file_regression, extension=".tree")
 
+	@pytest.mark.usefixtures("fixed_version_number")
 	@version_specific
 	def test_requirements_concise(self, tmp_repo, file_regression: FileRegressionFixture, py_version):
 
@@ -127,6 +136,7 @@ class ShowRequirementsTest:
 			assert result.exit_code == 0
 			check_file_regression(result.stdout.rstrip(), file_regression, extension=".tree")
 
+	@pytest.mark.usefixtures("fixed_version_number")
 	@version_specific
 	def test_requirements_no_pager(self, tmp_repo, file_regression: FileRegressionFixture, py_version):
 
