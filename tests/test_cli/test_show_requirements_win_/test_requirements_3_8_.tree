@@ -79,7 +79,7 @@ repo_helper==2020.12.18
 │   │   └── typing-extensions>=3.7.4.3
 │   └── typing-extensions>=3.7.4.3
 ├── css-parser==1.0.6
-├── domdf-python-tools>=1.8.0
+├── domdf-python-tools>=2.0.0
 │   ├── colorama>=0.4.3
 │   ├── deprecation>=2.1.0
 │   │   └── packaging
@@ -175,7 +175,7 @@ repo_helper==2020.12.18
 │   │   │   ├── pydash>=4.7.4
 │   │   │   └── typing-extensions>=3.7.4.3
 │   │   └── typing-extensions>=3.7.4.3
-│   ├── domdf-python-tools>=1.8.0
+│   ├── domdf-python-tools>=2.0.0
 │   │   ├── colorama>=0.4.3
 │   │   ├── deprecation>=2.1.0
 │   │   │   └── packaging
