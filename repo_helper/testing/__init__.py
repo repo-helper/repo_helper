@@ -292,6 +292,7 @@ def builder_smoke_test(
 	"""
 
 	ret = 0
+	build_time = -1
 
 	target_dir = PathPlus(target_dir)
 
