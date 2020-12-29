@@ -28,12 +28,20 @@ import pathlib
 import shutil
 
 # 3rd party
-import click
+from consolekit.options import flag_option
 
 # this package
 from repo_helper.cli import cli_command
 
-__all__ = ["depycache", "demypycache", "depytestcache", "demolish", "detox", "rmdir", "broomstick"]
+__all__ = [
+		"depycache",
+		"demypycache",
+		"depytestcache",
+		"demolish",
+		"detox",
+		"rmdir",
+		"broomstick",
+		]
 
 
 def depycache(base_dir: pathlib.Path, quiet: bool = False):
@@ -127,19 +135,8 @@ def rmdir(directory: pathlib.Path, quiet: bool = False):
 		shutil.rmtree(directory)
 
 
-@click.option(
-		"--rm-tox",
-		is_flag=True,
-		default=False,
-		help="Remove the '.tox' directory too.",
-		)
-@click.option(
-		"-v",
-		"--verbose",
-		is_flag=True,
-		default=False,
-		help="Show verbose output.",
-		)
+@flag_option("--rm-tox", help="Also remove the '.tox' directory")
+@flag_option("-v", "--verbose", help="Show verbose output.")
 @cli_command()
 def broomstick(rm_tox: bool = False, verbose: bool = False):
 	"""

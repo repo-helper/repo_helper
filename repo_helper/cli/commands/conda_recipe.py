@@ -25,6 +25,7 @@ Conda recipe builder.
 
 # 3rd party
 import click
+from consolekit.options import auto_default_option
 
 # this package
 from repo_helper.cli import cli_command
@@ -32,7 +33,13 @@ from repo_helper.cli import cli_command
 __all__ = ["make_recipe"]
 
 
-@click.option("-o", "--out-dir", type=click.STRING, default="./conda/", help="The output directory.")
+@auto_default_option(
+		"-o",
+		"--out-dir",
+		type=click.STRING,
+		help="The output directory.",
+		show_default=True,
+		)
 @cli_command()
 def make_recipe(out_dir: str = "./conda/"):
 	"""

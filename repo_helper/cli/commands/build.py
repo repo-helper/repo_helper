@@ -28,6 +28,7 @@ from typing import Optional
 
 # 3rd party
 import click
+from consolekit.options import flag_option
 from domdf_python_tools.typing import PathLike
 
 # this package
@@ -39,10 +40,10 @@ __all__ = ["build"]
 @click.argument("repository", type=click.STRING, default='.')
 @click.option("--build-dir", type=click.STRING, default=None, help="The temporary build directory.")
 @click.option("-o", "--out-dir", type=click.STRING, default=None, help="The output directory.")
-@click.option("-v", "--verbose", is_flag=True, default=False, help="Enable verbose output.")
-@click.option("-b", "--binary", is_flag=True, default=False, help="Build a binary wheel.")
-@click.option("-s", "--source", is_flag=True, default=False, help="Build a source distribution.")
-@click.option("-c", "--conda", is_flag=True, default=False, help="Build a conda distribution.")
+@flag_option("-v", "--verbose", help="Enable verbose output.")
+@flag_option("-b", "--binary", help="Build a binary wheel.")
+@flag_option("-s", "--source", help="Build a source distribution.")
+@flag_option("-c", "--conda", help="Build a conda distribution.")
 @cli_command()
 def build(
 		repository: PathLike = '.',

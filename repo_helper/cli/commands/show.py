@@ -24,7 +24,6 @@ Show information about the repository.
 #
 
 # stdlib
-import re
 from datetime import datetime
 from functools import partial
 from typing import Iterable, List, Optional, Union
@@ -32,10 +31,7 @@ from typing import Iterable, List, Optional, Union
 # 3rd party
 import click
 from consolekit import CONTEXT_SETTINGS
-from consolekit.options import colour_option, no_pager_option
-from domdf_python_tools.paths import in_directory
-from packaging.requirements import Requirement
-from shippinglabel.requirements import ComparableRequirement, combine_requirements
+from consolekit.options import auto_default_option, colour_option, flag_option, no_pager_option
 
 # this package
 from repo_helper.cli import cli_group
@@ -83,40 +79,27 @@ def version() -> None:
 			break
 
 
-@click.option(
+@auto_default_option(
 		"-n",
 		"--entries",
 		type=click.INT,
-		default=None,
 		help="Maximum number of entries to display.",
 		)
-@click.option(
-		"-r",
-		"--reverse",
-		is_flag=True,
-		default=False,
-		help="Print entries in reverse order.",
-		)
-@click.option(
+@flag_option("-r", "--reverse", help="Print entries in reverse order.")
+@auto_default_option(
 		"--from-date",
 		type=click.DateTime(),
-		default=None,
 		help="Show commits after the given date.",
 		)
-@click.option(
-		"--from-tag",
-		type=click.STRING,
-		default=None,
-		help="Show commits after the given tag.",
-		)
+@auto_default_option("--from-tag", type=click.STRING, help="Show commits after the given tag.")
 @colour_option()
 @no_pager_option()
 @show_command()
 def log(
-		entries: Optional[int],
-		reverse: bool,
-		from_date: Optional[datetime],
-		from_tag: Optional[str],
+		entries: Optional[int] = None,
+		reverse: bool = False,
+		from_date: Optional[datetime] = None,
+		from_tag: Optional[str] = None,
 		colour: Optional[bool] = None,
 		no_pager: bool = False
 		) -> int:
@@ -146,26 +129,20 @@ def log(
 	return 0
 
 
-@click.option(
+@auto_default_option(
 		"-n",
 		"--entries",
 		type=click.INT,
 		default=None,
 		help="Maximum number of entries to display.",
 		)
-@click.option(
-		"-r",
-		"--reverse",
-		is_flag=True,
-		default=False,
-		help="Print entries in reverse order.",
-		)
+@flag_option("-r", "--reverse", help="Print entries in reverse order.")
 @colour_option()
 @show_command()
 @no_pager_option()
 def changelog(
-		entries: Optional[int],
-		reverse: bool,
+		entries: Optional[int] = None,
+		reverse: bool = False,
 		colour: Optional[bool] = None,
 		no_pager: bool = False,
 		):
@@ -202,41 +179,42 @@ def changelog(
 
 
 @no_pager_option()
-@click.option(
+@auto_default_option(
 		"-d",
 		"--depth",
 		type=click.INT,
-		default=-1,
 		help="The maximum depth to display. -1 means infinite depth.",
+		show_default=True,
 		)
-@click.option(
-		"-c",
-		"--concise",
-		is_flag=True,
-		default=False,
-		help="Show a consolidated list of all dependencies.",
-		)
-@click.option(
-		"--no-venv",
-		is_flag=True,
-		default=False,
-		help="Don't search a 'venv' directory in the repository for the requirements.",
-		)
+@flag_option("-c", "--concise", help="Show a consolidated list of all dependencies.")
+@flag_option("--no-venv", help="Don't search a 'venv' directory in the repository for the requirements.")
 @show_command()
-def requirements(no_pager: bool = False, depth: int = -1, concise: bool = False, no_venv: bool = False):
+def requirements(
+		no_pager: bool = False,
+		depth: int = -1,
+		concise: bool = False,
+		no_venv: bool = False,
+		):
 	"""
 	Lists the requirements of this library, and their dependencies.
 	"""
 
 	# stdlib
+	import re
 	import shutil
 
 	# 3rd party
 	from domdf_python_tools.compat import importlib_metadata
 	from domdf_python_tools.iterative import make_tree
-	from domdf_python_tools.paths import PathPlus
+	from domdf_python_tools.paths import PathPlus, in_directory
 	from domdf_python_tools.stringlist import StringList
-	from shippinglabel.requirements import list_requirements, read_requirements
+	from packaging.requirements import Requirement
+	from shippinglabel.requirements import (
+			ComparableRequirement,
+			combine_requirements,
+			list_requirements,
+			read_requirements
+			)
 
 	# this package
 	from repo_helper.core import RepoHelper

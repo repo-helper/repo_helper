@@ -47,8 +47,6 @@ def wizard() -> None:
 	Run the wizard 🧙 to create a 'repo_helper.yml' file.
 	"""
 
-	# Import here to save time when the user calls --help or makes an error.
-
 	# stdlib
 	from io import StringIO
 
@@ -92,9 +90,8 @@ def wizard() -> None:
 	modname = prompt("Name")
 
 	# ---------- name ----------
-	click.echo("""
-The name of the author.
-The author is usually the person who wrote the library.""")
+	click.echo("The name of the author.")
+	click.echo("The author is usually the person who wrote the library.")
 
 	git_config = r.get_config_stack()
 
@@ -130,11 +127,8 @@ The author is usually the person who wrote the library.""")
 			click.echo("That is not a valid email address.")
 
 	# ---------- username ----------
-	click.echo(
-			"""
-The username of the author.
-(repo_helper naïvely assumes that you use the same username on GitHub as on other sites.)"""
-			)
+	click.echo("The username of the author.")
+	click.echo("(repo_helper naïvely assumes that you use the same username on GitHub as on other sites.)")
 	username = prompt("Username", default=author)
 	# TODO: validate username
 
@@ -154,10 +148,10 @@ Not all SPDX identifiers are allowed as not all map to PyPI Trove classifiers.""
 			)
 	while True:
 		license_ = prompt("License")
-		try:
-			license_lookup[license_]  # pylint: disable=pointless-statement
+
+		if license_ in license_lookup:
 			break
-		except KeyError:
+		else:
 			click.echo("That is not a valid identifier.")
 
 	# ---------- short_desc ----------

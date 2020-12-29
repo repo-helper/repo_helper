@@ -31,7 +31,7 @@ from typing import Iterator, Optional
 # 3rd party
 import click
 from consolekit import CONTEXT_SETTINGS
-from natsort import natsorted  # type: ignore
+from consolekit.options import auto_default_option, flag_option
 
 # this package
 from repo_helper.cli import cli_group
@@ -70,28 +70,25 @@ def suggest() -> None:
 suggest_command = partial(suggest.command, context_settings=CONTEXT_SETTINGS)
 
 
-@click.option(
-		"--add/--no-add",
-		is_flag=True,
-		default=None,
-		help="Add the classifiers to the 'repo_helper.yml' file.",
-		)
-@click.option(
+@flag_option("--add/--no-add", help="Add the classifiers to the 'repo_helper.yml' file.")
+@auto_default_option(
 		"-s",
 		"--status",
 		type=click.IntRange(1, 7),
-		default=None,
 		help="The Development Status of this project.",
 		)
-@click.option(
+@flag_option(
 		"-l",
 		"--library/--not-library",
-		is_flag=True,
 		default=None,
 		help="Indicates this project is a library for developers.",
 		)
 @suggest_command()
-def classifiers(add: bool, status: Optional[int], library: Optional[bool]):
+def classifiers(
+		add: bool,
+		status: Optional[int] = None,
+		library: Optional[bool] = None,
+		):
 	"""
 	Suggest trove classifiers based on repository metadata.
 	"""
@@ -102,6 +99,7 @@ def classifiers(add: bool, status: Optional[int], library: Optional[bool]):
 	# 3rd party
 	from consolekit.input import choice, confirm
 	from domdf_python_tools.paths import PathPlus
+	from natsort import natsorted  # type: ignore
 	from shippinglabel.classifiers import classifiers_from_requirements
 	from shippinglabel.requirements import combine_requirements, read_requirements
 

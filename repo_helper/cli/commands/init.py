@@ -64,9 +64,15 @@ def init(ctx, force: bool, commit: bool, message: str):
 	if ctx.obj["commit"] is not None:
 		commit = ctx.obj["commit"]
 
-	path = PathPlus.cwd()
+	ret = run_repo_helper(
+			path=PathPlus.cwd(),
+			force=force,
+			initialise=True,
+			commit=commit,
+			message=message,
+			)
 
-	sys.exit(run_repo_helper(path=path, force=force, initialise=True, commit=commit, message=message))
+	sys.exit(ret)
 
 
 base_license_url = RequestsURL("https://raw.githubusercontent.com/licenses/license-templates/master/templates/")
