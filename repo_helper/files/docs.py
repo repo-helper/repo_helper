@@ -132,10 +132,10 @@ class DocRequirementsManager(RequirementsManager):
 		# Mapping of pypi_name to version specifier
 		my_sphinx_extensions = {
 				"extras-require": ">=0.2.0",
-				"seed-intersphinx-mapping": ">=0.1.1",
-				"default-values": ">=0.2.0",
-				"toctree-plus": ">=0.0.4",
-				"sphinx-toolbox": ">=1.8.2",
+				"seed-intersphinx-mapping": ">=0.3.1",
+				"default-values": ">=0.4.2",
+				"toctree-plus": ">=0.1.0",
+				"sphinx-toolbox": ">=1.8.3",
 				}
 
 		for name, specifier in my_sphinx_extensions.items():
