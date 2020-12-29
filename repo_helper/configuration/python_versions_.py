@@ -24,8 +24,7 @@ r"""
 #
 
 # stdlib
-from collections import Sequence
-from typing import Any, Dict, Iterable, List, Optional, Union
+from typing import Any, Dict, Iterable, List, Optional, Sequence, Union
 
 # 3rd party
 from configconfig.configvar import ConfigVar
