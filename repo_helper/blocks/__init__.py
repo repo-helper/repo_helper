@@ -545,8 +545,8 @@ class ShieldsBlock:
 			substitutions["supported-implementations"] = self.make_python_implementations_shield(pypi_name)
 			substitutions["wheel"] = self.make_wheel_shield(pypi_name)
 
-		sections["Activity"].append("pypi-downloads")
-		substitutions["pypi-downloads"] = self.make_pypi_downloads_shield(pypi_name)
+			sections["Activity"].append("pypi-downloads")
+			substitutions["pypi-downloads"] = self.make_pypi_downloads_shield(pypi_name)
 
 		if self.conda:
 			sections["Anaconda"] = ["conda-version", "conda-platform"]
