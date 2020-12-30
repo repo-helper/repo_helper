@@ -25,6 +25,7 @@ Manage configuration files for continuous integration / continuous deployment.
 
 # stdlib
 import pathlib
+import posixpath
 from typing import Dict, Iterator, List
 
 # 3rd party
@@ -495,9 +496,11 @@ def ensure_bumpversion(repo_path: pathlib.Path, templates: jinja2.Environment) -
 		for modname in templates.globals["py_modules"]:
 			required_sections.append(f"bumpversion:file:{templates.globals['source_dir']}{modname}.py")
 	elif not templates.globals["stubs_package"]:
-		required_sections.append(
-				f"bumpversion:file:{templates.globals['source_dir']}{templates.globals['import_name']}/__init__.py"
+		source_dir = posixpath.join(
+				templates.globals["source_dir"],
+				templates.globals["import_name"].replace('.', '/'),
 				)
+		required_sections.append(f"bumpversion:file:{source_dir}/__init__.py")
 
 	for section in required_sections:
 		if section not in bv.sections():
