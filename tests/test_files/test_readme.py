@@ -42,7 +42,13 @@ from repo_helper.files.readme import rewrite_readme
 		"input_c.rst",
 		"input_d.rst",
 		])
-def test_rewrite_readme(tmp_pathplus, demo_environment, file_regression: FileRegressionFixture, filename):
+def test_rewrite_readme(
+		tmp_pathplus,
+		demo_environment,
+		file_regression: FileRegressionFixture,
+		filename,
+		fixed_date,
+		):
 	demo_environment.globals["version"] = "1.2.3"
 	demo_environment.globals["enable_docs"] = True
 	demo_environment.globals["docker_shields"] = False

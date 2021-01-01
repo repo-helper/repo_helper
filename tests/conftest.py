@@ -20,6 +20,9 @@
 #  MA 02110-1301, USA.
 #
 
+# stdlib
+import datetime
+
 # 3rd party
 import pytest
 
@@ -33,3 +36,19 @@ pytest_plugins = ("domdf_python_tools.testing", "repo_helper.testing")
 def fixed_version_number(monkeypatch):
 	monkeypatch.setattr(metadata.version, "validator", lambda *args: "2020.12.18")
 	yield
+
+
+@pytest.fixture()
+def fixed_date(monkeypatch):
+
+	class DT(datetime.datetime):
+
+		@classmethod
+		def today(cls):
+			return datetime.datetime(2020, 10, 13)
+
+		@classmethod
+		def now(cls, tz=None):
+			return datetime.datetime(2020, 10, 13, 2, 20)
+
+	monkeypatch.setattr(datetime, "datetime", DT)

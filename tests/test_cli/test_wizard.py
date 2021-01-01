@@ -14,7 +14,7 @@ from dulwich.config import StackedConfig
 from repo_helper.cli.commands.wizard import wizard
 
 
-def test_wizard(temp_empty_repo, file_regression):
+def test_wizard(temp_empty_repo, file_regression, fixed_date):
 	with in_directory(temp_empty_repo.path):
 		runner = CliRunner()
 
@@ -72,7 +72,7 @@ def test_wizard(temp_empty_repo, file_regression):
 		assert stdout[6] == "Aborted!"
 
 
-def test_wizard_validation(temp_empty_repo, file_regression):
+def test_wizard_validation(temp_empty_repo, file_regression, fixed_date):
 	with in_directory(temp_empty_repo.path):
 
 		runner = CliRunner()
@@ -108,7 +108,7 @@ def test_wizard_validation(temp_empty_repo, file_regression):
 		check_file_output((temp_empty_repo.path / "repo_helper.yml"), file_regression)
 
 
-def test_wizard_git_config(temp_empty_repo, file_regression):
+def test_wizard_git_config(temp_empty_repo, file_regression, fixed_date):
 	with in_directory(temp_empty_repo.path):
 
 		(temp_empty_repo.path / ".git" / "config").write_lines([
@@ -143,7 +143,7 @@ def test_wizard_git_config(temp_empty_repo, file_regression):
 		condition=sys.platform == "win32",
 		reason="Environment variable not being read.",
 		)
-def test_wizard_env_vars(temp_empty_repo, file_regression, monkeypatch):
+def test_wizard_env_vars(temp_empty_repo, file_regression, monkeypatch, fixed_date):
 	# Monkeypatch dulwich so it doesn't try to use the global config.
 	monkeypatch.setattr(StackedConfig, "default_backends", lambda *args: [], raising=True)
 	monkeypatch.setenv("GIT_COMMITTER_NAME", "Guido")

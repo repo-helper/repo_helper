@@ -24,10 +24,10 @@ Wizard 🧙‍ for creating a 'repo_helper.yml' file.
 #
 
 # stdlib
+import datetime
 import getpass
 import os
 import socket
-from datetime import datetime
 
 # 3rd party
 import click
@@ -138,7 +138,7 @@ def wizard() -> None:
 
 	# ---------- copyright_years ----------
 	click.echo("\nThe copyright years for the library.")
-	copyright_years = prompt("Copyright years", default=str(datetime.today().year), type=str)
+	copyright_years = prompt("Copyright years", default=str(datetime.datetime.today().year), type=str)
 
 	# ---------- license_ ----------
 	click.echo(
