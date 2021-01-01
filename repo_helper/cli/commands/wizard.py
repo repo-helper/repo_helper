@@ -5,7 +5,7 @@
 Wizard 🧙‍ for creating a 'repo_helper.yml' file.
 """
 #
-#  Copyright © 2020 Dominic Davis-Foster <dominic@davis-foster.co.uk>
+#  Copyright © 2020-2021 Dominic Davis-Foster <dominic@davis-foster.co.uk>
 #
 #  This program is free software; you can redistribute it and/or modify
 #  it under the terms of the GNU Lesser General Public License as published by
@@ -90,7 +90,7 @@ def wizard() -> None:
 	modname = prompt("Name")
 
 	# ---------- name ----------
-	click.echo("The name of the author.")
+	click.echo("\nThe name of the author.")
 	click.echo("The author is usually the person who wrote the library.")
 
 	git_config = r.get_config_stack()
@@ -127,7 +127,7 @@ def wizard() -> None:
 			click.echo("That is not a valid email address.")
 
 	# ---------- username ----------
-	click.echo("The username of the author.")
+	click.echo("\nThe username of the author.")
 	click.echo("(repo_helper naïvely assumes that you use the same username on GitHub as on other sites.)")
 	username = prompt("Username", default=author)
 	# TODO: validate username

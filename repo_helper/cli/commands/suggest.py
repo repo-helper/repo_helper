@@ -5,7 +5,7 @@
 Suggest trove classifiers and keywords.
 """
 #
-#  Copyright © 2020 Dominic Davis-Foster <dominic@davis-foster.co.uk>
+#  Copyright © 2020-2021 Dominic Davis-Foster <dominic@davis-foster.co.uk>
 #
 #  This program is free software; you can redistribute it and/or modify
 #  it under the terms of the GNU Lesser General Public License as published by
@@ -70,7 +70,7 @@ def suggest() -> None:
 suggest_command = partial(suggest.command, context_settings=CONTEXT_SETTINGS)
 
 
-@flag_option("--add/--no-add", help="Add the classifiers to the 'repo_helper.yml' file.")
+@flag_option("--add/--no-add", help="Add the classifiers to the 'repo_helper.yml' file.", default=None)
 @auto_default_option(
 		"-s",
 		"--status",
