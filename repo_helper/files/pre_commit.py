@@ -5,7 +5,7 @@
 Configuration for `pre-commit <https://pre-commit.com>`_.
 """
 #
-#  Copyright © 2020 Dominic Davis-Foster <dominic@davis-foster.co.uk>
+#  Copyright © 2020-2021 Dominic Davis-Foster <dominic@davis-foster.co.uk>
 #
 #  This program is free software; you can redistribute it and/or modify
 #  it under the terms of the GNU Lesser General Public License as published by
@@ -247,7 +247,7 @@ def make_pre_commit(repo_path: pathlib.Path, templates: jinja2.Environment) -> L
 
 	flake8_dunder_all = Repo(
 			repo=make_github_url("domdfcoding", "flake8-dunder-all"),
-			rev="v0.1.3",
+			rev="v0.1.4",
 			hooks=[{
 					"id": "ensure-dunder-all",
 					"files": fr"^{import_name}{'-stubs' if stubs_package else ''}/.*\.py$"
