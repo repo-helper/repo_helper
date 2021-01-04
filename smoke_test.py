@@ -76,14 +76,20 @@ with tempfile.TemporaryDirectory() as tmpdir:
 
 		target_dir = tmpdir_p / f"{username}_{repository}"
 
-		repo_ret, build_time = builder_smoke_test(
-			target_dir,
-			username,
-			repository,
-			actions=is_running_on_actions(),
-			)
+		try:
+			repo_ret, build_time = builder_smoke_test(
+					target_dir,
+					username,
+					repository,
+					actions=is_running_on_actions(),
+					)
+
+			build_times.append(build_time)
+		except Exception as e:
+			print(e)
+			repo_ret = 0
+
 		status[f"{username}/{repository}"] = repo_ret
-		build_times.append(build_time)
 
 print('\n')
 if is_running_on_actions():

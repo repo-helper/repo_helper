@@ -292,85 +292,78 @@ def builder_smoke_test(
 	"""
 
 	ret = 0
-	build_time: float = -1
-
 	target_dir = PathPlus(target_dir)
 
-	try:
-		url = GITHUB_COM / username / repository
+	url = GITHUB_COM / username / repository
 
-		if actions:
-			print(f"::group::{username}_{repository}")
-		else:
-			print("==============================================")
-		print(f"Cloning {url!s} -> {target_dir!s}")
+	if actions:
+		print(f"::group::{username}_{repository}")
+	else:
+		print("==============================================")
+	print(f"Cloning {url!s} -> {target_dir!s}")
 
-		if actions:
-			errstream = BytesIO()
-		else:
-			errstream = default_bytes_err_stream
+	if actions:
+		errstream = BytesIO()
+	else:
+		errstream = default_bytes_err_stream
 
-		clone(str(url), str(target_dir), depth=1, errstream=errstream)
+	clone(str(url), str(target_dir), depth=1, errstream=errstream)
 
-		with in_directory(target_dir):
-			# Run their tests
-			# make_pyproject(target_dir, templates)
-			# print((target_dir / "pyproject.toml").read_text())
-			# test_process = Popen(["python3", "-m", "tox", "-n", "test"])
-			# (output, err) = test_process.communicate()
-			# exit_code = test_process.wait()
-			# ret |= exit_code
+	with in_directory(target_dir):
+		# Run their tests
+		# make_pyproject(target_dir, templates)
+		# print((target_dir / "pyproject.toml").read_text())
+		# test_process = Popen(["python3", "-m", "tox", "-n", "test"])
+		# (output, err) = test_process.communicate()
+		# exit_code = test_process.wait()
+		# ret |= exit_code
 
-			# Test pyp517
-			# make_pyproject(target_dir, templates)
-			# print((target_dir / "pyproject.toml").read_text())
-			# tox_process = Popen(["python3", "-m", "tox", "-e", "build"])
-			# (output, err) = tox_process.communicate()
-			# exit_code = tox_process.wait()
-			# ret |= exit_code
+		# Test pyp517
+		# make_pyproject(target_dir, templates)
+		# print((target_dir / "pyproject.toml").read_text())
+		# tox_process = Popen(["python3", "-m", "tox", "-e", "build"])
+		# (output, err) = tox_process.communicate()
+		# exit_code = tox_process.wait()
+		# ret |= exit_code
 
-			# Test repo_helper.build
-			start_time = time.time()
-			build_wheel(target_dir / "dist")
-			build_sdist(target_dir / "dist")
+		# Test repo_helper.build
+		start_time = time.time()
+		build_wheel(target_dir / "dist")
+		build_sdist(target_dir / "dist")
 
-			if conda:
-				with tempfile.TemporaryDirectory() as tmpdir:
-					builder = Builder(
-							repo_dir=PathPlus.cwd(),
-							build_dir=tmpdir,
-							out_dir=target_dir / "conda_dist",
-							verbose=True,
-							)
-					builder.build_conda()
+		if conda:
+			with tempfile.TemporaryDirectory() as tmpdir:
+				builder = Builder(
+						repo_dir=PathPlus.cwd(),
+						build_dir=tmpdir,
+						out_dir=target_dir / "conda_dist",
+						verbose=True,
+						)
+				builder.build_conda()
 
-			build_time = time.time() - start_time
+		build_time = time.time() - start_time
 
-			sys.stdout.flush()
+		sys.stdout.flush()
 
-			# Twine check
-			print("twine check")
-			ret |= twine.cli.dispatch(["check", os.path.join("dist", '*')])
-			sys.stdout.flush()
+		# Twine check
+		print("twine check")
+		ret |= twine.cli.dispatch(["check", os.path.join("dist", '*')])
+		sys.stdout.flush()
 
-			# check_wheel_contents
-			print("check_wheel_contents")
-			runner = CliRunner()
-			result: Result = runner.invoke(
-					check_wheel_contents.__main__.main,
-					catch_exceptions=False,
-					args=["dist"],
-					)
-			ret |= result.exit_code
-			print(result.stdout, flush=True)
+		# check_wheel_contents
+		print("check_wheel_contents")
+		runner = CliRunner()
+		result: Result = runner.invoke(
+				check_wheel_contents.__main__.main,
+				catch_exceptions=False,
+				args=["dist"],
+				)
+		ret |= result.exit_code
+		print(result.stdout, flush=True)
 
-		if actions:
-			print("::endgroup::")
+	if actions:
+		print("::endgroup::")
 
 	# TODO: create virtualenv and install package in it
-
-	except Exception as e:
-		print(e)
-		ret |= 1
 
 	return ret, build_time
