@@ -77,10 +77,9 @@ repo_helper==2020.12.18
 │   └── typing-inspect>=0.6.0
 │       ├── mypy-extensions>=0.3.0
 │       └── typing-extensions>=3.7.4
-├── consolekit>=0.7.0
+├── consolekit>=0.8.0
 │   ├── click>=7.1.2
-│   ├── colorama>=0.4.3
-│   ├── domdf-python-tools>=1.3.0
+│   ├── domdf-python-tools>=2.0.0
 │   │   ├── deprecation-alias>=0.1.1
 │   │   │   ├── deprecation>=2.1.0
 │   │   │   │   └── packaging
@@ -95,9 +94,11 @@ repo_helper==2020.12.18
 │   │   └── importlib-metadata>=1.5.0; python_version < "3.8"
 │   │       ├── zipp>=0.5
 │   │       └── typing-extensions>=3.6.4; python_version < "3.8"
-│   └── typing-extensions>=3.7.4.3
+│   ├── mistletoe>=0.7.2
+│   ├── typing-extensions>=3.7.4.3
+│   └── colorama>=0.4.3; python_version < "3.10"
 ├── css-parser==1.0.6
-├── domdf-python-tools>=2.0.0
+├── domdf-python-tools>=2.0.1
 │   ├── deprecation-alias>=0.1.1
 │   │   ├── deprecation>=2.1.0
 │   │   │   └── packaging
@@ -118,6 +119,7 @@ repo_helper==2020.12.18
 ├── email-validator==1.1.2
 │   ├── idna>=2.0.0
 │   └── dnspython>=1.15.0
+├── idna==2.10
 ├── isort>=5.0.0
 ├── jinja2>=2.11.2
 │   └── MarkupSafe>=0.23
@@ -145,14 +147,14 @@ repo_helper==2020.12.18
 │   └── importlib-metadata; python_version < "3.8"
 │       ├── zipp>=0.5
 │       └── typing-extensions>=3.6.4; python_version < "3.8"
-├── requests>=2.25.0
+├── requests>=2.25.1
 │   ├── chardet<5,>=3.0.2
 │   ├── idna<3,>=2.5
 │   ├── urllib3<1.27,>=1.21.1
 │   └── certifi>=2017.4.17
 ├── ruamel-yaml>=0.16.12
 │   └── ruamel.yaml.clib>=0.1.2; platform_python_implementation == "CPython" and python_version < "3.9"
-├── shippinglabel>=0.8.0
+├── shippinglabel>=0.8.1
 │   ├── apeye>=0.4.0
 │   │   ├── appdirs>=1.4.4
 │   │   ├── cachecontrol[filecache]>=0.12.6
@@ -202,8 +204,7 @@ repo_helper==2020.12.18
 │   ├── appdirs>=1.4.4
 │   ├── consolekit>=0.1.2
 │   │   ├── click>=7.1.2
-│   │   ├── colorama>=0.4.3
-│   │   ├── domdf-python-tools>=1.3.0
+│   │   ├── domdf-python-tools>=2.0.0
 │   │   │   ├── deprecation-alias>=0.1.1
 │   │   │   │   ├── deprecation>=2.1.0
 │   │   │   │   │   └── packaging
@@ -218,8 +219,10 @@ repo_helper==2020.12.18
 │   │   │   └── importlib-metadata>=1.5.0; python_version < "3.8"
 │   │   │       ├── zipp>=0.5
 │   │   │       └── typing-extensions>=3.6.4; python_version < "3.8"
-│   │   └── typing-extensions>=3.7.4.3
-│   ├── domdf-python-tools>=1.8.0
+│   │   ├── mistletoe>=0.7.2
+│   │   ├── typing-extensions>=3.7.4.3
+│   │   └── colorama>=0.4.3; python_version < "3.10"
+│   ├── domdf-python-tools>=2.0.1
 │   │   ├── deprecation-alias>=0.1.1
 │   │   │   ├── deprecation>=2.1.0
 │   │   │   │   └── packaging
@@ -242,8 +245,7 @@ repo_helper==2020.12.18
 │   ├── click>=7.1.2
 │   ├── consolekit>=0.1.2
 │   │   ├── click>=7.1.2
-│   │   ├── colorama>=0.4.3
-│   │   ├── domdf-python-tools>=1.3.0
+│   │   ├── domdf-python-tools>=2.0.0
 │   │   │   ├── deprecation-alias>=0.1.1
 │   │   │   │   ├── deprecation>=2.1.0
 │   │   │   │   │   └── packaging
@@ -258,7 +260,9 @@ repo_helper==2020.12.18
 │   │   │   └── importlib-metadata>=1.5.0; python_version < "3.8"
 │   │   │       ├── zipp>=0.5
 │   │   │       └── typing-extensions>=3.6.4; python_version < "3.8"
-│   │   └── typing-extensions>=3.7.4.3
+│   │   ├── mistletoe>=0.7.2
+│   │   ├── typing-extensions>=3.7.4.3
+│   │   └── colorama>=0.4.3; python_version < "3.10"
 │   ├── domdf-python-tools>=1.3.0
 │   │   ├── deprecation-alias>=0.1.1
 │   │   │   ├── deprecation>=2.1.0
@@ -287,8 +291,7 @@ repo_helper==2020.12.18
     ├── click>=7.1.2
     ├── consolekit>=0.3.0
     │   ├── click>=7.1.2
-    │   ├── colorama>=0.4.3
-    │   ├── domdf-python-tools>=1.3.0
+    │   ├── domdf-python-tools>=2.0.0
     │   │   ├── deprecation-alias>=0.1.1
     │   │   │   ├── deprecation>=2.1.0
     │   │   │   │   └── packaging
@@ -303,7 +306,9 @@ repo_helper==2020.12.18
     │   │   └── importlib-metadata>=1.5.0; python_version < "3.8"
     │   │       ├── zipp>=0.5
     │   │       └── typing-extensions>=3.6.4; python_version < "3.8"
-    │   └── typing-extensions>=3.7.4.3
+    │   ├── mistletoe>=0.7.2
+    │   ├── typing-extensions>=3.7.4.3
+    │   └── colorama>=0.4.3; python_version < "3.10"
     ├── domdf-python-tools>=0.10.0
     │   ├── deprecation-alias>=0.1.1
     │   │   ├── deprecation>=2.1.0

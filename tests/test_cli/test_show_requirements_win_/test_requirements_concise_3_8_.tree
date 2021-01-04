@@ -16,7 +16,7 @@ repo_helper==2020.12.18
 ├── deprecation-alias>=0.1.1
 ├── distlib<1,>=0.3.1
 ├── dnspython>=1.15.0
-├── domdf-python-tools>=2.0.0
+├── domdf-python-tools>=2.0.1
 ├── dulwich!=0.20.7,!=0.20.8,!=0.20.9,>=0.20.5
 ├── email-validator==1.1.2
 ├── filelock<4,>=3.0.12
@@ -42,7 +42,7 @@ repo_helper==2020.12.18
 ├── ruamel-yaml>=0.16.12
 ├── ruamel-yaml-clib>=0.1.2; platform_python_implementation == "CPython" and python_version < "3.9"
 ├── setuptools
-├── shippinglabel>=0.8.0
+├── shippinglabel>=0.8.1
 ├── six<2,>=1.11.0
 ├── southwark>=0.6.0
 ├── tldextract>=2.2.0
