@@ -1,3 +1,7 @@
+=========================
+repo-helper release
+=========================
+
 .. click:: repo_helper.cli.commands.release:release
 	:prog: repo-helper release
 
