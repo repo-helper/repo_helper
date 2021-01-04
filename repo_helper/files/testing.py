@@ -5,7 +5,7 @@
 Configuration for testing and code formatting tools.
 """
 #
-#  Copyright © 2020 Dominic Davis-Foster <dominic@davis-foster.co.uk>
+#  Copyright © 2020-2021 Dominic Davis-Foster <dominic@davis-foster.co.uk>
 #
 #  This program is free software; you can redistribute it and/or modify
 #  it under the terms of the GNU Lesser General Public License as published by
@@ -36,6 +36,7 @@ import jinja2
 from domdf_python_tools.paths import PathPlus
 from domdf_python_tools.stringlist import DelimitedList
 from domdf_python_tools.typing import PathLike
+from packaging.version import Version
 from shippinglabel import normalize
 from shippinglabel.requirements import (
 		ComparableRequirement,
@@ -244,10 +245,14 @@ class ToxConfig(IniConfigurator):
 				third_party_library = list(self["third_party_version_matrix"].keys())[0]
 
 				for version in self["third_party_version_matrix"][third_party_library]:
-					if version != "latest":
-						deps.append(f"{third_party_library}{version}: {third_party_library}~={version}.0")
-					else:
+					if version == "latest":
 						deps.append(f"{third_party_library}latest: {third_party_library}")
+					else:
+						v = Version(version)
+						if v.is_prerelease:
+							deps.append(f"{third_party_library}{version}: {third_party_library}=={version}")
+						else:
+							deps.append(f"{third_party_library}{version}: {third_party_library}~={version}.0")
 
 			self._ini["testenv"]["deps"] = indent_join(deps)
 
@@ -322,7 +327,7 @@ class ToxConfig(IniConfigurator):
 		self._ini["testenv:lint"]["basepython"] = "python{min_py_version}".format(**self._globals)
 		self._ini["testenv:lint"]["changedir"] = "{toxinidir}"
 		self._ini["testenv:lint"]["ignore_errors"] = True
-		self._ini["testenv:lint"]["skip_install"] = True
+		self._ini["testenv:lint"]["skip_install"] = self["pypi_name"] not in {"domdf_python_tools", "consolekit"}
 		self._ini["testenv:lint"]["deps"] = indent_join([
 				# "autopep8 >=1.5.2",
 				"flake8 >=3.8.2",
@@ -650,7 +655,7 @@ class TestsRequirementsManager(RequirementsManager):
 		if self._globals["pypi_name"] != "coverage_pyver_pragma":
 			self.target_requirements.add(ComparableRequirement("coverage-pyver-pragma>=0.0.6"))
 		if self._globals["pypi_name"] != "domdf_python_tools":
-			self.target_requirements.add(ComparableRequirement("domdf-python-tools[testing]>=1.6.0"))
+			self.target_requirements.add(ComparableRequirement("domdf-python-tools[testing]>=2.0.1"))
 
 	def merge_requirements(self) -> List[str]:
 		current_requirements, comments, invalid_lines = read_requirements(self.req_file, include_invalid=True)
