@@ -160,7 +160,7 @@ class ToxConfig(IniConfigurator):
 		else:
 			mypy_deps = [f"mypy=={self['mypy_version']}"]
 
-		mypy_deps.append("lxml")
+		# mypy_deps.append("lxml")
 
 		if self._globals["enable_tests"]:
 			mypy_deps.append(f"-r{{toxinidir}}/{self._globals['tests_dir']}/requirements.txt")
