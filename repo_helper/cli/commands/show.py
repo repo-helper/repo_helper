@@ -5,7 +5,7 @@
 Show information about the repository.
 """
 #
-#  Copyright © 2020 Dominic Davis-Foster <dominic@davis-foster.co.uk>
+#  Copyright © 2020-2021 Dominic Davis-Foster <dominic@davis-foster.co.uk>
 #
 #  This program is free software; you can redistribute it and/or modify
 #  it under the terms of the GNU Lesser General Public License as published by
@@ -138,8 +138,8 @@ def log(
 		)
 @flag_option("-r", "--reverse", help="Print entries in reverse order.")
 @colour_option()
-@show_command()
 @no_pager_option()
+@show_command()
 def changelog(
 		entries: Optional[int] = None,
 		reverse: bool = False,

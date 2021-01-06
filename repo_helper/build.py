@@ -5,7 +5,7 @@
 :pep:`517` build backend.
 """
 #
-#  Copyright © 2020 Dominic Davis-Foster <dominic@davis-foster.co.uk>
+#  Copyright © 2020-2021 Dominic Davis-Foster <dominic@davis-foster.co.uk>
 #
 #  This program is free software; you can redistribute it and/or modify
 #  it under the terms of the GNU Lesser General Public License as published by
@@ -33,10 +33,8 @@ import shutil
 import sys
 import tarfile
 import tempfile
-from base64 import urlsafe_b64encode
 from datetime import datetime
 from email.message import EmailMessage
-from hashlib import sha256
 from io import StringIO
 from subprocess import PIPE, Popen
 from textwrap import dedent, indent
