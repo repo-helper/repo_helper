@@ -78,11 +78,11 @@ with tempfile.TemporaryDirectory() as tmpdir:
 
 		try:
 			repo_ret, build_time = builder_smoke_test(
-					target_dir,
-					username,
-					repository,
-					actions=is_running_on_actions(),
-					)
+				target_dir,
+				username,
+				repository,
+				actions=is_running_on_actions(),
+				)
 
 			build_times.append(build_time)
 		except Exception as e:

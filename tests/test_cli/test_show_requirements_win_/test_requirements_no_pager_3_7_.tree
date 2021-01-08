@@ -220,7 +220,7 @@ repo_helper==2020.12.18
 │   │   └── pyparsing>=2.0.2
 │   ├── trove-classifiers>=2020.10.21
 │   └── typing-extensions>=3.7.4.3
-├── southwark>=0.6.0
+├── southwark>=0.7.1
 │   ├── click>=7.1.2
 │   ├── consolekit>=0.1.2
 │   │   ├── click>=7.1.2
