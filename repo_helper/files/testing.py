@@ -29,7 +29,7 @@ import pathlib
 import posixpath
 import re
 import warnings
-from typing import Any, List
+from typing import Any, List, Tuple
 
 # 3rd party
 import jinja2
@@ -217,17 +217,26 @@ class ToxConfig(IniConfigurator):
 		"""
 
 		if self["third_party_version_matrix"]:
-			third_party_library = list(self["third_party_version_matrix"].keys())[0]
-			third_party_versions = DelimitedList(self["third_party_version_matrix"][third_party_library])
-			matrix_testenv_string = f"-{third_party_library}{{{third_party_versions:,}}}"
+			third_party_library, third_party_versions, matrix_testenv_string = self.get_third_party_version_matrix()
 			tox_envs = [v + matrix_testenv_string for v in self["tox_py_versions"]]
+			cov_envlist = [
+					f"{self['tox_py_versions'][0]}-{third_party_library}{third_party_versions[0]}",
+					"coverage",
+					]
 		else:
 			tox_envs = self["tox_py_versions"]
+			cov_envlist = [self["tox_py_versions"][0], "coverage"]
 
 		self._ini["envlists"]["test"] = tox_envs
 		self._ini["envlists"]["qa"] = ["mypy", "lint"]
 		if self["enable_tests"]:
-			self._ini["envlists"]["cov"] = [self["tox_py_versions"][0], "coverage"]
+			self._ini["envlists"]["cov"] = cov_envlist
+
+	def get_third_party_version_matrix(self) -> Tuple[str, DelimitedList, str]:
+		third_party_library = list(self["third_party_version_matrix"].keys())[0]
+		third_party_versions = DelimitedList(self["third_party_version_matrix"][third_party_library])
+		matrix_testenv_string = f"-{third_party_library}{{{third_party_versions:,}}}"
+		return third_party_library, third_party_versions, matrix_testenv_string
 
 	def testenv(self):
 		"""
