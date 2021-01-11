@@ -64,7 +64,7 @@ def make_github_url(username: str, repository: str) -> URL:
 
 class _BaseHook(TypedDict):
 	#: Which hook from the repository to use.
-	id: str  # noqa: A003
+	id: str  # noqa: A003  # pylint: disable=redefined-builtin
 
 
 class Hook(_BaseHook, total=False):
@@ -194,6 +194,12 @@ lucas_c_hooks = Repo(
 		hooks=["remove-crlf", "forbid-crlf"],
 		)
 
+flake2lint = Repo(
+		repo=make_github_url("domdfcoding", "flake2lint"),
+		rev="v0.1.0",
+		hooks=["flake2lint"],
+		)
+
 # shellcheck = Repo(
 # 		repo=make_github_url("shellcheck-py", "shellcheck-py"),
 # 		rev="v0.7.1.1",
@@ -296,6 +302,7 @@ def make_pre_commit(repo_path: pathlib.Path, templates: jinja2.Environment) -> L
 			pre_commit_hooks,
 			domdfcoding_hooks,
 			flake8_dunder_all,
+			flake2lint,
 			pygrep_hooks,
 			pyupgrade,
 			lucas_c_hooks,
