@@ -475,7 +475,7 @@ class Section(Block, Container, MutableMapping):
 		self._name = str(value)
 		self._updated = True
 
-	# def set(self, option: str, value: Optional[str] = None) -> "Section":  # noqa: A003
+	# def set(self, option: str, value: Optional[str] = None) -> "Section":  # noqa: A003  # pylint: disable=redefined-builtin
 	# 	"""
 	# 	Set an option for chaining.
 	#
@@ -1125,7 +1125,7 @@ class ConfigUpdater(Container[Block], MutableMapping):
 	# 		option = self.optionxform(option)
 	# 		return option in self[section]
 	#
-	# def set(self, section: str, option: str, value: str):  # noqa: A003
+	# def set(self, section: str, option: str, value: str):  # noqa: A003  # pylint: disable=redefined-builtin
 	# 	"""
 	# 	Set an option.
 	#

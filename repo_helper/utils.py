@@ -323,7 +323,7 @@ class IniConfigurator:
 		ini_file.write_lines(self._output)
 
 
-def easter_egg() -> None:  # noqa: D102,D103  # pragma: no cover
+def easter_egg() -> None:  # noqa: D102,D103
 	easter = calc_easter(today.year)
 	easter_margin = timedelta(days=7)
 
