@@ -233,6 +233,16 @@ class ToxConfig(IniConfigurator):
 			self._ini["envlists"]["cov"] = cov_envlist
 
 	def get_third_party_version_matrix(self) -> Tuple[str, DelimitedList, str]:
+		"""
+		Returns information about the matrix of third party versions.
+
+		The returned object is a three-element tuple, comprising:
+
+		* The name of the third party library.
+		* A list of version strings.
+		* The testenv suffix, e.g. ``-attrs{19.3,20.1}``.
+		"""
+
 		third_party_library = list(self["third_party_version_matrix"].keys())[0]
 		third_party_versions = DelimitedList(self["third_party_version_matrix"][third_party_library])
 		matrix_testenv_string = f"-{third_party_library}{{{third_party_versions:,}}}"
