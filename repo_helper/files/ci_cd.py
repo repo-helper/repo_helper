@@ -444,7 +444,9 @@ def make_github_mypy(repo_path: pathlib.Path, templates: jinja2.Environment) -> 
 	file = PathPlus(repo_path / ".github" / "workflows" / "mypy.yml")
 	file.parent.maybe_make(parents=True)
 
-	file.write_clean(templates.get_template(file.name).render())
+	platforms = list(filter(None, (platform_ci_names.get(p, None) for p in templates.globals["platforms"])))
+
+	file.write_clean(templates.get_template(file.name).render(platforms=platforms))
 
 	return [file.relative_to(repo_path).as_posix()]
 
