@@ -9,12 +9,12 @@ on:
 
 jobs:
   Run:
-    name: "mypy / ${{ brace("matrix.os") }}"
-    runs-on: ${{ brace("matrix.os") }}
+    name: "mypy / ${{ matrix.os }}"
+    runs-on: ${{ matrix.os }}
 
     strategy:
       matrix:
-        os: {{ platforms }}
+        os: ['macos-latest', 'ubuntu-20.04']
       fail-fast: false
 
     steps:
@@ -24,7 +24,7 @@ jobs:
       - name: Setup Python 🐍
         uses: "actions/setup-python@v2"
         with:
-          python-version: "{{ python_deploy_version }}"
+          python-version: "3.6"
 
       - name: Install dependencies 🔧
         run: |
