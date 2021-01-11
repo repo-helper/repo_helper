@@ -235,7 +235,7 @@ def requirements(
 			for directory in (venv_dir / "lib").glob("python3.*"):
 				search_path.append(str(directory / "site-packages"))
 
-			importlib_metadata.DistributionFinder.Context.path = search_path
+			importlib_metadata.DistributionFinder.Context.path = search_path  # type: ignore
 
 		if concise:
 			concise_requirements = []

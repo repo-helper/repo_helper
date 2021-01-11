@@ -234,11 +234,14 @@ def test_make_github_flake8(tmp_pathplus, demo_environment, file_regression: Fil
 	check_file_output(tmp_pathplus / ".github/workflows/flake8.yml", file_regression)
 
 
-@pytest.mark.parametrize("platforms", [
-		pytest.param(["Windows", "macOS", "Linux"], id="all"),
-		pytest.param(["Linux"], id="linux"),
-		pytest.param(["macOS", "Linux"], id="unix"),
-		])
+@pytest.mark.parametrize(
+		"platforms",
+		[
+				pytest.param(["Windows", "macOS", "Linux"], id="all"),
+				pytest.param(["Linux"], id="linux"),
+				pytest.param(["macOS", "Linux"], id="unix"),
+				]
+		)
 def test_make_github_mypy(tmp_pathplus, demo_environment, file_regression: FileRegressionFixture, platforms):
 	demo_environment.globals["platforms"] = platforms
 
