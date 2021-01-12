@@ -196,7 +196,7 @@ lucas_c_hooks = Repo(
 
 flake2lint = Repo(
 		repo=make_github_url("domdfcoding", "flake2lint"),
-		rev="v0.1.0",
+		rev="v0.1.1",
 		hooks=["flake2lint"],
 		)
 
@@ -253,7 +253,7 @@ def make_pre_commit(repo_path: pathlib.Path, templates: jinja2.Environment) -> L
 
 	flake8_dunder_all = Repo(
 			repo=make_github_url("domdfcoding", "flake8-dunder-all"),
-			rev="v0.1.4",
+			rev="v0.1.5",
 			hooks=[{
 					"id": "ensure-dunder-all",
 					"files": fr"^{import_name}{'-stubs' if stubs_package else ''}/.*\.py$"
@@ -264,7 +264,7 @@ def make_pre_commit(repo_path: pathlib.Path, templates: jinja2.Environment) -> L
 
 	yapf_isort = Repo(
 			repo=make_github_url("domdfcoding", "yapf-isort"),
-			rev="v0.5.4",
+			rev="v0.5.5",
 			hooks=[{"id": "yapf-isort", "exclude": yapf_isort_excludes}],
 			)
 
