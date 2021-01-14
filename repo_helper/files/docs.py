@@ -39,7 +39,6 @@ from typing import Dict, List, Sequence, Union
 import css_parser  # type: ignore
 import jinja2
 import ruamel.yaml as yaml
-from css_parser import css
 from domdf_python_tools.compat import importlib_resources
 from domdf_python_tools.paths import PathPlus
 from domdf_python_tools.typing import PathLike
@@ -375,7 +374,7 @@ def make_conf(repo_path: pathlib.Path, templates: jinja2.Environment) -> List[st
 	return [file.relative_to(repo_path).as_posix()]
 
 
-class StyleSheet(css.CSSStyleSheet):
+class StyleSheet(css_parser.css.CSSStyleSheet):
 	"""
 	Represents a CSS style sheet.
 	"""
