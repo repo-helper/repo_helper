@@ -229,6 +229,7 @@ __all__ = [
 		"YamlEditor",
 		"docs_url",
 		"third_party_version_matrix",
+		"entry_points",
 		]
 
 

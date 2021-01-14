@@ -34,7 +34,7 @@ from repo_helper.files.pre_commit import make_pre_commit
 from repo_helper.files.testing import ensure_tests_requirements, make_isort, make_tox, make_yapf
 
 
-def boolean_option(name: str, id: str):  # noqa: A002 # pylint: disable=redefined-builtin
+def boolean_option(name: str, id: str):  # noqa: A002  # pylint: disable=redefined-builtin
 	return pytest.mark.parametrize(name, [
 			pytest.param(True, id=id),
 			pytest.param(False, id=f"no {id}"),
