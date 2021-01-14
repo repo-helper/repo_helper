@@ -30,7 +30,7 @@ import posixpath
 import re
 from io import StringIO
 from textwrap import indent
-from typing import Iterable, List, Mapping, MutableMapping, Union
+from typing import Iterable, List, MutableMapping, Union
 
 # 3rd party
 import attr

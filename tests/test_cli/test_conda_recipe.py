@@ -1,6 +1,5 @@
 # stdlib
 import os
-import pathlib
 import re
 
 # 3rd party

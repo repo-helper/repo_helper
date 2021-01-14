@@ -3,4 +3,4 @@
 
 def test_import_main():
 	# this package
-	import repo_helper.__main__
+	import repo_helper.__main__  # noqa: F401

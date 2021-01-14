@@ -26,7 +26,6 @@ Manage configuration files for packaging tools.
 # stdlib
 import copy
 import pathlib
-import re
 import textwrap
 from typing import Any, List
 

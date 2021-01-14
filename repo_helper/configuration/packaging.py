@@ -25,7 +25,7 @@ r"""
 
 # stdlib
 import warnings
-from typing import Any, Dict, List, Mapping, Optional
+from typing import Any, Dict, List, Optional
 
 # 3rd party
 from configconfig.configvar import ConfigVar

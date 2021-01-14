@@ -27,9 +27,6 @@ Shields for use with sphinx-toolbox.
 import datetime
 from typing import Union
 
-# 3rd party
-from typing_extensions import Literal
-
 # this package
 from repo_helper.shields import (
 		make_conda_platform_shield,

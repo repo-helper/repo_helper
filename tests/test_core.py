@@ -1,9 +1,6 @@
 # stdlib
-import datetime
 import os
-import pathlib
 import re
-from tempfile import TemporaryDirectory
 
 # 3rd party
 import pytest

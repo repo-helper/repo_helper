@@ -5,12 +5,11 @@ import sys
 import pytest
 from click.testing import CliRunner, Result
 from domdf_python_tools.paths import PathPlus, in_directory
-from domdf_python_tools.testing import check_file_regression, min_version, not_pypy, not_windows, only_windows
+from domdf_python_tools.testing import check_file_regression, min_version, not_pypy, not_windows
 from pytest_regressions.file_regression import FileRegressionFixture
 
 # this package
 from repo_helper.cli.commands import show
-from repo_helper.configuration import metadata
 
 
 def test_version(tmp_repo, file_regression: FileRegressionFixture):

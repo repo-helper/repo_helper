@@ -30,7 +30,7 @@ import pathlib
 import re
 import textwrap
 from datetime import date, timedelta
-from typing import TYPE_CHECKING, Callable, Dict, Iterable, List, Optional, TypeVar, Union
+from typing import Callable, Dict, Iterable, List, Optional, Union
 
 # 3rd party
 import dulwich.repo
@@ -48,10 +48,6 @@ from southwark import open_repo_closing, status
 
 # this package
 from repo_helper.configupdater2 import ConfigUpdater
-
-if TYPE_CHECKING:
-	# this package
-	from repo_helper.core import RepoHelper
 
 __all__ = [
 		"IniConfigurator",
