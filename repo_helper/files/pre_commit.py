@@ -196,7 +196,7 @@ lucas_c_hooks = Repo(
 
 flake2lint = Repo(
 		repo=make_github_url("domdfcoding", "flake2lint"),
-		rev="v0.1.1",
+		rev="v0.2.0",
 		hooks=["flake2lint"],
 		)
 

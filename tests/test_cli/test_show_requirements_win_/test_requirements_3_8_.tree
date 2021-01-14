@@ -255,5 +255,5 @@ repo_helper==2020.12.18
     │   ├── natsort>=7.1.0
     │   ├── pydash>=4.7.4
     │   └── typing-extensions>=3.7.4.3
-    ├── isort==5.5.2
+    ├── isort<=5.6.4,>=5.5.2
     └── yapf==0.30.0
