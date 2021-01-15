@@ -32,15 +32,16 @@ import os.path
 import pathlib
 import shutil
 import warnings
-from textwrap import dedent
-from typing import Dict, List, Sequence, Union
+from contextlib import suppress
+from typing import List
 
 # 3rd party
-import css_parser  # type: ignore
+import dict2css
 import jinja2
 import ruamel.yaml as yaml
 from domdf_python_tools.compat import importlib_resources
 from domdf_python_tools.paths import PathPlus
+from domdf_python_tools.stringlist import StringList
 from domdf_python_tools.typing import PathLike
 from domdf_python_tools.utils import enquote_value
 from shippinglabel import normalize
@@ -74,14 +75,12 @@ __all__ = [
 		"make_rtfd",
 		"make_docutils_conf",
 		"make_conf",
-		"StyleSheet",
 		"make_alabaster_theming",
 		"make_readthedocs_theming",
 		"copy_docs_styling",
 		"rewrite_docs_index",
 		"make_404_page",
 		"make_docs_source_rst",
-		"make_style",
 		]
 
 # Disable logging from cssutils
@@ -280,62 +279,65 @@ def make_conf(repo_path: pathlib.Path, templates: jinja2.Environment) -> List[st
 	repo_name = templates.globals["repo_name"]
 
 	if templates.globals["sphinx_html_theme"] in {"sphinx-rtd-theme", "domdf-sphinx-theme"}:
-		for key, val in {
-			"display_github": True,  # Integrate GitHub
-			"github_user": username,  # Username
-			"github_repo": repo_name,  # Repo name
-			"github_version": "master",  # Version
-			"conf_py_path": f"/{templates.globals['docs_dir']}/",  # Path in the checkout to the docs root
-			}.items():
+		style = {
+				"display_github": True,  # Integrate GitHub
+				"github_user": username,  # Username
+				"github_repo": repo_name,  # Repo name
+				"github_version": "master",  # Version
+				"conf_py_path": f"/{templates.globals['docs_dir']}/",  # Path in the checkout to the docs root
+				}
+
+		for key, val in style.items():
 			if key not in templates.globals["html_context"]:
 				templates.globals["html_context"][key] = val
 
-		for key, val in {
-			# 'logo': 'logo.png',
-			"logo_only": False,  # True will show just the logo
-			}.items():
+		options = {
+				# 'logo': 'logo.png',
+				"logo_only": False,  # True will show just the logo
+				}
+
+		for key, val in options.items():
 			if key not in templates.globals["html_theme_options"]:
 				templates.globals["html_theme_options"][key] = val
 
 	elif templates.globals["sphinx_html_theme"] in {"alabaster", "repo-helper-sphinx-theme"}:
 		# See https://github.com/bitprophet/alabaster/blob/master/alabaster/theme.conf
 		# and https://alabaster.readthedocs.io/en/latest/customization.html
-		for key, val in {
-			# 'logo': 'logo.png',
-			"page_width": "1200px",
-			"logo_name": "true",
-			"github_user": username,  # Username
-			"github_repo": repo_name,  # Repo name
-			"description": templates.globals["short_desc"],
-			"github_banner": "true",
-			"github_type": "star",
-			# "travis_button": "true",
-			"badge_branch": "master",
-			"fixed_sidebar": "true",
-			}.items():
+
+		style = {
+				# 'logo': 'logo.png',
+				"page_width": "1200px",
+				"logo_name": "true",
+				"github_user": username,  # Username
+				"github_repo": repo_name,  # Repo name
+				"description": templates.globals["short_desc"],
+				"github_banner": "true",
+				"github_type": "star",
+				"badge_branch": "master",
+				"fixed_sidebar": "true",
+				}
+
+		for key, val in style.items():
 			if key not in templates.globals["html_theme_options"]:
 				templates.globals["html_theme_options"][key] = val
 
 	elif templates.globals["sphinx_html_theme"] in {"furo"}:
 		# See https://github.com/bitprophet/alabaster/blob/master/alabaster/theme.conf
 		# and https://alabaster.readthedocs.io/en/latest/customization.html
-		for key, val in {
-			"light_css_variables": {
-			"toc-title-font-size": "12pt",
-			"toc-font-size": "12pt",
-			"admonition-font-size": "12pt",
-			},
-			"dark_css_variables": {
-			"toc-title-font-size": "12pt",
-			"toc-font-size": "12pt",
-			"admonition-font-size": "12pt",
-			},
-			}.items():
+
+		style = {
+				"toc-title-font-size": "12pt",
+				"toc-font-size": "12pt",
+				"admonition-font-size": "12pt",
+				}
+
+		for key in ["light_css_variables", "dark_css_variables"]:
 			if key not in templates.globals["html_theme_options"]:
-				templates.globals["html_theme_options"][key] = val
+				templates.globals["html_theme_options"][key] = style
 			else:
 				templates.globals["html_theme_options"][key] = {
-						**val, **templates.globals["html_theme_options"][key]
+						**style,
+						**templates.globals["html_theme_options"][key],
 						}
 
 	sphinx_extensions = [
@@ -353,8 +355,9 @@ def make_conf(repo_path: pathlib.Path, templates: jinja2.Environment) -> List[st
 			"sphinx_copybutton",
 			"sphinxcontrib.default_values",
 			"sphinxcontrib.toctree_plus",
-			"seed_intersphinx_mapping",  # "sphinx.ext.autosectionlabel",
+			"seed_intersphinx_mapping",
 			]
+	# "sphinx.ext.autosectionlabel",
 	# "sphinx_gitstamp",
 
 	sphinx_extensions.extend(templates.globals["extra_sphinx_extensions"])
@@ -374,22 +377,6 @@ def make_conf(repo_path: pathlib.Path, templates: jinja2.Environment) -> List[st
 	return [file.relative_to(repo_path).as_posix()]
 
 
-class StyleSheet(css_parser.css.CSSStyleSheet):
-	"""
-	Represents a CSS style sheet.
-	"""
-
-	def add_style(self, selector: str, styles: Dict[str, Union[Sequence, str, int, None]]) -> None:
-		"""
-		Add a style to the stylesheet.
-
-		:param selector:
-		:param styles:
-		"""
-
-		self.add(make_style(selector, styles))
-
-
 def make_alabaster_theming() -> str:
 	"""
 	Make the custom stylesheet for the alabaster Sphinx theme.
@@ -397,27 +384,13 @@ def make_alabaster_theming() -> str:
 	:return: The custom stylesheet.
 	"""
 
-	sheet = StyleSheet()
-
-	# Reset CSS Parser to defaults
-	css_parser.ser.prefs.useDefaults()
-
-	# Formatting preferences
-	css_parser.ser.prefs.omitLastSemicolon = False
-	css_parser.ser.prefs.indentClosingBrace = False
-	css_parser.ser.prefs.indent = '\t'
-
-	# Helpers
-	important = "important"
-
-	def px(val: Union[int, float, str]) -> str:
-		return f"{val}px"
+	sheet = dict2css.StyleSheet()
 
 	# Common options
 	solid_border = {"border-style": "solid"}
-	docs_bottom_margin = {"margin-bottom": (px(17), important)}
+	docs_bottom_margin = {"margin-bottom": (dict2css.px(17), dict2css.IMPORTANT)}
 
-	sheet.add_style("li p:last-child", {"margin-bottom": px(12)})
+	sheet.add_style("li p:last-child", {"margin-bottom": dict2css.px(12)})
 
 	# Smooth scrolling between sections
 	sheet.add_style("html", {"scroll-behavior": "smooth"})
@@ -427,7 +400,7 @@ def make_alabaster_theming() -> str:
 			"dl.class",
 			{
 					"padding": "3px 3px 3px 5px",
-					"margin-top": ("7px", important),
+					"margin-top": ("7px", dict2css.IMPORTANT),
 					**docs_bottom_margin,
 					"border-color": "rgba(240, 128, 128, 0.5)",
 					**solid_border,
@@ -439,14 +412,14 @@ def make_alabaster_theming() -> str:
 			"dl.function",
 			{
 					"padding": "3px 3px 3px 5px",
-					"margin-top": ("7px", important),
+					"margin-top": ("7px", dict2css.IMPORTANT),
 					**docs_bottom_margin,
 					"border-color": "lightskyblue",
 					**solid_border,
 					}
 			)
 
-	sheet.add_style("dl.function dt", {"margin-bottom": (px(10), important)})
+	sheet.add_style("dl.function dt", {"margin-bottom": (dict2css.px(10), dict2css.IMPORTANT)})
 
 	# Border around attributes
 	sheet.add_style(
@@ -470,14 +443,19 @@ def make_alabaster_theming() -> str:
 					}
 			)
 
-	sheet.add_style("div.sphinxsidebar", {"font-size": px(14), "line-height": "1.5"})
+	sheet.add_style("div.sphinxsidebar", {"font-size": dict2css.px(14), "line-height": "1.5"})
 	sheet.add_style("div.sphinxsidebar h3", {"font-weight": "bold"})
-	sheet.add_style("div.sphinxsidebar p.caption", {"font-size": px(20)})
-	sheet.add_style("div.sphinxsidebar div.sphinxsidebarwrapper", {"padding-right": (px(20), important)})
+	sheet.add_style("div.sphinxsidebar p.caption", {"font-size": dict2css.px(20)})
+	sheet.add_style(
+			"div.sphinxsidebar div.sphinxsidebarwrapper", {"padding-right": (dict2css.px(20), dict2css.IMPORTANT)}
+			)
 
 	# Margin above and below table
 	sheet.add_style(
-			"table.longtable", {"margin-bottom": (px(20), "important"), "margin-top": (px(-15), "important")}
+			"table.longtable", {
+					"margin-bottom": (dict2css.px(20), "important"),
+					"margin-top": (dict2css.px(-15), dict2css.IMPORTANT)
+					}
 			)
 
 	# The following styling from Tox"s documentation
@@ -485,19 +463,19 @@ def make_alabaster_theming() -> str:
 	# MIT Licensed
 
 	# Page width
-	sheet.add_style("div.document", {"width": "100%", "max-width": px(1400)})
-	sheet.add_style("div.body", {"max-width": px(1100)})
+	sheet.add_style("div.document", {"width": "100%", "max-width": dict2css.px(1400)})
+	sheet.add_style("div.body", {"max-width": dict2css.px(1100)})
 
 	# No end-of-line hyphenation
 	sheet.add_style("div.body p, ol > li, div.body td", {"hyphens": None})
 
-	sheet.add_style("img, div.figure", {"margin": ('0', important)})
+	sheet.add_style("img, div.figure", {"margin": ('0', dict2css.IMPORTANT)})
 	sheet.add_style("ul > li", {"text-align": "justify"})
 	sheet.add_style("ul > li > p", {"margin-bottom": '0'})
 	sheet.add_style("ol > li > p", {"margin-bottom": '0'})
 	sheet.add_style("div.body code.descclassname", {"display": None})
-	sheet.add_style(".wy-table-responsive table td", {"white-space": ("normal", important)})
-	sheet.add_style(".wy-table-responsive", {"overflow": ("visible", important)})
+	sheet.add_style(".wy-table-responsive table td", {"white-space": ("normal", dict2css.IMPORTANT)})
+	sheet.add_style(".wy-table-responsive", {"overflow": ("visible", dict2css.IMPORTANT)})
 	sheet.add_style("div.toctree-wrapper.compound > ul > li", {
 			"margin": '0',
 			"padding": '0',
@@ -508,10 +486,8 @@ def make_alabaster_theming() -> str:
 	#     padding: 0 1px;
 	# }}
 
-	stylesheet = sheet.cssText.decode("UTF-8").replace('}', "}\n")
-
-	# Reset CSS Parser to defaults
-	css_parser.ser.prefs.useDefaults()
+	with dict2css.CSSSerializer(trailing_semicolon=True).use():
+		stylesheet = sheet.tostring().replace('}', "}\n")
 
 	return f"""\
 {stylesheet}
@@ -531,37 +507,13 @@ def make_readthedocs_theming() -> str:
 	:return: The custom stylesheet.
 	"""
 
-	sheet = StyleSheet()
+	style = {
+			".wy-nav-content": {"max-width": (dict2css.px(1200), dict2css.IMPORTANT)},
+			"li p:last-child": {"margin-bottom": (dict2css.px(12), dict2css.IMPORTANT)},
+			"html": {"scroll-behavior": "smooth"},
+			}
 
-	# Reset CSS Parser to defaults
-	css_parser.ser.prefs.useDefaults()
-
-	# Formatting preferences
-	css_parser.ser.prefs.omitLastSemicolon = False
-	css_parser.ser.prefs.indentClosingBrace = False
-	css_parser.ser.prefs.indent = '\t'
-
-	# Helpers
-	important = "important"
-
-	def px(val: Union[int, float, str]) -> str:
-		return f"{val}px"
-
-	# Body width
-	sheet.add_style(".wy-nav-content", {"max-width": (px(1200), important)})
-
-	# Spacing between list items
-	sheet.add_style("li p:last-child", {"margin-bottom": (px(12), important)})
-
-	# Smooth scrolling between sections
-	sheet.add_style("html", {"scroll-behavior": "smooth"})
-
-	stylesheet = sheet.cssText.decode("UTF-8").replace('}', "}\n")
-
-	# Reset CSS Parser to defaults
-	css_parser.ser.prefs.useDefaults()
-
-	return stylesheet
+	return dict2css.dumps(style, trailing_semicolon=True)
 
 
 def copy_docs_styling(repo_path: pathlib.Path, templates: jinja2.Environment) -> List[str]:
@@ -610,21 +562,17 @@ def copy_docs_styling(repo_path: pathlib.Path, templates: jinja2.Environment) ->
 		furo_navigation.parent.maybe_make()
 		github_url = make_github_url(templates.globals["username"], templates.globals["repo_name"])
 
-		buf = [
+		buf = StringList([
 				"<!---{managed_message}--->".format_map(templates.globals),
-				dedent(
-						"""\
-<div class="sidebar-tree">
-  {{ furo_navigation_tree }}
-</div>
-
-<div class="sidebar-tree">
-  <p class="caption"><span class="caption-text">Links</span></p>
-  <ul>"""
-						)
-				]
-
-		buf.append(f'    <li class="toctree-l1"><a class="reference external" href="{github_url}">GitHub</a></li>')
+				'<div class="sidebar-tree">',
+				"  {{ furo_navigation_tree }}",
+				"</div>",
+				'',
+				'<div class="sidebar-tree">',
+				'  <p class="caption"><span class="caption-text">Links</span></p>',
+				"  <ul>",
+				f'    <li class="toctree-l1"><a class="reference external" href="{github_url}">GitHub</a></li>'
+				])
 
 		if templates.globals["on_pypi"]:
 			buf.append(
@@ -632,7 +580,8 @@ def copy_docs_styling(repo_path: pathlib.Path, templates: jinja2.Environment) ->
 					f'href="https://pypi.org/project/{templates.globals["pypi_name"]}">PyPI</a></li>'
 					)
 
-		buf.append(dedent("  </ul>\n</div>\n"))
+		buf.extend(["  </ul>", "</div>"])
+		buf.blankline(ensure_single=True)
 
 		furo_navigation.write_lines(buf)
 
@@ -648,10 +597,8 @@ def copy_docs_styling(repo_path: pathlib.Path, templates: jinja2.Environment) ->
 		layout_html.unlink(missing_ok=True)
 
 	else:
-		try:
+		with suppress(FileNotFoundError):
 			shutil.rmtree(furo_navigation.parent)
-		except FileNotFoundError:
-			pass
 
 		layout_html.write_lines([
 				f"<!--- {templates.globals['managed_message']} --->",
@@ -790,22 +737,3 @@ def make_docs_source_rst(repo_path: pathlib.Path, templates: jinja2.Environment)
 			docs_building_rst.relative_to(repo_path).as_posix(),
 			git_download_png.relative_to(repo_path).as_posix(),
 			]
-
-
-def make_style(selector: str, styles: Dict[str, Union[Sequence, str, int, None]]) -> css.CSSStyleRule:
-	"""
-	Create a CSS Style Rule from a dictionary.
-
-	:param selector:
-	:param styles:
-	"""
-
-	style = css.CSSStyleDeclaration()
-
-	for name, properties in styles.items():
-		if isinstance(properties, Sequence) and not isinstance(properties, str):
-			style[name] = tuple(str(x) for x in properties)
-		else:
-			style[name] = str(properties)
-
-	return css.CSSStyleRule(selectorText=selector, style=style)
