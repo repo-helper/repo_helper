@@ -33,7 +33,7 @@ import pathlib
 import shutil
 import warnings
 from contextlib import suppress
-from typing import Dict, List, Mapping, MutableMapping
+from typing import Dict, List, Mapping, MutableMapping, Tuple, Union
 
 # 3rd party
 import dict2css
@@ -202,8 +202,10 @@ def make_rtfd(repo_path: pathlib.Path, templates: jinja2.Environment) -> List[st
 			*templates.globals["additional_requirements_files"],
 			]
 
-	python_config = {"version": 3.8, "install": [{"requirements": r} for r in install_requirements]}
-	python_config["install"].append({"method": "pip", "path": "."})
+	install_config: List[Dict] = [{"requirements": r} for r in install_requirements]
+	install_config.append({"method": "pip", "path": '.'})
+
+	python_config = {"version": 3.8, "install": install_config}
 
 	# Formats: Optionally build your docs in additional formats such as PDF and ePub
 	config = {"version": 2, "sphinx": sphinx_config, "formats": "all", "python": python_config}
@@ -387,22 +389,28 @@ def make_alabaster_theming() -> str:
 	solid_border = {"border-style": "solid"}
 	docs_bottom_margin = {"margin-bottom": (dict2css.px(17), dict2css.IMPORTANT)}
 
-	object_border = {"padding": "3px 3px 3px 5px", **docs_bottom_margin, **solid_border}
+	BorderMappingType = MutableMapping[str, Union[str, Tuple[str, str]]]
 
-	class_border = {
+	object_border: BorderMappingType = {
+			"padding": "3px 3px 3px 5px",
+			**docs_bottom_margin,
+			**solid_border,
+			}
+
+	class_border: BorderMappingType = {
 			**object_border,
 			"margin-top": ("7px", dict2css.IMPORTANT),
 			"border-color": "rgba(240, 128, 128, 0.5)",
 			}
 
-	function_border = {
+	function_border: BorderMappingType = {
 			**object_border,
 			"margin-top": ("7px", dict2css.IMPORTANT),
 			"border-color": "lightskyblue",
 			}
 
-	attribute_border = {**object_border, "border-color": "rgba(119, 136, 153, 0.5)"}
-	method_border = {**object_border, "border-color": "rgba(32, 178, 170, 0.5)"}
+	attribute_border: BorderMappingType = {**object_border, "border-color": "rgba(119, 136, 153, 0.5)"}
+	method_border: BorderMappingType = {**object_border, "border-color": "rgba(32, 178, 170, 0.5)"}
 
 	table_vertical_margins = {
 			"margin-bottom": (dict2css.px(20), "important"),
