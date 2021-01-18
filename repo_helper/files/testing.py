@@ -485,6 +485,7 @@ class ToxConfig(IniConfigurator):
 				"if TYPE_CHECKING:",
 				"if typing.TYPE_CHECKING:",
 				"if __name__ == .__main__.:",
+				"...",
 				])
 
 	def check_wheel_contents(self):
