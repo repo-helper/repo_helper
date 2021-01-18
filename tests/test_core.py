@@ -49,6 +49,7 @@ def test_via_run_repo_helper(
 			initialise=True,
 			commit=True,
 			message="Testing Testing",
+			enable_pre_commit=False,
 			) == 0
 
 	stat = status(temp_empty_repo.path)

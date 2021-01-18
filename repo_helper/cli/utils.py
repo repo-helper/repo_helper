@@ -101,8 +101,9 @@ def commit_changed_files(
 			commit = confirm("Commit?", default=True)
 
 		if commit:
-			# Ensure the working directory for pre-commit is correct
-			r.hooks["pre-commit"].cwd = str(repo_path.absolute())  # type: ignore
+			if enable_pre_commit or "pre-commit" in r.hooks:
+				# Ensure the working directory for pre-commit is correct
+				r.hooks["pre-commit"].cwd = str(repo_path.absolute())  # type: ignore
 
 			try:
 				commit_id = commit_changes(r, message.decode("UTF-8"))
@@ -125,6 +126,7 @@ def run_repo_helper(
 		initialise: bool,
 		commit: Optional[bool],
 		message: str,
+		enable_pre_commit: bool = True,
 		) -> int:
 	"""
 	Run repo_helper.
@@ -134,6 +136,7 @@ def run_repo_helper(
 	:param initialise: Whether to initialise the repository.
 	:param commit: Whether to commit unchanged files.
 	:param message: The commit message.
+	:param enable_pre_commit: Whether to install and configure pre-commit. Default :py:obj`True`.
 	"""
 
 	# this package
@@ -166,6 +169,7 @@ def run_repo_helper(
 				managed_files=managed_files,
 				commit=commit,
 				message=message.encode("UTF-8"),
+				enable_pre_commit=enable_pre_commit,
 				)
 	except CommitError as e:
 		indented_error = '\n'.join(f"\t{line}" for line in textwrap.wrap(str(e)))
