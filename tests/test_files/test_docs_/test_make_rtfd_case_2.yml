@@ -12,3 +12,5 @@ python:
    - requirements: requirements.txt
    - requirements: userguide/requirements.txt
    - requirements: hello_world/submodule/requirements.txt
+   - method: pip
+     path: .

@@ -203,23 +203,22 @@ def make_rtfd(repo_path: pathlib.Path, templates: jinja2.Environment) -> List[st
 			]
 
 	python_config = {"version": 3.8, "install": [{"requirements": r} for r in install_requirements]}
+	python_config["install"].append({"method": "pip", "path": "."})
 
 	# Formats: Optionally build your docs in additional formats such as PDF and ePub
 	config = {"version": 2, "sphinx": sphinx_config, "formats": "all", "python": python_config}
 
-	class Dumper(yaml.RoundTripDumper):
+	dumper = yaml.YAML()
+	dumper.indent(mapping=2, sequence=3, offset=1)
 
-		@functools.wraps(yaml.RoundTripDumper.__init__)
-		def __init__(self, *args, **kwargs):
-			super().__init__(*args, **kwargs)
-			self.sequence_dash_offset = 1
-			self.best_width = 4086
+	yaml_buf = yaml.StringIO()
+	dumper.dump(config, yaml_buf)
 
 	file.write_lines([
 			f"# {templates.globals['managed_message']}",
 			"# Read the Docs configuration file",
 			"---",
-			yaml.round_trip_dump(config, default_flow_style=False, Dumper=Dumper),  # type: ignore
+			yaml_buf.getvalue()
 			])
 
 	return [file.relative_to(repo_path).as_posix()]
