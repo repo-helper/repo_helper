@@ -2,13 +2,13 @@ repo_helper==2020.12.18
 ├── apeye>=0.4.0
 │   ├── appdirs>=1.4.4
 │   ├── cachecontrol[filecache]>=0.12.6
-│   │   ├── requests
-│   │   │   ├── chardet<5,>=3.0.2
-│   │   │   ├── idna<3,>=2.5
-│   │   │   ├── urllib3<1.27,>=1.21.1
-│   │   │   └── certifi>=2017.4.17
+│   │   ├── lockfile>=0.9; extra == "filecache"
 │   │   ├── msgpack>=0.5.2
-│   │   └── lockfile>=0.9; extra == "filecache"
+│   │   └── requests
+│   │       ├── certifi>=2017.4.17
+│   │       ├── chardet<5,>=3.0.2
+│   │       ├── idna<3,>=2.5
+│   │       └── urllib3<1.27,>=1.21.1
 │   ├── domdf-python-tools>=0.9.0
 │   │   ├── deprecation-alias>=0.1.1
 │   │   │   ├── deprecation>=2.1.0
@@ -21,25 +21,25 @@ repo_helper==2020.12.18
 │   │   └── typing-extensions>=3.7.4.3
 │   ├── lockfile>=0.12.2
 │   ├── requests>=2.24.0
+│   │   ├── certifi>=2017.4.17
 │   │   ├── chardet<5,>=3.0.2
 │   │   ├── idna<3,>=2.5
-│   │   ├── urllib3<1.27,>=1.21.1
-│   │   └── certifi>=2017.4.17
+│   │   └── urllib3<1.27,>=1.21.1
 │   └── tldextract>=2.2.0
+│       ├── filelock>=3.0.8
 │       ├── idna
 │       ├── requests>=2.1.0
+│       │   ├── certifi>=2017.4.17
 │       │   ├── chardet<5,>=3.0.2
 │       │   ├── idna<3,>=2.5
-│       │   ├── urllib3<1.27,>=1.21.1
-│       │   └── certifi>=2017.4.17
-│       ├── requests-file>=1.4
-│       │   ├── requests>=1.0.0
-│       │   │   ├── chardet<5,>=3.0.2
-│       │   │   ├── idna<3,>=2.5
-│       │   │   ├── urllib3<1.27,>=1.21.1
-│       │   │   └── certifi>=2017.4.17
-│       │   └── six
-│       └── filelock>=3.0.8
+│       │   └── urllib3<1.27,>=1.21.1
+│       └── requests-file>=1.4
+│           ├── requests>=1.0.0
+│           │   ├── certifi>=2017.4.17
+│           │   ├── chardet<5,>=3.0.2
+│           │   ├── idna<3,>=2.5
+│           │   └── urllib3<1.27,>=1.21.1
+│           └── six
 ├── attrs>=20.2.0
 ├── click==7.1.2
 ├── configconfig>=0.4.0
@@ -65,6 +65,7 @@ repo_helper==2020.12.18
 │       └── typing-extensions>=3.7.4
 ├── consolekit>=0.8.0
 │   ├── click>=7.1.2
+│   ├── colorama>=0.4.3; python_version < "3.10"
 │   ├── domdf-python-tools>=2.0.0
 │   │   ├── deprecation-alias>=0.1.1
 │   │   │   ├── deprecation>=2.1.0
@@ -76,8 +77,7 @@ repo_helper==2020.12.18
 │   │   ├── pydash>=4.7.4
 │   │   └── typing-extensions>=3.7.4.3
 │   ├── mistletoe>=0.7.2
-│   ├── typing-extensions>=3.7.4.3
-│   └── colorama>=0.4.3; python_version < "3.10"
+│   └── typing-extensions>=3.7.4.3
 ├── dict2css>=0.1.0
 │   ├── css-parser==1.0.6
 │   └── domdf-python-tools>=2.2.0
@@ -101,11 +101,11 @@ repo_helper==2020.12.18
 │   ├── pydash>=4.7.4
 │   └── typing-extensions>=3.7.4.3
 ├── dulwich>=0.19.16
-│   ├── urllib3>=1.24.1
-│   └── certifi
+│   ├── certifi
+│   └── urllib3>=1.24.1
 ├── email-validator==1.1.2
-│   ├── idna>=2.0.0
-│   └── dnspython>=1.15.0
+│   ├── dnspython>=1.15.0
+│   └── idna>=2.0.0
 ├── idna==2.10
 ├── isort>=5.0.0
 ├── jinja2>=2.11.2
@@ -125,22 +125,22 @@ repo_helper==2020.12.18
 │       ├── filelock<4,>=3.0.0
 │       └── six<2,>=1.9.0
 ├── requests>=2.25.1
+│   ├── certifi>=2017.4.17
 │   ├── chardet<5,>=3.0.2
 │   ├── idna<3,>=2.5
-│   ├── urllib3<1.27,>=1.21.1
-│   └── certifi>=2017.4.17
+│   └── urllib3<1.27,>=1.21.1
 ├── ruamel-yaml>=0.16.12
-├── shippinglabel>=0.8.1
+├── shippinglabel>=0.8.2
 │   ├── apeye>=0.4.0
 │   │   ├── appdirs>=1.4.4
 │   │   ├── cachecontrol[filecache]>=0.12.6
-│   │   │   ├── requests
-│   │   │   │   ├── chardet<5,>=3.0.2
-│   │   │   │   ├── idna<3,>=2.5
-│   │   │   │   ├── urllib3<1.27,>=1.21.1
-│   │   │   │   └── certifi>=2017.4.17
+│   │   │   ├── lockfile>=0.9; extra == "filecache"
 │   │   │   ├── msgpack>=0.5.2
-│   │   │   └── lockfile>=0.9; extra == "filecache"
+│   │   │   └── requests
+│   │   │       ├── certifi>=2017.4.17
+│   │   │       ├── chardet<5,>=3.0.2
+│   │   │       ├── idna<3,>=2.5
+│   │   │       └── urllib3<1.27,>=1.21.1
 │   │   ├── domdf-python-tools>=0.9.0
 │   │   │   ├── deprecation-alias>=0.1.1
 │   │   │   │   ├── deprecation>=2.1.0
@@ -153,28 +153,29 @@ repo_helper==2020.12.18
 │   │   │   └── typing-extensions>=3.7.4.3
 │   │   ├── lockfile>=0.12.2
 │   │   ├── requests>=2.24.0
+│   │   │   ├── certifi>=2017.4.17
 │   │   │   ├── chardet<5,>=3.0.2
 │   │   │   ├── idna<3,>=2.5
-│   │   │   ├── urllib3<1.27,>=1.21.1
-│   │   │   └── certifi>=2017.4.17
+│   │   │   └── urllib3<1.27,>=1.21.1
 │   │   └── tldextract>=2.2.0
+│   │       ├── filelock>=3.0.8
 │   │       ├── idna
 │   │       ├── requests>=2.1.0
+│   │       │   ├── certifi>=2017.4.17
 │   │       │   ├── chardet<5,>=3.0.2
 │   │       │   ├── idna<3,>=2.5
-│   │       │   ├── urllib3<1.27,>=1.21.1
-│   │       │   └── certifi>=2017.4.17
-│   │       ├── requests-file>=1.4
-│   │       │   ├── requests>=1.0.0
-│   │       │   │   ├── chardet<5,>=3.0.2
-│   │       │   │   ├── idna<3,>=2.5
-│   │       │   │   ├── urllib3<1.27,>=1.21.1
-│   │       │   │   └── certifi>=2017.4.17
-│   │       │   └── six
-│   │       └── filelock>=3.0.8
+│   │       │   └── urllib3<1.27,>=1.21.1
+│   │       └── requests-file>=1.4
+│   │           ├── requests>=1.0.0
+│   │           │   ├── certifi>=2017.4.17
+│   │           │   ├── chardet<5,>=3.0.2
+│   │           │   ├── idna<3,>=2.5
+│   │           │   └── urllib3<1.27,>=1.21.1
+│   │           └── six
 │   ├── appdirs>=1.4.4
 │   ├── consolekit>=0.1.2
 │   │   ├── click>=7.1.2
+│   │   ├── colorama>=0.4.3; python_version < "3.10"
 │   │   ├── domdf-python-tools>=2.0.0
 │   │   │   ├── deprecation-alias>=0.1.1
 │   │   │   │   ├── deprecation>=2.1.0
@@ -186,8 +187,7 @@ repo_helper==2020.12.18
 │   │   │   ├── pydash>=4.7.4
 │   │   │   └── typing-extensions>=3.7.4.3
 │   │   ├── mistletoe>=0.7.2
-│   │   ├── typing-extensions>=3.7.4.3
-│   │   └── colorama>=0.4.3; python_version < "3.10"
+│   │   └── typing-extensions>=3.7.4.3
 │   ├── domdf-python-tools>=2.0.1
 │   │   ├── deprecation-alias>=0.1.1
 │   │   │   ├── deprecation>=2.1.0
@@ -206,6 +206,7 @@ repo_helper==2020.12.18
 │   ├── click>=7.1.2
 │   ├── consolekit>=0.1.2
 │   │   ├── click>=7.1.2
+│   │   ├── colorama>=0.4.3; python_version < "3.10"
 │   │   ├── domdf-python-tools>=2.0.0
 │   │   │   ├── deprecation-alias>=0.1.1
 │   │   │   │   ├── deprecation>=2.1.0
@@ -217,8 +218,7 @@ repo_helper==2020.12.18
 │   │   │   ├── pydash>=4.7.4
 │   │   │   └── typing-extensions>=3.7.4.3
 │   │   ├── mistletoe>=0.7.2
-│   │   ├── typing-extensions>=3.7.4.3
-│   │   └── colorama>=0.4.3; python_version < "3.10"
+│   │   └── typing-extensions>=3.7.4.3
 │   ├── domdf-python-tools>=2.1.0
 │   │   ├── deprecation-alias>=0.1.1
 │   │   │   ├── deprecation>=2.1.0
@@ -230,8 +230,8 @@ repo_helper==2020.12.18
 │   │   ├── pydash>=4.7.4
 │   │   └── typing-extensions>=3.7.4.3
 │   ├── dulwich!=0.20.7,!=0.20.8,!=0.20.9,>=0.20.5
-│   │   ├── urllib3>=1.24.1
-│   │   └── certifi
+│   │   ├── certifi
+│   │   └── urllib3>=1.24.1
 │   ├── filelock>=3.0.12
 │   └── typing-extensions>=3.7.4.3
 ├── tomlkit>=0.7.0
@@ -242,6 +242,7 @@ repo_helper==2020.12.18
     ├── click>=7.1.2
     ├── consolekit>=0.3.0
     │   ├── click>=7.1.2
+    │   ├── colorama>=0.4.3; python_version < "3.10"
     │   ├── domdf-python-tools>=2.0.0
     │   │   ├── deprecation-alias>=0.1.1
     │   │   │   ├── deprecation>=2.1.0
@@ -253,8 +254,7 @@ repo_helper==2020.12.18
     │   │   ├── pydash>=4.7.4
     │   │   └── typing-extensions>=3.7.4.3
     │   ├── mistletoe>=0.7.2
-    │   ├── typing-extensions>=3.7.4.3
-    │   └── colorama>=0.4.3; python_version < "3.10"
+    │   └── typing-extensions>=3.7.4.3
     ├── domdf-python-tools>=0.10.0
     │   ├── deprecation-alias>=0.1.1
     │   │   ├── deprecation>=2.1.0
