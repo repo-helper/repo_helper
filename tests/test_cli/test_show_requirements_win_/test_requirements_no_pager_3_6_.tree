@@ -97,7 +97,7 @@ repo_helper==2020.12.18
 │   │   └── typing-extensions>=3.7.4.3
 │   ├── mistletoe>=0.7.2
 │   └── typing-extensions>=3.7.4.3
-├── dict2css>=0.1.0
+├── dict2css>=0.2.0
 │   ├── css-parser==1.0.6
 │   └── domdf-python-tools>=2.2.0
 │       ├── deprecation-alias>=0.1.1

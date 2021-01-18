@@ -33,7 +33,7 @@ import pathlib
 import shutil
 import warnings
 from contextlib import suppress
-from typing import List
+from typing import Dict, List, Mapping, MutableMapping
 
 # 3rd party
 import dict2css
@@ -384,120 +384,78 @@ def make_alabaster_theming() -> str:
 	:return: The custom stylesheet.
 	"""
 
-	sheet = dict2css.StyleSheet()
-
 	# Common options
 	solid_border = {"border-style": "solid"}
 	docs_bottom_margin = {"margin-bottom": (dict2css.px(17), dict2css.IMPORTANT)}
 
-	sheet.add_style("li p:last-child", {"margin-bottom": dict2css.px(12)})
+	object_border = {"padding": "3px 3px 3px 5px", **docs_bottom_margin, **solid_border}
 
-	# Smooth scrolling between sections
-	sheet.add_style("html", {"scroll-behavior": "smooth"})
+	class_border = {
+			**object_border,
+			"margin-top": ("7px", dict2css.IMPORTANT),
+			"border-color": "rgba(240, 128, 128, 0.5)",
+			}
 
-	# Border around classes
-	sheet.add_style(
-			"dl.class",
-			{
-					"padding": "3px 3px 3px 5px",
-					"margin-top": ("7px", dict2css.IMPORTANT),
-					**docs_bottom_margin,
-					"border-color": "rgba(240, 128, 128, 0.5)",
-					**solid_border,
-					}
-			)
+	function_border = {
+			**object_border,
+			"margin-top": ("7px", dict2css.IMPORTANT),
+			"border-color": "lightskyblue",
+			}
 
-	# Border around functions
-	sheet.add_style(
-			"dl.function",
-			{
-					"padding": "3px 3px 3px 5px",
-					"margin-top": ("7px", dict2css.IMPORTANT),
-					**docs_bottom_margin,
-					"border-color": "lightskyblue",
-					**solid_border,
-					}
-			)
+	attribute_border = {**object_border, "border-color": "rgba(119, 136, 153, 0.5)"}
+	method_border = {**object_border, "border-color": "rgba(32, 178, 170, 0.5)"}
 
-	sheet.add_style("dl.function dt", {"margin-bottom": (dict2css.px(10), dict2css.IMPORTANT)})
+	table_vertical_margins = {
+			"margin-bottom": (dict2css.px(20), "important"),
+			"margin-top": (dict2css.px(-15), dict2css.IMPORTANT),
+			}
 
-	# Border around attributes
-	sheet.add_style(
-			"dl.attribute",
-			{
-					"padding": "3px 3px 3px 5px",
-					**docs_bottom_margin,
-					"border-color": "rgba(119, 136, 153, 0.5)",
-					**solid_border
-					}
-			)
+	style: Dict[str, MutableMapping] = {
+			"li p:last-child": {"margin-bottom": dict2css.px(12)},
+			"html": {"scroll-behavior": "smooth"},  # Smooth scrolling between sections
+			"dl.class": class_border,
+			"dl.function": function_border,
+			"dl.function dt": {"margin-bottom": (dict2css.px(10), dict2css.IMPORTANT)},
+			"dl.attribute": attribute_border,
+			"dl.method": method_border,
+			"div.sphinxsidebar": {"font-size": dict2css.px(14), "line-height": "1.5"},
+			"div.sphinxsidebar h3": {"font-weight": "bold"},
+			"div.sphinxsidebar p.caption": {"font-size": dict2css.px(20)},
+			"div.sphinxsidebar div.sphinxsidebarwrapper": {"padding-right": (dict2css.px(20), dict2css.IMPORTANT)},
+			"table.longtable": table_vertical_margins,
+			}
 
-	# Border around Methods
-	sheet.add_style(
-			"dl.method",
-			{
-					"padding": "3px 3px 3px 5px",
-					**docs_bottom_margin,
-					"border-color": "rgba(32, 178, 170, 0.5)",
-					**solid_border
-					}
-			)
-
-	sheet.add_style("div.sphinxsidebar", {"font-size": dict2css.px(14), "line-height": "1.5"})
-	sheet.add_style("div.sphinxsidebar h3", {"font-weight": "bold"})
-	sheet.add_style("div.sphinxsidebar p.caption", {"font-size": dict2css.px(20)})
-	sheet.add_style(
-			"div.sphinxsidebar div.sphinxsidebarwrapper", {"padding-right": (dict2css.px(20), dict2css.IMPORTANT)}
-			)
-
-	# Margin above and below table
-	sheet.add_style(
-			"table.longtable", {
-					"margin-bottom": (dict2css.px(20), "important"),
-					"margin-top": (dict2css.px(-15), dict2css.IMPORTANT)
-					}
-			)
-
-	# The following styling from Tox"s documentation
+	# The following styling from Tox's documentation
 	# https://github.com/tox-dev/tox/blob/master/docs/_static/custom.css
 	# MIT Licensed
 
 	# Page width
-	sheet.add_style("div.document", {"width": "100%", "max-width": dict2css.px(1400)})
-	sheet.add_style("div.body", {"max-width": dict2css.px(1100)})
+	style["div.document"] = {"width": "100%", "max-width": dict2css.px(1400)}
+	style["div.body"] = {"max-width": dict2css.px(1100)}
 
 	# No end-of-line hyphenation
-	sheet.add_style("div.body p, ol > li, div.body td", {"hyphens": None})
+	style["div.body p, ol > li, div.body td"] = {"hyphens": None}
 
-	sheet.add_style("img, div.figure", {"margin": ('0', dict2css.IMPORTANT)})
-	sheet.add_style("ul > li", {"text-align": "justify"})
-	sheet.add_style("ul > li > p", {"margin-bottom": '0'})
-	sheet.add_style("ol > li > p", {"margin-bottom": '0'})
-	sheet.add_style("div.body code.descclassname", {"display": None})
-	sheet.add_style(".wy-table-responsive table td", {"white-space": ("normal", dict2css.IMPORTANT)})
-	sheet.add_style(".wy-table-responsive", {"overflow": ("visible", dict2css.IMPORTANT)})
-	sheet.add_style("div.toctree-wrapper.compound > ul > li", {
+	style["img, div.figure"] = {"margin": ('0', dict2css.IMPORTANT)}
+	style["ul > li"] = {"text-align": "justify"}
+	style["ul > li > p"] = {"margin-bottom": '0'}
+	style["ol > li > p"] = {"margin-bottom": '0'}
+	style["div.body code.descclassname"] = {"display": None}
+	style[".wy-table-responsive table td"] = {"white-space": ("normal", dict2css.IMPORTANT)}
+	style[".wy-table-responsive"] = {"overflow": ("visible", dict2css.IMPORTANT)}
+	style["div.toctree-wrapper.compound > ul > li"] = {
 			"margin": '0',
 			"padding": '0',
-			})
+			}
 	# TODO
 	# code.docutils.literal {{
 	#     background-color: #ECF0F3;
 	#     padding: 0 1px;
 	# }}
 
-	with dict2css.CSSSerializer(trailing_semicolon=True).use():
-		stylesheet = sheet.tostring().replace('}', "}\n")
+	style["@media screen and (min-width: 870px)"] = {"div.sphinxsidebar": {"width": "250px"}}
 
-	return f"""\
-{stylesheet}
-
-@media screen and (min-width: 870px) {{
-	div.sphinxsidebar {{
-		width: 250px;
-	}}
-}}
-"""
+	return dict2css.dumps(style, trailing_semicolon=True)
 
 
 def make_readthedocs_theming() -> str:
@@ -507,7 +465,7 @@ def make_readthedocs_theming() -> str:
 	:return: The custom stylesheet.
 	"""
 
-	style = {
+	style: Dict[str, Mapping] = {
 			".wy-nav-content": {"max-width": (dict2css.px(1200), dict2css.IMPORTANT)},
 			"li p:last-child": {"margin-bottom": (dict2css.px(12), dict2css.IMPORTANT)},
 			"html": {"scroll-behavior": "smooth"},

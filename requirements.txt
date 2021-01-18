@@ -3,7 +3,7 @@ attrs>=20.2.0
 click==7.1.2
 configconfig>=0.4.0
 consolekit>=0.8.0
-dict2css>=0.1.0
+dict2css>=0.2.0
 domdf-python-tools>=2.0.1
 dulwich>=0.19.16
 email-validator==1.1.2

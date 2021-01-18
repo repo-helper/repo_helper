@@ -2,7 +2,7 @@
 #
 #  test_docs.py
 #
-#  Copyright © 2020 Dominic Davis-Foster <dominic@davis-foster.co.uk>
+#  Copyright © 2020-2021 Dominic Davis-Foster <dominic@davis-foster.co.uk>
 #
 #  This program is free software; you can redistribute it and/or modify
 #  it under the terms of the GNU Lesser General Public License as published by
@@ -172,7 +172,7 @@ def test_make_conf(tmp_pathplus, demo_environment, file_regression, theme):
 
 
 def test_make_alabaster_theming(file_regression):
-	check_file_regression(make_alabaster_theming(), file_regression, "style.css")
+	check_file_regression(make_alabaster_theming(), file_regression, "_style.css")
 
 
 def test_make_readthedocs_theming(file_regression):

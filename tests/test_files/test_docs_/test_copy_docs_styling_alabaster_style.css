@@ -10,18 +10,18 @@ html {
 
 dl.class {
 	padding: 3px 3px 3px 5px;
-	margin-top: 7px !important;
 	margin-bottom: 17px !important;
-	border-color: rgba(240, 128, 128, 0.5);
 	border-style: solid;
+	margin-top: 7px !important;
+	border-color: rgba(240, 128, 128, 0.5);
 }
 
 dl.function {
 	padding: 3px 3px 3px 5px;
-	margin-top: 7px !important;
 	margin-bottom: 17px !important;
-	border-color: lightskyblue;
 	border-style: solid;
+	margin-top: 7px !important;
+	border-color: lightskyblue;
 }
 
 dl.function dt {
@@ -31,15 +31,15 @@ dl.function dt {
 dl.attribute {
 	padding: 3px 3px 3px 5px;
 	margin-bottom: 17px !important;
-	border-color: rgba(119, 136, 153, 0.5);
 	border-style: solid;
+	border-color: rgba(119, 136, 153, 0.5);
 }
 
 dl.method {
 	padding: 3px 3px 3px 5px;
 	margin-bottom: 17px !important;
-	border-color: rgba(32, 178, 170, 0.5);
 	border-style: solid;
+	border-color: rgba(32, 178, 170, 0.5);
 }
 
 div.sphinxsidebar {
@@ -110,9 +110,9 @@ div.toctree-wrapper.compound > ul > li {
 	padding: 0;
 }
 
-
 @media screen and (min-width: 870px) {
 	div.sphinxsidebar {
 		width: 250px;
 	}
+
 }
