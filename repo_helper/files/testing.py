@@ -441,13 +441,16 @@ class ToxConfig(IniConfigurator):
 		``[flake8]``.
 		"""
 
+		test_ignores = list(code_only_warning)
+		test_ignores.remove("E302")
+
 		self._ini["flake8"]["max-line-length"] = "120"
 		self._ini["flake8"]["select"] = f"{DelimitedList(lint_warn_list + code_only_warning): }"
 		self._ini["flake8"]["exclude"] = ','.join([self["docs_dir"], *standard_flake8_excludes])
 		self._ini["flake8"]["rst-directives"] = indent_join(sorted(allowed_rst_directives))
 		self._ini["flake8"]["per-file-ignores"] = indent_join([
 				'',
-				f"{self['tests_dir']}/*: {' '.join(str(e) for e in code_only_warning)}",
+				f"{self['tests_dir']}/*: {' '.join(str(e) for e in test_ignores)}",
 				f"*/*.pyi: {' '.join(str(e) for e in code_only_warning)}",
 				])
 		self._ini["flake8"]["pytest-parametrize-names-type"] = "csv"
@@ -485,7 +488,7 @@ class ToxConfig(IniConfigurator):
 				"if TYPE_CHECKING:",
 				"if typing.TYPE_CHECKING:",
 				"if __name__ == .__main__.:",
-				re.escape("..."),
+				r":[\n\s]*\.\.\.",
 				])
 
 	def check_wheel_contents(self):
