@@ -22,7 +22,7 @@
 
 # 3rd party
 import pytest
-from domdf_python_tools.testing import check_file_output
+from coincidence import check_file_output
 from pytest_regressions.file_regression import FileRegressionFixture
 
 # this package

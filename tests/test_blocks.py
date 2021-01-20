@@ -23,7 +23,7 @@
 # 3rd party
 import lorem  # type: ignore
 import pytest
-from domdf_python_tools.testing import check_file_regression
+from coincidence import check_file_regression
 from pytest_regressions.file_regression import FileRegressionFixture
 
 # this package

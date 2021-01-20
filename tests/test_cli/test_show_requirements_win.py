@@ -1,5 +1,5 @@
 # 3rd party
-from domdf_python_tools.testing import not_pypy, only_windows
+from coincidence import not_pypy, only_windows
 
 # this package
 from tests.test_cli.test_show import ShowRequirementsTest

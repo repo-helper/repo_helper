@@ -2,7 +2,7 @@
 import pytest
 import requests.exceptions
 from apeye.requests_url import RequestsURL
-from domdf_python_tools.testing import check_file_output
+from coincidence import check_file_output
 
 # this package
 from repo_helper.cli.commands.init import init_repo

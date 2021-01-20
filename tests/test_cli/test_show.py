@@ -4,8 +4,8 @@ import sys
 # 3rd party
 import pytest
 from click.testing import CliRunner, Result
+from coincidence import check_file_regression, min_version, not_pypy, not_windows
 from domdf_python_tools.paths import PathPlus, in_directory
-from domdf_python_tools.testing import check_file_regression, min_version, not_pypy, not_windows
 from pytest_regressions.file_regression import FileRegressionFixture
 
 # this package

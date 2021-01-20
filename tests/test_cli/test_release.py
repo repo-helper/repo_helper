@@ -4,8 +4,8 @@ from typing import TYPE_CHECKING, Callable, List, Optional
 
 # 3rd party
 from click.testing import CliRunner, Result
+from coincidence import check_file_output
 from domdf_python_tools.paths import in_directory
-from domdf_python_tools.testing import check_file_output
 from pytest_regressions.file_regression import FileRegressionFixture
 from southwark import get_tags
 from southwark.repo import Repo

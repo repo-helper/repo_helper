@@ -25,7 +25,7 @@ import posixpath
 
 # 3rd party
 import pytest
-from domdf_python_tools.testing import check_file_output
+from coincidence import check_file_output
 from pytest_regressions.file_regression import FileRegressionFixture
 
 # this package
@@ -114,13 +114,13 @@ def test_make_isort_case_1(tmp_pathplus, demo_environment, file_regression):
 	(tmp_pathplus / "tests").mkdir()
 	(tmp_pathplus / "tests" / "requirements.txt").write_text('')
 
-	(tmp_pathplus / "requirements.txt").write_text("""
-tox
-isort
-black
-wheel
-setuptools_rust
-""")
+	(tmp_pathplus / "requirements.txt").write_lines([
+			"tox",
+			"isort",
+			"black",
+			"wheel",
+			"setuptools_rust",
+			])
 	ensure_tests_requirements(tmp_pathplus, demo_environment)
 
 	managed_files = make_isort(tmp_pathplus, demo_environment)
@@ -132,18 +132,16 @@ def test_make_isort_case_2(tmp_pathplus, demo_environment, file_regression):
 	(tmp_pathplus / "tests").mkdir()
 	(tmp_pathplus / "tests" / "requirements.txt").write_text('')
 
-	(tmp_pathplus / "requirements.txt").write_text("""
-tox
-isort
-black
-wheel
-setuptools_rust
-""")
+	(tmp_pathplus / "requirements.txt").write_lines([
+			"tox",
+			"isort",
+			"black",
+			"wheel",
+			"setuptools_rust",
+			])
 	ensure_tests_requirements(tmp_pathplus, demo_environment)
 
-	(tmp_pathplus / ".isort.cfg").write_text("""[settings]
-known_third_party=awesome_package
-""")
+	(tmp_pathplus / ".isort.cfg").write_lines(["[settings]", "known_third_party=awesome_package"])
 
 	managed_files = make_isort(tmp_pathplus, demo_environment)
 	assert managed_files == [".isort.cfg"]
@@ -158,18 +156,18 @@ def test_ensure_tests_requirements(tmp_pathplus, demo_environment):
 	managed_files = ensure_tests_requirements(tmp_pathplus, demo_environment)
 	assert managed_files == [posixpath.join("tests", "requirements.txt")]
 
-	assert (tmp_pathplus / managed_files[0]).read_text(
-			encoding="UTF-8"
-			) == """\
-coverage>=5.1
-coverage-pyver-pragma>=0.0.6
-domdf-python-tools[testing]>=2.0.1
-iniconfig!=1.1.0,>=1.0.1
-pytest>=6.0.0
-pytest-cov>=2.8.1
-pytest-randomly>=3.3.1
-pytest-timeout>=1.4.2
-"""
+	assert (tmp_pathplus / managed_files[0]).read_lines() == [
+			"coincidence>=0.1.0",
+			"coverage>=5.1",
+			"coverage-pyver-pragma>=0.0.6",
+			"domdf-python-tools[testing]>=2.0.1",
+			"iniconfig!=1.1.0,>=1.0.1",
+			"pytest>=6.0.0",
+			"pytest-cov>=2.8.1",
+			"pytest-randomly>=3.3.1",
+			"pytest-timeout>=1.4.2",
+			'',
+			]
 
 	with (tmp_pathplus / managed_files[0]).open('a', encoding="UTF-8") as fp:
 		fp.write("lorem>=0.1.1")
@@ -177,19 +175,19 @@ pytest-timeout>=1.4.2
 	managed_files = ensure_tests_requirements(tmp_pathplus, demo_environment)
 	assert managed_files == ["tests/requirements.txt"]
 
-	assert (tmp_pathplus / managed_files[0]).read_text(
-			encoding="UTF-8"
-			) == """\
-coverage>=5.1
-coverage-pyver-pragma>=0.0.6
-domdf-python-tools[testing]>=2.0.1
-iniconfig!=1.1.0,>=1.0.1
-lorem>=0.1.1
-pytest>=6.0.0
-pytest-cov>=2.8.1
-pytest-randomly>=3.3.1
-pytest-timeout>=1.4.2
-"""
+	assert (tmp_pathplus / managed_files[0]).read_lines() == [
+			"coincidence>=0.1.0",
+			"coverage>=5.1",
+			"coverage-pyver-pragma>=0.0.6",
+			"domdf-python-tools[testing]>=2.0.1",
+			"iniconfig!=1.1.0,>=1.0.1",
+			"lorem>=0.1.1",
+			"pytest>=6.0.0",
+			"pytest-cov>=2.8.1",
+			"pytest-randomly>=3.3.1",
+			"pytest-timeout>=1.4.2",
+			'',
+			]
 
 
 def test_ensure_tests_requirements_extras(tmp_pathplus, demo_environment):
@@ -200,19 +198,19 @@ def test_ensure_tests_requirements_extras(tmp_pathplus, demo_environment):
 	managed_files = ensure_tests_requirements(tmp_pathplus, demo_environment)
 	assert managed_files == [posixpath.join("tests", "requirements.txt")]
 
-	assert (tmp_pathplus / managed_files[0]).read_text(
-			encoding="UTF-8"
-			) == """\
-coverage>=5.1
-coverage-pyver-pragma>=0.0.6
-domdf-python-tools[testing]>=2.0.1
-iniconfig!=1.1.0,>=1.0.1
-pytest>=6.0.0
-pytest-cov>=2.8.1
-pytest-randomly>=3.3.1
-pytest-timeout>=1.4.2
-some-package[extra]>=1.5.0
-"""
+	assert (tmp_pathplus / managed_files[0]).read_lines() == [
+			"coincidence>=0.1.0",
+			"coverage>=5.1",
+			"coverage-pyver-pragma>=0.0.6",
+			"domdf-python-tools[testing]>=2.0.1",
+			"iniconfig!=1.1.0,>=1.0.1",
+			"pytest>=6.0.0",
+			"pytest-cov>=2.8.1",
+			"pytest-randomly>=3.3.1",
+			"pytest-timeout>=1.4.2",
+			"some-package[extra]>=1.5.0",
+			'',
+			]
 
 
 def test_make_pre_commit(tmp_pathplus, demo_environment, file_regression):

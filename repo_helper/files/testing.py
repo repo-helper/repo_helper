@@ -679,6 +679,8 @@ class TestsRequirementsManager(RequirementsManager):
 			self.target_requirements.add(ComparableRequirement("coverage-pyver-pragma>=0.0.6"))
 		if self._globals["pypi_name"] != "domdf_python_tools":
 			self.target_requirements.add(ComparableRequirement("domdf-python-tools[testing]>=2.0.1"))
+		if self._globals["pypi_name"] != "coincidence":
+			self.target_requirements.add(ComparableRequirement("coincidence>=0.1.0"))
 
 	def merge_requirements(self) -> List[str]:
 		current_requirements, comments, invalid_lines = read_requirements(self.req_file, include_invalid=True)

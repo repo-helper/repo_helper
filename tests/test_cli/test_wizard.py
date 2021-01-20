@@ -6,8 +6,8 @@ from typing import List
 # 3rd party
 import pytest
 from click.testing import CliRunner, Result
+from coincidence import check_file_output
 from domdf_python_tools.paths import in_directory
-from domdf_python_tools.testing import check_file_output
 from dulwich.config import StackedConfig
 
 # this package
