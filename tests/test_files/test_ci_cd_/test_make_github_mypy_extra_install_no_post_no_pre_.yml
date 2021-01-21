@@ -9,12 +9,12 @@ on:
 
 jobs:
   Run:
-    name: "mypy / ${{ brace("matrix.os") }}"
-    runs-on: ${{ brace("matrix.os") }}
+    name: "mypy / ${{ matrix.os }}"
+    runs-on: ${{ matrix.os }}
 
     strategy:
       matrix:
-        os: {{ platforms }}
+        os: ['windows-2019']
       fail-fast: false
 
     steps:
@@ -24,9 +24,14 @@ jobs:
       - name: Setup Python 🐍
         uses: "actions/setup-python@v2"
         with:
-          python-version: "{{ python_deploy_version }}"
+          python-version: "3.6"
 
-{{ dependencies_block }}
+      - name: Install dependencies 🔧
+        run: |
+          python -VV
+          python -m site
+          python -m pip install --upgrade pip setuptools wheel
+          python -m pip install --upgrade tox virtualenv
 
       - name: "Run mypy"
         run: "python -m tox -e mypy"

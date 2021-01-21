@@ -26,12 +26,15 @@ jobs:
         with:
           python-version: "3.6"
 
-      - name: Install dependencies 🔧
+      - name: Install dependencies (Linux) 🔧
+        if: ${{ matrix.os == 'ubuntu-20.04' }}
         run: |
+          sudo apt update
           python -VV
           python -m site
           python -m pip install --upgrade pip setuptools wheel
           python -m pip install --upgrade tox virtualenv
+          sudo apt install python3-gi
 
       - name: "Run mypy"
         run: "python -m tox -e mypy"

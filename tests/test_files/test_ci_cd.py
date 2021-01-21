@@ -2,7 +2,7 @@
 #
 #  test_ci_cd.py
 #
-#  Copyright © 2020 Dominic Davis-Foster <dominic@davis-foster.co.uk>
+#  Copyright © 2020-2021 Dominic Davis-Foster <dominic@davis-foster.co.uk>
 #
 #  This program is free software; you can redistribute it and/or modify
 #  it under the terms of the GNU Lesser General Public License as published by
@@ -22,10 +22,12 @@
 
 # stdlib
 from types import SimpleNamespace
+from typing import List
 
 # 3rd party
 import pytest
-from coincidence import check_file_output
+from coincidence.regressions import check_file_output
+from domdf_python_tools.paths import PathPlus
 from pytest_regressions.data_regression import DataRegressionFixture
 from pytest_regressions.file_regression import FileRegressionFixture
 
@@ -46,7 +48,11 @@ from repo_helper.files.ci_cd import (
 from repo_helper.files.old import remove_copy_pypi_2_github, remove_make_conda_recipe
 
 
-def test_actions_deploy_conda(tmp_pathplus, demo_environment, file_regression: FileRegressionFixture):
+def test_actions_deploy_conda(
+		tmp_pathplus: PathPlus,
+		demo_environment,
+		file_regression: FileRegressionFixture,
+		):
 	managed_files = make_actions_deploy_conda(tmp_pathplus, demo_environment)
 	assert managed_files == [
 			".github/actions_build_conda.sh",
@@ -58,7 +64,11 @@ def test_actions_deploy_conda(tmp_pathplus, demo_environment, file_regression: F
 	check_file_output(tmp_pathplus / managed_files[2], file_regression, extension="_deploy.sh")
 
 
-def test_github_ci_case_1(tmp_pathplus, demo_environment, file_regression: FileRegressionFixture):
+def test_github_ci_case_1(
+		tmp_pathplus: PathPlus,
+		demo_environment,
+		file_regression: FileRegressionFixture,
+		):
 	demo_environment.globals["gh_actions_versions"] = {
 			"3.6": "py36, mypy",
 			"3.7": "py37, build",
@@ -75,13 +85,14 @@ def test_github_ci_case_1(tmp_pathplus, demo_environment, file_regression: FileR
 	check_file_output(tmp_pathplus / managed_files[0], file_regression)
 
 
-def test_github_ci_case_2(tmp_pathplus, demo_environment, file_regression: FileRegressionFixture):
-	demo_environment.globals.update(
-			dict(
-					travis_additional_requirements=["isort", "black"],
-					platforms=["macOS"],
-					)
-			)
+def test_github_ci_case_2(
+		tmp_pathplus: PathPlus,
+		demo_environment,
+		file_regression: FileRegressionFixture,
+		):
+
+	demo_environment.globals["travis_additional_requirements"] = ["isort", "black"]
+	demo_environment.globals["platforms"] = ["macOS"]
 
 	managed_files = make_github_ci(tmp_pathplus, demo_environment)
 	assert managed_files == [
@@ -94,14 +105,15 @@ def test_github_ci_case_2(tmp_pathplus, demo_environment, file_regression: FileR
 	check_file_output(tmp_pathplus / managed_files[1], file_regression)
 
 
-def test_github_ci_windows_38(tmp_pathplus, demo_environment, file_regression: FileRegressionFixture):
-	demo_environment.globals.update(
-			dict(
-					travis_additional_requirements=["isort", "black"],
-					platforms=["macOS"],
-					pure_python=False,
-					)
-			)
+def test_github_ci_windows_38(
+		tmp_pathplus: PathPlus,
+		demo_environment,
+		file_regression: FileRegressionFixture,
+		):
+
+	demo_environment.globals["travis_additional_requirements"] = ["isort", "black"]
+	demo_environment.globals["platforms"] = ["macOS"]
+	demo_environment.globals["pure_python"] = False
 
 	demo_environment.globals["py_versions"] = ["3.6", "3.7", "3.8"]
 	managed_files = make_github_ci(tmp_pathplus, demo_environment)
@@ -112,7 +124,7 @@ def test_github_ci_windows_38(tmp_pathplus, demo_environment, file_regression: F
 	check_file_output(tmp_pathplus / managed_files[1], file_regression)
 
 
-def test_github_ci_case_3(tmp_pathplus, demo_environment):  # pylint: disable=useless-return
+def test_github_ci_case_3(tmp_pathplus: PathPlus, demo_environment):
 	demo_environment.globals.update(dict(platforms=["Windows", "macOS"], ))
 
 	managed_files = make_github_ci(tmp_pathplus, demo_environment)
@@ -140,17 +152,8 @@ def test_github_ci_case_3(tmp_pathplus, demo_environment):  # pylint: disable=us
 	assert not (tmp_pathplus / managed_files[0]).is_file()
 	assert not (tmp_pathplus / managed_files[1]).is_file()
 
-	# # Reset
-	# demo_environment.globals.update(
-	# 		dict(
-	# 				travis_additional_requirements=["isort", "black"],
-	# 				platforms=["Windows", "macOS"],
-	# 				)
-	# 		)
-	return
 
-
-def test_remove_copy_pypi_2_github(tmp_pathplus, demo_environment):
+def test_remove_copy_pypi_2_github(tmp_pathplus: PathPlus, demo_environment):
 	(tmp_pathplus / ".ci").mkdir()
 	(tmp_pathplus / ".ci" / "copy_pypi_2_github.py").touch()
 	assert (tmp_pathplus / ".ci" / "copy_pypi_2_github.py").is_file()
@@ -160,26 +163,15 @@ def test_remove_copy_pypi_2_github(tmp_pathplus, demo_environment):
 	assert not (tmp_pathplus / ".ci" / "copy_pypi_2_github.py").is_file()
 
 
-def test_remove_make_conda_recipe(tmp_pathplus, demo_environment):
+def test_remove_make_conda_recipe(tmp_pathplus: PathPlus, demo_environment):
 	assert remove_make_conda_recipe(tmp_pathplus, demo_environment) == ["make_conda_recipe.py"]
 	assert not (tmp_pathplus / "make_conda_recipe.py").is_file()
-
-
-# def test_make_make_conda_recipe(tmp_pathplus, demo_environment, file_regression):
-# 	demo_environment.globals["conda_description"] = "This is the conda description."
-# 	demo_environment.globals["extras_require"] = {}
-# 	demo_environment.globals["license"] = "MIT License"
-# 	demo_environment.globals["author"] = "Joe Bloggs"
-# 	demo_environment.globals["email"] = "j.bloggs@example.com"
-#
-# 	assert make_make_conda_recipe(tmp_pathplus, demo_environment) == ["make_conda_recipe.py"]
-# 	check_file_output(tmp_pathplus / "make_conda_recipe.py", file_regression)
 
 
 @pytest.mark.parametrize("py_versions", [["3.6", "3.7", "3.8"], ["3.6", "3.7"]])
 @pytest.mark.parametrize("platforms", [["Linux"], ["Linux", "Windows"]])
 def test_make_github_manylinux(
-		tmp_pathplus,
+		tmp_pathplus: PathPlus,
 		demo_environment,
 		file_regression: FileRegressionFixture,
 		platforms,
@@ -201,7 +193,7 @@ def test_make_github_manylinux(
 
 @pytest.mark.parametrize("platforms", [["Linux"], ["Linux", "Windows"]])
 def test_make_github_manylinux_pure_python(
-		tmp_pathplus,
+		tmp_pathplus: PathPlus,
 		demo_environment,
 		file_regression: FileRegressionFixture,
 		platforms,
@@ -242,8 +234,56 @@ def test_make_github_flake8(tmp_pathplus, demo_environment, file_regression: Fil
 				pytest.param(["macOS", "Linux"], id="unix"),
 				]
 		)
-def test_make_github_mypy(tmp_pathplus, demo_environment, file_regression: FileRegressionFixture, platforms):
+def test_make_github_mypy(
+		tmp_pathplus: PathPlus,
+		demo_environment,
+		file_regression: FileRegressionFixture,
+		platforms,
+		):
 	demo_environment.globals["platforms"] = platforms
+
+	assert make_github_mypy(tmp_pathplus, demo_environment) == [".github/workflows/mypy.yml"]
+	assert (tmp_pathplus / ".github/workflows/mypy.yml").is_file()
+	check_file_output(tmp_pathplus / ".github/workflows/mypy.yml", file_regression)
+
+
+@pytest.mark.parametrize(
+		"extra_install_pre", [
+				pytest.param(["sudo apt update"], id="has_pre"),
+				pytest.param([], id="no_pre"),
+				]
+		)
+@pytest.mark.parametrize(
+		"extra_install_post", [
+				pytest.param(["sudo apt install python3-gi"], id="has_post"),
+				pytest.param([], id="no_post"),
+				]
+		)
+def test_make_github_mypy_extra_install(
+		tmp_pathplus: PathPlus,
+		demo_environment,
+		file_regression: FileRegressionFixture,
+		extra_install_pre: List[str],
+		extra_install_post: List[str],
+		):
+
+	demo_environment.globals["travis_extra_install_pre"] = extra_install_pre
+	demo_environment.globals["travis_extra_install_post"] = extra_install_post
+
+	assert make_github_mypy(tmp_pathplus, demo_environment) == [".github/workflows/mypy.yml"]
+	assert (tmp_pathplus / ".github/workflows/mypy.yml").is_file()
+	check_file_output(tmp_pathplus / ".github/workflows/mypy.yml", file_regression)
+
+
+def test_make_github_mypy_extra_install_only_linux(
+		tmp_pathplus: PathPlus,
+		demo_environment,
+		file_regression: FileRegressionFixture,
+		):
+
+	demo_environment.globals["travis_extra_install_pre"] = ["sudo apt update"]
+	demo_environment.globals["travis_extra_install_post"] = ["sudo apt install python3-gi"]
+	demo_environment.globals["platforms"] = ["Linux"]
 
 	assert make_github_mypy(tmp_pathplus, demo_environment) == [".github/workflows/mypy.yml"]
 	assert (tmp_pathplus / ".github/workflows/mypy.yml").is_file()
@@ -254,22 +294,27 @@ def test_make_github_mypy(tmp_pathplus, demo_environment, file_regression: FileR
 @pytest.mark.parametrize("enable_docs", [True, False])
 @pytest.mark.parametrize("py_modules", [["hello_world.py"], []])
 def test_ensure_bumpversion(
-		tmp_pathplus,
+		tmp_pathplus: PathPlus,
 		demo_environment,
 		file_regression: FileRegressionFixture,
 		enable_docs,
 		py_versions,
 		py_modules,
 		):
+
 	demo_environment.globals["version"] = "1.2.3"
 	demo_environment.globals["enable_docs"] = enable_docs
 	assert ensure_bumpversion(tmp_pathplus, demo_environment) == [".bumpversion.cfg"]
 	check_file_output(tmp_pathplus / ".bumpversion.cfg", file_regression)
 
 
-def test_ensure_bumpversion_remove_docs(tmp_pathplus, demo_environment, file_regression: FileRegressionFixture):
-	demo_environment.globals["version"] = "1.2.3"
+def test_ensure_bumpversion_remove_docs(
+		tmp_pathplus: PathPlus,
+		demo_environment,
+		file_regression: FileRegressionFixture,
+		):
 
+	demo_environment.globals["version"] = "1.2.3"
 	demo_environment.globals["enable_docs"] = True
 	ensure_bumpversion(tmp_pathplus, demo_environment)
 
@@ -279,7 +324,12 @@ def test_ensure_bumpversion_remove_docs(tmp_pathplus, demo_environment, file_reg
 	check_file_output(tmp_pathplus / ".bumpversion.cfg", file_regression)
 
 
-def test_make_github_linux_case_1(tmp_pathplus, demo_environment, file_regression: FileRegressionFixture):
+def test_make_github_linux_case_1(
+		tmp_pathplus: PathPlus,
+		demo_environment,
+		file_regression: FileRegressionFixture,
+		):
+
 	demo_environment.globals["platforms"] = ["Linux"]
 
 	managed_files = make_github_ci(tmp_pathplus, demo_environment)
@@ -295,19 +345,20 @@ def test_make_github_linux_case_1(tmp_pathplus, demo_environment, file_regressio
 	check_file_output(tmp_pathplus / managed_files[2], file_regression)
 
 
-def test_make_github_linux_case_2(tmp_pathplus, demo_environment, file_regression: FileRegressionFixture):
+def test_make_github_linux_case_2(
+		tmp_pathplus: PathPlus,
+		demo_environment,
+		file_regression: FileRegressionFixture,
+		):
+
 	demo_environment.globals["platforms"] = ["Linux"]
-	demo_environment.globals.update(
-			dict(
-					travis_ubuntu_version="bionic",
-					travis_extra_install_pre=["sudo apt update"],
-					travis_extra_install_post=["sudo apt install python3-gi"],
-					travis_additional_requirements=["isort", "black"],
-					enable_tests=False,
-					enable_conda=False,
-					enable_releases=False,
-					)
-			)
+	demo_environment.globals["travis_ubuntu_version"] = "bionic"
+	demo_environment.globals["travis_extra_install_pre"] = ["sudo apt update"]
+	demo_environment.globals["travis_extra_install_post"] = ["sudo apt install python3-gi"]
+	demo_environment.globals["travis_additional_requirements"] = ["isort", "black"]
+	demo_environment.globals["enable_tests"] = False
+	demo_environment.globals["enable_conda"] = False
+	demo_environment.globals["enable_releases"] = False
 
 	managed_files = make_github_ci(tmp_pathplus, demo_environment)
 	assert managed_files == [
@@ -327,7 +378,7 @@ def test_make_github_linux_case_2(tmp_pathplus, demo_environment, file_regressio
 @pytest.mark.parametrize("enable_tests", [True, False])
 @pytest.mark.parametrize("enable_releases", [True, False])
 def test_make_github_linux_case_3(
-		tmp_pathplus,
+		tmp_pathplus: PathPlus,
 		file_regression: FileRegressionFixture,
 		demo_environment,
 		pure_python,
@@ -335,15 +386,12 @@ def test_make_github_linux_case_3(
 		enable_tests,
 		enable_releases,
 		):
+
 	demo_environment.globals["platforms"] = ["Linux"]
-	demo_environment.globals.update(
-			dict(
-					pure_python=pure_python,
-					enable_tests=enable_conda,
-					enable_conda=enable_tests,
-					enable_releases=enable_releases,
-					)
-			)
+	demo_environment.globals["pure_python"] = pure_python
+	demo_environment.globals["enable_tests"] = enable_conda
+	demo_environment.globals["enable_conda"] = enable_tests
+	demo_environment.globals["enable_releases"] = enable_releases
 
 	managed_files = make_github_ci(tmp_pathplus, demo_environment)
 	assert managed_files == [
@@ -359,23 +407,20 @@ def test_make_github_linux_case_3(
 
 
 def test_make_github_linux_case_4(
-		tmp_pathplus,
+		tmp_pathplus: PathPlus,
 		file_regression: FileRegressionFixture,
 		demo_environment,
 		):
-	demo_environment.globals.update(
-			dict(
-					platforms=["Linux"],
-					travis_ubuntu_version="bionic",
-					travis_extra_install_pre=["sudo apt update"],
-					travis_extra_install_post=["sudo apt install python3-gi"],
-					travis_additional_requirements=["isort", "black"],
-					enable_tests=False,
-					enable_conda=False,
-					enable_releases=False,
-					python_versions=["3.6", "3.7", "3.8", "3.9", "3.10-dev"],
-					)
-			)
+
+	demo_environment.globals["platforms"] = ["Linux"]
+	demo_environment.globals["travis_ubuntu_version"] = "bionic"
+	demo_environment.globals["travis_extra_install_pre"] = ["sudo apt update"]
+	demo_environment.globals["travis_extra_install_post"] = ["sudo apt install python3-gi"]
+	demo_environment.globals["travis_additional_requirements"] = ["isort", "black"]
+	demo_environment.globals["enable_tests"] = False
+	demo_environment.globals["enable_conda"] = False
+	demo_environment.globals["enable_releases"] = False
+	demo_environment.globals["python_versions"] = ["3.6", "3.7", "3.8", "3.9", "3.10-dev"]
 
 	demo_environment.globals["tox_py_versions"] = get_tox_python_versions(
 			demo_environment.globals["python_versions"]
@@ -402,7 +447,11 @@ def test_make_github_linux_case_4(
 	check_file_output(tmp_pathplus / managed_files[2], file_regression)
 
 
-def test_make_conda_actions_ci(tmp_pathplus, demo_environment, file_regression: FileRegressionFixture):
+def test_make_conda_actions_ci(
+		tmp_pathplus: PathPlus,
+		demo_environment,
+		file_regression: FileRegressionFixture,
+		):
 	managed_files = make_conda_actions_ci(tmp_pathplus, demo_environment)
 	assert managed_files == [".github/workflows/conda_ci.yml"]
 	assert (tmp_pathplus / managed_files[0]).is_file()
@@ -427,7 +476,10 @@ def test_make_conda_actions_ci(tmp_pathplus, demo_environment, file_regression: 
 				["3.8"],
 				]
 		)
-def test_actions_manager_python_versions(python_versions, data_regression: DataRegressionFixture):
+def test_actions_manager_python_versions(
+		python_versions: List[str],
+		data_regression: DataRegressionFixture,
+		):
 
 	class FakeActionsManager:
 
@@ -453,7 +505,10 @@ def test_actions_manager_python_versions(python_versions, data_regression: DataR
 				["3.8"],
 				]
 		)
-def test_actions_manager_python_versions_matrix(python_versions, data_regression: DataRegressionFixture):
+def test_actions_manager_python_versions_matrix(
+		python_versions: List[str],
+		data_regression: DataRegressionFixture,
+		):
 
 	class FakeActionsManager:
 

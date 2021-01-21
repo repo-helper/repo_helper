@@ -5,7 +5,7 @@
 Manage configuration files for continuous integration / continuous deployment.
 """
 #
-#  Copyright © 2020 Dominic Davis-Foster <dominic@davis-foster.co.uk>
+#  Copyright © 2020-2021 Dominic Davis-Foster <dominic@davis-foster.co.uk>
 #
 #  This program is free software; you can redistribute it and/or modify
 #  it under the terms of the GNU Lesser General Public License as published by
@@ -26,6 +26,7 @@ Manage configuration files for continuous integration / continuous deployment.
 # stdlib
 import pathlib
 import posixpath
+from textwrap import indent
 from typing import Dict, Iterator, List
 
 # 3rd party
@@ -220,6 +221,60 @@ class ActionsManager:
 
 		return ci_file
 
+	def make_mypy(self) -> PathPlus:
+		"""
+		Create, update or remove the mypy action, as appropriate.
+
+		.. versionadded:: $VERSION
+		"""
+
+		ci_file = self.workflows_dir / "mypy.yml"
+		template = self.templates.get_template(ci_file.name)
+		# TODO: handle case where Linux is not a supported platform
+
+		platforms = list(
+				filter(None, (platform_ci_names.get(p, None) for p in self.templates.globals["platforms"]))
+				)
+
+		dependency_lines = self.get_linux_mypy_requirements()
+		linux_platform = platform_ci_names["Linux"]
+
+		if dependency_lines == self.standard_python_install_lines:
+			dependencies_block = StringList([
+					"- name: Install dependencies 🔧",
+					"  run: |",
+					])
+			with dependencies_block.with_indent("  ", 2):
+				dependencies_block.extend(self.standard_python_install_lines)
+		else:
+			dependencies_block = StringList([
+					"- name: Install dependencies (Linux) 🔧",
+					f"  if: ${{{{ matrix.os == '{linux_platform}' }}}}",
+					"  run: |",
+					])
+			with dependencies_block.with_indent("  ", 2):
+				dependencies_block.extend(dependency_lines)
+
+			if self.templates.globals["platforms"] != ["Linux"]:
+				dependencies_block.blankline(ensure_single=True)
+				dependencies_block.extend([
+						"- name: Install dependencies (Win/mac) 🔧",
+						f"  if: ${{{{ matrix.os != '{linux_platform}' }}}}",
+						"  run: |",
+						])
+				with dependencies_block.with_indent("  ", 2):
+					dependencies_block.extend(self.standard_python_install_lines)
+
+		ci_file.write_clean(
+				template.render(
+						platforms=platforms,
+						linux_platform=platform_ci_names["Linux"],
+						dependencies_block=indent(str(dependencies_block), "      "),
+						)
+				)
+
+		return ci_file
+
 	def get_windows_ci_versions(self) -> List[str]:
 		"""
 		Returns the Python versions to run tests for on Windows.
@@ -284,6 +339,17 @@ class ActionsManager:
 			dependency_lines.append("python -m pip install --upgrade coverage_pyver_pragma")
 
 		dependency_lines.extend(self._get_additional_requirements())
+		dependency_lines.extend(self.templates.globals["travis_extra_install_post"])
+
+		return dependency_lines
+
+	def get_linux_mypy_requirements(self) -> List[str]:
+		"""
+		Returns the Python requirements to run tests for on Linux.
+		"""
+
+		dependency_lines = StringList(self.templates.globals["travis_extra_install_pre"])
+		dependency_lines.extend(self.standard_python_install_lines)
 		dependency_lines.extend(self.templates.globals["travis_extra_install_post"])
 
 		return dependency_lines
@@ -441,14 +507,9 @@ def make_github_mypy(repo_path: pathlib.Path, templates: jinja2.Environment) -> 
 	:param templates:
 	"""
 
-	file = PathPlus(repo_path / ".github" / "workflows" / "mypy.yml")
-	file.parent.maybe_make(parents=True)
+	manager = ActionsManager(repo_path, templates)
 
-	platforms = list(filter(None, (platform_ci_names.get(p, None) for p in templates.globals["platforms"])))
-
-	file.write_clean(templates.get_template(file.name).render(platforms=platforms))
-
-	return [file.relative_to(repo_path).as_posix()]
+	return [manager.make_mypy().relative_to(repo_path).as_posix()]
 
 
 @management.register("bumpversion")
