@@ -643,21 +643,21 @@ class ConfigUpdater(Container[Block], MutableMapping):
 	last_item: Section
 
 	# Regular expressions for parsing section headers and options
-	_OPT_TMPL = RawConfigParser._OPT_TMPL  # type: ignore
-	_OPT_NV_TMPL = RawConfigParser._OPT_NV_TMPL  # type: ignore
+	_OPT_TMPL = RawConfigParser._OPT_TMPL
+	_OPT_NV_TMPL = RawConfigParser._OPT_NV_TMPL
 
 	# Compiled regular expression for matching sections
-	SECTCRE = RawConfigParser.SECTCRE  # type: ignore
+	SECTCRE = RawConfigParser.SECTCRE
 
 	# Compiled regular expression for matching options with typical separators
-	OPTCRE = RawConfigParser.OPTCRE  # type: ignore
+	OPTCRE = RawConfigParser.OPTCRE
 
 	# Compiled regular expression for matching options with optional values
 	# delimited using typical separators
-	OPTCRE_NV = RawConfigParser.OPTCRE_NV  # type: ignore
+	OPTCRE_NV = RawConfigParser.OPTCRE_NV
 
 	# Compiled regular expression for matching leading whitespace in a line
-	NONSPACECRE = RawConfigParser.NONSPACECRE  # type: ignore
+	NONSPACECRE = RawConfigParser.NONSPACECRE
 
 	def __init__(
 			self,

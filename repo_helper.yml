@@ -90,3 +90,5 @@ tox_unmanaged:
 
 keywords:
  - configuration
+
+mypy_version: "0.800"

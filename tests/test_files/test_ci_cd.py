@@ -490,7 +490,7 @@ def test_actions_manager_python_versions(
 				"third_party_version_matrix": {},
 				}
 
-	data_regression.check(ActionsManager.get_gh_actions_python_versions(FakeActionsManager()))
+	data_regression.check(ActionsManager.get_gh_actions_python_versions(FakeActionsManager()))  # type: ignore
 
 
 @pytest.mark.parametrize(
@@ -519,4 +519,4 @@ def test_actions_manager_python_versions_matrix(
 				"third_party_version_matrix": {"attrs": ["19.3", "20.1", "20.2", "latest"]},
 				}
 
-	data_regression.check(ActionsManager.get_gh_actions_python_versions(FakeActionsManager()))
+	data_regression.check(ActionsManager.get_gh_actions_python_versions(FakeActionsManager()))  # type: ignore

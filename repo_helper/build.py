@@ -152,8 +152,7 @@ class Builder:
 		for py_pattern in {"**/*.py", "**/*.pyi", "**/*.pyx", "**/py.typed"}:
 			for py_file in pkgdir.rglob(py_pattern):
 				if "__pycache__" not in py_file.parts:
-					# ref: https://github.com/python/typeshed/issues/4746
-					yield py_file  # type: ignore
+					yield py_file
 
 	def copy_source(self) -> None:
 		"""
