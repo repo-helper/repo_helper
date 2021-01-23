@@ -160,7 +160,6 @@ class ShowRequirementsTest:
 			check_file_regression(result.stdout.rstrip(), file_regression, extension=".tree")
 
 
-@not_windows("Output differs on Windows.")
 @not_pypy("Output differs on PyPy.")
 class TestShowRequirements(ShowRequirementsTest):
 	pass
