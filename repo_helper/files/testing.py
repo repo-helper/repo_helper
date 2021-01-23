@@ -375,23 +375,21 @@ class ToxConfig(IniConfigurator):
 		``[testenv:mypy]``.
 		"""
 
-		if not (self["stubs_package"] and not self["enable_tests"]):
-			self._ini["testenv:mypy"]["basepython"] = "python{python_deploy_version}".format(**self._globals)
-			self._ini["testenv:mypy"]["ignore_errors"] = True
-			self._ini["testenv:mypy"]["changedir"] = "{toxinidir}"
+		self._ini["testenv:mypy"]["basepython"] = "python{python_deploy_version}".format(**self._globals)
+		self._ini["testenv:mypy"]["ignore_errors"] = True
+		self._ini["testenv:mypy"]["changedir"] = "{toxinidir}"
 
-			if self._globals["tox_testenv_extras"]:
-				self._ini["testenv:mypy"]["extras"] = self._globals["tox_testenv_extras"]
+		if self._globals["tox_testenv_extras"]:
+			self._ini["testenv:mypy"]["extras"] = self._globals["tox_testenv_extras"]
 
-			self._ini["testenv:mypy"]["deps"] = indent_join(self.get_mypy_dependencies())
+		self._ini["testenv:mypy"]["deps"] = indent_join(self.get_mypy_dependencies())
 
-			commands = self.get_mypy_commands()
+		commands = self.get_mypy_commands()
 
-			if commands:
-				self._ini["testenv:mypy"]["commands"] = indent_join(commands)
-				return
-
-		self._ini.remove_section("testenv:mypy")
+		if commands:
+			self._ini["testenv:mypy"]["commands"] = indent_join(commands)
+		else:
+			self._ini.remove_section("testenv:mypy")
 
 	def testenv_pyup(self):
 		"""
