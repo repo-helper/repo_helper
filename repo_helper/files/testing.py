@@ -535,11 +535,22 @@ class ToxConfig(IniConfigurator):
 		if ini_file.is_file():
 			existing_config = ConfigUpdater()
 			existing_config.read(str(ini_file))
+
 			for section in existing_config.sections_blocks():
 				if section.name not in self.managed_sections:
 					self._ini.add_section(section)
 				elif section.name == "coverage:report" and "omit" in section:
 					self._ini["coverage:report"]["omit"] = section["omit"].value
+				elif section.name == "flake8":
+					self.copy_existing_value(section, "rst-roles")
+
+					if "rst-directives" in section:
+						existing_directives = section["rst-directives"].value.splitlines()
+						new_directives = self._ini["flake8"]["rst-directives"].value.splitlines()
+						combined_directives = set(map(str.strip, (*new_directives, *existing_directives)))
+						self._ini["flake8"]["rst-directives"] = indent_join(
+								sorted(filter(bool, combined_directives))
+								)
 
 		# TODO: for tox-isolation
 		# [testenv:{py36,py37,py38,pypy3,py39}]

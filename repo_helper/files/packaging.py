@@ -291,9 +291,6 @@ class SetupCfgConfig(IniConfigurator):
 			existing_config = ConfigUpdater()
 			existing_config.read(str(ini_file))
 
-			def strip(string: str) -> str:
-				return string.strip()
-
 			for section in existing_config.sections_blocks():
 				if section.name == "options.packages.find" and "exclude" in section:
 
@@ -302,13 +299,13 @@ class SetupCfgConfig(IniConfigurator):
 							*self._ini["options.packages.find"]["exclude"].value.splitlines(),
 							)
 
-					exclude_packages = sorted(set(filter(bool, map(strip, all_excludes))))
+					exclude_packages = sorted(filter(bool, set(map(str.strip, all_excludes))))
 					self._ini["options.packages.find"]["exclude"] = indent_join(exclude_packages)
 
 				if section.name not in self.managed_sections:
 					self._ini.add_section(section)
-				elif section.name == "mypy" and "incremental" in section:
-					self._ini["mypy"]["incremental"] = section["incremental"].value
+				elif section.name == "mypy":
+					self.copy_existing_value(section, "incremental")
 
 		if "options.entry_points" not in self._ini.sections():
 			self._ini.add_section("options.entry_points")

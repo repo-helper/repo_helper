@@ -47,7 +47,7 @@ from shippinglabel import normalize
 from southwark import open_repo_closing, status
 
 # this package
-from repo_helper.configupdater2 import ConfigUpdater
+from repo_helper.configupdater2 import ConfigUpdater, Section
 
 __all__ = [
 		"IniConfigurator",
@@ -317,6 +317,17 @@ class IniConfigurator:
 		self.merge_existing(ini_file)
 		self._output.append(str(self._ini))
 		ini_file.write_lines(self._output)
+
+	def copy_existing_value(self, section: Section, key: str):
+		"""
+		Copy the existing value for ``key``, if present, to the new configuration.
+
+		:param section:
+		:param key:
+		"""
+
+		if key in section:
+			self._ini[section.name][key] = section[key].value
 
 
 def easter_egg() -> None:  # noqa: D102,D103  # pragma: no cover
