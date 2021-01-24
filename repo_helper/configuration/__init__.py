@@ -130,6 +130,7 @@ from repo_helper.configuration.python_versions_ import (
 from repo_helper.configuration.testing import (
 		enable_devmode,
 		enable_tests,
+		min_coverage,
 		mypy_deps,
 		mypy_plugins,
 		mypy_version,
@@ -230,6 +231,7 @@ __all__ = [
 		"docs_url",
 		"third_party_version_matrix",
 		"entry_points",
+		"min_coverage",
 		]
 
 

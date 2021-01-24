@@ -202,6 +202,13 @@
       },
       "description": "A list of additional entries for ``MANIFEST.in``."
     },
+    "min_coverage": {
+      "type": [
+        "string",
+        "number"
+      ],
+      "description": "The minimum permitted test coverage percentage."
+    },
     "modname": {
       "type": "string",
       "description": "The name of the package."

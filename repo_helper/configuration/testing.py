@@ -40,6 +40,7 @@ __all__ = [
 		"enable_devmode",
 		"mypy_version",
 		"tox_unmanaged",
+		"min_coverage",
 		]
 
 
@@ -197,6 +198,25 @@ class mypy_version(ConfigVar):  # noqa
 	dtype = Union[str, float]
 	rtype = str
 	default = "0.790"
+	category: str = "testing"
+
+
+class min_coverage(ConfigVar):  # noqa
+	"""
+	The minimum permitted test coverage percentage.
+
+	Example:
+
+	.. code-block:: yaml
+
+		mypy_version: 0.790
+
+	.. versionadded:: $VERSION
+	"""
+
+	dtype = Union[str, float]
+	rtype = str
+	default = "80"
 	category: str = "testing"
 
 

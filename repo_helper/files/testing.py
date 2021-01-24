@@ -478,6 +478,7 @@ class ToxConfig(IniConfigurator):
 		``[coverage:report]``.
 		"""
 
+		self._ini["coverage:report"]["fail_under"] = self["min_coverage"]
 		self._ini["coverage:report"]["exclude_lines"] = indent_join([
 				"raise AssertionError",
 				"raise NotImplementedError",

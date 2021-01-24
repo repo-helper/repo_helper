@@ -61,6 +61,7 @@ def test_make_tox(
 		stubs_package,
 		):
 	# TODO: permutations to cover all branches
+	demo_environment.globals["min_coverage"] = 80
 	demo_environment.globals["stubs_package"] = stubs_package
 	demo_environment.globals["py_modules"] = py_modules
 	demo_environment.globals["mypy_deps"] = mypy_deps
@@ -84,21 +85,20 @@ def test_make_tox_matrix(
 		demo_environment,
 		file_regression: FileRegressionFixture,
 		):
-	demo_environment.globals.update(
-			enable_devmode=False,
-			enable_docs=False,
-			tox_testenv_extras='',
-			tox_requirements=[],
-			tox_build_requirements=[],
-			tox_unmanaged=[],
-			yapf_exclude=[],
-			mypy_deps=[],
-			py_modules=["hello_world"],
-			mypy_version="0.790",
-			tox_py_versions=["py36", "py37", "py38"],
-			code_only_warning=code_only_warning,
-			third_party_version_matrix={"attrs": ["19.3", "20.1", "20.2", "latest"]},
-			)
+	demo_environment.globals["min_coverage"] = 80
+	demo_environment.globals["enable_devmode"] = False
+	demo_environment.globals["enable_docs"] = False
+	demo_environment.globals["tox_testenv_extras"] = ''
+	demo_environment.globals["tox_requirements"] = []
+	demo_environment.globals["tox_build_requirements"] = []
+	demo_environment.globals["tox_unmanaged"] = []
+	demo_environment.globals["yapf_exclude"] = []
+	demo_environment.globals["mypy_deps"] = []
+	demo_environment.globals["py_modules"] = ["hello_world"]
+	demo_environment.globals["mypy_version"] = "0.790"
+	demo_environment.globals["tox_py_versions"] = ["py36", "py37", "py38"]
+	demo_environment.globals["code_only_warning"] = code_only_warning
+	demo_environment.globals["third_party_version_matrix"] = {"attrs": ["19.3", "20.1", "20.2", "latest"]}
 
 	make_tox(tmp_pathplus, demo_environment)
 	check_file_output(tmp_pathplus / "tox.ini", file_regression)
