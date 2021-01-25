@@ -22,7 +22,8 @@
 
 # stdlib
 import os
-from typing import Any, Dict, Type
+import re
+from typing import Any, Dict, List, Type
 
 # 3rd party
 import pytest
@@ -154,9 +155,11 @@ def test_version():
 @pytest.mark.parametrize(
 		"wrong_value, match",
 		[
-				({"version": True}, "'version' must be one of <class 'str'>"),
-				({"version": test_list_int}, "'version' must be one of <class 'str'>"),
-				({"version": test_list_str}, "'version' must be one of <class 'str'>"),
+				({"version": True}, "Invalid version: 'True'"),
+				({"version": test_list_int},
+					re.escape("'version' must be one of (<class 'str'>, <class 'float'>), not <class 'list'>")),
+				({"version": test_list_str},
+					re.escape("'version' must be one of (<class 'str'>, <class 'float'>), not <class 'list'>")),
 				({"username": "domdfcoding"}, "A value for 'version' is required."),
 				({}, "A value for 'version' is required."),
 				]
@@ -220,8 +223,12 @@ def test_copyright_years():
 @pytest.mark.parametrize(
 		"wrong_value, match",
 		[
-				({"copyright_years": test_list_int}, "'copyright_years' must be one of <class 'str'>"),
-				({"copyright_years": test_list_str}, "'copyright_years' must be one of <class 'str'>"),
+				({"copyright_years": test_list_int},
+					re.
+					escape("'copyright_years' must be one of (<class 'str'>, <class 'int'>), not <class 'list'>")),
+				({"copyright_years": test_list_str},
+					re.
+					escape("'copyright_years' must be one of (<class 'str'>, <class 'int'>), not <class 'list'>")),
 				({"username": "domdfcoding"}, "A value for 'copyright_years' is required."),
 				({}, "A value for 'copyright_years' is required."),
 				]
@@ -614,6 +621,13 @@ class Test_python_deploy_version(OptionalStringTest):
 	config_var = python_deploy_version
 	test_value = "3.8"
 	default_value = "3.6"
+
+	@property
+	def wrong_values(self) -> List[Dict[str, Any]]:  # noqa: D102
+		return [
+				{self.config_var.__name__: test_list_int},
+				{self.config_var.__name__: test_list_str},
+				]
 
 	def test_success(self):
 		assert self.config_var.get({self.config_var.__name__: 3.8}) == "3.8"
