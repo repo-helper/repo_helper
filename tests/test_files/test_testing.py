@@ -2,7 +2,7 @@
 #
 #  test_testing.py
 #
-#  Copyright © 2020 Dominic Davis-Foster <dominic@davis-foster.co.uk>
+#  Copyright © 2020-2021 Dominic Davis-Foster <dominic@davis-foster.co.uk>
 #
 #  This program is free software; you can redistribute it and/or modify
 #  it under the terms of the GNU Lesser General Public License as published by
@@ -22,6 +22,7 @@
 
 # stdlib
 import posixpath
+from typing import Sequence
 
 # 3rd party
 import pytest
@@ -41,67 +42,149 @@ def boolean_option(name: str, id: str):  # noqa: A002  # pylint: disable=redefin
 			])
 
 
-@boolean_option("enable_docs", "docs")
-@boolean_option("enable_devmode", "devmode")
-@boolean_option("stubs_package", "stubs")
-@pytest.mark.parametrize("tox_testenv_extras", ["extra_a", ''])
-@pytest.mark.parametrize("mypy_deps", [[], ["docutils-stubs"]])
-@pytest.mark.parametrize("mypy_version", ["0.790", "0.782"])
-@pytest.mark.parametrize("py_modules", [["hello_world"], []])
-def test_make_tox(
-		tmp_pathplus,
-		demo_environment,
-		file_regression: FileRegressionFixture,
-		enable_docs,
-		enable_devmode,
-		tox_testenv_extras,
-		mypy_deps,
-		mypy_version,
-		py_modules,
-		stubs_package,
-		):
-	# TODO: permutations to cover all branches
-	demo_environment.globals["min_coverage"] = 80
-	demo_environment.globals["stubs_package"] = stubs_package
-	demo_environment.globals["py_modules"] = py_modules
-	demo_environment.globals["mypy_deps"] = mypy_deps
-	demo_environment.globals["mypy_version"] = mypy_version
-	demo_environment.globals["tox_py_versions"] = ["py36", "py37", "py38"]
-	demo_environment.globals["tox_requirements"] = []
-	demo_environment.globals["tox_build_requirements"] = []
-	demo_environment.globals["tox_unmanaged"] = []
-	demo_environment.globals["yapf_exclude"] = []
-	demo_environment.globals["tox_testenv_extras"] = tox_testenv_extras
-	demo_environment.globals["enable_docs"] = enable_docs
-	demo_environment.globals["enable_devmode"] = enable_devmode
-	demo_environment.globals["code_only_warning"] = code_only_warning
+class TestMakeTox:
 
-	make_tox(tmp_pathplus, demo_environment)
-	check_file_output(tmp_pathplus / "tox.ini", file_regression)
+	@staticmethod
+	def set_globals(
+			demo_environment,
+			min_coverage: int = 80,
+			stubs_package: bool = False,
+			py_modules: Sequence[str] = (),
+			mypy_deps: Sequence[str] = (),
+			mypy_version: str = "0.790",
+			tox_py_versions: Sequence[str] = ("py36", "py37", "py38"),
+			tox_requirements: Sequence[str] = (),
+			tox_build_requirements: Sequence[str] = (),
+			tox_unmanaged: Sequence[str] = (),
+			yapf_exclude: Sequence[str] = (),
+			tox_testenv_extras: str = '',
+			enable_docs: bool = True,
+			enable_tests: bool = True,
+			enable_devmode: bool = True,
+			):
+		demo_environment.globals["min_coverage"] = min_coverage
+		demo_environment.globals["stubs_package"] = stubs_package
+		demo_environment.globals["py_modules"] = list(py_modules)
+		demo_environment.globals["mypy_deps"] = list(mypy_deps)
+		demo_environment.globals["mypy_version"] = mypy_version
+		demo_environment.globals["tox_py_versions"] = list(tox_py_versions)
+		demo_environment.globals["tox_requirements"] = list(tox_requirements)
+		demo_environment.globals["tox_build_requirements"] = list(tox_build_requirements)
+		demo_environment.globals["tox_unmanaged"] = list(tox_unmanaged)
+		demo_environment.globals["yapf_exclude"] = list(yapf_exclude)
+		demo_environment.globals["tox_testenv_extras"] = tox_testenv_extras
+		demo_environment.globals["enable_docs"] = enable_docs
+		demo_environment.globals["enable_tests"] = enable_tests
+		demo_environment.globals["enable_devmode"] = enable_devmode
+		demo_environment.globals["code_only_warning"] = code_only_warning
 
+	@boolean_option("enable_docs", "docs")
+	def test_tox_enable_docs(
+			self,
+			tmp_pathplus,
+			demo_environment,
+			file_regression: FileRegressionFixture,
+			enable_docs,
+			):
+		self.set_globals(demo_environment, enable_docs=enable_docs)
+		make_tox(tmp_pathplus, demo_environment)
+		check_file_output(tmp_pathplus / "tox.ini", file_regression)
 
-def test_make_tox_matrix(
-		tmp_pathplus,
-		demo_environment,
-		file_regression: FileRegressionFixture,
-		):
-	demo_environment.globals["min_coverage"] = 80
-	demo_environment.globals["enable_devmode"] = False
-	demo_environment.globals["enable_docs"] = False
-	demo_environment.globals["tox_testenv_extras"] = ''
-	demo_environment.globals["tox_requirements"] = []
-	demo_environment.globals["tox_build_requirements"] = []
-	demo_environment.globals["tox_unmanaged"] = []
-	demo_environment.globals["yapf_exclude"] = []
-	demo_environment.globals["mypy_deps"] = []
-	demo_environment.globals["py_modules"] = ["hello_world"]
-	demo_environment.globals["mypy_version"] = "0.790"
-	demo_environment.globals["tox_py_versions"] = ["py36", "py37", "py38"]
-	demo_environment.globals["code_only_warning"] = code_only_warning
-	demo_environment.globals["third_party_version_matrix"] = {"attrs": ["19.3", "20.1", "20.2", "latest"]}
+	@boolean_option("enable_tests", "tests")
+	def test_tox_enable_tests(
+			self,
+			tmp_pathplus,
+			demo_environment,
+			file_regression: FileRegressionFixture,
+			enable_tests,
+			):
+		self.set_globals(demo_environment, enable_tests=enable_tests)
+		make_tox(tmp_pathplus, demo_environment)
+		check_file_output(tmp_pathplus / "tox.ini", file_regression)
 
-	make_tox(tmp_pathplus, demo_environment)
-	check_file_output(tmp_pathplus / "tox.ini", file_regression)
+	@boolean_option("enable_devmode", "devmode")
+	def test_tox_enable_devmode(
+			self,
+			tmp_pathplus,
+			demo_environment,
+			file_regression: FileRegressionFixture,
+			enable_devmode,
+			):
+		self.set_globals(demo_environment, enable_devmode=enable_devmode)
+		make_tox(tmp_pathplus, demo_environment)
+		check_file_output(tmp_pathplus / "tox.ini", file_regression)
+
+	@boolean_option("stubs_package", "stubs")
+	def test_tox_stubs_package(
+			self,
+			tmp_pathplus,
+			demo_environment,
+			file_regression: FileRegressionFixture,
+			stubs_package,
+			):
+		self.set_globals(demo_environment, stubs_package=stubs_package)
+		make_tox(tmp_pathplus, demo_environment)
+		check_file_output(tmp_pathplus / "tox.ini", file_regression)
+
+	@pytest.mark.parametrize("tox_testenv_extras", ["extra_a", ''])
+	def test_tox_tox_testenv_extras(
+			self,
+			tmp_pathplus,
+			demo_environment,
+			file_regression: FileRegressionFixture,
+			tox_testenv_extras,
+			):
+		self.set_globals(demo_environment, tox_testenv_extras=tox_testenv_extras)
+		make_tox(tmp_pathplus, demo_environment)
+		check_file_output(tmp_pathplus / "tox.ini", file_regression)
+
+	@pytest.mark.parametrize("mypy_deps", [[], ["docutils-stubs"]])
+	def test_tox_mypy_deps(
+			self,
+			tmp_pathplus,
+			demo_environment,
+			file_regression: FileRegressionFixture,
+			mypy_deps,
+			):
+		self.set_globals(demo_environment, mypy_deps=mypy_deps)
+		make_tox(tmp_pathplus, demo_environment)
+		check_file_output(tmp_pathplus / "tox.ini", file_regression)
+
+	@pytest.mark.parametrize("mypy_version", ["0.790", "0.782"])
+	def test_tox_mypy_version(
+			self,
+			tmp_pathplus,
+			demo_environment,
+			file_regression: FileRegressionFixture,
+			mypy_version,
+			):
+		self.set_globals(demo_environment, mypy_version=mypy_version)
+		make_tox(tmp_pathplus, demo_environment)
+		check_file_output(tmp_pathplus / "tox.ini", file_regression)
+
+	@pytest.mark.parametrize("py_modules", [["hello_world"], []])
+	def test_tox_py_modules(
+			self,
+			tmp_pathplus,
+			demo_environment,
+			file_regression: FileRegressionFixture,
+			py_modules,
+			):
+		self.set_globals(demo_environment, py_modules=py_modules)
+		make_tox(tmp_pathplus, demo_environment)
+		check_file_output(tmp_pathplus / "tox.ini", file_regression)
+
+	def test_make_tox_matrix(
+			self,
+			tmp_pathplus,
+			demo_environment,
+			file_regression: FileRegressionFixture,
+			):
+		self.set_globals(demo_environment, enable_docs=False, enable_devmode=False, py_modules=["hello_world"])
+		demo_environment.globals["third_party_version_matrix"] = {"attrs": ["19.3", "20.1", "20.2", "latest"]}
+
+		make_tox(tmp_pathplus, demo_environment)
+		check_file_output(tmp_pathplus / "tox.ini", file_regression)
 
 
 def test_make_yapf(tmp_pathplus, demo_environment, file_regression):

@@ -91,10 +91,7 @@ class ToxConfig(IniConfigurator):
 			"testenv:lint",
 			"testenv:mypy",
 			"testenv:pyup",
-			"testenv:coverage",
 			"flake8",
-			"coverage:run",
-			"coverage:report",
 			"check-wheel-contents",
 			"pytest",
 			]
@@ -103,6 +100,11 @@ class ToxConfig(IniConfigurator):
 		self._globals = templates.globals
 
 		self.managed_sections = self.managed_sections[:]
+
+		if self["enable_tests"]:
+			self.managed_sections.insert(-3, "testenv:coverage")
+			self.managed_sections.insert(-2, "coverage:run")
+			self.managed_sections.insert(-2, "coverage:report")
 
 		for section_name in self["tox_unmanaged"]:
 			if section_name in self.managed_sections:
