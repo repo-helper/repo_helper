@@ -10,6 +10,8 @@ repo_helper==2020.12.18
 │   │       ├── idna<3,>=2.5
 │   │       └── urllib3<1.27,>=1.21.1
 │   ├── domdf-python-tools>=0.9.0
+│   │   ├── importlib-metadata>=1.5.0; python_version < "3.9"
+│   │   │   └── zipp>=0.5
 │   │   ├── natsort>=7.1.0
 │   │   ├── pydash>=4.7.4
 │   │   └── typing-extensions>=3.7.4.3
@@ -38,6 +40,8 @@ repo_helper==2020.12.18
 ├── click==7.1.2
 ├── configconfig>=0.5.0
 │   ├── domdf-python-tools>=0.10.0
+│   │   ├── importlib-metadata>=1.5.0; python_version < "3.9"
+│   │   │   └── zipp>=0.5
 │   │   ├── natsort>=7.1.0
 │   │   ├── pydash>=4.7.4
 │   │   └── typing-extensions>=3.7.4.3
@@ -46,7 +50,7 @@ repo_helper==2020.12.18
 │   │   ├── pyrsistent>=0.14.0
 │   │   ├── setuptools
 │   │   └── six>=1.11.0
-│   ├── ruamel.yaml>=0.16.12
+│   ├── ruamel-yaml>=0.16.12
 │   │   └── ruamel.yaml.clib>=0.1.2; platform_python_implementation == "CPython" and python_version < "3.9"
 │   ├── typing-extensions>=3.7.4.3
 │   └── typing-inspect>=0.6.0
@@ -56,6 +60,8 @@ repo_helper==2020.12.18
 │   ├── click>=7.1.2
 │   ├── colorama>=0.4.3; python_version < "3.10"
 │   ├── domdf-python-tools>=2.0.0
+│   │   ├── importlib-metadata>=1.5.0; python_version < "3.9"
+│   │   │   └── zipp>=0.5
 │   │   ├── natsort>=7.1.0
 │   │   ├── pydash>=4.7.4
 │   │   └── typing-extensions>=3.7.4.3
@@ -64,10 +70,14 @@ repo_helper==2020.12.18
 ├── dict2css>=0.2.0
 │   ├── css-parser==1.0.6
 │   └── domdf-python-tools>=2.2.0
+│       ├── importlib-metadata>=1.5.0; python_version < "3.9"
+│       │   └── zipp>=0.5
 │       ├── natsort>=7.1.0
 │       ├── pydash>=4.7.4
 │       └── typing-extensions>=3.7.4.3
-├── domdf-python-tools>=2.0.1
+├── domdf-python-tools>=2.5.0
+│   ├── importlib-metadata>=1.5.0; python_version < "3.9"
+│   │   └── zipp>=0.5
 │   ├── natsort>=7.1.0
 │   ├── pydash>=4.7.4
 │   └── typing-extensions>=3.7.4.3
@@ -101,6 +111,7 @@ repo_helper==2020.12.18
 │   ├── idna<3,>=2.5
 │   └── urllib3<1.27,>=1.21.1
 ├── ruamel-yaml>=0.16.12
+│   └── ruamel.yaml.clib>=0.1.2; platform_python_implementation == "CPython" and python_version < "3.9"
 ├── shippinglabel>=0.8.2
 │   ├── apeye>=0.4.0
 │   │   ├── appdirs>=1.4.4
@@ -113,6 +124,8 @@ repo_helper==2020.12.18
 │   │   │       ├── idna<3,>=2.5
 │   │   │       └── urllib3<1.27,>=1.21.1
 │   │   ├── domdf-python-tools>=0.9.0
+│   │   │   ├── importlib-metadata>=1.5.0; python_version < "3.9"
+│   │   │   │   └── zipp>=0.5
 │   │   │   ├── natsort>=7.1.0
 │   │   │   ├── pydash>=4.7.4
 │   │   │   └── typing-extensions>=3.7.4.3
@@ -142,12 +155,16 @@ repo_helper==2020.12.18
 │   │   ├── click>=7.1.2
 │   │   ├── colorama>=0.4.3; python_version < "3.10"
 │   │   ├── domdf-python-tools>=2.0.0
+│   │   │   ├── importlib-metadata>=1.5.0; python_version < "3.9"
+│   │   │   │   └── zipp>=0.5
 │   │   │   ├── natsort>=7.1.0
 │   │   │   ├── pydash>=4.7.4
 │   │   │   └── typing-extensions>=3.7.4.3
 │   │   ├── mistletoe>=0.7.2
 │   │   └── typing-extensions>=3.7.4.3
 │   ├── domdf-python-tools>=2.0.1
+│   │   ├── importlib-metadata>=1.5.0; python_version < "3.9"
+│   │   │   └── zipp>=0.5
 │   │   ├── natsort>=7.1.0
 │   │   ├── pydash>=4.7.4
 │   │   └── typing-extensions>=3.7.4.3
@@ -162,12 +179,16 @@ repo_helper==2020.12.18
 │   │   ├── click>=7.1.2
 │   │   ├── colorama>=0.4.3; python_version < "3.10"
 │   │   ├── domdf-python-tools>=2.0.0
+│   │   │   ├── importlib-metadata>=1.5.0; python_version < "3.9"
+│   │   │   │   └── zipp>=0.5
 │   │   │   ├── natsort>=7.1.0
 │   │   │   ├── pydash>=4.7.4
 │   │   │   └── typing-extensions>=3.7.4.3
 │   │   ├── mistletoe>=0.7.2
 │   │   └── typing-extensions>=3.7.4.3
 │   ├── domdf-python-tools>=2.1.0
+│   │   ├── importlib-metadata>=1.5.0; python_version < "3.9"
+│   │   │   └── zipp>=0.5
 │   │   ├── natsort>=7.1.0
 │   │   ├── pydash>=4.7.4
 │   │   └── typing-extensions>=3.7.4.3
@@ -186,12 +207,16 @@ repo_helper==2020.12.18
     │   ├── click>=7.1.2
     │   ├── colorama>=0.4.3; python_version < "3.10"
     │   ├── domdf-python-tools>=2.0.0
+    │   │   ├── importlib-metadata>=1.5.0; python_version < "3.9"
+    │   │   │   └── zipp>=0.5
     │   │   ├── natsort>=7.1.0
     │   │   ├── pydash>=4.7.4
     │   │   └── typing-extensions>=3.7.4.3
     │   ├── mistletoe>=0.7.2
     │   └── typing-extensions>=3.7.4.3
     ├── domdf-python-tools>=0.10.0
+    │   ├── importlib-metadata>=1.5.0; python_version < "3.9"
+    │   │   └── zipp>=0.5
     │   ├── natsort>=7.1.0
     │   ├── pydash>=4.7.4
     │   └── typing-extensions>=3.7.4.3

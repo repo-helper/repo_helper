@@ -91,7 +91,8 @@ show_directories = [
 		]
 
 
-class ShowRequirementsTest:
+@not_pypy("Output differs on PyPy.")
+class TestShowRequirements:
 
 	@version_specific
 	def test_requirements(
@@ -158,11 +159,6 @@ class ShowRequirementsTest:
 
 			assert result.exit_code == 0
 			check_file_regression(result.stdout.rstrip(), file_regression, extension=".tree")
-
-
-@not_pypy("Output differs on PyPy.")
-class TestShowRequirements(ShowRequirementsTest):
-	pass
 
 
 def test_log(tmp_repo, file_regression: FileRegressionFixture):
