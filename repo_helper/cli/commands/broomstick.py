@@ -28,6 +28,7 @@ import pathlib
 import shutil
 
 # 3rd party
+import click
 from consolekit.options import flag_option
 
 # this package
@@ -57,7 +58,7 @@ def depycache(base_dir: pathlib.Path, quiet: bool = False):
 			continue
 
 		if not quiet:
-			print(f"Removing {dirname}")
+			click.echo(f"Removing {dirname}")
 
 		shutil.rmtree(dirname)
 
@@ -130,7 +131,7 @@ def rmdir(directory: pathlib.Path, quiet: bool = False):
 	if directory.is_dir():
 
 		if not quiet:
-			print(f"Removing {directory}")
+			click.echo(f"Removing {directory}")
 
 		shutil.rmtree(directory)
 

@@ -29,6 +29,7 @@ import re
 from typing import Any, Dict, List, Mapping, MutableMapping, Optional, Sequence, Set, Union
 
 # 3rd party
+import click
 from configconfig.metaclass import ConfigVarMeta
 from configconfig.parser import Parser
 from configconfig.utils import make_schema
@@ -366,7 +367,7 @@ def dump_schema() -> Dict[str, Any]:
 
 	with importlib_resources.path(repo_helper, "repo_helper_schema.json") as schema_file:
 		PathPlus(schema_file).write_clean(json.dumps(schema, indent=2))
-		print(f"Wrote schema to {schema_file}")
+		click.echo(f"Wrote schema to {schema_file}")
 
 	return schema
 
