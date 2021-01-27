@@ -260,7 +260,7 @@ def make_pre_commit(repo_path: pathlib.Path, templates: jinja2.Environment) -> L
 					}]
 			)
 
-	formate_excludes = fr"^({'|'.join([*templates.globals['yapf_exclude'], *non_source_files])})\.py$"
+	formate_excludes = fr"^({'|'.join([*templates.globals['yapf_exclude'], *non_source_files])})\.(_)?py$"
 
 	formate = Repo(
 			repo=make_github_url("repo-helper", "formate"),
