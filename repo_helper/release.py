@@ -71,6 +71,8 @@ class Bumper:
 		#:
 		self.repo = RepoHelper(traverse_to_file(PathPlus(repo_path), "repo_helper.yml"))
 
+		self.repo.load_settings()
+
 		if not assert_clean(self.repo.target_repo):
 			if force:
 				click.echo(Fore.RED("Proceeding anyway"), err=True)

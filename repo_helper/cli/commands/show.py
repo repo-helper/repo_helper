@@ -64,6 +64,7 @@ def version() -> None:
 	from repo_helper.core import RepoHelper
 
 	rh = RepoHelper(PathPlus.cwd())
+	rh.load_settings()
 	version = rh.templates.globals["version"]
 	click.echo(f"Current version: {version}")
 
@@ -161,6 +162,7 @@ def changelog(
 	from repo_helper.core import RepoHelper
 
 	rh = RepoHelper(PathPlus.cwd())
+	rh.load_settings()
 	repo = Repo(rh.target_repo)
 
 	try:
@@ -220,6 +222,7 @@ def requirements(
 	from repo_helper.core import RepoHelper
 
 	rh = RepoHelper(PathPlus.cwd())
+	rh.load_settings()
 
 	with in_directory(rh.target_repo):
 

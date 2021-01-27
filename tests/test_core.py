@@ -98,8 +98,9 @@ def test_via_Repo_class(
 		(temp_repo.path / "doc-source" / "index.rst").touch()
 		(temp_repo.path / ".pre-commit-config.yaml").touch()
 
-		gh = RepoHelper(temp_repo.path)
-		managed_files = gh.run()
+		rh = RepoHelper(temp_repo.path)
+		rh.load_settings()
+		managed_files = rh.run()
 
 	data_regression.check(sorted(managed_files))
 
@@ -124,6 +125,7 @@ def test_managed_message(temp_repo):
 
 def test_repo_name(temp_repo):
 	rh = RepoHelper(temp_repo.path)
+	rh.load_settings()
 	assert rh.repo_name == "repo_helper_demo"
 
 

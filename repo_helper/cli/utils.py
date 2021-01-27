@@ -146,6 +146,7 @@ def run_repo_helper(
 
 	try:
 		rh = RepoHelper(path)
+		rh.load_settings()
 	except FileNotFoundError as e:
 		error_block = textwrap.indent(str(e), '\t')
 		raise abort(f"Unable to run 'repo_helper'.\nThe error was:\n{error_block}")

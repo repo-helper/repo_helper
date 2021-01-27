@@ -94,8 +94,6 @@ class RepoHelper:
 		self.templates.globals["managed_message"] = managed_message
 		self.templates.globals["brace"] = brace
 
-		self.load_settings()
-
 		# isort and formate.toml must always run last
 		self.files = management + [(make_isort, "isort", [])]
 		self.files = management + [(make_formate_toml, "formate", [])]

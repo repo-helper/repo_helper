@@ -107,6 +107,7 @@ def classifiers(
 	from repo_helper.core import RepoHelper
 
 	rh = RepoHelper(PathPlus.cwd())
+	rh.load_settings()
 	config = rh.templates.globals
 	suggested_classifiers = set()
 	pkg_dir = rh.target_repo / config["import_name"]
