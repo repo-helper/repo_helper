@@ -50,8 +50,7 @@ repo_helper==2020.12.18
 ├── six<2,>=1.11.0
 ├── southwark>=0.7.1
 ├── tldextract>=2.2.0
-├── toml
-├── tomlkit>=0.7.0
+├── toml>=0.10.2
 ├── trove-classifiers>=2020.10.21
 ├── typing-extensions>=3.7.4.3
 ├── typing-extensions>=3.7.4

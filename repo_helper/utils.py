@@ -36,6 +36,7 @@ from typing import Callable, Dict, Iterable, List, Optional, Union
 import dulwich.repo
 import isort  # type: ignore
 import isort.settings  # type: ignore
+import toml
 import yapf_isort
 from domdf_python_tools.dates import calc_easter
 from domdf_python_tools.import_tools import discover_entry_points
@@ -65,6 +66,7 @@ __all__ = [
 		"commit_changes",
 		"stage_changes",
 		"set_gh_actions_versions",
+		"CustomTomlEncoder",
 		]
 
 #: Under normal circumstances returns :meth:`datetime.date.today`.
@@ -478,3 +480,27 @@ def set_gh_actions_versions(py_versions: Iterable[str]) -> List[str]:
 		py_versions[py_versions.index("pypy3")] = "pypy-3.6"
 
 	return py_versions
+
+
+class CustomTomlEncoder(toml.TomlEncoder):
+	"""
+	Customised TOML encoder which wraps long lists onto multiple lines.
+	"""
+
+	max_width: int = 110
+
+	def dump_list(self, v):  # noqa: D102
+		single_line = super().dump_list(v)
+
+		if len(single_line) <= self.max_width:
+			return single_line
+
+		retval = StringList(['['])
+
+		with retval.with_indent("    ", 1):
+			for u in v:
+				retval.append(f"{str(self.dump_value(u))},")
+
+		retval.append(']')
+
+		return str(retval)

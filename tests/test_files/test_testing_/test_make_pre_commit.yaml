@@ -66,10 +66,10 @@ repos:
     - id: remove-crlf
     - id: forbid-crlf
 
- - repo: https://github.com/domdfcoding/yapf-isort
-   rev: v0.5.5
+ - repo: https://github.com/repo-helper/formate
+   rev: v0.1.0
    hooks:
-    - id: yapf-isort
+    - id: formate
       exclude: ^(doc-source/conf|__pkginfo__|make_conda_recipe|setup)\.py$
 
  - repo: https://github.com/domdfcoding/dep_checker

@@ -59,7 +59,7 @@ class additional_ignore(ConfigVar):  # noqa
 
 class yapf_exclude(ConfigVar):  # noqa
 	"""
-	A list of regular expressions to use to exclude files and directories from ``yapf-isort``.
+	A list of regular expressions to use to exclude files and directories from autoformatting.
 
 	Example:
 

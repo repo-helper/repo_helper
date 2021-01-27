@@ -27,7 +27,6 @@ The following files will be committed:
   .bumpversion.cfg
   .gitignore
   .imgbotconfig
-  .isort.cfg
   .pre-commit-config.yaml
   .pylintrc
   .readthedocs.yml
@@ -36,6 +35,7 @@ The following files will be committed:
   MANIFEST.in
   README.rst
   __pkginfo__.py
+  formate.toml
   pyproject.toml
   repo_helper.yml
   setup.cfg

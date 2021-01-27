@@ -460,7 +460,7 @@
       "items": {
         "type": "string"
       },
-      "description": "A list of regular expressions to use to exclude files and directories from ``yapf-isort``."
+      "description": "A list of regular expressions to use to exclude files and directories from autoformatting."
     }
   },
   "required": [

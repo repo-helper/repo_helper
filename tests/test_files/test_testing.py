@@ -32,7 +32,7 @@ from pytest_regressions.file_regression import FileRegressionFixture
 # this package
 from repo_helper.files.linting import code_only_warning
 from repo_helper.files.pre_commit import make_pre_commit
-from repo_helper.files.testing import ensure_tests_requirements, make_isort, make_tox, make_yapf
+from repo_helper.files.testing import ensure_tests_requirements, make_formate_toml, make_isort, make_tox, make_yapf
 
 
 def boolean_option(name: str, id: str):  # noqa: A002  # pylint: disable=redefined-builtin
@@ -193,7 +193,51 @@ def test_make_yapf(tmp_pathplus, demo_environment, file_regression):
 	check_file_output(tmp_pathplus / managed_files[0], file_regression)
 
 
-def test_make_isort_case_1(tmp_pathplus, demo_environment, file_regression):
+def test_make_isort(tmp_pathplus, demo_environment, file_regression):
+	managed_files = make_isort(tmp_pathplus, demo_environment)
+	assert managed_files == [".isort.cfg"]
+	assert not (tmp_pathplus / managed_files[0]).is_file()
+
+
+# def test_make_isort_case_1(tmp_pathplus, demo_environment, file_regression):
+# 	(tmp_pathplus / "tests").mkdir()
+# 	(tmp_pathplus / "tests" / "requirements.txt").write_text('')
+#
+# 	(tmp_pathplus / "requirements.txt").write_lines([
+# 			"tox",
+# 			"isort",
+# 			"black",
+# 			"wheel",
+# 			"setuptools_rust",
+# 			])
+# 	ensure_tests_requirements(tmp_pathplus, demo_environment)
+#
+# 	managed_files = make_isort(tmp_pathplus, demo_environment)
+# 	assert managed_files == [".isort.cfg"]
+# 	check_file_output(tmp_pathplus / managed_files[0], file_regression)
+#
+#
+# def test_make_isort_case_2(tmp_pathplus, demo_environment, file_regression):
+# 	(tmp_pathplus / "tests").mkdir()
+# 	(tmp_pathplus / "tests" / "requirements.txt").write_text('')
+#
+# 	(tmp_pathplus / "requirements.txt").write_lines([
+# 			"tox",
+# 			"isort",
+# 			"black",
+# 			"wheel",
+# 			"setuptools_rust",
+# 			])
+# 	ensure_tests_requirements(tmp_pathplus, demo_environment)
+#
+# 	(tmp_pathplus / ".isort.cfg").write_lines(["[settings]", "known_third_party=awesome_package"])
+#
+# 	managed_files = make_isort(tmp_pathplus, demo_environment)
+# 	assert managed_files == [".isort.cfg"]
+# 	check_file_output(tmp_pathplus / managed_files[0], file_regression)
+
+
+def test_make_formate_toml_case_1(tmp_pathplus, demo_environment, file_regression):
 	(tmp_pathplus / "tests").mkdir()
 	(tmp_pathplus / "tests" / "requirements.txt").write_text('')
 
@@ -206,12 +250,13 @@ def test_make_isort_case_1(tmp_pathplus, demo_environment, file_regression):
 			])
 	ensure_tests_requirements(tmp_pathplus, demo_environment)
 
-	managed_files = make_isort(tmp_pathplus, demo_environment)
-	assert managed_files == [".isort.cfg"]
+	managed_files = make_formate_toml(tmp_pathplus, demo_environment)
+	assert managed_files == ["formate.toml", ".isort.cfg"]
 	check_file_output(tmp_pathplus / managed_files[0], file_regression)
+	assert not (tmp_pathplus / managed_files[1]).is_file()
 
 
-def test_make_isort_case_2(tmp_pathplus, demo_environment, file_regression):
+def test_make_formate_toml_case_2(tmp_pathplus, demo_environment, file_regression):
 	(tmp_pathplus / "tests").mkdir()
 	(tmp_pathplus / "tests" / "requirements.txt").write_text('')
 
@@ -226,9 +271,33 @@ def test_make_isort_case_2(tmp_pathplus, demo_environment, file_regression):
 
 	(tmp_pathplus / ".isort.cfg").write_lines(["[settings]", "known_third_party=awesome_package"])
 
-	managed_files = make_isort(tmp_pathplus, demo_environment)
-	assert managed_files == [".isort.cfg"]
+	managed_files = make_formate_toml(tmp_pathplus, demo_environment)
+	assert managed_files == ["formate.toml", ".isort.cfg"]
 	check_file_output(tmp_pathplus / managed_files[0], file_regression)
+	assert not (tmp_pathplus / managed_files[1]).is_file()
+
+
+def test_make_formate_toml_case_3(tmp_pathplus, demo_environment, file_regression):
+	(tmp_pathplus / "tests").mkdir()
+	(tmp_pathplus / "tests" / "requirements.txt").write_text('')
+
+	(tmp_pathplus / "requirements.txt").write_lines([
+			"tox",
+			"isort",
+			"black",
+			"wheel",
+			"setuptools_rust",
+			])
+	ensure_tests_requirements(tmp_pathplus, demo_environment)
+
+	(tmp_pathplus / "formate.toml").write_lines([
+			"[hooks.isort.kwargs]", 'known_third_party = ["awesome_package"]'
+			])
+
+	managed_files = make_formate_toml(tmp_pathplus, demo_environment)
+	assert managed_files == ["formate.toml", ".isort.cfg"]
+	check_file_output(tmp_pathplus / managed_files[0], file_regression)
+	assert not (tmp_pathplus / managed_files[1]).is_file()
 
 
 def test_ensure_tests_requirements(tmp_pathplus, demo_environment):

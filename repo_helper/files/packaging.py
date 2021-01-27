@@ -31,7 +31,7 @@ from typing import Any, List
 
 # 3rd party
 import jinja2
-import tomlkit  # type: ignore
+import toml
 from domdf_python_tools.compat import importlib_resources
 from domdf_python_tools.paths import PathPlus
 from packaging.requirements import Requirement
@@ -41,7 +41,7 @@ from shippinglabel.requirements import combine_requirements
 import repo_helper.files
 from repo_helper.configupdater2 import ConfigUpdater
 from repo_helper.files import management
-from repo_helper.utils import IniConfigurator, indent_join, indent_with_tab, reformat_file
+from repo_helper.utils import CustomTomlEncoder, IniConfigurator, indent_join, indent_with_tab, reformat_file
 
 __all__ = [
 		"make_manifest",
@@ -103,9 +103,9 @@ def make_pyproject(repo_path: pathlib.Path, templates: jinja2.Environment) -> Li
 	pyproject_file = PathPlus(repo_path / "pyproject.toml")
 
 	if pyproject_file.is_file():
-		data = tomlkit.parse(pyproject_file.read_text())
+		data = toml.loads(pyproject_file.read_text())
 	else:
-		data = tomlkit.document()
+		data = {}
 
 	build_requirements = [
 			"setuptools>=40.6.0",
@@ -122,7 +122,7 @@ def make_pyproject(repo_path: pathlib.Path, templates: jinja2.Environment) -> Li
 	if "build-system" in data:
 		build_requirements.extend(data["build-system"].get("requires", []))
 	else:
-		data["build-system"] = tomlkit.table()
+		data["build-system"] = {}
 
 	build_requirements = sorted(combine_requirements(Requirement(req) for req in build_requirements))
 
@@ -132,7 +132,7 @@ def make_pyproject(repo_path: pathlib.Path, templates: jinja2.Environment) -> Li
 	data["build-system"]["requires"] = [str(x) for x in build_requirements]
 	data["build-system"]["build-backend"] = build_backend
 
-	pyproject_file.write_clean(tomlkit.dumps(data))
+	pyproject_file.write_clean(toml.dumps(data, encoder=CustomTomlEncoder(dict)))
 
 	return [pyproject_file.name]
 

@@ -29,10 +29,12 @@ import pathlib
 import posixpath
 import re
 import warnings
-from typing import Any, List, Tuple
+from operator import attrgetter
+from typing import Any, Dict, List, Tuple
 
 # 3rd party
 import jinja2
+import toml
 from domdf_python_tools.paths import PathPlus
 from domdf_python_tools.stringlist import DelimitedList
 from domdf_python_tools.typing import PathLike
@@ -49,13 +51,14 @@ from shippinglabel.requirements import (
 from repo_helper.configupdater2 import ConfigUpdater
 from repo_helper.files import management
 from repo_helper.files.linting import code_only_warning, lint_warn_list
-from repo_helper.utils import IniConfigurator, indent_join
+from repo_helper.utils import CustomTomlEncoder, IniConfigurator, indent_join
 
 __all__ = [
 		"make_tox",
 		"ToxConfig",
 		"make_yapf",
 		"make_isort",
+		"make_formate_toml",
 		"ensure_tests_requirements",
 		]
 
@@ -489,7 +492,6 @@ class ToxConfig(IniConfigurator):
 				"if TYPE_CHECKING:",
 				"if typing.TYPE_CHECKING:",
 				"if __name__ == .__main__.:",
-				r":[\n\s]*\.\.\.$",
 				])
 
 	def check_wheel_contents(self):
@@ -555,11 +557,11 @@ class ToxConfig(IniConfigurator):
 								sorted(filter(bool, combined_directives))
 								)
 
-		# TODO: for tox-isolation
-		# [testenv:{py36,py37,py38,pypy3,py39}]
-		# isolate_dirs =
-		#     {toxinidir}/tests
-		#     tox.ini
+	# TODO: for tox-isolation
+	# [testenv:{py36,py37,py38,pypy3,py39}]
+	# isolate_dirs =
+	#     {toxinidir}/tests
+	#     tox.ini
 
 
 @management.register("tox")
@@ -595,7 +597,7 @@ def make_yapf(repo_path: pathlib.Path, templates: jinja2.Environment) -> List[st
 
 def make_isort(repo_path: pathlib.Path, templates: jinja2.Environment) -> List[str]:
 	"""
-	Add configuration for ``isort``.
+	Remove the ``isort`` configuration file.
 
 	https://github.com/timothycrosley/isort
 
@@ -603,39 +605,147 @@ def make_isort(repo_path: pathlib.Path, templates: jinja2.Environment) -> List[s
 	:param templates:
 	"""
 
-	# if templates.globals["enable_docs"]:
-	# 	with (repo_path / templates.globals["docs_dir"] / "requirements.txt").open(encoding="UTF-8") as fp:
-	# 		doc_requirements = list(requirements.parse(fp))
-	# else:
-	# 	doc_requirements = []
+	isort_file = PathPlus(repo_path / ".isort.cfg")
+	isort_file.unlink(missing_ok=True)
+	assert not isort_file.is_file()
+	return [isort_file.name]
+
+
+# def make_isort(repo_path: pathlib.Path, templates: jinja2.Environment) -> List[str]:
+# 	"""
+# 	Add configuration for ``isort``.
+#
+# 	https://github.com/timothycrosley/isort
+#
+# 	:param repo_path: Path to the repository root.
+# 	:param templates:
+# 	"""
+#
+# 	isort_config = get_isort_config(repo_path, templates)
+#
+# 	isort_file = PathPlus(repo_path / ".isort.cfg")
+# 	isort = ConfigUpdater()
+#
+# 	if isort_file.is_file():
+# 		isort.read(str(isort_file))
+#
+# 	if "settings" not in isort.sections():
+# 		isort.add_section("settings")
+#
+# 	if "known_third_party" in isort["settings"]:
+# 		known_third_party = set(re.split(r"(\n|,\s*)", isort["settings"]["known_third_party"].value))
+# 	else:
+# 		known_third_party = set()
+#
+# 	known_third_party.update(isort_config["known_third_party"])
+# 	known_third_party.add("github")
+# 	known_third_party.add("requests")
+#
+# 	for key, value in isort_config.items():
+# 		isort["settings"][key] = value
+#
+# 	isort["settings"]["known_third_party"] = sorted(filter(bool, map(str.strip, known_third_party)))
+#
+# 	isort["settings"].pop("float_to_top", None)
+# 	isort["settings"].pop("force_to_top", None)
+#
+# 	isort_file.write_clean(str(isort))
+#
+# 	return [isort_file.name]
+
+
+def make_formate_toml(repo_path: pathlib.Path, templates: jinja2.Environment) -> List[str]:
+	"""
+	Add configuration for ``formate``.
+
+	https://formate.readthedocs.io
+
+	:param repo_path: Path to the repository root.
+	:param templates:
+	"""
+
+	known_third_party = set()
 
 	isort_file = PathPlus(repo_path / ".isort.cfg")
-	isort = ConfigUpdater()
+	formate_file = PathPlus(repo_path / "formate.toml")
 
+	isort_config = get_isort_config(repo_path, templates)
+	known_third_party.update(isort_config["known_third_party"])
+
+	if formate_file.is_file():
+		formate_config = toml.loads(formate_file.read_text())
+	else:
+		formate_config = {}
+
+	# Read the isort config file and get "known_third_party" from there
 	if isort_file.is_file():
+		isort = ConfigUpdater()
 		isort.read(str(isort_file))
 
-	if "settings" not in isort.sections():
-		isort.add_section("settings")
+		if "settings" in isort.sections() and "known_third_party" in isort["settings"]:
+			known_third_party.update(re.split(r"(\n|,\s*)", isort["settings"]["known_third_party"].value))
 
-	isort["settings"]["line_length"] = 115
-	isort["settings"]["force_to_top"] = True
-	isort["settings"]["indent"] = '"\t\t"'  # To match what yapf uses
+	isort_file.unlink(missing_ok=True)
+
+	if (
+			"hooks" in formate_config and "isort" in formate_config["hooks"]
+			and "kwargs" in formate_config["hooks"]["isort"]
+			):
+		known_third_party.update(formate_config["hooks"]["isort"]["kwargs"].get("known_third_party", ()))
+
+	def normalise_underscore(name: str) -> str:
+		return normalize(name.strip()).replace('-', '_')
+
+	isort_config["known_third_party"] = sorted(set(filter(bool, map(normalise_underscore, known_third_party))))
+
+	hooks = {
+			"dynamic_quotes": 10,
+			"collections-import-rewrite": 20,
+			"yapf": {"priority": 30, "kwargs": {"yapf_style": ".style.yapf"}},
+			"reformat-generics": 40,
+			"isort": {"priority": 50, "kwargs": isort_config},
+			"noqa-reformat": 60,
+			"ellipsis-reformat": 70,
+			}
+
+	config = {"indent": '\t', "line_length": 115}
+
+	formate_config["hooks"] = hooks
+	formate_config["config"] = config
+
+	formate_file = PathPlus(repo_path / "formate.toml")
+	formate_file.write_clean(toml.dumps(formate_config, encoder=CustomTomlEncoder(dict)))
+
+	return [formate_file.name, isort_file.name]
+
+
+def get_isort_config(repo_path: pathlib.Path, templates: jinja2.Environment) -> Dict[str, Any]:
+	"""
+	Returns a ``key: value`` mapping of configuration for ``isort``.
+
+	https://github.com/timothycrosley/isort
+
+	:param repo_path: Path to the repository root.
+	:param templates:
+	"""
+
+	isort: Dict[str, Any] = {}
+
+	isort["line_length"] = 115
+	isort["indent"] = '"\t\t"'  # To match what yapf uses
 
 	# Undocumented 8th option with the closing bracket indented
-	isort["settings"]["multi_line_output"] = 8
-	isort["settings"]["import_heading_stdlib"] = "stdlib"
-	isort["settings"]["import_heading_thirdparty"] = "3rd party"
-	isort["settings"]["import_heading_firstparty"] = "this package"
-	isort["settings"]["import_heading_localfolder"] = "this package"
-	isort["settings"]["balanced_wrapping"] = False
-	isort["settings"]["lines_between_types"] = 0
-	isort["settings"]["use_parentheses"] = True
-	# isort["settings"]["float_to_top"] = True  # TODO: Doesn't work properly; No imports get sorted or floated to the top
-	isort["settings"]["remove_redundant_aliases"] = True
-	isort["settings"]["default_section"] = "THIRDPARTY"
-	if "float_to_top" in isort["settings"]:
-		del isort["settings"]["float_to_top"]
+	isort["multi_line_output"] = 8
+	isort["import_heading_stdlib"] = "stdlib"
+	isort["import_heading_thirdparty"] = "3rd party"
+	isort["import_heading_firstparty"] = "this package"
+	isort["import_heading_localfolder"] = "this package"
+	isort["balanced_wrapping"] = False
+	isort["lines_between_types"] = 0
+	isort["use_parentheses"] = True
+	# isort["float_to_top"] = True  # TODO: Doesn't work properly; No imports get sorted or floated to the top
+	isort["remove_redundant_aliases"] = True
+	isort["default_section"] = "THIRDPARTY"
 
 	if templates.globals["enable_tests"]:
 		test_requirements = read_requirements(
@@ -647,28 +757,15 @@ def make_isort(repo_path: pathlib.Path, templates: jinja2.Environment) -> List[s
 
 	main_requirements = read_requirements(repo_path / "requirements.txt")[0]
 
-	# TODO: extras
-
-	if "known_third_party" in isort["settings"]:
-		all_requirements = set(re.split(r"\n|,\s*", isort["settings"]["known_third_party"].value))
-	else:
-		all_requirements = set()
-
-	for req in (*test_requirements, *main_requirements):  # *doc_requirements,
-		req.name = normalize(req.name)
-		all_requirements.add(req.name)
-
-	all_requirements = {normalize(r) for r in all_requirements}
+	all_requirements = set(map(normalize, map(attrgetter("name"), (*test_requirements, *main_requirements))))
 	all_requirements.discard(templates.globals["import_name"])
 	all_requirements.discard("iniconfig")
 
-	known_third_party = [req.replace('-', '_') for req in sorted({"github", "requests", *all_requirements})]
-	isort["settings"]["known_third_party"] = known_third_party
-	isort["settings"]["known_first_party"] = templates.globals["import_name"]
+	known_third_party = [req.replace('-', '_') for req in sorted(all_requirements)]
+	isort["known_third_party"] = known_third_party
+	isort["known_first_party"] = templates.globals["import_name"]
 
-	isort_file.write_clean(str(isort))
-
-	return [isort_file.name]
+	return isort
 
 
 class TestsRequirementsManager(RequirementsManager):

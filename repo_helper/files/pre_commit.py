@@ -260,12 +260,12 @@ def make_pre_commit(repo_path: pathlib.Path, templates: jinja2.Environment) -> L
 					}]
 			)
 
-	yapf_isort_excludes = fr"^({'|'.join([*templates.globals['yapf_exclude'], *non_source_files])})\.py$"
+	formate_excludes = fr"^({'|'.join([*templates.globals['yapf_exclude'], *non_source_files])})\.py$"
 
-	yapf_isort = Repo(
-			repo=make_github_url("domdfcoding", "yapf-isort"),
-			rev="v0.5.5",
-			hooks=[{"id": "yapf-isort", "exclude": yapf_isort_excludes}],
+	formate = Repo(
+			repo=make_github_url("repo-helper", "formate"),
+			rev="v0.1.0",
+			hooks=[{"id": "formate", "exclude": formate_excludes}],
 			)
 
 	dep_checker_args = [templates.globals["import_name"].replace('.', '/')]
@@ -306,7 +306,7 @@ def make_pre_commit(repo_path: pathlib.Path, templates: jinja2.Environment) -> L
 			pygrep_hooks,
 			pyupgrade,
 			lucas_c_hooks,
-			yapf_isort,
+			formate,
 			]
 
 	if not templates.globals["stubs_package"]:

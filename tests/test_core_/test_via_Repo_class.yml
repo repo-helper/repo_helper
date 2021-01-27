@@ -42,6 +42,7 @@
 - doc-source/index.rst
 - doc-source/not-found.png
 - doc-source/requirements.txt
+- formate.toml
 - git_helper.yml
 - lint_roller.sh
 - pyproject.toml

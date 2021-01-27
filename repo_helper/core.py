@@ -40,7 +40,7 @@ from repo_helper.configuration import parse_yaml
 from repo_helper.files import Management, is_registered, management
 from repo_helper.files.docs import copy_docs_styling
 from repo_helper.files.linting import code_only_warning, lint_warn_list
-from repo_helper.files.testing import make_isort
+from repo_helper.files.testing import make_formate_toml, make_isort
 from repo_helper.templates import init_repo_template_dir, template_dir
 from repo_helper.utils import brace, discover_entry_points
 
@@ -96,8 +96,9 @@ class RepoHelper:
 
 		self.load_settings()
 
-		# isort must always run last
+		# isort and formate.toml must always run last
 		self.files = management + [(make_isort, "isort", [])]
+		self.files = management + [(make_formate_toml, "formate", [])]
 
 	@property
 	def managed_message(self) -> str:
@@ -190,7 +191,7 @@ class RepoHelper:
 		all_managed_files.append("repo_helper.yml")
 		all_managed_files.append("git_helper.yml")
 
-		return all_managed_files
+		return sorted(set(all_managed_files))
 
 
 # Legacy alias

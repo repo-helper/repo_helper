@@ -31,7 +31,6 @@ os_sep_backward = pytest.mark.skipif(
 				pytest.param("backward", marks=os_sep_backward),
 				]
 		)
-@pytest.mark.skipif(condition=os.sep == '\\', reason="Different test for platforms where os.sep == \\")
 def test_via_run_repo_helper(
 		temp_empty_repo,
 		capsys,
@@ -92,6 +91,8 @@ def test_via_Repo_class(
 	with in_directory(temp_repo.path):
 		(temp_repo.path / "repo_helper.yml").write_text(example_config)
 		(temp_repo.path / "requirements.txt").touch()
+		(temp_repo.path / "tests").maybe_make()
+		(temp_repo.path / "tests" / "requirements.txt").touch()
 		(temp_repo.path / "README.rst").touch()
 		(temp_repo.path / "doc-source").mkdir()
 		(temp_repo.path / "doc-source" / "index.rst").touch()
