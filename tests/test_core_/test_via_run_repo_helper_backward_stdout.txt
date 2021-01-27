@@ -33,8 +33,8 @@ The following files will be committed:
   .style.yapf
   __pkginfo__.py
   CONTRIBUTING.rst
-  MANIFEST.in
   formate.toml
+  MANIFEST.in
   pyproject.toml
   README.rst
   repo_helper.yml
