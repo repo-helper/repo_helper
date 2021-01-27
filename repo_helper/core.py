@@ -114,12 +114,19 @@ class RepoHelper:
 
 		self.templates.globals["managed_message"] = str(value)
 
-	def load_settings(self) -> None:
+	def load_settings(self, allow_unknown_keys: bool = False) -> None:
 		"""
 		Load settings from the ``repo_helper.yml`` file in the repository.
+
+		:param allow_unknown_keys: Whether unknown keys should be allowed in the configuration file.
+
+		.. versionchanged:: $VERSION
+
+			* This method is no longer called automatically when instantiating the :class:`~.RepoHelper` class.
+			* Added the ``allow_unknown_keys`` argument.
 		"""
 
-		config_vars = parse_yaml(self.target_repo)
+		config_vars = parse_yaml(self.target_repo, allow_unknown_keys=allow_unknown_keys)
 		self.templates.globals.update(config_vars)
 		self.templates.globals["lint_warn_list"] = lint_warn_list
 		self.templates.globals["code_only_warning"] = code_only_warning

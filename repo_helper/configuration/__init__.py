@@ -236,13 +236,16 @@ __all__ = [
 		]
 
 
-def parse_yaml(repo_path: PathLike) -> Dict:
+def parse_yaml(repo_path: PathLike, allow_unknown_keys: bool = False) -> Dict:
 	"""
 	Parse configuration values from ``repo_helper.yml``.
 
 	:param repo_path: Path to the repository root.
+	:param allow_unknown_keys: Whether unknown keys should be allowed in the configuration file.
 
 	:returns: Mapping of configuration keys to values.
+
+	.. versionchanged:: $VERSION  Added the ``allow_unknown_keys`` argument.
 	"""
 
 	repo_path = PathPlus(repo_path)
@@ -260,7 +263,7 @@ def parse_yaml(repo_path: PathLike) -> Dict:
 			if not re.match("^(use_travis|travis_pypi_secure|travis_site)", line)
 			])
 
-	parser = RepoHelperParser(allow_unknown_keys=False)
+	parser = RepoHelperParser(allow_unknown_keys=allow_unknown_keys)
 	config_vars = parser.run(config_file)
 	config_file.write_clean(config_file.read_text())
 

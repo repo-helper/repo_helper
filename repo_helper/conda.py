@@ -54,7 +54,7 @@ def make_recipe(repo_dir: PathLike, recipe_file: PathLike) -> None:
 	repo_dir = PathPlus(repo_dir)
 	recipe_file = PathPlus(recipe_file)
 
-	config = parse_yaml(repo_dir)
+	config = parse_yaml(repo_dir, allow_unknown_keys=True)
 
 	requirements_block = '\n'.join([f"    - {req}" for req in get_conda_requirements(repo_dir, config)])
 
