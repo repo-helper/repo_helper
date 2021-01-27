@@ -225,7 +225,7 @@ class ActionsManager:
 		"""
 		Create, update or remove the mypy action, as appropriate.
 
-		.. versionadded:: $VERSION
+		.. versionadded:: 2020.1.27
 		"""
 
 		ci_file = self.workflows_dir / "mypy.yml"

@@ -211,7 +211,7 @@ class min_coverage(ConfigVar):  # noqa
 
 		mypy_version: 0.790
 
-	.. versionadded:: $VERSION
+	.. versionadded:: 2020.1.27
 	"""
 
 	dtype = Union[str, float]
