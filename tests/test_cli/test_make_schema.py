@@ -3,7 +3,7 @@ import os
 import re
 
 # 3rd party
-from click.testing import CliRunner, Result
+from consolekit.testing import CliRunner, Result
 from domdf_python_tools.paths import in_directory
 
 # this package

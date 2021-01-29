@@ -3,8 +3,8 @@ import os
 import re
 
 # 3rd party
-from click.testing import CliRunner, Result
 from coincidence import check_file_output
+from consolekit.testing import CliRunner, Result
 from domdf_python_tools.paths import in_directory
 from pytest_regressions.file_regression import FileRegressionFixture
 

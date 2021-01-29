@@ -3,8 +3,8 @@ import sys
 
 # 3rd party
 import pytest
-from click.testing import CliRunner, Result
 from coincidence import check_file_regression, min_version, not_pypy
+from consolekit.testing import CliRunner, Result
 from domdf_python_tools.paths import PathPlus, in_directory
 from pytest_regressions.file_regression import FileRegressionFixture
 
@@ -30,7 +30,7 @@ def test_version(tmp_repo, file_regression: FileRegressionFixture):
 		result: Result = runner.invoke(show.version, catch_exceptions=False)
 
 	assert result.exit_code == 0
-	check_file_regression(result.stdout.rstrip(), file_regression)
+	result.check_stdout(file_regression)
 
 
 def test_changelog(tmp_repo, file_regression: FileRegressionFixture):
@@ -54,7 +54,7 @@ def test_changelog(tmp_repo, file_regression: FileRegressionFixture):
 		result: Result = runner.invoke(show.changelog, catch_exceptions=False)
 
 	assert result.exit_code == 0
-	check_file_regression(result.stdout.rstrip(), file_regression)
+	result.check_stdout(file_regression)
 
 
 version_specific = pytest.mark.parametrize(
@@ -173,4 +173,4 @@ def test_log(tmp_repo, file_regression: FileRegressionFixture):
 		result: Result = runner.invoke(show.log, catch_exceptions=False)
 
 	assert result.exit_code == 0
-	check_file_regression(result.stdout.rstrip(), file_regression)
+	result.check_stdout(file_regression)

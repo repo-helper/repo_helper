@@ -706,6 +706,7 @@ def make_formate_toml(repo_path: pathlib.Path, templates: jinja2.Environment) ->
 			"isort": {"priority": 50, "kwargs": isort_config},
 			"noqa-reformat": 60,
 			"ellipsis-reformat": 70,
+			"squish_stubs": 80,
 			}
 
 	config = {"indent": '\t', "line_length": 115}
@@ -731,8 +732,7 @@ def get_isort_config(repo_path: pathlib.Path, templates: jinja2.Environment) -> 
 
 	isort: Dict[str, Any] = {}
 
-	isort["line_length"] = 115
-	isort["indent"] = '"\t\t"'  # To match what yapf uses
+	isort["indent"] = "\t\t"  # To match what yapf uses
 
 	# Undocumented 8th option with the closing bracket indented
 	isort["multi_line_output"] = 8

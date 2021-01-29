@@ -46,7 +46,7 @@ import jinja2
 import pytest  # nodep
 import twine.cli  # nodep
 from apeye.url import URL
-from click.testing import CliRunner, Result
+from consolekit.testing import CliRunner, Result
 from domdf_python_tools.paths import PathPlus, in_directory
 from domdf_python_tools.typing import PathLike
 from dulwich.config import StackedConfig
