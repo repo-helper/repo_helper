@@ -446,6 +446,7 @@ class ToxConfig(IniConfigurator):
 
 		test_ignores = list(code_only_warning)
 		test_ignores.remove("E302")
+		test_ignores.remove("E305")
 
 		self._ini["flake8"]["max-line-length"] = "120"
 		self._ini["flake8"]["select"] = f"{DelimitedList(lint_warn_list + code_only_warning): }"
