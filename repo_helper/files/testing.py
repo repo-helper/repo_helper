@@ -445,6 +445,7 @@ class ToxConfig(IniConfigurator):
 		"""
 
 		test_ignores = list(code_only_warning)
+		test_ignores.remove("E301")
 		test_ignores.remove("E302")
 		test_ignores.remove("E305")
 

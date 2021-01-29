@@ -76,7 +76,6 @@ lint_warn_list = [
 		"E265",
 		"E271",
 		"E272",
-		"E301",
 		"E303",
 		"E304",
 		"E306",
@@ -211,6 +210,7 @@ lint_warn_list.extend((
 
 # pydocstyle
 code_only_warning = [
+		"E301",
 		"E302",
 		"E305",
 		"D100",  # Missing docstring in public module
