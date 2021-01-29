@@ -264,7 +264,7 @@ def make_pre_commit(repo_path: pathlib.Path, templates: jinja2.Environment) -> L
 
 	formate = Repo(
 			repo=make_github_url("repo-helper", "formate"),
-			rev="v0.2.2",
+			rev="v0.2.3",
 			hooks=[{"id": "formate", "exclude": formate_excludes}],
 			)
 
