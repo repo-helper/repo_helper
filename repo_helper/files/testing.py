@@ -348,7 +348,7 @@ class ToxConfig(IniConfigurator):
 		"""
 
 		# TODO: https://github.com/asottile/yesqa
-		self._ini["testenv:lint"]["basepython"] = "python{min_py_version}".format(**self._globals)
+		self._ini["testenv:lint"]["basepython"] = "python{python_deploy_version}".format(**self._globals)
 		self._ini["testenv:lint"]["changedir"] = "{toxinidir}"
 		self._ini["testenv:lint"]["ignore_errors"] = True
 		self._ini["testenv:lint"]["skip_install"] = self["pypi_name"] not in {"domdf_python_tools", "consolekit"}
