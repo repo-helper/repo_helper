@@ -36,14 +36,13 @@ jobs:
           {% endfor %}
       - name: "Run Tests for Python ${{ brace('matrix.config.python-version')}}"
         run: python -m tox -e "${{ brace('matrix.config.testenvs') }}"
-{% if ci_name == "Linux" %}
 {% if enable_tests and not stubs_package %}
       - name: "Upload Coverage 🚀"
         uses: actions/upload-artifact@v2
         with:
           name: "coverage-${{ brace('matrix.config.python-version')}}"
-          path: .coverage
-
+          path: .coverage{% endif %}
+{% if ci_name == "Linux" %}{% if enable_tests and not stubs_package %}
 
   Coverage:
     needs: tests
