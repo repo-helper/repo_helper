@@ -39,6 +39,7 @@ jobs:
 {% if enable_tests and not stubs_package %}
       - name: "Upload Coverage 🚀"
         uses: actions/upload-artifact@v2
+        {{ "if: ${{ always() }} "}}
         with:
           name: "coverage-${{ brace('matrix.config.python-version')}}"
           path: .coverage{% endif %}
