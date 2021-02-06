@@ -415,9 +415,13 @@ def stage_changes(
 		for filename in files:
 			filename = PathPlus(filename)
 
+			if filename.is_absolute():
+				filename = filename.relative_to(repo.path)
+
 			if filename in unstaged_changes or filename in untracked_files:
 				repo.stage(os.path.normpath(filename))
 				staged_files.append(filename)
+
 			elif (
 					filename in stat.staged["add"] or filename in stat.staged["modify"]
 					or filename in stat.staged["delete"]
