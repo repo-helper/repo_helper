@@ -280,7 +280,7 @@ class ToxConfig(IniConfigurator):
 
 			self._ini["testenv"]["deps"] = indent_join(deps)
 
-		else:
+		elif not self["stubs_package"]:
 			deps = ["importcheck>=0.1.0"]
 
 			if self["third_party_version_matrix"]:
@@ -312,7 +312,7 @@ class ToxConfig(IniConfigurator):
 			# 		f"python -m pytest --cov={{envsitepackagesdir}}/{self['import_name']} -r aR {self['tests_dir']}/ {{posargs}}"
 			# 		)
 
-		else:
+		elif not self["stubs_package"]:
 			testenv_commands.append("python -m importcheck {posargs}")
 
 		self._ini["testenv"]["commands"] = indent_join(testenv_commands)
