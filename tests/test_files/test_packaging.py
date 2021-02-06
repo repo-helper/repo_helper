@@ -82,10 +82,14 @@ def test_make_setup_case_2(tmp_pathplus, demo_environment, file_regression: File
 	check_file_output(tmp_pathplus / managed_files[0], file_regression)
 
 
-def test_make_pyproject(tmp_pathplus, demo_environment, file_regression: FileRegressionFixture):
+@pytest.mark.parametrize("enable_tests", [True, False])
+def test_make_pyproject(
+		tmp_pathplus, demo_environment, file_regression: FileRegressionFixture, enable_tests: bool
+		):
 	# TODO: permutations to cover all branches
 
 	demo_environment.globals["tox_build_requirements"] = []
+	demo_environment.globals["enable_tests"] = enable_tests
 	demo_environment.globals["use_experimental_backend"] = False
 
 	managed_files = make_pyproject(tmp_pathplus, demo_environment)

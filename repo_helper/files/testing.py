@@ -280,6 +280,24 @@ class ToxConfig(IniConfigurator):
 
 			self._ini["testenv"]["deps"] = indent_join(deps)
 
+		else:
+			deps = ["importcheck>=0.1.0"]
+
+			if self["third_party_version_matrix"]:
+				third_party_library = list(self["third_party_version_matrix"].keys())[0]
+
+				for version in self["third_party_version_matrix"][third_party_library]:
+					if version == "latest":
+						deps.append(f"{third_party_library}latest: {third_party_library}")
+					else:
+						v = Version(version)
+						if v.is_prerelease:
+							deps.append(f"{third_party_library}{version}: {third_party_library}=={version}")
+						else:
+							deps.append(f"{third_party_library}{version}: {third_party_library}~={version}.0")
+
+			self._ini["testenv"]["deps"] = indent_join(deps)
+
 		if self["tox_testenv_extras"]:
 			self._ini["testenv"]["extras"] = self["tox_testenv_extras"]
 
@@ -293,7 +311,9 @@ class ToxConfig(IniConfigurator):
 			# testenv_commands.append(
 			# 		f"python -m pytest --cov={{envsitepackagesdir}}/{self['import_name']} -r aR {self['tests_dir']}/ {{posargs}}"
 			# 		)
-			testenv_commands.insert(0, '')
+
+		else:
+			testenv_commands.append("python -m importcheck {posargs}")
 
 		self._ini["testenv"]["commands"] = indent_join(testenv_commands)
 

@@ -132,6 +132,10 @@ def make_pyproject(repo_path: pathlib.Path, templates: jinja2.Environment) -> Li
 	data["build-system"]["requires"] = [str(x) for x in build_requirements]
 	data["build-system"]["build-backend"] = build_backend
 
+	if not templates.globals["enable_tests"]:
+		data["tool"] = data.get("tool", {})
+		data["tool"]["importcheck"] = data["tool"].get("importcheck", {})
+
 	pyproject_file.write_clean(toml.dumps(data, encoder=CustomTomlEncoder(dict)))
 
 	return [pyproject_file.name]
