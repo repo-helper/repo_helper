@@ -273,6 +273,7 @@ class ToxConfig(IniConfigurator):
 						deps.append(f"{third_party_library}latest: {third_party_library}")
 					else:
 						v = Version(version)
+
 						if v.is_prerelease:
 							deps.append(f"{third_party_library}{version}: {third_party_library}=={version}")
 						else:
