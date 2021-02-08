@@ -18,6 +18,7 @@
 - .github/workflows/python_ci.yml
 - .github/workflows/python_ci_linux.yml
 - .github/workflows/python_ci_macos.yml
+- .github/workflows/rustpython_ci_linux.yml
 - .gitignore
 - .imgbotconfig
 - .isort.cfg

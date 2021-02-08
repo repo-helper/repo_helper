@@ -101,6 +101,7 @@ def make_github_ci(repo_path: pathlib.Path, templates: jinja2.Environment) -> Li
 			manager.make_windows().relative_to(repo_path).as_posix(),
 			manager.make_macos().relative_to(repo_path).as_posix(),
 			manager.make_linux().relative_to(repo_path).as_posix(),
+			manager.make_rustpython().relative_to(repo_path).as_posix(),
 			]
 
 
@@ -214,6 +215,28 @@ class ActionsManager:
 							ci_name=platform_name,
 							dependency_lines=self.get_linux_ci_requirements(),
 							gh_actions_versions=self.get_gh_actions_python_versions(),
+							)
+					)
+		elif ci_file.is_file():
+			ci_file.unlink()
+
+		return ci_file
+
+	def make_rustpython(self) -> PathPlus:
+		"""
+		Create, update or remove the RustPython action, as appropriate.
+		"""
+
+		platform_name = "Linux"
+
+		template = self.templates.get_template("github_ci_rustpython.yml")
+		ci_file = self.workflows_dir / f"rustpython_ci_{platform_name.lower()}.yml"
+
+		if platform_name in self.templates.globals["platforms"] and "rustpython" in self.get_linux_ci_versions():
+			ci_file.write_clean(
+					template.render(
+							ci_platform=platform_ci_names[platform_name],
+							dependency_lines=self.get_linux_ci_requirements(),
 							)
 					)
 		elif ci_file.is_file():

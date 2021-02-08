@@ -26,7 +26,7 @@ from typing import List
 
 # 3rd party
 import pytest
-from coincidence.regressions import check_file_output
+from coincidence.regressions import AdvancedDataRegressionFixture, check_file_output
 from domdf_python_tools.paths import PathPlus
 from pytest_regressions.data_regression import DataRegressionFixture
 from pytest_regressions.file_regression import FileRegressionFixture
@@ -68,6 +68,7 @@ def test_github_ci_case_1(
 		tmp_pathplus: PathPlus,
 		demo_environment,
 		file_regression: FileRegressionFixture,
+		advanced_data_regression: AdvancedDataRegressionFixture,
 		):
 	demo_environment.globals["gh_actions_versions"] = {
 			"3.6": "py36, mypy",
@@ -75,11 +76,7 @@ def test_github_ci_case_1(
 			}
 
 	managed_files = make_github_ci(tmp_pathplus, demo_environment)
-	assert managed_files == [
-			".github/workflows/python_ci.yml",
-			".github/workflows/python_ci_macos.yml",
-			".github/workflows/python_ci_linux.yml",
-			]
+	advanced_data_regression.check(managed_files, basename="github_ci_managed_files")
 	assert (tmp_pathplus / managed_files[0]).is_file()
 	assert not (tmp_pathplus / managed_files[1]).is_file()
 	check_file_output(tmp_pathplus / managed_files[0], file_regression)
@@ -89,17 +86,14 @@ def test_github_ci_case_2(
 		tmp_pathplus: PathPlus,
 		demo_environment,
 		file_regression: FileRegressionFixture,
+		advanced_data_regression: AdvancedDataRegressionFixture,
 		):
 
 	demo_environment.globals["travis_additional_requirements"] = ["isort", "black"]
 	demo_environment.globals["platforms"] = ["macOS"]
 
 	managed_files = make_github_ci(tmp_pathplus, demo_environment)
-	assert managed_files == [
-			".github/workflows/python_ci.yml",
-			".github/workflows/python_ci_macos.yml",
-			".github/workflows/python_ci_linux.yml",
-			]
+	advanced_data_regression.check(managed_files, basename="github_ci_managed_files")
 	assert not (tmp_pathplus / managed_files[0]).is_file()
 	assert (tmp_pathplus / managed_files[1]).is_file()
 	check_file_output(tmp_pathplus / managed_files[1], file_regression)
@@ -124,15 +118,15 @@ def test_github_ci_windows_38(
 	check_file_output(tmp_pathplus / managed_files[1], file_regression)
 
 
-def test_github_ci_case_3(tmp_pathplus: PathPlus, demo_environment):
+def test_github_ci_case_3(
+		tmp_pathplus: PathPlus,
+		demo_environment,
+		advanced_data_regression: AdvancedDataRegressionFixture,
+		):
 	demo_environment.globals.update(dict(platforms=["Windows", "macOS"], ))
 
 	managed_files = make_github_ci(tmp_pathplus, demo_environment)
-	assert managed_files == [
-			".github/workflows/python_ci.yml",
-			".github/workflows/python_ci_macos.yml",
-			".github/workflows/python_ci_linux.yml",
-			]
+	advanced_data_regression.check(managed_files, basename="github_ci_managed_files")
 	assert (tmp_pathplus / managed_files[0]).is_file()
 	assert (tmp_pathplus / managed_files[1]).is_file()
 
@@ -143,11 +137,7 @@ def test_github_ci_case_3(tmp_pathplus: PathPlus, demo_environment):
 	assert (tmp_pathplus / managed_files[1]).is_file()
 
 	managed_files = make_github_ci(tmp_pathplus, demo_environment)
-	assert managed_files == [
-			".github/workflows/python_ci.yml",
-			".github/workflows/python_ci_macos.yml",
-			".github/workflows/python_ci_linux.yml",
-			]
+	advanced_data_regression.check(managed_files, basename="github_ci_managed_files")
 
 	assert not (tmp_pathplus / managed_files[0]).is_file()
 	assert not (tmp_pathplus / managed_files[1]).is_file()
@@ -328,16 +318,13 @@ def test_make_github_linux_case_1(
 		tmp_pathplus: PathPlus,
 		demo_environment,
 		file_regression: FileRegressionFixture,
+		advanced_data_regression: AdvancedDataRegressionFixture,
 		):
 
 	demo_environment.globals["platforms"] = ["Linux"]
 
 	managed_files = make_github_ci(tmp_pathplus, demo_environment)
-	assert managed_files == [
-			".github/workflows/python_ci.yml",
-			".github/workflows/python_ci_macos.yml",
-			".github/workflows/python_ci_linux.yml",
-			]
+	advanced_data_regression.check(managed_files, basename="github_ci_managed_files")
 	assert not (tmp_pathplus / managed_files[0]).is_file()
 	assert not (tmp_pathplus / managed_files[1]).is_file()
 	assert (tmp_pathplus / managed_files[2]).is_file()
@@ -349,6 +336,7 @@ def test_make_github_linux_case_2(
 		tmp_pathplus: PathPlus,
 		demo_environment,
 		file_regression: FileRegressionFixture,
+		advanced_data_regression: AdvancedDataRegressionFixture,
 		):
 
 	demo_environment.globals["platforms"] = ["Linux"]
@@ -361,11 +349,7 @@ def test_make_github_linux_case_2(
 	demo_environment.globals["enable_releases"] = False
 
 	managed_files = make_github_ci(tmp_pathplus, demo_environment)
-	assert managed_files == [
-			".github/workflows/python_ci.yml",
-			".github/workflows/python_ci_macos.yml",
-			".github/workflows/python_ci_linux.yml",
-			]
+	advanced_data_regression.check(managed_files, basename="github_ci_managed_files")
 	assert not (tmp_pathplus / managed_files[0]).is_file()
 	assert not (tmp_pathplus / managed_files[1]).is_file()
 	assert (tmp_pathplus / managed_files[2]).is_file()
@@ -385,6 +369,7 @@ def test_make_github_linux_case_3(
 		enable_conda,
 		enable_tests,
 		enable_releases,
+		advanced_data_regression: AdvancedDataRegressionFixture,
 		):
 
 	demo_environment.globals["platforms"] = ["Linux"]
@@ -394,11 +379,8 @@ def test_make_github_linux_case_3(
 	demo_environment.globals["enable_releases"] = enable_releases
 
 	managed_files = make_github_ci(tmp_pathplus, demo_environment)
-	assert managed_files == [
-			".github/workflows/python_ci.yml",
-			".github/workflows/python_ci_macos.yml",
-			".github/workflows/python_ci_linux.yml",
-			]
+	advanced_data_regression.check(managed_files, basename="github_ci_managed_files")
+
 	assert not (tmp_pathplus / managed_files[0]).is_file()
 	assert not (tmp_pathplus / managed_files[1]).is_file()
 	assert (tmp_pathplus / managed_files[2]).is_file()
@@ -410,6 +392,7 @@ def test_make_github_linux_case_4(
 		tmp_pathplus: PathPlus,
 		file_regression: FileRegressionFixture,
 		demo_environment,
+		advanced_data_regression: AdvancedDataRegressionFixture,
 		):
 
 	demo_environment.globals["platforms"] = ["Linux"]
@@ -435,11 +418,8 @@ def test_make_github_linux_case_4(
 			}
 
 	managed_files = make_github_ci(tmp_pathplus, demo_environment)
-	assert managed_files == [
-			".github/workflows/python_ci.yml",
-			".github/workflows/python_ci_macos.yml",
-			".github/workflows/python_ci_linux.yml",
-			]
+	advanced_data_regression.check(managed_files, basename="github_ci_managed_files")
+
 	assert not (tmp_pathplus / managed_files[0]).is_file()
 	assert not (tmp_pathplus / managed_files[1]).is_file()
 	assert (tmp_pathplus / managed_files[2]).is_file()

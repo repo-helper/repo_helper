@@ -1,0 +1,47 @@
+# {{ managed_message }}
+---
+name: RustPython
+
+on:
+  push:
+
+jobs:
+  tests:
+    name: "{{ ci_platform }} / RustPython"
+    runs-on: "{{ ci_platform }}"
+    env:
+      USING_COVERAGE: 'rustpython'
+      CARGO_TERM_COLOR: always
+
+    steps:
+      - name: Checkout 🛎️
+        uses: "actions/checkout@v2"
+
+      - name: Setup RustPython 🦀 🐍
+        run: |
+          git clone https://github.com/RustPython/RustPython
+          cargo install --path ./RustPython
+          rm -rf ./RustPython
+
+      - name: Install dependencies 🔧
+        run: |
+          {% for line in dependency_lines %}{{ line }}
+          {% endfor %}
+      - name: "Run Tests for RustPython"
+        run: python -m tox -e rustpython
+{% if enable_tests and not stubs_package %}
+      - name: "Upload Coverage 🚀"
+        uses: actions/upload-artifact@v2
+        if: always()
+        with:
+          name: "coverage-rustpython"
+          path: .coverage{% endif %}
+
+{% if ci_platform.startswith("ubuntu") %}
+      - name: "Upload tempdir on failure"
+        uses: actions/upload-artifact@v2
+        if: failure()
+        with:
+          name: "pytest-tempdir"
+          path: /tmp/pytest-of-runner/pytest-0
+{% endif %}

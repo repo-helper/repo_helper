@@ -45,7 +45,7 @@ def get_tox_python_versions(python_versions: Iterable[str]) -> List[str]:
 
 	for py_version in python_versions:
 		py_version = str(py_version).replace('.', '')
-		if not py_version.startswith("py"):
+		if py_version[0].isdigit():
 			py_version = f"py{py_version}"
 		tox_py_versions.append(py_version)
 

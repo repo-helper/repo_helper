@@ -20,8 +20,6 @@ console_scripts:
  - "repo_helper = repo_helper.__main__:main"
  - "repo-helper = repo_helper.__main__:main"
 
-sphinx_html_theme: domdf_sphinx_theme
-
 python_deploy_version: 3.7
 
 # Versions to run tests for
@@ -32,7 +30,6 @@ python_versions:
  - '3.9'
  - 'pypy3'
 
-# additional lines for MANIFEST.in
 manifest_additional:
  - "include repo_helper/testing/repo_helper_example.yml"
  - "recursive-include repo_helper/templates *"
@@ -50,7 +47,7 @@ classifiers:
  - 'Topic :: Software Development :: Build Tools'
  - 'Topic :: Software Development :: Version Control :: Git'
  - 'Topic :: System :: Archiving :: Packaging'
- - 'Topic :: System :: Software Distribution'#
+ - 'Topic :: System :: Software Distribution'
  - 'Environment :: Console'
 
 extra_sphinx_extensions:
@@ -77,9 +74,10 @@ extras_require:
    - twine>=3.2.0
    - check_wheel_contents>=0.2.0
 
+sphinx_html_theme: domdf_sphinx_theme
 tox_testenv_extras: all
-
 pre_commit_exclude: "^.*\\._py$"
+mypy_version: "0.800"
 
 conda_channels:
  - conda-forge
@@ -92,5 +90,3 @@ tox_unmanaged:
 
 keywords:
  - configuration
-
-mypy_version: "0.800"

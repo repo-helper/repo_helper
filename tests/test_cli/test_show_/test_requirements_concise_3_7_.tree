@@ -15,7 +15,7 @@ repo_helper==2020.12.18
 ├── dict2css>=0.2.0
 ├── distlib<1,>=0.3.1
 ├── dnspython>=1.15.0
-├── domdf-python-tools>=2.5.0
+├── domdf-python-tools>=2.5.1
 ├── dulwich!=0.20.7,!=0.20.8,!=0.20.9,>=0.20.5
 ├── email-validator==1.1.2
 ├── filelock<4,>=3.0.12
