@@ -26,7 +26,7 @@ Configuration options.
 # stdlib
 import json
 import re
-from typing import Any, Dict, List, Mapping, MutableMapping, Optional, Sequence, Set, Union
+from typing import Any, Callable, Dict, Iterable, List, Mapping, MutableMapping, Optional, Sequence, Set, Union
 
 # 3rd party
 import click
@@ -37,7 +37,7 @@ from domdf_python_tools.compat import importlib_resources
 from domdf_python_tools.paths import PathPlus
 from domdf_python_tools.typing import PathLike
 from domdf_python_tools.versions import Version
-from natsort import natsorted  # type: ignore
+from natsort import natsorted
 from ruamel.yaml import YAML
 
 # this package
@@ -455,6 +455,18 @@ class YamlEditor(YAML):
 
 		data = self.load_file(filename)
 
+		if not isinstance(data, dict):
+			raise TypeError("'update_key' can only be used with mappings.")
+
+		if isinstance(new_value, str) or not isinstance(new_value, Iterable):
+			if key in data:
+				data[key] = new_value
+				self.dump_to_file(data, filename, mode='w')
+			else:
+				self.dump_to_file({key: new_value}, filename, mode='a')
+
+		sort_func: Callable[[Iterable], Iterable]
+
 		if sort:
 			sort_func = natsorted
 		else:
@@ -469,4 +481,4 @@ class YamlEditor(YAML):
 			data[key] = sort_func({*data[key], *new_value})  # type: ignore
 			self.dump_to_file(data, filename, mode='w')
 		else:
-			self.dump_to_file({key: sort_func(new_value)}, filename, mode='a')
+			self.dump_to_file({key: sort_func(new_value)}, filename, mode='a')  # type: ignore

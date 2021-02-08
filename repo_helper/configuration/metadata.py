@@ -30,7 +30,7 @@ from typing import Any, Dict, Iterable, List, Optional, Union
 # 3rd party
 from configconfig.configvar import ConfigVar
 from configconfig.utils import optional_getter
-from natsort import natsorted  # type: ignore
+from natsort import natsorted
 from packaging.version import Version
 from shippinglabel.classifiers import validate_classifiers
 

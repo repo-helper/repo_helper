@@ -29,7 +29,7 @@ import re
 from typing import Any, Dict, Iterable, List, Mapping, Tuple
 
 # 3rd party
-from natsort import natsorted  # type: ignore
+from natsort import natsorted
 
 __all__ = ["get_tox_python_versions", "get_version_classifiers", "parse_extras"]
 
