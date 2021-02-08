@@ -29,6 +29,7 @@ python_versions:
  - '3.8'
  - '3.9'
  - 'pypy3'
+ - rustpython
 
 manifest_additional:
  - "include repo_helper/testing/repo_helper_example.yml"

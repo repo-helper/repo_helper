@@ -1,0 +1,50 @@
+# This file is managed by 'repo_helper'. Don't edit it directly.
+---
+name: RustPython
+
+on:
+  push:
+
+jobs:
+  tests:
+    name: "ubuntu-20.04 / RustPython"
+    runs-on: "ubuntu-20.04"
+    env:
+      USING_COVERAGE: 'rustpython'
+      CARGO_TERM_COLOR: always
+
+    steps:
+      - name: Checkout 🛎️
+        uses: "actions/checkout@v2"
+
+      - name: Setup RustPython 🦀 🐍
+        run: |
+          git clone https://github.com/RustPython/RustPython
+          cargo install --path ./RustPython
+          rm -rf ./RustPython
+
+      - name: Install dependencies 🔧
+        run: |
+          python -VV
+          python -m site
+          python -m pip install --upgrade pip setuptools wheel
+          python -m pip install --upgrade tox virtualenv
+          python -m pip install --upgrade coverage_pyver_pragma
+
+      - name: "Run Tests for RustPython"
+        run: python -m tox -e rustpython
+
+      - name: "Upload Coverage 🚀"
+        uses: actions/upload-artifact@v2
+        if: always()
+        with:
+          name: "coverage-rustpython"
+          path: .coverage
+
+
+      - name: "Upload tempdir on failure"
+        uses: actions/upload-artifact@v2
+        if: failure()
+        with:
+          name: "pytest-tempdir"
+          path: /tmp/pytest-of-runner/pytest-0
