@@ -2,7 +2,7 @@
 repo-helper make-recipe
 ===========================
 
-Register the schema mapping for ‘repo_helper.yml’ with PyCharm.
+Register the schema mapping for ``repo_helper.yml`` with PyCharm.
 
 .. code-block:: bash
 

@@ -29,6 +29,7 @@ import shutil
 
 # 3rd party
 import click
+from consolekit.commands import MarkdownHelpCommand
 from consolekit.options import flag_option
 
 # this package
@@ -138,18 +139,18 @@ def rmdir(directory: pathlib.Path, quiet: bool = False):
 
 @flag_option("--rm-tox", help="Also remove the '.tox' directory")
 @flag_option("-v", "--verbose", help="Show verbose output.")
-@cli_command()
+@cli_command(cls=MarkdownHelpCommand)
 def broomstick(rm_tox: bool = False, verbose: bool = False):
 	"""
 	Clean up build and test artefacts 🧹.
 
 	Removes the following:
 
-	  build
-	  .mypy_cache
-	  .pytest_cache
-	  **/__pytest__
-	  *.egg-info
+	* build
+	* .mypy_cache
+	* .pytest_cache
+	* **/__pytest__
+	* *.egg-info
 	"""  # noqa: RST
 
 	base_dir = pathlib.Path.cwd()

@@ -2,7 +2,7 @@
 repo-helper wizard
 ===================
 
-Run the wizard 🧙 to create a ‘repo_helper.yml’ file.
+Run the wizard 🧙 to create a ``repo_helper.yml`` file.
 
 .. code-block:: bash
 
