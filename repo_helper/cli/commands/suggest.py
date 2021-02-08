@@ -99,7 +99,7 @@ def classifiers(
 	# 3rd party
 	from consolekit.input import choice, confirm
 	from domdf_python_tools.paths import PathPlus
-	from natsort import natsorted  # type: ignore
+	from natsort import natsorted
 	from shippinglabel.classifiers import classifiers_from_requirements
 	from shippinglabel.requirements import combine_requirements, read_requirements
 
