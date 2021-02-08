@@ -31,16 +31,6 @@ __version__ = "2021.1.27"
 repo_root = pathlib.Path(__file__).parent
 install_requires = (repo_root / "requirements.txt").read_text(encoding="utf-8").split('\n')
 extras_require = {
-		"testing": [
-				"pytest>=6.0.0",
-				"domdf-python-tools[testing]>=1.6.0",
-				"twine>=3.2.0",
-				"check_wheel_contents>=0.2.0"
-				],
-		"all": [
-				"check_wheel_contents>=0.2.0",
-				"domdf-python-tools[testing]>=1.6.0",
-				"pytest>=6.0.0",
-				"twine>=3.2.0"
-				]
+		"testing": ["pytest>=6.0.0", "coincidence>=0.1.2", "twine>=3.2.0", "check_wheel_contents>=0.2.0"],
+		"all": ["check_wheel_contents>=0.2.0", "coincidence>=0.1.2", "pytest>=6.0.0", "twine>=3.2.0"]
 		}

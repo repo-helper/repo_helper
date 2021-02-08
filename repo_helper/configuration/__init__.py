@@ -26,6 +26,7 @@ Configuration options.
 # stdlib
 import json
 import re
+from io import StringIO
 from typing import Any, Callable, Dict, Iterable, List, Mapping, MutableMapping, Optional, Sequence, Set, Union
 
 # 3rd party
@@ -407,6 +408,18 @@ class YamlEditor(YAML):
 		filename = PathPlus(filename)
 		return self.load(filename.read_text())
 
+	def dumps(self, data: Union[MutableMapping, Sequence], *, explicit_start: bool = True, **kwargs) -> str:
+		original_exp_start = self.explicit_start
+
+		try:
+			fp = StringIO()
+			self.explicit_start = explicit_start
+			self.dump(data, fp, **kwargs)
+			return fp.getvalue()
+
+		finally:
+			self.explicit_start = original_exp_start
+
 	def dump_to_file(self, data: Union[MutableMapping, Sequence], filename: PathLike, mode: str = 'w'):
 		"""
 		Dump the given data to the specified file.
@@ -416,25 +429,18 @@ class YamlEditor(YAML):
 		:param mode:
 		"""
 
-		# TODO: dump to StringIO and use write_clean
+		filename = PathPlus(filename)
 
-		explicit_start = self.explicit_start
+		if 'w' in mode:
+			filename.write_lines([
+					"# Configuration for 'repo_helper' (https://github.com/domdfcoding/repo_helper)",
+					self.dumps(data, explicit_start=True),
+					])
 
-		try:
-			filename = PathPlus(filename)
-
-			with filename.open(mode) as fp:
-
-				if 'w' in mode:
-					self.explicit_start = True
-				elif 'a' in mode:
-					self.explicit_start = False
-					fp.write('\n')
-
-				self.dump(data, fp)
-
-		finally:
-			self.explicit_start = explicit_start
+		elif 'a' in mode:
+			with filename.open('a') as fp:
+				fp.write('\n')
+				fp.write(self.dumps(data, explicit_start=False))
 
 	def update_key(
 			self,

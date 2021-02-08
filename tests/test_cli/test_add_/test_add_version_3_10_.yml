@@ -9,8 +9,7 @@ username: "domdfcoding"
 license: 'LGPLv3+'
 short_desc: 'Update multiple configuration files, build scripts etc. from a single location.'
 
-classifiers:
- - 'Development Status :: 4 - Beta'
- - 'Framework :: Flake8'
- - 'Intended Audience :: Developers'
- - 'Topic :: Software Development :: Libraries :: Python Modules'
+python_versions:
+ - '3.6'
+ - '3.7'
+ - '3.10'
