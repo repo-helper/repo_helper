@@ -173,7 +173,7 @@ pre_commit_hooks = Repo(
 
 pygrep_hooks = Repo(
 		repo=make_github_url("pre-commit", "pygrep-hooks"),
-		rev="v1.7.0",
+		rev="v1.7.1",
 		hooks=[
 				"python-no-eval",
 				"rst-backticks",
@@ -264,7 +264,7 @@ def make_pre_commit(repo_path: pathlib.Path, templates: jinja2.Environment) -> L
 
 	formate = Repo(
 			repo=make_github_url("repo-helper", "formate"),
-			rev="v0.2.5",
+			rev="v0.3.1",
 			hooks=[{"id": "formate", "exclude": formate_excludes}],
 			)
 
