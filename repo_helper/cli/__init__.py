@@ -44,7 +44,7 @@ from typing import Optional
 # 3rd party
 import click
 from click import Context
-from consolekit import CONTEXT_SETTINGS, click_group
+from consolekit import CONTEXT_SETTINGS, SuggestionGroup, click_group
 from consolekit.options import force_option
 from domdf_python_tools.paths import PathPlus
 from southwark.click import commit_message_option, commit_option
@@ -84,4 +84,4 @@ def cli(ctx: Context, force: bool, commit: Optional[bool], message: str):
 
 
 cli_command = partial(cli.command, context_settings=CONTEXT_SETTINGS)
-cli_group = partial(cli.group, context_settings=CONTEXT_SETTINGS)
+cli_group = partial(cli.group, context_settings=CONTEXT_SETTINGS, cls=SuggestionGroup)
