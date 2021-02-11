@@ -1,3 +1,4 @@
+# Configuration for 'repo_helper' (https://github.com/domdfcoding/repo_helper)
 ---
 modname: repo_helper
 copyright_years: "2020-2021"
@@ -28,8 +29,8 @@ python_versions:
  - '3.7'
  - '3.8'
  - '3.9'
- - 'pypy3'
- - rustpython
+ - 3.10-dev
+ - pypy3
 
 manifest_additional:
  - "include repo_helper/testing/repo_helper_example.yml"
