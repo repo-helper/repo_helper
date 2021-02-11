@@ -160,10 +160,7 @@ class ToxConfig(IniConfigurator):
 		Compile the list of mypy dependencies.
 		"""
 
-		if self["stubs_package"]:
-			mypy_deps = ["git+https://github.com/python/mypy@c1fa1ade66a053774366d3710c380cfc8b3abbb1"]
-		else:
-			mypy_deps = [f"mypy=={self['mypy_version']}"]
+		mypy_deps = [f"mypy=={self['mypy_version']}"]
 
 		# mypy_deps.append("lxml")
 
@@ -372,7 +369,14 @@ class ToxConfig(IniConfigurator):
 		self._ini["testenv:lint"]["basepython"] = "python{python_deploy_version}".format(**self._globals)
 		self._ini["testenv:lint"]["changedir"] = "{toxinidir}"
 		self._ini["testenv:lint"]["ignore_errors"] = True
-		self._ini["testenv:lint"]["skip_install"] = self["pypi_name"] not in {"domdf_python_tools", "consolekit"}
+
+		if self["pypi_name"] in {"domdf_python_tools", "consolekit"}:
+			self._ini["testenv:lint"]["skip_install"] = False
+		elif self["pypi_name"].startswith("flake8"):
+			self._ini["testenv:lint"]["skip_install"] = False
+		else:
+			self._ini["testenv:lint"]["skip_install"] = True
+
 		self._ini["testenv:lint"]["deps"] = indent_join([
 				# "autopep8 >=1.5.2",
 				"flake8 >=3.8.2",
