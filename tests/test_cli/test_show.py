@@ -1,9 +1,6 @@
-# stdlib
-import sys
-
 # 3rd party
 import pytest
-from coincidence import check_file_regression, min_version, not_pypy
+from coincidence import check_file_regression, min_version, not_pypy, only_version
 from consolekit.testing import CliRunner, Result
 from domdf_python_tools.paths import PathPlus, in_directory
 from pytest_regressions.file_regression import FileRegressionFixture
@@ -60,28 +57,11 @@ def test_changelog(tmp_repo, file_regression: FileRegressionFixture):
 version_specific = pytest.mark.parametrize(
 		"py_version",
 		[
-				pytest.param(
-						"3.6",
-						marks=pytest.mark.skipif(
-								condition=sys.version_info[:2] != (3, 6),
-								reason="Output differs on Python 3.6",
-								)
-						),
-				pytest.param(
-						"3.7",
-						marks=pytest.mark.skipif(
-								condition=sys.version_info[:2] != (3, 7),
-								reason="Output differs on Python 3.7",
-								)
-						),
-				pytest.param(
-						"3.8",
-						marks=pytest.mark.skipif(
-								condition=sys.version_info[:2] != (3, 8),
-								reason="Output differs on Python 3.8",
-								)
-						),
-				pytest.param("3.9+", marks=min_version(3.9, "Output differs on Python 3.9+")),
+				pytest.param("3.6", marks=only_version(3.6, reason="Output differs on Python 3.6")),
+				pytest.param("3.7", marks=only_version(3.7, reason="Output differs on Python 3.7")),
+				pytest.param("3.8", marks=only_version(3.8, reason="Output differs on Python 3.8")),
+				pytest.param("3.9", marks=only_version(3.9, reason="Output differs on Python 3.9")),
+				pytest.param("3.10+", marks=min_version("3.10", "Output differs on Python 3.10+")),
 				]
 		)
 

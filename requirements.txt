@@ -17,6 +17,7 @@ requests>=2.25.1
 ruamel-yaml>=0.16.12
 shippinglabel>=0.8.2
 southwark>=0.7.1
+tabulate>=0.8.7
 toml>=0.10.2
 typing-extensions>=3.7.4.3
 yapf-isort>=0.5.2

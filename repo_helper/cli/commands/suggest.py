@@ -31,7 +31,8 @@ from typing import Iterator, Optional
 # 3rd party
 import click
 from consolekit import CONTEXT_SETTINGS
-from consolekit.options import auto_default_option, flag_option
+from consolekit.input import confirm
+from consolekit.options import auto_default_option, flag_option, no_pager_option
 
 # this package
 from repo_helper.cli import cli_group
@@ -205,3 +206,115 @@ def detect_languages(directory: pathlib.Path) -> Iterator[str]:
 		for _ in chain.from_iterable(directory.rglob(pattern) for pattern in patterns):
 			yield language
 			break
+
+
+@no_pager_option()
+@flag_option("-t", "--force-tty", help="Force repo-helper to treat stdout as a TTY")
+@flag_option("--add/--no-add", help="Add the classifiers to the 'repo_helper.yml' file.", default=None)
+@suggest_command()
+def stubs(add: Optional[bool] = None, force_tty: bool = False, no_pager: bool = False):
+	"""
+	Suggest :pep:`561` type stubs.
+	"""
+
+	# stdlib
+	import shutil
+	import sys
+	from itertools import chain
+
+	# 3rd party
+	import tabulate
+	from apeye import URL, TrailingRequestsURL
+	from domdf_python_tools.paths import PathPlus
+	from domdf_python_tools.stringlist import StringList
+	from shippinglabel import normalize
+	from shippinglabel.pypi import PYPI_API
+	from shippinglabel.requirements import combine_requirements, read_requirements
+
+	# this package
+	from repo_helper.core import RepoHelper
+
+	rh = RepoHelper(PathPlus.cwd())
+	rh.load_settings()
+	config = rh.templates.globals
+
+	requirements_files = [rh.target_repo / "requirements.txt"]
+
+	if config["enable_tests"]:
+		requirements_files.append(rh.target_repo / config["tests_dir"] / "requirements.txt")
+
+	requirements_files.extend((rh.target_repo / config["import_name"]).iterchildren("**/requirements.txt"))
+
+	all_requirements = set(
+			chain.from_iterable(read_requirements(file, include_invalid=True)[0] for file in requirements_files)
+			)
+
+	stubs_file = rh.target_repo / "stubs.txt"
+
+	if stubs_file.is_file():
+		existing_stubs, stub_comments, invalid_stubs = read_requirements(stubs_file, include_invalid=True)
+	else:
+		existing_stubs = set()
+		stub_comments, invalid_stubs = [], []
+
+	suggestions = {}
+
+	for requirement in all_requirements:
+		if normalize(requirement.name) in {"typing-extensions"}:
+			continue
+
+		types_url = TrailingRequestsURL(PYPI_API / f"types-{requirement.name.lower()}" / "json/")
+		stubs_url = TrailingRequestsURL(PYPI_API / f"{requirement.name.lower()}-stubs" / "json/")
+
+		response = stubs_url.head()
+		if response.status_code == 404:
+			# No stubs found for -stubs
+			response = types_url.head()
+			if response.status_code == 404:
+				# No stubs found for types-
+				continue
+			else:
+				response_url = URL(response.url)
+				suggestions[str(requirement)] = response_url.parent.name
+				# print(requirement, response.url)
+		else:
+			response_url = URL(response.url)
+			suggestions[str(requirement)] = response_url.parent.name
+			# print(requirement, response.url)
+
+	if not suggestions:
+		if sys.stdout.isatty() or force_tty:
+			click.echo("No stubs to suggest.")
+		sys.exit(1)
+
+	if sys.stdout.isatty() or force_tty:
+
+		table = StringList([
+				"Suggestions",
+				"-----------",
+				tabulate.tabulate(suggestions.items(), headers=["Requirement", "Stubs"]),
+				])
+		table.blankline(ensure_single=True)
+
+		if no_pager or len(table) <= shutil.get_terminal_size().lines:
+			click.echo('\n'.join(table))
+		else:
+			click.echo_via_pager('\n'.join(table))
+
+		if add is None:
+			add = confirm("Do you want to add these to the 'stubs.txt' file?")
+
+		if add:
+			new_stubs = sorted(combine_requirements(*existing_stubs, *suggestions.values()))
+
+			stubs_file.write_lines([
+					*stub_comments,
+					*invalid_stubs,
+					*map(str, new_stubs),
+					])
+
+	else:
+		for stub in suggestions.values():
+			click.echo(stub)
+
+	sys.exit(0)

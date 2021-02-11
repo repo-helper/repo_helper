@@ -29,7 +29,7 @@ import pytest
 # this package
 from repo_helper.configuration import metadata
 
-pytest_plugins = ("domdf_python_tools.testing", "repo_helper.testing", "coincidence")
+pytest_plugins = ("coincidence", "repo_helper.testing")
 
 
 @pytest.fixture()
