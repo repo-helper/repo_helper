@@ -715,11 +715,13 @@ def make_formate_toml(repo_path: pathlib.Path, templates: jinja2.Environment) ->
 
 	isort_file.unlink(missing_ok=True)
 
-	if (
-			"hooks" in formate_config and "isort" in formate_config["hooks"]
-			and "kwargs" in formate_config["hooks"]["isort"]
-			):
-		known_third_party.update(formate_config["hooks"]["isort"]["kwargs"].get("known_third_party", ()))
+	if "hooks" in formate_config and "isort" in formate_config["hooks"]:
+		if "kwargs" in formate_config["hooks"]["isort"]:
+			known_third_party.update(formate_config["hooks"]["isort"]["kwargs"].get("known_third_party", ()))
+
+			for existing_key, value in formate_config["hooks"]["isort"]["kwargs"].items():
+				if existing_key not in isort_config:
+					isort_config[existing_key] = value
 
 	def normalise_underscore(name: str) -> str:
 		return normalize(name.strip()).replace('-', '_')
