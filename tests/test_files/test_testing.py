@@ -321,7 +321,7 @@ def test_ensure_tests_requirements(tmp_pathplus, demo_environment):
 			'',
 			]
 
-	with (tmp_pathplus / managed_files[0]).open('a', encoding="UTF-8") as fp:
+	with (tmp_pathplus / managed_files[0]).open('a') as fp:
 		fp.write("lorem>=0.1.1")
 
 	managed_files = ensure_tests_requirements(tmp_pathplus, demo_environment)
