@@ -59,7 +59,7 @@ from repo_helper.configuration.conda_anaconda import (
 		conda_description,
 		conda_extras,
 		enable_conda,
-		primary_conda_channel
+		primary_conda_channel,
 		)
 from repo_helper.configuration.documentation import (
 		docs_dir,
@@ -74,7 +74,8 @@ from repo_helper.configuration.documentation import (
 		sphinx_conf_epilogue,
 		sphinx_conf_preamble,
 		sphinx_html_theme,
-		standalone_contrib_guide
+		standalone_contrib_guide,
+		docs_fail_on_warning,
 		)
 from repo_helper.configuration.metadata import (  # pylint: disable=redefined-builtin
 		assignee,
@@ -94,13 +95,13 @@ from repo_helper.configuration.metadata import (  # pylint: disable=redefined-bu
 		source_dir,
 		stubs_package,
 		username,
-		version
+		version,
 		)
 from repo_helper.configuration.optional_features import (
 		docker_name,
 		docker_shields,
 		enable_pre_commit,
-		enable_releases
+		enable_releases,
 		)
 from repo_helper.configuration.other import (
 		additional_ignore,
@@ -109,7 +110,7 @@ from repo_helper.configuration.other import (
 		imgbot_ignore,
 		pkginfo_extra,
 		pre_commit_exclude,
-		yapf_exclude
+		yapf_exclude,
 		)
 from repo_helper.configuration.packaging import (
 		additional_requirements_files,
@@ -121,13 +122,13 @@ from repo_helper.configuration.packaging import (
 		platforms,
 		py_modules,
 		setup_pre,
-		use_experimental_backend
+		use_experimental_backend,
 		)
 from repo_helper.configuration.python_versions_ import (
 		default_python_versions,
 		python_deploy_version,
 		python_versions,
-		third_party_version_matrix
+		third_party_version_matrix,
 		)
 from repo_helper.configuration.testing import (
 		enable_devmode,
@@ -140,13 +141,13 @@ from repo_helper.configuration.testing import (
 		tox_build_requirements,
 		tox_requirements,
 		tox_testenv_extras,
-		tox_unmanaged
+		tox_unmanaged,
 		)
 from repo_helper.configuration.travis import (
 		travis_additional_requirements,
 		travis_extra_install_post,
 		travis_extra_install_pre,
-		travis_ubuntu_version
+		travis_ubuntu_version,
 		)
 from repo_helper.configuration.utils import get_tox_python_versions, parse_extras
 from repo_helper.utils import no_dev_versions
@@ -234,6 +235,7 @@ __all__ = [
 		"third_party_version_matrix",
 		"entry_points",
 		"min_coverage",
+		"docs_fail_on_warning",
 		]
 
 

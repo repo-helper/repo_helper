@@ -31,6 +31,7 @@ desktopfile: {}
 docker_name: ''
 docker_shields: false
 docs_dir: doc-source
+docs_fail_on_warning: false
 docs_url: https://repo_helper_demo.readthedocs.io/en/latest
 email: dominic@davis-foster.co.uk
 enable_conda: false

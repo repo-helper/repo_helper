@@ -196,7 +196,9 @@ def test_make_github_manylinux_pure_python(
 	assert not (tmp_pathplus / ".github/workflows/manylinux_build.yml").is_file()
 
 
-def test_make_github_docs_test(tmp_pathplus, demo_environment, file_regression: FileRegressionFixture):
+@pytest.mark.parametrize("fail_on_warning", [True, False])
+def test_make_github_docs_test(tmp_pathplus, demo_environment, file_regression: FileRegressionFixture, fail_on_warning):
+	demo_environment.globals["docs_fail_on_warning"] = fail_on_warning
 	assert make_github_docs_test(tmp_pathplus, demo_environment) == [".github/workflows/docs_test_action.yml"]
 	check_file_output(tmp_pathplus / ".github/workflows/docs_test_action.yml", file_regression)
 

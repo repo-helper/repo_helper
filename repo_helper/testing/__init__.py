@@ -118,6 +118,7 @@ def demo_environment() -> jinja2.Environment:
 			"managed_message": "This file is managed by 'repo_helper'. Don't edit it directly.",
 			"short_desc": "a short description",
 			"on_pypi": true,
+			"docs_fail_on_warning": false,
 			"third_party_version_matrix": {}
 			}
 
@@ -175,6 +176,7 @@ def demo_environment() -> jinja2.Environment:
 					managed_message="This file is managed by 'repo_helper'. Don't edit it directly.",
 					short_desc="a short description",
 					on_pypi=True,
+					docs_fail_on_warning=False,
 					brace=brace,
 					third_party_version_matrix={},
 					gh_actions_versions={

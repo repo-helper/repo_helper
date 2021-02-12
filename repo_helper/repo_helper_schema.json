@@ -86,6 +86,13 @@
       "type": "string",
       "description": "The directory containing the docs code of the project."
     },
+    "docs_fail_on_warning": {
+      "type": [
+        "boolean",
+        "string"
+      ],
+      "description": "Whether the documentation check on GitHub Actions should fail on warnings."
+    },
     "docs_url": {
       "type": "string",
       "description": "The URL of the documentation, if it uses a custom domain. Default ``https://{repo_name}.readthedocs.io``."

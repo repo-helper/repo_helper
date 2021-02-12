@@ -47,6 +47,7 @@ __all__ = [
 		"docs_dir",
 		"standalone_contrib_guide",
 		"docs_url",
+		"docs_fail_on_warning",
 		]
 
 
@@ -314,3 +315,21 @@ class docs_url(ConfigVar):  # noqa
 			return None
 		else:
 			return super().validate(raw_config_vars)
+
+
+class docs_fail_on_warning(ConfigVar):  # noqa
+	"""
+	Whether the documentation check on GitHub Actions should fail on warnings.
+
+	Example:
+
+	.. code-block:: yaml
+
+		docs_fail_on_warning: True
+
+	.. versionadded:: $VERSION
+	"""
+
+	dtype = bool
+	default: bool = False
+	category: str = "documentation"

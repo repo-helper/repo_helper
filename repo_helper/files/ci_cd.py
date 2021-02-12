@@ -480,7 +480,12 @@ def make_github_docs_test(repo_path: pathlib.Path, templates: jinja2.Environment
 
 	file = PathPlus(repo_path / ".github" / "workflows" / "docs_test_action.yml")
 	file.parent.maybe_make(parents=True)
-	file.write_clean(templates.get_template(file.name).render())
+	if templates.globals["docs_fail_on_warning"]:
+		build_command = "tox -e docs -- -W "
+	else:
+		build_command = "tox -e docs -- "
+
+	file.write_clean(templates.get_template(file.name).render(build_command=build_command))
 	return [file.relative_to(repo_path).as_posix()]
 
 
