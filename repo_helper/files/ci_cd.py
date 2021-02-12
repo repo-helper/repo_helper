@@ -535,6 +535,9 @@ def make_github_mypy(repo_path: pathlib.Path, templates: jinja2.Environment) -> 
 	:param templates:
 	"""
 
+	# TODO: make use of the --python-version and --platform options to test all python versions and platforms in one pass
+	# https://mypy.readthedocs.io/en/stable/command_line.html#cmdoption-mypy-python-version
+
 	manager = ActionsManager(repo_path, templates)
 
 	return [manager.make_mypy().relative_to(repo_path).as_posix()]

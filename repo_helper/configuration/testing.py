@@ -193,11 +193,13 @@ class mypy_version(ConfigVar):  # noqa
 	.. code-block:: yaml
 
 		mypy_version: 0.790
+
+	.. versionchanged:: $VERSION  The default is now ``0.800``
 	"""
 
 	dtype = Union[str, float]
 	rtype = str
-	default = "0.790"
+	default = "0.800"
 	category: str = "testing"
 
 
