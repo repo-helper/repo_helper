@@ -24,7 +24,7 @@ def cassette(request: FixtureRequest, monkeypatch):
 	monkeypatch.setattr(add.PYPI_API, "session", session)
 
 	with Betamax(session) as vcr:
-		vcr.use_cassette(request.node.name, record="once")
+		vcr.use_cassette(request.node.name.translate({ord(k): "_" for k in '<>:"/\\|?*'}), record="once")
 
 		yield session
 
