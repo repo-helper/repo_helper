@@ -208,6 +208,14 @@ lint_warn_list.extend((
 		"TYP006",  # guard typing attribute by quoting
 		))
 
+# Encodings
+lint_warn_list.extend((
+		"ENC001",  # no encoding specified for 'open'.
+		"ENC002",  # 'encoding=None' used for 'open'.
+		"ENC003",  # no encoding specified for 'open' with unknown mode.
+		"ENC004",  # 'encoding=None' used for 'open' with unknown mode.
+		))
+
 # pydocstyle
 code_only_warning = [
 		"E301",
