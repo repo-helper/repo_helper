@@ -101,7 +101,7 @@ repo_helper==2020.12.18
 │   └── urllib3<1.27,>=1.21.1
 ├── ruamel-yaml>=0.16.12
 ├── shippinglabel>=0.8.2
-│   ├── apeye>=0.4.0
+│   ├── apeye>=0.7.0
 │   │   ├── appdirs>=1.4.4
 │   │   ├── cachecontrol[filecache]>=0.12.6
 │   │   │   ├── lockfile>=0.9; extra == "filecache"
@@ -146,12 +146,13 @@ repo_helper==2020.12.18
 │   │   │   └── typing-extensions>=3.7.4.3
 │   │   ├── mistletoe>=0.7.2
 │   │   └── typing-extensions>=3.7.4.3
-│   ├── domdf-python-tools>=2.0.1
+│   ├── domdf-python-tools>=2.5.0
 │   │   ├── natsort>=7.1.0
 │   │   ├── pydash>=4.7.4
 │   │   └── typing-extensions>=3.7.4.3
 │   ├── packaging>=20.7
 │   │   └── pyparsing>=2.0.2
+│   ├── toml>=0.10.2
 │   ├── trove-classifiers>=2020.10.21
 │   ├── typing-extensions>=3.7.4.3
 │   └── wheel-filename>=1.2.0

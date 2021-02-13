@@ -141,7 +141,7 @@ repo_helper==2020.12.18
 ├── ruamel-yaml>=0.16.12
 │   └── ruamel.yaml.clib>=0.1.2; platform_python_implementation == "CPython" and python_version < "3.9"
 ├── shippinglabel>=0.8.2
-│   ├── apeye>=0.4.0
+│   ├── apeye>=0.7.0
 │   │   ├── appdirs>=1.4.4
 │   │   ├── cachecontrol[filecache]>=0.12.6
 │   │   │   ├── lockfile>=0.9; extra == "filecache"
@@ -196,7 +196,7 @@ repo_helper==2020.12.18
 │   │   │   └── typing-extensions>=3.7.4.3
 │   │   ├── mistletoe>=0.7.2
 │   │   └── typing-extensions>=3.7.4.3
-│   ├── domdf-python-tools>=2.0.1
+│   ├── domdf-python-tools>=2.5.0
 │   │   ├── importlib-metadata>=1.5.0; python_version < "3.9"
 │   │   │   ├── typing-extensions>=3.6.4; python_version < "3.8"
 │   │   │   └── zipp>=0.5
@@ -207,6 +207,7 @@ repo_helper==2020.12.18
 │   │   └── typing-extensions>=3.7.4.3
 │   ├── packaging>=20.7
 │   │   └── pyparsing>=2.0.2
+│   ├── toml>=0.10.2
 │   ├── trove-classifiers>=2020.10.21
 │   ├── typing-extensions>=3.7.4.3
 │   └── wheel-filename>=1.2.0
