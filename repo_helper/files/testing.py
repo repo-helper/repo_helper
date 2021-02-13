@@ -330,10 +330,13 @@ class ToxConfig(IniConfigurator):
 			if self["tox_testenv_extras"]:
 				self._ini["testenv:docs"]["extras"] = self["tox_testenv_extras"]
 
-			self._ini["testenv:docs"]["deps"] = indent_join([
-					"-r{toxinidir}/requirements.txt",
-					f"-r{{toxinidir}}/{self['docs_dir']}/requirements.txt",
-					], )
+			self._ini["testenv:docs"]["deps"] = f"-r{{toxinidir}}/{self['docs_dir']}/requirements.txt"
+
+			# self._ini["testenv:docs"]["deps"] = indent_join([
+			# 		"-r{toxinidir}/requirements.txt",
+			# 		f"-r{{toxinidir}}/{self['docs_dir']}/requirements.txt",
+			# 		], )
+
 			self._ini["testenv:docs"]["commands"] = "sphinx-build -M html . ./build {posargs}"
 
 		else:
