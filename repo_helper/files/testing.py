@@ -206,12 +206,10 @@ class ToxConfig(IniConfigurator):
 
 		self._ini["tox"]["envlist"] = [*tox_envs, "mypy", "build"]
 		self._ini["tox"]["skip_missing_interpreters"] = True
-		self._ini["tox"]["requires"] = indent_join([
-				"pip>=20.3.3",
-				"tox-envlist>=0.1.0",
-				*self["tox_requirements"],
-				])
 		self._ini["tox"]["isolated_build"] = True
+
+		tox_requires = {"pip>=20.3.3", "tox-envlist>=0.1.0", "tox-pip-version==0.0.7", *self["tox_requirements"]}
+		self._ini["tox"]["requires"] = indent_join(sorted(tox_requires))
 
 	def envlists(self):
 		"""
@@ -325,6 +323,7 @@ class ToxConfig(IniConfigurator):
 			self._ini["testenv:docs"]["setenv"] = indent_join(envvars)
 
 			self._ini["testenv:docs"]["basepython"] = "python3.8"
+			self._ini["testenv:docs"]["pip_version"] = "pip>=21"
 			self._ini["testenv:docs"]["changedir"] = f"{{toxinidir}}/{self['docs_dir']}"
 
 			if self["tox_testenv_extras"]:
