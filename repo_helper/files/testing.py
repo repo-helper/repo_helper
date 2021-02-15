@@ -208,7 +208,7 @@ class ToxConfig(IniConfigurator):
 		self._ini["tox"]["skip_missing_interpreters"] = True
 		self._ini["tox"]["isolated_build"] = True
 
-		tox_requires = {"pip>=20.3.3", "tox-envlist>=0.2.1", "tox-pip-version==0.0.7", *self["tox_requirements"]}
+		tox_requires = {"pip>=20.3.3", "tox-envlist>=0.2.1", "tox-pip-version>=0.0.7", *self["tox_requirements"]}
 		self._ini["tox"]["requires"] = indent_join(sorted(tox_requires))
 
 	def envlists(self):
