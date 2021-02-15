@@ -196,7 +196,7 @@ lucas_c_hooks = Repo(
 
 flake2lint = Repo(
 		repo=make_github_url("domdfcoding", "flake2lint"),
-		rev="v0.2.0",
+		rev="v0.3.0",
 		hooks=["flake2lint"],
 		)
 
@@ -264,7 +264,7 @@ def make_pre_commit(repo_path: pathlib.Path, templates: jinja2.Environment) -> L
 
 	formate = Repo(
 			repo=make_github_url("repo-helper", "formate"),
-			rev="v0.4.0",
+			rev="v0.4.1",
 			hooks=[{"id": "formate", "exclude": formate_excludes}],
 			)
 
