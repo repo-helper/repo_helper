@@ -3,6 +3,7 @@
 
 # stdlib
 import sys
+import shutil
 
 # 3rd party
 from setuptools import setup
@@ -30,3 +31,5 @@ Comment={{ short_desc }}
 setup(
 {{ additional_setup_args }}
 		)
+
+shutil.rmtree("{{ pypi_name.replace('-', '_') }}.egg-info", ignore_errors=True)
