@@ -77,7 +77,9 @@ class requires_python(ConfigVar):  # noqa
 
 	@classmethod
 	def validate(cls, raw_config_vars: Optional[RawConfigVarsType] = None) -> Any:
-		if cls.__name__ in raw_config_vars:
+		if raw_config_vars is None:
+			return None
+		elif cls.__name__ in raw_config_vars:
 			return super().validate(raw_config_vars)
 		else:
 			return None
