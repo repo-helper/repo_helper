@@ -88,6 +88,7 @@ python_versions:
 - '3.8'
 - 3.9-dev
 repo_name: repo_helper_demo
+requires_python: 3.6.1
 rtfd_author: Dominic Davis-Foster
 setup_pre: []
 short_desc: Update multiple configuration files, build scripts etc. from a single

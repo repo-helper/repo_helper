@@ -364,7 +364,7 @@ class Builder:
 		for classifier in self.config["classifiers"]:
 			metadata["Classifier"] = classifier
 
-		metadata["Requires-Python"] = str(Specifier(f">={self.config['min_py_version']}"))
+		metadata["Requires-Python"] = str(Specifier(f">={self.config['requires_python']}"))
 		metadata["Description-Content-Type"] = "text/x-rst"
 
 		for requirement in sorted(combine_requirements(read_requirements(self.repo_dir / "requirements.txt")[0])):

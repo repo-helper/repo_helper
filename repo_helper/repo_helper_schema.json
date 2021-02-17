@@ -320,6 +320,13 @@
       "type": "string",
       "description": "The name of GitHub repository, if different to :conf:`modname`."
     },
+    "requires_python": {
+      "type": [
+        "string",
+        "number"
+      ],
+      "description": "The minimum required version of Python."
+    },
     "rtfd_author": {
       "type": "string",
       "description": "The name of the author to show on ReadTheDocs, if different."

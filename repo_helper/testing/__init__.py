@@ -119,6 +119,7 @@ def demo_environment() -> jinja2.Environment:
 			"short_desc": "a short description",
 			"on_pypi": true,
 			"docs_fail_on_warning": false,
+			"requires_python": "3.6.1",
 			"third_party_version_matrix": {}
 			}
 
@@ -152,6 +153,7 @@ def demo_environment() -> jinja2.Environment:
 					enable_conda=True,
 					enable_releases=True,
 					python_deploy_version="3.6",
+					requires_python="3.6.1",
 					min_py_version="3.6",
 					modname="hello-world",
 					repo_name="hello-world",

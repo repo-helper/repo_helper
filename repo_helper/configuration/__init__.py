@@ -128,6 +128,7 @@ from repo_helper.configuration.python_versions_ import (
 		default_python_versions,
 		python_deploy_version,
 		python_versions,
+		requires_python,
 		third_party_version_matrix
 		)
 from repo_helper.configuration.testing import (
@@ -201,6 +202,7 @@ __all__ = [
 		"pypi_name",
 		"python_deploy_version",
 		"python_versions",
+		"requires_python",
 		"repo_name",
 		"rtfd_author",
 		"setup_pre",
@@ -326,6 +328,13 @@ class RepoHelperParser(Parser):
 		# Python Versions
 		versions = no_dev_versions(parsed_config_vars["python_versions"])
 		parsed_config_vars["min_py_version"] = min_py_version = versions[0]
+
+		if parsed_config_vars["requires_python"] is None:
+			if min_py_version in {"3.6", 3.6}:
+				parsed_config_vars["requires_python"] = "3.6.1"
+			else:
+				parsed_config_vars["requires_python"] = min_py_version
+
 		smallest_py_version = Version.from_str(min_py_version)
 		for py_version in versions:
 			try:

@@ -28,8 +28,16 @@ from typing import Any, Dict, Iterable, List, Optional, Sequence, Union
 
 # 3rd party
 from configconfig.configvar import ConfigVar
+from configconfig.utils import RawConfigVarsType
+from natsort import natsorted
 
-__all__ = ["python_deploy_version", "default_python_versions", "python_versions", "third_party_version_matrix"]
+__all__ = [
+		"python_deploy_version",
+		"requires_python",
+		"default_python_versions",
+		"python_versions",
+		"third_party_version_matrix"
+		]
 
 
 class python_deploy_version(ConfigVar):  # noqa
@@ -47,6 +55,32 @@ class python_deploy_version(ConfigVar):  # noqa
 	rtype = str
 	default: float = 3.6
 	category: str = "python versions"
+
+
+class requires_python(ConfigVar):  # noqa
+	"""
+	The minimum required version of Python.
+
+	Example:
+
+	.. code-block:: yaml
+
+		requires_python: 3.6.1
+
+	.. versionadded:: $VERSION
+	"""
+
+	dtype = Union[str, float]
+	rtype = str
+	default = None
+	category: str = "python versions"
+
+	@classmethod
+	def validate(cls, raw_config_vars: Optional[RawConfigVarsType] = None) -> Any:
+		if cls.__name__ in raw_config_vars:
+			return super().validate(raw_config_vars)
+		else:
+			return None
 
 
 def default_python_versions(raw_config_vars: Optional[Dict[str, Any]]) -> List[str]:
@@ -81,7 +115,7 @@ class python_versions(ConfigVar):  # noqa
 
 	@classmethod
 	def validator(cls, value: Iterable[str]) -> List[str]:  # noqa: D102
-		return [str(ver) for ver in value if ver]
+		return natsorted(str(ver) for ver in value if ver)
 
 
 class third_party_version_matrix(ConfigVar):  # noqa

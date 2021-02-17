@@ -245,12 +245,7 @@ class SetupCfgConfig(IniConfigurator):
 		``[options]``.
 		"""
 
-		if self["min_py_version"] in {"3.6", 3.6}:
-			min_py_version = "3.6.1"
-		else:
-			min_py_version = self["min_py_version"]
-
-		self._ini["options"]["python_requires"] = f">={min_py_version}"
+		self._ini["options"]["python_requires"] = f">={self['requires_python']}"
 		self._ini["options"]["zip_safe"] = False
 		self._ini["options"]["include_package_data"] = True
 		if self["stubs_package"]:
