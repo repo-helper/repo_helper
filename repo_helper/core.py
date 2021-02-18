@@ -120,7 +120,7 @@ class RepoHelper:
 
 		:param allow_unknown_keys: Whether unknown keys should be allowed in the configuration file.
 
-		.. versionchanged:: $VERSION
+		.. versionchanged:: 2021.2.18
 
 			* This method is no longer called automatically when instantiating the :class:`~.RepoHelper` class.
 			* Added the ``allow_unknown_keys`` argument.

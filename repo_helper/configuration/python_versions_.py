@@ -67,7 +67,7 @@ class requires_python(ConfigVar):  # noqa
 
 		requires_python: 3.6.1
 
-	.. versionadded:: $VERSION
+	.. versionadded:: 2021.2.18
 	"""
 
 	dtype = Union[str, float]

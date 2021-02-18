@@ -19,9 +19,7 @@ jobs:
 
       - name: Setup RustPython 🦀 🐍
         run: |
-          git clone https://github.com/RustPython/RustPython
-          cargo install --path ./RustPython
-          rm -rf ./RustPython
+          cargo install --git https://github.com/RustPython/RustPython
 
       - name: Install dependencies 🔧
         run: |

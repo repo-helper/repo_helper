@@ -194,7 +194,7 @@ class mypy_version(ConfigVar):  # noqa
 
 		mypy_version: 0.790
 
-	.. versionchanged:: $VERSION  The default is now ``0.800``
+	.. versionchanged:: 2021.2.18  The default is now ``0.800``
 	"""
 
 	dtype = Union[str, float]

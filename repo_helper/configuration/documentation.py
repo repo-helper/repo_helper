@@ -327,7 +327,7 @@ class docs_fail_on_warning(ConfigVar):  # noqa
 
 		docs_fail_on_warning: True
 
-	.. versionadded:: $VERSION
+	.. versionadded:: 2021.2.18
 	"""
 
 	dtype = bool

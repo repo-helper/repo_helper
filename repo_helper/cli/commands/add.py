@@ -4,7 +4,7 @@
 """
 Add metadata.
 
-.. versionadded:: $VERSION
+.. versionadded:: 2021.2.18
 """
 #
 #  Copyright © 2020-2021 Dominic Davis-Foster <dominic@davis-foster.co.uk>

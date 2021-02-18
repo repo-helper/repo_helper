@@ -307,10 +307,6 @@ class ActionsManager:
 
 		if not self.templates.globals["pure_python"] and "3.8" in py_versions:
 			py_versions.remove("3.8")  # FIXME: Python 3.8 tests fail on Windows for native wheels.
-		if "pypy3" in py_versions:
-			# FIXME: PyPy3 tests fail on Windows.
-			# https://github.com/domdfcoding/flake8-sphinx-links/runs/1276871725?check_suite_focus=true
-			py_versions.remove("pypy3")
 
 		return py_versions
 

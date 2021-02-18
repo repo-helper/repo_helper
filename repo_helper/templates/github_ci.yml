@@ -19,7 +19,7 @@ jobs:
       fail-fast: False
       matrix:
         config:{% for version in no_dev_versions(python_versions) %}
-          - {python-version: "{{ version }}", testenvs: "{{ gh_actions_versions[version] }}", experimental: {{ "alpha" in version or "beta" in version }}}{% endfor %}
+          - {python-version: "{{ version }}", testenvs: "{{ gh_actions_versions[version] }}", experimental: {{ "alpha" in version or "beta" in version or version == "pypy3.7"}}}{% endfor %}
 
     steps:
       - name: Checkout 🛎️

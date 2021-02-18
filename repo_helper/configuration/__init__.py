@@ -250,7 +250,7 @@ def parse_yaml(repo_path: PathLike, allow_unknown_keys: bool = False) -> Dict:
 
 	:returns: Mapping of configuration keys to values.
 
-	.. versionchanged:: $VERSION  Added the ``allow_unknown_keys`` argument.
+	.. versionchanged:: 2021.2.18  Added the ``allow_unknown_keys`` argument.
 	"""
 
 	repo_path = PathPlus(repo_path)
