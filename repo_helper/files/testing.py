@@ -393,6 +393,7 @@ class ToxConfig(IniConfigurator):
 				"flake8-strftime>=0.1.1",
 				"flake8-typing-imports>=1.10.0",
 				"flake8-encodings>=0.1.0",
+				"flake8-slots>=0.1.0",
 				"git+https://github.com/PyCQA/pydocstyle@5118faa7173b0e5bbc230c4adf628758e13605bf",
 				"git+https://github.com/domdfcoding/flake8-quotes.git",
 				"git+https://github.com/domdfcoding/flake8-rst-docstrings.git",
