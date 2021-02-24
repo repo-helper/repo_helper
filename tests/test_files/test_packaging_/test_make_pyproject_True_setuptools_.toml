@@ -13,6 +13,8 @@ dynamic = [ "requires-python", "classifiers", "dependencies",]
 email = "j.bloggs@example.com"
 name = "Joe Bloggs"
 
+[tool]
+
 [project.license]
 file = "LICENSE"
 
@@ -23,11 +25,3 @@ Homepage = "https://github.com/octocat/hello-world"
 Documentation = "https://hello-world.readthedocs.io/en/latest"
 
 [project.entry-points]
-
-[tool.whey]
-base-classifiers = []
-python-versions = [ "3.6", "3.7",]
-python-implementations = [ "CPython", "CPython",]
-platforms = [ "Windows",]
-license-key = "MIT"
-package = "hello_world"

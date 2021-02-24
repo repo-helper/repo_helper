@@ -327,20 +327,13 @@ class classifiers(ConfigVar):  # noqa
 	@classmethod
 	def validate(cls, raw_config_vars: Optional[Dict[str, Any]] = None):  # noqa: D102
 
-		# this package
-		from repo_helper.configuration import python_versions
-
 		if raw_config_vars is None:
 			raw_config_vars = {}
 
 		if cls.rtype is None:
 			cls.rtype = cls.dtype
 
-		classifier_list = []
-
-		def add_classifier(c):
-			if c not in classifier_list:
-				classifier_list.append(c)
+		classifier_list = set()
 
 		data = optional_getter(raw_config_vars, cls, cls.required)
 		if isinstance(data, str) or not isinstance(data, Iterable):
@@ -353,27 +346,7 @@ class classifiers(ConfigVar):  # noqa
 						) from None
 
 		for classifier in data:
-			add_classifier(classifier)
-
-		lic = raw_config_vars.get("license", '')
-		# lic = license.get(raw_config_vars)
-
-		if lic in license_lookup:
-			lic = license_lookup[lic]
-			add_classifier(f"License :: OSI Approved :: {lic}")
-
-		for c in get_version_classifiers(python_versions.get(raw_config_vars)):
-			add_classifier(c)
-
-		if set(platforms.get(raw_config_vars)) == {"Windows", "macOS", "Linux"}:
-			add_classifier("Operating System :: OS Independent")
-		else:
-			if "Windows" in platforms.get(raw_config_vars):
-				add_classifier("Operating System :: Microsoft :: Windows")
-			if "Linux" in platforms.get(raw_config_vars):
-				add_classifier("Operating System :: POSIX :: Linux")
-			if "macOS" in platforms.get(raw_config_vars):
-				add_classifier("Operating System :: MacOS")
+			classifier_list.add(classifier)
 
 		validate_classifiers(classifier_list)
 

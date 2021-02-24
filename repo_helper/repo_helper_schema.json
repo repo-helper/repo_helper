@@ -458,6 +458,13 @@
       ],
       "description": "Whether to use ``repo_helper``\\'s experimental build backend, rather than ``setuptools.build_meta``."
     },
+    "use_whey": {
+      "type": [
+        "boolean",
+        "string"
+      ],
+      "description": "Whether to use `whey <https://whey.readthedocs.io/en/latest/>`_ to build distributions, rather than ``setuptools.build_meta``."
+    },
     "username": {
       "type": "string",
       "description": "The username of the GitHub account hosting the repository."
