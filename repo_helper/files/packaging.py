@@ -134,17 +134,17 @@ def make_pyproject(repo_path: pathlib.Path, templates: jinja2.Environment) -> Li
 	if templates.globals["use_whey"] or templates.globals["use_experimental_backend"]:
 		for old_dep in ["setuptools", "wheel"]:
 			if old_dep in build_requirements:
-				build_requirements.remove(old_dep)
+				build_requirements.remove(old_dep)  # type: ignore
 
 	if templates.globals["use_whey"]:
 		build_backend = "whey"
 	elif "whey" in build_requirements:
-		build_requirements.remove("whey")
+		build_requirements.remove("whey")  # type: ignore
 
 	if templates.globals["use_experimental_backend"]:
 		build_backend = "repo_helper.build"
 	elif "repo-helper" in build_requirements:
-		build_requirements.remove("repo-helper")
+		build_requirements.remove("repo-helper")  # type: ignore
 
 	data["build-system"]["requires"] = list(map(str, build_requirements))
 	data["build-system"]["build-backend"] = build_backend
@@ -171,13 +171,15 @@ def make_pyproject(repo_path: pathlib.Path, templates: jinja2.Environment) -> Li
 
 	if templates.globals["console_scripts"]:
 		data["project"]["scripts"] = dict(
-				map(str.strip, e.split('=', 1)) for e in templates.globals["console_scripts"]
+				map(str.strip, e.split('=', 1)) for e in templates.globals["console_scripts"]  # type: ignore
 				)
 
 	data["project"].setdefault("entry-points", {})
 
 	for group, entry_points in templates.globals["entry_points"].items():
-		data["project"]["entry-points"][group] = dict(map(str.strip, e.split('=', 1)) for e in entry_points)
+		data["project"]["entry-points"][group] = dict(
+				map(str.strip, e.split('=', 1)) for e in entry_points  # type: ignore
+				)
 
 	data["tool"] = data.get("tool", {})
 
