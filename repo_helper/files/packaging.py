@@ -120,7 +120,7 @@ def make_pyproject(repo_path: pathlib.Path, templates: jinja2.Environment) -> Li
 	data.setdefault("build-system", {})
 	build_backend = "setuptools.build_meta"
 
-	build_requirements = {
+	build_requirements_ = {
 			"setuptools>=40.6.0",
 			"wheel>=0.34.2",
 			"whey",
@@ -129,7 +129,7 @@ def make_pyproject(repo_path: pathlib.Path, templates: jinja2.Environment) -> Li
 			*data["build-system"].get("requires", [])
 			}
 
-	build_requirements = sorted(combine_requirements(ComparableRequirement(req) for req in build_requirements))
+	build_requirements = sorted(combine_requirements(ComparableRequirement(req) for req in build_requirements_))
 
 	if templates.globals["use_whey"] or templates.globals["use_experimental_backend"]:
 		for old_dep in ["setuptools", "wheel"]:
@@ -328,8 +328,8 @@ class SetupCfgConfig(IniConfigurator):
 
 		classifiers = set(self["classifiers"])
 
-		if self["license"] in license_lookup:
-			classifiers.add(f"License :: OSI Approved :: {license_lookup[self['license']]}")
+		if self["license"] in license_lookup.values():
+			classifiers.add(f"License :: OSI Approved :: {self['license']}")
 
 		for c in get_version_classifiers(self["python_versions"]):
 			classifiers.add(c)
