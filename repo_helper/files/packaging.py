@@ -181,10 +181,10 @@ def make_pyproject(repo_path: pathlib.Path, templates: jinja2.Environment) -> Li
 				map(str.strip, e.split('=', 1)) for e in entry_points  # type: ignore
 				)
 
-	data["tool"] = data.get("tool", {})
+	data.setdefault("tool", {})
 
 	if templates.globals["use_whey"]:
-		data["tool"]["whey"] = data["tool"].get("whey", {})
+		data["tool"].setdefault("whey", {})
 
 		data["tool"]["whey"]["base-classifiers"] = templates.globals["classifiers"]
 
