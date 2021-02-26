@@ -261,7 +261,6 @@ code_only_warning.extend((
 		"SLOT000",  # Define __slots__ for subclasses of str
 		"SLOT001",  # Define __slots__ for subclasses of tuple
 		"SLOT002",  # Define __slots__ for subclasses of collections.namedtuple
-		"SLOT003",  # Define __slots__ for subclasses of typing.NamedTuple
 		))
 
 # flake8-pyi

@@ -64,14 +64,11 @@ __all__ = [
 
 allowed_rst_directives = ["envvar", "TODO", "extras-require"]
 standard_flake8_excludes = [
-		".git",
-		"__pycache__",
 		"old",
 		"build",
 		"dist",
 		"__pkginfo__.py",
 		"setup.py",
-		".tox",
 		"venv",
 		]
 
@@ -480,7 +477,7 @@ class ToxConfig(IniConfigurator):
 
 		self._ini["flake8"]["max-line-length"] = "120"
 		self._ini["flake8"]["select"] = f"{DelimitedList(lint_warn_list + code_only_warning): }"
-		self._ini["flake8"]["exclude"] = ','.join([self["docs_dir"], *standard_flake8_excludes])
+		self._ini["flake8"]["extend-exclude"] = ','.join([self["docs_dir"], *standard_flake8_excludes])
 		self._ini["flake8"]["rst-directives"] = indent_join(sorted(allowed_rst_directives))
 		self._ini["flake8"]["per-file-ignores"] = indent_join([
 				'',
