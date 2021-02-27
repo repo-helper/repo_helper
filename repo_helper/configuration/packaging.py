@@ -41,7 +41,8 @@ __all__ = [
 		"additional_requirements_files",
 		"setup_pre",
 		"platforms",
-		"use_experimental_backend"
+		"use_experimental_backend",
+		"use_whey",
 		]
 
 
@@ -289,9 +290,21 @@ class use_experimental_backend(ConfigVar):  # noqa
 				return False
 
 		# Excluded files that the backend is incompatible with
-		disallowed_files = {"setup", "setup_cfg"}
+		disallowed_files = {"setup", "setup_cfg", "pyproject"}
 		for file in disallowed_files:
 			if file in excluded_files:
 				return False
 
 		return super().validate(raw_config_vars)
+
+
+class use_whey(use_experimental_backend):  # noqa
+	r"""
+	Whether to use `whey <https://whey.readthedocs.io/en/latest/>`_ to build distributions,
+	rather than ``setuptools.build_meta``.
+
+	.. versionadded:: $VERSION
+	"""  # noqa: D400
+
+	dtype = bool
+	default = False

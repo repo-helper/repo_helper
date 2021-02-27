@@ -122,7 +122,8 @@ from repo_helper.configuration.packaging import (
 		platforms,
 		py_modules,
 		setup_pre,
-		use_experimental_backend
+		use_experimental_backend,
+		use_whey
 		)
 from repo_helper.configuration.python_versions_ import (
 		default_python_versions,
@@ -238,6 +239,7 @@ __all__ = [
 		"entry_points",
 		"min_coverage",
 		"docs_fail_on_warning",
+		"use_whey",
 		]
 
 
@@ -419,7 +421,13 @@ class YamlEditor(YAML):
 		filename = PathPlus(filename)
 		return self.load(filename.read_text())
 
-	def dumps(self, data: Union[MutableMapping, Sequence], *, explicit_start: bool = True, **kwargs) -> str:
+	def dumps(  # noqa: D102
+			self,
+			data: Union[MutableMapping, Sequence],
+			*,
+			explicit_start: bool = True,
+			**kwargs,
+			) -> str:
 		original_exp_start = self.explicit_start
 
 		try:

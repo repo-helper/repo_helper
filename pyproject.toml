@@ -1,3 +1,27 @@
 [build-system]
 requires = [ "setuptools>=40.6.0", "wheel>=0.34.2",]
 build-backend = "setuptools.build_meta"
+
+[project]
+name = "repo_helper"
+version = "2021.2.18"
+description = "A tool to manage configuration files, build scripts etc. across multiple projects."
+readme = "README.rst"
+keywords = [ "configuration",]
+dynamic = [ "requires-python", "classifiers", "dependencies",]
+[[project.authors]]
+email = "dominic@davis-foster.co.uk"
+name = "Dominic Davis-Foster"
+
+[project.license]
+file = "LICENSE"
+
+[project.urls]
+Homepage = "https://github.com/domdfcoding/repo_helper"
+"Issue Tracker" = "https://github.com/domdfcoding/repo_helper/issues"
+"Source Code" = "https://github.com/domdfcoding/repo_helper"
+Documentation = "https://docs.repo-helper.uk"
+
+[project.scripts]
+repo_helper = "repo_helper.__main__:main"
+repo-helper = "repo_helper.__main__:main"

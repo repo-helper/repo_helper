@@ -22,10 +22,12 @@
 
 # stdlib
 from textwrap import dedent
+from typing import List
 
 # 3rd party
 import pytest
 from coincidence import check_file_output
+from domdf_python_tools.paths import PathPlus
 from pytest_regressions.file_regression import FileRegressionFixture
 
 # this package
@@ -82,29 +84,75 @@ def test_make_setup_case_2(tmp_pathplus, demo_environment, file_regression: File
 	check_file_output(tmp_pathplus / managed_files[0], file_regression)
 
 
+@pytest.mark.parametrize("backend", ["whey", "experimental", "setuptools"])
 @pytest.mark.parametrize("enable_tests", [True, False])
 def test_make_pyproject(
-		tmp_pathplus, demo_environment, file_regression: FileRegressionFixture, enable_tests: bool
+		tmp_pathplus,
+		demo_environment,
+		file_regression: FileRegressionFixture,
+		enable_tests: bool,
+		backend: str,
 		):
 	# TODO: permutations to cover all branches
 
-	demo_environment.globals["tox_build_requirements"] = []
-	demo_environment.globals["enable_tests"] = enable_tests
+	demo_environment.globals["author"] = "Joe Bloggs"
+	demo_environment.globals["email"] = "j.bloggs@example.com"
+	demo_environment.globals["version"] = "2020.1.1"
+	demo_environment.globals["license"] = "MIT License"
+	demo_environment.globals["keywords"] = ["awesome", "python", "project"]
+	demo_environment.globals["classifiers"] = []
+	demo_environment.globals["console_scripts"] = []
+	demo_environment.globals["mypy_plugins"] = []
 	demo_environment.globals["use_experimental_backend"] = False
+	demo_environment.globals["enable_docs"] = True
+	demo_environment.globals["enable_tests"] = enable_tests
+	demo_environment.globals["entry_points"] = {}
+	demo_environment.globals["tox_build_requirements"] = []
+
+	demo_environment.globals["use_experimental_backend"] = False
+	demo_environment.globals["use_whey"] = False
+
+	if backend == "whey":
+		demo_environment.globals["use_whey"] = True
+	elif backend == "experimental":
+		demo_environment.globals["use_experimental_backend"] = True
 
 	managed_files = make_pyproject(tmp_pathplus, demo_environment)
 	assert managed_files == ["pyproject.toml"]
 	check_file_output(tmp_pathplus / managed_files[0], file_regression)
 
 
-def test_make_setup_cfg(tmp_pathplus, demo_environment, file_regression: FileRegressionFixture):
+@pytest.mark.parametrize(
+		"python_versions",
+		[
+				pytest.param([3.6, 3.7, 3.8], id="simple_versions"),
+				pytest.param([3.6, 3.7, 3.8, "3.10"], id="complex_versions"),
+				pytest.param([3.7, "3.10", 3.8, 3.6], id="unordered_versions"),
+				pytest.param([3.6, 3.7, 3.8, "pypy3"], id="pypy_versions"),
+				]
+		)
+@pytest.mark.parametrize(
+		"classifiers",
+		[
+				pytest.param({"classifiers": ["Environment :: Console"]}, id="environment_console"),
+				pytest.param([], id="no_classifiers"),
+				]
+		)
+def test_make_setup_cfg(
+		tmp_pathplus: PathPlus,
+		demo_environment,
+		file_regression: FileRegressionFixture,
+		classifiers: List[str],
+		python_versions
+		):
 	# TODO: permutations to cover all branches
 
 	demo_environment.globals["author"] = "Joe Bloggs"
 	demo_environment.globals["email"] = "j.bloggs@example.com"
 	demo_environment.globals["license"] = "MIT License"
 	demo_environment.globals["keywords"] = ["awesome", "python", "project"]
-	demo_environment.globals["classifiers"] = []
+	demo_environment.globals["classifiers"] = classifiers
+	demo_environment.globals["python_versions"] = python_versions
 	demo_environment.globals["console_scripts"] = []
 	demo_environment.globals["mypy_plugins"] = []
 	demo_environment.globals["use_experimental_backend"] = False

@@ -21,8 +21,8 @@ repo_helper==2020.12.18
 ├── filelock<4,>=3.0.12
 ├── identify>=1.0.0
 ├── idna<3,==2.10,>=2.5
-├── importlib-metadata>=1.5.0; python_version < "3.9"
 ├── importlib-metadata>=0.12; python_version < "3.8"
+├── importlib-metadata<3.5.0,>=1.5.0; python_version < "3.9"
 ├── importlib-metadata; python_version < "3.8"
 ├── isort<=5.6.4,>=5.5.2
 ├── jinja2>=2.11.2
@@ -48,7 +48,7 @@ repo_helper==2020.12.18
 ├── shippinglabel>=0.8.2
 ├── six<2,>=1.11.0
 ├── southwark>=0.7.1
-├── tabulate>=0.8.7
+├── tabulate>=0.8.8
 ├── tldextract>=2.2.0
 ├── toml>=0.10.2
 ├── trove-classifiers>=2020.10.21

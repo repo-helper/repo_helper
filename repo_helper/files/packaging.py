@@ -26,22 +26,32 @@ Manage configuration files for packaging tools.
 # stdlib
 import copy
 import pathlib
+import posixpath
+import re
 import textwrap
-from typing import Any, List
+from typing import Any, Dict, List, Tuple, TypeVar
 
 # 3rd party
 import jinja2
 import toml
 from domdf_python_tools.compat import importlib_resources
 from domdf_python_tools.paths import PathPlus
-from packaging.requirements import Requirement
-from shippinglabel.requirements import combine_requirements
+from natsort import natsorted
+from shippinglabel.requirements import ComparableRequirement, combine_requirements
 
 # this package
 import repo_helper.files
 from repo_helper.configupdater2 import ConfigUpdater
+from repo_helper.configuration.utils import get_version_classifiers
 from repo_helper.files import management
-from repo_helper.utils import CustomTomlEncoder, IniConfigurator, indent_join, indent_with_tab, reformat_file
+from repo_helper.utils import (
+		CustomTomlEncoder,
+		IniConfigurator,
+		indent_join,
+		indent_with_tab,
+		license_lookup,
+		reformat_file
+		)
 
 __all__ = [
 		"make_manifest",
@@ -50,6 +60,27 @@ __all__ = [
 		"make_pyproject",
 		"make_setup_cfg",
 		]
+
+_KT = TypeVar("_KT")
+_VT_co = TypeVar("_VT_co")
+
+
+class DefaultDict(Dict[_KT, _VT_co]):
+
+	__slots__ = ["__defaults"]
+
+	def __init__(self, *args, **kwargs):
+		super().__init__(*args, **kwargs)
+		self.__defaults = {}
+
+	def set_default(self, key: _KT, default: _VT_co) -> None:
+		self.__defaults[key] = default
+
+	def __getitem__(self, item) -> _VT_co:
+		if item not in self and item in self.__defaults:
+			self[item] = self.__defaults[item]
+
+		return super().__getitem__(item)
 
 
 @management.register("manifest")
@@ -60,6 +91,8 @@ def make_manifest(repo_path: pathlib.Path, templates: jinja2.Environment) -> Lis
 	:param repo_path: Path to the repository root.
 	:param templates:
 	"""
+
+	# TODO: if "use_whey", remove this file
 
 	file = PathPlus(repo_path / "MANIFEST.in")
 
@@ -102,40 +135,117 @@ def make_pyproject(repo_path: pathlib.Path, templates: jinja2.Environment) -> Li
 
 	pyproject_file = PathPlus(repo_path / "pyproject.toml")
 
-	if pyproject_file.is_file():
-		data = toml.loads(pyproject_file.read_text())
-	else:
-		data = {}
+	data: DefaultDict[str, Any]
 
-	build_requirements = [
+	if pyproject_file.is_file():
+		data = DefaultDict(toml.loads(pyproject_file.read_text()))
+	else:
+		data = DefaultDict()
+
+	data.set_default("build-system", {})
+	build_backend = "setuptools.build_meta"
+
+	build_requirements_ = {
 			"setuptools>=40.6.0",
 			"wheel>=0.34.2",
+			"whey",
+			"repo-helper",
 			*templates.globals["tox_build_requirements"],
-			]
+			*data["build-system"].get("requires", [])
+			}
+
+	build_requirements = sorted(combine_requirements(ComparableRequirement(req) for req in build_requirements_))
+
+	if templates.globals["use_whey"] or templates.globals["use_experimental_backend"]:
+		for old_dep in ["setuptools", "wheel"]:
+			if old_dep in build_requirements:
+				build_requirements.remove(old_dep)  # type: ignore
+
+	if templates.globals["use_whey"]:
+		build_backend = "whey"
+	elif "whey" in build_requirements:
+		build_requirements.remove("whey")  # type: ignore
 
 	if templates.globals["use_experimental_backend"]:
 		build_backend = "repo_helper.build"
-		build_requirements.append("repo_helper")
-	else:
-		build_backend = "setuptools.build_meta"
+	elif "repo-helper" in build_requirements:
+		build_requirements.remove("repo-helper")  # type: ignore
 
-	if "build-system" in data:
-		build_requirements.extend(data["build-system"].get("requires", []))
-	else:
-		data["build-system"] = {}
-
-	build_requirements = sorted(combine_requirements(Requirement(req) for req in build_requirements))
-
-	if not templates.globals["use_experimental_backend"] and "repo-helper" in build_requirements:
-		build_requirements.remove("repo-helper")
-
-	data["build-system"]["requires"] = [str(x) for x in build_requirements]
+	data["build-system"]["requires"] = list(map(str, build_requirements))
 	data["build-system"]["build-backend"] = build_backend
 
+	data["project"] = DefaultDict(data.get("project", {}))
+	data["project"]["name"] = templates.globals["pypi_name"]
+	data["project"]["version"] = templates.globals["version"]
+	data["project"]["description"] = templates.globals["short_desc"]
+	data["project"]["readme"] = "README.rst"
+	data["project"]["keywords"] = templates.globals["keywords"]
+	data["project"]["dynamic"] = ["requires-python", "classifiers", "dependencies"]
+	data["project"]["authors"] = [{"email": templates.globals["email"], "name": templates.globals["author"]}]
+	data["project"]["license"] = {"file": "LICENSE"}
+
+	url = "https://github.com/{username}/{repo_name}".format_map(templates.globals)
+	data["project"]["urls"] = {
+			"Homepage": url,
+			"Issue Tracker": "https://github.com/{username}/{repo_name}/issues".format_map(templates.globals),
+			"Source Code": url,
+			}
+
+	if templates.globals["enable_docs"]:
+		data["project"]["urls"]["Documentation"] = templates.globals["docs_url"]
+
+	if templates.globals["console_scripts"]:
+		data["project"]["scripts"] = dict(split_entry_point(e) for e in templates.globals["console_scripts"])
+
+	data["project"].set_default("entry-points", {})
+
+	for group, entry_points in templates.globals["entry_points"].items():
+		data["project"]["entry-points"][group] = dict(split_entry_point(e) for e in entry_points)
+
+	data.set_default("tool", {})
+
+	if templates.globals["use_whey"]:
+		data["tool"].setdefault("whey", {})
+
+		data["tool"]["whey"]["base-classifiers"] = templates.globals["classifiers"]
+
+		python_versions = set()
+		python_implementations = set()
+
+		for py_version in templates.globals["python_versions"]:
+			py_version = str(py_version)
+
+			if re.match(".*(-dev|alpha|beta)", py_version):
+				continue
+
+			if py_version.startswith('3'):
+				python_versions.add(py_version)
+				python_implementations.add("CPython")
+
+			elif py_version.lower().startswith("pypy"):
+				python_implementations.add("PyPy")
+
+		data["tool"]["whey"]["python-versions"] = sorted(python_versions)
+		data["tool"]["whey"]["python-implementations"] = sorted(python_implementations)
+
+		data["tool"]["whey"]["platforms"] = templates.globals["platforms"]
+
+		license_ = templates.globals["license"]
+		data["tool"]["whey"]["license-key"] = {v: k for k, v in license_lookup.items()}.get(license_, license_)
+
+		if templates.globals["source_dir"] or templates.globals["import_name"] != templates.globals["pypi_name"]:
+			data["tool"]["whey"]["package"] = posixpath.join(
+					templates.globals["source_dir"],
+					templates.globals["import_name"].replace('.', '/'),
+					)
+
+	if not data["tool"]:
+		del data["tool"]
+
 	if not templates.globals["enable_tests"]:
-		data["tool"] = data.get("tool", {})
 		data["tool"]["importcheck"] = data["tool"].get("importcheck", {})
 
+	# TODO: managed message
 	pyproject_file.write_clean(toml.dumps(data, encoder=CustomTomlEncoder(dict)))
 
 	return [pyproject_file.name]
@@ -238,7 +348,29 @@ class SetupCfgConfig(IniConfigurator):
 			project_urls.insert(0, "Documentation = {docs_url}".format_map(self._globals))
 
 		self._ini["metadata"]["project_urls"] = indent_with_tab('\n' + textwrap.dedent('\n'.join(project_urls)))
-		self._ini["metadata"]["classifiers"] = self["classifiers"]
+		self._ini["metadata"]["classifiers"] = self._get_classifiers()
+
+	def _get_classifiers(self) -> List[str]:
+
+		classifiers = set(self["classifiers"])
+
+		if self["license"] in license_lookup.values():
+			classifiers.add(f"License :: OSI Approved :: {self['license']}")
+
+		for c in get_version_classifiers(self["python_versions"]):
+			classifiers.add(c)
+
+		if set(self["platforms"]) == {"Windows", "macOS", "Linux"}:
+			classifiers.add("Operating System :: OS Independent")
+		else:
+			if "Windows" in self["platforms"]:
+				classifiers.add("Operating System :: Microsoft :: Windows")
+			if "Linux" in self["platforms"]:
+				classifiers.add("Operating System :: POSIX :: Linux")
+			if "macOS" in self["platforms"]:
+				classifiers.add("Operating System :: MacOS")
+
+		return natsorted(classifiers)
 
 	def options(self):
 		"""
@@ -353,3 +485,7 @@ def make_pkginfo(repo_path: pathlib.Path, templates: jinja2.Environment) -> List
 		reformat_file(pkginfo_file, yapf_style=str(yapf_style), isort_config_file=str(isort_config))
 
 	return [pkginfo_file.name]
+
+
+def split_entry_point(entry_point: str) -> Tuple[str, str]:
+	return tuple(map(str.strip, entry_point.split('=', 1)))  # type: ignore

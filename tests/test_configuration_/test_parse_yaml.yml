@@ -7,14 +7,6 @@ author: Dominic Davis-Foster
 classifiers:
 - 'Development Status :: 4 - Beta'
 - 'Intended Audience :: Developers'
-- 'License :: OSI Approved :: GNU Lesser General Public License v3 or later (LGPLv3+)'
-- 'Operating System :: OS Independent'
-- 'Programming Language :: Python'
-- 'Programming Language :: Python :: 3 :: Only'
-- 'Programming Language :: Python :: 3.6'
-- 'Programming Language :: Python :: 3.7'
-- 'Programming Language :: Python :: 3.8'
-- 'Programming Language :: Python :: Implementation :: CPython'
 - 'Topic :: Utilities'
 conda_channels:
 - conda-forge
@@ -115,6 +107,7 @@ travis_extra_install_post: []
 travis_extra_install_pre: []
 travis_ubuntu_version: focal
 use_experimental_backend: false
+use_whey: false
 username: domdfcoding
 version: 0.0.1
 yapf_exclude: []

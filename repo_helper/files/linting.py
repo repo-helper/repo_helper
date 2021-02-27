@@ -253,7 +253,14 @@ code_only_warning = [
 
 # flake8_dunder_all
 code_only_warning.extend((
-		"DALL000 ",  # DALL000 Module lacks __all__.
+		"DALL000 ",  # Module lacks __all__.
+		))
+
+# flake8_slots
+code_only_warning.extend((
+		"SLOT000",  # Define __slots__ for subclasses of str
+		"SLOT001",  # Define __slots__ for subclasses of tuple
+		"SLOT002",  # Define __slots__ for subclasses of collections.namedtuple
 		))
 
 # flake8-pyi

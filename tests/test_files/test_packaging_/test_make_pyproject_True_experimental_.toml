@@ -1,6 +1,6 @@
 [build-system]
-requires = [ "setuptools>=40.6.0", "wheel>=0.34.2",]
-build-backend = "setuptools.build_meta"
+requires = [ "repo-helper",]
+build-backend = "repo_helper.build"
 
 [project]
 name = "hello-world"
@@ -21,13 +21,3 @@ Homepage = "https://github.com/octocat/hello-world"
 "Issue Tracker" = "https://github.com/octocat/hello-world/issues"
 "Source Code" = "https://github.com/octocat/hello-world"
 Documentation = "https://hello-world.readthedocs.io/en/latest"
-
-[project.entry-points]
-
-[tool.whey]
-base-classifiers = []
-python-versions = [ "3.6", "3.7",]
-python-implementations = [ "CPython", "CPython",]
-platforms = [ "Windows",]
-license-key = "MIT"
-package = "hello_world"

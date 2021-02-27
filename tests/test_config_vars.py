@@ -323,43 +323,12 @@ def test_import_name_errors(wrong_value, match):
 				pytest.param({"classifiers": []}, id="empty"),
 				pytest.param({"username": "domdfcoding"}, id="not_given_1"),
 				pytest.param({}, id="not_given_2"),
-				pytest.param({
-						"classifiers": ["Environment :: Console"],
-						"python_versions": [3.6, 3.7, 3.8],
-						},
-								id="environment_console_simple_versions"),
-				pytest.param({
-						"classifiers": ["Environment :: Console"],
-						"python_versions": [3.6, 3.7, 3.8, "3.10"],
-						},
-								id="environment_console_complex_versions"),
-				pytest.param({
-						"classifiers": ["Environment :: Console"],
-						"python_versions": [3.7, "3.10", 3.8, 3.6],
-						},
-								id="environment_console_unordered_versions"),
-				pytest.param({
-						"classifiers": ["Environment :: Console"],
-						"python_versions": [3.6, 3.7, 3.8, "pypy3"],
-						},
-								id="environment_console_pypy_versions"),
-				pytest.param({
-						"classifiers": ["Environment :: Console"],
-						"license": "MIT",
-						},
-								id="environment_console_license_mit"),
 				]
 		)
 def test_classifiers(config_dict: Dict[str, Any], data_regression: DataRegressionFixture):
 	data_regression.check(classifiers.get(config_dict))
 
-	assert classifiers.get() == [
-			"Operating System :: OS Independent",
-			"Programming Language :: Python",
-			"Programming Language :: Python :: 3 :: Only",
-			"Programming Language :: Python :: 3.6",
-			"Programming Language :: Python :: Implementation :: CPython",
-			]
+	assert not classifiers.get()
 
 
 @pytest.mark.parametrize(

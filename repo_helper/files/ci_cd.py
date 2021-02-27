@@ -568,6 +568,7 @@ def ensure_bumpversion(repo_path: pathlib.Path, templates: jinja2.Environment) -
 			]
 
 	required_sections = [
+			"bumpversion:file:pyproject.toml",
 			"bumpversion:file:repo_helper.yml",
 			"bumpversion:file:__pkginfo__.py",
 			"bumpversion:file:README.rst",
