@@ -195,12 +195,12 @@ def make_pyproject(repo_path: pathlib.Path, templates: jinja2.Environment) -> Li
 		data["project"]["urls"]["Documentation"] = templates.globals["docs_url"]
 
 	if templates.globals["console_scripts"]:
-		data["project"]["scripts"] = {split_entry_point(e) for e in templates.globals["console_scripts"]}
+		data["project"]["scripts"] = dict(split_entry_point(e) for e in templates.globals["console_scripts"])
 
 	data["project"].set_default("entry-points", {})
 
 	for group, entry_points in templates.globals["entry_points"].items():
-		data["project"]["entry-points"][group] = {split_entry_point(e) for e in entry_points}
+		data["project"]["entry-points"][group] = dict(split_entry_point(e) for e in entry_points)
 
 	data.set_default("tool", {})
 

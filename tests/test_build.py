@@ -13,7 +13,10 @@ from repo_helper.testing import builder_smoke_test
 GITHUB_COM = URL("https://github.com")
 
 
-@pytest.mark.skipif(PYPY and platform.system() == "Windows")
+@pytest.mark.skipif(
+		PYPY and platform.system() == "Windows",
+		reason="Dulwich causes 'TypeError: os.scandir() doesn't support bytes path on Windows, use Unicode instead'",
+		)
 @pytest.mark.parametrize(
 		"username, repository", [
 				("domdfcoding", "sphinx-toolbox"),
