@@ -422,12 +422,12 @@ class YamlEditor(YAML):
 		return self.load(filename.read_text())
 
 	def dumps(  # noqa: D102
-			self,
-			data: Union[MutableMapping, Sequence],
-			*,
-			explicit_start: bool = True,
-			**kwargs,
-			) -> str:
+		self,
+		data: Union[MutableMapping, Sequence],
+		*,
+		explicit_start: bool = True,
+		**kwargs,
+		) -> str:
 		original_exp_start = self.explicit_start
 
 		try:
