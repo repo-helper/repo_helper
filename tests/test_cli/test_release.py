@@ -1,10 +1,13 @@
 # stdlib
+import platform
 import re
 from typing import TYPE_CHECKING, Callable, List, Optional
 
 # 3rd party
-from coincidence import check_file_output
+import pytest
+from coincidence.regressions import check_file_output
 from consolekit.testing import CliRunner, Result
+from domdf_python_tools.compat import PYPY
 from domdf_python_tools.paths import in_directory
 from pytest_regressions.file_regression import FileRegressionFixture
 from southwark import get_tags
@@ -79,6 +82,14 @@ def do_test_release(
 		assert tags[m.group(1)] == f"v{expected_version}"
 
 
+pypy_windows_dulwich = pytest.mark.skipif(
+		PYPY and platform.system() == "Windows",
+		reason=
+		"Dulwich causes 'TypeError: os.scandir() doesn't support bytes path on Windows, use Unicode instead'",
+		)
+
+
+@pypy_windows_dulwich
 def test_release_minor(temp_repo, file_regression: FileRegressionFixture):
 	do_test_release(
 			temp_repo,
@@ -88,6 +99,7 @@ def test_release_minor(temp_repo, file_regression: FileRegressionFixture):
 			)
 
 
+@pypy_windows_dulwich
 def test_release_major(temp_repo, file_regression: FileRegressionFixture):
 	do_test_release(
 			temp_repo,
@@ -97,6 +109,7 @@ def test_release_major(temp_repo, file_regression: FileRegressionFixture):
 			)
 
 
+@pypy_windows_dulwich
 def test_release_patch(temp_repo, file_regression: FileRegressionFixture):
 	do_test_release(
 			temp_repo,
@@ -106,6 +119,7 @@ def test_release_patch(temp_repo, file_regression: FileRegressionFixture):
 			)
 
 
+@pypy_windows_dulwich
 def test_release_version(temp_repo, file_regression: FileRegressionFixture):
 	do_test_release(
 			temp_repo,
@@ -116,6 +130,7 @@ def test_release_version(temp_repo, file_regression: FileRegressionFixture):
 			)
 
 
+@pypy_windows_dulwich
 def test_release_unclean(temp_repo, file_regression: FileRegressionFixture):
 	(temp_repo.path / "file.txt").write_clean("Hello World")
 	temp_repo.stage("file.txt")
@@ -188,6 +203,7 @@ def test_release_unclean(temp_repo, file_regression: FileRegressionFixture):
 # 		bumper = Bumper(temp_repo.path, force=False)
 
 
+@pypy_windows_dulwich
 def test_release_minor_unclean_force(temp_repo, file_regression: FileRegressionFixture):
 	(temp_repo.path / "file.txt").write_clean("Hello World")
 	temp_repo.stage("file.txt")
@@ -201,6 +217,7 @@ def test_release_minor_unclean_force(temp_repo, file_regression: FileRegressionF
 			)
 
 
+@pypy_windows_dulwich
 def test_release_major_unclean_force(temp_repo, file_regression: FileRegressionFixture):
 	(temp_repo.path / "file.txt").write_clean("Hello World")
 	temp_repo.stage("file.txt")
@@ -214,6 +231,7 @@ def test_release_major_unclean_force(temp_repo, file_regression: FileRegressionF
 			)
 
 
+@pypy_windows_dulwich
 def test_release_patch_unclean_force(temp_repo, file_regression: FileRegressionFixture):
 	(temp_repo.path / "file.txt").write_clean("Hello World")
 	temp_repo.stage("file.txt")
@@ -227,6 +245,7 @@ def test_release_patch_unclean_force(temp_repo, file_regression: FileRegressionF
 			)
 
 
+@pypy_windows_dulwich
 def test_release_version_unclean_force(temp_repo, file_regression: FileRegressionFixture):
 	(temp_repo.path / "file.txt").write_clean("Hello World")
 	temp_repo.stage("file.txt")

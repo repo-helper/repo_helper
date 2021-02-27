@@ -1,6 +1,7 @@
-# 3rd party
+# stdlib
 import platform
 
+# 3rd party
 import pytest
 import southwark.repo
 from apeye import URL
@@ -15,7 +16,8 @@ GITHUB_COM = URL("https://github.com")
 
 @pytest.mark.skipif(
 		PYPY and platform.system() == "Windows",
-		reason="Dulwich causes 'TypeError: os.scandir() doesn't support bytes path on Windows, use Unicode instead'",
+		reason=
+		"Dulwich causes 'TypeError: os.scandir() doesn't support bytes path on Windows, use Unicode instead'",
 		)
 @pytest.mark.parametrize(
 		"username, repository", [
