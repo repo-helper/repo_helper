@@ -204,6 +204,8 @@ def version(version: str):
 		data["python_versions"] = natsorted(map(str, {*data["python_versions"], *version}), key=sort_key)
 		yaml.dump_to_file(data, rh.target_repo / "repo_helper.yml", mode='w')
 	else:
-		yaml.dump_to_file({"python_versions": natsorted(version, key=sort_key)},
-							rh.target_repo / "repo_helper.yml",
-							mode='a')
+		yaml.dump_to_file(
+				{"python_versions": natsorted(version, key=sort_key)},
+				rh.target_repo / "repo_helper.yml",
+				mode='a',
+				)

@@ -421,7 +421,13 @@ class YamlEditor(YAML):
 		filename = PathPlus(filename)
 		return self.load(filename.read_text())
 
-	def dumps(self, data: Union[MutableMapping, Sequence], *, explicit_start: bool = True, **kwargs) -> str:
+	def dumps(  # noqa: D102
+			self,
+			data: Union[MutableMapping, Sequence],
+			*,
+			explicit_start: bool = True,
+			**kwargs,
+			) -> str:
 		original_exp_start = self.explicit_start
 
 		try:

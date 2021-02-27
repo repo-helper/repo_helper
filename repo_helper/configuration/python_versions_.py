@@ -76,7 +76,7 @@ class requires_python(ConfigVar):  # noqa
 	category: str = "python versions"
 
 	@classmethod
-	def validate(cls, raw_config_vars: Optional[RawConfigVarsType] = None) -> Any:
+	def validate(cls, raw_config_vars: Optional[RawConfigVarsType] = None) -> Any:  # noqa: D102
 		if raw_config_vars is None:
 			return None
 		elif cls.__name__ in raw_config_vars:
