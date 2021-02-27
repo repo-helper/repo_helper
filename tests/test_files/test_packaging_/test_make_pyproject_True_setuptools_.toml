@@ -13,8 +13,6 @@ dynamic = [ "requires-python", "classifiers", "dependencies",]
 email = "j.bloggs@example.com"
 name = "Joe Bloggs"
 
-[tool]
-
 [project.license]
 file = "LICENSE"
 
