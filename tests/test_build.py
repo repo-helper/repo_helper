@@ -1,7 +1,10 @@
 # 3rd party
+import platform
+
 import pytest
 import southwark.repo
 from apeye import URL
+from domdf_python_tools.compat import PYPY
 from dulwich.config import StackedConfig
 
 # this package
@@ -10,6 +13,7 @@ from repo_helper.testing import builder_smoke_test
 GITHUB_COM = URL("https://github.com")
 
 
+@pytest.mark.skipif(PYPY and platform.system() == "Windows")
 @pytest.mark.parametrize(
 		"username, repository", [
 				("domdfcoding", "sphinx-toolbox"),
