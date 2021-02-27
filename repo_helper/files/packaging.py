@@ -29,7 +29,7 @@ import pathlib
 import posixpath
 import re
 import textwrap
-from typing import Any, List
+from typing import Any, Dict, List, Tuple, TypeVar
 
 # 3rd party
 import jinja2
@@ -61,6 +61,27 @@ __all__ = [
 		"make_setup_cfg",
 		]
 
+_KT = TypeVar("_KT")
+_VT_co = TypeVar("_VT_co")
+
+
+class DefaultDict(Dict[_KT, _VT_co]):
+
+	__slots__ = ["__defaults"]
+
+	def __init__(self, *args, **kwargs):
+		super().__init__(*args, **kwargs)
+		self.__defaults = {}
+
+	def set_default(self, key: _KT, default: _VT_co) -> None:
+		self.__defaults[key] = default
+
+	def __getitem__(self, item) -> _VT_co:
+		if item not in self and item in self.__defaults:
+			self[item] = self.__defaults[item]
+
+		return super().__getitem__(item)
+
 
 @management.register("manifest")
 def make_manifest(repo_path: pathlib.Path, templates: jinja2.Environment) -> List[str]:
@@ -70,6 +91,8 @@ def make_manifest(repo_path: pathlib.Path, templates: jinja2.Environment) -> Lis
 	:param repo_path: Path to the repository root.
 	:param templates:
 	"""
+
+	# TODO: if "use_whey", remove this file
 
 	file = PathPlus(repo_path / "MANIFEST.in")
 
@@ -112,12 +135,14 @@ def make_pyproject(repo_path: pathlib.Path, templates: jinja2.Environment) -> Li
 
 	pyproject_file = PathPlus(repo_path / "pyproject.toml")
 
-	if pyproject_file.is_file():
-		data = toml.loads(pyproject_file.read_text())
-	else:
-		data = {}
+	data: DefaultDict[str, Any]
 
-	data.setdefault("build-system", {})
+	if pyproject_file.is_file():
+		data = DefaultDict(toml.loads(pyproject_file.read_text()))
+	else:
+		data = DefaultDict()
+
+	data.set_default("build-system", {})
 	build_backend = "setuptools.build_meta"
 
 	build_requirements_ = {
@@ -149,7 +174,7 @@ def make_pyproject(repo_path: pathlib.Path, templates: jinja2.Environment) -> Li
 	data["build-system"]["requires"] = list(map(str, build_requirements))
 	data["build-system"]["build-backend"] = build_backend
 
-	data["project"] = data.get("project", {})
+	data["project"] = DefaultDict(data.get("project", {}))
 	data["project"]["name"] = templates.globals["pypi_name"]
 	data["project"]["version"] = templates.globals["version"]
 	data["project"]["description"] = templates.globals["short_desc"]
@@ -170,18 +195,14 @@ def make_pyproject(repo_path: pathlib.Path, templates: jinja2.Environment) -> Li
 		data["project"]["urls"]["Documentation"] = templates.globals["docs_url"]
 
 	if templates.globals["console_scripts"]:
-		data["project"]["scripts"] = dict(
-				map(str.strip, e.split('=', 1)) for e in templates.globals["console_scripts"]  # type: ignore
-				)
+		data["project"]["scripts"] = {split_entry_point(e) for e in templates.globals["console_scripts"]}
 
-	data["project"].setdefault("entry-points", {})
+	data["project"].set_default("entry-points", {})
 
 	for group, entry_points in templates.globals["entry_points"].items():
-		data["project"]["entry-points"][group] = dict(
-				map(str.strip, e.split('=', 1)) for e in entry_points  # type: ignore
-				)
+		data["project"]["entry-points"][group] = {split_entry_point(e) for e in entry_points}
 
-	data.setdefault("tool", {})
+	data.set_default("tool", {})
 
 	if templates.globals["use_whey"]:
 		data["tool"].setdefault("whey", {})
@@ -464,3 +485,7 @@ def make_pkginfo(repo_path: pathlib.Path, templates: jinja2.Environment) -> List
 		reformat_file(pkginfo_file, yapf_style=str(yapf_style), isort_config_file=str(isort_config))
 
 	return [pkginfo_file.name]
+
+
+def split_entry_point(entry_point: str) -> Tuple[str, str]:
+	return tuple(map(str.strip, entry_point.split('=', 1)))  # type: ignore

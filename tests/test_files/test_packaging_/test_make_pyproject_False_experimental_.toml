@@ -22,6 +22,4 @@ Homepage = "https://github.com/octocat/hello-world"
 "Source Code" = "https://github.com/octocat/hello-world"
 Documentation = "https://hello-world.readthedocs.io/en/latest"
 
-[project.entry-points]
-
 [tool.importcheck]
