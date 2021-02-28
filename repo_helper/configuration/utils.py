@@ -26,10 +26,12 @@ Configuration utilities.
 # stdlib
 import pathlib
 import re
+from itertools import chain
 from typing import Any, Dict, Iterable, List, Mapping, Tuple
 
 # 3rd party
 from natsort import natsorted
+from shippinglabel.requirements import ComparableRequirement, combine_requirements
 
 __all__ = ["get_tox_python_versions", "get_version_classifiers", "parse_extras"]
 
@@ -94,32 +96,31 @@ def parse_extras(raw_config_vars: Mapping[str, Any], repo_path: pathlib.Path) ->
 
 	:param raw_config_vars: Dictionary to obtain the value from.
 	:param repo_path: The path to the repository.
-
-	:return:
 	"""
 
-	additional_requirements_files = raw_config_vars.get("additional_requirements_files", [])
+	additional_requirements_files = set(raw_config_vars.get("additional_requirements_files", ()))
 	extras_require = raw_config_vars.get("extras_require", {})
-
-	all_extras = []
 
 	for extra, requires in extras_require.items():
 		if isinstance(requires, str):
 			if (repo_path / requires).is_file():
 				# a path to the requirements file from the repo root
-				extras_require[extra] = [
-						x for x in (repo_path / requires).read_text(encoding="UTF-8").split('\n') if x
-						]
-				if requires not in additional_requirements_files:
-					additional_requirements_files.append(requires)
+				extras_require[extra] = parse_extra_requirements_file(
+						(repo_path / requires).read_text(encoding="UTF-8")
+						)
+				additional_requirements_files.add(requires)
 			else:
 				# A single requirement
 				extras_require[extra] = [requires]
+		else:
+			extras_require[extra] = sorted(combine_requirements(map(ComparableRequirement, extras_require[extra])))
 
-		all_extras += [x.replace(' ', '') for x in extras_require[extra]]
+	extras_require["all"] = sorted(set(chain.from_iterable(extras_require.values())))
 
-	all_extras = sorted(set(all_extras))
+	return {k: list(map(str, v)) for k, v in extras_require.items()}, sorted(additional_requirements_files)
 
-	extras_require["all"] = all_extras
 
-	return extras_require, additional_requirements_files
+def parse_extra_requirements_file(requirements: str) -> List[ComparableRequirement]:
+	requirements_list = [x for x in requirements.split('\n') if x]
+	requirements_set = set(map(ComparableRequirement, requirements_list))
+	return sorted(combine_requirements(requirements_set))
