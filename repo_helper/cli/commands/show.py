@@ -49,8 +49,9 @@ def show() -> None:
 show_command = partial(show.command, context_settings=CONTEXT_SETTINGS)
 
 
+@flag_option("-q", "--quiet", help="Print only the version number.")
 @show_command()
-def version() -> None:
+def version(quiet: bool = False) -> None:
 	"""
 	Show the repository version.
 	"""
@@ -66,18 +67,23 @@ def version() -> None:
 	rh = RepoHelper(PathPlus.cwd())
 	rh.load_settings(allow_unknown_keys=True)
 	version = rh.templates.globals["version"]
-	click.echo(f"Current version: {version}")
 
-	repo = Repo(rh.target_repo)
-	for sha, tag in get_tags(repo).items():
-		if tag == f"v{version}":
-			walker = repo.get_walker()
-			for idx, entry in enumerate(walker):
-				commit_id = entry.commit.id.decode("UTF-8")
-				if commit_id == sha:
-					click.echo(f"{idx} commit{'s' if idx > 1 else ''} since that release.")
-					break
-			break
+	if quiet:
+		click.echo(f"v{version}")
+
+	else:
+		click.echo(f"Current version: v{version}")
+
+		repo = Repo(rh.target_repo)
+		for sha, tag in get_tags(repo).items():
+			if tag == f"v{version}":
+				walker = repo.get_walker()
+				for idx, entry in enumerate(walker):
+					commit_id = entry.commit.id.decode("UTF-8")
+					if commit_id == sha:
+						click.echo(f"{idx} commit{'s' if idx > 1 else ''} since that release.")
+						break
+				break
 
 
 @auto_default_option(
