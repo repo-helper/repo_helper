@@ -5,10 +5,10 @@ from typing import TYPE_CHECKING, Callable, List, Optional
 
 # 3rd party
 import pytest
-from coincidence.regressions import check_file_output
+from coincidence.regressions import check_file_regression
 from consolekit.testing import CliRunner, Result
 from domdf_python_tools.compat import PYPY
-from domdf_python_tools.paths import in_directory
+from domdf_python_tools.paths import in_directory, PathPlus
 from pytest_regressions.file_regression import FileRegressionFixture
 from southwark import get_tags
 from southwark.repo import Repo
@@ -39,6 +39,25 @@ def do_test_release(
 			'',
 			"[bumpversion:file:repo_helper.yml]",
 			])
+	(temp_repo.path / "pyproject.toml").write_lines([
+			"[project]",
+			'name = "modname: repo_helper_demo"',
+			'version = "0.0.1"',
+			])
+	(temp_repo.path / "__pkginfo__.py").write_text('__version__ = "0.0.1"')
+	(temp_repo.path / "repo_helper_demo").maybe_make()
+	(temp_repo.path / "repo_helper_demo" / "__init__.py").write_text('__version__ = "0.0.1"')
+	(temp_repo.path / "README.rst").write_lines([
+			".. image:: https://img.shields.io/github/commits-since/domdfcoding/repo_helper/v0.0.1",
+			"\t:target: https://github.com/domdfcoding/repo_helper/pulse",
+			"\t:alt: GitHub commits since tagged version",
+			])
+	(temp_repo.path / "doc-source").maybe_make()
+	(temp_repo.path / "doc-source" / "index.rst").write_lines([
+			".. github-shield::",
+			"\t:commits-since: v0.0.1",
+			"\t:alt: GitHub commits since tagged version",
+			])
 
 	if args is None:
 		args = []
@@ -50,7 +69,7 @@ def do_test_release(
 
 	with in_directory(temp_repo.path):
 		runner = CliRunner(mix_stderr=False)
-		result: Result = runner.invoke(command, catch_exceptions=False, args=args)  # type: ignore
+		result: Result = runner.invoke(command, args=args)  # type: ignore
 		assert result.exit_code == 0
 
 		if force:
@@ -62,20 +81,31 @@ def do_test_release(
 		else:
 			assert not result.stderr
 
-		assert result.stdout.splitlines()[:-1] == [
-				f"Bump version v0.0.1 -> v{expected_version}",
-				'',
-				"The following files will be committed:",
-				"  .bumpversion.cfg",
-				"  repo_helper.yml",
-				'',
-				]
+		check_file_regression('\n'.join(result.stdout.splitlines()[:-1]), file_regression, extension="_stdout.txt")
 
 		m = re.match("Committed as ([A-Za-z0-9]{40})", result.stdout.splitlines()[-1])
 		assert m is not None
 
-		check_file_output(temp_repo.path / ".bumpversion.cfg", file_regression, extension=".bumpversion.cfg")
-		check_file_output(temp_repo.path / "repo_helper.yml", file_regression, extension="_repo_helper.yml")
+		def check_file(filename: PathPlus, extension: Optional[str] = None):
+
+			data = filename.read_text(encoding="UTF-8")
+
+			assert expected_version in data
+
+			extension = extension or filename.suffix
+
+			if extension == ".py":
+				extension = "._py_"
+
+			return check_file_regression(data, file_regression, extension)
+
+		check_file(temp_repo.path / ".bumpversion.cfg", extension=".bumpversion.cfg")
+		check_file(temp_repo.path / "pyproject.toml", extension="_pyproject.toml")
+		check_file(temp_repo.path / "repo_helper.yml", extension="_repo_helper.yml")
+		check_file(temp_repo.path / "__pkginfo__.py", extension="_pkginfo._py")
+		check_file(temp_repo.path / "README.rst", extension="_readme.rst")
+		check_file(temp_repo.path / "repo_helper_demo" / "__init__.py", extension="_init._py")
+		check_file(temp_repo.path / "doc-source" / "index.rst", extension="_index.rst")
 
 		tags = get_tags(temp_repo)
 		assert f"v{expected_version}" in tags.values()
