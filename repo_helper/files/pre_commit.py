@@ -173,7 +173,7 @@ pre_commit_hooks = Repo(
 
 pygrep_hooks = Repo(
 		repo=make_github_url("pre-commit", "pygrep-hooks"),
-		rev="v1.7.1",
+		rev="v1.8.0",
 		hooks=[
 				"python-no-eval",
 				"rst-backticks",
