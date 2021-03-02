@@ -53,6 +53,12 @@ repo_helper==2020.12.18
 │       └── typing-extensions>=3.7.4
 ├── consolekit>=1.0.0
 │   ├── click>=7.1.2
+│   ├── deprecation-alias>=0.1.1
+│   │   ├── deprecation>=2.1.0
+│   │   │   └── packaging
+│   │   │       └── pyparsing>=2.0.2
+│   │   └── packaging>=20.4
+│   │       └── pyparsing>=2.0.2
 │   ├── domdf-python-tools>=2.5.1
 │   │   ├── natsort>=7.1.0
 │   │   ├── pydash>=4.7.4
@@ -138,6 +144,12 @@ repo_helper==2020.12.18
 │   ├── appdirs>=1.4.4
 │   ├── consolekit>=0.1.2
 │   │   ├── click>=7.1.2
+│   │   ├── deprecation-alias>=0.1.1
+│   │   │   ├── deprecation>=2.1.0
+│   │   │   │   └── packaging
+│   │   │   │       └── pyparsing>=2.0.2
+│   │   │   └── packaging>=20.4
+│   │   │       └── pyparsing>=2.0.2
 │   │   ├── domdf-python-tools>=2.5.1
 │   │   │   ├── natsort>=7.1.0
 │   │   │   ├── pydash>=4.7.4
@@ -158,6 +170,12 @@ repo_helper==2020.12.18
 │   ├── click>=7.1.2
 │   ├── consolekit>=0.1.2
 │   │   ├── click>=7.1.2
+│   │   ├── deprecation-alias>=0.1.1
+│   │   │   ├── deprecation>=2.1.0
+│   │   │   │   └── packaging
+│   │   │   │       └── pyparsing>=2.0.2
+│   │   │   └── packaging>=20.4
+│   │   │       └── pyparsing>=2.0.2
 │   │   ├── domdf-python-tools>=2.5.1
 │   │   │   ├── natsort>=7.1.0
 │   │   │   ├── pydash>=4.7.4
@@ -182,6 +200,12 @@ repo_helper==2020.12.18
     ├── click>=7.1.2
     ├── consolekit>=0.3.0
     │   ├── click>=7.1.2
+    │   ├── deprecation-alias>=0.1.1
+    │   │   ├── deprecation>=2.1.0
+    │   │   │   └── packaging
+    │   │   │       └── pyparsing>=2.0.2
+    │   │   └── packaging>=20.4
+    │   │       └── pyparsing>=2.0.2
     │   ├── domdf-python-tools>=2.5.1
     │   │   ├── natsort>=7.1.0
     │   │   ├── pydash>=4.7.4
