@@ -240,7 +240,7 @@ def make_pre_commit(repo_path: pathlib.Path, templates: jinja2.Environment) -> L
 
 	domdfcoding_hooks = Repo(
 			repo=make_github_url("domdfcoding", "pre-commit-hooks"),
-			rev="v0.2.0",
+			rev="v0.2.1",
 			hooks=[
 					{"id": "requirements-txt-sorter", "args": ["--allow-git"]},
 					{
