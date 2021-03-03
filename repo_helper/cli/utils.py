@@ -94,7 +94,7 @@ def commit_changed_files(
 
 		# Sort staged_files and put directories first
 		for staged_filename in sort_paths(*staged_files):
-			click.echo(f"  {os.path.normpath(staged_filename)!s}")
+			click.echo(f"  {staged_filename.as_posix()!s}")
 		click.echo()
 
 		if commit is None:
