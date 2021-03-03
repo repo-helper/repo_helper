@@ -346,7 +346,8 @@ class ToxConfig(IniConfigurator):
 		self._ini["testenv:build"]["skip_install"] = True
 		self._ini["testenv:build"]["changedir"] = "{toxinidir}"
 		self._ini["testenv:build"]["deps"] = indent_join([
-				"build>=0.3.0",
+				# "build>=0.3.0",
+				"git+https://github.com/domdfcoding/build@issue-250",
 				"check-wheel-contents>=0.1.0",
 				"twine>=3.2.0",
 				*self["tox_build_requirements"],
