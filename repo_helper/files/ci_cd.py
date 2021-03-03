@@ -309,7 +309,7 @@ class ActionsManager:
 		if not self.templates.globals["pure_python"] and "3.8" in py_versions:
 			py_versions.remove("3.8")  # FIXME: Python 3.8 tests fail on Windows for native wheels.
 
-		return py_versions
+		return [v for v in py_versions if not v.startswith("pypy")]
 
 	def get_linux_ci_versions(self) -> List[str]:
 		"""
