@@ -8,7 +8,7 @@ import pytest
 from coincidence.regressions import check_file_regression
 from consolekit.testing import CliRunner, Result
 from domdf_python_tools.compat import PYPY
-from domdf_python_tools.paths import in_directory, PathPlus
+from domdf_python_tools.paths import PathPlus, in_directory
 from pytest_regressions.file_regression import FileRegressionFixture
 from southwark import get_tags
 from southwark.repo import Repo
