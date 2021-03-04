@@ -81,7 +81,7 @@ repo_helper==2020.12.18
 │       ├── natsort>=7.1.0
 │       ├── pydash>=4.7.4
 │       └── typing-extensions>=3.7.4.3
-├── domdf-python-tools>=2.5.0
+├── domdf-python-tools>=2.7.0
 │   ├── importlib-metadata<3.5.0,>=1.5.0; python_version < "3.9"
 │   │   └── zipp>=0.5
 │   ├── natsort>=7.1.0
