@@ -348,7 +348,7 @@ class ToxConfig(IniConfigurator):
 		self._ini["testenv:build"]["deps"] = indent_join([
 				# "build[virtualenv]>=0.3.0",
 				"virtualenv",
-				"git+https://github.com/domdfcoding/build@issue-250",
+				"git+https://github.com/pypa/build",
 				"check-wheel-contents>=0.1.0",
 				"twine>=3.2.0",
 				*self["tox_build_requirements"],
