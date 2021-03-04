@@ -239,6 +239,9 @@ def make_pyproject(repo_path: pathlib.Path, templates: jinja2.Environment) -> Li
 					templates.globals["import_name"].replace('.', '/'),
 					)
 
+		if templates.globals["manifest_additional"]:
+			data["tool"]["whey"]["additional-files"] = templates.globals["manifest_additional"]
+
 	if not data["tool"]:
 		del data["tool"]
 
