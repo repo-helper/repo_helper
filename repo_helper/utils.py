@@ -40,7 +40,7 @@ import toml
 import yapf_isort
 from domdf_python_tools.dates import calc_easter
 from domdf_python_tools.import_tools import discover_entry_points
-from domdf_python_tools.paths import PathPlus
+from domdf_python_tools.paths import PathPlus, sort_paths
 from domdf_python_tools.pretty_print import FancyPrinter
 from domdf_python_tools.stringlist import StringList
 from domdf_python_tools.typing import PathLike
@@ -356,37 +356,6 @@ def no_dev_versions(versions: Iterable[str]) -> List[str]:
 	"""
 
 	return [v for v in versions if not v.endswith("-dev")]
-
-
-def sort_paths(*paths: PathLike) -> List[PathPlus]:
-	"""
-	Sort the list of paths by directory, then by file.
-
-	:param paths:
-	"""
-
-	directories: Dict[str, List[PathPlus]] = {}
-	local_contents: List[PathPlus] = []
-	files: List[PathPlus] = []
-
-	for obj in [PathPlus(path) for path in paths]:
-		if len(obj.parts) > 1:
-			key = obj.parts[0]
-			if key in directories:
-				directories[key].append(obj)
-			else:
-				directories[key] = [obj]
-		else:
-			local_contents.append(obj)
-
-	# sort directories
-	directories = {directory: directories[directory] for directory in sorted(directories.keys())}
-
-	for directory, contents in directories.items():
-		contents = [path.relative_to(directory) for path in contents]
-		files.extend(PathPlus(directory) / path for path in sort_paths(*contents))
-
-	return files + sorted(local_contents)
 
 
 def stage_changes(
