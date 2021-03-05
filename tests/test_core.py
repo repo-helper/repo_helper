@@ -15,29 +15,13 @@ from southwark import status
 from repo_helper.cli.utils import run_repo_helper
 from repo_helper.core import RepoHelper
 
-os_sep_forward = pytest.mark.skipif(
-		condition=os.sep == '\\',
-		reason="Different test for platforms where os.sep == \\",
-		)
-os_sep_backward = pytest.mark.skipif(
-		condition=os.sep == '/',
-		reason="Different test for platforms where os.sep == /",
-		)
 
-
-@pytest.mark.parametrize(
-		"os_sep", [
-				pytest.param("forward", marks=os_sep_forward),
-				pytest.param("backward", marks=os_sep_backward),
-				]
-		)
 def test_via_run_repo_helper(
 		temp_empty_repo,
 		capsys,
 		file_regression: FileRegressionFixture,
 		monkeypatch,
 		example_config,
-		os_sep,
 		):
 
 	(temp_empty_repo.path / "repo_helper.yml").write_text(example_config)
@@ -75,8 +59,8 @@ def test_via_run_repo_helper(
 
 	sha = "6d8cf72fff6adc4e570cb046ca417db7f2e10a3b"
 	stdout = re.sub(f"Committed as [A-Za-z0-9]{{{len(sha)}}}", f"Committed as {sha}", capsys.readouterr().out)
-	check_file_regression(capsys.readouterr().err, file_regression, extension="stderr.txt")
-	check_file_regression(stdout, file_regression, extension="stdout.txt")
+	assert not capsys.readouterr().err
+	check_file_regression(stdout, file_regression)
 
 
 def test_via_Repo_class(

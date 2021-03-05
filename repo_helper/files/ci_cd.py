@@ -27,7 +27,7 @@ Manage configuration files for continuous integration / continuous deployment.
 import pathlib
 import posixpath
 from textwrap import indent
-from typing import Dict, Iterator, List
+from typing import Dict, Iterable, Iterator, List
 
 # 3rd party
 import jinja2
@@ -50,6 +50,7 @@ __all__ = [
 		"make_actions_deploy_conda",
 		"make_conda_actions_ci",
 		"ActionsManager",
+		"get_bumpversion_filenames",
 		]
 
 
@@ -563,35 +564,15 @@ def ensure_bumpversion(repo_path: pathlib.Path, templates: jinja2.Environment) -
 	bv = ConfigUpdater()
 	bv.read(str(bumpversion_file))
 
-	old_sections = [
-			"bumpversion:file:git_helper.yml",
-			]
+	old_sections = ["bumpversion:file:git_helper.yml"]
+	required_sections = [f"bumpversion:file:{filename}" for filename in get_bumpversion_filenames(templates)]
 
-	required_sections = [
-			"bumpversion:file:pyproject.toml",
-			"bumpversion:file:repo_helper.yml",
-			"bumpversion:file:__pkginfo__.py",
-			"bumpversion:file:README.rst",
-			]
-
-	if templates.globals["enable_docs"]:
-		required_sections.append(f"bumpversion:file:{templates.globals['docs_dir']}/index.rst")
-	else:
+	if not templates.globals["enable_docs"]:
 		old_sections.append(f"bumpversion:file:{templates.globals['docs_dir']}/index.rst")
 
 	for section in old_sections:
 		if section in bv.sections():
 			bv.remove_section(section)
-
-	if templates.globals["py_modules"]:
-		for modname in templates.globals["py_modules"]:
-			required_sections.append(f"bumpversion:file:{templates.globals['source_dir']}{modname}.py")
-	elif not templates.globals["stubs_package"]:
-		source_dir = posixpath.join(
-				templates.globals["source_dir"],
-				templates.globals["import_name"].replace('.', '/'),
-				)
-		required_sections.append(f"bumpversion:file:{source_dir}/__init__.py")
 
 	for section in required_sections:
 		if section not in bv.sections():
@@ -604,3 +585,28 @@ def ensure_bumpversion(repo_path: pathlib.Path, templates: jinja2.Environment) -
 	bumpversion_file.write_clean(str(bv))
 
 	return [bumpversion_file.name]
+
+
+def get_bumpversion_filenames(templates: jinja2.Environment) -> Iterable[str]:
+	"""
+	Returns an iterable of filenames to have the version number bumped in.
+
+	.. versionadded:: $VERSION
+
+	:param templates:
+	"""
+
+	yield from ["pyproject.toml", "repo_helper.yml", "__pkginfo__.py", "README.rst"]
+
+	if templates.globals["enable_docs"]:
+		yield f"{templates.globals['docs_dir']}/index.rst"
+
+	if templates.globals["py_modules"]:
+		for modname in templates.globals["py_modules"]:
+			yield f"{templates.globals['source_dir']}{modname}.py"
+	elif not templates.globals["stubs_package"]:
+		source_dir = posixpath.join(
+				templates.globals["source_dir"],
+				templates.globals["import_name"].replace('.', '/'),
+				)
+		yield f"{source_dir}/__init__.py"

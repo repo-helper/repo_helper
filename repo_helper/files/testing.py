@@ -346,13 +346,15 @@ class ToxConfig(IniConfigurator):
 		self._ini["testenv:build"]["skip_install"] = True
 		self._ini["testenv:build"]["changedir"] = "{toxinidir}"
 		self._ini["testenv:build"]["deps"] = indent_join([
-				"twine>=3.2.0",
-				"pep517>=0.9.1",
+				# "build[virtualenv]>=0.3.0",
+				"virtualenv",
+				"git+https://github.com/pypa/build",
 				"check-wheel-contents>=0.1.0",
+				"twine>=3.2.0",
 				*self["tox_build_requirements"],
 				])
 		self._ini["testenv:build"]["commands"] = indent_join([
-				'python -m pep517.build --source --binary "{toxinidir}"',
+				'python -m build --sdist --wheel "{toxinidir}"',
 				# python setup.py {posargs} sdist bdist_wheel
 				# "twine check dist/*",
 				"twine check dist/*.tar.gz dist/*.whl",  # source

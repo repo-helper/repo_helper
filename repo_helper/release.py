@@ -46,6 +46,7 @@ from typing_extensions import TypedDict
 from repo_helper.cli.utils import commit_changed_files
 from repo_helper.configupdater2 import ConfigUpdater
 from repo_helper.core import RepoHelper
+from repo_helper.files.ci_cd import get_bumpversion_filenames
 
 __all__ = ["Bumper", "BumpversionFileConfig"]
 
@@ -209,11 +210,23 @@ class Bumper:
 
 		bv = ConfigUpdater()
 		bv.read(self.bumpversion_file)
-		config: Dict[str, BumpversionFileConfig] = {}
 
-		sections = [section for section in bv.sections() if section.startswith("bumpversion:file:")]
+		def default():
+			return {"search": current_version, "replace": new_version}
 
-		for section in sections:
+		# populate with the sections which are managed by repo_helper
+		config: Dict[str, BumpversionFileConfig] = {
+				filename: default()
+				for filename in get_bumpversion_filenames(self.repo.templates)
+				}
+
+		if self.repo.templates.globals["enable_docs"]:
+			config[f"{self.repo.templates.globals['docs_dir']}/index.rst"] = default()
+
+		for section in bv.sections():
+			if not section.startswith("bumpversion:file:"):
+				continue
+
 			section_dict: Dict[str, str] = bv[section].to_dict()
 			config[section[17:]] = dict(
 					search=section_dict.get("search", "{current_version}").format(current_version=current_version),

@@ -173,7 +173,7 @@ pre_commit_hooks = Repo(
 
 pygrep_hooks = Repo(
 		repo=make_github_url("pre-commit", "pygrep-hooks"),
-		rev="v1.7.1",
+		rev="v1.8.0",
 		hooks=[
 				"python-no-eval",
 				"rst-backticks",
@@ -196,7 +196,7 @@ lucas_c_hooks = Repo(
 
 flake2lint = Repo(
 		repo=make_github_url("domdfcoding", "flake2lint"),
-		rev="v0.3.0",
+		rev="v0.4.0",
 		hooks=["flake2lint"],
 		)
 
@@ -240,7 +240,7 @@ def make_pre_commit(repo_path: pathlib.Path, templates: jinja2.Environment) -> L
 
 	domdfcoding_hooks = Repo(
 			repo=make_github_url("domdfcoding", "pre-commit-hooks"),
-			rev="v0.2.0",
+			rev="v0.2.1",
 			hooks=[
 					{"id": "requirements-txt-sorter", "args": ["--allow-git"]},
 					{

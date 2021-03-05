@@ -1,0 +1,10 @@
+Bump version v0.0.1 -> v1.0.0
+
+The following files will be committed:
+  doc-source/index.rst
+  repo_helper_demo/__init__.py
+  .bumpversion.cfg
+  README.rst
+  __pkginfo__.py
+  pyproject.toml
+  repo_helper.yml

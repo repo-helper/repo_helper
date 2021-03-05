@@ -68,6 +68,12 @@ repo_helper==2020.12.18
 ├── consolekit>=1.0.0
 │   ├── click>=7.1.2
 │   ├── colorama>=0.4.3; python_version < "3.10"
+│   ├── deprecation-alias>=0.1.1
+│   │   ├── deprecation>=2.1.0
+│   │   │   └── packaging
+│   │   │       └── pyparsing>=2.0.2
+│   │   └── packaging>=20.4
+│   │       └── pyparsing>=2.0.2
 │   ├── domdf-python-tools>=2.5.1
 │   │   ├── importlib-metadata<3.5.0,>=1.5.0; python_version < "3.9"
 │   │   │   ├── typing-extensions>=3.6.4; python_version < "3.8"
@@ -90,7 +96,7 @@ repo_helper==2020.12.18
 │       ├── natsort>=7.1.0
 │       ├── pydash>=4.7.4
 │       └── typing-extensions>=3.7.4.3
-├── domdf-python-tools>=2.5.0
+├── domdf-python-tools>=2.7.0
 │   ├── importlib-metadata<3.5.0,>=1.5.0; python_version < "3.9"
 │   │   ├── typing-extensions>=3.6.4; python_version < "3.8"
 │   │   └── zipp>=0.5
@@ -185,6 +191,12 @@ repo_helper==2020.12.18
 │   ├── consolekit>=0.1.2
 │   │   ├── click>=7.1.2
 │   │   ├── colorama>=0.4.3; python_version < "3.10"
+│   │   ├── deprecation-alias>=0.1.1
+│   │   │   ├── deprecation>=2.1.0
+│   │   │   │   └── packaging
+│   │   │   │       └── pyparsing>=2.0.2
+│   │   │   └── packaging>=20.4
+│   │   │       └── pyparsing>=2.0.2
 │   │   ├── domdf-python-tools>=2.5.1
 │   │   │   ├── importlib-metadata<3.5.0,>=1.5.0; python_version < "3.9"
 │   │   │   │   ├── typing-extensions>=3.6.4; python_version < "3.8"
@@ -216,6 +228,12 @@ repo_helper==2020.12.18
 │   ├── consolekit>=0.1.2
 │   │   ├── click>=7.1.2
 │   │   ├── colorama>=0.4.3; python_version < "3.10"
+│   │   ├── deprecation-alias>=0.1.1
+│   │   │   ├── deprecation>=2.1.0
+│   │   │   │   └── packaging
+│   │   │   │       └── pyparsing>=2.0.2
+│   │   │   └── packaging>=20.4
+│   │   │       └── pyparsing>=2.0.2
 │   │   ├── domdf-python-tools>=2.5.1
 │   │   │   ├── importlib-metadata<3.5.0,>=1.5.0; python_version < "3.9"
 │   │   │   │   ├── typing-extensions>=3.6.4; python_version < "3.8"
@@ -251,6 +269,12 @@ repo_helper==2020.12.18
     ├── consolekit>=0.3.0
     │   ├── click>=7.1.2
     │   ├── colorama>=0.4.3; python_version < "3.10"
+    │   ├── deprecation-alias>=0.1.1
+    │   │   ├── deprecation>=2.1.0
+    │   │   │   └── packaging
+    │   │   │       └── pyparsing>=2.0.2
+    │   │   └── packaging>=20.4
+    │   │       └── pyparsing>=2.0.2
     │   ├── domdf-python-tools>=2.5.1
     │   │   ├── importlib-metadata<3.5.0,>=1.5.0; python_version < "3.9"
     │   │   │   ├── typing-extensions>=3.6.4; python_version < "3.8"

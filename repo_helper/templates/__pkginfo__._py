@@ -17,17 +17,6 @@ import pathlib
 __all__ = [
 		"__copyright__",
 		"__version__",
-		{# "modname",
-		"pypi_name",
-		"import_name",
-		"__license__",
-		"__author__",
-		"short_desc",
-		"author",
-		"author_email",
-		"github_username",
-		"web",
-		"github_url",  #}
 		"repo_root",
 		"install_requires",
 		"extras_require",
@@ -38,15 +27,6 @@ __copyright__ = """
 """
 
 __version__ = "{{ version }}"
-{# modname = "{{ modname }}"
-pypi_name = "{{ pypi_name }}"
-import_name = "{{ import_name }}"
-__license__ = "{{ license }}"
-short_desc = {{ short_desc.__repr__() }}
-__author__ = author = {{ author.__repr__() }}
-author_email = {{ email.__repr__() }}
-github_username = "{{ username }}"
-web = github_url = "https://github.com/{{ username }}/{{ repo_name }}"  #}
 repo_root = pathlib.Path(__file__).parent
 install_requires = (repo_root / "requirements.txt").read_text(encoding="utf-8").split('\n')
 extras_require = {{ extras_require }}
