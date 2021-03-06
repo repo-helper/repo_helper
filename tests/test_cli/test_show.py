@@ -1,7 +1,11 @@
+# stdlib
+import platform
+
 # 3rd party
 import pytest
 from coincidence import check_file_regression, min_version, not_pypy, only_version
 from consolekit.testing import CliRunner, Result
+from domdf_python_tools.compat import PYPY36
 from domdf_python_tools.paths import PathPlus, in_directory
 from pytest_regressions.file_regression import FileRegressionFixture
 
@@ -30,6 +34,11 @@ def test_version(tmp_repo, file_regression: FileRegressionFixture):
 	result.check_stdout(file_regression)
 
 
+@pytest.mark.skipif(
+		PYPY36 and platform.system() == "Windows",
+		reason=
+		"Dulwich causes 'TypeError: os.scandir() doesn't support bytes path on Windows, use Unicode instead'",
+		)
 def test_changelog(tmp_repo, file_regression: FileRegressionFixture):
 
 	# TODO: -n/--entries
