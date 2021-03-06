@@ -89,7 +89,7 @@ class Builder:
 		self.tag = "py3-none-any"
 
 		#: repo_helper's configuration dictionary.
-		self.config = parse_yaml(self.repo_dir)
+		self.config = parse_yaml(self.repo_dir, allow_unknown_keys=True)
 
 		self.config["version"] = str(Version(self.config["version"]))
 
