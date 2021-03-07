@@ -311,7 +311,7 @@ def test_ensure_tests_requirements(tmp_pathplus, demo_environment):
 	assert (tmp_pathplus / managed_files[0]).read_lines() == [
 			"coincidence>=0.1.0",
 			"coverage>=5.1",
-			"coverage-pyver-pragma>=0.0.6",
+			"coverage-pyver-pragma>=0.2.1",
 			"domdf-python-tools[testing]>=2.0.1",
 			"iniconfig!=1.1.0,>=1.0.1",
 			"pytest>=6.0.0",
@@ -330,7 +330,7 @@ def test_ensure_tests_requirements(tmp_pathplus, demo_environment):
 	assert (tmp_pathplus / managed_files[0]).read_lines() == [
 			"coincidence>=0.1.0",
 			"coverage>=5.1",
-			"coverage-pyver-pragma>=0.0.6",
+			"coverage-pyver-pragma>=0.2.1",
 			"domdf-python-tools[testing]>=2.0.1",
 			"iniconfig!=1.1.0,>=1.0.1",
 			"lorem>=0.1.1",
@@ -353,7 +353,7 @@ def test_ensure_tests_requirements_extras(tmp_pathplus, demo_environment):
 	assert (tmp_pathplus / managed_files[0]).read_lines() == [
 			"coincidence>=0.1.0",
 			"coverage>=5.1",
-			"coverage-pyver-pragma>=0.0.6",
+			"coverage-pyver-pragma>=0.2.1",
 			"domdf-python-tools[testing]>=2.0.1",
 			"iniconfig!=1.1.0,>=1.0.1",
 			"pytest>=6.0.0",

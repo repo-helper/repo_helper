@@ -275,7 +275,7 @@ def make_pre_commit(repo_path: pathlib.Path, templates: jinja2.Environment) -> L
 
 	dep_checker = Repo(
 			repo=make_github_url("domdfcoding", "dep_checker"),
-			rev="v0.4.1",
+			rev="v0.5.0",
 			hooks=[{"id": "dep_checker", "args": dep_checker_args}]
 			)
 

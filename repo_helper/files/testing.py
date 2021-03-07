@@ -455,7 +455,7 @@ class ToxConfig(IniConfigurator):
 
 			coverage_deps = ["coverage>=5"]
 			if self["pypi_name"] != "coverage_pyver_pragma":
-				coverage_deps.append("coverage_pyver_pragma>=0.0.6")
+				coverage_deps.append("coverage_pyver_pragma>=0.2.1")
 
 			self._ini["testenv:coverage"]["deps"] = indent_join(coverage_deps)
 
@@ -817,7 +817,7 @@ class TestsRequirementsManager(RequirementsManager):
 
 	def compile_target_requirements(self) -> None:
 		if self._globals["pypi_name"] != "coverage_pyver_pragma":
-			self.target_requirements.add(ComparableRequirement("coverage-pyver-pragma>=0.0.6"))
+			self.target_requirements.add(ComparableRequirement("coverage-pyver-pragma>=0.2.1"))
 		if self._globals["pypi_name"] != "domdf_python_tools":
 			self.target_requirements.add(ComparableRequirement("domdf-python-tools[testing]>=2.0.1"))
 		if self._globals["pypi_name"] != "coincidence":
