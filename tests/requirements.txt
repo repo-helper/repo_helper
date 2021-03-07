@@ -1,10 +1,11 @@
 betamax>=0.8.1
 coincidence>=0.1.0
 coverage>=5.1
-coverage-pyver-pragma>=0.0.6
+coverage-pyver-pragma>=0.2.1
 domdf-python-tools[testing]>=2.0.1
 iniconfig!=1.1.0,>=1.0.1
 lorem>=0.1.1
+pyreadline@ https://github.com/domdfcoding/3.10-Wheels/raw/936f0570b561f3cda0be94d93066a11c6fe782f1/pyreadline-2.0-py3-none-any.whl ; python_version == "3.10" and platform_system == "Windows"
 pytest>=6.0.0
 pytest-cov>=2.8.1
 pytest-randomly>=3.3.1

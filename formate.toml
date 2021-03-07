@@ -59,6 +59,7 @@ known_third_party = [
     "natsort",
     "packaging",
     "pre_commit",
+    "pyreadline",
     "pytest",
     "pytest_cov",
     "pytest_git",
