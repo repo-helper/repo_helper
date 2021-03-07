@@ -45,7 +45,7 @@ repo_helper==2020.12.18
 ├── requests>=2.25.1
 ├── requests-file>=1.4
 ├── ruamel-yaml>=0.16.12
-├── ruamel-yaml-clib>=0.1.2; platform_python_implementation == "CPython" and python_version < "3.9"
+├── ruamel-yaml-clib>=0.1.2; platform_python_implementation == "CPython" and python_version < "3.10"
 ├── setuptools
 ├── shippinglabel>=0.8.2
 ├── six<2,>=1.11.0

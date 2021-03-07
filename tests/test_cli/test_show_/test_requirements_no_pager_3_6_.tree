@@ -60,7 +60,7 @@ repo_helper==2020.12.18
 │   │   ├── setuptools
 │   │   └── six>=1.11.0
 │   ├── ruamel-yaml>=0.16.12
-│   │   └── ruamel.yaml.clib>=0.1.2; platform_python_implementation == "CPython" and python_version < "3.9"
+│   │   └── ruamel.yaml.clib>=0.1.2; platform_python_implementation == "CPython" and python_version < "3.10"
 │   ├── typing-extensions>=3.7.4.3
 │   └── typing-inspect>=0.6.0
 │       ├── mypy-extensions>=0.3.0
@@ -145,7 +145,7 @@ repo_helper==2020.12.18
 │   ├── idna<3,>=2.5
 │   └── urllib3<1.27,>=1.21.1
 ├── ruamel-yaml>=0.16.12
-│   └── ruamel.yaml.clib>=0.1.2; platform_python_implementation == "CPython" and python_version < "3.9"
+│   └── ruamel.yaml.clib>=0.1.2; platform_python_implementation == "CPython" and python_version < "3.10"
 ├── shippinglabel>=0.8.2
 │   ├── apeye>=0.7.0
 │   │   ├── appdirs>=1.4.4
