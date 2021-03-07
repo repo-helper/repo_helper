@@ -591,7 +591,7 @@ def get_bumpversion_filenames(templates: jinja2.Environment) -> Iterable[str]:
 	"""
 	Returns an iterable of filenames to have the version number bumped in.
 
-	.. versionadded:: $VERSION
+	.. versionadded:: 2021.3.8
 
 	:param templates:
 	"""

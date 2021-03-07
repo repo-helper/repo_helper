@@ -303,7 +303,7 @@ class use_whey(use_experimental_backend):  # noqa
 	Whether to use `whey <https://whey.readthedocs.io/en/latest/>`_ to build distributions,
 	rather than ``setuptools.build_meta``.
 
-	.. versionadded:: $VERSION
+	.. versionadded:: 2021.3.8
 	"""  # noqa: D400
 
 	dtype = bool
