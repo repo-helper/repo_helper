@@ -270,6 +270,8 @@ def make_setup(repo_path: pathlib.Path, templates: jinja2.Environment) -> List[s
 	:param templates:
 	"""
 
+	# TODO: if "use_whey", remove this file, but ensure unmanaged sections are preserved
+
 	setup_file = PathPlus(repo_path / "setup.py")
 
 	# if templates.globals["use_experimental_backend"]:
@@ -459,6 +461,8 @@ def make_setup_cfg(repo_path: pathlib.Path, templates: jinja2.Environment) -> Li
 	:param repo_path: Path to the repository root.
 	:param templates:
 	"""
+
+	# TODO: if "use_whey", remove this file, but ensure unmanaged sections are preserved
 
 	# if templates.globals["use_experimental_backend"]:
 	# 	if (repo_path / SetupCfgConfig.filename).is_file():
