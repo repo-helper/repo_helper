@@ -93,3 +93,5 @@ tox_unmanaged:
 
 keywords:
  - configuration
+
+min_coverage: 85
