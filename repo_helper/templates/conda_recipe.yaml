@@ -7,7 +7,7 @@ source:
 
 build:
   noarch: python
-  {% raw %}script: "{{ PYTHON }} {% endraw %}-m pip install {{ pypi_name }}=={{ version }} -vv --index-url https://pypi.org/simple"
+  {% raw %}script: "{{ PYTHON }} {% endraw %}-m pip install . -vv  --no-build-isolation"
 
 requirements:
   build:
