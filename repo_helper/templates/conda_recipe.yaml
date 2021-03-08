@@ -7,7 +7,7 @@ source:
 
 build:
   noarch: python
-  {% raw %}script: "{{ PYTHON }} -m pip install . -vv"{% endraw %}
+  {% raw %}script: "{{ PYTHON }} {% endraw %}-m pip install {{ pypi_name }}=={{ version }} -vv --index-url https://pypi.org/simple"
 
 requirements:
   build:
@@ -15,6 +15,7 @@ requirements:
     - setuptools
     - wheel
 {% if use_experimental_backend %}    - repo_helper
+{% elif use_whey %}    - whey
 {% endif %}  host:
     - pip
     - python
