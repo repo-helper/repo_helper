@@ -7,7 +7,7 @@ source:
 
 build:
   noarch: python
-  script: "{{ PYTHON }} -m pip install . -vv"
+  script: "{{ PYTHON }} -m pip install . -vv  --no-build-isolation"
 
 requirements:
   build:
@@ -31,6 +31,7 @@ requirements:
     - ruamel.yaml>=0.16.12
     - tomlkit>=0.7.0
     - typing-extensions>=3.7.4.3
+
   run:
     - python
     - apeye>=0.3.0

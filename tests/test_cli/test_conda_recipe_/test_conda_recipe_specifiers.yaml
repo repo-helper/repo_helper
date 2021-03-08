@@ -7,7 +7,7 @@ source:
 
 build:
   noarch: python
-  script: "{{ PYTHON }} -m pip install . -vv"
+  script: "{{ PYTHON }} -m pip install . -vv  --no-build-isolation"
 
 requirements:
   build:
@@ -20,6 +20,7 @@ requirements:
     - apeye>=0.3.0
     - attrs>=20.2.0
     - lxml
+
   run:
     - python
     - apeye>=0.3.0
