@@ -20,6 +20,9 @@ requirements:
     - pip
     - python
 {{ requirements_block }}
+{% if use_experimental_backend %}    - repo_helper
+{% elif use_whey %}    - whey
+{% endif %}
   run:
     - python
 {{ requirements_block }}
