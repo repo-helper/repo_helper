@@ -19,3 +19,17 @@
 #  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
 #  MA 02110-1301, USA.
 #
+
+# stdlib
+import platform
+
+# 3rd party
+import pytest
+from domdf_python_tools.compat import PYPY
+
+_reason = "Dulwich causes 'TypeError: os.scandir() doesn't support bytes path on Windows, use Unicode instead'"
+
+pypy_windows_dulwich = pytest.mark.skipif(
+		PYPY and platform.system() == "Windows",
+		reason=_reason,
+		)

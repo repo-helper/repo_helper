@@ -1,13 +1,10 @@
 # stdlib
-import platform
 import re
 from typing import TYPE_CHECKING, Callable, List, Optional
 
 # 3rd party
-import pytest
 from coincidence.regressions import check_file_regression
 from consolekit.testing import CliRunner, Result
-from domdf_python_tools.compat import PYPY
 from domdf_python_tools.paths import PathPlus, in_directory
 from pytest_regressions.file_regression import FileRegressionFixture
 from southwark import get_tags
@@ -15,6 +12,7 @@ from southwark.repo import Repo
 
 # this package
 from repo_helper.cli.commands.release import major, minor, patch, release
+from tests import pypy_windows_dulwich
 
 if TYPE_CHECKING:
 	Command = Callable
@@ -110,13 +108,6 @@ def do_test_release(
 		tags = get_tags(temp_repo)
 		assert f"v{expected_version}" in tags.values()
 		assert tags[m.group(1)] == f"v{expected_version}"
-
-
-pypy_windows_dulwich = pytest.mark.skipif(
-		PYPY and platform.system() == "Windows",
-		reason=
-		"Dulwich causes 'TypeError: os.scandir() doesn't support bytes path on Windows, use Unicode instead'",
-		)
 
 
 @pypy_windows_dulwich

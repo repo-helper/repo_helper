@@ -1,24 +1,17 @@
-# stdlib
-import platform
-
 # 3rd party
 import pytest
 import southwark.repo
 from apeye import URL
-from domdf_python_tools.compat import PYPY
 from dulwich.config import StackedConfig
 
 # this package
 from repo_helper.testing import builder_smoke_test
+from tests import pypy_windows_dulwich
 
 GITHUB_COM = URL("https://github.com")
 
 
-@pytest.mark.skipif(
-		PYPY and platform.system() == "Windows",
-		reason=
-		"Dulwich causes 'TypeError: os.scandir() doesn't support bytes path on Windows, use Unicode instead'",
-		)
+@pypy_windows_dulwich
 @pytest.mark.parametrize(
 		"username, repository", [
 				("domdfcoding", "sphinx-toolbox"),

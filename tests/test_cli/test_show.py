@@ -1,18 +1,17 @@
-# stdlib
-import platform
-
 # 3rd party
 import pytest
-from coincidence import check_file_regression, min_version, not_pypy, only_version
+from coincidence.regressions import check_file_regression
+from coincidence.selectors import min_version, not_pypy, only_version
 from consolekit.testing import CliRunner, Result
-from domdf_python_tools.compat import PYPY36
 from domdf_python_tools.paths import PathPlus, in_directory
 from pytest_regressions.file_regression import FileRegressionFixture
 
 # this package
 from repo_helper.cli.commands import show
+from tests import pypy_windows_dulwich
 
 
+@pypy_windows_dulwich
 def test_version(tmp_repo, file_regression: FileRegressionFixture):
 
 	(tmp_repo / "repo_helper.yml").write_lines([
@@ -34,11 +33,7 @@ def test_version(tmp_repo, file_regression: FileRegressionFixture):
 	result.check_stdout(file_regression)
 
 
-@pytest.mark.skipif(
-		PYPY36 and platform.system() == "Windows",
-		reason=
-		"Dulwich causes 'TypeError: os.scandir() doesn't support bytes path on Windows, use Unicode instead'",
-		)
+@pypy_windows_dulwich
 def test_changelog(tmp_repo, file_regression: FileRegressionFixture):
 
 	# TODO: -n/--entries
@@ -150,6 +145,7 @@ class TestShowRequirements:
 			check_file_regression(result.stdout.rstrip(), file_regression, extension=".tree")
 
 
+@pypy_windows_dulwich
 def test_log(tmp_repo, file_regression: FileRegressionFixture):
 
 	# TODO: -n/--entries
