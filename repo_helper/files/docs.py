@@ -134,6 +134,7 @@ class DocRequirementsManager(RequirementsManager):
 				"default-values": ">=0.4.2",
 				"toctree-plus": ">=0.1.0",
 				"sphinx-toolbox": ">=1.8.3",
+				"sphinx-debuginfo": ">=0.1.0",
 				}
 
 		for name, specifier in my_sphinx_extensions.items():
@@ -356,6 +357,7 @@ def make_conf(repo_path: pathlib.Path, templates: jinja2.Environment) -> List[st
 			"sphinx_copybutton",
 			"sphinxcontrib.default_values",
 			"sphinxcontrib.toctree_plus",
+			"sphinx_debuginfo",
 			"seed_intersphinx_mapping",
 			]
 	# "sphinx.ext.autosectionlabel",
