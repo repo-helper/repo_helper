@@ -101,7 +101,6 @@ class DocRequirementsManager(RequirementsManager):
 			# ComparableRequirement("sphinx_autodoc_typehints>=1.11.0"),
 			ComparableRequirement("sphinx-copybutton>=0.2.12"),
 			ComparableRequirement("sphinx-prompt>=1.1.0"),
-			ComparableRequirement("sphinx>=3.0.3,<3.4.0"),
 			}
 
 	def __init__(self, repo_path: PathLike, templates: jinja2.Environment):
@@ -143,6 +142,11 @@ class DocRequirementsManager(RequirementsManager):
 
 	def merge_requirements(self) -> List[str]:
 		current_requirements, comments, invalid_lines = read_requirements(self.req_file, include_invalid=True)
+
+		if "sphinx" not in current_requirements:
+			current_requirements.add(ComparableRequirement("sphinx>=3.0.3,<3.4.0"))
+		else:
+			current_requirements.add(ComparableRequirement("sphinx>=3.0.3"))
 
 		for line in invalid_lines:
 			if line.startswith("git+"):
