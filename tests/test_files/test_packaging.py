@@ -34,21 +34,37 @@ from pytest_regressions.file_regression import FileRegressionFixture
 from repo_helper.files.packaging import make_manifest, make_pkginfo, make_pyproject, make_setup, make_setup_cfg
 
 
-@pytest.mark.parametrize("stubs_package", [True, False])
+def boolean_option(name: str, id: str):  # noqa: A002  # pylint: disable=redefined-builtin
+	return pytest.mark.parametrize(name, [
+			pytest.param(True, id=id),
+			pytest.param(False, id=f"no {id}"),
+			])
+
+
+@boolean_option("stubs_package", "stubs")
+@boolean_option("use_whey", "whey")
 def test_make_manifest_case_1(
 		tmp_pathplus,
 		demo_environment,
 		file_regression: FileRegressionFixture,
 		stubs_package,
+		use_whey,
 		):
 	demo_environment.globals["stubs_package"] = stubs_package
+	demo_environment.globals["use_whey"] = use_whey
+
 	managed_files = make_manifest(tmp_pathplus, demo_environment)
 	assert managed_files == ["MANIFEST.in"]
-	check_file_output(tmp_pathplus / managed_files[0], file_regression)
+
+	if use_whey:
+		assert not (tmp_pathplus / managed_files[0]).is_file()
+	else:
+		check_file_output(tmp_pathplus / managed_files[0], file_regression)
 
 
 def test_make_manifest_case_2(tmp_pathplus, demo_environment, file_regression: FileRegressionFixture):
 	demo_environment.globals["manifest_additional"] = ["recursive-include hello_world/templates *"]
+	demo_environment.globals["use_whey"] = False
 	demo_environment.globals["additional_requirements_files"] = ["hello_world/submodule/requirements.txt"]
 
 	managed_files = make_manifest(tmp_pathplus, demo_environment)
@@ -56,18 +72,31 @@ def test_make_manifest_case_2(tmp_pathplus, demo_environment, file_regression: F
 	check_file_output(tmp_pathplus / managed_files[0], file_regression)
 
 
-def test_make_setup_case_1(tmp_pathplus, demo_environment, file_regression: FileRegressionFixture):
+@boolean_option("use_whey", "whey")
+def test_make_setup_case_1(
+		tmp_pathplus,
+		demo_environment,
+		file_regression: FileRegressionFixture,
+		use_whey,
+		):
 	demo_environment.globals["use_experimental_backend"] = False
 	demo_environment.globals["desktopfile"] = {}
+	demo_environment.globals["use_whey"] = use_whey
 
 	managed_files = make_setup(tmp_pathplus, demo_environment)
 	assert managed_files == ["setup.py"]
-	check_file_output(tmp_pathplus / managed_files[0], file_regression)
+
+	if use_whey:
+		assert not (tmp_pathplus / managed_files[0]).is_file()
+	else:
+		check_file_output(tmp_pathplus / managed_files[0], file_regression)
 
 
-def test_make_setup_case_2(tmp_pathplus, demo_environment, file_regression: FileRegressionFixture):
+@boolean_option("use_whey", "whey")
+def test_make_setup_case_2(tmp_pathplus, demo_environment, file_regression: FileRegressionFixture, use_whey):
 	demo_environment.globals["use_experimental_backend"] = False
 	demo_environment.globals["desktopfile"] = {}
+	demo_environment.globals["use_whey"] = use_whey
 
 	demo_environment.globals.update(
 			dict(
@@ -81,7 +110,11 @@ def test_make_setup_case_2(tmp_pathplus, demo_environment, file_regression: File
 
 	managed_files = make_setup(tmp_pathplus, demo_environment)
 	assert managed_files == ["setup.py"]
-	check_file_output(tmp_pathplus / managed_files[0], file_regression)
+
+	if use_whey:
+		assert not (tmp_pathplus / managed_files[0]).is_file()
+	else:
+		check_file_output(tmp_pathplus / managed_files[0], file_regression)
 
 
 @pytest.mark.parametrize("backend", ["whey", "experimental", "setuptools"])

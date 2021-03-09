@@ -92,34 +92,36 @@ def make_manifest(repo_path: pathlib.Path, templates: jinja2.Environment) -> Lis
 	:param templates:
 	"""
 
-	# TODO: if "use_whey", remove this file
-
 	file = PathPlus(repo_path / "MANIFEST.in")
 
-	manifest_entries = [
-			"include __pkginfo__.py",
-			"include LICENSE",
-			"include requirements.txt",
-			"prune **/__pycache__",
-			*templates.globals["manifest_additional"],
-			]
+	if templates.globals["use_whey"]:
+		file.unlink(missing_ok=True)
 
-	for item in templates.globals["additional_requirements_files"]:
-		manifest_entries.append(f"include {pathlib.PurePosixPath(item)}")
-
-	if templates.globals["stubs_package"]:
-		import_name = f"{templates.globals['import_name']}-stubs"
 	else:
-		import_name = templates.globals["import_name"].replace('.', '/')
+		manifest_entries = [
+				"include __pkginfo__.py",
+				"include LICENSE",
+				"include requirements.txt",
+				"prune **/__pycache__",
+				*templates.globals["manifest_additional"],
+				]
 
-	pkg_dir = pathlib.PurePosixPath(templates.globals["source_dir"]) / import_name
+		for item in templates.globals["additional_requirements_files"]:
+			manifest_entries.append(f"include {pathlib.PurePosixPath(item)}")
 
-	manifest_entries.extend([
-			f"recursive-include {pkg_dir} *.pyi",
-			f"include {pkg_dir / 'py.typed'}",
-			])
+		if templates.globals["stubs_package"]:
+			import_name = f"{templates.globals['import_name']}-stubs"
+		else:
+			import_name = templates.globals["import_name"].replace('.', '/')
 
-	file.write_clean('\n'.join(manifest_entries))
+		pkg_dir = pathlib.PurePosixPath(templates.globals["source_dir"]) / import_name
+
+		manifest_entries.extend([
+				f"recursive-include {pkg_dir} *.pyi",
+				f"include {pkg_dir / 'py.typed'}",
+				])
+
+		file.write_clean('\n'.join(manifest_entries))
 
 	return [file.name]
 
@@ -270,31 +272,30 @@ def make_setup(repo_path: pathlib.Path, templates: jinja2.Environment) -> List[s
 	:param templates:
 	"""
 
-	# TODO: if "use_whey", remove this file, but ensure unmanaged sections are preserved
-
 	setup_file = PathPlus(repo_path / "setup.py")
 
-	# if templates.globals["use_experimental_backend"]:
-	# 	if setup_file.is_file():
-	# 		setup_file.unlink()
-	#
-	# else:
-	setup = templates.get_template("setup._py")
+	if templates.globals["use_whey"]:
+		setup_file.unlink(missing_ok=True)
 
-	data = copy.deepcopy(setup_py_defaults)
-	data["description"] = repr(templates.globals["short_desc"])
-	data["py_modules"] = templates.globals["py_modules"]
+	else:
+		setup = templates.get_template("setup._py")
 
-	if templates.globals["desktopfile"]:
-		data["data_files"] = "[('share/applications', ['{modname}.desktop'])]".format_map(templates.globals)
+		data = copy.deepcopy(setup_py_defaults)
+		data["description"] = repr(templates.globals["short_desc"])
+		data["py_modules"] = templates.globals["py_modules"]
 
-	setup_args = sorted({**data, **templates.globals["additional_setup_args"]}.items())
+		if templates.globals["desktopfile"]:
+			data["data_files"] = "[('share/applications', ['{modname}.desktop'])]".format_map(templates.globals)
 
-	setup_file.write_clean(setup.render(additional_setup_args='\n'.join(f"\t\t{k}={v}," for k, v in setup_args)))
+		setup_args = sorted({**data, **templates.globals["additional_setup_args"]}.items())
 
-	with importlib_resources.path(repo_helper.files, "isort.cfg") as isort_config:
-		yapf_style = PathPlus(isort_config).parent.parent / "templates" / "style.yapf"
-		reformat_file(setup_file, yapf_style=str(yapf_style), isort_config_file=str(isort_config))
+		setup_file.write_clean(
+				setup.render(additional_setup_args='\n'.join(f"\t\t{k}={v}," for k, v in setup_args))
+				)
+
+		with importlib_resources.path(repo_helper.files, "isort.cfg") as isort_config:
+			yapf_style = PathPlus(isort_config).parent.parent / "templates" / "style.yapf"
+			reformat_file(setup_file, yapf_style=str(yapf_style), isort_config_file=str(isort_config))
 
 	return [setup_file.name]
 
