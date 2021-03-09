@@ -235,10 +235,13 @@ def make_pyproject(repo_path: pathlib.Path, templates: jinja2.Environment) -> Li
 		license_ = templates.globals["license"]
 		data["tool"]["whey"]["license-key"] = {v: k for k, v in license_lookup.items()}.get(license_, license_)
 
-		if templates.globals["source_dir"] or templates.globals["import_name"] != templates.globals["pypi_name"]:
+		if templates.globals["source_dir"]:
+			raise NotImplementedError("Whey does not support custom source directories")
+
+		elif templates.globals["import_name"] != templates.globals["pypi_name"]:
 			data["tool"]["whey"]["package"] = posixpath.join(
-					templates.globals["source_dir"],
-					templates.globals["import_name"].replace('.', '/'),
+					# templates.globals["source_dir"],
+					templates.globals["import_name"].split('.', 1)[0],
 					)
 
 		if templates.globals["manifest_additional"]:
