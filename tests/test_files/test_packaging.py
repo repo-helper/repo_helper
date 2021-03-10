@@ -155,6 +155,45 @@ def test_make_pyproject(
 	check_file_output(tmp_pathplus / managed_files[0], file_regression)
 
 
+@pytest.mark.parametrize("enable_tests", [True, False])
+def test_make_pyproject_whey_extras(
+		tmp_pathplus,
+		demo_environment,
+		file_regression: FileRegressionFixture,
+		enable_tests: bool,
+		):
+	# TODO: permutations to cover all branches
+
+	demo_environment.globals["author"] = "Joe Bloggs"
+	demo_environment.globals["email"] = "j.bloggs@example.com"
+	demo_environment.globals["version"] = "2020.1.1"
+	demo_environment.globals["license"] = "MIT License"
+	demo_environment.globals["keywords"] = ["awesome", "python", "project"]
+	demo_environment.globals["classifiers"] = []
+	demo_environment.globals["console_scripts"] = []
+	demo_environment.globals["mypy_plugins"] = []
+	demo_environment.globals["use_experimental_backend"] = False
+	demo_environment.globals["enable_docs"] = True
+	demo_environment.globals["enable_tests"] = enable_tests
+	demo_environment.globals["extras_require"] = {
+			"foo": [
+					"apeye>=0.4.0",
+					"attrs>=20.2.0",
+					"click==7.1.2",
+					"configconfig>=0.5.0",
+					"consolekit>=1.0.0",
+					]
+			}
+	demo_environment.globals["entry_points"] = {}
+	demo_environment.globals["tox_build_requirements"] = []
+
+	demo_environment.globals["use_whey"] = True
+
+	managed_files = make_pyproject(tmp_pathplus, demo_environment)
+	assert managed_files == ["pyproject.toml"]
+	check_file_output(tmp_pathplus / managed_files[0], file_regression)
+
+
 @pytest.mark.parametrize(
 		"python_versions",
 		[

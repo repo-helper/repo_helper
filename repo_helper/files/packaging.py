@@ -196,13 +196,30 @@ def make_pyproject(repo_path: pathlib.Path, templates: jinja2.Environment) -> Li
 	if templates.globals["enable_docs"]:
 		data["project"]["urls"]["Documentation"] = templates.globals["docs_url"]
 
+	# extras-require
+
+	data["project"]["optional-dependencies"] = {}
+
+	for extra, dependencies in templates.globals["extras_require"].items():
+		data["project"]["optional-dependencies"][extra] = dependencies
+
+	if not data["project"]["optional-dependencies"]:
+		del data["project"]["optional-dependencies"]
+
+	# entry-points
+
 	if templates.globals["console_scripts"]:
 		data["project"]["scripts"] = dict(split_entry_point(e) for e in templates.globals["console_scripts"])
 
-	data["project"].set_default("entry-points", {})
+	data["project"]["entry-points"] = {}
 
 	for group, entry_points in templates.globals["entry_points"].items():
 		data["project"]["entry-points"][group] = dict(split_entry_point(e) for e in entry_points)
+
+	if not data["project"]["entry-points"]:
+		del data["project"]["entry-points"]
+
+	# tool.whey
 
 	data.set_default("tool", {})
 
