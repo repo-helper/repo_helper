@@ -141,12 +141,14 @@ class DocRequirementsManager(RequirementsManager):
 				self.target_requirements.add(ComparableRequirement(f"{name}{specifier}"))
 
 	def merge_requirements(self) -> List[str]:
-		current_requirements, comments, invalid_lines = read_requirements(self.req_file, include_invalid=True)
+		current_requirements_, comments, invalid_lines = read_requirements(self.req_file, include_invalid=True)
+
+		current_requirements = list(current_requirements_)
 
 		if "sphinx" not in current_requirements:
-			current_requirements.add(ComparableRequirement("sphinx>=3.0.3,<3.4.0"))
+			current_requirements.append(ComparableRequirement("sphinx>=3.0.3,<3.4.0"))
 		else:
-			current_requirements.add(ComparableRequirement("sphinx>=3.0.3"))
+			current_requirements.append(ComparableRequirement("sphinx>=3.0.3"))
 
 		for line in invalid_lines:
 			if line.startswith("git+"):
