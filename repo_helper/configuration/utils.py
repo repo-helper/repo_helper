@@ -117,6 +117,9 @@ def parse_extras(raw_config_vars: Mapping[str, Any], repo_path: pathlib.Path) ->
 
 	extras_require["all"] = sorted(set(chain.from_iterable(extras_require.values())))
 
+	if not extras_require["all"]:
+		del extras_require["all"]
+
 	return {k: list(map(str, v)) for k, v in extras_require.items()}, sorted(additional_requirements_files)
 
 
