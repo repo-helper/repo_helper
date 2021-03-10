@@ -470,7 +470,7 @@ class CustomTomlEncoder(toml.TomlEncoder):
 	Customised TOML encoder which wraps long lists onto multiple lines.
 	"""
 
-	max_width: int = 110
+	max_width: int = 100
 
 	def dump_list(self, v):  # noqa: D102
 		single_line = super().dump_list(v)
