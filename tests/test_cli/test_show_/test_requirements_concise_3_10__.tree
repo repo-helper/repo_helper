@@ -4,6 +4,7 @@ repo_helper==2020.12.18
 ├── asttokens>=2.0.4
 ├── attrs>=20.2.0
 ├── cachecontrol[filecache]>=0.12.6
+├── cawdrey>=0.4.1
 ├── certifi>=2017.4.17
 ├── cfgv>=2.0.0
 ├── chardet<5,>=3.0.2

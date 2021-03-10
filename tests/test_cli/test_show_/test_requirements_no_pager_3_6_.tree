@@ -111,6 +111,7 @@ repo_helper==2020.12.18
 ├── email-validator==1.1.2
 │   ├── dnspython>=1.15.0
 │   └── idna>=2.0.0
+├── first>=2.0.2
 ├── idna==2.10
 ├── isort>=5.0.0
 ├── jinja2>=2.11.2
@@ -188,6 +189,17 @@ repo_helper==2020.12.18
 │   │           │   └── urllib3<1.27,>=1.21.1
 │   │           └── six
 │   ├── appdirs>=1.4.4
+│   ├── cawdrey>=0.4.1
+│   │   ├── domdf-python-tools>=1.1.0
+│   │   │   ├── importlib-metadata<3.5.0,>=1.5.0; python_version < "3.9"
+│   │   │   │   ├── typing-extensions>=3.6.4; python_version < "3.8"
+│   │   │   │   └── zipp>=0.5
+│   │   │   ├── importlib-resources>=3.0.0; python_version < "3.7"
+│   │   │   │   └── zipp>=0.4; python_version < "3.8"
+│   │   │   ├── natsort>=7.1.0
+│   │   │   ├── pydash>=4.7.4
+│   │   │   └── typing-extensions>=3.7.4.3
+│   │   └── typing-extensions>=3.7.4.3
 │   ├── consolekit>=0.1.2
 │   │   ├── click>=7.1.2
 │   │   ├── colorama>=0.4.3; python_version < "3.10"
