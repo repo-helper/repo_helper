@@ -17,7 +17,10 @@ def test_conda_recipe(
 		file_regression: FileRegressionFixture,
 		example_config,
 		):
-	(tmp_pathplus / "repo_helper.yml").write_text(example_config)
+
+	config = example_config.replace("repo_helper_demo", "repo_helper").replace("0.0.1", "2021.3.8")
+	(tmp_pathplus / "repo_helper.yml").write_text(config)
+
 	(tmp_pathplus / "requirements.txt").write_lines([
 			"apeye>=0.3.0",
 			"attrs>=20.2.0",
@@ -54,7 +57,10 @@ def test_conda_recipe_specifiers(
 		file_regression: FileRegressionFixture,
 		example_config,
 		):
-	(tmp_pathplus / "repo_helper.yml").write_text(example_config)
+
+	config = example_config.replace("repo_helper_demo", "repo_helper").replace("0.0.1", "2021.3.8")
+	(tmp_pathplus / "repo_helper.yml").write_text(config)
+
 	(tmp_pathplus / "requirements.txt").write_lines([
 			'apeye>=0.3.0; python_version < "3.10"',
 			"attrs[extra]>=20.2.0",

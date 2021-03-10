@@ -24,13 +24,16 @@ Utilities for Conda packages.
 #
 
 # stdlib
+from operator import methodcaller
 from typing import Any, Dict, Iterable, List
 
 # 3rd party
 import jinja2
 from domdf_python_tools.paths import PathPlus
 from domdf_python_tools.typing import PathLike
+from first import first
 from shippinglabel.conda import compile_requirements, validate_requirements
+from shippinglabel.pypi import get_pypi_releases
 
 # this package
 from repo_helper.configuration import parse_yaml
@@ -56,6 +59,19 @@ def make_recipe(repo_dir: PathLike, recipe_file: PathLike) -> None:
 
 	config = parse_yaml(repo_dir, allow_unknown_keys=True)
 
+	# find the download URL
+	releases = get_pypi_releases(config["pypi_name"])
+
+	if config["version"] not in releases:
+		raise ValueError(f"Cannot find version {config['version']} on PyPI.")
+
+	download_urls = releases[config["version"]]
+
+	if not download_urls:
+		raise ValueError(f"Version {config['version']} has no files on PyPI.")
+
+	sdist_url = first(download_urls, key=methodcaller("endswith", ".tar.gz"), default=download_urls[0])
+
 	requirements_block = '\n'.join([f"    - {req}" for req in get_conda_requirements(repo_dir, config)])
 
 	templates = jinja2.Environment(  # nosec: B701
@@ -66,6 +82,7 @@ def make_recipe(repo_dir: PathLike, recipe_file: PathLike) -> None:
 	recipe_template = templates.get_template("conda_recipe.yaml")
 	recipe_file.write_clean(
 			recipe_template.render(
+					sdist_url=sdist_url,
 					requirements_block=requirements_block,
 					conda_full_description=make_conda_description(
 							config["conda_description"], config["conda_channels"]
@@ -104,7 +121,7 @@ def get_conda_requirements(repo_dir: PathPlus, config: Dict[str, Any]) -> List[s
 	extras = []
 
 	for extra in config["conda_extras"]:
-		extras.extend(config["extras_require"][extra])
+		extras.extend(config["extras_require"].get(extra, ()))
 
 	all_requirements = validate_requirements(
 			compile_requirements(repo_dir, extras),

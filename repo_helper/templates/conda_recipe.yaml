@@ -3,7 +3,7 @@ package:
   version: "{{ version }}"
 
 source:
-  url: "https://pypi.io/packages/source/{{ pypi_name[0] }}/{{ pypi_name }}/{{ pypi_name }}-{{ version }}.tar.gz"
+  url: "{{ sdist_url }}"
 
 build:
   noarch: python
@@ -16,7 +16,8 @@ requirements:
     - wheel
 {% if use_experimental_backend %}    - repo_helper
 {% elif use_whey %}    - whey
-{% endif %}  host:
+{% endif %}
+  host:
     - pip
     - python
 {{ requirements_block }}

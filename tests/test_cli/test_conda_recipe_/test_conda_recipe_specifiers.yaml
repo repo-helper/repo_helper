@@ -1,9 +1,9 @@
 package:
-  name: "repo_helper_demo"
-  version: "0.0.1"
+  name: "repo_helper"
+  version: "2021.3.8"
 
 source:
-  url: "https://pypi.io/packages/source/r/repo_helper_demo/repo_helper_demo-0.0.1.tar.gz"
+  url: "https://files.pythonhosted.org/packages/f1/8c/2ac0f06df8bda9b4810cddb1d47fdb53a29a4d3375b7f736e491b56bf53e/repo_helper-2021.3.8.tar.gz"
 
 build:
   noarch: python
@@ -14,6 +14,7 @@ requirements:
     - python
     - setuptools
     - wheel
+
   host:
     - pip
     - python
@@ -29,10 +30,10 @@ requirements:
 
 test:
   imports:
-    - repo_helper_demo
+    - repo_helper
 
 about:
-  home: "https://github.com/domdfcoding/repo_helper_demo"
+  home: "https://github.com/domdfcoding/repo_helper"
   license: "GNU Lesser General Public License v3 or later (LGPLv3+)"
   summary: "Update multiple configuration files, build scripts etc. from a single location."
   description: "Update multiple configuration files, build scripts etc. from a single location.
@@ -40,8 +41,8 @@ about:
 
 Before installing please ensure you have added the following channels: conda-forge, domdfcoding
 "
-  doc_url: https://repo_helper_demo.readthedocs.io
-  dev_url: https://github.com/domdfcoding/repo_helper_demo
+  doc_url: https://repo_helper.readthedocs.io
+  dev_url: https://github.com/domdfcoding/repo_helper
 
 extra:
   maintainers:
