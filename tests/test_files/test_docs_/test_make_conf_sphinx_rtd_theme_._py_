@@ -23,7 +23,7 @@ rst_prolog = f""".. |pkgname| replace:: hello-world
 """
 
 author = "Joe Bloggs"
-project = "hello-world"
+project = "hello-world".replace('_', '-')
 slug = re.sub(r'\W+', '-', project.lower())
 release = version = __version__
 copyright = "2020-2021 E. Xample"  # pylint: disable=redefined-builtin

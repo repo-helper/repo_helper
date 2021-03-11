@@ -26,7 +26,7 @@ rst_prolog = f""".. |pkgname| replace:: {{ modname }}
 """
 
 author = "{{ rtfd_author }}"
-project = "{{ modname }}"
+project = "{{ modname }}".replace("_", "-")
 slug = re.sub(r'\W+', '-', project.lower())
 release = version = __version__
 copyright = "{{ copyright_years }} {{ author }}"  # pylint: disable=redefined-builtin
