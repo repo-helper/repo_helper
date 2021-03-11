@@ -25,3 +25,7 @@ Documentation = "https://docs.repo-helper.uk"
 [project.scripts]
 repo_helper = "repo_helper.__main__:main"
 repo-helper = "repo_helper.__main__:main"
+
+[project.optional-dependencies]
+testing = [ "check-wheel-contents>=0.2.0", "coincidence>=0.1.2", "pytest>=6.0.0", "twine>=3.2.0",]
+all = [ "check-wheel-contents>=0.2.0", "coincidence>=0.1.2", "pytest>=6.0.0", "twine>=3.2.0",]

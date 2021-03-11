@@ -50,6 +50,7 @@ known_third_party = [
     "domdf_python_tools",
     "dulwich",
     "email_validator",
+    "first",
     "github",
     "idna",
     "isort",
