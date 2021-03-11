@@ -551,6 +551,13 @@ def ensure_bumpversion(repo_path: pathlib.Path, templates: jinja2.Environment) -
 	:param templates:
 	"""
 
+	# TODO:
+	"""
+	[bumpversion:file:shippinglabel/__init__.py]
+	search = : str = "{current_version}"
+	replace = : str = "{new_version}"
+	"""
+
 	bumpversion_file = PathPlus(repo_path / ".bumpversion.cfg")
 
 	if not bumpversion_file.is_file():
