@@ -33,7 +33,6 @@ from typing import List, Optional, Sequence
 # 3rd party
 import click
 import jinja2
-import requests
 from apeye.requests_url import RequestsURL
 from consolekit.options import force_option
 from domdf_python_tools.paths import PathPlus, maybe_make
@@ -177,7 +176,8 @@ def init_repo(repo_path: pathlib.Path, templates: jinja2.Environment) -> List[st
 
 			try:
 				response = license_url.get()
-			except requests.exceptions.RequestException:
+			except Exception:
+				# except requests.exceptions.RequestException:
 				if attempt == 1:
 					continue
 				else:

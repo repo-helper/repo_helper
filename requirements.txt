@@ -14,7 +14,6 @@ jinja2>=2.11.2
 natsort>=7.1.0
 packaging>=20.4
 pre-commit>=2.7.1
-requests>=2.25.1
 ruamel-yaml>=0.16.12
 shippinglabel>=0.8.2
 southwark>=0.7.1
