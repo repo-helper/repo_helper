@@ -57,6 +57,7 @@ extra_sphinx_extensions:
  - configconfig.autoconfig
  - sphinx_click
  - sphinx_autofixture
+ - sphinx_toolbox.tweaks.latex_toc
 
 intersphinx_mapping:
  - "'jinja2': ('https://jinja.palletsprojects.com/en/2.11.x/', None)"
