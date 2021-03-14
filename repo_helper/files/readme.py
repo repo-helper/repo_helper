@@ -57,22 +57,24 @@ def rewrite_readme(repo_path: pathlib.Path, templates: jinja2.Environment) -> Li
 
 	readme_file = PathPlus(repo_path / "README.rst")
 
-	shields_block = str(ShieldsBlock(
-			username=templates.globals["username"],
-			repo_name=templates.globals["repo_name"],
-			version=templates.globals["version"],
-			conda=templates.globals["enable_conda"],
-			tests=templates.globals["enable_tests"] and not templates.globals["stubs_package"],
-			docs=templates.globals["enable_docs"],
-			pypi_name=templates.globals["pypi_name"],
-			docker_shields=templates.globals["docker_shields"],
-			docker_name=templates.globals["docker_name"],
-			platforms=templates.globals["platforms"],
-			pre_commit=templates.globals["enable_pre_commit"],
-			on_pypi=templates.globals["on_pypi"],
-			docs_url=templates.globals["docs_url"],
-			primary_conda_channel=templates.globals["primary_conda_channel"],
-			).make())
+	shields_block = str(
+			ShieldsBlock(
+					username=templates.globals["username"],
+					repo_name=templates.globals["repo_name"],
+					version=templates.globals["version"],
+					conda=templates.globals["enable_conda"],
+					tests=templates.globals["enable_tests"] and not templates.globals["stubs_package"],
+					docs=templates.globals["enable_docs"],
+					pypi_name=templates.globals["pypi_name"],
+					docker_shields=templates.globals["docker_shields"],
+					docker_name=templates.globals["docker_name"],
+					platforms=templates.globals["platforms"],
+					pre_commit=templates.globals["enable_pre_commit"],
+					on_pypi=templates.globals["on_pypi"],
+					docs_url=templates.globals["docs_url"],
+					primary_conda_channel=templates.globals["primary_conda_channel"],
+					).make()
+			)
 
 	if templates.globals["on_pypi"]:
 		install_block = create_readme_install_block(
