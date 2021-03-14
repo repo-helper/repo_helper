@@ -35,7 +35,6 @@ extensions = [
 		"sphinx_toolbox.more_autodoc",
 		"sphinx_toolbox.more_autosummary",
 		"sphinx_toolbox.tweaks.param_dash",
-		"sphinx_toolbox.tweaks.latex_toc",
 		"sphinx.ext.intersphinx",
 		"sphinx.ext.mathjax",
 		"sphinxcontrib.httpdomain",
@@ -136,3 +135,5 @@ autodoc_default_options = {
 		"show-inheritance": None,
 		"exclude-members": ','.join(autodoc_exclude_members),
 		}
+
+toctree_plus_types.add("fixture")

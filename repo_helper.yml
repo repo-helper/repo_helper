@@ -96,3 +96,6 @@ keywords:
  - configuration
 
 min_coverage: 85
+
+sphinx_conf_epilogue:
+ - toctree_plus_types.add("fixture")
