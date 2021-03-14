@@ -460,7 +460,7 @@ class ShieldsBlock:
 		self.make_wheel_shield = make_docs_wheel_shield
 		self.make_pypi_downloads_shield = make_docs_pypi_downloads_shield
 
-	def make(self) -> str:
+	def make(self) -> StringList:
 		"""
 		Constructs the contents of the shields block.
 		"""
@@ -581,4 +581,4 @@ class ShieldsBlock:
 		buf.append(".. end shields")
 		# buf.blankline(ensure_single=True)
 
-		return str(buf)
+		return buf

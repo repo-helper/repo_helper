@@ -57,7 +57,7 @@ def rewrite_readme(repo_path: pathlib.Path, templates: jinja2.Environment) -> Li
 
 	readme_file = PathPlus(repo_path / "README.rst")
 
-	shields_block = ShieldsBlock(
+	shields_block = str(ShieldsBlock(
 			username=templates.globals["username"],
 			repo_name=templates.globals["repo_name"],
 			version=templates.globals["version"],
@@ -72,7 +72,7 @@ def rewrite_readme(repo_path: pathlib.Path, templates: jinja2.Environment) -> Li
 			on_pypi=templates.globals["on_pypi"],
 			docs_url=templates.globals["docs_url"],
 			primary_conda_channel=templates.globals["primary_conda_channel"],
-			).make()
+			).make())
 
 	if templates.globals["on_pypi"]:
 		install_block = create_readme_install_block(

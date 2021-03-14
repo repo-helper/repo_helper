@@ -129,7 +129,7 @@ def test_short_desc_regex(value):
 				]
 		)
 def test_create_shields_block(file_regression: FileRegressionFixture, kwargs, fixed_date):
-	result = ShieldsBlock(**kwargs).make()
+	result = str(ShieldsBlock(**kwargs).make())
 	check_file_regression(result, file_regression, extension=".rst")
 
 

@@ -620,8 +620,18 @@ def rewrite_docs_index(repo_path: pathlib.Path, templates: jinja2.Environment) -
 			on_pypi=templates.globals["on_pypi"],
 			primary_conda_channel=templates.globals["primary_conda_channel"],
 			)
+
 	sb.set_docs_mode()
-	shields_block = sb.make()
+	make_out = sb.make()
+
+	shield_block_list = StringList([*make_out[0:2], ".. only:: html"])
+
+	with shield_block_list.with_indent_size(1):
+		shield_block_list.extend(make_out[1:-1])
+
+	shield_block_list.append(make_out[-1])
+
+	shields_block = str(shield_block_list)
 
 	if templates.globals["license"] == "GNU General Public License v2 (GPLv2)":
 		source = f"https://img.shields.io/github/license/{templates.globals['username']}/{templates.globals['repo_name']}"
