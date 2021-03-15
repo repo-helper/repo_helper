@@ -2,10 +2,6 @@ li p:last-child {
 	margin-bottom: 12px;
 }
 
-html {
-	scroll-behavior: smooth;
-}
-
 dl.class {
 	padding: 3px 3px 3px 5px;
 	margin-bottom: 17px !important;

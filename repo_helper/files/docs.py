@@ -215,7 +215,10 @@ def make_rtfd(repo_path: pathlib.Path, templates: jinja2.Environment) -> List[st
 	python_config = {"version": 3.8, "install": install_config}
 
 	# Formats: Optionally build your docs in additional formats such as PDF and ePub
-	config = {"version": 2, "sphinx": sphinx_config, "formats": "all", "python": python_config}
+	config = {"version": 2, "sphinx": sphinx_config, "formats": ["pdf", "htmlzip"], "python": python_config}
+
+	# TODO: support user customisation of search rankings
+	# https://docs.readthedocs.io/en/stable/config-file/v2.html#search-ranking
 
 	dumper = yaml.YAML()
 	dumper.indent(mapping=2, sequence=3, offset=1)
@@ -353,6 +356,7 @@ def make_conf(repo_path: pathlib.Path, templates: jinja2.Environment) -> List[st
 			"sphinx_toolbox.more_autodoc",
 			"sphinx_toolbox.more_autosummary",
 			"sphinx_toolbox.tweaks.param_dash",
+			"sphinx_toolbox.tweaks.latex_toc",
 			"sphinx.ext.intersphinx",
 			"sphinx.ext.mathjax",
 			"sphinxcontrib.httpdomain",
@@ -427,7 +431,7 @@ def make_alabaster_theming() -> str:
 
 	style: Dict[str, MutableMapping] = {
 			"li p:last-child": {"margin-bottom": dict2css.px(12)},
-			"html": {"scroll-behavior": "smooth"},  # Smooth scrolling between sections
+			# "html": {"scroll-behavior": "smooth"},  # Smooth scrolling between sections
 			"dl.class": class_border,
 			"dl.function": function_border,
 			"dl.function dt": {"margin-bottom": (dict2css.px(10), dict2css.IMPORTANT)},
@@ -483,7 +487,22 @@ def make_readthedocs_theming() -> str:
 	style: Dict[str, Mapping] = {
 			".wy-nav-content": {"max-width": (dict2css.px(1200), dict2css.IMPORTANT)},
 			"li p:last-child": {"margin-bottom": (dict2css.px(12), dict2css.IMPORTANT)},
-			"html": {"scroll-behavior": "smooth"},
+			# "html": {"scroll-behavior": "smooth"},
+			}
+
+	return dict2css.dumps(style, trailing_semicolon=True)
+
+
+def make_furo_theming() -> str:
+	"""
+	Make the custom stylesheet for the `Furo <https://github.com/pradyunsg/furo>`_ Sphinx theme.
+
+	:return: The custom stylesheet.
+	"""
+
+	style: Dict[str, Mapping] = {
+			"div.highlight": {"-moz-tab-size": 4, "tab-size": 4},
+			".field-list dt, dl.simple dt": {"margin-top": ".5rem"},
 			}
 
 	return dict2css.dumps(style, trailing_semicolon=True)
@@ -506,30 +525,19 @@ def copy_docs_styling(repo_path: pathlib.Path, templates: jinja2.Environment) ->
 	for directory in {style_css.parent, layout_html.parent}:
 		directory.maybe_make(parents=True)
 
-	if templates.globals["sphinx_html_theme"] == "sphinx-rtd-theme":
+	sphinx_html_theme = templates.globals["sphinx_html_theme"]
+	style_css_lines = [f"/* {templates.globals['managed_message']} */", '']
 
-		style_css.write_lines([
-				f"/* {templates.globals['managed_message']} */",
-				'',
-				make_readthedocs_theming(),
-				])
-	elif templates.globals["sphinx_html_theme"] == "alabaster":
-		style_css.write_lines([
-				f"/* {templates.globals['managed_message']} */",
-				'',
-				make_alabaster_theming(),
-				])
-	elif templates.globals["sphinx_html_theme"] == "furo":
-		style_css.write_lines([
-				f"/* {templates.globals['managed_message']} */",
-				'',
-				"div.highlight {",
-				"    -moz-tab-size: 4; /* Firefox */",
-				"    tab-size: 4;",
-				'}',
-				])
+	if sphinx_html_theme == "sphinx-rtd-theme":
+		style_css_lines.append(make_readthedocs_theming())
+	elif sphinx_html_theme == "alabaster":
+		style_css_lines.append(make_alabaster_theming())
+	elif sphinx_html_theme == "furo":
+		style_css_lines.append(make_furo_theming())
 	else:
-		style_css.write_clean('')
+		style_css_lines.clear()
+
+	style_css.write_lines(style_css_lines)
 
 	if templates.globals["sphinx_html_theme"] == "furo":
 		furo_navigation.parent.maybe_make()

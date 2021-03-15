@@ -7,7 +7,3 @@
 li p:last-child {
 	margin-bottom: 12px !important;
 }
-
-html {
-	scroll-behavior: smooth;
-}
