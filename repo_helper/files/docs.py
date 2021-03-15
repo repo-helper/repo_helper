@@ -26,7 +26,6 @@ Configuration for documentation with
 #
 
 # stdlib
-import functools
 import logging
 import os.path
 import pathlib
@@ -132,7 +131,7 @@ class DocRequirementsManager(RequirementsManager):
 				"seed-intersphinx-mapping": ">=0.3.1",
 				"default-values": ">=0.4.2",
 				"toctree-plus": ">=0.1.0",
-				"sphinx-toolbox": ">=1.8.3",
+				"sphinx-toolbox": ">=2.1.0",
 				"sphinx-debuginfo": ">=0.1.0",
 				}
 
