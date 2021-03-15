@@ -350,9 +350,7 @@ class ToxConfig(IniConfigurator):
 		self._ini["testenv:build"]["skip_install"] = True
 		self._ini["testenv:build"]["changedir"] = "{toxinidir}"
 		self._ini["testenv:build"]["deps"] = indent_join([
-				# "build[virtualenv]>=0.3.0",
-				"virtualenv",
-				"git+https://github.com/pypa/build",
+				"build[virtualenv]>=0.3.1",
 				"check-wheel-contents>=0.1.0",
 				"twine>=3.2.0",
 				*self["tox_build_requirements"],
