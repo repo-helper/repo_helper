@@ -381,27 +381,25 @@ class ToxConfig(IniConfigurator):
 			self._ini["testenv:lint"]["skip_install"] = True
 
 		self._ini["testenv:lint"]["deps"] = indent_join([
-				# "autopep8 >=1.5.2",
 				"flake8 >=3.8.2",
 				"flake8-2020 >= 1.6.0",
 				"flake8-builtins>=1.5.3",
 				"flake8-docstrings>=1.5.0",
 				"flake8-dunder-all>=0.1.1",
+				"flake8-encodings>=0.1.0",
 				"flake8-github-actions>=0.1.0",
 				"flake8-pyi>=20.10.0",
 				"flake8-pytest-style>=1.3.0",
+				"flake8-slots>=0.1.0",
 				"flake8-sphinx-links>=0.0.4",
 				"flake8-strftime>=0.1.1",
 				"flake8-typing-imports>=1.10.0",
-				"flake8-encodings>=0.1.0",
-				"flake8-slots>=0.1.0",
-				"git+https://github.com/PyCQA/pydocstyle@5118faa7173b0e5bbc230c4adf628758e13605bf",
 				"git+https://github.com/domdfcoding/flake8-quotes.git",
-				"git+https://github.com/domdfcoding/flake8-rst-docstrings.git",
 				"git+https://github.com/domdfcoding/flake8-rst-docstrings-sphinx.git",
+				"git+https://github.com/domdfcoding/flake8-rst-docstrings.git",
+				"pydocstyle>=6.0.0",
 				"pygments>=2.7.1",
 				])
-		# cmd = f"flake8 {' '.join(self.get_source_files())} --format=rst-toolbox"
 		cmd = f"python3 -m flake8_rst_docstrings_sphinx {' '.join(self.get_source_files())} --allow-toolbox {{posargs}}"
 		self._ini["testenv:lint"]["commands"] = cmd
 
