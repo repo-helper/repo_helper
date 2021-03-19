@@ -47,6 +47,7 @@ repo_helper==2020.12.18
 │   │   ├── setuptools
 │   │   └── six>=1.11.0
 │   ├── ruamel-yaml>=0.16.12
+│   │   └── ruamel.yaml.clib>=0.1.2; platform_python_implementation == "CPython" and python_version < "3.10"
 │   ├── typing-extensions>=3.7.4.3
 │   └── typing-inspect>=0.6.0
 │       ├── mypy-extensions>=0.3.0
@@ -102,6 +103,7 @@ repo_helper==2020.12.18
 │       ├── filelock<4,>=3.0.0
 │       └── six<2,>=1.9.0
 ├── ruamel-yaml>=0.16.12
+│   └── ruamel.yaml.clib>=0.1.2; platform_python_implementation == "CPython" and python_version < "3.10"
 ├── shippinglabel>=0.8.2
 │   ├── apeye>=0.7.0
 │   │   ├── appdirs>=1.4.4
@@ -187,7 +189,7 @@ repo_helper==2020.12.18
 │   │   │   └── typing-extensions>=3.7.4.3
 │   │   ├── mistletoe>=0.7.2
 │   │   └── typing-extensions>=3.7.4.3
-│   ├── domdf-python-tools>=2.1.0
+│   ├── domdf-python-tools>=2.7.0
 │   │   ├── natsort>=7.1.0
 │   │   ├── pydash>=4.7.4
 │   │   └── typing-extensions>=3.7.4.3
