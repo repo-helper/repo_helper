@@ -131,7 +131,7 @@ class DocRequirementsManager(RequirementsManager):
 				"seed-intersphinx-mapping": ">=0.3.1",
 				"default-values": ">=0.4.2",
 				"toctree-plus": ">=0.1.0",
-				"sphinx-toolbox": ">=2.1.0",
+				"sphinx-toolbox": ">=2.2.0",
 				"sphinx-debuginfo": ">=0.1.0",
 				}
 
@@ -354,6 +354,7 @@ def make_conf(repo_path: pathlib.Path, templates: jinja2.Environment) -> List[st
 			"sphinx_toolbox",
 			"sphinx_toolbox.more_autodoc",
 			"sphinx_toolbox.more_autosummary",
+			"sphinx_toolbox.documentation_summary",
 			"sphinx_toolbox.tweaks.param_dash",
 			"sphinx_toolbox.tweaks.latex_toc",
 			"sphinx.ext.intersphinx",
@@ -660,14 +661,15 @@ def rewrite_docs_index(repo_path: pathlib.Path, templates: jinja2.Environment) -
 			templates.globals["repo_name"],
 			)
 
-	short_desc_block = create_short_desc_block(templates.globals["short_desc"], )
-
 	# Do the replacement
 	index_rst = index_rst_file.read_text(encoding="UTF-8")
 	index_rst = shields_regex.sub(shields_block, index_rst)
 	index_rst = installation_regex.sub(install_block, index_rst)
 	index_rst = links_regex.sub(links_block, index_rst)
-	index_rst = short_desc_regex.sub(short_desc_block, index_rst)
+	index_rst = short_desc_regex.sub(
+			".. start short_desc\n\n.. documentation-summary::\n\n.. end short_desc",
+			index_rst,
+			)
 
 	index_rst_file.write_clean(index_rst)
 

@@ -87,7 +87,7 @@ add_module_names = False
 hide_none_rtype = True
 all_typevars = True
 overloads_location = "bottom"
-
+documentation_summary = {{ short_desc.__repr__() }}
 
 autodoc_exclude_members = [   # Exclude "standard" methods.
 	"__dict__",
