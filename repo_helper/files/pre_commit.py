@@ -184,7 +184,7 @@ pygrep_hooks = Repo(
 
 pyupgrade = Repo(
 		repo=make_github_url("asottile", "pyupgrade"),
-		rev="v2.10.1",
+		rev="v2.11.0",
 		hooks=[{"id": "pyupgrade", "args": ["--py36-plus", "--keep-runtime-typing"]}]
 		)
 
