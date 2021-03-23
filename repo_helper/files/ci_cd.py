@@ -256,9 +256,11 @@ class ActionsManager:
 		template = self.templates.get_template(ci_file.name)
 		# TODO: handle case where Linux is not a supported platform
 
-		platforms = list(
-				filter(None, (platform_ci_names.get(p, None) for p in self.templates.globals["platforms"]))
-				)
+		platforms = set((self.templates.globals["platforms"]))
+		if "macOS" in platforms:
+			platforms.remove("macOS")
+
+		platforms = set(filter(None, (platform_ci_names.get(p, None) for p in platforms)))
 
 		dependency_lines = self.get_linux_mypy_requirements()
 		linux_platform = platform_ci_names["Linux"]
@@ -291,7 +293,7 @@ class ActionsManager:
 
 		ci_file.write_clean(
 				template.render(
-						platforms=platforms,
+						platforms=sorted(platforms),
 						linux_platform=platform_ci_names["Linux"],
 						dependencies_block=indent(str(dependencies_block), "      "),
 						)
