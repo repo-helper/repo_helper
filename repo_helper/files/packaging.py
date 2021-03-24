@@ -256,7 +256,10 @@ def make_pyproject(repo_path: pathlib.Path, templates: jinja2.Environment) -> Li
 			raise NotImplementedError("Whey does not support custom source directories")
 
 		elif templates.globals["import_name"] != templates.globals["pypi_name"]:
-			data["tool"]["whey"]["package"] = posixpath.join(
+			if templates.globals["stubs_package"]:
+				data["tool"]["whey"]["package"] = "{import_name}-stubs".format_map(templates.globals)
+			else:
+				data["tool"]["whey"]["package"] = posixpath.join(
 					# templates.globals["source_dir"],
 					templates.globals["import_name"].split('.', 1)[0],
 					)
