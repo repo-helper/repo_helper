@@ -260,9 +260,9 @@ def make_pyproject(repo_path: pathlib.Path, templates: jinja2.Environment) -> Li
 				data["tool"]["whey"]["package"] = "{import_name}-stubs".format_map(templates.globals)
 			else:
 				data["tool"]["whey"]["package"] = posixpath.join(
-					# templates.globals["source_dir"],
-					templates.globals["import_name"].split('.', 1)[0],
-					)
+						# templates.globals["source_dir"],
+						templates.globals["import_name"].split('.', 1)[0],
+						)
 
 		if templates.globals["manifest_additional"]:
 			data["tool"]["whey"]["additional-files"] = templates.globals["manifest_additional"]

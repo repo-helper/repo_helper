@@ -10,6 +10,11 @@ license: 'LGPLv3+'
 short_desc: 'A tool to manage configuration files, build scripts etc. across multiple projects.'
 docs_url: https://docs.repo-helper.uk
 
+python_deploy_version: 3.7
+min_coverage: 85
+tox_testenv_extras: all
+pre_commit_exclude: "^.*\\._py$"
+
 additional_ignore:
  - Tokens
  - rh.bat
@@ -20,8 +25,6 @@ additional_ignore:
 console_scripts:
  - "repo_helper = repo_helper.__main__:main"
  - "repo-helper = repo_helper.__main__:main"
-
-python_deploy_version: 3.7
 
 # Versions to run tests for
 python_versions:
@@ -77,11 +80,6 @@ extras_require:
    - twine>=3.2.0
    - check_wheel_contents>=0.2.0
 
-sphinx_html_theme: domdf_sphinx_theme
-tox_testenv_extras: all
-pre_commit_exclude: "^.*\\._py$"
-mypy_version: "0.800"
-
 conda_channels:
  - conda-forge
 
@@ -93,8 +91,6 @@ tox_unmanaged:
 
 keywords:
  - configuration
-
-min_coverage: 85
 
 sphinx_conf_epilogue:
  - toctree_plus_types.add("fixture")
