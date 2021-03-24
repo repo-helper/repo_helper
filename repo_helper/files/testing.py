@@ -491,6 +491,7 @@ class ToxConfig(IniConfigurator):
 		self._ini["flake8"]["multiline-quotes"] = '"""'
 		self._ini["flake8"]["docstring-quotes"] = '"""'
 		self._ini["flake8"]["count"] = True
+		self._ini["flake8"]["min_python_version"] = self["requires_python"]
 
 	def coverage_run(self):
 		"""
