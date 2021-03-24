@@ -473,6 +473,11 @@ class SetupCfgConfig(IniConfigurator):
 		if not self._ini["options.entry_points"].options():
 			self._ini.remove_section("options.entry_points")
 
+		if self["use_whey"]:
+			self._ini.remove_section("metadata")
+			self._ini.remove_section("options")
+			self._ini.remove_section("options.packages.find")
+
 
 @management.register("setup_cfg")
 def make_setup_cfg(repo_path: pathlib.Path, templates: jinja2.Environment) -> List[str]:

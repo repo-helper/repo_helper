@@ -256,7 +256,7 @@ class ActionsManager:
 		template = self.templates.get_template(ci_file.name)
 		# TODO: handle case where Linux is not a supported platform
 
-		platforms = set((self.templates.globals["platforms"]))
+		platforms = set(self.templates.globals["platforms"])
 		if "macOS" in platforms:
 			platforms.remove("macOS")
 

@@ -210,12 +210,14 @@ def test_make_pyproject_whey_extras(
 				pytest.param([], id="no_classifiers"),
 				]
 		)
+@pytest.mark.parametrize("use_whey", [True, False])
 def test_make_setup_cfg(
 		tmp_pathplus: PathPlus,
 		demo_environment,
 		file_regression: FileRegressionFixture,
 		classifiers: List[str],
-		python_versions
+		python_versions,
+		use_whey: bool,
 		):
 	# TODO: permutations to cover all branches
 
@@ -230,13 +232,20 @@ def test_make_setup_cfg(
 	demo_environment.globals["use_experimental_backend"] = False
 	demo_environment.globals["enable_docs"] = True
 	demo_environment.globals["entry_points"] = {}
+	demo_environment.globals["use_whey"] = use_whey
 
 	managed_files = make_setup_cfg(tmp_pathplus, demo_environment)
 	assert managed_files == ["setup.cfg"]
 	check_file_output(tmp_pathplus / managed_files[0], file_regression)
 
 
-def test_make_setup_cfg_existing(tmp_pathplus, demo_environment, file_regression: FileRegressionFixture):
+@pytest.mark.parametrize("use_whey", [True, False])
+def test_make_setup_cfg_existing(
+		tmp_pathplus,
+		demo_environment,
+		file_regression: FileRegressionFixture,
+		use_whey: bool,
+		):
 	# TODO: permutations to cover all branches
 
 	(tmp_pathplus / "setup.cfg").write_text(
@@ -264,6 +273,7 @@ def test_make_setup_cfg_existing(tmp_pathplus, demo_environment, file_regression
 	demo_environment.globals["mypy_plugins"] = []
 	demo_environment.globals["use_experimental_backend"] = False
 	demo_environment.globals["enable_docs"] = True
+	demo_environment.globals["use_whey"] = True
 	demo_environment.globals["entry_points"] = {}
 
 	managed_files = make_setup_cfg(tmp_pathplus, demo_environment)
