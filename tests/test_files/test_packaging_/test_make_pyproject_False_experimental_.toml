@@ -9,9 +9,11 @@ description = "a short description"
 readme = "README.rst"
 keywords = [ "awesome", "python", "project",]
 dynamic = [ "requires-python", "classifiers", "dependencies",]
+
 [[project.authors]]
 email = "j.bloggs@example.com"
 name = "Joe Bloggs"
+
 
 [project.license]
 file = "LICENSE"

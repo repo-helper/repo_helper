@@ -73,6 +73,12 @@ repo_helper==2020.12.18
 │       ├── natsort>=7.1.0
 │       ├── pydash>=4.7.4
 │       └── typing-extensions>=3.7.4.3
+├── dom-toml>=0.2.2
+│   ├── domdf-python-tools>=2.7.0
+│   │   ├── natsort>=7.1.0
+│   │   ├── pydash>=4.7.4
+│   │   └── typing-extensions>=3.7.4.3
+│   └── toml>=0.10.2
 ├── domdf-python-tools>=2.7.0
 │   ├── natsort>=7.1.0
 │   ├── pydash>=4.7.4
@@ -199,7 +205,6 @@ repo_helper==2020.12.18
 │   ├── filelock>=3.0.12
 │   └── typing-extensions>=3.7.4.3
 ├── tabulate>=0.8.8
-├── toml>=0.10.2
 ├── typing-extensions>=3.7.4.3
 └── yapf-isort>=0.5.2
     ├── asttokens>=2.0.4

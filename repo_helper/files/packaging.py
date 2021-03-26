@@ -32,8 +32,8 @@ import textwrap
 from typing import Any, Dict, List, Tuple, TypeVar
 
 # 3rd party
+import dom_toml
 import jinja2
-import toml
 from domdf_python_tools.compat import importlib_resources
 from domdf_python_tools.paths import PathPlus
 from natsort import natsorted
@@ -44,14 +44,7 @@ import repo_helper.files
 from repo_helper.configupdater2 import ConfigUpdater
 from repo_helper.configuration.utils import get_version_classifiers
 from repo_helper.files import management
-from repo_helper.utils import (
-		CustomTomlEncoder,
-		IniConfigurator,
-		indent_join,
-		indent_with_tab,
-		license_lookup,
-		reformat_file
-		)
+from repo_helper.utils import IniConfigurator, indent_join, indent_with_tab, license_lookup, reformat_file
 
 __all__ = [
 		"make_manifest",
@@ -140,7 +133,7 @@ def make_pyproject(repo_path: pathlib.Path, templates: jinja2.Environment) -> Li
 	data: DefaultDict[str, Any]
 
 	if pyproject_file.is_file():
-		data = DefaultDict(toml.loads(pyproject_file.read_text()))
+		data = DefaultDict(dom_toml.load(pyproject_file))
 	else:
 		data = DefaultDict()
 
@@ -274,7 +267,7 @@ def make_pyproject(repo_path: pathlib.Path, templates: jinja2.Environment) -> Li
 		data["tool"]["importcheck"] = data["tool"].get("importcheck", {})
 
 	# TODO: managed message
-	pyproject_file.write_clean(toml.dumps(data, encoder=CustomTomlEncoder(dict)))
+	dom_toml.dump(data, pyproject_file, encoder=dom_toml.TomlEncoder)
 
 	return [pyproject_file.name]
 

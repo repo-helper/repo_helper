@@ -33,8 +33,8 @@ from operator import attrgetter
 from typing import Any, Dict, List, Tuple
 
 # 3rd party
+import dom_toml
 import jinja2
-import toml
 from domdf_python_tools.paths import PathPlus
 from domdf_python_tools.stringlist import DelimitedList
 from domdf_python_tools.typing import PathLike
@@ -51,7 +51,7 @@ from shippinglabel.requirements import (
 from repo_helper.configupdater2 import ConfigUpdater
 from repo_helper.files import management
 from repo_helper.files.linting import code_only_warning, lint_warn_list
-from repo_helper.utils import CustomTomlEncoder, IniConfigurator, indent_join
+from repo_helper.utils import IniConfigurator, indent_join
 
 __all__ = [
 		"make_tox",
@@ -704,7 +704,7 @@ def make_formate_toml(repo_path: pathlib.Path, templates: jinja2.Environment) ->
 	known_third_party.update(isort_config["known_third_party"])
 
 	if formate_file.is_file():
-		formate_config = toml.loads(formate_file.read_text())
+		formate_config = dom_toml.load(formate_file)
 	else:
 		formate_config = {}
 
@@ -748,7 +748,7 @@ def make_formate_toml(repo_path: pathlib.Path, templates: jinja2.Environment) ->
 	formate_config["config"] = config
 
 	formate_file = PathPlus(repo_path / "formate.toml")
-	formate_file.write_clean(toml.dumps(formate_config, encoder=CustomTomlEncoder(dict)))
+	dom_toml.dump(formate_config, formate_file, encoder=dom_toml.TomlEncoder)
 
 	return [formate_file.name, isort_file.name]
 

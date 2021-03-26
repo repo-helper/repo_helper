@@ -4,6 +4,7 @@ click==7.1.2
 configconfig>=0.5.0
 consolekit>=1.0.0
 dict2css>=0.2.0
+dom-toml>=0.2.2
 domdf-python-tools>=2.7.0
 dulwich>=0.19.16
 email-validator==1.1.2
@@ -18,6 +19,5 @@ ruamel-yaml>=0.16.12
 shippinglabel>=0.8.2
 southwark>=0.7.1
 tabulate>=0.8.8
-toml>=0.10.2
 typing-extensions>=3.7.4.3
 yapf-isort>=0.5.2
