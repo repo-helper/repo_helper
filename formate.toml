@@ -47,6 +47,7 @@ known_third_party = [
     "coverage_pyver_pragma",
     "css_parser",
     "dict2css",
+    "dom_toml",
     "domdf_python_tools",
     "dulwich",
     "email_validator",
