@@ -27,7 +27,7 @@ Manage configuration files for continuous integration / continuous deployment.
 import pathlib
 import posixpath
 from textwrap import indent
-from typing import Dict, Iterable, Iterator, List
+from typing import Dict, Iterable, Iterator, List, Optional
 
 # 3rd party
 import jinja2
@@ -553,13 +553,6 @@ def ensure_bumpversion(repo_path: pathlib.Path, templates: jinja2.Environment) -
 	:param templates:
 	"""
 
-	# TODO:
-	"""
-	[bumpversion:file:shippinglabel/__init__.py]
-	search = : str = "{current_version}"
-	replace = : str = "{new_version}"
-	"""
-
 	bumpversion_file = PathPlus(repo_path / ".bumpversion.cfg")
 
 	if not bumpversion_file.is_file():
@@ -587,6 +580,13 @@ def ensure_bumpversion(repo_path: pathlib.Path, templates: jinja2.Environment) -
 		if section not in bv.sections():
 			bv.add_section(section)
 
+	init_filename = get_init_filename(templates)
+	if init_filename is not None:
+		init_section = bv[f"bumpversion:file:{init_filename}"]
+		if "search" not in init_section:
+			init_section["search"] = ': str = "{current_version}"'
+			init_section["replace"] = ': str = "{new_version}"'
+
 	bv["bumpversion"]["current_version"] = templates.globals["version"]
 	bv["bumpversion"]["commit"] = "True"
 	bv["bumpversion"]["tag"] = "True"
@@ -610,12 +610,21 @@ def get_bumpversion_filenames(templates: jinja2.Environment) -> Iterable[str]:
 	if templates.globals["enable_docs"]:
 		yield f"{templates.globals['docs_dir']}/index.rst"
 
+	init_filename = get_init_filename(templates)
+
+	if init_filename is not None:
+		yield init_filename
+
+
+def get_init_filename(templates: jinja2.Environment) -> Optional[str]:
 	if templates.globals["py_modules"]:
 		for modname in templates.globals["py_modules"]:
-			yield f"{templates.globals['source_dir']}{modname}.py"
+			return f"{templates.globals['source_dir']}{modname}.py"
 	elif not templates.globals["stubs_package"]:
 		source_dir = posixpath.join(
 				templates.globals["source_dir"],
 				templates.globals["import_name"].replace('.', '/'),
 				)
-		yield f"{source_dir}/__init__.py"
+		return f"{source_dir}/__init__.py"
+
+	return None
