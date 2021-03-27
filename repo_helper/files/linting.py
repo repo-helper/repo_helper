@@ -214,6 +214,8 @@ lint_warn_list.extend((
 		"ENC002",  # 'encoding=None' used for 'open'.
 		"ENC003",  # no encoding specified for 'open' with unknown mode.
 		"ENC004",  # 'encoding=None' used for 'open' with unknown mode.
+		"ENC011",  # no encoding specified for 'configparser.ConfigParser.read'.
+		"ENC012",  # 'encoding=None' used for 'configparser.ConfigParser.read'.
 		))
 
 # pydocstyle
