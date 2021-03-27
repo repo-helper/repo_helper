@@ -21,7 +21,7 @@
 #
 
 # 3rd party
-from coincidence import check_file_output
+from coincidence.regressions import check_file_output
 from pytest_regressions.file_regression import FileRegressionFixture
 
 # this package

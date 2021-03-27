@@ -5,7 +5,7 @@ from email import message_from_file
 
 # 3rd party
 import pytest
-from coincidence import check_file_output
+from coincidence.regressions import check_file_output
 from domdf_python_tools.paths import PathPlus
 from pytest_regressions.data_regression import DataRegressionFixture
 from pytest_regressions.file_regression import FileRegressionFixture

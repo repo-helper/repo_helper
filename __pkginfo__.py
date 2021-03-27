@@ -30,6 +30,6 @@ __version__ = "2021.3.12"
 repo_root = pathlib.Path(__file__).parent
 install_requires = (repo_root / "requirements.txt").read_text(encoding="utf-8").split('\n')
 extras_require = {
-		"testing": ["check-wheel-contents>=0.2.0", "coincidence>=0.1.2", "pytest>=6.0.0", "twine>=3.2.0"],
-		"all": ["check-wheel-contents>=0.2.0", "coincidence>=0.1.2", "pytest>=6.0.0", "twine>=3.2.0"]
+		"testing": ["check-wheel-contents>=0.2.0", "coincidence>=0.2.0", "pytest>=6.0.0", "twine>=3.2.0"],
+		"all": ["check-wheel-contents>=0.2.0", "coincidence>=0.2.0", "pytest>=6.0.0", "twine>=3.2.0"]
 		}

@@ -5,7 +5,7 @@ from typing import List
 
 # 3rd party
 import pytest
-from coincidence import check_file_output
+from coincidence.regressions import check_file_output
 from consolekit.testing import CliRunner, Result
 from domdf_python_tools.paths import in_directory
 from dulwich.config import StackedConfig

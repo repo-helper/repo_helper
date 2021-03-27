@@ -5,7 +5,7 @@ import re
 # 3rd party
 import pytest
 from click import Abort
-from coincidence import check_file_regression
+from coincidence.regressions import check_file_regression
 from domdf_python_tools.paths import in_directory
 from pytest_regressions.data_regression import DataRegressionFixture
 from pytest_regressions.file_regression import FileRegressionFixture
