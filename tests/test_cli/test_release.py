@@ -3,10 +3,9 @@ import re
 from typing import TYPE_CHECKING, Callable, List, Optional
 
 # 3rd party
-from coincidence.regressions import check_file_regression
+from coincidence.regressions import AdvancedFileRegressionFixture, check_file_regression
 from consolekit.testing import CliRunner, Result
 from domdf_python_tools.paths import PathPlus, in_directory
-from pytest_regressions.file_regression import FileRegressionFixture
 from southwark import get_tags
 from southwark.repo import Repo
 
@@ -23,7 +22,7 @@ else:
 
 def do_test_release(
 		temp_repo: Repo,
-		file_regression: FileRegressionFixture,
+		advanced_file_regression: AdvancedFileRegressionFixture,
 		expected_version: str,
 		command: Command,
 		args: Optional[List[str]] = None,
@@ -79,7 +78,9 @@ def do_test_release(
 		else:
 			assert not result.stderr
 
-		check_file_regression('\n'.join(result.stdout.splitlines()[:-1]), file_regression, extension="_stdout.txt")
+		check_file_regression(
+				'\n'.join(result.stdout.splitlines()[:-1]), advanced_file_regression, extension="_stdout.txt"
+				)
 
 		m = re.match("Committed as ([A-Za-z0-9]{40})", result.stdout.splitlines()[-1])
 		assert m is not None
@@ -95,7 +96,7 @@ def do_test_release(
 			if extension == ".py":
 				extension = "._py_"
 
-			return check_file_regression(data, file_regression, extension)
+			return check_file_regression(data, advanced_file_regression, extension)
 
 		check_file(temp_repo.path / ".bumpversion.cfg", extension=".bumpversion.cfg")
 		check_file(temp_repo.path / "pyproject.toml", extension="_pyproject.toml")
@@ -111,40 +112,40 @@ def do_test_release(
 
 
 @pypy_windows_dulwich
-def test_release_minor(temp_repo, file_regression: FileRegressionFixture):
+def test_release_minor(temp_repo, advanced_file_regression: AdvancedFileRegressionFixture):
 	do_test_release(
 			temp_repo,
-			file_regression,
+			advanced_file_regression,
 			expected_version="0.1.0",
 			command=minor,
 			)
 
 
 @pypy_windows_dulwich
-def test_release_major(temp_repo, file_regression: FileRegressionFixture):
+def test_release_major(temp_repo, advanced_file_regression: AdvancedFileRegressionFixture):
 	do_test_release(
 			temp_repo,
-			file_regression,
+			advanced_file_regression,
 			expected_version="1.0.0",
 			command=major,
 			)
 
 
 @pypy_windows_dulwich
-def test_release_patch(temp_repo, file_regression: FileRegressionFixture):
+def test_release_patch(temp_repo, advanced_file_regression: AdvancedFileRegressionFixture):
 	do_test_release(
 			temp_repo,
-			file_regression,
+			advanced_file_regression,
 			expected_version="0.0.2",
 			command=patch,
 			)
 
 
 @pypy_windows_dulwich
-def test_release_version(temp_repo, file_regression: FileRegressionFixture):
+def test_release_version(temp_repo, advanced_file_regression: AdvancedFileRegressionFixture):
 	do_test_release(
 			temp_repo,
-			file_regression,
+			advanced_file_regression,
 			expected_version="1.2.3",
 			command=release,
 			args=["1.2.3"],
@@ -152,7 +153,7 @@ def test_release_version(temp_repo, file_regression: FileRegressionFixture):
 
 
 @pypy_windows_dulwich
-def test_release_unclean(temp_repo, file_regression: FileRegressionFixture):
+def test_release_unclean(temp_repo, advanced_file_regression: AdvancedFileRegressionFixture):
 	(temp_repo.path / "file.txt").write_clean("Hello World")
 	temp_repo.stage("file.txt")
 
@@ -183,7 +184,7 @@ def test_release_unclean(temp_repo, file_regression: FileRegressionFixture):
 
 
 #
-# def test_release_coward(temp_repo, file_regression: FileRegressionFixture):
+# def test_release_coward(temp_repo, advanced_file_regression: AdvancedFileRegressionFixture):
 #
 # 	config_file_content = (temp_repo.path / "repo_helper.yml").read_lines()
 #
@@ -225,13 +226,13 @@ def test_release_unclean(temp_repo, file_regression: FileRegressionFixture):
 
 
 @pypy_windows_dulwich
-def test_release_minor_unclean_force(temp_repo, file_regression: FileRegressionFixture):
+def test_release_minor_unclean_force(temp_repo, advanced_file_regression: AdvancedFileRegressionFixture):
 	(temp_repo.path / "file.txt").write_clean("Hello World")
 	temp_repo.stage("file.txt")
 
 	do_test_release(
 			temp_repo,
-			file_regression,
+			advanced_file_regression,
 			expected_version="0.1.0",
 			command=minor,
 			force=True,
@@ -239,13 +240,13 @@ def test_release_minor_unclean_force(temp_repo, file_regression: FileRegressionF
 
 
 @pypy_windows_dulwich
-def test_release_major_unclean_force(temp_repo, file_regression: FileRegressionFixture):
+def test_release_major_unclean_force(temp_repo, advanced_file_regression: AdvancedFileRegressionFixture):
 	(temp_repo.path / "file.txt").write_clean("Hello World")
 	temp_repo.stage("file.txt")
 
 	do_test_release(
 			temp_repo,
-			file_regression,
+			advanced_file_regression,
 			expected_version="1.0.0",
 			command=major,
 			force=True,
@@ -253,13 +254,13 @@ def test_release_major_unclean_force(temp_repo, file_regression: FileRegressionF
 
 
 @pypy_windows_dulwich
-def test_release_patch_unclean_force(temp_repo, file_regression: FileRegressionFixture):
+def test_release_patch_unclean_force(temp_repo, advanced_file_regression: AdvancedFileRegressionFixture):
 	(temp_repo.path / "file.txt").write_clean("Hello World")
 	temp_repo.stage("file.txt")
 
 	do_test_release(
 			temp_repo,
-			file_regression,
+			advanced_file_regression,
 			expected_version="0.0.2",
 			command=patch,
 			force=True,
@@ -267,13 +268,13 @@ def test_release_patch_unclean_force(temp_repo, file_regression: FileRegressionF
 
 
 @pypy_windows_dulwich
-def test_release_version_unclean_force(temp_repo, file_regression: FileRegressionFixture):
+def test_release_version_unclean_force(temp_repo, advanced_file_regression: AdvancedFileRegressionFixture):
 	(temp_repo.path / "file.txt").write_clean("Hello World")
 	temp_repo.stage("file.txt")
 
 	do_test_release(
 			temp_repo,
-			file_regression,
+			advanced_file_regression,
 			expected_version="1.2.3",
 			command=release,
 			args=["1.2.3"],

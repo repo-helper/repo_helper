@@ -9,9 +9,11 @@ description = "A tool to manage configuration files, build scripts etc. across m
 readme = "README.rst"
 keywords = [ "configuration",]
 dynamic = [ "requires-python", "classifiers", "dependencies",]
+
 [[project.authors]]
 email = "dominic@davis-foster.co.uk"
 name = "Dominic Davis-Foster"
+
 
 [project.license]
 file = "LICENSE"
@@ -27,5 +29,5 @@ repo_helper = "repo_helper.__main__:main"
 repo-helper = "repo_helper.__main__:main"
 
 [project.optional-dependencies]
-testing = [ "check-wheel-contents>=0.2.0", "coincidence>=0.1.2", "pytest>=6.0.0", "twine>=3.2.0",]
-all = [ "check-wheel-contents>=0.2.0", "coincidence>=0.1.2", "pytest>=6.0.0", "twine>=3.2.0",]
+testing = [ "check-wheel-contents>=0.2.0", "coincidence>=0.2.0", "pytest>=6.0.0", "twine>=3.2.0",]
+all = [ "check-wheel-contents>=0.2.0", "coincidence>=0.2.0", "pytest>=6.0.0", "twine>=3.2.0",]

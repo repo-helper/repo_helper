@@ -5,10 +5,9 @@ from email import message_from_file
 
 # 3rd party
 import pytest
-from coincidence.regressions import check_file_output
+from coincidence.regressions import AdvancedFileRegressionFixture
 from domdf_python_tools.paths import PathPlus
 from pytest_regressions.data_regression import DataRegressionFixture
-from pytest_regressions.file_regression import FileRegressionFixture
 
 # this package
 from repo_helper.build import Builder
@@ -76,11 +75,11 @@ def test_info_dir(builder):
 	assert info_dir.name == "info"
 
 
-def test_write_entry_points(builder, file_regression: FileRegressionFixture):
+def test_write_entry_points(builder, advanced_file_regression: AdvancedFileRegressionFixture):
 	builder.config["console_scripts"] = ["foo = bar:baz"]
 	builder.write_entry_points()
 	assert (builder.dist_info / "entry_points.txt").is_file()
-	check_file_output(builder.dist_info / "entry_points.txt", file_regression)
+	advanced_file_regression.check_file(builder.dist_info / "entry_points.txt")
 
 
 @pytest.mark.parametrize(
@@ -112,16 +111,18 @@ def test_copy_license(builder, filename):
 	assert (builder.dist_info / filename).read_text() == "This is the license.\n"
 
 
-def test_write_wheel(builder, file_regression: FileRegressionFixture, data_regression: DataRegressionFixture):
+def test_write_wheel(
+		builder, advanced_file_regression: AdvancedFileRegressionFixture, data_regression: DataRegressionFixture
+		):
 	builder.write_wheel()
-	check_file_output(builder.dist_info / "WHEEL", file_regression)
+	advanced_file_regression.check_file(builder.dist_info / "WHEEL")
 	# Check the file can be read by EmailMessage
 	with (builder.dist_info / "WHEEL").open() as fp:
 		data = message_from_file(fp)
 	data_regression.check(dict(data))
 
 
-def test_write_metadata(builder, file_regression: FileRegressionFixture):
+def test_write_metadata(builder, advanced_file_regression: AdvancedFileRegressionFixture):
 
 	(builder.repo_dir / "requirements.txt").write_lines([
 			"alabaster>=0.7.12",
@@ -152,4 +153,4 @@ This is the readme.
 	builder.write_metadata(metadata_file=builder.build_dir / "METADATA")
 	assert (builder.build_dir / "METADATA").exists()
 	assert (builder.build_dir / "METADATA").is_file()
-	check_file_output(builder.build_dir / "METADATA", file_regression)
+	advanced_file_regression.check_file(builder.build_dir / "METADATA")

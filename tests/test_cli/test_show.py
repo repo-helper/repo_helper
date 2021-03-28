@@ -1,10 +1,9 @@
 # 3rd party
 import pytest
-from coincidence.regressions import check_file_regression
+from coincidence.regressions import AdvancedFileRegressionFixture
 from coincidence.selectors import min_version, not_pypy, only_version
 from consolekit.testing import CliRunner, Result
 from domdf_python_tools.paths import PathPlus, in_directory
-from pytest_regressions.file_regression import FileRegressionFixture
 
 # this package
 from repo_helper.cli.commands import show
@@ -12,7 +11,7 @@ from tests import pypy_windows_dulwich
 
 
 @pypy_windows_dulwich
-def test_version(tmp_repo, file_regression: FileRegressionFixture):
+def test_version(tmp_repo, advanced_file_regression: AdvancedFileRegressionFixture):
 
 	(tmp_repo / "repo_helper.yml").write_lines([
 			"modname: repo_helper",
@@ -30,11 +29,11 @@ def test_version(tmp_repo, file_regression: FileRegressionFixture):
 		result: Result = runner.invoke(show.version, catch_exceptions=False)
 
 	assert result.exit_code == 0
-	result.check_stdout(file_regression)
+	result.check_stdout(advanced_file_regression)
 
 
 @pypy_windows_dulwich
-def test_changelog(tmp_repo, file_regression: FileRegressionFixture):
+def test_changelog(tmp_repo, advanced_file_regression: AdvancedFileRegressionFixture):
 
 	# TODO: -n/--entries
 	# TODO: -r/--reverse
@@ -55,7 +54,7 @@ def test_changelog(tmp_repo, file_regression: FileRegressionFixture):
 		result: Result = runner.invoke(show.changelog, catch_exceptions=False)
 
 	assert result.exit_code == 0
-	result.check_stdout(file_regression)
+	result.check_stdout(advanced_file_regression)
 
 
 version_specific = pytest.mark.parametrize(
@@ -82,7 +81,7 @@ class TestShowRequirements:
 	def test_requirements(
 			self,
 			tmp_repo,
-			file_regression: FileRegressionFixture,
+			advanced_file_regression: AdvancedFileRegressionFixture,
 			py_version,
 			fixed_version_number,
 			):
@@ -95,13 +94,13 @@ class TestShowRequirements:
 				result: Result = runner.invoke(show.requirements, catch_exceptions=False, args="--no-venv")
 
 			assert result.exit_code == 0
-			check_file_regression(result.stdout.rstrip(), file_regression, extension=".tree")
+			result.check_stdout(advanced_file_regression, extension=".tree")
 
 	@version_specific
 	def test_requirements_concise(
 			self,
 			tmp_repo,
-			file_regression: FileRegressionFixture,
+			advanced_file_regression: AdvancedFileRegressionFixture,
 			py_version,
 			fixed_version_number,
 			):
@@ -115,20 +114,20 @@ class TestShowRequirements:
 						)
 
 			assert result.exit_code == 0
-			check_file_regression(result.stdout.rstrip(), file_regression, extension=".tree")
+			result.check_stdout(advanced_file_regression, extension=".tree")
 
 			with in_directory(directory):
 				runner = CliRunner()
 				result = runner.invoke(show.requirements, catch_exceptions=False, args=["-c", "--no-venv"])
 
 			assert result.exit_code == 0
-			check_file_regression(result.stdout.rstrip(), file_regression, extension=".tree")
+			result.check_stdout(advanced_file_regression, extension=".tree")
 
 	@version_specific
 	def test_requirements_no_pager(
 			self,
 			tmp_repo,
-			file_regression: FileRegressionFixture,
+			advanced_file_regression: AdvancedFileRegressionFixture,
 			py_version,
 			fixed_version_number,
 			):
@@ -142,11 +141,11 @@ class TestShowRequirements:
 						)
 
 			assert result.exit_code == 0
-			check_file_regression(result.stdout.rstrip(), file_regression, extension=".tree")
+			result.check_stdout(advanced_file_regression, extension=".tree")
 
 
 @pypy_windows_dulwich
-def test_log(tmp_repo, file_regression: FileRegressionFixture):
+def test_log(tmp_repo, advanced_file_regression: AdvancedFileRegressionFixture):
 
 	# TODO: -n/--entries
 	# TODO: -r/--reverse
@@ -158,4 +157,4 @@ def test_log(tmp_repo, file_regression: FileRegressionFixture):
 		result: Result = runner.invoke(show.log, catch_exceptions=False)
 
 	assert result.exit_code == 0
-	result.check_stdout(file_regression)
+	result.check_stdout(advanced_file_regression)

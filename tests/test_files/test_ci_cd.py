@@ -26,10 +26,9 @@ from typing import List
 
 # 3rd party
 import pytest
-from coincidence.regressions import AdvancedDataRegressionFixture, check_file_output
+from coincidence.regressions import AdvancedDataRegressionFixture, AdvancedFileRegressionFixture
 from domdf_python_tools.paths import PathPlus
 from pytest_regressions.data_regression import DataRegressionFixture
-from pytest_regressions.file_regression import FileRegressionFixture
 
 # this package
 from repo_helper.configuration import get_tox_python_versions
@@ -51,7 +50,7 @@ from repo_helper.files.old import remove_copy_pypi_2_github, remove_make_conda_r
 def test_actions_deploy_conda(
 		tmp_pathplus: PathPlus,
 		demo_environment,
-		file_regression: FileRegressionFixture,
+		advanced_file_regression: AdvancedFileRegressionFixture,
 		):
 	managed_files = make_actions_deploy_conda(tmp_pathplus, demo_environment)
 	assert managed_files == [
@@ -60,14 +59,14 @@ def test_actions_deploy_conda(
 			".github/actions_deploy_conda.sh",
 			".ci/actions_deploy_conda.sh",
 			]
-	check_file_output(tmp_pathplus / managed_files[0], file_regression, extension="_build.sh")
-	check_file_output(tmp_pathplus / managed_files[2], file_regression, extension="_deploy.sh")
+	advanced_file_regression.check_file(tmp_pathplus / managed_files[0], extension="_build.sh")
+	advanced_file_regression.check_file(tmp_pathplus / managed_files[2], extension="_deploy.sh")
 
 
 def test_github_ci_case_1(
 		tmp_pathplus: PathPlus,
 		demo_environment,
-		file_regression: FileRegressionFixture,
+		advanced_file_regression: AdvancedFileRegressionFixture,
 		advanced_data_regression: AdvancedDataRegressionFixture,
 		):
 	demo_environment.globals["gh_actions_versions"] = {
@@ -79,13 +78,13 @@ def test_github_ci_case_1(
 	advanced_data_regression.check(managed_files, basename="github_ci_managed_files")
 	assert (tmp_pathplus / managed_files[0]).is_file()
 	assert not (tmp_pathplus / managed_files[1]).is_file()
-	check_file_output(tmp_pathplus / managed_files[0], file_regression)
+	advanced_file_regression.check_file(tmp_pathplus / managed_files[0])
 
 
 def test_github_ci_case_2(
 		tmp_pathplus: PathPlus,
 		demo_environment,
-		file_regression: FileRegressionFixture,
+		advanced_file_regression: AdvancedFileRegressionFixture,
 		advanced_data_regression: AdvancedDataRegressionFixture,
 		):
 
@@ -96,13 +95,13 @@ def test_github_ci_case_2(
 	advanced_data_regression.check(managed_files, basename="github_ci_managed_files")
 	assert not (tmp_pathplus / managed_files[0]).is_file()
 	assert (tmp_pathplus / managed_files[1]).is_file()
-	check_file_output(tmp_pathplus / managed_files[1], file_regression)
+	advanced_file_regression.check_file(tmp_pathplus / managed_files[1])
 
 
 def test_github_ci_windows_38(
 		tmp_pathplus: PathPlus,
 		demo_environment,
-		file_regression: FileRegressionFixture,
+		advanced_file_regression: AdvancedFileRegressionFixture,
 		):
 
 	demo_environment.globals["travis_additional_requirements"] = ["isort", "black"]
@@ -111,11 +110,11 @@ def test_github_ci_windows_38(
 
 	demo_environment.globals["py_versions"] = ["3.6", "3.7", "3.8"]
 	managed_files = make_github_ci(tmp_pathplus, demo_environment)
-	check_file_output(tmp_pathplus / managed_files[1], file_regression)
+	advanced_file_regression.check_file(tmp_pathplus / managed_files[1])
 
 	demo_environment.globals["py_versions"] = ["3.6", "3.7"]
 	managed_files = make_github_ci(tmp_pathplus, demo_environment)
-	check_file_output(tmp_pathplus / managed_files[1], file_regression)
+	advanced_file_regression.check_file(tmp_pathplus / managed_files[1])
 
 
 def test_github_ci_case_3(
@@ -163,7 +162,7 @@ def test_remove_make_conda_recipe(tmp_pathplus: PathPlus, demo_environment):
 def test_make_github_manylinux(
 		tmp_pathplus: PathPlus,
 		demo_environment,
-		file_regression: FileRegressionFixture,
+		advanced_file_regression: AdvancedFileRegressionFixture,
 		platforms,
 		py_versions,
 		):
@@ -173,7 +172,7 @@ def test_make_github_manylinux(
 	demo_environment.globals["py_versions"] = py_versions
 
 	assert make_github_manylinux(tmp_pathplus, demo_environment) == [".github/workflows/manylinux_build.yml"]
-	check_file_output(tmp_pathplus / ".github/workflows/manylinux_build.yml", file_regression)
+	advanced_file_regression.check_file(tmp_pathplus / ".github/workflows/manylinux_build.yml")
 
 	demo_environment.globals["platforms"] = ["Windows"]
 
@@ -185,7 +184,7 @@ def test_make_github_manylinux(
 def test_make_github_manylinux_pure_python(
 		tmp_pathplus: PathPlus,
 		demo_environment,
-		file_regression: FileRegressionFixture,
+		advanced_file_regression: AdvancedFileRegressionFixture,
 		platforms,
 		):
 
@@ -200,27 +199,31 @@ def test_make_github_manylinux_pure_python(
 def test_make_github_docs_test(
 		tmp_pathplus,
 		demo_environment,
-		file_regression: FileRegressionFixture,
+		advanced_file_regression: AdvancedFileRegressionFixture,
 		fail_on_warning,
 		):
 	demo_environment.globals["docs_fail_on_warning"] = fail_on_warning
 	assert make_github_docs_test(tmp_pathplus, demo_environment) == [".github/workflows/docs_test_action.yml"]
-	check_file_output(tmp_pathplus / ".github/workflows/docs_test_action.yml", file_regression)
+	advanced_file_regression.check_file(tmp_pathplus / ".github/workflows/docs_test_action.yml")
 
 
-def test_make_github_octocheese(tmp_pathplus, demo_environment, file_regression: FileRegressionFixture):
+def test_make_github_octocheese(
+		tmp_pathplus, demo_environment, advanced_file_regression: AdvancedFileRegressionFixture
+		):
 	assert make_github_octocheese(tmp_pathplus, demo_environment) == [".github/workflows/octocheese.yml"]
 	assert (tmp_pathplus / ".github/workflows/octocheese.yml").is_file()
-	check_file_output(tmp_pathplus / ".github/workflows/octocheese.yml", file_regression)
+	advanced_file_regression.check_file(tmp_pathplus / ".github/workflows/octocheese.yml")
 	demo_environment.globals["on_pypi"] = False
 	assert make_github_octocheese(tmp_pathplus, demo_environment) == [".github/workflows/octocheese.yml"]
 	assert not (tmp_pathplus / ".github/workflows/octocheese.yml").exists()
 
 
-def test_make_github_flake8(tmp_pathplus, demo_environment, file_regression: FileRegressionFixture):
+def test_make_github_flake8(
+		tmp_pathplus, demo_environment, advanced_file_regression: AdvancedFileRegressionFixture
+		):
 	assert make_github_flake8(tmp_pathplus, demo_environment) == [".github/workflows/flake8.yml"]
 	assert (tmp_pathplus / ".github/workflows/flake8.yml").is_file()
-	check_file_output(tmp_pathplus / ".github/workflows/flake8.yml", file_regression)
+	advanced_file_regression.check_file(tmp_pathplus / ".github/workflows/flake8.yml")
 
 
 @pytest.mark.parametrize(
@@ -234,14 +237,14 @@ def test_make_github_flake8(tmp_pathplus, demo_environment, file_regression: Fil
 def test_make_github_mypy(
 		tmp_pathplus: PathPlus,
 		demo_environment,
-		file_regression: FileRegressionFixture,
+		advanced_file_regression: AdvancedFileRegressionFixture,
 		platforms,
 		):
 	demo_environment.globals["platforms"] = platforms
 
 	assert make_github_mypy(tmp_pathplus, demo_environment) == [".github/workflows/mypy.yml"]
 	assert (tmp_pathplus / ".github/workflows/mypy.yml").is_file()
-	check_file_output(tmp_pathplus / ".github/workflows/mypy.yml", file_regression)
+	advanced_file_regression.check_file(tmp_pathplus / ".github/workflows/mypy.yml")
 
 
 @pytest.mark.parametrize(
@@ -259,7 +262,7 @@ def test_make_github_mypy(
 def test_make_github_mypy_extra_install(
 		tmp_pathplus: PathPlus,
 		demo_environment,
-		file_regression: FileRegressionFixture,
+		advanced_file_regression: AdvancedFileRegressionFixture,
 		extra_install_pre: List[str],
 		extra_install_post: List[str],
 		):
@@ -269,13 +272,13 @@ def test_make_github_mypy_extra_install(
 
 	assert make_github_mypy(tmp_pathplus, demo_environment) == [".github/workflows/mypy.yml"]
 	assert (tmp_pathplus / ".github/workflows/mypy.yml").is_file()
-	check_file_output(tmp_pathplus / ".github/workflows/mypy.yml", file_regression)
+	advanced_file_regression.check_file(tmp_pathplus / ".github/workflows/mypy.yml")
 
 
 def test_make_github_mypy_extra_install_only_linux(
 		tmp_pathplus: PathPlus,
 		demo_environment,
-		file_regression: FileRegressionFixture,
+		advanced_file_regression: AdvancedFileRegressionFixture,
 		):
 
 	demo_environment.globals["travis_extra_install_pre"] = ["sudo apt update"]
@@ -284,7 +287,7 @@ def test_make_github_mypy_extra_install_only_linux(
 
 	assert make_github_mypy(tmp_pathplus, demo_environment) == [".github/workflows/mypy.yml"]
 	assert (tmp_pathplus / ".github/workflows/mypy.yml").is_file()
-	check_file_output(tmp_pathplus / ".github/workflows/mypy.yml", file_regression)
+	advanced_file_regression.check_file(tmp_pathplus / ".github/workflows/mypy.yml")
 
 
 @pytest.mark.parametrize("py_versions", [["3.6", "3.7", "3.8"], ["3.6", "3.7"]])
@@ -293,7 +296,7 @@ def test_make_github_mypy_extra_install_only_linux(
 def test_ensure_bumpversion(
 		tmp_pathplus: PathPlus,
 		demo_environment,
-		file_regression: FileRegressionFixture,
+		advanced_file_regression: AdvancedFileRegressionFixture,
 		enable_docs,
 		py_versions,
 		py_modules,
@@ -302,13 +305,13 @@ def test_ensure_bumpversion(
 	demo_environment.globals["version"] = "1.2.3"
 	demo_environment.globals["enable_docs"] = enable_docs
 	assert ensure_bumpversion(tmp_pathplus, demo_environment) == [".bumpversion.cfg"]
-	check_file_output(tmp_pathplus / ".bumpversion.cfg", file_regression)
+	advanced_file_regression.check_file(tmp_pathplus / ".bumpversion.cfg")
 
 
 def test_ensure_bumpversion_remove_docs(
 		tmp_pathplus: PathPlus,
 		demo_environment,
-		file_regression: FileRegressionFixture,
+		advanced_file_regression: AdvancedFileRegressionFixture,
 		):
 
 	demo_environment.globals["version"] = "1.2.3"
@@ -318,13 +321,13 @@ def test_ensure_bumpversion_remove_docs(
 	demo_environment.globals["enable_docs"] = False
 	ensure_bumpversion(tmp_pathplus, demo_environment)
 
-	check_file_output(tmp_pathplus / ".bumpversion.cfg", file_regression)
+	advanced_file_regression.check_file(tmp_pathplus / ".bumpversion.cfg")
 
 
 def test_make_github_linux_case_1(
 		tmp_pathplus: PathPlus,
 		demo_environment,
-		file_regression: FileRegressionFixture,
+		advanced_file_regression: AdvancedFileRegressionFixture,
 		advanced_data_regression: AdvancedDataRegressionFixture,
 		):
 
@@ -336,13 +339,13 @@ def test_make_github_linux_case_1(
 	assert not (tmp_pathplus / managed_files[1]).is_file()
 	assert (tmp_pathplus / managed_files[2]).is_file()
 
-	check_file_output(tmp_pathplus / managed_files[2], file_regression)
+	advanced_file_regression.check_file(tmp_pathplus / managed_files[2])
 
 
 def test_make_github_linux_case_2(
 		tmp_pathplus: PathPlus,
 		demo_environment,
-		file_regression: FileRegressionFixture,
+		advanced_file_regression: AdvancedFileRegressionFixture,
 		advanced_data_regression: AdvancedDataRegressionFixture,
 		):
 
@@ -361,7 +364,7 @@ def test_make_github_linux_case_2(
 	assert not (tmp_pathplus / managed_files[1]).is_file()
 	assert (tmp_pathplus / managed_files[2]).is_file()
 
-	check_file_output(tmp_pathplus / managed_files[2], file_regression)
+	advanced_file_regression.check_file(tmp_pathplus / managed_files[2])
 
 
 @pytest.mark.parametrize("pure_python", [True, False])
@@ -370,7 +373,7 @@ def test_make_github_linux_case_2(
 @pytest.mark.parametrize("enable_releases", [True, False])
 def test_make_github_linux_case_3(
 		tmp_pathplus: PathPlus,
-		file_regression: FileRegressionFixture,
+		advanced_file_regression: AdvancedFileRegressionFixture,
 		demo_environment,
 		pure_python,
 		enable_conda,
@@ -392,12 +395,12 @@ def test_make_github_linux_case_3(
 	assert not (tmp_pathplus / managed_files[1]).is_file()
 	assert (tmp_pathplus / managed_files[2]).is_file()
 
-	check_file_output(tmp_pathplus / managed_files[2], file_regression)
+	advanced_file_regression.check_file(tmp_pathplus / managed_files[2])
 
 
 def test_make_github_linux_case_4(
 		tmp_pathplus: PathPlus,
-		file_regression: FileRegressionFixture,
+		advanced_file_regression: AdvancedFileRegressionFixture,
 		demo_environment,
 		advanced_data_regression: AdvancedDataRegressionFixture,
 		):
@@ -431,19 +434,19 @@ def test_make_github_linux_case_4(
 	assert not (tmp_pathplus / managed_files[1]).is_file()
 	assert (tmp_pathplus / managed_files[2]).is_file()
 
-	check_file_output(tmp_pathplus / managed_files[2], file_regression)
+	advanced_file_regression.check_file(tmp_pathplus / managed_files[2])
 
 
 def test_make_conda_actions_ci(
 		tmp_pathplus: PathPlus,
 		demo_environment,
-		file_regression: FileRegressionFixture,
+		advanced_file_regression: AdvancedFileRegressionFixture,
 		):
 	managed_files = make_conda_actions_ci(tmp_pathplus, demo_environment)
 	assert managed_files == [".github/workflows/conda_ci.yml"]
 	assert (tmp_pathplus / managed_files[0]).is_file()
 
-	check_file_output(tmp_pathplus / managed_files[0], file_regression)
+	advanced_file_regression.check_file(tmp_pathplus / managed_files[0])
 
 	demo_environment.globals["enable_conda"] = False
 	managed_files = make_conda_actions_ci(tmp_pathplus, demo_environment)

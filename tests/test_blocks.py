@@ -2,7 +2,7 @@
 #
 #  test_blocks.py
 #
-#  Copyright © 2020 Dominic Davis-Foster <dominic@davis-foster.co.uk>
+#  Copyright © 2020-2021 Dominic Davis-Foster <dominic@davis-foster.co.uk>
 #
 #  This program is free software; you can redistribute it and/or modify
 #  it under the terms of the GNU Lesser General Public License as published by
@@ -23,8 +23,7 @@
 # 3rd party
 import lorem  # type: ignore
 import pytest
-from coincidence.regressions import check_file_regression
-from pytest_regressions.file_regression import FileRegressionFixture
+from coincidence.regressions import AdvancedFileRegressionFixture
 
 # this package
 from repo_helper.blocks import (
@@ -128,9 +127,9 @@ def test_short_desc_regex(value):
 						),
 				]
 		)
-def test_create_shields_block(file_regression: FileRegressionFixture, kwargs, fixed_date):
+def test_create_shields_block(advanced_file_regression: AdvancedFileRegressionFixture, kwargs, fixed_date):
 	result = str(ShieldsBlock(**kwargs).make())
-	check_file_regression(result, file_regression, extension=".rst")
+	advanced_file_regression.check(result, extension=".rst")
 
 
 @pytest.mark.parametrize(
@@ -166,9 +165,9 @@ def test_create_shields_block(file_regression: FileRegressionFixture, kwargs, fi
 						),
 				]
 		)
-def test_create_docs_install_block(file_regression: FileRegressionFixture, kwargs):
+def test_create_docs_install_block(advanced_file_regression: AdvancedFileRegressionFixture, kwargs):
 	result = create_docs_install_block(**kwargs)
-	check_file_regression(result, file_regression, extension=".rst")
+	advanced_file_regression.check(result, extension=".rst")
 
 	with pytest.raises(ValueError, match="Please supply a list of 'conda_channels' if Conda builds are supported"):
 		create_docs_install_block(
@@ -205,19 +204,19 @@ def test_create_docs_install_block(file_regression: FileRegressionFixture, kwarg
 						),
 				]
 		)
-def test_create_readme_install_block(file_regression: FileRegressionFixture, kwargs):
+def test_create_readme_install_block(advanced_file_regression: AdvancedFileRegressionFixture, kwargs):
 	result = create_readme_install_block(**kwargs)
-	check_file_regression(result, file_regression, extension=".rst")
+	advanced_file_regression.check(result, extension=".rst")
 
 	with pytest.raises(ValueError, match="Please supply a list of 'conda_channels' if Conda builds are supported"):
 		create_readme_install_block(modname="hello_world", username="octocat")
 
 
-def test_create_short_desc_block(file_regression: FileRegressionFixture):
+def test_create_short_desc_block(advanced_file_regression: AdvancedFileRegressionFixture):
 	result = create_short_desc_block(short_desc="This is a short description of my awesome project!")
-	check_file_regression(result, file_regression, extension=".rst")
+	advanced_file_regression.check(result, extension=".rst")
 
 
-def test_create_docs_links_block(file_regression: FileRegressionFixture):
+def test_create_docs_links_block(advanced_file_regression: AdvancedFileRegressionFixture):
 	result = create_docs_links_block(username="octocat", repo_name="hello_world")
-	check_file_regression(result, file_regression, extension=".rst")
+	advanced_file_regression.check(result, extension=".rst")

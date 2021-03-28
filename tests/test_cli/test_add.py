@@ -3,10 +3,9 @@ import pytest
 import requests
 from _pytest.fixtures import FixtureRequest
 from betamax import Betamax  # type: ignore
-from coincidence.regressions import check_file_output
+from coincidence.regressions import AdvancedFileRegressionFixture
 from consolekit.testing import CliRunner, Result
 from domdf_python_tools.paths import PathPlus, in_directory
-from pytest_regressions.file_regression import FileRegressionFixture
 from southwark import status
 
 # this package
@@ -39,7 +38,10 @@ def cassette(request: FixtureRequest, monkeypatch):
 				]
 		)
 def test_add_requirement(
-		tmp_pathplus: PathPlus, requirement: str, cassette, file_regression: FileRegressionFixture
+		tmp_pathplus: PathPlus,
+		requirement: str,
+		cassette,
+		advanced_file_regression: AdvancedFileRegressionFixture
 		):
 	(tmp_pathplus / "repo_helper.yml").touch()
 	(tmp_pathplus / "requirements.txt").touch()
@@ -53,17 +55,17 @@ def test_add_requirement(
 		result = runner.invoke(add.requirement, args=requirement)
 		assert result.exit_code == 0
 
-	check_file_output(tmp_pathplus / "requirements.txt", file_regression)
+	advanced_file_regression.check_file(tmp_pathplus / "requirements.txt")
 
 	with in_directory(tmp_pathplus):
 		runner = CliRunner()
 		result = runner.invoke(add.requirement, args=[requirement, "--file", "tests/requirements.txt"])
 		assert result.exit_code == 0
 
-	check_file_output(tmp_pathplus / "tests" / "requirements.txt", file_regression)
+	advanced_file_regression.check_file(tmp_pathplus / "tests" / "requirements.txt")
 
 
-def test_add_typed(tmp_pathplus: PathPlus, file_regression: FileRegressionFixture, tmp_repo):
+def test_add_typed(tmp_pathplus: PathPlus, advanced_file_regression: AdvancedFileRegressionFixture, tmp_repo):
 	(tmp_pathplus / "repo_helper.yml").write_lines([
 			"modname: repo_helper",
 			'copyright_years: "2020"',
@@ -116,7 +118,7 @@ def test_add_typed(tmp_pathplus: PathPlus, file_regression: FileRegressionFixtur
 
 	assert (tmp_pathplus / "repo_helper" / "py.typed").is_file()
 
-	check_file_output(tmp_pathplus / "setup.cfg", file_regression)
+	advanced_file_regression.check_file(tmp_pathplus / "setup.cfg")
 
 	with in_directory(tmp_pathplus):
 		runner = CliRunner()
@@ -125,7 +127,7 @@ def test_add_typed(tmp_pathplus: PathPlus, file_regression: FileRegressionFixtur
 
 	assert (tmp_pathplus / "repo_helper" / "py.typed").is_file()
 
-	check_file_output(tmp_pathplus / "setup.cfg", file_regression)
+	advanced_file_regression.check_file(tmp_pathplus / "setup.cfg")
 
 	stat = status(tmp_pathplus)
 	assert stat.staged["add"] == [(tmp_pathplus / "repo_helper" / "py.typed").relative_to(tmp_pathplus)]
@@ -149,7 +151,9 @@ def test_add_typed(tmp_pathplus: PathPlus, file_regression: FileRegressionFixtur
 				pytest.param(["3.9", "rustpython"], id="multiple_2")
 				]
 		)
-def test_add_version(tmp_pathplus: PathPlus, file_regression: FileRegressionFixture, version: str):
+def test_add_version(
+		tmp_pathplus: PathPlus, advanced_file_regression: AdvancedFileRegressionFixture, version: str
+		):
 	(tmp_pathplus / "repo_helper.yml").write_lines([
 			"modname: repo_helper",
 			'copyright_years: "2020"',
@@ -170,4 +174,4 @@ def test_add_version(tmp_pathplus: PathPlus, file_regression: FileRegressionFixt
 		result: Result = runner.invoke(add.version, args=version)
 		assert result.exit_code == 0
 
-	check_file_output(tmp_pathplus / "repo_helper.yml", file_regression)
+	advanced_file_regression.check_file(tmp_pathplus / "repo_helper.yml")
