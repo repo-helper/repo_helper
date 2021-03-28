@@ -216,6 +216,12 @@ lint_warn_list.extend((
 		"ENC004",  # 'encoding=None' used for 'open' with unknown mode.
 		"ENC011",  # no encoding specified for 'configparser.ConfigParser.read'.
 		"ENC012",  # 'encoding=None' used for 'configparser.ConfigParser.read'.
+		"ENC021",  # no encoding specified for ‘pathlib.Path.open’.
+		"ENC022",  # ’encoding=None’ used for ‘pathlib.Path.open’.
+		"ENC023",  # no encoding specified for ‘pathlib.Path.read_text’.
+		"ENC024",  # ’encoding=None’ used for ‘pathlib.Path.read_text’.
+		"ENC025",  # no encoding specified for ‘pathlib.Path.write_text’.
+		"ENC026",  # ’encoding=None’ used for ‘pathlib.Path.write_text’."""
 		))
 
 # pydocstyle
