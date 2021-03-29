@@ -702,7 +702,7 @@ class ConfigUpdater(Container[Block], MutableMapping):
 		else:
 			raise ValueError
 
-	def read(self, filename: PathLike, encoding: Optional[str] = None):
+	def read(self, filename: PathLike, encoding: Optional[str] = "UTF-8"):
 		"""
 		Read and parse a filename.
 
@@ -907,7 +907,7 @@ class ConfigUpdater(Container[Block], MutableMapping):
 							e = self._handle_error(e, fpname, lineno, line)
 						optname = self.optionxform(optname.rstrip())
 						if self._strict and (sectname, optname) in elements_added:
-							raise DuplicateOptionError(sectname, optname, fpname, str(lineno))  # type: ignore
+							raise DuplicateOptionError(sectname, optname, fpname, lineno)  # type: ignore
 						elements_added.add((sectname, optname))
 						# This check is fine because the OPTCRE cannot
 						# match if it would set optval to None
