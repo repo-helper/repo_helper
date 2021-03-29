@@ -135,6 +135,81 @@ def test_add_typed(tmp_pathplus: PathPlus, advanced_file_regression: AdvancedFil
 	assert stat.staged["delete"] == []
 
 
+def test_add_typed_pyproject(
+		tmp_pathplus: PathPlus, advanced_file_regression: AdvancedFileRegressionFixture, tmp_repo
+		):
+	(tmp_pathplus / "repo_helper.yml").write_lines([
+			"modname: importcheck",
+			'copyright_years: "2021"',
+			'author: "Dominic Davis-Foster"',
+			'email: "dominic@davis-foster.co.uk"',
+			'version: "0.3.0"',
+			'username: "domdfcoding"',
+			"license: MIT",
+			"short_desc: 'A tool to check all modules can be correctly imported.'",
+			])
+
+	(tmp_pathplus / "pyproject.toml").write_lines([
+			"[build-system]",
+			'requires = [ "whey",]',
+			'build-backend = "whey"',
+			'',
+			"[project]",
+			'name = "importcheck"',
+			'version = "0.3.0"',
+			'description = "A tool to check all modules can be correctly imported."',
+			'readme = "README.rst"',
+			'keywords = [ "import", "test",]',
+			'dynamic = [ "requires-python", "classifiers", "dependencies",]',
+			'',
+			"[[project.authors]]",
+			'email = "dominic@davis-foster.co.uk"',
+			'name = "Dominic Davis-Foster"',
+			'',
+			'',
+			"[project.license]",
+			'file = "LICENSE"',
+			'',
+			"[tool.whey]",
+			"base-classifiers = [",
+			'    "Development Status :: 4 - Beta",',
+			'    "Environment :: Console",',
+			'    "Intended Audience :: Developers",',
+			']',
+			'python-versions = [ "3.6", "3.7", "3.8", "3.9",]',
+			'python-implementations = [ "CPython",]',
+			'platforms = [ "Windows", "macOS", "Linux",]',
+			'license-key = "MIT"',
+			])
+
+	(tmp_pathplus / "importcheck").mkdir()
+
+	result: Result
+
+	with in_directory(tmp_pathplus):
+		runner = CliRunner()
+		result = runner.invoke(add.typed)
+		assert result.exit_code == 0
+
+	assert (tmp_pathplus / "importcheck" / "py.typed").is_file()
+
+	advanced_file_regression.check_file(tmp_pathplus / "pyproject.toml")
+
+	with in_directory(tmp_pathplus):
+		runner = CliRunner()
+		result = runner.invoke(add.typed)
+		assert result.exit_code == 0
+
+	assert (tmp_pathplus / "importcheck" / "py.typed").is_file()
+
+	advanced_file_regression.check_file(tmp_pathplus / "pyproject.toml")
+
+	stat = status(tmp_pathplus)
+	assert stat.staged["add"] == [(tmp_pathplus / "importcheck" / "py.typed").relative_to(tmp_pathplus)]
+	assert stat.staged["modify"] == []
+	assert stat.staged["delete"] == []
+
+
 @pytest.mark.parametrize(
 		"version",
 		[

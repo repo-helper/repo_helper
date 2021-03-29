@@ -31,6 +31,7 @@ from typing import Optional
 
 # 3rd party
 import click
+import dom_toml
 from apeye import TrailingRequestsURL
 from consolekit import CONTEXT_SETTINGS
 from consolekit.options import auto_default_option
@@ -151,8 +152,9 @@ def typed():
 	stage_changes(rh.target_repo, [py_typed])
 
 	setup_cfg = rh.target_repo / "setup.cfg"
+	pyproject_file = rh.target_repo / "pyproject.toml"
 
-	if setup_cfg.is_file():
+	if setup_cfg.is_file() and not rh.templates.globals["use_whey"]:
 		content = setup_cfg.read_text()
 
 		config = ConfigUpdater()
@@ -169,6 +171,15 @@ def typed():
 		new_classifiers_lines.blankline(ensure_single=True)
 
 		setup_cfg.write_clean(content.replace(existing_classifiers_string, str(new_classifiers_lines)))
+
+	if pyproject_file.is_file() and rh.templates.globals["use_whey"]:
+		pyproject_config = dom_toml.load(pyproject_file)
+		if "whey" in pyproject_config.get("tool", {}):
+			classifiers = set(pyproject_config["tool"]["whey"]["base-classifiers"])
+			classifiers.add("Typing :: Typed")
+			pyproject_config["tool"]["whey"]["base-classifiers"] = natsorted(classifiers)
+
+		dom_toml.dump(pyproject_config, pyproject_file, encoder=dom_toml.TomlEncoder)
 
 
 @click.argument("version", type=click.STRING, nargs=-1)
