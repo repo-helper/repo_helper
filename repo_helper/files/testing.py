@@ -557,9 +557,12 @@ class ToxConfig(IniConfigurator):
 		``[pytest]``.
 		"""
 
-		self._ini["pytest"]["addopts"] = "--color yes --durations 25"
-		# --reruns 1 --reruns-delay 5
-		self._ini["pytest"]["timeout"] = 300
+		if self["enable_tests"]:
+			self._ini["pytest"]["addopts"] = "--color yes --durations 25"
+			# --reruns 1 --reruns-delay 5
+			self._ini["pytest"]["timeout"] = 300
+		else:
+			self._ini.remove_section("pytest")
 
 	def merge_existing(self, ini_file):
 		"""
