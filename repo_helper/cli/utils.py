@@ -28,6 +28,7 @@ import logging
 import os
 import platform
 import textwrap
+from contextlib import suppress
 from typing import Iterable, Optional
 
 # 3rd party
@@ -38,7 +39,6 @@ from consolekit.utils import abort
 from domdf_python_tools.paths import PathPlus, in_directory
 from domdf_python_tools.typing import PathLike
 from dulwich.errors import CommitError
-from pre_commit.commands import install_uninstall  # type: ignore
 from southwark import assert_clean
 from southwark.repo import Repo
 
@@ -47,10 +47,14 @@ __all__ = [
 		"run_repo_helper",
 		]
 
-# Disable logging from pre-commit install command
-logging.getLogger(install_uninstall.__name__).addHandler(logging.NullHandler())
-logging.getLogger(install_uninstall.__name__).propagate = False
-logging.getLogger(install_uninstall.__name__).addFilter(lambda record: False)
+with suppress(ImportError):
+	# 3rd party
+	from pre_commit.commands import install_uninstall  # type: ignore
+
+	# Disable logging from pre-commit install command
+	logging.getLogger(install_uninstall.__name__).addHandler(logging.NullHandler())
+	logging.getLogger(install_uninstall.__name__).propagate = False
+	logging.getLogger(install_uninstall.__name__).addFilter(lambda record: False)
 
 
 def commit_changed_files(
@@ -73,9 +77,6 @@ def commit_changed_files(
 	:returns: :py:obj:`True` if the changes were committed. :py:obj:`False` otherwise.
 	"""
 
-	# 3rd party
-	import pre_commit.main  # type: ignore
-
 	# this package
 	from repo_helper.utils import commit_changes, sort_paths, stage_changes
 
@@ -86,7 +87,9 @@ def commit_changed_files(
 
 	# Ensure pre-commit hooks are installed
 	if enable_pre_commit and platform.system() == "Linux":
-		with in_directory(repo_path):
+		with in_directory(repo_path), suppress(ImportError):
+			# 3rd party
+			import pre_commit.main  # type: ignore
 			pre_commit.main.main(["install"])
 
 	if staged_files:
