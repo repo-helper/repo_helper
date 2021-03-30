@@ -5,6 +5,7 @@ coverage-pyver-pragma>=0.2.1
 domdf-python-tools[testing]>=2.0.1
 iniconfig!=1.1.0,>=1.0.1
 lorem>=0.1.1
+pre-commit>=2.7.1
 pytest>=6.0.0
 pytest-cov>=2.8.1
 pytest-randomly>=3.3.1
