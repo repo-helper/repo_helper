@@ -58,6 +58,7 @@ known_third_party = [
     "jinja2",
     "lorem",
     "lxml",
+    "mkrecipe",
     "natsort",
     "packaging",
     "pre_commit",
@@ -87,6 +88,7 @@ known_third_party = [
     "twine",
     "typing_extensions",
     "typing_inspect",
+    "whey",
     "yapf_isort",
     "ytools3",
 ]
