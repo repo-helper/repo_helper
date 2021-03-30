@@ -24,22 +24,75 @@ Utilities for Conda packages.
 #
 
 # stdlib
-from operator import methodcaller
+import posixpath
 from typing import Any, Dict, Iterable, List
 
 # 3rd party
-import jinja2
 from domdf_python_tools.paths import PathPlus
 from domdf_python_tools.typing import PathLike
-from first import first
+from mkrecipe import MaryBerry
 from shippinglabel.conda import compile_requirements, validate_requirements
-from shippinglabel.pypi import get_pypi_releases
+from shippinglabel.requirements import read_requirements
+from whey.config.whey import license_lookup
 
 # this package
 from repo_helper.configuration import parse_yaml
-from repo_helper.templates import template_dir
 
-__all__ = ["make_recipe"]
+__all__ = ["make_recipe", "make_conda_description", "get_conda_requirements"]
+
+
+class CondaRecipeMaker(MaryBerry):
+	"""
+	Builder of Conda ``meta.yaml`` recipes from ``repo-helper`` configuration.
+
+	:param project_dir: The project directory.
+	"""
+
+	def load_config(self) -> Dict[str, Any]:
+		"""
+		Load the ``mkrecipe`` configuration.
+		"""
+
+		config = parse_yaml(self.project_dir, allow_unknown_keys=True)
+
+		config["name"] = config["modname"]
+		config["description"] = config["short_desc"]
+		config["authors"] = [{"name": config["author"]}]
+		config["maintainers"] = []
+		config["extras"] = config["conda_extras"]
+		config["conda-channels"] = config["conda_channels"]
+		config["optional-dependencies"] = config["extras_require"]
+		config["dependencies"] = sorted(read_requirements(self.project_dir / "requirements.txt")[0])
+
+		config["requires"] = ["setuptools", "wheel"]
+
+		if config["use_experimental_backend"]:
+			config["requires"].append("repo-helper")
+		elif config["use_whey"]:
+			config["requires"].append("whey")
+
+		url = "https://github.com/{username}/{repo_name}".format_map(config)
+		config["urls"] = {
+				"Homepage": url,
+				"Issue Tracker": "https://github.com/{username}/{repo_name}/issues".format_map(config),
+				"Source Code": url,
+				}
+
+		if config["enable_docs"]:
+			config["urls"]["Documentation"] = config["docs_url"]
+
+		config["package"] = posixpath.join(
+				# config["source_dir"],
+				config["import_name"].split('.', 1)[0],
+				)
+
+		if config["import_name"] != config["pypi_name"] and config["stubs_package"]:
+			config["package"] = "{import_name}-stubs".format_map(config)
+
+		license_ = config["license"]
+		config["license-key"] = {v: k for k, v in license_lookup.items()}.get(license_, license_)
+
+		return config
 
 
 def make_recipe(repo_dir: PathLike, recipe_file: PathLike) -> None:
@@ -57,44 +110,7 @@ def make_recipe(repo_dir: PathLike, recipe_file: PathLike) -> None:
 	repo_dir = PathPlus(repo_dir)
 	recipe_file = PathPlus(recipe_file)
 
-	config = parse_yaml(repo_dir, allow_unknown_keys=True)
-
-	# find the download URL
-	releases = get_pypi_releases(config["pypi_name"])
-
-	if config["version"] not in releases:
-		raise ValueError(f"Cannot find version {config['version']} on PyPI.")
-
-	download_urls = releases[config["version"]]
-
-	if not download_urls:
-		raise ValueError(f"Version {config['version']} has no files on PyPI.")
-
-	sdist_url = first(download_urls, key=methodcaller("endswith", ".tar.gz"), default=download_urls[0])
-
-	requirements_block = '\n'.join([f"    - {req}" for req in get_conda_requirements(repo_dir, config)])
-
-	templates = jinja2.Environment(  # nosec: B701
-		loader=jinja2.FileSystemLoader(str(template_dir)),
-		undefined=jinja2.StrictUndefined,
-		)
-
-	recipe_template = templates.get_template("conda_recipe.yaml")
-	recipe_file.write_clean(
-			recipe_template.render(
-					sdist_url=sdist_url,
-					requirements_block=requirements_block,
-					conda_full_description=make_conda_description(
-							config["conda_description"], config["conda_channels"]
-							),
-					**config,
-					)
-			)
-
-	#  entry_points:
-	#    - {{ import_name }} = {{ import_name }}:main
-	#  skip_compile_pyc:
-	#    - "*/templates/*.py"          # These should not (and cannot) be compiled
+	recipe_file.write_clean(CondaRecipeMaker(repo_dir).make())
 
 
 def make_conda_description(summary: str, conda_channels: Iterable[str] = ()) -> str:

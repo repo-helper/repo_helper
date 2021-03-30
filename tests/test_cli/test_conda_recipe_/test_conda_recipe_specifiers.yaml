@@ -14,14 +14,14 @@ requirements:
     - python
     - setuptools
     - wheel
-
   host:
     - pip
     - python
     - apeye>=0.3.0
     - attrs>=20.2.0
     - lxml
-
+    - setuptools
+    - wheel
   run:
     - python
     - apeye>=0.3.0
@@ -33,7 +33,6 @@ test:
     - repo_helper
 
 about:
-  home: "https://github.com/domdfcoding/repo_helper"
   license: "GNU Lesser General Public License v3 or later (LGPLv3+)"
   summary: "Update multiple configuration files, build scripts etc. from a single location."
   description: "Update multiple configuration files, build scripts etc. from a single location.
@@ -41,10 +40,10 @@ about:
 
 Before installing please ensure you have added the following channels: conda-forge, domdfcoding
 "
-  doc_url: https://repo_helper.readthedocs.io
-  dev_url: https://github.com/domdfcoding/repo_helper
+  home: 'https://github.com/domdfcoding/repo_helper'
+  dev_url: 'https://github.com/domdfcoding/repo_helper'
+  doc_url: 'https://repo_helper.readthedocs.io/en/latest'
 
 extra:
   maintainers:
-    - Dominic Davis-Foster
-    - github.com/domdfcoding
+    - 'Dominic Davis-Foster'
