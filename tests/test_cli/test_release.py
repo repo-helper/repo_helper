@@ -111,7 +111,7 @@ def do_test_release(
 		assert tags[m.group(1)] == f"v{expected_version}"
 
 
-@pypy_windows_dulwich
+# @pypy_windows_dulwich
 def test_release_minor(temp_repo, advanced_file_regression: AdvancedFileRegressionFixture):
 	do_test_release(
 			temp_repo,
@@ -121,7 +121,7 @@ def test_release_minor(temp_repo, advanced_file_regression: AdvancedFileRegressi
 			)
 
 
-@pypy_windows_dulwich
+# @pypy_windows_dulwich
 def test_release_major(temp_repo, advanced_file_regression: AdvancedFileRegressionFixture):
 	do_test_release(
 			temp_repo,
@@ -131,7 +131,7 @@ def test_release_major(temp_repo, advanced_file_regression: AdvancedFileRegressi
 			)
 
 
-@pypy_windows_dulwich
+# @pypy_windows_dulwich
 def test_release_patch(temp_repo, advanced_file_regression: AdvancedFileRegressionFixture):
 	do_test_release(
 			temp_repo,
@@ -141,7 +141,7 @@ def test_release_patch(temp_repo, advanced_file_regression: AdvancedFileRegressi
 			)
 
 
-@pypy_windows_dulwich
+# @pypy_windows_dulwich
 def test_release_version(temp_repo, advanced_file_regression: AdvancedFileRegressionFixture):
 	do_test_release(
 			temp_repo,
@@ -152,7 +152,7 @@ def test_release_version(temp_repo, advanced_file_regression: AdvancedFileRegres
 			)
 
 
-@pypy_windows_dulwich
+# @pypy_windows_dulwich
 def test_release_unclean(temp_repo, advanced_file_regression: AdvancedFileRegressionFixture):
 	(temp_repo.path / "file.txt").write_clean("Hello World")
 	temp_repo.stage("file.txt")
@@ -225,7 +225,7 @@ def test_release_unclean(temp_repo, advanced_file_regression: AdvancedFileRegres
 # 		bumper = Bumper(temp_repo.path, force=False)
 
 
-@pypy_windows_dulwich
+# @pypy_windows_dulwich
 def test_release_minor_unclean_force(temp_repo, advanced_file_regression: AdvancedFileRegressionFixture):
 	(temp_repo.path / "file.txt").write_clean("Hello World")
 	temp_repo.stage("file.txt")
@@ -239,7 +239,7 @@ def test_release_minor_unclean_force(temp_repo, advanced_file_regression: Advanc
 			)
 
 
-@pypy_windows_dulwich
+# @pypy_windows_dulwich
 def test_release_major_unclean_force(temp_repo, advanced_file_regression: AdvancedFileRegressionFixture):
 	(temp_repo.path / "file.txt").write_clean("Hello World")
 	temp_repo.stage("file.txt")
@@ -253,7 +253,7 @@ def test_release_major_unclean_force(temp_repo, advanced_file_regression: Advanc
 			)
 
 
-@pypy_windows_dulwich
+# @pypy_windows_dulwich
 def test_release_patch_unclean_force(temp_repo, advanced_file_regression: AdvancedFileRegressionFixture):
 	(temp_repo.path / "file.txt").write_clean("Hello World")
 	temp_repo.stage("file.txt")
@@ -267,7 +267,7 @@ def test_release_patch_unclean_force(temp_repo, advanced_file_regression: Advanc
 			)
 
 
-@pypy_windows_dulwich
+# @pypy_windows_dulwich
 def test_release_version_unclean_force(temp_repo, advanced_file_regression: AdvancedFileRegressionFixture):
 	(temp_repo.path / "file.txt").write_clean("Hello World")
 	temp_repo.stage("file.txt")

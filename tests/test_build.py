@@ -11,7 +11,7 @@ from tests import pypy_windows_dulwich
 GITHUB_COM = URL("https://github.com")
 
 
-@pypy_windows_dulwich
+# @pypy_windows_dulwich
 @pytest.mark.parametrize(
 		"username, repository", [
 				("domdfcoding", "sphinx-toolbox"),
