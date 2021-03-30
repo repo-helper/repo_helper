@@ -8,10 +8,10 @@ dom-toml>=0.2.2
 domdf-python-tools>=2.7.0
 dulwich>=0.19.16
 email-validator==1.1.2
-first>=2.0.2
 idna==2.10
 isort>=5.0.0
 jinja2>=2.11.2
+mkrecipe>=0.1.2
 natsort>=7.1.0
 packaging>=20.4
 ruamel-yaml>=0.16.12
@@ -19,4 +19,5 @@ shippinglabel>=0.8.2
 southwark>=0.7.1
 tabulate>=0.8.8
 typing-extensions>=3.7.4.3
+whey>=0.0.8
 yapf-isort>=0.5.2
