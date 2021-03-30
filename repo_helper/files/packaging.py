@@ -263,7 +263,7 @@ def make_pyproject(repo_path: pathlib.Path, templates: jinja2.Environment) -> Li
 	if not data["tool"]:
 		del data["tool"]
 
-	if not templates.globals["enable_tests"]:
+	if not templates.globals["enable_tests"] and not templates.globals["stubs_package"]:
 		data["tool"]["importcheck"] = data["tool"].get("importcheck", {})
 
 	# TODO: managed message
