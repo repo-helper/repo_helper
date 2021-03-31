@@ -55,7 +55,7 @@ def wizard() -> None:
 	from consolekit.terminal_colours import Fore
 	from dulwich.errors import NotGitRepository
 	from email_validator import EmailNotValidError, validate_email  # type: ignore
-	from ruamel.yaml.scalarstring import SingleQuotedScalarString
+	from ruamel.yaml import scalarstring
 	from southwark.repo import Repo
 
 	path = PathPlus.cwd()
@@ -171,7 +171,7 @@ Not all SPDX identifiers are allowed as not all map to PyPI Trove classifiers.""
 			"short_desc": short_desc,
 			}
 
-	data = {k: SingleQuotedScalarString(v) for k, v in data.items()}
+	data = {k: scalarstring.SingleQuotedScalarString(v) for k, v in data.items()}
 
 	output = StringIO()
 	yaml.round_trip_dump(data, output, explicit_start=True)
