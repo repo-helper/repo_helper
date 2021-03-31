@@ -140,6 +140,8 @@ def test_make_pyproject(
 	demo_environment.globals["enable_tests"] = enable_tests
 	demo_environment.globals["entry_points"] = {}
 	demo_environment.globals["extras_require"] = {}
+	demo_environment.globals["conda_extras"] = "none"
+	demo_environment.globals["conda_channels"] = []
 	demo_environment.globals["tox_build_requirements"] = []
 
 	demo_environment.globals["use_experimental_backend"] = False
@@ -175,6 +177,8 @@ def test_make_pyproject_whey_extras(
 	demo_environment.globals["use_experimental_backend"] = False
 	demo_environment.globals["enable_docs"] = True
 	demo_environment.globals["enable_tests"] = enable_tests
+	demo_environment.globals["conda_extras"] = "none"
+	demo_environment.globals["conda_channels"] = ["domdfcoding", "conda-forge", "bioconda"]
 	demo_environment.globals["extras_require"] = {
 			"foo": [
 					"apeye>=0.4.0",

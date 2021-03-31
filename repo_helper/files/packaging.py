@@ -216,6 +216,10 @@ def make_pyproject(repo_path: pathlib.Path, templates: jinja2.Environment) -> Li
 
 	data.set_default("tool", {})
 
+	data["tool"].setdefault("mkrecipe", {})
+	data["tool"]["mkrecipe"]["extras"] = templates.globals["conda_extras"]
+	data["tool"]["mkrecipe"]["conda-channels"] = templates.globals["conda_channels"]
+
 	if templates.globals["use_whey"]:
 		data["tool"].setdefault("whey", {})
 
@@ -259,6 +263,23 @@ def make_pyproject(repo_path: pathlib.Path, templates: jinja2.Environment) -> Li
 
 		if templates.globals["manifest_additional"]:
 			data["tool"]["whey"]["additional-files"] = templates.globals["manifest_additional"]
+
+	else:
+		if "whey" in data["tool"]:
+			del data["tool"]["whey"]
+
+		license_ = templates.globals["license"]
+		data["tool"]["mkrecipe"]["license-key"] = {v: k for k, v in license_lookup.items()}.get(license_, license_)
+
+		if templates.globals["import_name"] != templates.globals["pypi_name"]:
+			if templates.globals["stubs_package"]:
+				data["tool"]["mkrecipe"]["package"] = "{import_name}-stubs".format_map(templates.globals)
+			else:
+				data["tool"]["mkrecipe"]["package"] = posixpath.join(
+						# templates.globals["source_dir"],
+						templates.globals["import_name"].split('.', 1)[0],
+						)
+
 
 	if not data["tool"]:
 		del data["tool"]
