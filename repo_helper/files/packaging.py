@@ -280,7 +280,6 @@ def make_pyproject(repo_path: pathlib.Path, templates: jinja2.Environment) -> Li
 						templates.globals["import_name"].split('.', 1)[0],
 						)
 
-
 	if not data["tool"]:
 		del data["tool"]
 
