@@ -60,7 +60,7 @@ min_py_version: '3.6'
 modname: repo_helper_demo
 mypy_deps: []
 mypy_plugins: []
-mypy_version: '0.800'
+mypy_version: '0.812'
 on_pypi: true
 pkginfo_extra: []
 platforms:
