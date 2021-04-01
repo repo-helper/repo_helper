@@ -809,9 +809,9 @@ class TestsRequirementsManager(RequirementsManager):
 			ComparableRequirement("coverage>=5.1"),
 			ComparableRequirement("pytest>=6.0.0"),
 			ComparableRequirement("pytest-cov>=2.8.1"),
-			ComparableRequirement("pytest-randomly>=3.3.1"),
-			ComparableRequirement("pytest-timeout>=1.4.2"),  # ComparableRequirement("pytest-rerunfailures>=9.0"),
-			ComparableRequirement("iniconfig!=1.1.0,>=1.0.1"),
+			ComparableRequirement("backports-entry-points-selectable>=1.0.2"),
+			ComparableRequirement("pytest-randomly>=3.6.0"),
+			ComparableRequirement("pytest-timeout>=1.4.2"),
 			}
 
 	def __init__(self, repo_path: PathLike, templates: jinja2.Environment):
@@ -822,8 +822,6 @@ class TestsRequirementsManager(RequirementsManager):
 	def compile_target_requirements(self) -> None:
 		if self._globals["pypi_name"] != "coverage_pyver_pragma":
 			self.target_requirements.add(ComparableRequirement("coverage-pyver-pragma>=0.2.1"))
-		if self._globals["pypi_name"] != "domdf_python_tools":
-			self.target_requirements.add(ComparableRequirement("domdf-python-tools[testing]>=2.0.1"))
 		if self._globals["pypi_name"] != "coincidence":
 			self.target_requirements.add(ComparableRequirement("coincidence>=0.2.0"))
 

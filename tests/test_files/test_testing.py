@@ -309,14 +309,13 @@ def test_ensure_tests_requirements(tmp_pathplus, demo_environment):
 	assert managed_files == [posixpath.join("tests", "requirements.txt")]
 
 	assert (tmp_pathplus / managed_files[0]).read_lines() == [
+			"backports-entry-points-selectable>=1.0.2",
 			"coincidence>=0.2.0",
 			"coverage>=5.1",
 			"coverage-pyver-pragma>=0.2.1",
-			"domdf-python-tools[testing]>=2.0.1",
-			"iniconfig!=1.1.0,>=1.0.1",
 			"pytest>=6.0.0",
 			"pytest-cov>=2.8.1",
-			"pytest-randomly>=3.3.1",
+			"pytest-randomly>=3.6.0",
 			"pytest-timeout>=1.4.2",
 			'',
 			]
@@ -328,15 +327,14 @@ def test_ensure_tests_requirements(tmp_pathplus, demo_environment):
 	assert managed_files == ["tests/requirements.txt"]
 
 	assert (tmp_pathplus / managed_files[0]).read_lines() == [
+			"backports-entry-points-selectable>=1.0.2",
 			"coincidence>=0.2.0",
 			"coverage>=5.1",
 			"coverage-pyver-pragma>=0.2.1",
-			"domdf-python-tools[testing]>=2.0.1",
-			"iniconfig!=1.1.0,>=1.0.1",
 			"lorem>=0.1.1",
 			"pytest>=6.0.0",
 			"pytest-cov>=2.8.1",
-			"pytest-randomly>=3.3.1",
+			"pytest-randomly>=3.6.0",
 			"pytest-timeout>=1.4.2",
 			'',
 			]
@@ -351,14 +349,13 @@ def test_ensure_tests_requirements_extras(tmp_pathplus, demo_environment):
 	assert managed_files == [posixpath.join("tests", "requirements.txt")]
 
 	assert (tmp_pathplus / managed_files[0]).read_lines() == [
+			"backports-entry-points-selectable>=1.0.2",
 			"coincidence>=0.2.0",
 			"coverage>=5.1",
 			"coverage-pyver-pragma>=0.2.1",
-			"domdf-python-tools[testing]>=2.0.1",
-			"iniconfig!=1.1.0,>=1.0.1",
 			"pytest>=6.0.0",
 			"pytest-cov>=2.8.1",
-			"pytest-randomly>=3.3.1",
+			"pytest-randomly>=3.6.0",
 			"pytest-timeout>=1.4.2",
 			"some-package[extra]>=1.5.0",
 			'',
