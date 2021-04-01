@@ -59,12 +59,15 @@ class CondaRecipeMaker(MaryBerry):
 		config["description"] = config["short_desc"]
 		config["authors"] = [{"name": config["author"]}]
 		config["maintainers"] = []
-		config["extras"] = config["conda_extras"]
 		config["conda-channels"] = config["conda_channels"]
 		config["optional-dependencies"] = config["extras_require"]
 		config["dependencies"] = sorted(read_requirements(self.project_dir / "requirements.txt")[0])
-
 		config["requires"] = ["setuptools", "wheel"]
+
+		if config["conda_extras"] in (["none"], ["all"]):
+			config["extras"] = config["conda_extras"][0]
+		else:
+			config["extras"] = config["conda_extras"]
 
 		if config["use_experimental_backend"]:
 			config["requires"].append("repo-helper")
@@ -136,8 +139,9 @@ def make_conda_description(summary: str, conda_channels: Iterable[str] = ()) -> 
 def get_conda_requirements(repo_dir: PathPlus, config: Dict[str, Any]) -> List[str]:
 	extras = []
 
-	for extra in config["conda_extras"]:
-		extras.extend(config["extras_require"].get(extra, ()))
+	if config["conda_extras"] != ["none"]:
+		for extra in config["conda_extras"]:
+			extras.extend(config["extras_require"].get(extra, ()))
 
 	all_requirements = validate_requirements(
 			compile_requirements(repo_dir, extras),

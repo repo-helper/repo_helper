@@ -217,8 +217,12 @@ def make_pyproject(repo_path: pathlib.Path, templates: jinja2.Environment) -> Li
 	data.set_default("tool", {})
 
 	data["tool"].setdefault("mkrecipe", {})
-	data["tool"]["mkrecipe"]["extras"] = templates.globals["conda_extras"]
 	data["tool"]["mkrecipe"]["conda-channels"] = templates.globals["conda_channels"]
+
+	if templates.globals["conda_extras"] in (["none"], ["all"]):
+		data["tool"]["mkrecipe"]["extras"] = templates.globals["conda_extras"][0]
+	else:
+		data["tool"]["mkrecipe"]["extras"] = templates.globals["conda_extras"]
 
 	if templates.globals["use_whey"]:
 		data["tool"].setdefault("whey", {})

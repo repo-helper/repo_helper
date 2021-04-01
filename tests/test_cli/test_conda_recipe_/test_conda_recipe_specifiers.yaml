@@ -19,14 +19,12 @@ requirements:
     - python
     - apeye>=0.3.0
     - attrs>=20.2.0
-    - lxml
     - setuptools
     - wheel
   run:
     - python
     - apeye>=0.3.0
     - attrs>=20.2.0
-    - lxml
 
 test:
   imports:

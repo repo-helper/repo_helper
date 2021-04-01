@@ -25,7 +25,6 @@ requirements:
     - email-validator==1.1.1
     - isort>=5.0.0
     - jinja2>=2.11.2
-    - lxml
     - packaging>=20.4
     - pre-commit>=2.7.1
     - ruamel.yaml>=0.16.12
@@ -43,7 +42,6 @@ requirements:
     - email-validator==1.1.1
     - isort>=5.0.0
     - jinja2>=2.11.2
-    - lxml
     - packaging>=20.4
     - pre-commit>=2.7.1
     - ruamel.yaml>=0.16.12

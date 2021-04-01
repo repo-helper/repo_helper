@@ -25,7 +25,7 @@ Homepage = "https://github.com/octocat/hello-world"
 Documentation = "https://hello-world.readthedocs.io/en/latest"
 
 [tool.mkrecipe]
-extras = "none"
 conda-channels = []
+extras = "none"
 license-key = "MIT"
 package = "hello_world"
