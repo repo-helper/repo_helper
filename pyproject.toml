@@ -31,3 +31,8 @@ repo-helper = "repo_helper.__main__:main"
 [project.optional-dependencies]
 testing = [ "check-wheel-contents>=0.2.0", "coincidence>=0.2.0", "pytest>=6.0.0", "twine>=3.2.0",]
 all = [ "check-wheel-contents>=0.2.0", "coincidence>=0.2.0", "pytest>=6.0.0", "twine>=3.2.0",]
+
+[tool.mkrecipe]
+extras = []
+conda-channels = [ "conda-forge", "domdfcoding",]
+license-key = "LGPL-3.0-or-later"
