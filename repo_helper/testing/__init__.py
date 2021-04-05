@@ -5,7 +5,7 @@
 Helpers for running tests with pytest.
 
 .. extras-require:: testing
-	:__pkginfo__:
+	:pyproject:
 
 .. versionadded:: 2020.11.17
 """

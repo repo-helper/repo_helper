@@ -15,18 +15,11 @@
 import pathlib
 
 __all__ = [
-		"__copyright__",
 		"__version__",
 		"repo_root",
-		"install_requires",
 		"extras_require",
 		]
 
-__copyright__ = """
-2020 Joe Bloggs <j.bloggs@example.com>
-"""
-
 __version__ = "1.2.3"
 repo_root = pathlib.Path(__file__).parent
-install_requires = (repo_root / "requirements.txt").read_text(encoding="utf-8").split('\n')
 extras_require = {}

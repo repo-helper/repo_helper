@@ -10,11 +10,13 @@ from setuptools import setup
 
 sys.path.append('.')
 
-# stdlib
-import datetime
-
 # this package
 from __pkginfo__ import *  # pylint: disable=wildcard-import
+
+install_requires = (repo_root / "requirements.txt").read_text(encoding="utf-8").split('\n')
+
+# stdlib
+import datetime
 
 print(datetime.datetime.now)
 
