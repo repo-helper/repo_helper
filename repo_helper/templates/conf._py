@@ -5,12 +5,11 @@
 # stdlib
 import os
 import re
-import sys
 
-sys.path.append(os.path.abspath('.'))
-sys.path.append(os.path.abspath('..'))
+# 3rd party
+from sphinx_pyproject import SphinxConfig
 
-from __pkginfo__ import __version__
+config = SphinxConfig()
 
 {% for line in sphinx_conf_preamble %}{{ line }}
 {% endfor %}
@@ -25,7 +24,7 @@ rst_prolog = f""".. |pkgname| replace:: {{ modname }}
 """
 
 slug = re.sub(r'\W+', '-', project.lower())
-release = version = __version__
+release = version = config.version
 
 todo_include_todos = bool(os.environ.get("SHOW_TODOS", 0))
 
