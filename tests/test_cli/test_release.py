@@ -41,6 +41,15 @@ def do_test_release(
 			'name = "modname: repo_helper_demo"',
 			'version = "0.0.1"',
 			])
+	(temp_repo.path / "setup.cfg").write_lines([
+			"[metadata]",
+			"name = domdf_python_tools",
+			"version = 0.0.1",
+			"author = Dominic Davis-Foster",
+			"author_email = dominic@davis-foster.co.uk",
+			"license = GNU Lesser General Public License v3 or later (LGPLv3+)",
+			"keywords = utilities",
+			])
 	(temp_repo.path / "__pkginfo__.py").write_text('__version__ = "0.0.1"')
 	(temp_repo.path / "repo_helper_demo").maybe_make()
 	(temp_repo.path / "repo_helper_demo" / "__init__.py").write_text('__version__ = "0.0.1"')

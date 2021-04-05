@@ -377,6 +377,7 @@ class SetupCfgConfig(IniConfigurator):
 		"""
 
 		self._ini["metadata"]["name"] = self["pypi_name"]
+		self._ini["metadata"]["version"] = self["version"]
 		self._ini["metadata"]["author"] = self["author"]
 		self._ini["metadata"]["author_email"] = self["email"]
 		self._ini["metadata"]["license"] = self["license"]

@@ -8,3 +8,4 @@ The following files will be committed:
   __pkginfo__.py
   pyproject.toml
   repo_helper.yml
+  setup.cfg

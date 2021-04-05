@@ -226,6 +226,7 @@ def test_make_setup_cfg(
 	# TODO: permutations to cover all branches
 
 	demo_environment.globals["author"] = "Joe Bloggs"
+	demo_environment.globals["version"] = "1.2.3"
 	demo_environment.globals["email"] = "j.bloggs@example.com"
 	demo_environment.globals["license"] = "MIT License"
 	demo_environment.globals["keywords"] = ["awesome", "python", "project"]
@@ -269,6 +270,7 @@ def test_make_setup_cfg_existing(
 			)
 
 	demo_environment.globals["author"] = "Joe Bloggs"
+	demo_environment.globals["version"] = "1.2.3"
 	demo_environment.globals["email"] = "j.bloggs@example.com"
 	demo_environment.globals["license"] = "MIT License"
 	demo_environment.globals["keywords"] = ["awesome", "python", "project"]

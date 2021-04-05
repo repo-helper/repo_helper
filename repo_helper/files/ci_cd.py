@@ -587,6 +587,11 @@ def ensure_bumpversion(repo_path: pathlib.Path, templates: jinja2.Environment) -
 			init_section["search"] = ': str = "{current_version}"'
 			init_section["replace"] = ': str = "{new_version}"'
 
+	setup_cfg_section = bv["bumpversion:file:setup.cfg"]
+	if "search" not in setup_cfg_section:
+		setup_cfg_section["search"] = 'name = {current_version}'
+		setup_cfg_section["replace"] = 'name = {new_version}'
+
 	bv["bumpversion"]["current_version"] = templates.globals["version"]
 	bv["bumpversion"]["commit"] = "True"
 	bv["bumpversion"]["tag"] = "True"
@@ -605,7 +610,7 @@ def get_bumpversion_filenames(templates: jinja2.Environment) -> Iterable[str]:
 	:param templates:
 	"""
 
-	yield from ["pyproject.toml", "repo_helper.yml", "__pkginfo__.py", "README.rst"]
+	yield from ["pyproject.toml", "repo_helper.yml", "__pkginfo__.py", "README.rst", "setup.cfg"]
 
 	if templates.globals["enable_docs"]:
 		yield f"{templates.globals['docs_dir']}/index.rst"
