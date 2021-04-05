@@ -75,7 +75,7 @@ repos:
       exclude: ^(repo_helper/templates/.*|doc-source/conf|__pkginfo__|make_conda_recipe|setup)\.(_)?py$
 
  - repo: https://github.com/domdfcoding/dep_checker
-   rev: v0.6.0
+   rev: v0.6.1
    hooks:
     - id: dep_checker
       args:
