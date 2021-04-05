@@ -4,6 +4,7 @@
 # stdlib
 import sys
 import shutil
+import pathlib
 
 # 3rd party
 from setuptools import setup
@@ -15,7 +16,7 @@ from __pkginfo__ import *  # pylint: disable=wildcard-import
 
 {% if desktopfile %}
 from textwrap import dedent
-with open('{{ modname }}.desktop', 'w') as desktop:
+with open('{{ modname }}.desktop', 'w', encoding="UTF-8") as desktop:
 	desktop.write(dedent(f"""\
 [Desktop Entry]
 Version={__version__}
@@ -26,7 +27,8 @@ Comment={{ short_desc }}
 		))
 {% endif %}
 
-install_requires = (repo_root / "requirements.txt").read_text(encoding="utf-8").split('\n')
+repo_root = pathlib.Path(__file__).parent
+install_requires = (repo_root / "requirements.txt").read_text(encoding="UTF-8").split('\n')
 
 {{ "\n".join(setup_pre) }}
 

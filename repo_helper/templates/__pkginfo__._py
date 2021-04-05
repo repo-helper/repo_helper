@@ -11,17 +11,12 @@
 # This script based on https://github.com/rocky/python-uncompyle6/blob/master/__pkginfo__.py
 #
 
-# stdlib
-import pathlib
-
 __all__ = [
 		"__version__",
-		"repo_root",
 		"extras_require",
 		]
 
 __version__ = "{{ version }}"
-repo_root = pathlib.Path(__file__).parent
 extras_require = {{ extras_require }}
 
 {{ '\n'.join(pkginfo_extra) }}
