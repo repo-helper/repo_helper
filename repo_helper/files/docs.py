@@ -806,7 +806,6 @@ def make_sphinx_config_dict(templates: jinja2.Environment) -> Dict[str, Any]:
 			"__hash__",
 			]
 
-
 	return data
 
 
