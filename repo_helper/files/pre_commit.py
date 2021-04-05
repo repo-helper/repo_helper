@@ -231,12 +231,7 @@ def make_pre_commit(repo_path: pathlib.Path, templates: jinja2.Environment) -> L
 	import_name = templates.globals["import_name"]
 	stubs_package = templates.globals["stubs_package"]
 
-	non_source_files = [
-			posixpath.join(docs_dir, "conf"),
-			"__pkginfo__",
-			"make_conda_recipe",
-			"setup",
-			]
+	non_source_files = [posixpath.join(docs_dir, "conf"), "__pkginfo__", "setup"]
 
 	domdfcoding_hooks = Repo(
 			repo=make_github_url("domdfcoding", "pre-commit-hooks"),
@@ -275,7 +270,7 @@ def make_pre_commit(repo_path: pathlib.Path, templates: jinja2.Environment) -> L
 
 	dep_checker = Repo(
 			repo=make_github_url("domdfcoding", "dep_checker"),
-			rev="v0.6.0",
+			rev="v0.6.1",
 			hooks=[{"id": "dep_checker", "args": dep_checker_args}]
 			)
 
