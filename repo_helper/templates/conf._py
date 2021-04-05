@@ -6,6 +6,13 @@
 import os
 import re
 
+{% if modname == "domdf_python_tools" %}
+# 3rd party
+import domdf_python_tools
+
+domdf_python_tools.__docs = True
+{% endif %}
+
 # 3rd party
 from sphinx_pyproject import SphinxConfig
 
