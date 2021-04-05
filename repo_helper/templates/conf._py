@@ -26,16 +26,12 @@ rst_prolog = f""".. |pkgname| replace:: {{ modname }}
 
 slug = re.sub(r'\W+', '-', project.lower())
 release = version = __version__
-package_root = "{{ import_name.replace('.', '/') }}"
 
 todo_include_todos = bool(os.environ.get("SHOW_TODOS", 0))
 
 intersphinx_mapping = {
 		'python': ('https://docs.python.org/3/', None),
 		'sphinx': ('https://www.sphinx-doc.org/en/stable/', None),
-		{#'rtd': ('https://docs.readthedocs.io/en/latest/', None),#}
-		{#"h5py": ('https://docs.h5py.org/en/latest/', None),#}
-		{#"sarge": ('https://sarge.readthedocs.io/en/latest/', None),#}
 		{% for mapping in intersphinx_mapping %}{{ mapping }},{{ '\n' }}		{% endfor %}}
 
 html_theme_options = {{ pformat(html_theme_options) }}
@@ -46,6 +42,8 @@ htmlhelp_basename = slug
 latex_documents = [('index', f'{slug}.tex', project, author, 'manual')]
 man_pages = [('index', slug, project, [author], 1)]
 texinfo_documents = [('index', slug, project, author, slug, project, 'Miscellaneous')]
+
+toctree_plus_types = set(toctree_plus_types)
 
 autodoc_default_options = {
 		'members': None,  # Include all members (methods).

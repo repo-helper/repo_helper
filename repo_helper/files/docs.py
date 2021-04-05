@@ -725,7 +725,7 @@ def make_sphinx_config_dict(templates: jinja2.Environment) -> Dict[str, Any]:
 	data["project"] = templates.globals["modname"].replace('_', '-')
 	data["copyright"] = "{copyright_years} {author}".format_map(templates.globals)
 	data["language"] = "en"
-	# data["package_root"] =
+	data["package_root"] = templates.globals["import_name"].replace('.', '/')
 
 	data["extensions"] = [
 			"sphinx_toolbox",
@@ -762,6 +762,24 @@ def make_sphinx_config_dict(templates: jinja2.Environment) -> Dict[str, Any]:
 	data["html_theme"] = templates.globals["sphinx_html_theme"].replace('_', '-')
 	data["html_theme_path"] = ["../.."]
 	data["html_show_sourcelink"] = True  # True will show link to source
+
+	data["toctree_plus_types"] = sorted({
+			"class",
+			"function",
+			"method",
+			"data",
+			"enum",
+			"flag",
+			"confval",
+			"directive",
+			"role",
+			"confval",
+			"protocol",
+			"typeddict",
+			"namedtuple",
+			"exception",
+			})
+
 	data["add_module_names"] = False
 	data["hide_none_rtype"] = True
 	data["all_typevars"] = True
@@ -788,22 +806,6 @@ def make_sphinx_config_dict(templates: jinja2.Environment) -> Dict[str, Any]:
 			"__hash__",
 			]
 
-	data["toctree_plus_types"] = sorted({
-			"class",
-			"function",
-			"method",
-			"data",
-			"enum",
-			"flag",
-			"confval",
-			"directive",
-			"role",
-			"confval",
-			"protocol",
-			"typeddict",
-			"namedtuple",
-			"exception",
-			})
 
 	return data
 
