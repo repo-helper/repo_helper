@@ -292,18 +292,21 @@ def test_make_github_mypy_extra_install_only_linux(
 
 @pytest.mark.parametrize("py_versions", [["3.6", "3.7", "3.8"], ["3.6", "3.7"]])
 @pytest.mark.parametrize("enable_docs", [True, False])
+@pytest.mark.parametrize("use_whey", [True, False])
 @pytest.mark.parametrize("py_modules", [["hello_world.py"], []])
 def test_ensure_bumpversion(
 		tmp_pathplus: PathPlus,
 		demo_environment,
 		advanced_file_regression: AdvancedFileRegressionFixture,
-		enable_docs,
+		enable_docs: bool,
+		use_whey: bool,
 		py_versions,
 		py_modules,
 		):
 
 	demo_environment.globals["version"] = "1.2.3"
 	demo_environment.globals["enable_docs"] = enable_docs
+	demo_environment.globals["use_whey"] = use_whey
 	assert ensure_bumpversion(tmp_pathplus, demo_environment) == [".bumpversion.cfg"]
 	advanced_file_regression.check_file(tmp_pathplus / ".bumpversion.cfg")
 
@@ -316,9 +319,27 @@ def test_ensure_bumpversion_remove_docs(
 
 	demo_environment.globals["version"] = "1.2.3"
 	demo_environment.globals["enable_docs"] = True
+	demo_environment.globals["use_whey"] = False
 	ensure_bumpversion(tmp_pathplus, demo_environment)
 
 	demo_environment.globals["enable_docs"] = False
+	ensure_bumpversion(tmp_pathplus, demo_environment)
+
+	advanced_file_regression.check_file(tmp_pathplus / ".bumpversion.cfg")
+
+
+def test_ensure_bumpversion_remove_setup_cfg(
+		tmp_pathplus: PathPlus,
+		demo_environment,
+		advanced_file_regression: AdvancedFileRegressionFixture,
+		):
+
+	demo_environment.globals["version"] = "1.2.3"
+	demo_environment.globals["enable_docs"] = True
+	demo_environment.globals["use_whey"] = False
+	ensure_bumpversion(tmp_pathplus, demo_environment)
+
+	demo_environment.globals["use_whey"] = True
 	ensure_bumpversion(tmp_pathplus, demo_environment)
 
 	advanced_file_regression.check_file(tmp_pathplus / ".bumpversion.cfg")
