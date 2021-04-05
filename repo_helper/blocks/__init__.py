@@ -50,8 +50,6 @@ from repo_helper._docs_shields import (
 		make_docs_last_commit_shield,
 		make_docs_license_shield,
 		make_docs_maintained_shield,
-		make_docs_pre_commit_ci_shield,
-		make_docs_pre_commit_shield,
 		make_docs_pypi_downloads_shield,
 		make_docs_pypi_version_shield,
 		make_docs_python_implementations_shield,
@@ -75,8 +73,6 @@ from repo_helper.shields import (
 		make_last_commit_shield,
 		make_license_shield,
 		make_maintained_shield,
-		make_pre_commit_ci_shield,
-		make_pre_commit_shield,
 		make_pypi_downloads_shield,
 		make_pypi_version_shield,
 		make_python_implementations_shield,
@@ -311,7 +307,6 @@ class ShieldsBlock:
 	:param docker_shields: Whether to show shields for Docker. Default :py:obj:`False`.
 	:param docker_name: The name of the Docker image on DockerHub.
 	:param platforms: List of supported platforms.
-	:param pre_commit: Whether to show a shield for pre-commit
 	:param on_pypi:
 	:param primary_conda_channel: The Conda channel the package can be downloaded from.
 
@@ -357,8 +352,6 @@ class ShieldsBlock:
 			"docker_build",
 			"docker_automated",
 			"docker_size",
-			"pre_commit",
-			"pre_commit_ci",
 			)
 
 	def __init__(
@@ -396,7 +389,6 @@ class ShieldsBlock:
 		self.docker_shields: bool = docker_shields
 		self.docker_name: str = str(docker_name)
 		self.platforms: Iterable[str] = set(platforms or ())
-		self.pre_commit: bool = pre_commit
 		self.on_pypi: bool = on_pypi
 		self.primary_conda_channel: str = primary_conda_channel or self.username
 
@@ -421,8 +413,6 @@ class ShieldsBlock:
 		self.make_last_commit_shield = make_last_commit_shield
 		self.make_license_shield = make_license_shield
 		self.make_maintained_shield = make_maintained_shield
-		self.make_pre_commit_ci_shield = make_pre_commit_ci_shield
-		self.make_pre_commit_shield = make_pre_commit_shield
 		self.make_pypi_version_shield = make_pypi_version_shield
 		self.make_python_implementations_shield = make_python_implementations_shield
 		self.make_python_versions_shield = make_python_versions_shield
@@ -450,8 +440,6 @@ class ShieldsBlock:
 		self.make_last_commit_shield = make_docs_last_commit_shield
 		self.make_license_shield = make_docs_license_shield
 		self.make_maintained_shield = make_docs_maintained_shield
-		self.make_pre_commit_ci_shield = make_docs_pre_commit_ci_shield
-		self.make_pre_commit_shield = make_docs_pre_commit_shield
 		self.make_pypi_version_shield = make_docs_pypi_version_shield
 		self.make_python_implementations_shield = make_docs_python_implementations_shield
 		self.make_python_versions_shield = make_docs_python_versions_shield
@@ -533,10 +521,6 @@ class ShieldsBlock:
 		if self.tests:
 			sections["Tests"].append("coveralls")
 			substitutions["coveralls"] = self.make_coveralls_shield(repo_name, username)
-
-		if self.pre_commit:
-			sections["QA"].append("pre_commit_ci")
-			substitutions["pre_commit_ci"] = self.make_pre_commit_ci_shield(repo_name, username)
 
 		if self.on_pypi:
 			sections["PyPI"] = ["pypi-version", "supported-versions", "supported-implementations", "wheel"]

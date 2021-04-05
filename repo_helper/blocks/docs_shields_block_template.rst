@@ -11,8 +11,7 @@
 {% if "Windows" in platforms %}|actions_windows{{ unique_name }}| {% endif %}\
 {% if "macOS" in platforms %}|actions_macos{{ unique_name }}| {% endif %}\
 {% if tests %}|coveralls{{ unique_name }}| {% endif %}\
-|codefactor{{ unique_name }}|\
-{% if pre_commit %} |pre_commit_ci{{ unique_name }}|{% endif %}
+|codefactor{{ unique_name }}|
 	{% if on_pypi %}* - PyPI
 	  - |pypi-version{{ unique_name }}| |supported-versions{{ unique_name }}| |supported-implementations{{ unique_name }}| |wheel{{ unique_name }}|{% endif %}
 	{% if conda %}* - Anaconda
@@ -22,8 +21,7 @@
 	{% if docker_shields %}* - Docker
 	  - |docker_build{{ unique_name }}| |docker_automated{{ unique_name }}| |docker_size{{ unique_name }}|
 	{% endif %}* - Other
-	  - |license{{ unique_name }}| |language{{ unique_name }}| |requires{{ unique_name }}|\
-{% if pre_commit %} |pre_commit{{ unique_name }}|{% endif %}
+	  - |license{{ unique_name }}| |language{{ unique_name }}| |requires{{ unique_name }}|
 
 {% if docs %}.. |docs{{ unique_name }}| {{ make_rtfd_shield(repo_name)[3:] }}
 
@@ -68,9 +66,5 @@
 .. |docker_automated{{ unique_name }}| {{ make_docker_automated_build_shield(docker_name, username)[3:] }}
 
 .. |docker_size{{ unique_name }}| {{ make_docker_size_shield(docker_name, username)[3:] }}
-{% endif %}{% if pre_commit %}
-.. |pre_commit{{ unique_name }}| {{ make_pre_commit_shield()[3:] }}
-
-.. |pre_commit_ci{{ unique_name }}| {{ make_pre_commit_ci_shield(repo_name, username)[3:] }}
 {% endif %}
 .. end shields
