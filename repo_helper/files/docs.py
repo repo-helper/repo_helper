@@ -759,7 +759,7 @@ def make_sphinx_config_dict(templates: jinja2.Environment) -> Dict[str, Any]:
 	data["master_doc"] = "index"
 	data["suppress_warnings"] = ["image.nonlocal_uri"]
 	data["pygments_style"] = "default"
-	data["html_theme"] = templates.globals["sphinx_html_theme"].replace('_', '-')
+	data["html_theme"] = templates.globals["sphinx_html_theme"].replace('-', '_')
 	data["html_theme_path"] = ["../.."]
 	data["html_show_sourcelink"] = True  # True will show link to source
 
@@ -805,7 +805,6 @@ def make_sphinx_config_dict(templates: jinja2.Environment) -> Dict[str, Any]:
 			"__abstractmethods__",
 			"__hash__",
 			]
-
 
 	return data
 
