@@ -567,19 +567,21 @@ def ensure_bumpversion(repo_path: pathlib.Path, templates: jinja2.Environment) -
 	bv.read(str(bumpversion_file))
 
 	old_sections = ["bumpversion:file:git_helper.yml"]
-	required_sections = [f"bumpversion:file:{filename}" for filename in get_bumpversion_filenames(templates)]
+	required_sections = {f"bumpversion:file:{filename}" for filename in get_bumpversion_filenames(templates)}
 
 	if not templates.globals["enable_docs"]:
 		old_sections.append(f"bumpversion:file:{templates.globals['docs_dir']}/index.rst")
 
 	if templates.globals["use_whey"]:
-		old_sections.append(f"bumpversion:file:setup.cfg")
+		old_sections.append("bumpversion:file:setup.cfg")
 
 	for section in old_sections:
 		if section in bv.sections():
 			bv.remove_section(section)
+		if section in required_sections:
+			required_sections.remove(section)
 
-	for section in required_sections:
+	for section in sorted(required_sections):
 		if section not in bv.sections():
 			bv.add_section(section)
 
@@ -590,10 +592,11 @@ def ensure_bumpversion(repo_path: pathlib.Path, templates: jinja2.Environment) -
 			init_section["search"] = ': str = "{current_version}"'
 			init_section["replace"] = ': str = "{new_version}"'
 
-	setup_cfg_section = bv["bumpversion:file:setup.cfg"]
-	if "search" not in setup_cfg_section:
-		setup_cfg_section["search"] = "name = {current_version}"
-		setup_cfg_section["replace"] = "name = {new_version}"
+	if "bumpversion:file:setup.cfg" in bv.sections():
+		setup_cfg_section = bv["bumpversion:file:setup.cfg"]
+		if "search" not in setup_cfg_section:
+			setup_cfg_section["search"] = "name = {current_version}"
+			setup_cfg_section["replace"] = "name = {new_version}"
 
 	bv["bumpversion"]["current_version"] = templates.globals["version"]
 	bv["bumpversion"]["commit"] = "True"
