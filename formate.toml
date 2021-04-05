@@ -35,6 +35,7 @@ known_third_party = [
     "apeye",
     "appdirs",
     "attrs",
+    "backports_entry_points_selectable",
     "betamax",
     "bump2version",
     "check_wheel_contents",
