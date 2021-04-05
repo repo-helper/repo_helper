@@ -32,15 +32,17 @@ import pathlib
 import shutil
 import warnings
 from contextlib import suppress
-from typing import Dict, List, Mapping, MutableMapping, Tuple, Union
+from functools import partial
+from typing import Any, Dict, List, Mapping, MutableMapping, Tuple, Union
 
 # 3rd party
 import dict2css
+import dom_toml
 import jinja2
 import ruamel.yaml as yaml
 from domdf_python_tools.compat import importlib_resources
 from domdf_python_tools.paths import PathPlus
-from domdf_python_tools.stringlist import StringList
+from domdf_python_tools.stringlist import DelimitedList, StringList
 from domdf_python_tools.typing import PathLike
 from domdf_python_tools.utils import enquote_value
 from shippinglabel import normalize
@@ -100,6 +102,7 @@ class DocRequirementsManager(RequirementsManager):
 			# ComparableRequirement("sphinx_autodoc_typehints>=1.11.0"),
 			ComparableRequirement("sphinx-copybutton>=0.2.12"),
 			ComparableRequirement("sphinx-prompt>=1.1.0"),
+			ComparableRequirement("sphinx-pyproject>=0.1.0"),
 			}
 
 	def __init__(self, repo_path: PathLike, templates: jinja2.Environment):
@@ -350,36 +353,12 @@ def make_conf(repo_path: pathlib.Path, templates: jinja2.Environment) -> List[st
 						**templates.globals["html_theme_options"][key],
 						}
 
-	sphinx_extensions = [
-			"sphinx_toolbox",
-			"sphinx_toolbox.more_autodoc",
-			"sphinx_toolbox.more_autosummary",
-			"sphinx_toolbox.documentation_summary",
-			"sphinx_toolbox.tweaks.param_dash",
-			"sphinx_toolbox.tweaks.latex_toc",
-			"sphinx.ext.intersphinx",
-			"sphinx.ext.mathjax",
-			"sphinxcontrib.httpdomain",
-			"sphinxcontrib.extras_require",
-			"sphinx.ext.todo",
-			"sphinxemoji.sphinxemoji",
-			"notfound.extension",
-			"sphinx_copybutton",
-			"sphinxcontrib.default_values",
-			"sphinxcontrib.toctree_plus",
-			"sphinx_debuginfo",
-			"seed_intersphinx_mapping",
-			]
-	# "sphinx.ext.autosectionlabel",
-	# "sphinx_gitstamp",
-
-	sphinx_extensions.extend(templates.globals["extra_sphinx_extensions"])
-
 	file.write_clean(
 			conf.render(
-					sphinx_extensions=sphinx_extensions,
 					pformat=pformat_tabs,
 					enquote_value=enquote_value,
+					dump_toml=partial(dom_toml.dumps, encoder=PythonFormatTomlEncoder),
+					sphinx_config_dict=make_sphinx_config_dict(templates)
 					)
 			)
 
@@ -729,3 +708,127 @@ def make_docs_source_rst(repo_path: pathlib.Path, templates: jinja2.Environment)
 			docs_building_rst.relative_to(repo_path).as_posix(),
 			git_download_png.relative_to(repo_path).as_posix(),
 			]
+
+
+def make_sphinx_config_dict(templates: jinja2.Environment) -> Dict[str, Any]:
+	"""
+	Returns a dictionary of configuration values for use in ``conf.py``.
+
+	:param templates:
+	"""
+
+	data = {}
+
+	data["github_username"] = templates.globals["username"]
+	data["github_repository"] = templates.globals["repo_name"]
+	data["author"] = templates.globals["rtfd_author"]
+	data["project"] = templates.globals["modname"].replace('_', '-')
+	data["copyright"] = "{copyright_years} {author}".format_map(templates.globals)
+	data["language"] = "en"
+	# data["package_root"] =
+
+	data["extensions"] = [
+			"sphinx_toolbox",
+			"sphinx_toolbox.more_autodoc",
+			"sphinx_toolbox.more_autosummary",
+			"sphinx_toolbox.documentation_summary",
+			"sphinx_toolbox.tweaks.param_dash",
+			"sphinx_toolbox.tweaks.latex_toc",
+			"sphinx.ext.intersphinx",
+			"sphinx.ext.mathjax",
+			"sphinxcontrib.httpdomain",
+			"sphinxcontrib.extras_require",
+			"sphinx.ext.todo",
+			"sphinxemoji.sphinxemoji",
+			"notfound.extension",
+			"sphinx_copybutton",
+			"sphinxcontrib.default_values",
+			"sphinxcontrib.toctree_plus",
+			"sphinx_debuginfo",
+			"seed_intersphinx_mapping",
+			*templates.globals["extra_sphinx_extensions"],
+			]
+	# "sphinx.ext.autosectionlabel",
+	# "sphinx_gitstamp",
+
+	data["sphinxemoji_style"] = "twemoji"
+	data["gitstamp_fmt"] = "%d %b %Y"
+	data["templates_path"] = ["_templates"]
+	data["html_static_path"] = ["_static"]
+	data["source_suffix"] = ".rst"
+	data["master_doc"] = "index"
+	data["suppress_warnings"] = ["image.nonlocal_uri"]
+	data["pygments_style"] = "default"
+	data["html_theme"] = templates.globals["sphinx_html_theme"].replace('_', '-')
+	data["html_theme_path"] = ["../.."]
+	data["html_show_sourcelink"] = True  # True will show link to source
+	data["add_module_names"] = False
+	data["hide_none_rtype"] = True
+	data["all_typevars"] = True
+	data["overloads_location"] = "bottom"
+	data["documentation_summary"] = templates.globals["short_desc"]
+
+	# Exclude "standard" methods.
+	data["autodoc_exclude_members"] = [
+			"__dict__",
+			"__class__",
+			"__dir__",
+			"__weakref__",
+			"__module__",
+			"__annotations__",
+			"__orig_bases__",
+			"__parameters__",
+			"__subclasshook__",
+			"__init_subclass__",
+			"__attrs_attrs__",
+			"__init__",
+			"__new__",
+			"__getnewargs__",
+			"__abstractmethods__",
+			"__hash__",
+			]
+
+	data["toctree_plus_types"] = sorted({
+			"class",
+			"function",
+			"method",
+			"data",
+			"enum",
+			"flag",
+			"confval",
+			"directive",
+			"role",
+			"confval",
+			"protocol",
+			"typeddict",
+			"namedtuple",
+			"exception",
+			})
+
+	return data
+
+
+class PythonFormatTomlEncoder(dom_toml.TomlEncoder):
+
+	def dump_list(self, v):  # noqa: D102
+		values = DelimitedList(str(self.dump_value(u)) for u in v)
+		single_line = f"[{values:, }]"
+
+		if len(single_line) <= self.max_width:
+			return single_line
+
+		retval = StringList(['['])
+
+		with retval.with_indent("    ", 1):
+			for u in v:
+				retval.append(f"{str(self.dump_value(u))},")
+
+		retval.append(']')
+
+		return str(retval)
+
+	def dump_value(self, v):
+		if isinstance(v, bool):
+			return str(v)
+
+		return super().dump_value(v)

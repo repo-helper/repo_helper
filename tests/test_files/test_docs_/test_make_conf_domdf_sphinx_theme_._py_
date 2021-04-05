@@ -15,21 +15,10 @@ from __pkginfo__ import __version__
 
 github_username = "octocat"
 github_repository = "hello-world"
-github_url = f"https://github.com/{github_username}/{github_repository}"
-
-rst_prolog = f""".. |pkgname| replace:: hello-world
-.. |pkgname2| replace:: ``hello-world``
-.. |browse_github| replace:: `Browse the GitHub Repository <{github_url}>`__
-"""
-
 author = "Joe Bloggs"
-project = "hello-world".replace('_', '-')
-slug = re.sub(r'\W+', '-', project.lower())
-release = version = __version__
-copyright = "2020-2021 E. Xample"  # pylint: disable=redefined-builtin
+project = "hello-world"
+copyright = "2020-2021 E. Xample"
 language = "en"
-package_root = "hello_world"
-
 extensions = [
 		"sphinx_toolbox",
 		"sphinx_toolbox.more_autodoc",
@@ -50,65 +39,23 @@ extensions = [
 		"sphinx_debuginfo",
 		"seed_intersphinx_mapping",
 		]
-
 sphinxemoji_style = "twemoji"
-todo_include_todos = bool(os.environ.get("SHOW_TODOS", 0))
 gitstamp_fmt = "%d %b %Y"
-
 templates_path = ["_templates"]
 html_static_path = ["_static"]
 source_suffix = ".rst"
 master_doc = "index"
 suppress_warnings = ["image.nonlocal_uri"]
 pygments_style = "default"
-
-intersphinx_mapping = {
-		"python": ("https://docs.python.org/3/", None),
-		"sphinx": ("https://www.sphinx-doc.org/en/stable/", None),
-		}
-
-html_theme = "domdf_sphinx_theme"
-html_theme_options = {"logo_only": False}
+html_theme = "domdf-sphinx-theme"
 html_theme_path = ["../.."]
-html_show_sourcelink = True  # True will show link to source
-
-html_context = {
-		"display_github": True,
-		"github_user": "octocat",
-		"github_repo": "hello-world",
-		"github_version": "master",
-		"conf_py_path": "/doc-source/",
-		}
-htmlhelp_basename = slug
-
-latex_documents = [("index", f'{slug}.tex', project, author, "manual")]
-man_pages = [("index", slug, project, [author], 1)]
-texinfo_documents = [("index", slug, project, author, slug, project, "Miscellaneous")]
-
-toctree_plus_types = {
-		"class",
-		"function",
-		"method",
-		"data",
-		"enum",
-		"flag",
-		"confval",
-		"directive",
-		"role",
-		"confval",
-		"protocol",
-		"typeddict",
-		"namedtuple",
-		"exception",
-		}
-
+html_show_sourcelink = True
 add_module_names = False
 hide_none_rtype = True
 all_typevars = True
 overloads_location = "bottom"
 documentation_summary = "a short description"
-
-autodoc_exclude_members = [   # Exclude "standard" methods.
+autodoc_exclude_members = [
 		"__dict__",
 		"__class__",
 		"__dir__",
@@ -126,6 +73,55 @@ autodoc_exclude_members = [   # Exclude "standard" methods.
 		"__abstractmethods__",
 		"__hash__",
 		]
+toctree_plus_types = [
+		"class",
+		"confval",
+		"data",
+		"directive",
+		"enum",
+		"exception",
+		"flag",
+		"function",
+		"method",
+		"namedtuple",
+		"protocol",
+		"role",
+		"typeddict",
+		]
+
+github_url = f"https://github.com/{github_username}/{github_repository}"
+
+rst_prolog = f""".. |pkgname| replace:: hello-world
+.. |pkgname2| replace:: ``hello-world``
+.. |browse_github| replace:: `Browse the GitHub Repository <{github_url}>`__
+"""
+
+slug = re.sub(r'\W+', '-', project.lower())
+release = version = __version__
+package_root = "hello_world"
+
+todo_include_todos = bool(os.environ.get("SHOW_TODOS", 0))
+
+intersphinx_mapping = {
+		"python": ("https://docs.python.org/3/", None),
+		"sphinx": ("https://www.sphinx-doc.org/en/stable/", None),
+		}
+
+html_theme_options = {"logo_only": False}
+
+html_context = {
+		"display_github": True,
+		"github_user": "octocat",
+		"github_repo": "hello-world",
+		"github_version": "master",
+		"conf_py_path": "/doc-source/",
+		}
+htmlhelp_basename = slug
+
+latex_documents = [("index", f'{slug}.tex', project, author, "manual")]
+man_pages = [("index", slug, project, [author], 1)]
+texinfo_documents = [("index", slug, project, author, slug, project, "Miscellaneous")]
+
 autodoc_default_options = {
 		"members": None,  # Include all members (methods).
 		"special-members": None,
