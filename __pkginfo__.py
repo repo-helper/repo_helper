@@ -11,24 +11,12 @@
 # This script based on https://github.com/rocky/python-uncompyle6/blob/master/__pkginfo__.py
 #
 
-# stdlib
-import pathlib
-
 __all__ = [
-		"__copyright__",
 		"__version__",
-		"repo_root",
-		"install_requires",
 		"extras_require",
 		]
 
-__copyright__ = """
-2020-2021 Dominic Davis-Foster <dominic@davis-foster.co.uk>
-"""
-
 __version__ = "2021.3.31"
-repo_root = pathlib.Path(__file__).parent
-install_requires = (repo_root / "requirements.txt").read_text(encoding="utf-8").split('\n')
 extras_require = {
 		"testing": ["check-wheel-contents>=0.2.0", "coincidence>=0.2.0", "pytest>=6.0.0", "twine>=3.2.0"],
 		"all": ["check-wheel-contents>=0.2.0", "coincidence>=0.2.0", "pytest>=6.0.0", "twine>=3.2.0"]
