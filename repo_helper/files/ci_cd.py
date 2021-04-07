@@ -596,7 +596,7 @@ def ensure_bumpversion(repo_path: pathlib.Path, templates: jinja2.Environment) -
 		setup_cfg_section = bv["bumpversion:file:setup.cfg"]
 		if (
 				"search" not in setup_cfg_section
-				or ("search" in setup_cfg_section and setup_cfg_section["search"] == "name = {current_version}")
+				or ("search" in setup_cfg_section and setup_cfg_section["search"].value == "name = {current_version}")
 				):
 			setup_cfg_section["search"] = "version = {current_version}"
 			setup_cfg_section["replace"] = "version = {new_version}"
