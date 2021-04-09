@@ -451,6 +451,11 @@ class ToxConfig(IniConfigurator):
 			self._ini["testenv:coverage"]["skip_install"] = True
 			self._ini["testenv:coverage"]["ignore_errors"] = True
 			self._ini["testenv:coverage"]["whitelist_externals"] = "/bin/bash"
+			self._ini["testenv:coverage"]["passenv"] = indent_join([
+					"COV_PYTHON_VERSION",
+					"COV_PLATFORM",
+					"COV_PYTHON_IMPLEMENTATION",
+					])
 			self._ini["testenv:coverage"]["changedir"] = "{toxinidir}"
 
 			coverage_deps = ["coverage>=5"]
