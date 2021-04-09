@@ -69,10 +69,6 @@ def test_github_ci_case_1(
 		advanced_file_regression: AdvancedFileRegressionFixture,
 		advanced_data_regression: AdvancedDataRegressionFixture,
 		):
-	demo_environment.globals["gh_actions_versions"] = {
-			"3.6": "py36, mypy",
-			"3.7": "py37, build",
-			}
 
 	managed_files = make_github_ci(tmp_pathplus, demo_environment)
 	advanced_data_regression.check(managed_files, basename="github_ci_managed_files")
@@ -439,14 +435,6 @@ def test_make_github_linux_case_4(
 	demo_environment.globals["tox_py_versions"] = get_tox_python_versions(
 			demo_environment.globals["python_versions"]
 			)
-
-	demo_environment.globals["gh_actions_versions"] = {
-			"3.6": "py36, mypy",
-			"3.7": "py37, build",
-			"3.8": "py38, build",
-			"3.9": "py39, build",
-			"3.10.0-alpha.3": "py310-dev, build",
-			}
 
 	managed_files = make_github_ci(tmp_pathplus, demo_environment)
 	advanced_data_regression.check(managed_files, basename="github_ci_managed_files")
