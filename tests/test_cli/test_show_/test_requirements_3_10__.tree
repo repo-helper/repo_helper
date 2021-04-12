@@ -337,7 +337,7 @@ repo_helper==2020.12.18
 ├── natsort>=7.1.0
 ├── packaging>=20.4
 │   └── pyparsing>=2.0.2
-├── ruamel-yaml>=0.16.12
+├── ruamel-yaml>=0.17.4
 ├── shippinglabel>=0.8.2
 │   ├── apeye>=0.7.0
 │   │   ├── appdirs>=1.4.4
