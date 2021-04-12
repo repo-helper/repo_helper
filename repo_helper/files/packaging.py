@@ -29,7 +29,7 @@ import pathlib
 import posixpath
 import re
 import textwrap
-from typing import Any, Dict, List, Tuple, TypeVar
+from typing import Any, Dict, Iterable, List, Tuple, TypeVar
 
 # 3rd party
 import dom_toml
@@ -42,6 +42,7 @@ from shippinglabel.requirements import ComparableRequirement, combine_requiremen
 # this package
 import repo_helper.files
 from repo_helper.configupdater2 import ConfigUpdater
+from repo_helper.configuration import _pypy_version_re
 from repo_helper.configuration.utils import get_version_classifiers
 from repo_helper.files import management
 from repo_helper.utils import IniConfigurator, indent_join, indent_with_tab, license_lookup, reformat_file
@@ -117,6 +118,9 @@ def make_manifest(repo_path: pathlib.Path, templates: jinja2.Environment) -> Lis
 		file.write_clean('\n'.join(manifest_entries))
 
 	return [file.name]
+
+
+pre_release_re = re.compile(".*(-dev|alpha|beta)", re.IGNORECASE)
 
 
 @management.register("pyproject")
@@ -235,15 +239,18 @@ def make_pyproject(repo_path: pathlib.Path, templates: jinja2.Environment) -> Li
 		for py_version in templates.globals["python_versions"]:
 			py_version = str(py_version)
 
-			if re.match(".*(-dev|alpha|beta)", py_version):
+			if pre_release_re.match(py_version):
 				continue
+
+			pypy_version_m = _pypy_version_re.match(py_version)
 
 			if py_version.startswith('3'):
 				python_versions.add(py_version)
 				python_implementations.add("CPython")
 
-			elif py_version.lower().startswith("pypy"):
+			elif pypy_version_m:
 				python_implementations.add("PyPy")
+				python_versions.add(f"3.{pypy_version_m.group(1)}")
 
 		data["tool"]["whey"]["python-versions"] = sorted(python_versions)
 		data["tool"]["whey"]["python-implementations"] = sorted(python_implementations)

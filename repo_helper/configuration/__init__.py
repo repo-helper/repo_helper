@@ -26,8 +26,22 @@ Configuration options.
 # stdlib
 import json
 import re
+from contextlib import suppress
 from io import StringIO
-from typing import Any, Callable, Dict, Iterable, List, Mapping, MutableMapping, Optional, Sequence, Set, Union
+from typing import (
+		Any,
+		Callable,
+		Dict,
+		Iterable,
+		Iterator,
+		List,
+		Mapping,
+		MutableMapping,
+		Optional,
+		Sequence,
+		Set,
+		Union
+		)
 
 # 3rd party
 import click
@@ -38,6 +52,7 @@ from domdf_python_tools.compat import importlib_resources
 from domdf_python_tools.paths import PathPlus
 from domdf_python_tools.typing import PathLike
 from domdf_python_tools.versions import Version
+from first import first
 from natsort import natsorted
 from ruamel.yaml import YAML
 
@@ -329,7 +344,7 @@ class RepoHelperParser(Parser):
 
 		# Python Versions
 		versions = no_dev_versions(parsed_config_vars["python_versions"])
-		parsed_config_vars["min_py_version"] = min_py_version = versions[0]
+		parsed_config_vars["min_py_version"] = min_py_version = first(_pure_version_numbers(*versions))
 
 		if parsed_config_vars["requires_python"] is None:
 			if min_py_version in {"3.6", 3.6}:
@@ -338,7 +353,7 @@ class RepoHelperParser(Parser):
 				parsed_config_vars["requires_python"] = min_py_version
 
 		smallest_py_version = Version.from_str(min_py_version)
-		for py_version in versions:
+		for py_version in _pure_version_numbers(*versions):
 			try:
 				if Version.from_str(py_version) < smallest_py_version:
 					smallest_py_version = Version.from_str(py_version)
@@ -507,3 +522,20 @@ class YamlEditor(YAML):
 			self.dump_to_file(data, filename, mode='w')
 		else:
 			self.dump_to_file({key: sort_func(new_value)}, filename, mode='a')  # type: ignore
+
+
+_pypy_version_re = re.compile(r"pypy3([0-9])", flags=re.IGNORECASE)
+
+
+def _pure_version_numbers(*version_numbers) -> Iterator[str]:
+	for version in version_numbers:
+
+		pypy_version_match = _pypy_version_re.match(version)
+
+		if isinstance(version, (float, int)):
+			yield str(version_numbers)
+		elif pypy_version_match:
+			yield f"3.{pypy_version_match.group(1)}"
+		else:
+			with suppress(ValueError):
+				yield str(float(version))

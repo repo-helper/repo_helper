@@ -122,6 +122,7 @@ repo_helper==2020.12.18
 ├── email-validator==1.1.2
 │   ├── dnspython>=1.15.0
 │   └── idna>=2.0.0
+├── first>=2.0.2
 ├── idna==2.10
 ├── isort>=5.0.0
 ├── jinja2>=2.11.2
