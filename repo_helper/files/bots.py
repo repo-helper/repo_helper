@@ -117,7 +117,7 @@ def make_auto_assign_action(repo_path: pathlib.Path, templates: jinja2.Environme
 	auto_assign_yml.write_lines([
 			f"# {templates.globals['managed_message']}",
 			"---",
-			_round_trip_dump(config),  # type: ignore
+			_round_trip_dump(config),
 			"# more settings at https://github.com/marketplace/actions/auto-assign-action",
 			])
 
