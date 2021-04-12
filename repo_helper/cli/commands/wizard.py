@@ -36,7 +36,7 @@ from domdf_python_tools.paths import PathPlus
 
 # this package
 from repo_helper.cli import cli_command
-from repo_helper.utils import license_lookup
+from repo_helper.utils import _round_trip_dump, license_lookup
 
 __all__ = ["wizard"]
 
@@ -173,12 +173,10 @@ Not all SPDX identifiers are allowed as not all map to PyPI Trove classifiers.""
 
 	data = {k: scalarstring.SingleQuotedScalarString(v) for k, v in data.items()}
 
-	output = StringIO()
-	yaml.round_trip_dump(data, output, explicit_start=True)
-
 	config_file.write_lines([
 			"# Configuration for 'repo_helper' (https://github.com/domdfcoding/repo_helper)",
-			output.getvalue(),
+			"---",
+			_round_trip_dump(data),
 			"enable_conda: false",
 			])
 

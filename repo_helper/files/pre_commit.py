@@ -39,6 +39,7 @@ import ruamel.yaml
 from apeye.url import URL
 from domdf_python_tools.paths import PathPlus
 from domdf_python_tools.stringlist import StringList
+from ruamel.yaml import YAML
 from typing_extensions import Literal, TypedDict
 
 # this package
@@ -48,6 +49,8 @@ __all__ = ["GITHUB_COM", "make_github_url", "Hook", "Repo", "make_pre_commit"]
 
 #: Instance of :class:`apeye.url.URL` that points to the GitHub website.
 GITHUB_COM: URL = URL("https://github.com")
+
+yaml_safe_loader = YAML(typ="safe", pure=True)
 
 
 @functools.lru_cache()
@@ -326,7 +329,7 @@ def make_pre_commit(repo_path: pathlib.Path, templates: jinja2.Environment) -> L
 
 		custom_hooks = [
 				Repo(**repo)
-				for repo in ruamel.yaml.safe_load(custom_hooks_yaml) or []
+				for repo in yaml_safe_loader.load(custom_hooks_yaml) or []
 				if repo["repo"] not in managed_hooks_urls
 				]
 

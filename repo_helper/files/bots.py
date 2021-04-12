@@ -35,6 +35,7 @@ from domdf_python_tools.paths import PathPlus
 
 # this package
 from repo_helper.files import management
+from repo_helper.utils import _round_trip_dump
 
 __all__ = [
 		"make_dependabot",
@@ -116,7 +117,7 @@ def make_auto_assign_action(repo_path: pathlib.Path, templates: jinja2.Environme
 	auto_assign_yml.write_lines([
 			f"# {templates.globals['managed_message']}",
 			"---",
-			yaml.round_trip_dump(config, default_flow_style=False),  # type: ignore
+			_round_trip_dump(config),  # type: ignore
 			"# more settings at https://github.com/marketplace/actions/auto-assign-action",
 			])
 
@@ -155,7 +156,7 @@ def make_dependabot(repo_path: pathlib.Path, templates: jinja2.Environment) -> L
 	dependabot_file.write_lines([
 			f"# {templates.globals['managed_message']}",
 			"---",
-			yaml.round_trip_dump(config, default_flow_style=False),  # type: ignore
+			_round_trip_dump(config),
 			])
 
 	return [dependabot_file.relative_to(repo_path).as_posix()]
@@ -189,7 +190,7 @@ def make_dependabotv2(repo_path: pathlib.Path, templates: jinja2.Environment) ->
 	dependabot_file.write_lines([
 			f"# {templates.globals['managed_message']}",
 			"---",
-			yaml.round_trip_dump(config, default_flow_style=False),  # type: ignore
+			_round_trip_dump(config),
 			])
 
 	return [dependabot_file.relative_to(repo_path).as_posix()]
@@ -265,7 +266,7 @@ def make_automerge_action(repo_path: pathlib.Path, templates: jinja2.Environment
 	automerge_workflow.write_lines([
 			f"# {templates.globals['managed_message']}",
 			"---",
-			yaml.round_trip_dump(config, default_flow_style=False),  # type: ignore
+			_round_trip_dump(config),
 			])
 
 	return [automerge_workflow.relative_to(repo_path).as_posix()]
@@ -303,7 +304,7 @@ def make_artefact_cleaner(repo_path: pathlib.Path, templates: jinja2.Environment
 	cleanup_workflow.write_lines([
 			f"# {templates.globals['managed_message']}",
 			"---",
-			yaml.round_trip_dump(config, default_flow_style=False),  # type: ignore
+			_round_trip_dump(config),
 			])
 
 	return [cleanup_workflow.relative_to(repo_path).as_posix()]

@@ -30,7 +30,8 @@ import pathlib
 import re
 import textwrap
 from datetime import date, timedelta
-from typing import Callable, Dict, Iterable, List, Optional, Union
+from io import StringIO
+from typing import Any, Callable, Iterable, List, Optional, Union
 
 # 3rd party
 import dulwich.repo
@@ -43,6 +44,7 @@ from domdf_python_tools.paths import PathPlus, sort_paths
 from domdf_python_tools.pretty_print import FancyPrinter
 from domdf_python_tools.stringlist import StringList
 from domdf_python_tools.typing import PathLike
+from ruamel.yaml import YAML
 from shippinglabel import normalize
 from southwark import open_repo_closing, status
 
@@ -461,3 +463,13 @@ def set_gh_actions_versions(py_versions: Iterable[str]) -> List[str]:
 		py_versions.remove("rustpython")
 
 	return py_versions
+
+
+_yaml_round_trip_dumper = YAML(typ="rt")
+_yaml_round_trip_dumper.default_flow_style = False
+
+
+def _round_trip_dump(obj: Any):
+	stream = StringIO()
+	_yaml_round_trip_dumper.dump(obj, stream=stream)
+	return stream.getvalue()
