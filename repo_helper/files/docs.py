@@ -198,7 +198,8 @@ def make_rtfd(repo_path: pathlib.Path, templates: jinja2.Environment) -> List[st
 	"""
 
 	file = PathPlus(repo_path / ".readthedocs.yml")
-	file.parent.maybe_make()
+
+	docs_dir = PathPlus(repo_path / templates.globals['docs_dir'])
 
 	sphinx_config = {
 			"builder": "html",
@@ -212,7 +213,11 @@ def make_rtfd(repo_path: pathlib.Path, templates: jinja2.Environment) -> List[st
 			]
 
 	install_config: List[Dict] = [{"requirements": r} for r in install_requirements]
-	install_config.append({"method": "pip", "path": '.'})
+
+	if (docs_dir / "rtd-extra-deps.txt").is_file():
+		install_config.append({"requirements": f"{templates.globals['docs_dir']}/rtd-extra-deps.txt"})
+	else:
+		install_config.append({"method": "pip", "path": '.'})
 
 	python_config = {"version": 3.8, "install": install_config}
 
