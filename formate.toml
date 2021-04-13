@@ -55,6 +55,7 @@ known_third_party = [
     "first",
     "github",
     "idna",
+    "importlib_metadata",
     "isort",
     "jinja2",
     "lorem",
