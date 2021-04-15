@@ -105,7 +105,7 @@ installation_regex = re.compile(r"(?s)(\.\. start installation)(.*?)(\.\. end in
 shields_regex = re.compile(r"(?s)(\.\. start shields)(.*?)(\.\. end shields)")
 
 #: Regular expression to match the short description block placeholder.
-short_desc_regex = re.compile(r"(?s)(\.\. start short_desc)(.*?)(\.\. end short_desc)")
+short_desc_regex = re.compile(r"(?s)(\.\. start short[-_]desc)(.*?)(\.\. end short[-_]desc)")
 
 #: Regular expression to match the links block placeholder.
 links_regex = re.compile(r"(?s)(\.\. start links)(.*?)(\.\. end links)")
