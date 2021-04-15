@@ -128,7 +128,7 @@ To install with ``conda``:
 
 	.. code-block:: bash
 
-		$ conda config --add channels http://conda.anaconda.org/conda-forge
+		$ conda config --add channels https://conda.anaconda.org/conda-forge
 
 	* Then install
 

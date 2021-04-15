@@ -14,7 +14,7 @@ To install with ``conda``:
 
 	.. code-block:: bash
 {% for channel in conda_channels %}
-		$ conda config --add channels http://conda.anaconda.org/{{ channel }}{% endfor %}
+		$ conda config --add channels https://conda.anaconda.org/{{ channel }}{% endfor %}
 
 	* Then install
 
