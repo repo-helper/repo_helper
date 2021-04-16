@@ -216,6 +216,13 @@ def make_rtfd(repo_path: pathlib.Path, templates: jinja2.Environment) -> List[st
 
 	if (docs_dir / "rtd-extra-deps.txt").is_file():
 		install_config.append({"requirements": f"{templates.globals['docs_dir']}/rtd-extra-deps.txt"})
+	elif templates.globals["tox_testenv_extras"]:
+		install_config.append({
+				"method": "pip",
+				"path": '.',
+				"extra_requirements": templates.globals["tox_testenv_extras"],
+				})
+
 	else:
 		install_config.append({"method": "pip", "path": '.'})
 

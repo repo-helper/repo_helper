@@ -41,18 +41,16 @@ from repo_helper.files.old import remove_autodoc_augment_defaults
 
 
 def test_make_rtfd_case_1(tmp_pathplus, demo_environment, file_regression: FileRegressionFixture):
+	demo_environment.globals["tox_testenv_extras"] = "all"
 	managed_files = make_rtfd(tmp_pathplus, demo_environment)
 	assert managed_files == [".readthedocs.yml"]
 	check_file_output(tmp_pathplus / managed_files[0], file_regression)
 
 
 def test_make_rtfd_case_2(tmp_pathplus, demo_environment, file_regression: FileRegressionFixture):
-	demo_environment.globals.update(
-			dict(
-					additional_requirements_files=["hello_world/submodule/requirements.txt"],
-					docs_dir="userguide",
-					)
-			)
+	demo_environment.globals["tox_testenv_extras"] = "all"
+	demo_environment.globals["additional_requirements_files"] = ["hello_world/submodule/requirements.txt"]
+	demo_environment.globals["docs_dir"] = "userguide"
 
 	managed_files = make_rtfd(tmp_pathplus, demo_environment)
 	assert managed_files == [".readthedocs.yml"]

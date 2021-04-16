@@ -16,3 +16,4 @@ python:
    - requirements: hello_world/submodule/requirements.txt
    - method: pip
      path: .
+     extra_requirements: all
