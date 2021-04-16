@@ -344,7 +344,9 @@ class RepoHelperParser(Parser):
 
 		# Python Versions
 		versions = no_dev_versions(parsed_config_vars["python_versions"])
-		parsed_config_vars["min_py_version"] = min_py_version = first(_pure_version_numbers(*versions), default="3.6")
+		parsed_config_vars["min_py_version"] = min_py_version = first(
+				_pure_version_numbers(*versions), default="3.6"
+				)
 
 		if parsed_config_vars["requires_python"] is None:
 			if min_py_version in {"3.6", 3.6}:

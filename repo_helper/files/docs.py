@@ -199,7 +199,7 @@ def make_rtfd(repo_path: pathlib.Path, templates: jinja2.Environment) -> List[st
 
 	file = PathPlus(repo_path / ".readthedocs.yml")
 
-	docs_dir = PathPlus(repo_path / templates.globals['docs_dir'])
+	docs_dir = PathPlus(repo_path / templates.globals["docs_dir"])
 
 	sphinx_config = {
 			"builder": "html",
