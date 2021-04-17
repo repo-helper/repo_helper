@@ -469,7 +469,7 @@ class YamlEditor(YAML):
 
 		if 'w' in mode:
 			filename.write_lines([
-					"# Configuration for 'repo_helper' (https://github.com/domdfcoding/repo_helper)",
+					"# Configuration for 'repo_helper' (https://github.com/repo-helper/repo_helper)",
 					self.dumps(data, explicit_start=True),
 					])
 

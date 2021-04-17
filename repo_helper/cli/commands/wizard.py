@@ -174,7 +174,7 @@ Not all SPDX identifiers are allowed as not all map to PyPI Trove classifiers.""
 	data = {k: scalarstring.SingleQuotedScalarString(v) for k, v in data.items()}
 
 	config_file.write_lines([
-			"# Configuration for 'repo_helper' (https://github.com/domdfcoding/repo_helper)",
+			"# Configuration for 'repo_helper' (https://github.com/repo-helper/repo_helper)",
 			"---",
 			_round_trip_dump(data),
 			"enable_conda: false",
@@ -186,7 +186,7 @@ The options you provided have been written to the file {config_file}.
 You can configure additional options in that file.
 
 The schema for the Yaml file can be found at:
-	https://github.com/domdfcoding/repo_helper/blob/master/repo_helper/repo_helper_schema.json
+	https://github.com/repo-helper/repo_helper/blob/master/repo_helper/repo_helper_schema.json
 You may be able to configure your code editor to validate your configuration file against that schema.
 
 repo_helper can now be run with the 'repo_helper' command in the repository root.

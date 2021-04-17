@@ -48,5 +48,5 @@ jobs:
           $CONDA/bin/conda install --file {{ tests_dir }}/requirements.txt -y
           $CONDA/bin/pytest {{ tests_dir }}/
 
-# See also https://github.com/domdfcoding/repo_helper/new/master?filename=.github%2Fworkflows%2Fpython-package-conda.yml&workflow_template=python-package-conda
+# See also https://github.com/repo-helper/repo_helper/new/master?filename=.github%2Fworkflows%2Fpython-package-conda.yml&workflow_template=python-package-conda
 #}
