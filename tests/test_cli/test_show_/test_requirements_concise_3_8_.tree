@@ -2,7 +2,8 @@ repo_helper==2020.12.18
 ├── apeye>=0.7.0
 ├── appdirs>=1.4.4
 ├── asttokens>=2.0.4
-├── attrs>=20.2.0
+├── attr-utils>=0.5.6
+├── attrs>=20.3.0
 ├── cachecontrol[filecache]>=0.12.6
 ├── cawdrey>=0.4.1
 ├── certifi>=2017.4.17
@@ -16,7 +17,7 @@ repo_helper==2020.12.18
 ├── deprecation-alias>=0.1.1
 ├── dict2css>=0.2.0
 ├── dnspython>=1.15.0
-├── dom-toml>=0.3.0
+├── dom-toml>=0.4.0
 ├── domdf-python-tools>=2.7.0
 ├── dulwich!=0.20.7,!=0.20.8,!=0.20.9,>=0.20.5
 ├── email-validator==1.1.2
@@ -37,6 +38,7 @@ repo_helper==2020.12.18
 ├── packaging>=20.9
 ├── pydash>=4.7.4
 ├── pyparsing>=2.0.2
+├── pyproject-parser>=0.1.1
 ├── pyrsistent>=0.14.0
 ├── requests>=2.24.0
 ├── requests-file>=1.4
@@ -49,12 +51,13 @@ repo_helper==2020.12.18
 ├── tabulate>=0.8.8
 ├── tldextract>=2.2.0
 ├── toml>=0.10.2
+├── toolz>=0.11.1
 ├── trove-classifiers>=2020.10.21
 ├── typing-extensions>=3.7.4.3
 ├── typing-inspect>=0.6.0
 ├── urllib3<1.27,>=1.24.1
 ├── wheel-filename>=1.2.0
-├── whey>=0.0.8
+├── whey>=0.0.12
 ├── yapf==0.30.0
 ├── yapf-isort>=0.5.2
 └── zipp>=0.5
