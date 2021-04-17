@@ -11,7 +11,7 @@ from sphinx_pyproject import SphinxConfig
 
 config = SphinxConfig()
 
-github_username = "domdfcoding"
+github_username = "repo-helper"
 github_repository = "repo_helper"
 author = "Dominic Davis-Foster"
 project = "repo-helper"
@@ -113,7 +113,7 @@ html_theme_options = {"logo_only": False}
 
 html_context = {
 		"display_github": True,
-		"github_user": "domdfcoding",
+		"github_user": "repo-helper",
 		"github_repo": "repo_helper",
 		"github_version": "master",
 		"conf_py_path": "/doc-source/",

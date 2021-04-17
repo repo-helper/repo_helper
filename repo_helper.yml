@@ -5,7 +5,9 @@ copyright_years: "2020-2021"
 author: "Dominic Davis-Foster"
 email: "dominic@davis-foster.co.uk"
 version: "2021.3.31"
-username: "domdfcoding"
+username: "repo-helper"
+assignee: "domdfcoding"
+primary_conda_channel: "domdfcoding"
 license: 'LGPLv3+'
 short_desc: 'A tool to manage configuration files, build scripts etc. across multiple projects.'
 docs_url: https://docs.repo-helper.uk

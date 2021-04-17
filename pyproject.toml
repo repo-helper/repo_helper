@@ -19,9 +19,9 @@ name = "Dominic Davis-Foster"
 file = "LICENSE"
 
 [project.urls]
-Homepage = "https://github.com/domdfcoding/repo_helper"
-"Issue Tracker" = "https://github.com/domdfcoding/repo_helper/issues"
-"Source Code" = "https://github.com/domdfcoding/repo_helper"
+Homepage = "https://github.com/repo-helper/repo_helper"
+"Issue Tracker" = "https://github.com/repo-helper/repo_helper/issues"
+"Source Code" = "https://github.com/repo-helper/repo_helper"
 Documentation = "https://docs.repo-helper.uk"
 
 [project.scripts]
