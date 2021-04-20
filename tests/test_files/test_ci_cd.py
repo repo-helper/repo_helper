@@ -70,6 +70,7 @@ def test_github_ci_case_1(
 		advanced_data_regression: AdvancedDataRegressionFixture,
 		):
 
+	demo_environment.globals["github_ci_requirements"] = {"Windows": {"pre": [], "post": []}}
 	managed_files = make_github_ci(tmp_pathplus, demo_environment)
 	advanced_data_regression.check(managed_files, basename="github_ci_managed_files")
 	assert (tmp_pathplus / managed_files[0]).is_file()
@@ -86,6 +87,7 @@ def test_github_ci_case_2(
 
 	demo_environment.globals["travis_additional_requirements"] = ["isort", "black"]
 	demo_environment.globals["platforms"] = ["macOS"]
+	demo_environment.globals["github_ci_requirements"] = {"macOS": {"pre": [], "post": []}}
 
 	managed_files = make_github_ci(tmp_pathplus, demo_environment)
 	advanced_data_regression.check(managed_files, basename="github_ci_managed_files")
@@ -100,6 +102,7 @@ def test_github_ci_windows_38(
 		advanced_file_regression: AdvancedFileRegressionFixture,
 		):
 
+	demo_environment.globals["github_ci_requirements"] = {"macOS": {"pre": [], "post": []}}
 	demo_environment.globals["travis_additional_requirements"] = ["isort", "black"]
 	demo_environment.globals["platforms"] = ["macOS"]
 	demo_environment.globals["pure_python"] = False
@@ -118,7 +121,11 @@ def test_github_ci_case_3(
 		demo_environment,
 		advanced_data_regression: AdvancedDataRegressionFixture,
 		):
-	demo_environment.globals.update(dict(platforms=["Windows", "macOS"], ))
+
+	demo_environment.globals["github_ci_requirements"] = {
+			"Windows": {"pre": [], "post": []}, "macOS": {"pre": [], "post": []}
+			}
+	demo_environment.globals["platforms"] = ["Windows", "macOS"]
 
 	managed_files = make_github_ci(tmp_pathplus, demo_environment)
 	advanced_data_regression.check(managed_files, basename="github_ci_managed_files")
@@ -262,9 +269,9 @@ def test_make_github_mypy_extra_install(
 		extra_install_pre: List[str],
 		extra_install_post: List[str],
 		):
-
-	demo_environment.globals["travis_extra_install_pre"] = extra_install_pre
-	demo_environment.globals["travis_extra_install_post"] = extra_install_post
+	demo_environment.globals["github_ci_requirements"] = {
+			"Linux": {"pre": extra_install_pre, "post": extra_install_post}
+			}
 
 	assert make_github_mypy(tmp_pathplus, demo_environment) == [".github/workflows/mypy.yml"]
 	assert (tmp_pathplus / ".github/workflows/mypy.yml").is_file()
@@ -277,8 +284,9 @@ def test_make_github_mypy_extra_install_only_linux(
 		advanced_file_regression: AdvancedFileRegressionFixture,
 		):
 
-	demo_environment.globals["travis_extra_install_pre"] = ["sudo apt update"]
-	demo_environment.globals["travis_extra_install_post"] = ["sudo apt install python3-gi"]
+	demo_environment.globals["github_ci_requirements"] = {
+			"Linux": {"pre": ["sudo apt update"], "post": ["sudo apt install python3-gi"]}
+			}
 	demo_environment.globals["platforms"] = ["Linux"]
 
 	assert make_github_mypy(tmp_pathplus, demo_environment) == [".github/workflows/mypy.yml"]
@@ -368,8 +376,9 @@ def test_make_github_linux_case_2(
 
 	demo_environment.globals["platforms"] = ["Linux"]
 	demo_environment.globals["travis_ubuntu_version"] = "bionic"
-	demo_environment.globals["travis_extra_install_pre"] = ["sudo apt update"]
-	demo_environment.globals["travis_extra_install_post"] = ["sudo apt install python3-gi"]
+	demo_environment.globals["github_ci_requirements"] = {
+			"Linux": {"pre": ["sudo apt update"], "post": ["sudo apt install python3-gi"]}
+			}
 	demo_environment.globals["travis_additional_requirements"] = ["isort", "black"]
 	demo_environment.globals["enable_tests"] = False
 	demo_environment.globals["enable_conda"] = False
@@ -424,8 +433,9 @@ def test_make_github_linux_case_4(
 
 	demo_environment.globals["platforms"] = ["Linux"]
 	demo_environment.globals["travis_ubuntu_version"] = "bionic"
-	demo_environment.globals["travis_extra_install_pre"] = ["sudo apt update"]
-	demo_environment.globals["travis_extra_install_post"] = ["sudo apt install python3-gi"]
+	demo_environment.globals["github_ci_requirements"] = {
+			"Linux": {"pre": ["sudo apt update"], "post": ["sudo apt install python3-gi"]}
+			}
 	demo_environment.globals["travis_additional_requirements"] = ["isort", "black"]
 	demo_environment.globals["enable_tests"] = False
 	demo_environment.globals["enable_conda"] = False

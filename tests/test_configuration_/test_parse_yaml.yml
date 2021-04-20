@@ -41,6 +41,16 @@ extras_require:
   - lxml
   schema:
   - lxml
+github_ci_requirements:
+  Linux:
+    post: []
+    pre: []
+  Windows:
+    post: []
+    pre: []
+  macOS:
+    post: []
+    pre: []
 html_context: {}
 html_theme_options: {}
 imgbot_ignore:
@@ -103,8 +113,6 @@ tox_requirements: []
 tox_testenv_extras: all
 tox_unmanaged: []
 travis_additional_requirements: []
-travis_extra_install_post: []
-travis_extra_install_pre: []
 travis_ubuntu_version: focal
 use_experimental_backend: false
 use_whey: false

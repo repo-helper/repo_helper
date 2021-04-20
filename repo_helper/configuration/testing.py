@@ -24,10 +24,14 @@ r"""
 #
 
 # stdlib
-from typing import List, Union
+from typing import Dict, List, Optional, Union
 
 # 3rd party
 from configconfig.configvar import ConfigVar
+
+# 3rd party
+from configconfig.utils import RawConfigVarsType, optional_getter
+from configconfig.validator import Validator
 
 __all__ = [
 		"enable_tests",
@@ -41,6 +45,7 @@ __all__ = [
 		"mypy_version",
 		"tox_unmanaged",
 		"min_coverage",
+		"github_ci_requirements",
 		]
 
 
@@ -239,3 +244,77 @@ class tox_unmanaged(ConfigVar):  # noqa
 	dtype = List[str]
 	default: List[str] = []
 	category: str = "testing"
+
+
+class _Validator(Validator):
+
+	def visit_dict(self, raw_config_vars: RawConfigVarsType) -> Dict:
+		"""
+		Used to validate and convert :class:`dict` values.
+
+		:param raw_config_vars:
+		"""
+
+		# Dict[str, Dict[str, List[str]]]
+		if self.config_var.dtype == Dict[str, Dict[str, List[str]]]:
+			obj = optional_getter(raw_config_vars, self.config_var, self.config_var.required)
+
+			if not isinstance(obj, dict):
+				raise ValueError(f"'{self.config_var.__name__}' must be a dictionary") from None
+
+			return {str(k): {str(kk): [str(i) for i in vv] for kk, vv in v.items()} for k, v in obj.items()}
+		else:
+			return super().visit_dict(raw_config_vars)
+
+
+class github_ci_requirements(ConfigVar):  # noqa
+	"""
+	Additional steps to run in GitHub actions before and after installing dependencies.
+
+	.. versionadded:: $VERSION
+
+	Example:
+
+	.. code-block:: yaml
+
+		github_ci_requirements:
+		  Linux:
+		    pre:
+		     - sudo apt update
+		     - sudo apt install python3-gi
+		  macOS:
+		    post:
+		     - "Installation Complete!"
+	"""
+
+	dtype = Dict[str, Dict[str, List[str]]]
+	default: Dict[str, Dict[str, List[str]]] = {}
+	category: str = "testing"
+
+	@classmethod
+	def validate(cls, raw_config_vars: Optional[RawConfigVarsType] = None) -> Dict[str, Dict[str, List[str]]]:
+		"""
+		Validate the value obtained from the ``YAML`` file and coerce into the appropriate return type.
+
+		:param raw_config_vars: Dictionary to obtain the value from.
+
+		:rtype: See the ``rtype`` attribute.
+		"""
+
+		if raw_config_vars is None:
+			raw_config_vars = {}
+
+		if cls.rtype is None:
+			cls.rtype = cls.dtype
+
+		parsed_config: Dict[str, Dict[str, List[str]]] = _Validator(cls).validate(raw_config_vars)
+
+		parsed_config.setdefault("Linux", {})
+		parsed_config.setdefault("macOS", {})
+		parsed_config.setdefault("Windows", {})
+
+		for platform in parsed_config.values():
+			platform.setdefault("pre", [])
+			platform.setdefault("post", [])
+
+		return parsed_config

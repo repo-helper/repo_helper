@@ -165,6 +165,10 @@
       "type": "object",
       "description": "A dictionary of extra requirements, where the keys are the names of the extras and the values are a list of requirements."
     },
+    "github_ci_requirements": {
+      "type": "object",
+      "description": "Additional steps to run in GitHub actions before and after installing dependencies."
+    },
     "html_context": {
       "type": "object",
       "description": "A dictionary of configuration values for the documentation HTML context."

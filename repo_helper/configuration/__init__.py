@@ -150,6 +150,7 @@ from repo_helper.configuration.python_versions_ import (
 from repo_helper.configuration.testing import (
 		enable_devmode,
 		enable_tests,
+		github_ci_requirements,
 		min_coverage,
 		mypy_deps,
 		mypy_plugins,
@@ -255,6 +256,7 @@ __all__ = [
 		"min_coverage",
 		"docs_fail_on_warning",
 		"use_whey",
+		"github_ci_requirements",
 		]
 
 
@@ -387,6 +389,15 @@ class RepoHelperParser(Parser):
 				*parsed_config_vars["conda_channels"],
 				parsed_config_vars["primary_conda_channel"],
 				})
+
+		parsed_config_vars["github_ci_requirements"]["Linux"]["pre"] = (
+				parsed_config_vars["github_ci_requirements"]["Linux"]["pre"]
+				or parsed_config_vars.pop("travis_extra_install_pre")
+				)
+		parsed_config_vars["github_ci_requirements"]["Linux"]["post"] = (
+				parsed_config_vars["github_ci_requirements"]["Linux"]["post"]
+				or parsed_config_vars.pop("travis_extra_install_post")
+				)
 
 		return parsed_config_vars
 

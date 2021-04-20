@@ -344,8 +344,11 @@ class ActionsManager:
 		Returns the Python requirements to run tests for on Windows.
 		"""
 
-		dependency_lines = StringList(self.standard_python_install_lines)
+		dependency_lines = StringList(self.templates.globals["github_ci_requirements"]["Windows"]["pre"])
+		dependency_lines.extend(self.standard_python_install_lines)
+
 		dependency_lines.extend(self._get_additional_requirements())
+		dependency_lines.extend(self.templates.globals["github_ci_requirements"]["Windows"]["post"])
 
 		return dependency_lines
 
@@ -354,14 +357,14 @@ class ActionsManager:
 		Returns the Python requirements to run tests for on Linux.
 		"""
 
-		dependency_lines = StringList(self.templates.globals["travis_extra_install_pre"])
+		dependency_lines = StringList(self.templates.globals["github_ci_requirements"]["Linux"]["pre"])
 		dependency_lines.extend(self.standard_python_install_lines)
 
 		if self.templates.globals["enable_tests"]:
 			dependency_lines.append("python -m pip install --upgrade coverage_pyver_pragma")
 
 		dependency_lines.extend(self._get_additional_requirements())
-		dependency_lines.extend(self.templates.globals["travis_extra_install_post"])
+		dependency_lines.extend(self.templates.globals["github_ci_requirements"]["Linux"]["post"])
 
 		return dependency_lines
 
@@ -370,9 +373,9 @@ class ActionsManager:
 		Returns the Python requirements to run tests for on Linux.
 		"""
 
-		dependency_lines = StringList(self.templates.globals["travis_extra_install_pre"])
+		dependency_lines = StringList(self.templates.globals["github_ci_requirements"]["Linux"]["pre"])
 		dependency_lines.extend(self.standard_python_install_lines)
-		dependency_lines.extend(self.templates.globals["travis_extra_install_post"])
+		dependency_lines.extend(self.templates.globals["github_ci_requirements"]["Linux"]["post"])
 
 		return dependency_lines
 
@@ -381,7 +384,13 @@ class ActionsManager:
 		Returns the Python requirements to run tests for on macOS.
 		"""
 
-		return self.get_windows_ci_requirements()
+		dependency_lines = StringList(self.templates.globals["github_ci_requirements"]["macOS"]["pre"])
+		dependency_lines.extend(self.standard_python_install_lines)
+
+		dependency_lines.extend(self._get_additional_requirements())
+		dependency_lines.extend(self.templates.globals["github_ci_requirements"]["macOS"]["post"])
+
+		return dependency_lines
 
 
 platform_ci_names = {
