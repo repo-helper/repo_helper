@@ -36,3 +36,10 @@ all = [ "check-wheel-contents>=0.2.0", "coincidence>=0.2.0", "pytest>=6.0.0", "t
 extras = []
 conda-channels = [ "conda-forge", "domdfcoding",]
 license-key = "LGPL-3.0-or-later"
+
+[tool.dep_checker]
+namespace_packages = ["ruamel.yaml"]
+allowed_unused = ["idna"]
+[tool.dep_checker.name_mapping]
+attrs = "attr"
+ruamel-yaml = "ruamel.yaml"
