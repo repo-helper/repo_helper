@@ -178,9 +178,9 @@ def make_pyproject(repo_path: pathlib.Path, templates: jinja2.Environment) -> Li
 	data["project"]["version"] = templates.globals["version"]
 	data["project"]["description"] = templates.globals["short_desc"]
 	data["project"]["readme"] = "README.rst"
-	data["project"]["keywords"] = templates.globals["keywords"]
+	data["project"]["keywords"] = sorted(templates.globals["keywords"])
 	data["project"]["dynamic"] = ["requires-python", "classifiers", "dependencies"]
-	data["project"]["authors"] = [{"email": templates.globals["email"], "name": templates.globals["author"]}]
+	data["project"]["authors"] = [{"name": templates.globals["author"], "email": templates.globals["email"]}]
 	data["project"]["license"] = {"file": "LICENSE"}
 
 	url = "https://github.com/{username}/{repo_name}".format_map(templates.globals)

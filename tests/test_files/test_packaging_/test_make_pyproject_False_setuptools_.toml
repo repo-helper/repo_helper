@@ -7,12 +7,12 @@ name = "hello-world"
 version = "2020.1.1"
 description = "a short description"
 readme = "README.rst"
-keywords = [ "awesome", "python", "project",]
+keywords = [ "awesome", "project", "python",]
 dynamic = [ "requires-python", "classifiers", "dependencies",]
 
 [[project.authors]]
-email = "j.bloggs@example.com"
 name = "Joe Bloggs"
+email = "j.bloggs@example.com"
 
 
 [project.license]
