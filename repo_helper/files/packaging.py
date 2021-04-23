@@ -198,7 +198,7 @@ def make_pyproject(repo_path: pathlib.Path, templates: jinja2.Environment) -> Li
 	data["project"]["optional-dependencies"] = {}
 
 	for extra, dependencies in templates.globals["extras_require"].items():
-		data["project"]["optional-dependencies"][extra] = dependencies
+		data["project"]["optional-dependencies"][extra] = list(map(str, dependencies))
 
 	if not data["project"]["optional-dependencies"]:
 		del data["project"]["optional-dependencies"]

@@ -1,13 +1,12 @@
 # stdlib
 import statistics
 import sys
-import tempfile
 from typing import Dict
 
 # 3rd party
 import southwark.repo
 from apeye.url import URL
-from domdf_python_tools.paths import PathPlus
+from domdf_python_tools.paths import TemporaryPathPlus
 from dulwich.config import StackedConfig
 
 # this package
@@ -32,8 +31,7 @@ StackedConfig.default_backends = lambda *args: []
 email = b"repo-helper[bot] <74742576+repo-helper[bot]@users.noreply.github.com>"
 southwark.repo.get_user_identity = lambda *args: email
 
-with tempfile.TemporaryDirectory() as tmpdir:
-	tmpdir_p = PathPlus(tmpdir)
+with TemporaryPathPlus() as tmpdir_p:
 
 	for username, repository in [
 		("domdfcoding", "default_values"),

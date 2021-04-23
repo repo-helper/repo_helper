@@ -28,8 +28,6 @@ from typing import Dict, List, Optional, Union
 
 # 3rd party
 from configconfig.configvar import ConfigVar
-
-# 3rd party
 from configconfig.utils import RawConfigVarsType, optional_getter
 from configconfig.validator import Validator
 
