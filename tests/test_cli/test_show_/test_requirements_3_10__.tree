@@ -358,9 +358,6 @@ repo_helper==2020.12.18
 │       │   ├── natsort>=7.1.0
 │       │   ├── pydash>=4.7.4
 │       │   └── typing-extensions>=3.7.4.3
-│       ├── email-validator>=1.1.2
-│       │   ├── dnspython>=1.15.0
-│       │   └── idna>=2.0.0
 │       ├── first>=2.0.2
 │       ├── natsort>=7.1.1
 │       ├── packaging>=20.9
@@ -704,9 +701,6 @@ repo_helper==2020.12.18
 │   │   ├── natsort>=7.1.0
 │   │   ├── pydash>=4.7.4
 │   │   └── typing-extensions>=3.7.4.3
-│   ├── email-validator>=1.1.2
-│   │   ├── dnspython>=1.15.0
-│   │   └── idna>=2.0.0
 │   ├── first>=2.0.2
 │   ├── natsort>=7.1.1
 │   ├── packaging>=20.9
