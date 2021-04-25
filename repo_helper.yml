@@ -90,6 +90,7 @@ conda_extras:
 
 tox_unmanaged:
  - flake8
+ - pytest
 
 keywords:
  - configuration
