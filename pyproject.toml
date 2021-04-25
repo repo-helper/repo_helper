@@ -11,8 +11,8 @@ keywords = [ "configuration",]
 dynamic = [ "requires-python", "classifiers", "dependencies",]
 
 [[project.authors]]
-email = "dominic@davis-foster.co.uk"
 name = "Dominic Davis-Foster"
+email = "dominic@davis-foster.co.uk"
 
 
 [project.license]
@@ -38,8 +38,9 @@ conda-channels = [ "conda-forge", "domdfcoding",]
 license-key = "LGPL-3.0-or-later"
 
 [tool.dep_checker]
-namespace_packages = ["ruamel.yaml"]
-allowed_unused = ["idna"]
+namespace_packages = [ "ruamel.yaml",]
+allowed_unused = [ "idna",]
+
 [tool.dep_checker.name_mapping]
 attrs = "attr"
 ruamel-yaml = "ruamel.yaml"
