@@ -47,6 +47,13 @@ from repo_helper.files.ci_cd import (
 from repo_helper.files.old import remove_copy_pypi_2_github, remove_make_conda_recipe
 
 
+def boolean_option(name: str, id: str):  # noqa: A002  # pylint: disable=redefined-builtin
+	return pytest.mark.parametrize(name, [
+			pytest.param(True, id=id),
+			pytest.param(False, id=f"no {id}"),
+			])
+
+
 def test_actions_deploy_conda(
 		tmp_pathplus: PathPlus,
 		demo_environment,
@@ -295,8 +302,8 @@ def test_make_github_mypy_extra_install_only_linux(
 
 
 @pytest.mark.parametrize("py_versions", [["3.6", "3.7", "3.8"], ["3.6", "3.7"]])
-@pytest.mark.parametrize("enable_docs", [True, False])
-@pytest.mark.parametrize("use_whey", [True, False])
+@boolean_option("enable_docs", "docs")
+@boolean_option("use_whey", "whey")
 @pytest.mark.parametrize("py_modules", [["hello_world.py"], []])
 def test_ensure_bumpversion(
 		tmp_pathplus: PathPlus,
@@ -393,10 +400,10 @@ def test_make_github_linux_case_2(
 	advanced_file_regression.check_file(tmp_pathplus / managed_files[2])
 
 
-@pytest.mark.parametrize("pure_python", [True, False])
-@pytest.mark.parametrize("enable_conda", [True, False])
-@pytest.mark.parametrize("enable_tests", [True, False])
-@pytest.mark.parametrize("enable_releases", [True, False])
+@boolean_option("pure_python", "pure_python")
+@boolean_option("enable_conda", "conda")
+@boolean_option("enable_tests", "tests")
+@boolean_option("enable_releases", "releases")
 def test_make_github_linux_case_3(
 		tmp_pathplus: PathPlus,
 		advanced_file_regression: AdvancedFileRegressionFixture,
