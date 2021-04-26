@@ -440,7 +440,7 @@ class source_dir(ConfigVar):  # noqa
 
 class pure_python(ConfigVar):  # noqa
 	"""
-	Flag to indicate the package is pure Python
+	Flag to indicate the package is pure Python.
 
 	Example:
 
@@ -456,7 +456,7 @@ class pure_python(ConfigVar):  # noqa
 
 class on_pypi(ConfigVar):  # noqa
 	"""
-	Flag to indicate the package is available on PyPI
+	Flag to indicate the package is available on PyPI.
 
 	Example:
 

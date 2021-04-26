@@ -250,7 +250,7 @@
         "boolean",
         "string"
       ],
-      "description": "Flag to indicate the package is available on PyPI"
+      "description": "Flag to indicate the package is available on PyPI."
     },
     "pkginfo_extra": {
       "type": "array",
@@ -290,7 +290,7 @@
         "boolean",
         "string"
       ],
-      "description": "Flag to indicate the package is pure Python"
+      "description": "Flag to indicate the package is pure Python."
     },
     "py_modules": {
       "type": "array",

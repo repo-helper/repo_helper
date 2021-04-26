@@ -38,7 +38,7 @@ from whey.config.whey import license_lookup
 # this package
 from repo_helper.configuration import parse_yaml
 
-__all__ = ["make_recipe", "make_conda_description", "get_conda_requirements"]
+__all__ = ["make_recipe"]
 
 
 class CondaRecipeMaker(MaryBerry):
@@ -137,6 +137,13 @@ def make_conda_description(summary: str, conda_channels: Iterable[str] = ()) -> 
 
 
 def get_conda_requirements(repo_dir: PathPlus, config: Dict[str, Any]) -> List[str]:
+	"""
+	Returns a list of requirements for the project, for use in a Conda recipe.
+
+	:param repo_dir:
+	:param config:
+	"""
+
 	extras = []
 
 	if config["conda_extras"] != ["none"]:
