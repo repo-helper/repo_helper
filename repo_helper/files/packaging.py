@@ -45,6 +45,7 @@ from repo_helper.configupdater2 import ConfigUpdater
 from repo_helper.configuration import _pypy_version_re
 from repo_helper.configuration.utils import get_version_classifiers
 from repo_helper.files import management
+from repo_helper.files.docs import make_sphinx_config_dict
 from repo_helper.utils import IniConfigurator, indent_join, indent_with_tab, license_lookup, reformat_file
 
 __all__ = [
@@ -291,11 +292,13 @@ def make_pyproject(repo_path: pathlib.Path, templates: jinja2.Environment) -> Li
 						templates.globals["import_name"].split('.', 1)[0],
 						)
 
-	if not data["tool"]:
-		del data["tool"]
-
 	if not templates.globals["enable_tests"] and not templates.globals["stubs_package"]:
 		data["tool"]["importcheck"] = data["tool"].get("importcheck", {})
+
+	data["tool"]["sphinx-pyproject"] = make_sphinx_config_dict(templates)
+
+	if not data["tool"]:
+		del data["tool"]
 
 	# TODO: managed message
 	dom_toml.dump(data, pyproject_file, encoder=dom_toml.TomlEncoder)

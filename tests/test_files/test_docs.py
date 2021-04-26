@@ -159,12 +159,8 @@ def test_make_conf(tmp_pathplus, demo_environment, file_regression, theme):
 
 	# TODO: with values for these
 	demo_environment.globals["html_theme_options"] = {}
-	demo_environment.globals["extra_sphinx_extensions"] = []
 	demo_environment.globals["sphinx_conf_preamble"] = []
 	demo_environment.globals["sphinx_conf_epilogue"] = []
-	demo_environment.globals["rtfd_author"] = "Joe Bloggs"
-	demo_environment.globals["author"] = "E. Xample"
-	demo_environment.globals["copyright_years"] = "2020-2021"
 	demo_environment.globals["intersphinx_mapping"] = {}
 	demo_environment.globals["html_context"] = {}
 

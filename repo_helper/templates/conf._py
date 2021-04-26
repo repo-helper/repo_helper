@@ -19,12 +19,11 @@ from sphinx_pyproject import SphinxConfig
 
 sys.path.append(".")
 
-config = SphinxConfig()
+config = SphinxConfig(globalns=globals())
 
 {% for line in sphinx_conf_preamble %}{{ line }}
 {% endfor %}
 
-{{ dump_toml(sphinx_config_dict) }}
 github_url = f"https://github.com/{github_username}/{github_repository}"
 
 

@@ -118,17 +118,20 @@ def test_make_setup_case_2(tmp_pathplus, demo_environment, file_regression: File
 
 
 @pytest.mark.parametrize("backend", ["whey", "experimental", "setuptools"])
-@pytest.mark.parametrize("enable_tests", [True, False])
+@boolean_option("enable_tests", "tests")
+@boolean_option("enable_docs", "docs")
 def test_make_pyproject(
 		tmp_pathplus,
 		demo_environment,
 		file_regression: FileRegressionFixture,
 		enable_tests: bool,
+		enable_docs: bool,
 		backend: str,
 		):
 	# TODO: permutations to cover all branches
 
-	demo_environment.globals["author"] = "Joe Bloggs"
+	demo_environment.globals["author"] = "E. Xample"
+	demo_environment.globals["rtfd_author"] = "Joe Bloggs"
 	demo_environment.globals["email"] = "j.bloggs@example.com"
 	demo_environment.globals["version"] = "2020.1.1"
 	demo_environment.globals["license"] = "MIT License"
@@ -136,13 +139,15 @@ def test_make_pyproject(
 	demo_environment.globals["classifiers"] = []
 	demo_environment.globals["console_scripts"] = []
 	demo_environment.globals["mypy_plugins"] = []
-	demo_environment.globals["enable_docs"] = True
+	demo_environment.globals["enable_docs"] = enable_docs
 	demo_environment.globals["enable_tests"] = enable_tests
 	demo_environment.globals["entry_points"] = {}
 	demo_environment.globals["extras_require"] = {}
 	demo_environment.globals["conda_extras"] = ["none"]
 	demo_environment.globals["conda_channels"] = []
 	demo_environment.globals["tox_build_requirements"] = []
+	demo_environment.globals["copyright_years"] = "2020-2021"
+	demo_environment.globals["extra_sphinx_extensions"] = []
 
 	demo_environment.globals["use_experimental_backend"] = False
 	demo_environment.globals["use_whey"] = False
@@ -157,7 +162,7 @@ def test_make_pyproject(
 	check_file_output(tmp_pathplus / managed_files[0], file_regression)
 
 
-@pytest.mark.parametrize("enable_tests", [True, False])
+@boolean_option("enable_tests", "tests")
 def test_make_pyproject_whey_extras(
 		tmp_pathplus,
 		demo_environment,
@@ -166,7 +171,8 @@ def test_make_pyproject_whey_extras(
 		):
 	# TODO: permutations to cover all branches
 
-	demo_environment.globals["author"] = "Joe Bloggs"
+	demo_environment.globals["author"] = "E. Xample"
+	demo_environment.globals["rtfd_author"] = "Joe Bloggs"
 	demo_environment.globals["email"] = "j.bloggs@example.com"
 	demo_environment.globals["version"] = "2020.1.1"
 	demo_environment.globals["license"] = "MIT License"
@@ -190,7 +196,8 @@ def test_make_pyproject_whey_extras(
 			}
 	demo_environment.globals["entry_points"] = {}
 	demo_environment.globals["tox_build_requirements"] = []
-
+	demo_environment.globals["copyright_years"] = "2020-2021"
+	demo_environment.globals["extra_sphinx_extensions"] = []
 	demo_environment.globals["use_whey"] = True
 
 	managed_files = make_pyproject(tmp_pathplus, demo_environment)
