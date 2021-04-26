@@ -365,14 +365,7 @@ def make_conf(repo_path: pathlib.Path, templates: jinja2.Environment) -> List[st
 						**templates.globals["html_theme_options"][key],
 						}
 
-	file.write_clean(
-			conf.render(
-					pformat=pformat_tabs,
-					enquote_value=enquote_value,
-					dump_toml=partial(dom_toml.dumps, encoder=PythonFormatTomlEncoder),
-					sphinx_config_dict=make_sphinx_config_dict(templates)
-					)
-			)
+	file.write_clean(conf.render(pformat=pformat_tabs, enquote_value=enquote_value))
 
 	with importlib_resources.path(repo_helper.files, "isort.cfg") as isort_config:
 		yapf_style = PathPlus(isort_config).parent.parent / "templates" / "style.yapf"
