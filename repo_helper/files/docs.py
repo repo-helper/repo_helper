@@ -160,7 +160,8 @@ class DocRequirementsManager(RequirementsManager):
 
 		for req in current_requirements:
 			req.name = normalize(req.name)
-			if req.name not in self.get_target_requirement_names() and req.name not in self.theme_versions.keys():
+			# if req.name not in self.get_target_requirement_names() and req.name not in self.theme_versions.keys():
+			if req.name not in self.theme_versions.keys():
 				if req.name == "sphinx-autodoc-typehints":
 					continue
 				else:
