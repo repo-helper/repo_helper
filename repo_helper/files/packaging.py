@@ -295,7 +295,10 @@ def make_pyproject(repo_path: pathlib.Path, templates: jinja2.Environment) -> Li
 	if not templates.globals["enable_tests"] and not templates.globals["stubs_package"]:
 		data["tool"]["importcheck"] = data["tool"].get("importcheck", {})
 
-	data["tool"]["sphinx-pyproject"] = make_sphinx_config_dict(templates)
+	if templates.globals["enable_docs"]:
+		data["tool"]["sphinx-pyproject"] = make_sphinx_config_dict(templates)
+	else:
+		data["tool"].pop("sphinx-pyproject", None)
 
 	if not data["tool"]:
 		del data["tool"]
