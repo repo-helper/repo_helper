@@ -15,6 +15,7 @@ sys.path.append('.')
 config = SphinxConfig(globalns=globals())
 project = config["project"]
 author = config["author"]
+documentation_summary = config.description
 
 github_url = "https://github.com/{github_username}/{github_repository}".format_map(config)
 

@@ -22,6 +22,7 @@ sys.path.append(".")
 config = SphinxConfig(globalns=globals())
 project = config["project"]
 author = config["author"]
+documentation_summary = config.description
 
 {% for line in sphinx_conf_preamble %}{{ line }}
 {% endfor %}
