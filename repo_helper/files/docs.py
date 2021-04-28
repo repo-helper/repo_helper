@@ -790,7 +790,6 @@ def make_sphinx_config_dict(templates: jinja2.Environment) -> Dict[str, Any]:
 	data["hide_none_rtype"] = True
 	data["all_typevars"] = True
 	data["overloads_location"] = "bottom"
-	data["documentation_summary"] = templates.globals["short_desc"]
 
 	# Exclude "standard" methods.
 	data["autodoc_exclude_members"] = [

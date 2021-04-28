@@ -4,6 +4,27 @@ name: {{ ci_name }}
 
 on:
   push:
+    paths-ignore:
+      - '{{ docs_dir }}/**'
+      - '.bumpversion.cfg'
+      - '.imgbotconfig'
+      - '.pre-commit-config.yaml'
+      - '.pylintrc'
+      - '.readthedocs.yml'
+      - '.style.yapf'
+      - 'CONTRIBUTING.rst'
+      - 'stubs.txt'
+  pull_request:
+    paths:
+      - '{{ docs_dir }}/**'
+      - '.bumpversion.cfg'
+      - '.imgbotconfig'
+      - '.pre-commit-config.yaml'
+      - '.pylintrc'
+      - '.readthedocs.yml'
+      - '.style.yapf'
+      - 'CONTRIBUTING.rst'
+      - 'stubs.txt'
 
 jobs:
   tests:
