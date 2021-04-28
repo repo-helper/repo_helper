@@ -13,8 +13,11 @@ from sphinx_pyproject import SphinxConfig
 sys.path.append('.')
 
 config = SphinxConfig(globalns=globals())
+project = config["project"]
+author = config["author"]
+documentation_summary = config.description
 
-github_url = f"https://github.com/{github_username}/{github_repository}"
+github_url = "https://github.com/{github_username}/{github_repository}".format_map(config)
 
 rst_prolog = f""".. |pkgname| replace:: repo_helper
 .. |pkgname2| replace:: ``repo_helper``
@@ -47,14 +50,14 @@ latex_documents = [("index", f'{slug}.tex', project, author, "manual")]
 man_pages = [("index", slug, project, [author], 1)]
 texinfo_documents = [("index", slug, project, author, slug, project, "Miscellaneous")]
 
-toctree_plus_types = set(toctree_plus_types)
+toctree_plus_types = set(config["toctree_plus_types"])
 
 autodoc_default_options = {
 		"members": None,  # Include all members (methods).
 		"special-members": None,
 		"autosummary": None,
 		"show-inheritance": None,
-		"exclude-members": ','.join(autodoc_exclude_members),
+		"exclude-members": ','.join(config["autodoc_exclude_members"]),
 		}
 
 toctree_plus_types.add("fixture")
