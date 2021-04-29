@@ -4,16 +4,6 @@ name: {{ ci_name }}
 
 on:
   push:
-    paths-ignore:
-      - '{{ docs_dir }}/**'
-      - 'CONTRIBUTING.rst'
-{#      - '.bumpversion.cfg'
-      - '.imgbotconfig'
-      - '.pre-commit-config.yaml'
-      - '.pylintrc'
-      - '.readthedocs.yml'
-      - '.style.yapf'
-      - 'stubs.txt' #}
 
 jobs:
   tests:
@@ -33,21 +23,35 @@ jobs:
       - name: Checkout 🛎️
         uses: "actions/checkout@v2"
 
+      - name: Check for changed files
+        uses: dorny/paths-filter@v2
+        id: changes
+        with:
+          list-files: "json"
+          filters: |
+            code:
+              - '!({{ docs_dir }}/**|CONTRIBUTING.rst|.imgbotconfig|.pre-commit-config.yaml|.pylintrc|.readthedocs.yml)'
+{#              - '!.bumpversion.cfg'
+              - '!.style.yapf'
+              - '!stubs.txt'#}
       - name: Setup Python 🐍
+        if: steps.changes.outputs.code == 'true'
         uses: "actions/setup-python@v2"
         with:
           python-version: "${{ brace('matrix.config.python-version')}}"
 
       - name: Install dependencies 🔧
+        if: steps.changes.outputs.code == 'true'
         run: |
           {% for line in dependency_lines %}{{ line }}
           {% endfor %}
       - name: "Run Tests for Python ${{ brace('matrix.config.python-version')}}"
+        if: steps.changes.outputs.code == 'true'
         run: python -m tox -e "${{ brace('matrix.config.testenvs') }}"
 {% if enable_tests and not stubs_package %}
       - name: "Upload Coverage 🚀"
         uses: actions/upload-artifact@v2
-        {{ "if: ${{ always() }} "}}
+        {{ "if: ${{ always() && steps.changes.outputs.code == 'true'}} "}}
         with:
           name: "coverage-${{ brace('matrix.config.python-version')}}"
           path: .coverage{% endif %}

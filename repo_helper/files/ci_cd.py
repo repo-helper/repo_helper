@@ -275,7 +275,7 @@ class ActionsManager:
 		else:
 			dependencies_block = StringList([
 					"- name: Install dependencies (Linux) 🔧",
-					f"  if: ${{{{ matrix.os == '{linux_platform}' }}}}",
+					f"  if: ${{{{ matrix.os == '{linux_platform}' && steps.changes.outputs.code == 'true' }}}}",
 					"  run: |",
 					])
 			with dependencies_block.with_indent("  ", 2):
@@ -285,7 +285,7 @@ class ActionsManager:
 				dependencies_block.blankline(ensure_single=True)
 				dependencies_block.extend([
 						"- name: Install dependencies (Win/mac) 🔧",
-						f"  if: ${{{{ matrix.os != '{linux_platform}' }}}}",
+						f"  if: ${{{{ matrix.os != '{linux_platform}' && steps.changes.outputs.code == 'true' }}}}",
 						"  run: |",
 						])
 				with dependencies_block.with_indent("  ", 2):
