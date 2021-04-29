@@ -206,13 +206,16 @@ def test_make_github_manylinux_pure_python(
 
 
 @pytest.mark.parametrize("fail_on_warning", [True, False])
+@boolean_option("enable_tests", "tests")
 def test_make_github_docs_test(
 		tmp_pathplus,
 		demo_environment,
 		advanced_file_regression: AdvancedFileRegressionFixture,
 		fail_on_warning,
+		enable_tests: bool,
 		):
 	demo_environment.globals["docs_fail_on_warning"] = fail_on_warning
+	demo_environment.globals["enable_tests"] = enable_tests
 	assert make_github_docs_test(tmp_pathplus, demo_environment) == [".github/workflows/docs_test_action.yml"]
 	advanced_file_regression.check_file(tmp_pathplus / ".github/workflows/docs_test_action.yml")
 
@@ -229,7 +232,9 @@ def test_make_github_octocheese(
 
 
 def test_make_github_flake8(
-		tmp_pathplus, demo_environment, advanced_file_regression: AdvancedFileRegressionFixture
+		tmp_pathplus,
+		demo_environment,
+		advanced_file_regression: AdvancedFileRegressionFixture,
 		):
 	assert make_github_flake8(tmp_pathplus, demo_environment) == [".github/workflows/flake8.yml"]
 	assert (tmp_pathplus / ".github/workflows/flake8.yml").is_file()

@@ -125,6 +125,24 @@ class ActionsManager:
 		self.workflows_dir = PathPlus(repo_path / ".github" / "workflows")
 		self.workflows_dir.maybe_make(parents=True)
 
+		code_file_filter: DelimitedList[str] = DelimitedList()
+
+		if self.templates.globals["enable_docs"]:
+			code_file_filter.append(f"{templates.globals['docs_dir']}/**")
+
+		code_file_filter.extend([
+				"CONTRIBUTING.rst",
+				".imgbotconfig",
+				".pre-commit-config.yaml",
+				".pylintrc",
+				".readthedocs.yml",
+				])
+		# ".bumpversion.cfg",
+		# ".style.yapf",
+		# "stubs.txt",
+
+		self._code_file_filter = f"!({code_file_filter:|})"
+
 	def get_gh_actions_python_versions(self) -> Dict[str, str]:
 		"""
 		Prepares the mapping of Python versions to tox testenvs for use with GitHub Actions.
@@ -168,6 +186,7 @@ class ActionsManager:
 							python_versions=set_gh_actions_versions(self.get_windows_ci_versions()),
 							dependency_lines=self.get_windows_ci_requirements(),
 							gh_actions_versions=self.get_gh_actions_python_versions(),
+							code_file_filter=self._code_file_filter,
 							)
 					)
 		elif ci_file.is_file():
@@ -192,6 +211,7 @@ class ActionsManager:
 							python_versions=set_gh_actions_versions(self.get_macos_ci_versions()),
 							dependency_lines=self.get_macos_ci_requirements(),
 							gh_actions_versions=self.get_gh_actions_python_versions(),
+							code_file_filter=self._code_file_filter,
 							)
 					)
 		elif ci_file.is_file():
@@ -216,6 +236,7 @@ class ActionsManager:
 							ci_name=platform_name,
 							dependency_lines=self.get_linux_ci_requirements(),
 							gh_actions_versions=self.get_gh_actions_python_versions(),
+							code_file_filter=self._code_file_filter,
 							)
 					)
 		elif ci_file.is_file():
@@ -238,6 +259,7 @@ class ActionsManager:
 					template.render(
 							ci_platform=platform_ci_names[platform_name],
 							dependency_lines=self.get_linux_ci_requirements(),
+							code_file_filter=self._code_file_filter,
 							)
 					)
 		elif ci_file.is_file():
@@ -296,8 +318,24 @@ class ActionsManager:
 						platforms=sorted(platforms),
 						linux_platform=platform_ci_names["Linux"],
 						dependencies_block=indent(str(dependencies_block), "      "),
+						code_file_filter=self._code_file_filter,
 						)
 				)
+
+		return ci_file
+
+	def make_flake8(self) -> PathPlus:
+		"""
+		Create, update or remove the flake8 action, as appropriate.
+
+		.. versionadded:: $VERSION
+		"""
+
+		ci_file = self.workflows_dir / "flake8.yml"
+		template = self.templates.get_template(ci_file.name)
+		# TODO: handle case where Linux is not a supported platform
+
+		ci_file.write_clean(template.render(code_file_filter=self._code_file_filter))
 
 		return ci_file
 
@@ -526,12 +564,9 @@ def make_github_flake8(repo_path: pathlib.Path, templates: jinja2.Environment) -
 	:param templates:
 	"""
 
-	file = PathPlus(repo_path / ".github" / "workflows" / "flake8.yml")
-	file.parent.maybe_make(parents=True)
+	manager = ActionsManager(repo_path, templates)
 
-	file.write_clean(templates.get_template(file.name).render())
-
-	return [file.relative_to(repo_path).as_posix()]
+	return [manager.make_flake8().relative_to(repo_path).as_posix()]
 
 
 @management.register("mypy_action")
