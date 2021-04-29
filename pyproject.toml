@@ -102,7 +102,6 @@ add_module_names = false
 hide_none_rtype = true
 all_typevars = true
 overloads_location = "bottom"
-documentation_summary = "A tool to manage configuration files, build scripts etc. across multiple projects."
 autodoc_exclude_members = [
     "__dict__",
     "__class__",

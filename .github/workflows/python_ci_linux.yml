@@ -4,6 +4,10 @@ name: Linux
 
 on:
   push:
+    paths-ignore:
+      - 'doc-source/**'
+      - 'CONTRIBUTING.rst'
+
 
 jobs:
   tests:
