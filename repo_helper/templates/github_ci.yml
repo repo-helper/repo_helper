@@ -14,10 +14,6 @@ on:
       - '.readthedocs.yml'
       - '.style.yapf'
       - 'stubs.txt' #}
-  pull_request:
-    paths:
-      - '{{ docs_dir }}/**'
-      - 'CONTRIBUTING.rst'
 
 jobs:
   tests:

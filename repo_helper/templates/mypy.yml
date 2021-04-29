@@ -4,6 +4,16 @@ name: mypy
 
 on:
   push:
+    paths-ignore:
+      - '{{ docs_dir }}/**'
+      - 'CONTRIBUTING.rst'
+      - '.bumpversion.cfg'
+      - '.imgbotconfig'
+      - '.pre-commit-config.yaml'
+      - '.pylintrc'
+      - '.readthedocs.yml'
+      - '.style.yapf'
+      - 'stubs.txt'
 
 jobs:
   Run:

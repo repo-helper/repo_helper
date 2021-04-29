@@ -8,10 +8,6 @@ on:
       - 'doc-source/**'
       - 'CONTRIBUTING.rst'
 
-  pull_request:
-    paths:
-      - 'doc-source/**'
-      - 'CONTRIBUTING.rst'
 
 jobs:
   tests:

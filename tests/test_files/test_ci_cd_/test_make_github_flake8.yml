@@ -4,6 +4,16 @@ name: Flake8
 
 on:
   push:
+    paths-ignore:
+      - 'doc-source/**'
+      - 'CONTRIBUTING.rst'
+      - '.bumpversion.cfg'
+      - '.imgbotconfig'
+      - '.pre-commit-config.yaml'
+      - '.pylintrc'
+      - '.readthedocs.yml'
+      - '.style.yapf'
+      - 'stubs.txt'
 
 jobs:
   Run:
