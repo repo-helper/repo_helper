@@ -35,7 +35,7 @@ jobs:
 
       - name: Setup Python 🐍
         id: setup-python
-        if: ${{ brace("steps.changes.outputs.code == 'true' || steps.changes.outputs.outcome == 'skipped'") }}
+        if: ${{ brace("steps.changes.outputs.code == 'true' || steps.changes.outcome == 'skipped'") }}
         uses: "actions/setup-python@v2"
         with:
           python-version: "${{ brace('matrix.config.python-version')}}"
