@@ -5,6 +5,10 @@ name: macOS
 on:
   push:
 
+permissions:
+  actions: write
+  contents: read
+
 jobs:
   tests:
     name: "macos-latest / Python ${{ matrix.config.python-version }}"

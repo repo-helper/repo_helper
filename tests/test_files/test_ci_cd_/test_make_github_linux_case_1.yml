@@ -5,6 +5,10 @@ name: Linux
 on:
   push:
 
+permissions:
+  actions: write
+  contents: read
+
 jobs:
   tests:
     name: "ubuntu-20.04 / Python ${{ matrix.config.python-version }}"

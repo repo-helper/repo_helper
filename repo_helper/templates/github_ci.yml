@@ -5,6 +5,10 @@ name: {{ ci_name }}
 on:
   push:
 
+permissions:
+  actions: write
+  contents: read
+
 jobs:
   tests:
     name: "{{ ci_platform }} / Python ${{ brace('matrix.config.python-version')}}"
