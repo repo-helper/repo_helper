@@ -414,6 +414,10 @@ class short_desc(ConfigVar):  # noqa
 	required = True
 	category: str = "metadata"
 
+	@classmethod
+	def validator(cls, value: str) -> str:  # noqa: D102
+		return value.strip()
+
 
 class source_dir(ConfigVar):  # noqa
 	"""
