@@ -88,7 +88,7 @@ def make_actions_deploy_conda(repo_path: pathlib.Path, templates: jinja2.Environ
 @management.register("actions")
 def make_github_ci(repo_path: pathlib.Path, templates: jinja2.Environment) -> List[str]:
 	"""
-	Add configuration for `Github Actions` to the desired repo.
+	Add configuration for `GitHub Actions` to the desired repo.
 
 	:param repo_path: Path to the repository root.
 	:param templates:
@@ -446,7 +446,7 @@ Mapping of platform names to the GitHub Actions platform tags.
 @management.register("conda_actions", ["enable_conda"])
 def make_conda_actions_ci(repo_path: pathlib.Path, templates: jinja2.Environment) -> List[str]:
 	"""
-	Add configuration for testing conda paclages on `Github Actions` to the desired repo.
+	Add configuration for testing conda paclages on `GitHub Actions` to the desired repo.
 
 	:param repo_path: Path to the repository root.
 	:param templates:
@@ -479,7 +479,7 @@ def make_conda_actions_ci(repo_path: pathlib.Path, templates: jinja2.Environment
 @management.register("manylinux")
 def make_github_manylinux(repo_path: pathlib.Path, templates: jinja2.Environment) -> List[str]:
 	"""
-	Add configuration for `Github Actions` manylinux wheel builds the desired repo.
+	Add configuration for `GitHub Actions` manylinux wheel builds the desired repo.
 
 	:param repo_path: Path to the repository root.
 	:param templates:
@@ -518,7 +518,7 @@ def make_github_manylinux(repo_path: pathlib.Path, templates: jinja2.Environment
 @management.register("docs_action", ["enable_docs"])
 def make_github_docs_test(repo_path: pathlib.Path, templates: jinja2.Environment) -> List[str]:
 	"""
-	Add configuration for Github Actions documentation check to the desired repo.
+	Add configuration for GitHub Actions documentation check to the desired repo.
 
 	:param repo_path: Path to the repository root.
 	:param templates:
@@ -538,7 +538,7 @@ def make_github_docs_test(repo_path: pathlib.Path, templates: jinja2.Environment
 @management.register("octocheese")
 def make_github_octocheese(repo_path: pathlib.Path, templates: jinja2.Environment) -> List[str]:
 	"""
-	Add configuration for the OctoCheese Github Action.
+	Add configuration for the OctoCheese GitHub Action.
 
 	:param repo_path: Path to the repository root.
 	:param templates:
@@ -558,7 +558,7 @@ def make_github_octocheese(repo_path: pathlib.Path, templates: jinja2.Environmen
 @management.register("flake8_action")
 def make_github_flake8(repo_path: pathlib.Path, templates: jinja2.Environment) -> List[str]:
 	"""
-	Add configuration for the Flake8 Github Action.
+	Add configuration for the Flake8 GitHub Action.
 
 	:param repo_path: Path to the repository root.
 	:param templates:
@@ -572,7 +572,7 @@ def make_github_flake8(repo_path: pathlib.Path, templates: jinja2.Environment) -
 @management.register("mypy_action")
 def make_github_mypy(repo_path: pathlib.Path, templates: jinja2.Environment) -> List[str]:
 	"""
-	Add configuration for the mypy Github Action.
+	Add configuration for the mypy GitHub Action.
 
 	:param repo_path: Path to the repository root.
 	:param templates:
