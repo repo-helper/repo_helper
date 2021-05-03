@@ -5,6 +5,10 @@ name: Windows
 on:
   push:
 
+permissions:
+  actions: write
+  contents: read
+
 jobs:
   tests:
     name: "windows-2019 / Python ${{ matrix.config.python-version }}"
