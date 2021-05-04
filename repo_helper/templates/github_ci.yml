@@ -51,7 +51,7 @@ jobs:
           {% endfor %}
       - name: "Run Tests for Python ${{ brace('matrix.config.python-version')}}"
         if: steps.setup-python.outcome == 'success'
-        run: python -m tox -e "${{ brace('matrix.config.testenvs') }}"
+        run: python -m tox -e "${{ brace('matrix.config.testenvs') }}" -s false
 {% if enable_tests and not stubs_package %}
       - name: "Upload Coverage 🚀"
         uses: actions/upload-artifact@v2
@@ -140,7 +140,6 @@ jobs:
           skip_existing: true
 
 {% if enable_conda %}
-
   Conda:
     needs: deploy
     runs-on: "{{ ci_platform }}"
