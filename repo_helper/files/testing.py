@@ -337,7 +337,7 @@ class ToxConfig(IniConfigurator):
 			# 		f"-r{{toxinidir}}/{self['docs_dir']}/requirements.txt",
 			# 		], )
 
-			self._ini["testenv:docs"]["commands"] = "sphinx-build -M html . ./build {posargs}"
+			self._ini["testenv:docs"]["commands"] = "sphinx-build -M {env:SPHINX_BUILDER:html} . ./build {posargs}"
 
 		else:
 			self._ini.remove_section("testenv:docs")
