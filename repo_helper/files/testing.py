@@ -381,8 +381,8 @@ class ToxConfig(IniConfigurator):
 			self._ini["testenv:lint"]["skip_install"] = True
 
 		self._ini["testenv:lint"]["deps"] = indent_join([
-				"flake8 >=3.8.2",
-				"flake8-2020 >= 1.6.0",
+				"flake8>=3.8.2",
+				"flake8-2020>=1.6.0",
 				"flake8-builtins>=1.5.3",
 				"flake8-docstrings>=1.5.0",
 				"flake8-dunder-all>=0.1.1",
