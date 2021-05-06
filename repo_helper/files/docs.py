@@ -134,7 +134,7 @@ class DocRequirementsManager(RequirementsManager):
 				"seed-intersphinx-mapping": ">=0.3.1",
 				"default-values": ">=0.4.2",
 				"toctree-plus": ">=0.1.0",
-				"sphinx-toolbox": ">=2.2.0",
+				"sphinx-toolbox": ">=2.9.0",
 				"sphinx-debuginfo": ">=0.1.0",
 				}
 
