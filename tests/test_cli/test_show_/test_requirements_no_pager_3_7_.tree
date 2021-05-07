@@ -151,11 +151,12 @@ repo_helper==2020.12.18
 │   │   ├── natsort>=7.1.0
 │   │   ├── pydash>=4.7.4
 │   │   └── typing-extensions>=3.7.4.3
+│   ├── first>=2.0.2
 │   ├── jinja2>=2.11.3
 │   │   └── MarkupSafe>=0.23
 │   ├── packaging>=20.9
 │   │   └── pyparsing>=2.0.2
-│   ├── pyproject-parser>=0.1.1
+│   ├── pyproject-parser>=0.2.0
 │   │   ├── apeye>=0.7.0
 │   │   │   ├── appdirs>=1.4.4
 │   │   │   ├── cachecontrol[filecache]>=0.12.6

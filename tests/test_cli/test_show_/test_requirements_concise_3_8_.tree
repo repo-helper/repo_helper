@@ -38,7 +38,7 @@ repo_helper==2020.12.18
 ├── packaging>=20.9
 ├── pydash>=4.7.4
 ├── pyparsing>=2.0.2
-├── pyproject-parser>=0.1.1
+├── pyproject-parser>=0.2.0
 ├── pyrsistent>=0.14.0
 ├── requests>=2.24.0
 ├── requests-file>=1.4
