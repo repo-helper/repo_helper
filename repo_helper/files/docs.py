@@ -134,7 +134,7 @@ class DocRequirementsManager(RequirementsManager):
 				"seed-intersphinx-mapping": ">=0.3.1",
 				"default-values": ">=0.4.2",
 				"toctree-plus": ">=0.1.0",
-				"sphinx-toolbox": ">=2.9.0",
+				"sphinx-toolbox": ">=2.10.0",
 				"sphinx-debuginfo": ">=0.1.0",
 				}
 
@@ -739,6 +739,7 @@ def make_sphinx_config_dict(templates: jinja2.Environment) -> Dict[str, Any]:
 			"sphinx_toolbox.more_autosummary",
 			"sphinx_toolbox.documentation_summary",
 			"sphinx_toolbox.tweaks.param_dash",
+			"sphinx_toolbox.tweaks.latex_layout",
 			"sphinx_toolbox.tweaks.latex_toc",
 			"sphinx.ext.intersphinx",
 			"sphinx.ext.mathjax",
