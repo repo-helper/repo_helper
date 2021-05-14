@@ -11,7 +11,7 @@ email-validator==1.1.2
 first>=2.0.2
 idna==2.10
 isort>=5.0.0
-jinja2>=2.11.2
+jinja2<3.0.0,>=2.11.2
 mkrecipe>=0.1.2
 natsort>=7.1.0
 packaging>=20.4
