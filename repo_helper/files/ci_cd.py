@@ -647,6 +647,12 @@ def ensure_bumpversion(repo_path: pathlib.Path, templates: jinja2.Environment) -
 			setup_cfg_section["search"] = "version = {current_version}"
 			setup_cfg_section["replace"] = "version = {new_version}"
 
+	if "bumpversion:file:pyproject.toml" in bv.sections():
+		pp_toml_section = bv["bumpversion:file:pyproject.toml"]
+		if "search" not in pp_toml_section:
+			pp_toml_section["search"] = 'version = "{current_version}"'
+			pp_toml_section["replace"] = 'version = "{new_version}"'
+
 	bv["bumpversion"]["current_version"] = templates.globals["version"]
 	bv["bumpversion"]["commit"] = "True"
 	bv["bumpversion"]["tag"] = "True"
