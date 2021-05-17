@@ -146,11 +146,7 @@ class DocRequirementsManager(RequirementsManager):
 		current_requirements_, comments, invalid_lines = read_requirements(self.req_file, include_invalid=True)
 
 		current_requirements = list(current_requirements_)
-
-		if "sphinx" not in current_requirements:
-			current_requirements.append(ComparableRequirement("sphinx>=3.0.3,<3.4.0"))
-		else:
-			current_requirements.append(ComparableRequirement("sphinx>=3.0.3"))
+		current_requirements.append(ComparableRequirement("sphinx>=3.0.3"))
 
 		for line in invalid_lines:
 			if line.startswith("git+"):
