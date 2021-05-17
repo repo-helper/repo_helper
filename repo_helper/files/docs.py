@@ -547,30 +547,14 @@ def copy_docs_styling(repo_path: pathlib.Path, templates: jinja2.Environment) ->
 
 		furo_navigation.write_lines(buf)
 
-		base_html.write_lines([
-				f"<!--- {templates.globals['managed_message']} --->",
-				'{% extends "!base.html" %}',
-				"{% block extrahead %}",
-				'\t<link href="{{ pathto("_static/style.css", True) }}" rel="stylesheet" type="text/css">',
-				"{% endblock %}",
-				''
-				])
-
+		base_html.write_lines(_template_with_custom_css(templates.globals["managed_message"], "base.html"))
 		layout_html.unlink(missing_ok=True)
 
 	else:
 		with suppress(FileNotFoundError):
 			shutil.rmtree(furo_navigation.parent)
 
-		layout_html.write_lines([
-				f"<!--- {templates.globals['managed_message']} --->",
-				'{% extends "!layout.html" %}',
-				"{% block extrahead %}",
-				'\t<link href="{{ pathto("_static/style.css", True) }}" rel="stylesheet" type="text/css">',
-				"{% endblock %}",
-				''
-				])
-
+		layout_html.write_lines(_template_with_custom_css(templates.globals["managed_message"], "layout.html"))
 		base_html.unlink(missing_ok=True)
 
 	return [
@@ -835,3 +819,14 @@ class PythonFormatTomlEncoder(dom_toml.TomlEncoder):
 			return str(v)
 
 		return super().dump_value(v)
+
+
+def _template_with_custom_css(managed_message: str, filename: str) -> List[str]:
+	return [
+			f"<!--- {managed_message} --->",
+			f'{{% extends "!{filename}" %}}',
+			"{% block extrahead %}",
+			'\t<link href="{{ pathto("_static/style.css", True) }}" rel="stylesheet" type="text/css">',
+			"{% endblock %}",
+			'',
+			]
