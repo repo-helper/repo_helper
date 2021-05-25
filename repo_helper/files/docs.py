@@ -753,7 +753,6 @@ def make_sphinx_config_dict(templates: jinja2.Environment) -> Dict[str, Any]:
 	data["toctree_plus_types"] = sorted({
 			"class",
 			"function",
-			"method",
 			"data",
 			"enum",
 			"flag",
