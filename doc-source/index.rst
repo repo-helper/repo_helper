@@ -5,7 +5,6 @@ repo_helper
 .. start short_desc
 
 .. documentation-summary::
-	:meta:
 
 .. end short_desc
 
