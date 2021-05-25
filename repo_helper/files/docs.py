@@ -632,7 +632,7 @@ def rewrite_docs_index(repo_path: pathlib.Path, templates: jinja2.Environment) -
 	index_rst = installation_regex.sub(install_block, index_rst)
 	index_rst = links_regex.sub(links_block, index_rst)
 	index_rst = short_desc_regex.sub(
-			".. start short_desc\n\n.. documentation-summary::\n\n.. end short_desc",
+			".. start short_desc\n\n.. documentation-summary::\n\t:meta:\n\n.. end short_desc",
 			index_rst,
 			)
 
