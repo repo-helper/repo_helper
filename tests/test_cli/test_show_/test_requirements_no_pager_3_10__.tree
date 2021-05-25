@@ -1,19 +1,10 @@
 repo_helper==2020.12.18
 ├── apeye>=0.4.0
 │   ├── appdirs>=1.4.4
-│   ├── cachecontrol[filecache]>=0.12.6
-│   │   ├── lockfile>=0.9; extra == "filecache"
-│   │   ├── msgpack>=0.5.2
-│   │   └── requests
-│   │       ├── certifi>=2017.4.17
-│   │       ├── chardet<5,>=3.0.2
-│   │       ├── idna<3,>=2.5
-│   │       └── urllib3<1.27,>=1.21.1
 │   ├── domdf-python-tools>=0.9.0
 │   │   ├── natsort>=7.1.0
 │   │   ├── pydash>=4.7.4
 │   │   └── typing-extensions>=3.7.4.3
-│   ├── lockfile>=0.12.2
 │   ├── requests>=2.24.0
 │   │   ├── certifi>=2017.4.17
 │   │   ├── chardet<5,>=3.0.2
@@ -126,19 +117,10 @@ repo_helper==2020.12.18
 │   ├── pyproject-parser>=0.2.0
 │   │   ├── apeye>=0.7.0
 │   │   │   ├── appdirs>=1.4.4
-│   │   │   ├── cachecontrol[filecache]>=0.12.6
-│   │   │   │   ├── lockfile>=0.9; extra == "filecache"
-│   │   │   │   ├── msgpack>=0.5.2
-│   │   │   │   └── requests
-│   │   │   │       ├── certifi>=2017.4.17
-│   │   │   │       ├── chardet<5,>=3.0.2
-│   │   │   │       ├── idna<3,>=2.5
-│   │   │   │       └── urllib3<1.27,>=1.21.1
 │   │   │   ├── domdf-python-tools>=0.9.0
 │   │   │   │   ├── natsort>=7.1.0
 │   │   │   │   ├── pydash>=4.7.4
 │   │   │   │   └── typing-extensions>=3.7.4.3
-│   │   │   ├── lockfile>=0.12.2
 │   │   │   ├── requests>=2.24.0
 │   │   │   │   ├── certifi>=2017.4.17
 │   │   │   │   ├── chardet<5,>=3.0.2
@@ -187,19 +169,10 @@ repo_helper==2020.12.18
 │   │   ├── shippinglabel>=0.10.0
 │   │   │   ├── apeye>=0.7.0
 │   │   │   │   ├── appdirs>=1.4.4
-│   │   │   │   ├── cachecontrol[filecache]>=0.12.6
-│   │   │   │   │   ├── lockfile>=0.9; extra == "filecache"
-│   │   │   │   │   ├── msgpack>=0.5.2
-│   │   │   │   │   └── requests
-│   │   │   │   │       ├── certifi>=2017.4.17
-│   │   │   │   │       ├── chardet<5,>=3.0.2
-│   │   │   │   │       ├── idna<3,>=2.5
-│   │   │   │   │       └── urllib3<1.27,>=1.21.1
 │   │   │   │   ├── domdf-python-tools>=0.9.0
 │   │   │   │   │   ├── natsort>=7.1.0
 │   │   │   │   │   ├── pydash>=4.7.4
 │   │   │   │   │   └── typing-extensions>=3.7.4.3
-│   │   │   │   ├── lockfile>=0.12.2
 │   │   │   │   ├── requests>=2.24.0
 │   │   │   │   │   ├── certifi>=2017.4.17
 │   │   │   │   │   ├── chardet<5,>=3.0.2
@@ -262,19 +235,10 @@ repo_helper==2020.12.18
 │   ├── shippinglabel>=0.13.0
 │   │   ├── apeye>=0.7.0
 │   │   │   ├── appdirs>=1.4.4
-│   │   │   ├── cachecontrol[filecache]>=0.12.6
-│   │   │   │   ├── lockfile>=0.9; extra == "filecache"
-│   │   │   │   ├── msgpack>=0.5.2
-│   │   │   │   └── requests
-│   │   │   │       ├── certifi>=2017.4.17
-│   │   │   │       ├── chardet<5,>=3.0.2
-│   │   │   │       ├── idna<3,>=2.5
-│   │   │   │       └── urllib3<1.27,>=1.21.1
 │   │   │   ├── domdf-python-tools>=0.9.0
 │   │   │   │   ├── natsort>=7.1.0
 │   │   │   │   ├── pydash>=4.7.4
 │   │   │   │   └── typing-extensions>=3.7.4.3
-│   │   │   ├── lockfile>=0.12.2
 │   │   │   ├── requests>=2.24.0
 │   │   │   │   ├── certifi>=2017.4.17
 │   │   │   │   ├── chardet<5,>=3.0.2
@@ -366,19 +330,10 @@ repo_helper==2020.12.18
 │       ├── pyproject-parser>=0.1.0
 │       │   ├── apeye>=0.7.0
 │       │   │   ├── appdirs>=1.4.4
-│       │   │   ├── cachecontrol[filecache]>=0.12.6
-│       │   │   │   ├── lockfile>=0.9; extra == "filecache"
-│       │   │   │   ├── msgpack>=0.5.2
-│       │   │   │   └── requests
-│       │   │   │       ├── certifi>=2017.4.17
-│       │   │   │       ├── chardet<5,>=3.0.2
-│       │   │   │       ├── idna<3,>=2.5
-│       │   │   │       └── urllib3<1.27,>=1.21.1
 │       │   │   ├── domdf-python-tools>=0.9.0
 │       │   │   │   ├── natsort>=7.1.0
 │       │   │   │   ├── pydash>=4.7.4
 │       │   │   │   └── typing-extensions>=3.7.4.3
-│       │   │   ├── lockfile>=0.12.2
 │       │   │   ├── requests>=2.24.0
 │       │   │   │   ├── certifi>=2017.4.17
 │       │   │   │   ├── chardet<5,>=3.0.2
@@ -427,19 +382,10 @@ repo_helper==2020.12.18
 │       │   ├── shippinglabel>=0.10.0
 │       │   │   ├── apeye>=0.7.0
 │       │   │   │   ├── appdirs>=1.4.4
-│       │   │   │   ├── cachecontrol[filecache]>=0.12.6
-│       │   │   │   │   ├── lockfile>=0.9; extra == "filecache"
-│       │   │   │   │   ├── msgpack>=0.5.2
-│       │   │   │   │   └── requests
-│       │   │   │   │       ├── certifi>=2017.4.17
-│       │   │   │   │       ├── chardet<5,>=3.0.2
-│       │   │   │   │       ├── idna<3,>=2.5
-│       │   │   │   │       └── urllib3<1.27,>=1.21.1
 │       │   │   │   ├── domdf-python-tools>=0.9.0
 │       │   │   │   │   ├── natsort>=7.1.0
 │       │   │   │   │   ├── pydash>=4.7.4
 │       │   │   │   │   └── typing-extensions>=3.7.4.3
-│       │   │   │   ├── lockfile>=0.12.2
 │       │   │   │   ├── requests>=2.24.0
 │       │   │   │   │   ├── certifi>=2017.4.17
 │       │   │   │   │   ├── chardet<5,>=3.0.2
@@ -502,19 +448,10 @@ repo_helper==2020.12.18
 │       └── shippinglabel>=0.10.0
 │           ├── apeye>=0.7.0
 │           │   ├── appdirs>=1.4.4
-│           │   ├── cachecontrol[filecache]>=0.12.6
-│           │   │   ├── lockfile>=0.9; extra == "filecache"
-│           │   │   ├── msgpack>=0.5.2
-│           │   │   └── requests
-│           │   │       ├── certifi>=2017.4.17
-│           │   │       ├── chardet<5,>=3.0.2
-│           │   │       ├── idna<3,>=2.5
-│           │   │       └── urllib3<1.27,>=1.21.1
 │           │   ├── domdf-python-tools>=0.9.0
 │           │   │   ├── natsort>=7.1.0
 │           │   │   ├── pydash>=4.7.4
 │           │   │   └── typing-extensions>=3.7.4.3
-│           │   ├── lockfile>=0.12.2
 │           │   ├── requests>=2.24.0
 │           │   │   ├── certifi>=2017.4.17
 │           │   │   ├── chardet<5,>=3.0.2
@@ -579,19 +516,10 @@ repo_helper==2020.12.18
 ├── shippinglabel>=0.8.2
 │   ├── apeye>=0.7.0
 │   │   ├── appdirs>=1.4.4
-│   │   ├── cachecontrol[filecache]>=0.12.6
-│   │   │   ├── lockfile>=0.9; extra == "filecache"
-│   │   │   ├── msgpack>=0.5.2
-│   │   │   └── requests
-│   │   │       ├── certifi>=2017.4.17
-│   │   │       ├── chardet<5,>=3.0.2
-│   │   │       ├── idna<3,>=2.5
-│   │   │       └── urllib3<1.27,>=1.21.1
 │   │   ├── domdf-python-tools>=0.9.0
 │   │   │   ├── natsort>=7.1.0
 │   │   │   ├── pydash>=4.7.4
 │   │   │   └── typing-extensions>=3.7.4.3
-│   │   ├── lockfile>=0.12.2
 │   │   ├── requests>=2.24.0
 │   │   │   ├── certifi>=2017.4.17
 │   │   │   ├── chardet<5,>=3.0.2
@@ -709,19 +637,10 @@ repo_helper==2020.12.18
 │   ├── pyproject-parser>=0.1.0
 │   │   ├── apeye>=0.7.0
 │   │   │   ├── appdirs>=1.4.4
-│   │   │   ├── cachecontrol[filecache]>=0.12.6
-│   │   │   │   ├── lockfile>=0.9; extra == "filecache"
-│   │   │   │   ├── msgpack>=0.5.2
-│   │   │   │   └── requests
-│   │   │   │       ├── certifi>=2017.4.17
-│   │   │   │       ├── chardet<5,>=3.0.2
-│   │   │   │       ├── idna<3,>=2.5
-│   │   │   │       └── urllib3<1.27,>=1.21.1
 │   │   │   ├── domdf-python-tools>=0.9.0
 │   │   │   │   ├── natsort>=7.1.0
 │   │   │   │   ├── pydash>=4.7.4
 │   │   │   │   └── typing-extensions>=3.7.4.3
-│   │   │   ├── lockfile>=0.12.2
 │   │   │   ├── requests>=2.24.0
 │   │   │   │   ├── certifi>=2017.4.17
 │   │   │   │   ├── chardet<5,>=3.0.2
@@ -770,19 +689,10 @@ repo_helper==2020.12.18
 │   │   ├── shippinglabel>=0.10.0
 │   │   │   ├── apeye>=0.7.0
 │   │   │   │   ├── appdirs>=1.4.4
-│   │   │   │   ├── cachecontrol[filecache]>=0.12.6
-│   │   │   │   │   ├── lockfile>=0.9; extra == "filecache"
-│   │   │   │   │   ├── msgpack>=0.5.2
-│   │   │   │   │   └── requests
-│   │   │   │   │       ├── certifi>=2017.4.17
-│   │   │   │   │       ├── chardet<5,>=3.0.2
-│   │   │   │   │       ├── idna<3,>=2.5
-│   │   │   │   │       └── urllib3<1.27,>=1.21.1
 │   │   │   │   ├── domdf-python-tools>=0.9.0
 │   │   │   │   │   ├── natsort>=7.1.0
 │   │   │   │   │   ├── pydash>=4.7.4
 │   │   │   │   │   └── typing-extensions>=3.7.4.3
-│   │   │   │   ├── lockfile>=0.12.2
 │   │   │   │   ├── requests>=2.24.0
 │   │   │   │   │   ├── certifi>=2017.4.17
 │   │   │   │   │   ├── chardet<5,>=3.0.2
@@ -845,19 +755,10 @@ repo_helper==2020.12.18
 │   └── shippinglabel>=0.10.0
 │       ├── apeye>=0.7.0
 │       │   ├── appdirs>=1.4.4
-│       │   ├── cachecontrol[filecache]>=0.12.6
-│       │   │   ├── lockfile>=0.9; extra == "filecache"
-│       │   │   ├── msgpack>=0.5.2
-│       │   │   └── requests
-│       │   │       ├── certifi>=2017.4.17
-│       │   │       ├── chardet<5,>=3.0.2
-│       │   │       ├── idna<3,>=2.5
-│       │   │       └── urllib3<1.27,>=1.21.1
 │       │   ├── domdf-python-tools>=0.9.0
 │       │   │   ├── natsort>=7.1.0
 │       │   │   ├── pydash>=4.7.4
 │       │   │   └── typing-extensions>=3.7.4.3
-│       │   ├── lockfile>=0.12.2
 │       │   ├── requests>=2.24.0
 │       │   │   ├── certifi>=2017.4.17
 │       │   │   ├── chardet<5,>=3.0.2
