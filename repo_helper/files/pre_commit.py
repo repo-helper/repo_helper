@@ -203,6 +203,12 @@ flake2lint = Repo(
 		hooks=["flake2lint"],
 		)
 
+pyproject_parser = Repo(
+		repo=make_github_url("repo-helper", "pyproject-parser"),
+		rev="v0.2.0",
+		hooks=["reformat-pyproject"],
+		)
+
 # shellcheck = Repo(
 # 		repo=make_github_url("shellcheck-py", "shellcheck-py"),
 # 		rev="v0.7.1.1",
@@ -297,6 +303,7 @@ def make_pre_commit(repo_path: pathlib.Path, templates: jinja2.Environment) -> L
 	indent_re = re.compile("^ {3}")
 
 	managed_hooks = [
+			pyproject_parser,
 			pre_commit_hooks,
 			domdfcoding_hooks,
 			flake8_dunder_all,
