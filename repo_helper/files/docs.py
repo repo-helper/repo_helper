@@ -636,6 +636,20 @@ def rewrite_docs_index(repo_path: pathlib.Path, templates: jinja2.Environment) -
 			index_rst,
 			)
 
+	if ":caption: Links" not in index_rst and not templates.globals["preserve_custom_theme"]:
+		index_rst = index_rst.replace(
+				".. start links",
+				'\n'.join([
+						".. sidebar-links::",
+						"\t:caption: Links",
+						"\t:github:",
+						(f"	:pypi: {templates.globals['pypi_name']}" if templates.globals["on_pypi"] else ''),
+						'',
+						'',
+						".. start links",
+						])
+				)
+
 	index_rst_file.write_clean(index_rst)
 
 	return [index_rst_file.relative_to(repo_path).as_posix()]

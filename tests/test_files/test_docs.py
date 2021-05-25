@@ -21,22 +21,27 @@
 #
 
 # 3rd party
+import sys
+from domdf_python_tools.compat import importlib_resources
 import pytest
 from coincidence.regressions import check_file_output, check_file_regression
+from domdf_python_tools.paths import PathPlus
 from pytest_regressions.file_regression import FileRegressionFixture
+import tests.test_files.test_rewrite_docs_index_input
 
 # this package
+import tests
 from repo_helper.files.docs import (
-		copy_docs_styling,
-		ensure_doc_requirements,
-		make_404_page,
-		make_alabaster_theming,
-		make_conf,
-		make_docs_source_rst,
-		make_docutils_conf,
-		make_readthedocs_theming,
-		make_rtfd
-		)
+	copy_docs_styling,
+	ensure_doc_requirements,
+	make_404_page,
+	make_alabaster_theming,
+	make_conf,
+	make_docs_source_rst,
+	make_docutils_conf,
+	make_readthedocs_theming,
+	make_rtfd, rewrite_docs_index,
+	)
 from repo_helper.files.old import remove_autodoc_augment_defaults
 
 
@@ -205,3 +210,41 @@ def test_copy_docs_styling(tmp_pathplus, demo_environment, file_regression, them
 	for file in managed_files:
 		if (tmp_pathplus / file).exists():
 			check_file_output(tmp_pathplus / file, file_regression, (tmp_pathplus / file).name)
+
+
+@pytest.mark.parametrize("filename", [
+		"input_a.rst",
+		"input_b.rst",
+		"input_c.rst",
+		"input_d.rst",
+		"input_e.rst",
+		"input_f.rst",
+		"input_g.rst",
+		"input_h.rst",
+		])
+def test_rewrite_docs_index(
+		tmp_pathplus,
+		demo_environment,
+		file_regression: FileRegressionFixture,
+		filename,
+		fixed_date,
+		):
+	demo_environment.globals["version"] = "1.2.3"
+	demo_environment.globals["enable_docs"] = True
+	demo_environment.globals["docker_shields"] = False
+	demo_environment.globals["docker_name"] = ''
+	demo_environment.globals["enable_pre_commit"] = True
+	demo_environment.globals["license"] = "MIT"
+	demo_environment.globals["primary_conda_channel"] = "octocat"
+	demo_environment.globals["preserve_custom_theme"] = False
+
+	index_file = tmp_pathplus / "doc-source" / "index.rst"
+	index_file.parent.maybe_make()
+
+	with importlib_resources.path(tests.test_files.test_rewrite_docs_index_input, filename) as p:
+		index_file.write_clean(PathPlus(p).read_text())
+
+	managed_files = rewrite_docs_index(tmp_pathplus, demo_environment)
+	assert managed_files == ["doc-source/index.rst"]
+
+	check_file_output(index_file, file_regression)
