@@ -5,7 +5,7 @@ exclude: ^$
 
 repos:
  - repo: https://github.com/repo-helper/pyproject-parser
-   rev: v0.2.0
+   rev: v0.2.2
    hooks:
     - id: reformat-pyproject
 
