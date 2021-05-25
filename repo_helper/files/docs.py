@@ -520,40 +520,13 @@ def copy_docs_styling(repo_path: pathlib.Path, templates: jinja2.Environment) ->
 
 	style_css.write_lines(style_css_lines)
 
+	with suppress(FileNotFoundError):
+		shutil.rmtree(furo_navigation.parent)
+
 	if templates.globals["sphinx_html_theme"] == "furo":
-		furo_navigation.parent.maybe_make()
-		github_url = make_github_url(templates.globals["username"], templates.globals["repo_name"])
-
-		buf = StringList([
-				"<!---{managed_message}--->".format_map(templates.globals),
-				'<div class="sidebar-tree">',
-				"  {{ furo_navigation_tree }}",
-				"</div>",
-				'',
-				'<div class="sidebar-tree">',
-				'  <p class="caption"><span class="caption-text">Links</span></p>',
-				"  <ul>",
-				f'    <li class="toctree-l1"><a class="reference external" href="{github_url}">GitHub</a></li>'
-				])
-
-		if templates.globals["on_pypi"]:
-			buf.append(
-					f'    <li class="toctree-l1"><a class="reference external" '
-					f'href="https://pypi.org/project/{templates.globals["pypi_name"]}">PyPI</a></li>'
-					)
-
-		buf.extend(["  </ul>", "</div>"])
-		buf.blankline(ensure_single=True)
-
-		furo_navigation.write_lines(buf)
-
 		base_html.write_lines(_template_with_custom_css(templates.globals["managed_message"], "base.html"))
 		layout_html.unlink(missing_ok=True)
-
 	else:
-		with suppress(FileNotFoundError):
-			shutil.rmtree(furo_navigation.parent)
-
 		layout_html.write_lines(_template_with_custom_css(templates.globals["managed_message"], "layout.html"))
 		base_html.unlink(missing_ok=True)
 

@@ -20,28 +20,31 @@
 #  MA 02110-1301, USA.
 #
 
-# 3rd party
+# stdlib
 import sys
-from domdf_python_tools.compat import importlib_resources
+
+# 3rd party
 import pytest
 from coincidence.regressions import check_file_output, check_file_regression
+from domdf_python_tools.compat import importlib_resources
 from domdf_python_tools.paths import PathPlus
 from pytest_regressions.file_regression import FileRegressionFixture
-import tests.test_files.test_rewrite_docs_index_input
 
 # this package
 import tests
+import tests.test_files.test_rewrite_docs_index_input
 from repo_helper.files.docs import (
-	copy_docs_styling,
-	ensure_doc_requirements,
-	make_404_page,
-	make_alabaster_theming,
-	make_conf,
-	make_docs_source_rst,
-	make_docutils_conf,
-	make_readthedocs_theming,
-	make_rtfd, rewrite_docs_index,
-	)
+		copy_docs_styling,
+		ensure_doc_requirements,
+		make_404_page,
+		make_alabaster_theming,
+		make_conf,
+		make_docs_source_rst,
+		make_docutils_conf,
+		make_readthedocs_theming,
+		make_rtfd,
+		rewrite_docs_index
+		)
 from repo_helper.files.old import remove_autodoc_augment_defaults
 
 
@@ -211,17 +214,22 @@ def test_copy_docs_styling(tmp_pathplus, demo_environment, file_regression, them
 		if (tmp_pathplus / file).exists():
 			check_file_output(tmp_pathplus / file, file_regression, (tmp_pathplus / file).name)
 
+	assert not (tmp_pathplus / "doc-source/_templates/sidebar/navigation.html").is_file()
 
-@pytest.mark.parametrize("filename", [
-		"input_a.rst",
-		"input_b.rst",
-		"input_c.rst",
-		"input_d.rst",
-		"input_e.rst",
-		"input_f.rst",
-		"input_g.rst",
-		"input_h.rst",
-		])
+
+@pytest.mark.parametrize(
+		"filename",
+		[
+				"input_a.rst",
+				"input_b.rst",
+				"input_c.rst",
+				"input_d.rst",
+				"input_e.rst",
+				"input_f.rst",
+				"input_g.rst",
+				"input_h.rst",
+				]
+		)
 def test_rewrite_docs_index(
 		tmp_pathplus,
 		demo_environment,
