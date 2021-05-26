@@ -205,8 +205,8 @@ flake2lint = Repo(
 
 pyproject_parser = Repo(
 		repo=make_github_url("repo-helper", "pyproject-parser"),
-		rev="v0.2.2",
-		hooks=["reformat-pyproject"],
+		rev="v0.2.3",
+		hooks=["reformat-pyproject"],  # TODO: add check-pyproject
 		)
 
 # shellcheck = Repo(
