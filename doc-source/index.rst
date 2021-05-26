@@ -195,6 +195,12 @@ Installation
 	Source
 
 
+.. sidebar-links::
+	:caption: Links
+	:github:
+	:pypi: repo_helper
+
+
 .. start links
 
 .. only:: html
