@@ -515,7 +515,7 @@ def make_github_manylinux(repo_path: pathlib.Path, templates: jinja2.Environment
 	return [file.relative_to(repo_path).as_posix()]
 
 
-@management.register("docs_action", ["enable_docs"])
+@management.register("docs_action")
 def make_github_docs_test(repo_path: pathlib.Path, templates: jinja2.Environment) -> List[str]:
 	"""
 	Add configuration for GitHub Actions documentation check to the desired repo.
