@@ -216,6 +216,16 @@ def test_make_github_docs_test(
 		):
 	demo_environment.globals["docs_fail_on_warning"] = fail_on_warning
 	demo_environment.globals["enable_tests"] = enable_tests
+
+	assert make_github_docs_test(tmp_pathplus, demo_environment) == [".github/workflows/docs_test_action.yml"]
+	advanced_file_regression.check_file(tmp_pathplus / ".github/workflows/docs_test_action.yml")
+
+	demo_environment.globals["enable_docs"] = False
+	assert make_github_docs_test(tmp_pathplus, demo_environment) == [".github/workflows/docs_test_action.yml"]
+	assert not (tmp_pathplus / ".github/workflows/docs_test_action.yml").is_file()
+	assert not (tmp_pathplus / ".github/workflows/docs_test_action.yml").exists()
+
+	demo_environment.globals["enable_docs"] = True
 	assert make_github_docs_test(tmp_pathplus, demo_environment) == [".github/workflows/docs_test_action.yml"]
 	advanced_file_regression.check_file(tmp_pathplus / ".github/workflows/docs_test_action.yml")
 
