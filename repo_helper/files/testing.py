@@ -399,6 +399,7 @@ class ToxConfig(IniConfigurator):
 				"git+https://github.com/domdfcoding/flake8-rst-docstrings.git",
 				"pydocstyle>=6.0.0",
 				"pygments>=2.7.1",
+				"importlib_metadata<4.5.0; python_version<'3.8'"
 				])
 		cmd = f"python3 -m flake8_rst_docstrings_sphinx {' '.join(self.get_source_files())} --allow-toolbox {{posargs}}"
 		self._ini["testenv:lint"]["commands"] = cmd
