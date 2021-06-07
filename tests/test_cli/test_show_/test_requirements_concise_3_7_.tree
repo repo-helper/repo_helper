@@ -8,9 +8,8 @@ repo_helper==2020.12.18
 ├── certifi>=2017.4.17
 ├── chardet<5,>=3.0.2
 ├── click==7.1.2
-├── colorama>=0.4.3; python_version < "3.10"
 ├── configconfig>=0.5.0
-├── consolekit>=1.1.1
+├── consolekit>=1.2.0
 ├── css-parser==1.0.6
 ├── deprecation>=2.1.0
 ├── deprecation-alias>=0.1.1
