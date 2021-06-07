@@ -60,7 +60,7 @@ repo_helper==2020.12.18
 │   │   │       └── pyparsing>=2.0.2
 │   │   └── packaging>=20.4
 │   │       └── pyparsing>=2.0.2
-│   ├── domdf-python-tools>=2.5.1
+│   ├── domdf-python-tools>=2.6.0
 │   │   ├── importlib-metadata>=1.5.0; python_version < "3.9"
 │   │   │   ├── typing-extensions>=3.6.4; python_version < "3.8"
 │   │   │   └── zipp>=0.5
@@ -115,7 +115,7 @@ repo_helper==2020.12.18
 │   │   │   │       └── pyparsing>=2.0.2
 │   │   │   └── packaging>=20.4
 │   │   │       └── pyparsing>=2.0.2
-│   │   ├── domdf-python-tools>=2.5.1
+│   │   ├── domdf-python-tools>=2.6.0
 │   │   │   ├── importlib-metadata>=1.5.0; python_version < "3.9"
 │   │   │   │   ├── typing-extensions>=3.6.4; python_version < "3.8"
 │   │   │   │   └── zipp>=0.5
@@ -257,7 +257,7 @@ repo_helper==2020.12.18
 │   │   │   │   │   │       └── pyparsing>=2.0.2
 │   │   │   │   │   └── packaging>=20.4
 │   │   │   │   │       └── pyparsing>=2.0.2
-│   │   │   │   ├── domdf-python-tools>=2.5.1
+│   │   │   │   ├── domdf-python-tools>=2.6.0
 │   │   │   │   │   ├── importlib-metadata>=1.5.0; python_version < "3.9"
 │   │   │   │   │   │   ├── typing-extensions>=3.6.4; python_version < "3.8"
 │   │   │   │   │   │   └── zipp>=0.5
@@ -338,7 +338,7 @@ repo_helper==2020.12.18
 │   │   │   │   │       └── pyparsing>=2.0.2
 │   │   │   │   └── packaging>=20.4
 │   │   │   │       └── pyparsing>=2.0.2
-│   │   │   ├── domdf-python-tools>=2.5.1
+│   │   │   ├── domdf-python-tools>=2.6.0
 │   │   │   │   ├── importlib-metadata>=1.5.0; python_version < "3.9"
 │   │   │   │   │   ├── typing-extensions>=3.6.4; python_version < "3.8"
 │   │   │   │   │   └── zipp>=0.5
@@ -380,7 +380,7 @@ repo_helper==2020.12.18
 │       │   │   │       └── pyparsing>=2.0.2
 │       │   │   └── packaging>=20.4
 │       │   │       └── pyparsing>=2.0.2
-│       │   ├── domdf-python-tools>=2.5.1
+│       │   ├── domdf-python-tools>=2.6.0
 │       │   │   ├── importlib-metadata>=1.5.0; python_version < "3.9"
 │       │   │   │   ├── typing-extensions>=3.6.4; python_version < "3.8"
 │       │   │   │   └── zipp>=0.5
@@ -521,7 +521,7 @@ repo_helper==2020.12.18
 │       │   │   │   │   │       └── pyparsing>=2.0.2
 │       │   │   │   │   └── packaging>=20.4
 │       │   │   │   │       └── pyparsing>=2.0.2
-│       │   │   │   ├── domdf-python-tools>=2.5.1
+│       │   │   │   ├── domdf-python-tools>=2.6.0
 │       │   │   │   │   ├── importlib-metadata>=1.5.0; python_version < "3.9"
 │       │   │   │   │   │   ├── typing-extensions>=3.6.4; python_version < "3.8"
 │       │   │   │   │   │   └── zipp>=0.5
@@ -602,7 +602,7 @@ repo_helper==2020.12.18
 │           │   │   │       └── pyparsing>=2.0.2
 │           │   │   └── packaging>=20.4
 │           │   │       └── pyparsing>=2.0.2
-│           │   ├── domdf-python-tools>=2.5.1
+│           │   ├── domdf-python-tools>=2.6.0
 │           │   │   ├── importlib-metadata>=1.5.0; python_version < "3.9"
 │           │   │   │   ├── typing-extensions>=3.6.4; python_version < "3.8"
 │           │   │   │   └── zipp>=0.5
@@ -686,7 +686,7 @@ repo_helper==2020.12.18
 │   │   │   │       └── pyparsing>=2.0.2
 │   │   │   └── packaging>=20.4
 │   │   │       └── pyparsing>=2.0.2
-│   │   ├── domdf-python-tools>=2.5.1
+│   │   ├── domdf-python-tools>=2.6.0
 │   │   │   ├── importlib-metadata>=1.5.0; python_version < "3.9"
 │   │   │   │   ├── typing-extensions>=3.6.4; python_version < "3.8"
 │   │   │   │   └── zipp>=0.5
@@ -727,7 +727,7 @@ repo_helper==2020.12.18
 │   │   │   │       └── pyparsing>=2.0.2
 │   │   │   └── packaging>=20.4
 │   │   │       └── pyparsing>=2.0.2
-│   │   ├── domdf-python-tools>=2.5.1
+│   │   ├── domdf-python-tools>=2.6.0
 │   │   │   ├── importlib-metadata>=1.5.0; python_version < "3.9"
 │   │   │   │   ├── typing-extensions>=3.6.4; python_version < "3.8"
 │   │   │   │   └── zipp>=0.5
@@ -760,7 +760,7 @@ repo_helper==2020.12.18
 │   │   │   │       └── pyparsing>=2.0.2
 │   │   │   └── packaging>=20.4
 │   │   │       └── pyparsing>=2.0.2
-│   │   ├── domdf-python-tools>=2.5.1
+│   │   ├── domdf-python-tools>=2.6.0
 │   │   │   ├── importlib-metadata>=1.5.0; python_version < "3.9"
 │   │   │   │   ├── typing-extensions>=3.6.4; python_version < "3.8"
 │   │   │   │   └── zipp>=0.5
@@ -901,7 +901,7 @@ repo_helper==2020.12.18
 │   │   │   │   │   │       └── pyparsing>=2.0.2
 │   │   │   │   │   └── packaging>=20.4
 │   │   │   │   │       └── pyparsing>=2.0.2
-│   │   │   │   ├── domdf-python-tools>=2.5.1
+│   │   │   │   ├── domdf-python-tools>=2.6.0
 │   │   │   │   │   ├── importlib-metadata>=1.5.0; python_version < "3.9"
 │   │   │   │   │   │   ├── typing-extensions>=3.6.4; python_version < "3.8"
 │   │   │   │   │   │   └── zipp>=0.5
@@ -982,7 +982,7 @@ repo_helper==2020.12.18
 │       │   │   │       └── pyparsing>=2.0.2
 │       │   │   └── packaging>=20.4
 │       │   │       └── pyparsing>=2.0.2
-│       │   ├── domdf-python-tools>=2.5.1
+│       │   ├── domdf-python-tools>=2.6.0
 │       │   │   ├── importlib-metadata>=1.5.0; python_version < "3.9"
 │       │   │   │   ├── typing-extensions>=3.6.4; python_version < "3.8"
 │       │   │   │   └── zipp>=0.5
@@ -1025,7 +1025,7 @@ repo_helper==2020.12.18
     │   │   │       └── pyparsing>=2.0.2
     │   │   └── packaging>=20.4
     │   │       └── pyparsing>=2.0.2
-    │   ├── domdf-python-tools>=2.5.1
+    │   ├── domdf-python-tools>=2.6.0
     │   │   ├── importlib-metadata>=1.5.0; python_version < "3.9"
     │   │   │   ├── typing-extensions>=3.6.4; python_version < "3.8"
     │   │   │   └── zipp>=0.5
