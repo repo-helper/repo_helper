@@ -35,6 +35,7 @@ import tarfile
 import tempfile
 from datetime import datetime
 from email.message import EmailMessage
+from functools import partial
 from io import StringIO
 from subprocess import PIPE, Popen
 from textwrap import dedent, indent
@@ -51,7 +52,8 @@ from domdf_python_tools.typing import PathLike
 from packaging.specifiers import Specifier
 from packaging.version import Version
 from shippinglabel.checksum import get_record_entry
-from shippinglabel.requirements import ComparableRequirement, combine_requirements, read_requirements
+from shippinglabel.requirements import combine_requirements, ComparableRequirement, read_requirements
+from whey.builder import AbstractBuilder
 
 # this package
 from repo_helper import __version__
@@ -61,7 +63,7 @@ from repo_helper.configuration import parse_yaml
 __all__ = ["Builder", "build_wheel", "build_sdist"]
 
 
-class Builder:
+class Builder(AbstractBuilder):
 	"""
 	Builds source and binary distributions using metadata read from ``repo_helper.yml``.
 
@@ -73,25 +75,31 @@ class Builder:
 	:param verbose: Enable verbose output.
 	"""
 
+	#: The repository
+	repo_dir: PathPlus
+
 	def __init__(
 			self,
 			repo_dir: pathlib.Path,
 			build_dir: Optional[PathLike] = None,
 			out_dir: Optional[PathLike] = None,
-			verbose: bool = False
+			*,
+			verbose: bool = False,
+			colour: bool = None,
 			):
 
 		# Walk up the tree until a "repo_helper.yml" or "git_helper.yml" (old name) file is found.
 		#: The repository
-		self.repo_dir: PathPlus = traverse_to_file(PathPlus(repo_dir), "repo_helper.yml", "git_helper.yml")
-
-		#: The tag for the wheel
-		self.tag = "py3-none-any"
+		self.project_dir = self.repo_dir = traverse_to_file(PathPlus(repo_dir), "repo_helper.yml", "git_helper.yml")
 
 		#: repo_helper's configuration dictionary.
 		self.config = parse_yaml(self.repo_dir, allow_unknown_keys=True)
-
 		self.config["version"] = str(Version(self.config["version"]))
+		self.config["source-dir"] = self.config["source_dir"]
+		self.config["additional-files"] = self.config["manifest_additional"]
+
+		#: The tag for the wheel
+		self.tag = "py3-none-any"
 
 		#: The archive name, without the tag
 		self.archive_name = re.sub(
@@ -101,15 +109,30 @@ class Builder:
 				re.UNICODE,
 				) + f"-{self.config['version']}"
 
-		self.build_dir = PathPlus(build_dir or self.repo_dir / "build/repo_helper_build")
+		#: The (temporary) build directory.
+		self.build_dir = PathPlus(build_dir or self.default_build_dir)
 		self.clear_build_dir()
 		(self.build_dir / self.pkg_dir).maybe_make(parents=True)
 
-		out_dir = out_dir or self.repo_dir / "dist"
-		self.out_dir = PathPlus(out_dir)
+		#: The output directory.
+		self.out_dir = PathPlus(out_dir or self.default_out_dir)
 		self.out_dir.maybe_make(parents=True)
 
+		#: Whether to enable verbose output.
 		self.verbose = verbose
+
+		#: Whether to use coloured output.
+		self.colour = resolve_color_default(colour)
+
+		self._echo = partial(click.echo, color=self.colour)
+
+	@property
+	def default_build_dir(self) -> PathPlus:  # pragma: no cover
+		"""
+		Provides a default for the ``build_dir`` argument.
+		"""
+
+		return self.project_dir / "build/repo_helper_build"
 
 	@property
 	def dist_info(self) -> PathPlus:
@@ -149,64 +172,19 @@ class Builder:
 
 		pkgdir = self.repo_dir / self.pkg_dir
 
+		if not pkgdir.is_dir():
+			raise FileNotFoundError(f"Package directory '{self.config['package']}' not found.")
+
+		found_file = False
+
 		for py_pattern in {"**/*.py", "**/*.pyi", "**/*.pyx", "**/py.typed"}:
 			for py_file in pkgdir.rglob(py_pattern):
 				if "__pycache__" not in py_file.parts:
+					found_file = True
 					yield py_file
 
-	def copy_source(self) -> None:
-		"""
-		Copy source files into the build directory.
-		"""
-
-		for py_file in self.iter_source_files():
-			target = self.build_dir / py_file.relative_to(self.repo_dir)
-			target.parent.maybe_make(parents=True)
-			target.write_clean(py_file.read_text())
-			self.report_copied(py_file, target)
-
-	def report_copied(self, source: pathlib.Path, target: pathlib.Path):
-		"""
-		Report that a file has been copied into the build directory.
-
-		The format is::
-
-			Copying {source} -> {target.relative_to(self.build_dir)}
-
-		:param source: The source file
-		:param target: The file in the build directory.
-		"""
-
-		if self.verbose:
-			click.echo(f"Copying {source.resolve()} -> {target.relative_to(self.build_dir)}")
-
-	def report_removed(self, removed_file: pathlib.Path):
-		"""
-		Report that a file has been removed from the build directory.
-
-		The format is::
-
-			Removing {removed_file.relative_to(self.build_dir)}
-
-		:param removed_file:
-		"""
-
-		if self.verbose:
-			click.echo(f"Removing {removed_file.relative_to(self.build_dir)}")
-
-	def report_written(self, written_file: pathlib.Path):
-		"""
-		Report that a file has been written to the build directory.
-
-		The format is::
-
-			Writing {written_file.relative_to(self.build_dir)}
-
-		:param written_file:
-		"""
-
-		if self.verbose:
-			click.echo(f"Writing {written_file.relative_to(self.build_dir)}")
+		if not found_file:
+			raise FileNotFoundError(f"No Python source files found in {pkgdir}")
 
 	def copy_manifest_additional(self) -> None:  # pylint: disable=useless-return
 		"""
@@ -214,68 +192,7 @@ class Builder:
 		as specfied in :conf:`manifest_additional`.
 		"""  # noqa: D400
 
-		def copy_file(filename):
-			target = self.build_dir / filename.relative_to(self.repo_dir)
-			target.parent.maybe_make(parents=True)
-			shutil.copy2(src=filename, dst=target)
-			self.report_copied(filename, target)
-
-		for entry in self.config["manifest_additional"]:
-			parts = entry.split(' ')
-
-			if parts[0] == "include":
-				for include_pat in parts[1:]:
-					for include_file in self.repo_dir.glob(include_pat):
-						if include_file.is_file():
-							copy_file(filename=include_file)
-
-			elif parts[0] == "exclude":
-				for exclude_pat in parts[1:]:
-					for exclude_file in self.build_dir.glob(exclude_pat):
-						if exclude_file.is_file():
-							exclude_file.unlink()
-							self.report_removed(exclude_file)
-
-			elif parts[0] == "recursive-include":
-				for include_file in (self.repo_dir / parts[1]).rglob(parts[2]):
-					if include_file.is_file():
-						copy_file(filename=include_file)
-
-			elif parts[0] == "recursive-exclude":
-				for exclude_file in (self.build_dir / parts[1]).rglob(parts[2]):
-					if exclude_file.is_file():
-						exclude_file.unlink()
-						self.report_removed(exclude_file)
-
-		#
-		# elif parts[0] == "global-include":
-		# 	for include_pat in parts[1:]:
-		# 		for include_file in self.repo_dir.rglob(include_pat):
-		# 			if include_file.is_file():
-		# 				copy_file(filename=include_file)
-		#
-		# elif parts[0] == "global-exclude":
-		# 	for exclude_pat in parts[1:]:
-		# 		for exclude_file in self.repo_dir.rglob(exclude_pat):
-		# 			if exclude_file.is_file():
-		# 				exclude_file.unlink()
-		# 				self.report_removed(exclude_file)
-
-		#
-		# elif parts[0] == "graft":
-		# 	for graft_dir in self.repo_dir.rglob(parts[1]):
-		# 		for graft_file in graft_dir.rglob("*.*"):
-		# 			if graft_file.is_file():
-		# 				copy_file(graft_file)
-		#
-		# elif parts[0] == "prune":
-		# 	for prune_dir in self.repo_dir.rglob(parts[1]):
-		# 		for prune_file in prune_dir.rglob("*.*"):
-		# 			if prune_file.is_file():
-		# 				prune_file.unlink()
-		# 				self.report_removed(exclude_file)
-
-		return
+		self.parse_additional_files(*self.config["additional-files"])
 
 	def write_entry_points(self) -> None:
 		"""
@@ -305,7 +222,7 @@ class Builder:
 		entry_points_file.write_clean(cfg_io.getvalue())
 		self.report_written(entry_points_file)
 
-	def copy_license(self, dest_dir: PathPlus):
+	def write_license(self, dest_dir: PathPlus):
 		"""
 		Copy the any files matching ``LICEN[CS]E``.
 
@@ -317,6 +234,8 @@ class Builder:
 			target.parent.maybe_make(parents=True)
 			target.write_clean(license_file.read_text())
 			self.report_copied(license_file, target)
+
+	copy_license = write_license
 
 	@property
 	def import_name(self) -> str:
@@ -330,18 +249,19 @@ class Builder:
 
 	def write_metadata(self, metadata_file: PathPlus):
 		"""
-		Write `Core Metadata <https://packaging.python.org/specifications/core-metadata>`_
-		to the given file.
+		Write `Core Metadata`_ to the given file.
+
+		.. _Core Metadata: https://packaging.python.org/specifications/core-metadata
 
 		:param metadata_file:
-		"""  # noqa: D400
+		"""
 
 		github_url = "https://github.com/{username}/{repo_name}".format_map(self.config)
 
 		metadata = EmailMessage()
 		metadata["Metadata-Version"] = "2.1"
 		metadata["Name"] = self.config["pypi_name"]
-		metadata["Version"] = self.config["version"]
+		metadata["Version"] = str(self.config["version"])
 		metadata["Summary"] = self.config["short_desc"]
 		metadata["Home-page"] = github_url
 		metadata["Author"] = self.config["author"]
@@ -651,6 +571,7 @@ class Builder:
 			shutil.rmtree(self.build_dir)
 		self.build_dir.maybe_make(parents=True)
 
+	build = build_wheel
 
 # copy_file(repo_dir / "__pkginfo__.py")
 # copy_file(repo_dir / "requirements.txt")
