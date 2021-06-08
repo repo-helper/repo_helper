@@ -47,13 +47,12 @@ import click
 from consolekit.terminal_colours import Fore, resolve_color_default
 from consolekit.utils import abort
 from domdf_python_tools.paths import PathPlus, traverse_to_file
-from domdf_python_tools.stringlist import StringList
 from domdf_python_tools.typing import PathLike
+from domdf_python_tools.utils import divide
 from packaging.specifiers import Specifier
 from packaging.version import Version
-from shippinglabel.checksum import get_record_entry
-from shippinglabel.requirements import combine_requirements, ComparableRequirement, read_requirements
-from whey.builder import AbstractBuilder
+from shippinglabel.requirements import ComparableRequirement, combine_requirements, read_requirements
+from whey.builder import SDistBuilder, WheelBuilder
 
 # this package
 from repo_helper import __version__
@@ -63,7 +62,7 @@ from repo_helper.configuration import parse_yaml
 __all__ = ["Builder", "build_wheel", "build_sdist"]
 
 
-class Builder(AbstractBuilder):
+class Builder(WheelBuilder):
 	"""
 	Builds source and binary distributions using metadata read from ``repo_helper.yml``.
 
@@ -90,16 +89,15 @@ class Builder(AbstractBuilder):
 
 		# Walk up the tree until a "repo_helper.yml" or "git_helper.yml" (old name) file is found.
 		#: The repository
-		self.project_dir = self.repo_dir = traverse_to_file(PathPlus(repo_dir), "repo_helper.yml", "git_helper.yml")
+		self.project_dir = self.repo_dir = traverse_to_file(
+				PathPlus(repo_dir), "repo_helper.yml", "git_helper.yml"
+				)
 
 		#: repo_helper's configuration dictionary.
 		self.config = parse_yaml(self.repo_dir, allow_unknown_keys=True)
 		self.config["version"] = str(Version(self.config["version"]))
 		self.config["source-dir"] = self.config["source_dir"]
 		self.config["additional-files"] = self.config["manifest_additional"]
-
-		#: The tag for the wheel
-		self.tag = "py3-none-any"
 
 		#: The archive name, without the tag
 		self.archive_name = re.sub(
@@ -125,24 +123,6 @@ class Builder(AbstractBuilder):
 		self.colour = resolve_color_default(colour)
 
 		self._echo = partial(click.echo, color=self.colour)
-
-	@property
-	def default_build_dir(self) -> PathPlus:  # pragma: no cover
-		"""
-		Provides a default for the ``build_dir`` argument.
-		"""
-
-		return self.project_dir / "build/repo_helper_build"
-
-	@property
-	def dist_info(self) -> PathPlus:
-		"""
-		The ``*.dist-info`` directory in the build directory.
-		"""
-
-		dist_info = self.build_dir / f"{self.archive_name}.dist-info"
-		dist_info.maybe_make()
-		return dist_info
 
 	@property
 	def info_dir(self) -> PathPlus:
@@ -186,7 +166,7 @@ class Builder(AbstractBuilder):
 		if not found_file:
 			raise FileNotFoundError(f"No Python source files found in {pkgdir}")
 
-	def copy_manifest_additional(self) -> None:  # pylint: disable=useless-return
+	def copy_manifest_additional(self) -> None:
 		"""
 		Copy additional files to the build directory,
 		as specfied in :conf:`manifest_additional`.
@@ -202,25 +182,16 @@ class Builder(AbstractBuilder):
 		.. TODO:: non console-script entry points.
 		"""  # noqa: D400
 
-		cfg_parser = configparser.ConfigParser()
+		self.config["scripts"] = {}
+		self.config["gui-scripts"] = {}
+		self.config["entry-points"] = {}
 
-		buf = StringList()
 		if self.config["console_scripts"]:
-			buf.append("[console_scripts]")
-			buf.extend(self.config["console_scripts"])
+			for cs in self.config["console_scripts"]:
+				name, func = divide(cs, '=')
+				self.config["scripts"][name.strip()] = func.strip()
 
-		for group, entry_points in self.config["entry_points"].items():
-
-			buf.append(f"[{group}]")
-			buf.extend(entry_points)
-
-		cfg_parser.read_string(str(buf))
-		cfg_io = StringIO()
-		cfg_parser.write(cfg_io)
-
-		entry_points_file = self.dist_info / "entry_points.txt"
-		entry_points_file.write_clean(cfg_io.getvalue())
-		self.report_written(entry_points_file)
+		super().write_entry_points()
 
 	def write_license(self, dest_dir: PathPlus):
 		"""
@@ -361,6 +332,8 @@ class Builder(AbstractBuilder):
 		Write the metadata to the ``WHEEL`` file.
 		"""
 
+		# TODO: remove this once most implementation is in whey
+
 		wheel = EmailMessage()
 		wheel["Wheel-Version"] = "1.0"
 		wheel["Generator"] = f"repo_helper.build ({__version__})"
@@ -370,47 +343,6 @@ class Builder(AbstractBuilder):
 		wheel_file = self.dist_info / "WHEEL"
 		wheel_file.write_clean(str(wheel))
 		self.report_written(wheel_file)
-
-	def create_wheel_archive(self) -> str:
-		"""
-		Create the wheel archive.
-
-		:return: The filename of the created archive.
-		"""
-
-		wheel_filename = self.out_dir / f"{self.archive_name}-{self.tag}.whl"
-		self.out_dir.maybe_make(parents=True)
-
-		with ZipFile(wheel_filename, mode='w') as wheel_archive:
-			with (self.dist_info / "RECORD").open('w') as fp:
-				for file in (self.build_dir / self.pkg_dir).rglob('*'):
-					if file.is_file():
-						fp.write(get_record_entry(file, relative_to=self.build_dir))
-						fp.write('\n')
-						wheel_archive.write(file, arcname=file.relative_to(self.build_dir))
-
-				for file in self.dist_info.rglob('*'):
-					if "RECORD" in file.name and self.dist_info.name in file.parts:
-						continue
-					if not file.is_file():
-						continue
-
-					fp.write(get_record_entry(file, relative_to=self.build_dir))
-					fp.write('\n')
-					wheel_archive.write(file, arcname=file.relative_to(self.build_dir))
-
-			for file in self.dist_info.rglob("RECORD*"):
-				if file.is_file():
-					wheel_archive.write(file, arcname=file.relative_to(self.build_dir))
-					self.report_written(file)
-
-		emoji = "🎡 " if sys.platform != "win32" else ''
-		click.echo(
-				Fore.GREEN(f"{emoji}Wheel created at {wheel_filename.resolve()}"),
-				color=resolve_color_default(),
-				)
-
-		return wheel_filename.name
 
 	def create_conda_archive(self, wheel_contents_dir: PathLike, build_number: int = 1) -> str:
 		"""
@@ -462,41 +394,7 @@ class Builder(AbstractBuilder):
 		:return: The filename of the created archive.
 		"""
 
-		self.out_dir.maybe_make(parents=True)
-
-		sdist_filename = self.out_dir / f"{self.archive_name}.tar.gz"
-		with tarfile.open(sdist_filename, mode="w:gz", format=tarfile.PAX_FORMAT) as sdist_archive:
-			for file in self.build_dir.rglob('*'):
-				if file.is_file():
-					sdist_archive.add(str(file), arcname=file.relative_to(self.build_dir).as_posix())
-
-		click.echo(
-				Fore.GREEN(f"Source distribution created at {sdist_filename.resolve()}"),
-				color=resolve_color_default(),
-				)
-		return os.path.basename(sdist_filename)
-
-	def build_wheel(self) -> str:
-		"""
-		Build the binary wheel distribution.
-
-		:return: The filename of the created archive.
-		"""
-
-		if self.build_dir.is_dir():
-			shutil.rmtree(self.build_dir)
-		self.build_dir.maybe_make(parents=True)
-
-		self.copy_source()
-		self.copy_manifest_additional()
-		self.copy_license(self.dist_info)
-		self.write_entry_points()
-		self.write_metadata(self.dist_info / "METADATA")
-		self.write_wheel()
-		(self.dist_info / "top_level.txt").write_clean(posixpath.split(self.pkg_dir)[0])
-		self.report_written(self.dist_info / "top_level.txt")
-
-		return self.create_wheel_archive()
+		return SDistBuilder.create_sdist_archive(self)  # type: ignore
 
 	def build_sdist(self) -> str:
 		"""
@@ -562,16 +460,6 @@ class Builder(AbstractBuilder):
 				)
 		return conda_filename
 
-	def clear_build_dir(self) -> None:
-		"""
-		Clear the build directory of any residue from previous builds.
-		"""
-
-		if self.build_dir.is_dir():
-			shutil.rmtree(self.build_dir)
-		self.build_dir.maybe_make(parents=True)
-
-	build = build_wheel
 
 # copy_file(repo_dir / "__pkginfo__.py")
 # copy_file(repo_dir / "requirements.txt")
