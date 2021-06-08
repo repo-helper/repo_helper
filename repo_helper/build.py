@@ -98,6 +98,7 @@ class Builder(WheelBuilder):
 		self.config["version"] = str(Version(self.config["version"]))
 		self.config["source-dir"] = self.config["source_dir"]
 		self.config["additional-files"] = self.config["manifest_additional"]
+		self.config["package"] = self.config["import_name"]
 
 		#: The archive name, without the tag
 		self.archive_name = re.sub(
@@ -454,10 +455,8 @@ class Builder(WheelBuilder):
 			pip_install_wheel(self.out_dir / wheel_file, tmpdir, self.verbose)
 			conda_filename = self.create_conda_archive(str(tmpdir), build_number=build_number)
 
-		click.echo(
-				Fore.GREEN(f"Conda package created at {(self.out_dir / conda_filename).resolve()}"),
-				color=resolve_color_default(),
-				)
+		self._echo(Fore.GREEN(f"Conda package created at {(self.out_dir / conda_filename).resolve()}"))
+
 		return conda_filename
 
 
