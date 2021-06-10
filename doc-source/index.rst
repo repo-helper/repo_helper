@@ -200,6 +200,7 @@ Installation
 	:github:
 	:pypi: repo_helper
 
+	Contributing Guide <https://contributing.repo-helper.uk>
 
 .. start links
 
