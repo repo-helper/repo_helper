@@ -20,5 +20,5 @@ shippinglabel>=0.8.2
 southwark>=0.7.1
 tabulate>=0.8.8
 typing-extensions>=3.7.4.3
-whey>=0.0.8
+whey>=0.0.14
 yapf-isort>=0.5.2

@@ -700,7 +700,7 @@ repo_helper==2020.12.18
 │   └── typing-extensions>=3.7.4.3
 ├── tabulate>=0.8.8
 ├── typing-extensions>=3.7.4.3
-├── whey>=0.0.8
+├── whey>=0.0.14
 │   ├── click>=7.1.2
 │   ├── consolekit>=1.2.0
 │   │   ├── click>=7.1.2

@@ -51,6 +51,6 @@ repo_helper==2020.12.18
 ├── typing-inspect>=0.6.0
 ├── urllib3<1.27,>=1.24.1
 ├── wheel-filename>=1.2.0
-├── whey>=0.0.12
+├── whey>=0.0.14
 ├── yapf==0.30.0
 └── yapf-isort>=0.5.2
