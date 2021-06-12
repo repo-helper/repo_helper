@@ -23,6 +23,12 @@ jobs:
         with:
           python-version: "3.8"
 
+      - name: 'Get Previous tag'
+        id: previoustag
+        uses: "WyriHaximus/github-action-get-previous-tag@v1"
+        with:
+          fallback: 0.0.0
+
       - name: Install dependencies 🔧
         run: |
           python -VV
@@ -35,18 +41,23 @@ jobs:
 
           $CONDA/bin/conda config --add channels conda-forge
 
-      - name: "Build and install package"
+      - name: "Build and index channel"
         run: |
-          CURRENT_VERSION=$(git tag | tail -n 1 | cut -c 2-)
-          CURRENT_VERSION=${CURRENT_VERSION:=0.0.0}
           python -m repo_helper build --conda --out-dir conda-bld/noarch
-
-          # This mess is only necessary because conda won't fix it themselves
-          # https://github.com/conda/conda/issues/1884
           $CONDA/bin/conda index ./conda-bld || exit 1
-          $CONDA/bin/conda install -c file://$(pwd)/conda-bld hello-world=$CURRENT_VERSION -y || exit 1
 
-      - name: "Run Tests for Python ${{ matrix.python-version }}"
+      - name: "Search for package"
+        run: |
+          $CONDA/bin/conda search -c file://$(pwd)/conda-bld hello-world
+          $CONDA/bin/conda search -c file://$(pwd)/conda-bld --override-channels hello-world
+
+      - name: "Install package"
+        run: |
+          $CONDA/bin/conda install -c file://$(pwd)/conda-bld hello-world=${{ steps.previoustag.outputs.tag }}=py_1 -y || exit 1
+
+
+
+      - name: "Run Tests"
         run: |
           rm -rf hello_world
           $CONDA/bin/pip install -r tests/requirements.txt
