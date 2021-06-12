@@ -201,20 +201,6 @@ repo_helper==2020.12.18
 │   │   │   │   │   ├── pydash>=4.7.4
 │   │   │   │   │   └── typing-extensions>=3.7.4.3
 │   │   │   │   └── typing-extensions>=3.7.4.3
-│   │   │   ├── consolekit>=0.1.2
-│   │   │   │   ├── click>=7.1.2
-│   │   │   │   ├── deprecation-alias>=0.1.1
-│   │   │   │   │   ├── deprecation>=2.1.0
-│   │   │   │   │   │   └── packaging
-│   │   │   │   │   │       └── pyparsing>=2.0.2
-│   │   │   │   │   └── packaging>=20.4
-│   │   │   │   │       └── pyparsing>=2.0.2
-│   │   │   │   ├── domdf-python-tools>=2.6.0
-│   │   │   │   │   ├── natsort>=7.1.0
-│   │   │   │   │   ├── pydash>=4.7.4
-│   │   │   │   │   └── typing-extensions>=3.7.4.3
-│   │   │   │   ├── mistletoe>=0.7.2
-│   │   │   │   └── typing-extensions>=3.7.4.3
 │   │   │   ├── dom-toml>=0.2.2
 │   │   │   │   ├── domdf-python-tools>=2.7.0
 │   │   │   │   │   ├── natsort>=7.1.0
@@ -225,7 +211,6 @@ repo_helper==2020.12.18
 │   │   │   │   ├── natsort>=7.1.0
 │   │   │   │   ├── pydash>=4.7.4
 │   │   │   │   └── typing-extensions>=3.7.4.3
-│   │   │   ├── first>=2.0.2
 │   │   │   ├── packaging>=20.7
 │   │   │   │   └── pyparsing>=2.0.2
 │   │   │   ├── trove-classifiers>=2020.10.21
@@ -267,20 +252,6 @@ repo_helper==2020.12.18
 │   │   │   │   ├── pydash>=4.7.4
 │   │   │   │   └── typing-extensions>=3.7.4.3
 │   │   │   └── typing-extensions>=3.7.4.3
-│   │   ├── consolekit>=0.1.2
-│   │   │   ├── click>=7.1.2
-│   │   │   ├── deprecation-alias>=0.1.1
-│   │   │   │   ├── deprecation>=2.1.0
-│   │   │   │   │   └── packaging
-│   │   │   │   │       └── pyparsing>=2.0.2
-│   │   │   │   └── packaging>=20.4
-│   │   │   │       └── pyparsing>=2.0.2
-│   │   │   ├── domdf-python-tools>=2.6.0
-│   │   │   │   ├── natsort>=7.1.0
-│   │   │   │   ├── pydash>=4.7.4
-│   │   │   │   └── typing-extensions>=3.7.4.3
-│   │   │   ├── mistletoe>=0.7.2
-│   │   │   └── typing-extensions>=3.7.4.3
 │   │   ├── dom-toml>=0.2.2
 │   │   │   ├── domdf-python-tools>=2.7.0
 │   │   │   │   ├── natsort>=7.1.0
@@ -291,7 +262,6 @@ repo_helper==2020.12.18
 │   │   │   ├── natsort>=7.1.0
 │   │   │   ├── pydash>=4.7.4
 │   │   │   └── typing-extensions>=3.7.4.3
-│   │   ├── first>=2.0.2
 │   │   ├── packaging>=20.7
 │   │   │   └── pyparsing>=2.0.2
 │   │   ├── trove-classifiers>=2020.10.21
@@ -414,20 +384,6 @@ repo_helper==2020.12.18
 │       │   │   │   │   ├── pydash>=4.7.4
 │       │   │   │   │   └── typing-extensions>=3.7.4.3
 │       │   │   │   └── typing-extensions>=3.7.4.3
-│       │   │   ├── consolekit>=0.1.2
-│       │   │   │   ├── click>=7.1.2
-│       │   │   │   ├── deprecation-alias>=0.1.1
-│       │   │   │   │   ├── deprecation>=2.1.0
-│       │   │   │   │   │   └── packaging
-│       │   │   │   │   │       └── pyparsing>=2.0.2
-│       │   │   │   │   └── packaging>=20.4
-│       │   │   │   │       └── pyparsing>=2.0.2
-│       │   │   │   ├── domdf-python-tools>=2.6.0
-│       │   │   │   │   ├── natsort>=7.1.0
-│       │   │   │   │   ├── pydash>=4.7.4
-│       │   │   │   │   └── typing-extensions>=3.7.4.3
-│       │   │   │   ├── mistletoe>=0.7.2
-│       │   │   │   └── typing-extensions>=3.7.4.3
 │       │   │   ├── dom-toml>=0.2.2
 │       │   │   │   ├── domdf-python-tools>=2.7.0
 │       │   │   │   │   ├── natsort>=7.1.0
@@ -438,7 +394,6 @@ repo_helper==2020.12.18
 │       │   │   │   ├── natsort>=7.1.0
 │       │   │   │   ├── pydash>=4.7.4
 │       │   │   │   └── typing-extensions>=3.7.4.3
-│       │   │   ├── first>=2.0.2
 │       │   │   ├── packaging>=20.7
 │       │   │   │   └── pyparsing>=2.0.2
 │       │   │   ├── trove-classifiers>=2020.10.21
@@ -480,20 +435,6 @@ repo_helper==2020.12.18
 │           │   │   ├── pydash>=4.7.4
 │           │   │   └── typing-extensions>=3.7.4.3
 │           │   └── typing-extensions>=3.7.4.3
-│           ├── consolekit>=0.1.2
-│           │   ├── click>=7.1.2
-│           │   ├── deprecation-alias>=0.1.1
-│           │   │   ├── deprecation>=2.1.0
-│           │   │   │   └── packaging
-│           │   │   │       └── pyparsing>=2.0.2
-│           │   │   └── packaging>=20.4
-│           │   │       └── pyparsing>=2.0.2
-│           │   ├── domdf-python-tools>=2.6.0
-│           │   │   ├── natsort>=7.1.0
-│           │   │   ├── pydash>=4.7.4
-│           │   │   └── typing-extensions>=3.7.4.3
-│           │   ├── mistletoe>=0.7.2
-│           │   └── typing-extensions>=3.7.4.3
 │           ├── dom-toml>=0.2.2
 │           │   ├── domdf-python-tools>=2.7.0
 │           │   │   ├── natsort>=7.1.0
@@ -504,7 +445,6 @@ repo_helper==2020.12.18
 │           │   ├── natsort>=7.1.0
 │           │   ├── pydash>=4.7.4
 │           │   └── typing-extensions>=3.7.4.3
-│           ├── first>=2.0.2
 │           ├── packaging>=20.7
 │           │   └── pyparsing>=2.0.2
 │           ├── trove-classifiers>=2020.10.21
@@ -549,20 +489,6 @@ repo_helper==2020.12.18
 │   │   │   ├── pydash>=4.7.4
 │   │   │   └── typing-extensions>=3.7.4.3
 │   │   └── typing-extensions>=3.7.4.3
-│   ├── consolekit>=0.1.2
-│   │   ├── click>=7.1.2
-│   │   ├── deprecation-alias>=0.1.1
-│   │   │   ├── deprecation>=2.1.0
-│   │   │   │   └── packaging
-│   │   │   │       └── pyparsing>=2.0.2
-│   │   │   └── packaging>=20.4
-│   │   │       └── pyparsing>=2.0.2
-│   │   ├── domdf-python-tools>=2.6.0
-│   │   │   ├── natsort>=7.1.0
-│   │   │   ├── pydash>=4.7.4
-│   │   │   └── typing-extensions>=3.7.4.3
-│   │   ├── mistletoe>=0.7.2
-│   │   └── typing-extensions>=3.7.4.3
 │   ├── dom-toml>=0.2.2
 │   │   ├── domdf-python-tools>=2.7.0
 │   │   │   ├── natsort>=7.1.0
@@ -573,7 +499,6 @@ repo_helper==2020.12.18
 │   │   ├── natsort>=7.1.0
 │   │   ├── pydash>=4.7.4
 │   │   └── typing-extensions>=3.7.4.3
-│   ├── first>=2.0.2
 │   ├── packaging>=20.7
 │   │   └── pyparsing>=2.0.2
 │   ├── trove-classifiers>=2020.10.21
@@ -722,20 +647,6 @@ repo_helper==2020.12.18
 │   │   │   │   │   ├── pydash>=4.7.4
 │   │   │   │   │   └── typing-extensions>=3.7.4.3
 │   │   │   │   └── typing-extensions>=3.7.4.3
-│   │   │   ├── consolekit>=0.1.2
-│   │   │   │   ├── click>=7.1.2
-│   │   │   │   ├── deprecation-alias>=0.1.1
-│   │   │   │   │   ├── deprecation>=2.1.0
-│   │   │   │   │   │   └── packaging
-│   │   │   │   │   │       └── pyparsing>=2.0.2
-│   │   │   │   │   └── packaging>=20.4
-│   │   │   │   │       └── pyparsing>=2.0.2
-│   │   │   │   ├── domdf-python-tools>=2.6.0
-│   │   │   │   │   ├── natsort>=7.1.0
-│   │   │   │   │   ├── pydash>=4.7.4
-│   │   │   │   │   └── typing-extensions>=3.7.4.3
-│   │   │   │   ├── mistletoe>=0.7.2
-│   │   │   │   └── typing-extensions>=3.7.4.3
 │   │   │   ├── dom-toml>=0.2.2
 │   │   │   │   ├── domdf-python-tools>=2.7.0
 │   │   │   │   │   ├── natsort>=7.1.0
@@ -746,7 +657,6 @@ repo_helper==2020.12.18
 │   │   │   │   ├── natsort>=7.1.0
 │   │   │   │   ├── pydash>=4.7.4
 │   │   │   │   └── typing-extensions>=3.7.4.3
-│   │   │   ├── first>=2.0.2
 │   │   │   ├── packaging>=20.7
 │   │   │   │   └── pyparsing>=2.0.2
 │   │   │   ├── trove-classifiers>=2020.10.21
@@ -788,20 +698,6 @@ repo_helper==2020.12.18
 │       │   │   ├── pydash>=4.7.4
 │       │   │   └── typing-extensions>=3.7.4.3
 │       │   └── typing-extensions>=3.7.4.3
-│       ├── consolekit>=0.1.2
-│       │   ├── click>=7.1.2
-│       │   ├── deprecation-alias>=0.1.1
-│       │   │   ├── deprecation>=2.1.0
-│       │   │   │   └── packaging
-│       │   │   │       └── pyparsing>=2.0.2
-│       │   │   └── packaging>=20.4
-│       │   │       └── pyparsing>=2.0.2
-│       │   ├── domdf-python-tools>=2.6.0
-│       │   │   ├── natsort>=7.1.0
-│       │   │   ├── pydash>=4.7.4
-│       │   │   └── typing-extensions>=3.7.4.3
-│       │   ├── mistletoe>=0.7.2
-│       │   └── typing-extensions>=3.7.4.3
 │       ├── dom-toml>=0.2.2
 │       │   ├── domdf-python-tools>=2.7.0
 │       │   │   ├── natsort>=7.1.0
@@ -812,7 +708,6 @@ repo_helper==2020.12.18
 │       │   ├── natsort>=7.1.0
 │       │   ├── pydash>=4.7.4
 │       │   └── typing-extensions>=3.7.4.3
-│       ├── first>=2.0.2
 │       ├── packaging>=20.7
 │       │   └── pyparsing>=2.0.2
 │       ├── trove-classifiers>=2020.10.21
