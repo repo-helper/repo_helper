@@ -1,12 +1,11 @@
 # 3rd party
 import pytest
 import southwark.repo
-from apeye import URL
+from apeye.url import URL
 from dulwich.config import StackedConfig
 
 # this package
 from repo_helper.testing import builder_smoke_test
-from tests import pypy_windows_dulwich
 
 GITHUB_COM = URL("https://github.com")
 

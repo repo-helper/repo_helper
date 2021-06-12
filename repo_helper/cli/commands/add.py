@@ -32,7 +32,7 @@ from typing import Optional
 # 3rd party
 import click
 import dom_toml
-from apeye import TrailingRequestsURL
+from apeye.requests_url import TrailingRequestsURL
 from consolekit import CONTEXT_SETTINGS
 from consolekit.options import auto_default_option
 from natsort import natsorted

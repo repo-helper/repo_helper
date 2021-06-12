@@ -224,7 +224,8 @@ def stubs(add: Optional[bool] = None, force_tty: bool = False, no_pager: bool = 
 
 	# 3rd party
 	import tabulate
-	from apeye import URL, TrailingRequestsURL
+	from apeye import URL
+	from apeye.requests_url import TrailingRequestsURL
 	from domdf_python_tools.paths import PathPlus
 	from domdf_python_tools.stringlist import StringList
 	from shippinglabel import normalize
