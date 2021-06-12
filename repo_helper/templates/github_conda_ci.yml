@@ -37,19 +37,17 @@ jobs:
 
       - name: "Build and install package"
         run: |
+          CURRENT_VERSION=$(git tag | tail -n 1 | cut -c 2-)
+          CURRENT_VERSION=${CURRENT_VERSION:=0.0.0}
+          python -m repo_helper build --conda --out-dir conda-bld/noarch
+
           # This mess is only necessary because conda won't fix it themselves
           # https://github.com/conda/conda/issues/1884
-          {# TODO: Install deps then install package, as current approach doesn't seem to work either #}
-          python -m repo_helper build --conda --out-dir conda-bld/noarch
           $CONDA/bin/conda index ./conda-bld || exit 1
-          $CONDA/bin/conda install -c file://$(pwd)/conda-bld {{ pypi_name.lower() }} -y || exit 1
+          $CONDA/bin/conda install -c file://$(pwd)/conda-bld {{ pypi_name.lower() }}=$CURRENT_VERSION -y || exit 1
 
-{#      - name: "Run Tests for Python ${{ "{{" }} matrix.python-version {{ "}}" }}"
+      - name: "Run Tests for Python ${{ "{{" }} matrix.python-version {{ "}}" }}"
         run: |
-          rm -rf {{ import_name }}
-          $CONDA/bin/conda install pytest
-          $CONDA/bin/conda install --file {{ tests_dir }}/requirements.txt -y
+          rm -rf {{ import_name.replace(".", "/") }}
+          $CONDA/bin/pip install -r {{ tests_dir }}/requirements.txt
           $CONDA/bin/pytest {{ tests_dir }}/
-
-# See also https://github.com/repo-helper/repo_helper/new/master?filename=.github%2Fworkflows%2Fpython-package-conda.yml&workflow_template=python-package-conda
-#}

@@ -37,9 +37,17 @@ jobs:
 
       - name: "Build and install package"
         run: |
+          CURRENT_VERSION=$(git tag | tail -n 1 | cut -c 2-)
+          CURRENT_VERSION=${CURRENT_VERSION:=0.0.0}
+          python -m repo_helper build --conda --out-dir conda-bld/noarch
+
           # This mess is only necessary because conda won't fix it themselves
           # https://github.com/conda/conda/issues/1884
-
-          python -m repo_helper build --conda --out-dir conda-bld/noarch
           $CONDA/bin/conda index ./conda-bld || exit 1
-          $CONDA/bin/conda install -c file://$(pwd)/conda-bld hello-world -y || exit 1
+          $CONDA/bin/conda install -c file://$(pwd)/conda-bld hello-world=$CURRENT_VERSION -y || exit 1
+
+      - name: "Run Tests for Python ${{ matrix.python-version }}"
+        run: |
+          rm -rf hello_world
+          $CONDA/bin/pip install -r tests/requirements.txt
+          $CONDA/bin/pytest tests/
