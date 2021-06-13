@@ -104,7 +104,7 @@ Note: The autocommit functionality is currently broken on Windows, but works OK 
 .. |language| image:: https://img.shields.io/github/languages/top/repo-helper/repo_helper
 	:alt: GitHub top language
 
-.. |commits-since| image:: https://img.shields.io/github/commits-since/repo-helper/repo_helper/v2021.3.31
+.. |commits-since| image:: https://img.shields.io/github/commits-since/repo-helper/repo_helper/v2021.6.13
 	:target: https://github.com/repo-helper/repo_helper/pulse
 	:alt: GitHub commits since tagged version
 

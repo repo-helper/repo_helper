@@ -16,7 +16,7 @@ __all__ = [
 		"extras_require",
 		]
 
-__version__ = "2021.3.31"
+__version__ = "2021.6.13"
 extras_require = {
 		"testing": ["check-wheel-contents>=0.2.0", "coincidence>=0.2.0", "pytest>=6.0.0", "twine>=3.2.0"],
 		"all": ["check-wheel-contents>=0.2.0", "coincidence>=0.2.0", "pytest>=6.0.0", "twine>=3.2.0"]
