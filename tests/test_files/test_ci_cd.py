@@ -483,6 +483,8 @@ def test_make_conda_actions_ci(
 		demo_environment,
 		advanced_file_regression: AdvancedFileRegressionFixture,
 		):
+	demo_environment.globals["version"] = "1.2.3"
+
 	managed_files = make_conda_actions_ci(tmp_pathplus, demo_environment)
 	assert managed_files == [".github/workflows/conda_ci.yml"]
 	assert (tmp_pathplus / managed_files[0]).is_file()

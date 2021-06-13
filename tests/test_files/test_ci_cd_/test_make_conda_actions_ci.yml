@@ -23,12 +23,6 @@ jobs:
         with:
           python-version: "3.8"
 
-      - name: 'Get Previous tag'
-        id: previoustag
-        uses: "WyriHaximus/github-action-get-previous-tag@v1"
-        with:
-          fallback: 0.0.0
-
       - name: Install dependencies 🔧
         run: |
           python -VV
@@ -53,7 +47,7 @@ jobs:
 
       - name: "Install package"
         run: |
-          $CONDA/bin/conda install -c file://$(pwd)/conda-bld hello-world=${{ steps.previoustag.outputs.tag }}=py_1 -y || exit 1
+          $CONDA/bin/conda install -c file://$(pwd)/conda-bld hello-world=1.2.3=py_1 -y || exit 1
 
 
 

@@ -623,6 +623,9 @@ def ensure_bumpversion(repo_path: pathlib.Path, templates: jinja2.Environment) -
 	if not templates.globals["enable_docs"]:
 		old_sections.append(f"bumpversion:file:{templates.globals['docs_dir']}/index.rst")
 
+	if not templates.globals["enable_conda"]:
+		old_sections.append(f"bumpversion:file:.github/workflows/conda_ci.yml")
+
 	if templates.globals["use_whey"]:
 		old_sections.append("bumpversion:file:setup.cfg")
 
@@ -682,6 +685,9 @@ def get_bumpversion_filenames(templates: jinja2.Environment) -> Iterable[str]:
 
 	if templates.globals["enable_docs"]:
 		yield f"{templates.globals['docs_dir']}/index.rst"
+
+	if templates.globals["enable_conda"]:
+		yield ".github/workflows/conda_ci.yml"
 
 	init_filename = get_init_filename(templates)
 
