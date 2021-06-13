@@ -49,8 +49,6 @@ jobs:
         run: |
           $CONDA/bin/conda install -c file://$(pwd)/conda-bld hello-world=1.2.3=py_1 -y || exit 1
 
-
-
       - name: "Run Tests"
         run: |
           rm -rf hello_world
