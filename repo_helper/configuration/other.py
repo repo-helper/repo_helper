@@ -153,7 +153,7 @@ class pre_commit_exclude(ConfigVar):  # noqa
 
 	.. code-block:: yaml
 
-		pre_commit_exclude: "^.*\._py$"
+		pre_commit_exclude: "^.*\\._py$"
 	"""
 
 	dtype = str

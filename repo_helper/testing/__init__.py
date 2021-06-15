@@ -87,7 +87,7 @@ def demo_environment() -> jinja2.Environment:
 			"assignee": "octocat",
 			"imgbot_ignore": [],
 			"travis_ubuntu_version": "xenial",
-			"github_ci_requirements: {"Linux": {"pre": [], "post": []}},
+			"github_ci_requirements": {"Linux": {"pre": [], "post": []}},
 			"travis_additional_requirements": [],
 			"conda_channels": ["conda-forge"],
 			"python_versions": ["3.6", "3.7"],

@@ -52,7 +52,6 @@ __all__ = [
 		"make_python_versions_shield",
 		"make_requires_shield",
 		"make_rtfd_shield",
-		"make_actions_linux_shield",
 		"make_typing_shield",
 		"make_wheel_shield",
 		"make_actions_shield",

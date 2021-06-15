@@ -141,7 +141,7 @@ def rmdir(directory: pathlib.Path, quiet: bool = False):
 @flag_option("-v", "--verbose", help="Show verbose output.")
 @cli_command(cls=MarkdownHelpCommand)
 def broomstick(rm_tox: bool = False, verbose: bool = False):
-	"""
+	r"""
 	Clean up build and test artefacts 🧹.
 
 	Removes the following:
@@ -149,8 +149,8 @@ def broomstick(rm_tox: bool = False, verbose: bool = False):
 	* build
 	* .mypy_cache
 	* .pytest_cache
-	* **/__pytest__
-	* *.egg-info
+	* \*\*/\_\_pytest\_\_
+	* \*.egg-info
 	"""  # noqa: RST
 
 	base_dir = pathlib.Path.cwd()
