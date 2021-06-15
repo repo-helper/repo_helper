@@ -1,5 +1,5 @@
 repo_helper==2020.12.18
-├── apeye>=0.7.0
+├── apeye>=1.0.0
 ├── appdirs>=1.4.4
 ├── asttokens>=2.0.4
 ├── attr-utils>=0.5.6

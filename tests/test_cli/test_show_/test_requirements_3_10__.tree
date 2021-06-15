@@ -101,7 +101,7 @@ repo_helper==2020.12.18
 │   ├── packaging>=20.9
 │   │   └── pyparsing>=2.0.2
 │   ├── pyproject-parser>=0.2.0
-│   │   ├── apeye>=0.7.0
+│   │   ├── apeye>=1.0.0
 │   │   │   ├── appdirs>=1.4.4
 │   │   │   ├── domdf-python-tools>=0.9.0
 │   │   │   │   ├── natsort>=7.1.0
@@ -132,9 +132,6 @@ repo_helper==2020.12.18
 │   │   │   ├── natsort>=7.1.0
 │   │   │   ├── pydash>=4.7.4
 │   │   │   └── typing-extensions>=3.7.4.3
-│   │   ├── email-validator>=1.1.2
-│   │   │   ├── dnspython>=1.15.0
-│   │   │   └── idna>=2.0.0
 │   │   ├── natsort>=7.1.1
 │   │   ├── packaging>=20.9
 │   │   │   └── pyparsing>=2.0.2
@@ -242,7 +239,7 @@ repo_helper==2020.12.18
 │       ├── packaging>=20.9
 │       │   └── pyparsing>=2.0.2
 │       ├── pyproject-parser>=0.2.0
-│       │   ├── apeye>=0.7.0
+│       │   ├── apeye>=1.0.0
 │       │   │   ├── appdirs>=1.4.4
 │       │   │   ├── domdf-python-tools>=0.9.0
 │       │   │   │   ├── natsort>=7.1.0
@@ -273,9 +270,6 @@ repo_helper==2020.12.18
 │       │   │   ├── natsort>=7.1.0
 │       │   │   ├── pydash>=4.7.4
 │       │   │   └── typing-extensions>=3.7.4.3
-│       │   ├── email-validator>=1.1.2
-│       │   │   ├── dnspython>=1.15.0
-│       │   │   └── idna>=2.0.0
 │       │   ├── natsort>=7.1.1
 │       │   ├── packaging>=20.9
 │       │   │   └── pyparsing>=2.0.2
@@ -448,7 +442,7 @@ repo_helper==2020.12.18
 │   ├── packaging>=20.9
 │   │   └── pyparsing>=2.0.2
 │   ├── pyproject-parser>=0.2.0
-│   │   ├── apeye>=0.7.0
+│   │   ├── apeye>=1.0.0
 │   │   │   ├── appdirs>=1.4.4
 │   │   │   ├── domdf-python-tools>=0.9.0
 │   │   │   │   ├── natsort>=7.1.0
@@ -479,9 +473,6 @@ repo_helper==2020.12.18
 │   │   │   ├── natsort>=7.1.0
 │   │   │   ├── pydash>=4.7.4
 │   │   │   └── typing-extensions>=3.7.4.3
-│   │   ├── email-validator>=1.1.2
-│   │   │   ├── dnspython>=1.15.0
-│   │   │   └── idna>=2.0.0
 │   │   ├── natsort>=7.1.1
 │   │   ├── packaging>=20.9
 │   │   │   └── pyparsing>=2.0.2
