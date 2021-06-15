@@ -18,6 +18,18 @@ __all__ = [
 
 __version__ = "2021.6.13"
 extras_require = {
-		"testing": ["check-wheel-contents>=0.2.0", "coincidence>=0.2.0", "pytest>=6.0.0", "twine>=3.2.0"],
-		"all": ["check-wheel-contents>=0.2.0", "coincidence>=0.2.0", "pytest>=6.0.0", "twine>=3.2.0"]
+		"testing": [
+				"check-wheel-contents>=0.2.0",
+				"coincidence>=0.2.0",
+				"docutils==0.16",
+				"pytest>=6.0.0",
+				"twine>=3.2.0"
+				],
+		"all": [
+				"check-wheel-contents>=0.2.0",
+				"coincidence>=0.2.0",
+				"docutils==0.16",
+				"pytest>=6.0.0",
+				"twine>=3.2.0"
+				]
 		}
