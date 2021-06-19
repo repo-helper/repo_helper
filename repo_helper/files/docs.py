@@ -92,7 +92,6 @@ logging.getLogger("CSSUTILS").addFilter(lambda record: False)
 
 class DocRequirementsManager(RequirementsManager):
 	target_requirements = {
-			ComparableRequirement("sphinxcontrib-httpdomain>=1.7.0"),
 			ComparableRequirement("sphinxemoji>=0.1.6"),
 			ComparableRequirement("sphinx-notfound-page>=0.5"),
 			ComparableRequirement("sphinx-tabs>=1.1.13"),
@@ -710,7 +709,6 @@ def make_sphinx_config_dict(templates: jinja2.Environment) -> Dict[str, Any]:
 			"sphinx_toolbox.tweaks.latex_toc",
 			"sphinx.ext.intersphinx",
 			"sphinx.ext.mathjax",
-			"sphinxcontrib.httpdomain",
 			"sphinxcontrib.extras_require",
 			"sphinx.ext.todo",
 			"sphinxemoji.sphinxemoji",
