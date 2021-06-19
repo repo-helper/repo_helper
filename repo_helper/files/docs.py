@@ -138,7 +138,7 @@ class DocRequirementsManager(RequirementsManager):
 				}
 
 		for name, specifier in my_sphinx_extensions.items():
-			if name != self._globals["pypi_name"]:
+			if name != normalize(self._globals["pypi_name"]):
 				self.target_requirements.add(ComparableRequirement(f"{name}{specifier}"))
 
 	def merge_requirements(self) -> List[str]:
