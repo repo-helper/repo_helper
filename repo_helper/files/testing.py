@@ -221,12 +221,12 @@ class ToxConfig(IniConfigurator):
 			third_party_library, third_party_versions, matrix_testenv_string = self.get_third_party_version_matrix()
 			tox_envs = [v + matrix_testenv_string for v in self["tox_py_versions"]]
 			cov_envlist = [
-					f"{self['tox_py_versions'][0]}-{third_party_library}{third_party_versions[0]}",
+					f"py{self['python_deploy_version'].replace('.', '')}-{third_party_library}{third_party_versions[0]}",
 					"coverage",
 					]
 		else:
 			tox_envs = self["tox_py_versions"]
-			cov_envlist = [self["tox_py_versions"][0], "coverage"]
+			cov_envlist = [f"py{self['python_deploy_version']}".replace('.', ''), "coverage"]
 
 		self._ini["envlists"]["test"] = tox_envs
 		self._ini["envlists"]["qa"] = ["mypy", "lint"]

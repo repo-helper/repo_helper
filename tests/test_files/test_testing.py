@@ -61,6 +61,7 @@ class TestMakeTox:
 			enable_docs: bool = True,
 			enable_tests: bool = True,
 			enable_devmode: bool = True,
+			python_deploy_version: str = "3.6"
 			):
 		demo_environment.globals["min_coverage"] = min_coverage
 		demo_environment.globals["stubs_package"] = stubs_package
@@ -77,6 +78,7 @@ class TestMakeTox:
 		demo_environment.globals["enable_tests"] = enable_tests
 		demo_environment.globals["enable_devmode"] = enable_devmode
 		demo_environment.globals["code_only_warning"] = code_only_warning
+		demo_environment.globals["python_deploy_version"] = python_deploy_version
 
 	@boolean_option("enable_docs", "docs")
 	def test_tox_enable_docs(
@@ -159,6 +161,18 @@ class TestMakeTox:
 			mypy_version,
 			):
 		self.set_globals(demo_environment, mypy_version=mypy_version)
+		make_tox(tmp_pathplus, demo_environment)
+		check_file_output(tmp_pathplus / "tox.ini", file_regression)
+
+	@pytest.mark.parametrize("python_deploy_version", ["3.6", "3.7", "3.8"])
+	def test_tox_python_deploy_version(
+			self,
+			tmp_pathplus,
+			demo_environment,
+			file_regression: FileRegressionFixture,
+			python_deploy_version,
+			):
+		self.set_globals(demo_environment, python_deploy_version=python_deploy_version)
 		make_tox(tmp_pathplus, demo_environment)
 		check_file_output(tmp_pathplus / "tox.ini", file_regression)
 
