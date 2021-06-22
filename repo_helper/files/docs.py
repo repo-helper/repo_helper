@@ -483,6 +483,7 @@ def make_furo_theming() -> str:
 	style: Dict[str, Mapping] = {
 			"div.highlight": {"-moz-tab-size": 4, "tab-size": 4},
 			".field-list dt, dl.simple dt": {"margin-top": ".5rem"},
+			"div.versionchanged ul, div.versionremoved ul": {"margin-left": "20px", "margin-top": 0},
 			}
 
 	return dict2css.dumps(style, trailing_semicolon=True)
