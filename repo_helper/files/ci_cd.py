@@ -443,10 +443,10 @@ Mapping of platform names to the GitHub Actions platform tags.
 """
 
 
-@management.register("conda_actions", ["enable_conda"])
+@management.register("conda_actions")
 def make_conda_actions_ci(repo_path: pathlib.Path, templates: jinja2.Environment) -> List[str]:
 	"""
-	Add configuration for testing conda paclages on `GitHub Actions` to the desired repo.
+	Add configuration for testing conda packages on `GitHub Actions` to the desired repo.
 
 	:param repo_path: Path to the repository root.
 	:param templates:
