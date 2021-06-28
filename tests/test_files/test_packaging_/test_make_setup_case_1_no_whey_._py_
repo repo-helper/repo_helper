@@ -21,6 +21,7 @@ setup(
 		description="a short description",
 		extras_require=extras_require,
 		install_requires=install_requires,
+		name="hello-world",
 		py_modules=[],
 		version=__version__,
 		)

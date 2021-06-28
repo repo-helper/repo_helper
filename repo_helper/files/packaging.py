@@ -336,6 +336,7 @@ def make_setup(repo_path: pathlib.Path, templates: jinja2.Environment) -> List[s
 		data = copy.deepcopy(setup_py_defaults)
 		data["description"] = repr(templates.globals["short_desc"])
 		data["py_modules"] = templates.globals["py_modules"]
+		data["name"] = f"{templates.globals['modname']!r}"  # TODO: remove once GitHub dependency graph fixed
 
 		if templates.globals["desktopfile"]:
 			data["data_files"] = "[('share/applications', ['{modname}.desktop'])]".format_map(templates.globals)
