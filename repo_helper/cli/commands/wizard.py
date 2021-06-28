@@ -23,20 +23,12 @@ Wizard 🧙‍ for creating a 'repo_helper.yml' file.
 #  MA 02110-1301, USA.
 #
 
-# stdlib
-import datetime
-import getpass
-import os
-import socket
-
 # 3rd party
 import click
 from consolekit.input import confirm, prompt
-from domdf_python_tools.paths import PathPlus
 
 # this package
 from repo_helper.cli import cli_command
-from repo_helper.utils import _round_trip_dump, license_lookup
 
 __all__ = ["wizard"]
 
@@ -48,15 +40,21 @@ def wizard() -> None:
 	"""
 
 	# stdlib
-	from io import StringIO
+	import datetime
+	import getpass
+	import os
+	import socket
 
 	# 3rd party
-	import ruamel.yaml as yaml
+	from apeye.email_validator import EmailSyntaxError, validate_email
 	from consolekit.terminal_colours import Fore
+	from domdf_python_tools.paths import PathPlus
 	from dulwich.errors import NotGitRepository
-	from email_validator import EmailNotValidError, validate_email  # type: ignore
 	from ruamel.yaml import scalarstring
 	from southwark.repo import Repo
+
+	# this package
+	from repo_helper.utils import _round_trip_dump, license_lookup
 
 	path = PathPlus.cwd()
 	config_file = path / "repo_helper.yml"
@@ -121,9 +119,9 @@ def wizard() -> None:
 
 	while True:
 		try:
-			email = validate_email(prompt("Email", default=default_email), check_deliverability=False).email
+			email = validate_email(prompt("Email", default=default_email)).email
 			break
-		except EmailNotValidError:
+		except EmailSyntaxError:
 			click.echo("That is not a valid email address.")
 
 	# ---------- username ----------
