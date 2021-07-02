@@ -53,6 +53,7 @@ from packaging.specifiers import Specifier
 from packaging.version import Version
 from shippinglabel.requirements import ComparableRequirement, combine_requirements, read_requirements
 from whey.builder import SDistBuilder, WheelBuilder
+from whey_conda import pip_install_wheel
 
 # this package
 from repo_helper import __version__
@@ -503,39 +504,3 @@ def build_sdist(sdist_directory, config_settings=None):
 
 def get_requires_for_build_sdist(config_settings=None):
 	return []
-
-
-def pip_install_wheel(wheel_file: PathLike, target_dir: PathLike, verbose: bool = False):
-	command = [
-			"pip",
-			"install",
-			os.fspath(wheel_file),
-			"--target",
-			os.fspath(target_dir),
-			"--no-deps",
-			"--no-compile",
-			"--no-warn-script-location",
-			"--no-warn-conflicts",
-			"--disable-pip-version-check",
-			]
-
-	process = Popen(command, stdout=PIPE)
-	(output, err) = process.communicate()
-	exit_code = process.wait()
-
-	if verbose:
-		click.echo((output or b'').decode("UTF-8"))
-		click.echo((err or b'').decode("UTF-8"), err=True)
-
-	if exit_code != 0:
-		err = err or b''
-
-		message = dedent(
-				f"""\
-					Command '{' '.join(command)}' returned non-zero exit code {exit_code}:
-
-					{indent(err.decode("UTF-8"), '    ')}
-					"""
-				)
-
-		raise abort(message.rstrip() + '\n')
