@@ -33,7 +33,6 @@ repo_helper==2020.12.18
 ├── natsort>=7.1.1
 ├── packaging>=20.9
 ├── prettyprinter>=0.18.0
-├── pydash>=4.7.4
 ├── pygments>=2.2.0
 ├── pyparsing>=2.0.2
 ├── pyproject-parser>=0.3.0
