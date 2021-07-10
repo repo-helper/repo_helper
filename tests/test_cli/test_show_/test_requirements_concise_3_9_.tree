@@ -41,7 +41,7 @@ repo_helper==2020.12.18
 ├── ruamel-yaml>=0.17.4
 ├── ruamel-yaml-clib>=0.1.2; platform_python_implementation == "CPython" and python_version < "3.10"
 ├── setuptools
-├── shippinglabel>=0.15.0
+├── shippinglabel>=0.16.0
 ├── six>=1.11.0
 ├── southwark>=0.7.1
 ├── tabulate>=0.8.8
@@ -52,7 +52,7 @@ repo_helper==2020.12.18
 ├── typing-inspect>=0.6.0
 ├── urllib3<1.27,>=1.24.1
 ├── wheel-filename>=1.2.0
-├── whey>=0.0.15
+├── whey>=0.0.17
 ├── whey-conda>=0.1.2
 ├── yapf<0.32.0,>=0.30.0
 └── yapf-isort>=0.5.2

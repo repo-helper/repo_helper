@@ -274,7 +274,7 @@ repo_helper==2020.12.18
 │       │   │   └── wheel-filename>=1.2.0
 │       │   ├── toml>=0.10.2
 │       │   └── typing-extensions>=3.7.4.3
-│       └── shippinglabel>=0.15.0
+│       └── shippinglabel>=0.16.0
 │           ├── apeye>=0.7.0
 │           │   ├── appdirs>=1.4.4
 │           │   ├── domdf-python-tools>=2.3.0
@@ -365,7 +365,7 @@ repo_helper==2020.12.18
 │   └── typing-extensions>=3.7.4.3
 ├── tabulate>=0.8.8
 ├── typing-extensions>=3.7.4.1
-├── whey>=0.0.14
+├── whey>=0.0.17
 │   ├── click>=7.1.2
 │   ├── consolekit>=1.2.2
 │   │   ├── click>=7.1.2
@@ -456,7 +456,7 @@ repo_helper==2020.12.18
 │   │   │   └── wheel-filename>=1.2.0
 │   │   ├── toml>=0.10.2
 │   │   └── typing-extensions>=3.7.4.3
-│   └── shippinglabel>=0.15.0
+│   └── shippinglabel>=0.16.0
 │       ├── apeye>=0.7.0
 │       │   ├── appdirs>=1.4.4
 │       │   ├── domdf-python-tools>=2.3.0
@@ -725,7 +725,7 @@ repo_helper==2020.12.18
 │   │       │   │   └── wheel-filename>=1.2.0
 │   │       │   ├── toml>=0.10.2
 │   │       │   └── typing-extensions>=3.7.4.3
-│   │       └── shippinglabel>=0.15.0
+│   │       └── shippinglabel>=0.16.0
 │   │           ├── apeye>=0.7.0
 │   │           │   ├── appdirs>=1.4.4
 │   │           │   ├── domdf-python-tools>=2.3.0
@@ -943,7 +943,7 @@ repo_helper==2020.12.18
 │       │   │   └── wheel-filename>=1.2.0
 │       │   ├── toml>=0.10.2
 │       │   └── typing-extensions>=3.7.4.3
-│       └── shippinglabel>=0.15.0
+│       └── shippinglabel>=0.16.0
 │           ├── apeye>=0.7.0
 │           │   ├── appdirs>=1.4.4
 │           │   ├── domdf-python-tools>=2.3.0
