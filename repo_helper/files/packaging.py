@@ -217,80 +217,68 @@ def make_pyproject(repo_path: pathlib.Path, templates: jinja2.Environment) -> Li
 	if not data["project"]["entry-points"]:
 		del data["project"]["entry-points"]
 
-	# tool.whey
-
+	# tool
 	data.set_default("tool", {})
 
-	data["tool"].setdefault("mkrecipe", {})
-	data["tool"]["mkrecipe"]["conda-channels"] = templates.globals["conda_channels"]
+	# tool.mkrecipe
+	if templates.globals["enable_conda"]:
+		data["tool"].setdefault("mkrecipe", {})
+		data["tool"]["mkrecipe"]["conda-channels"] = templates.globals["conda_channels"]
 
-	if templates.globals["conda_extras"] in (["none"], ["all"]):
-		data["tool"]["mkrecipe"]["extras"] = templates.globals["conda_extras"][0]
+		if templates.globals["conda_extras"] in (["none"], ["all"]):
+			data["tool"]["mkrecipe"]["extras"] = templates.globals["conda_extras"][0]
+		else:
+			data["tool"]["mkrecipe"]["extras"] = templates.globals["conda_extras"]
 	else:
-		data["tool"]["mkrecipe"]["extras"] = templates.globals["conda_extras"]
+		if "mkrecipe" in data["tool"]:
+			del data["tool"]["mkrecipe"]
 
-	if templates.globals["use_whey"]:
-		data["tool"].setdefault("whey", {})
+	# tool.whey
+	data["tool"].setdefault("whey", {})
 
-		data["tool"]["whey"]["base-classifiers"] = templates.globals["classifiers"]
+	data["tool"]["whey"]["base-classifiers"] = templates.globals["classifiers"]
 
-		python_versions = set()
-		python_implementations = set()
+	python_versions = set()
+	python_implementations = set()
 
-		for py_version in templates.globals["python_versions"]:
-			py_version = str(py_version)
+	for py_version in templates.globals["python_versions"]:
+		py_version = str(py_version)
 
-			if pre_release_re.match(py_version):
-				continue
+		if pre_release_re.match(py_version):
+			continue
 
-			pypy_version_m = _pypy_version_re.match(py_version)
+		pypy_version_m = _pypy_version_re.match(py_version)
 
-			if py_version.startswith('3'):
-				python_versions.add(py_version)
-				python_implementations.add("CPython")
+		if py_version.startswith('3'):
+			python_versions.add(py_version)
+			python_implementations.add("CPython")
 
-			elif pypy_version_m:
-				python_implementations.add("PyPy")
-				python_versions.add(f"3.{pypy_version_m.group(1)}")
+		elif pypy_version_m:
+			python_implementations.add("PyPy")
+			python_versions.add(f"3.{pypy_version_m.group(1)}")
 
-		data["tool"]["whey"]["python-versions"] = sorted(python_versions)
-		data["tool"]["whey"]["python-implementations"] = sorted(python_implementations)
+	data["tool"]["whey"]["python-versions"] = sorted(python_versions)
+	data["tool"]["whey"]["python-implementations"] = sorted(python_implementations)
 
-		data["tool"]["whey"]["platforms"] = templates.globals["platforms"]
+	data["tool"]["whey"]["platforms"] = templates.globals["platforms"]
 
-		license_ = templates.globals["license"]
-		data["tool"]["whey"]["license-key"] = {v: k for k, v in license_lookup.items()}.get(license_, license_)
+	license_ = templates.globals["license"]
+	data["tool"]["whey"]["license-key"] = {v: k for k, v in license_lookup.items()}.get(license_, license_)
 
-		if templates.globals["source_dir"]:
-			raise NotImplementedError("Whey does not support custom source directories")
+	if templates.globals["source_dir"]:
+		raise NotImplementedError("Whey does not support custom source directories")
 
-		elif templates.globals["import_name"] != templates.globals["pypi_name"]:
-			if templates.globals["stubs_package"]:
-				data["tool"]["whey"]["package"] = "{import_name}-stubs".format_map(templates.globals)
-			else:
-				data["tool"]["whey"]["package"] = posixpath.join(
-						# templates.globals["source_dir"],
-						templates.globals["import_name"].split('.', 1)[0],
-						)
+	elif templates.globals["import_name"] != templates.globals["pypi_name"]:
+		if templates.globals["stubs_package"]:
+			data["tool"]["whey"]["package"] = "{import_name}-stubs".format_map(templates.globals)
+		else:
+			data["tool"]["whey"]["package"] = posixpath.join(
+					# templates.globals["source_dir"],
+					templates.globals["import_name"].split('.', 1)[0],
+					)
 
-		if templates.globals["manifest_additional"]:
-			data["tool"]["whey"]["additional-files"] = templates.globals["manifest_additional"]
-
-	else:
-		if "whey" in data["tool"]:
-			del data["tool"]["whey"]
-
-		license_ = templates.globals["license"]
-		data["tool"]["mkrecipe"]["license-key"] = {v: k for k, v in license_lookup.items()}.get(license_, license_)
-
-		if templates.globals["import_name"] != templates.globals["pypi_name"]:
-			if templates.globals["stubs_package"]:
-				data["tool"]["mkrecipe"]["package"] = "{import_name}-stubs".format_map(templates.globals)
-			else:
-				data["tool"]["mkrecipe"]["package"] = posixpath.join(
-						# templates.globals["source_dir"],
-						templates.globals["import_name"].split('.', 1)[0],
-						)
+	if templates.globals["manifest_additional"]:
+		data["tool"]["whey"]["additional-files"] = templates.globals["manifest_additional"]
 
 	if not templates.globals["enable_tests"] and not templates.globals["stubs_package"]:
 		data["tool"]["importcheck"] = data["tool"].get("importcheck", {})

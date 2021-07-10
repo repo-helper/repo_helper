@@ -27,6 +27,12 @@ Documentation = "https://hello-world.readthedocs.io/en/latest"
 [tool.mkrecipe]
 conda-channels = []
 extras = "none"
+
+[tool.whey]
+base-classifiers = []
+python-versions = [ "3.6", "3.7",]
+python-implementations = [ "CPython",]
+platforms = [ "Windows",]
 license-key = "MIT"
 package = "hello_world"
 
