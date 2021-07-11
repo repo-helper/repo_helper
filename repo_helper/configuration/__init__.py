@@ -123,7 +123,6 @@ from repo_helper.configuration.other import (
 		desktopfile,
 		exclude_files,
 		imgbot_ignore,
-		pkginfo_extra,
 		pre_commit_exclude,
 		yapf_exclude
 		)
@@ -211,7 +210,6 @@ __all__ = [
 		"on_pypi",
 		"parse_extras",
 		"parse_yaml",
-		"pkginfo_extra",
 		"platforms",
 		"preserve_custom_theme",
 		"pure_python",

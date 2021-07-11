@@ -18,5 +18,3 @@ __all__ = [
 
 __version__ = "{{ version }}"
 extras_require = {{ extras_require }}
-
-{{ '\n'.join(pkginfo_extra) }}

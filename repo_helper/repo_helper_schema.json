@@ -252,13 +252,6 @@
       ],
       "description": "Flag to indicate the package is available on PyPI."
     },
-    "pkginfo_extra": {
-      "type": "array",
-      "items": {
-        "type": "string"
-      },
-      "description": "A list of lines of Python code to add to the top of ``conf.py``. These could be additional settings for Sphinx or calls to extra scripts that must be executed before building the documentation."
-    },
     "platforms": {
       "type": "array",
       "items": {

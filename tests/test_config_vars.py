@@ -422,11 +422,6 @@ class Test_additional_ignore(ListTest):
 	test_value = ["*.pyc"]
 
 
-class Test_pkginfo_extra(ListTest):
-	config_var = pkginfo_extra
-	test_value = ["a string"]
-
-
 class Test_exclude_files(ListTest):
 	config_var = exclude_files
 	test_value = ["conf", "tox"]

@@ -34,7 +34,6 @@ __all__ = [
 		"additional_ignore",
 		"yapf_exclude",
 		"imgbot_ignore",
-		"pkginfo_extra",
 		"exclude_files",
 		"pre_commit_exclude",
 		"desktopfile",
@@ -88,20 +87,6 @@ class imgbot_ignore(ConfigVar):  # noqa
 	dtype = List[str]
 	default: List[str] = []
 
-
-class pkginfo_extra(ConfigVar):  # noqa
-	"""
-	A list of lines of Python code to add to the top of ``conf.py``. These could be additional settings for Sphinx or calls to extra scripts that must be executed before building the documentation.
-
-	.. code-block:: yaml
-
-		pkginfo_extra:
-		  - import datetime
-		  - print(datetim.datetime.today())
-	"""
-
-	dtype = List[str]
-	default: List[str] = []
 
 
 class exclude_files(ConfigVar):  # noqa

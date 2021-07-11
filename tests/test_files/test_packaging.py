@@ -300,7 +300,6 @@ def test_make_pkginfo(tmp_pathplus, demo_environment, file_regression: FileRegre
 	demo_environment.globals["author"] = "Joe Bloggs"
 	demo_environment.globals["email"] = "j.bloggs@example.com"
 	demo_environment.globals["license"] = "MIT License"
-	demo_environment.globals["pkginfo_extra"] = []
 	demo_environment.globals["extras_require"] = {}
 	demo_environment.globals["copyright_years"] = 2020
 	demo_environment.globals["version"] = "1.2.3"

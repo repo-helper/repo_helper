@@ -72,7 +72,6 @@ mypy_deps: []
 mypy_plugins: []
 mypy_version: '0.812'
 on_pypi: true
-pkginfo_extra: []
 platforms:
 - Windows
 - macOS
