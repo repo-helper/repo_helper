@@ -91,6 +91,7 @@ known_third_party = [
     "typing_extensions",
     "typing_inspect",
     "whey",
+    "whey_conda",
     "yapf_isort",
     "ytools3",
 ]
