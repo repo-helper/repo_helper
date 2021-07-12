@@ -30,12 +30,11 @@ import pathlib
 from typing import List
 
 # 3rd party
-import jinja2
 from domdf_python_tools.paths import PathPlus
 
 # this package
 from repo_helper.files import management
-from repo_helper.templates import template_dir
+from repo_helper.templates import Environment, template_dir
 
 __all__ = [
 		"lint_warn_list",
@@ -293,7 +292,7 @@ lint_warn_list.extend([
 
 
 @management.register("pylintrc")
-def make_pylintrc(repo_path: pathlib.Path, templates: jinja2.Environment) -> List[str]:
+def make_pylintrc(repo_path: pathlib.Path, templates: Environment) -> List[str]:
 	"""
 	Copy ``.pylintrc`` into the desired repository.
 

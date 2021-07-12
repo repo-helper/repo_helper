@@ -41,7 +41,7 @@ from repo_helper.files import Management, is_registered, management
 from repo_helper.files.docs import copy_docs_styling
 from repo_helper.files.linting import code_only_warning, lint_warn_list
 from repo_helper.files.testing import make_formate_toml, make_isort
-from repo_helper.templates import init_repo_template_dir, template_dir
+from repo_helper.templates import Environment, init_repo_template_dir, template_dir
 from repo_helper.utils import brace, discover_entry_points
 
 __all__ = [
@@ -72,7 +72,7 @@ class RepoHelper:
 	target_repo: PathPlus
 
 	#: Provides the templates and stores the configuration.
-	templates: jinja2.Environment
+	templates: Environment
 
 	#: List of functions to manage files.
 	files: Management
@@ -87,7 +87,7 @@ class RepoHelper:
 		# Walk up the tree until a "repo_helper.yml" or "git_helper.yml" (old name) file is found.
 		self.target_repo = traverse_to_file(PathPlus(target_repo), "repo_helper.yml", "git_helper.yml")
 
-		self.templates = jinja2.Environment(  # nosec: B701
+		self.templates = Environment(  # nosec: B701
 			loader=jinja2.FileSystemLoader(str(template_dir)),
 			undefined=jinja2.StrictUndefined,
 			)
@@ -168,7 +168,7 @@ class RepoHelper:
 			# this package
 			from repo_helper.cli.commands.init import enable_docs
 
-			init_repo_templates = jinja2.Environment(  # nosec: B701
+			init_repo_templates = Environment(  # nosec: B701
 				loader=jinja2.FileSystemLoader(str(init_repo_template_dir)),
 				undefined=jinja2.StrictUndefined,
 				)

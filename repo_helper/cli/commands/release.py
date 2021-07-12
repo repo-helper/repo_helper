@@ -32,7 +32,7 @@ from typing import Callable, List, Optional, Tuple, cast
 import click
 from click import Command
 from consolekit import CONTEXT_SETTINGS
-from consolekit.options import force_option
+from consolekit.options import _C, force_option
 from domdf_python_tools.paths import PathPlus
 from southwark.click import commit_message_option, commit_option
 
@@ -57,7 +57,7 @@ def release() -> None:
 	"""
 
 
-def release_options(f: Callable) -> Callable:
+def release_options(f: _C) -> _C:
 	"""
 	Decorator to add the options to the ``release`` subcommands.
 	"""

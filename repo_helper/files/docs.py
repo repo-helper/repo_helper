@@ -38,7 +38,6 @@ from typing import Any, Dict, List, Mapping, MutableMapping, Tuple, Union
 # 3rd party
 import dict2css
 import dom_toml
-import jinja2
 import ruamel.yaml as yaml
 from domdf_python_tools.compat import importlib_resources
 from domdf_python_tools.paths import PathPlus
@@ -67,8 +66,7 @@ from repo_helper.blocks import (
 		)
 from repo_helper.configupdater2 import ConfigUpdater
 from repo_helper.files import management
-from repo_helper.files.pre_commit import make_github_url
-from repo_helper.templates import init_repo_template_dir, template_dir
+from repo_helper.templates import Environment, init_repo_template_dir, template_dir
 from repo_helper.utils import pformat_tabs, reformat_file
 
 __all__ = [
@@ -104,7 +102,7 @@ class DocRequirementsManager(RequirementsManager):
 			ComparableRequirement("sphinx-pyproject>=0.1.0"),
 			}
 
-	def __init__(self, repo_path: PathLike, templates: jinja2.Environment):
+	def __init__(self, repo_path: PathLike, templates: Environment):
 		self.filename = os.path.join(templates.globals["docs_dir"], "requirements.txt")
 		self._globals = templates.globals
 		super().__init__(repo_path)
@@ -168,7 +166,7 @@ class DocRequirementsManager(RequirementsManager):
 
 
 @management.register("doc_requirements", ["enable_docs"])
-def ensure_doc_requirements(repo_path: pathlib.Path, templates: jinja2.Environment) -> List[str]:
+def ensure_doc_requirements(repo_path: pathlib.Path, templates: Environment) -> List[str]:
 	"""
 	Ensure ``<docs_dir>/requirements.txt`` contains the required entries.
 
@@ -181,7 +179,7 @@ def ensure_doc_requirements(repo_path: pathlib.Path, templates: jinja2.Environme
 
 
 @management.register("rtfd", ["enable_docs"])
-def make_rtfd(repo_path: pathlib.Path, templates: jinja2.Environment) -> List[str]:
+def make_rtfd(repo_path: pathlib.Path, templates: Environment) -> List[str]:
 	"""
 	Add configuration for ``ReadTheDocs``.
 
@@ -247,7 +245,7 @@ def make_rtfd(repo_path: pathlib.Path, templates: jinja2.Environment) -> List[st
 
 
 @management.register("docutils_conf", ["enable_docs"])
-def make_docutils_conf(repo_path: pathlib.Path, templates: jinja2.Environment) -> List[str]:
+def make_docutils_conf(repo_path: pathlib.Path, templates: Environment) -> List[str]:
 	"""
 	Add configuration for ``Docutils``.
 
@@ -282,7 +280,7 @@ def make_docutils_conf(repo_path: pathlib.Path, templates: jinja2.Environment) -
 
 
 @management.register("conf", ["enable_docs"])
-def make_conf(repo_path: pathlib.Path, templates: jinja2.Environment) -> List[str]:
+def make_conf(repo_path: pathlib.Path, templates: Environment) -> List[str]:
 	"""
 	Add ``conf.py`` configuration file for ``Sphinx``.
 
@@ -489,7 +487,7 @@ def make_furo_theming() -> str:
 	return dict2css.dumps(style, trailing_semicolon=True)
 
 
-def copy_docs_styling(repo_path: pathlib.Path, templates: jinja2.Environment) -> List[str]:
+def copy_docs_styling(repo_path: pathlib.Path, templates: Environment) -> List[str]:
 	"""
 	Copy custom styling for documentation to the desired repository.
 
@@ -539,7 +537,7 @@ def copy_docs_styling(repo_path: pathlib.Path, templates: jinja2.Environment) ->
 
 
 @management.register("index.rst", ["enable_docs"])
-def rewrite_docs_index(repo_path: pathlib.Path, templates: jinja2.Environment) -> List[str]:
+def rewrite_docs_index(repo_path: pathlib.Path, templates: Environment) -> List[str]:
 	"""
 	Update blocks in the documentation ``index.rst`` file.
 
@@ -629,7 +627,7 @@ def rewrite_docs_index(repo_path: pathlib.Path, templates: jinja2.Environment) -
 
 
 @management.register("404", ["enable_docs"])
-def make_404_page(repo_path: pathlib.Path, templates: jinja2.Environment) -> List[str]:
+def make_404_page(repo_path: pathlib.Path, templates: Environment) -> List[str]:
 	"""
 
 	:param repo_path: Path to the repository root.
@@ -654,7 +652,7 @@ def make_404_page(repo_path: pathlib.Path, templates: jinja2.Environment) -> Lis
 
 
 @management.register("Source_rst", ["enable_docs"])
-def make_docs_source_rst(repo_path: pathlib.Path, templates: jinja2.Environment) -> List[str]:
+def make_docs_source_rst(repo_path: pathlib.Path, templates: Environment) -> List[str]:
 	"""
 	Create the "Source" page in the documentation, and add the associated image.
 
@@ -683,7 +681,7 @@ def make_docs_source_rst(repo_path: pathlib.Path, templates: jinja2.Environment)
 			]
 
 
-def make_sphinx_config_dict(templates: jinja2.Environment) -> Dict[str, Any]:
+def make_sphinx_config_dict(templates: Environment) -> Dict[str, Any]:
 	"""
 	Returns a dictionary of configuration values for use in ``conf.py``.
 

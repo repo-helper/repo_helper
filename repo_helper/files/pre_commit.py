@@ -34,7 +34,6 @@ from typing import Iterable, List, MutableMapping, Union
 
 # 3rd party
 import attr
-import jinja2
 import ruamel.yaml
 from apeye.url import URL
 from domdf_python_tools.paths import PathPlus
@@ -44,6 +43,7 @@ from typing_extensions import Literal, TypedDict
 
 # this package
 from repo_helper.files import management
+from repo_helper.templates import Environment
 
 __all__ = ["GITHUB_COM", "make_github_url", "Hook", "Repo", "make_pre_commit"]
 
@@ -223,7 +223,7 @@ pyproject_parser = Repo(
 
 
 @management.register("pre-commit", ["enable_pre_commit"])
-def make_pre_commit(repo_path: pathlib.Path, templates: jinja2.Environment) -> List[str]:
+def make_pre_commit(repo_path: pathlib.Path, templates: Environment) -> List[str]:
 	"""
 	Add configuration for ``pre-commit``.
 

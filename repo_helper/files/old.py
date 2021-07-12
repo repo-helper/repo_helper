@@ -28,11 +28,11 @@ import pathlib
 from typing import List
 
 # 3rd party
-import jinja2
 from domdf_python_tools.paths import PathPlus
 
 # this package
 from repo_helper.files import management
+from repo_helper.templates import Environment
 
 __all__ = [
 		"make_lint_roller",
@@ -45,7 +45,7 @@ __all__ = [
 
 
 @management.register("travis")
-def travis_bad(repo_path: pathlib.Path, templates: jinja2.Environment) -> List[str]:
+def travis_bad(repo_path: pathlib.Path, templates: Environment) -> List[str]:
 	"""
 	Removes Travis CI configuration.
 
@@ -63,7 +63,7 @@ def travis_bad(repo_path: pathlib.Path, templates: jinja2.Environment) -> List[s
 
 
 @management.register("copy_pypi_2_github", ["enable_releases"])
-def remove_copy_pypi_2_github(repo_path: pathlib.Path, templates: jinja2.Environment) -> List[str]:
+def remove_copy_pypi_2_github(repo_path: pathlib.Path, templates: Environment) -> List[str]:
 	"""
 	Remove deprecated copy_pypi_2_github.py script.
 
@@ -81,7 +81,7 @@ def remove_copy_pypi_2_github(repo_path: pathlib.Path, templates: jinja2.Environ
 
 
 @management.register("make_conda_recipe", ["enable_conda"])
-def remove_make_conda_recipe(repo_path: pathlib.Path, templates: jinja2.Environment) -> List[str]:
+def remove_make_conda_recipe(repo_path: pathlib.Path, templates: Environment) -> List[str]:
 	"""
 	Remove the old script to create a Conda recipe.
 
@@ -95,7 +95,7 @@ def remove_make_conda_recipe(repo_path: pathlib.Path, templates: jinja2.Environm
 
 
 # @management.register("make_conda_recipe", ["enable_conda"])
-# def make_make_conda_recipe(repo_path: pathlib.Path, templates: jinja2.Environment) -> List[str]:
+# def make_make_conda_recipe(repo_path: pathlib.Path, templates: Environment) -> List[str]:
 # 	"""
 # 	Add script to create a Conda recipe for the package.
 #
@@ -109,7 +109,7 @@ def remove_make_conda_recipe(repo_path: pathlib.Path, templates: jinja2.Environm
 
 
 @management.register("autodoc_augment_defaults", ["enable_docs"])
-def remove_autodoc_augment_defaults(repo_path: pathlib.Path, templates: jinja2.Environment) -> List[str]:
+def remove_autodoc_augment_defaults(repo_path: pathlib.Path, templates: Environment) -> List[str]:
 	"""
 	Remove the redundant "autodoc_augment_defaults" extension.
 
@@ -126,7 +126,7 @@ def remove_autodoc_augment_defaults(repo_path: pathlib.Path, templates: jinja2.E
 
 
 @management.register("lint_roller")
-def remove_lint_roller(repo_path: pathlib.Path, templates: jinja2.Environment) -> List[str]:
+def remove_lint_roller(repo_path: pathlib.Path, templates: Environment) -> List[str]:
 	"""
 	Remove the old lint_roller.sh script to the desired repo.
 
@@ -142,7 +142,7 @@ def remove_lint_roller(repo_path: pathlib.Path, templates: jinja2.Environment) -
 
 
 # @management.register("lint_roller")
-def make_lint_roller(repo_path: pathlib.Path, templates: jinja2.Environment) -> List[str]:
+def make_lint_roller(repo_path: pathlib.Path, templates: Environment) -> List[str]:
 	"""
 	Add the lint_roller.sh script to the desired repo.
 

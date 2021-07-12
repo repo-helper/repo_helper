@@ -34,7 +34,6 @@ from typing import Any, Dict, List, Tuple
 
 # 3rd party
 import dom_toml
-import jinja2
 from domdf_python_tools.paths import PathPlus
 from domdf_python_tools.stringlist import DelimitedList
 from domdf_python_tools.typing import PathLike
@@ -51,6 +50,7 @@ from shippinglabel.requirements import (
 from repo_helper.configupdater2 import ConfigUpdater
 from repo_helper.files import management
 from repo_helper.files.linting import code_only_warning, lint_warn_list
+from repo_helper.templates import Environment
 from repo_helper.utils import IniConfigurator, indent_join
 
 __all__ = [
@@ -96,7 +96,7 @@ class ToxConfig(IniConfigurator):
 			"pytest",
 			]
 
-	def __init__(self, repo_path: pathlib.Path, templates: jinja2.Environment):
+	def __init__(self, repo_path: pathlib.Path, templates: Environment):
 		self._globals = templates.globals
 
 		self.managed_sections = self.managed_sections[:]
@@ -605,7 +605,7 @@ class ToxConfig(IniConfigurator):
 
 
 @management.register("tox")
-def make_tox(repo_path: pathlib.Path, templates: jinja2.Environment) -> List[str]:
+def make_tox(repo_path: pathlib.Path, templates: Environment) -> List[str]:
 	"""
 	Add configuration for ``Tox``.
 
@@ -620,7 +620,7 @@ def make_tox(repo_path: pathlib.Path, templates: jinja2.Environment) -> List[str
 
 
 @management.register("yapf")
-def make_yapf(repo_path: pathlib.Path, templates: jinja2.Environment) -> List[str]:
+def make_yapf(repo_path: pathlib.Path, templates: Environment) -> List[str]:
 	"""
 	Add configuration for ``yapf``.
 
@@ -635,7 +635,7 @@ def make_yapf(repo_path: pathlib.Path, templates: jinja2.Environment) -> List[st
 	return [file.name]
 
 
-def make_isort(repo_path: pathlib.Path, templates: jinja2.Environment) -> List[str]:
+def make_isort(repo_path: pathlib.Path, templates: Environment) -> List[str]:
 	"""
 	Remove the ``isort`` configuration file.
 
@@ -651,7 +651,7 @@ def make_isort(repo_path: pathlib.Path, templates: jinja2.Environment) -> List[s
 	return [isort_file.name]
 
 
-# def make_isort(repo_path: pathlib.Path, templates: jinja2.Environment) -> List[str]:
+# def make_isort(repo_path: pathlib.Path, templates: Environment) -> List[str]:
 # 	"""
 # 	Add configuration for ``isort``.
 #
@@ -694,7 +694,7 @@ def make_isort(repo_path: pathlib.Path, templates: jinja2.Environment) -> List[s
 # 	return [isort_file.name]
 
 
-def make_formate_toml(repo_path: pathlib.Path, templates: jinja2.Environment) -> List[str]:
+def make_formate_toml(repo_path: pathlib.Path, templates: Environment) -> List[str]:
 	"""
 	Add configuration for ``formate``.
 
@@ -762,7 +762,7 @@ def make_formate_toml(repo_path: pathlib.Path, templates: jinja2.Environment) ->
 	return [formate_file.name, isort_file.name]
 
 
-def get_isort_config(repo_path: pathlib.Path, templates: jinja2.Environment) -> Dict[str, Any]:
+def get_isort_config(repo_path: pathlib.Path, templates: Environment) -> Dict[str, Any]:
 	"""
 	Returns a ``key: value`` mapping of configuration for ``isort``.
 
@@ -820,7 +820,7 @@ class TestsRequirementsManager(RequirementsManager):
 			ComparableRequirement("pytest-timeout>=1.4.2"),
 			}
 
-	def __init__(self, repo_path: PathLike, templates: jinja2.Environment):
+	def __init__(self, repo_path: PathLike, templates: Environment):
 		self.filename = os.path.join(templates.globals["tests_dir"], "requirements.txt")
 		self._globals = templates.globals
 		super().__init__(repo_path)
@@ -846,7 +846,7 @@ class TestsRequirementsManager(RequirementsManager):
 
 
 @management.register("test_requirements", ["enable_tests"])
-def ensure_tests_requirements(repo_path: pathlib.Path, templates: jinja2.Environment) -> List[str]:
+def ensure_tests_requirements(repo_path: pathlib.Path, templates: Environment) -> List[str]:
 	"""
 	Ensure ``tests/requirements.txt`` contains the required entries.
 

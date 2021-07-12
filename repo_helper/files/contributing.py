@@ -29,11 +29,11 @@ import re
 from typing import List
 
 # 3rd party
-import jinja2
 from domdf_python_tools.paths import PathPlus
 
 # this package
 from repo_helper.files import management
+from repo_helper.templates import Environment
 
 __all__ = [
 		"make_contributing",
@@ -88,7 +88,7 @@ def sphinx_bash_block(*commands: str) -> str:
 
 
 @management.register("contributing")
-def make_contributing(repo_path: pathlib.Path, templates: jinja2.Environment) -> List[str]:
+def make_contributing(repo_path: pathlib.Path, templates: Environment) -> List[str]:
 	"""
 	Add ``CONTRIBUTING.rst`` to the desired repo.
 
@@ -108,7 +108,7 @@ def make_contributing(repo_path: pathlib.Path, templates: jinja2.Environment) ->
 
 
 @management.register("contributing", ["enable_docs"])
-def make_docs_contributing(repo_path: pathlib.Path, templates: jinja2.Environment) -> List[str]:
+def make_docs_contributing(repo_path: pathlib.Path, templates: Environment) -> List[str]:
 	"""
 	Add CONTRIBUTING.rst to the documentation directory of the repo.
 
@@ -135,7 +135,7 @@ def make_docs_contributing(repo_path: pathlib.Path, templates: jinja2.Environmen
 
 
 @management.register("issue_templates")
-def make_issue_templates(repo_path: pathlib.Path, templates: jinja2.Environment) -> List[str]:
+def make_issue_templates(repo_path: pathlib.Path, templates: Environment) -> List[str]:
 	"""
 	Add issue templates for GitHub to the desired repo.
 

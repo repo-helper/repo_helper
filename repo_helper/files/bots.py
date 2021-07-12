@@ -29,12 +29,11 @@ import pathlib
 from typing import Any, List, MutableMapping
 
 # 3rd party
-import jinja2
-import ruamel.yaml as yaml
 from domdf_python_tools.paths import PathPlus
 
 # this package
 from repo_helper.files import management
+from repo_helper.templates import Environment
 from repo_helper.utils import _round_trip_dump
 
 __all__ = [
@@ -48,7 +47,7 @@ __all__ = [
 
 
 @management.register("stale_bot")
-def make_stale_bot(repo_path: pathlib.Path, templates: jinja2.Environment) -> List[str]:
+def make_stale_bot(repo_path: pathlib.Path, templates: Environment) -> List[str]:
 	"""
 	Add configuration for ``stale`` to the desired repo.
 
@@ -65,7 +64,7 @@ def make_stale_bot(repo_path: pathlib.Path, templates: jinja2.Environment) -> Li
 
 
 @management.register("auto_assign")
-def make_auto_assign_action(repo_path: pathlib.Path, templates: jinja2.Environment) -> List[str]:
+def make_auto_assign_action(repo_path: pathlib.Path, templates: Environment) -> List[str]:
 	"""
 	Add configuration for ``auto-assign`` to the desired repo.
 
@@ -129,7 +128,7 @@ def make_auto_assign_action(repo_path: pathlib.Path, templates: jinja2.Environme
 
 
 @management.register("dependabot")
-def make_dependabot(repo_path: pathlib.Path, templates: jinja2.Environment) -> List[str]:
+def make_dependabot(repo_path: pathlib.Path, templates: Environment) -> List[str]:
 	"""
 	Add configuration for ``dependabot`` to the desired repo.
 
@@ -163,7 +162,7 @@ def make_dependabot(repo_path: pathlib.Path, templates: jinja2.Environment) -> L
 
 
 @management.register("dependabotv2")
-def make_dependabotv2(repo_path: pathlib.Path, templates: jinja2.Environment) -> List[str]:
+def make_dependabotv2(repo_path: pathlib.Path, templates: Environment) -> List[str]:
 	"""
 	Add configuration for ``dependabot`` to the desired repo.
 
@@ -197,7 +196,7 @@ def make_dependabotv2(repo_path: pathlib.Path, templates: jinja2.Environment) ->
 
 
 @management.register("imgbot")
-def make_imgbot(repo_path: pathlib.Path, templates: jinja2.Environment) -> List[str]:
+def make_imgbot(repo_path: pathlib.Path, templates: Environment) -> List[str]:
 	"""
 	Add configuration for ``imgbot`` to the desired repo.
 
@@ -220,7 +219,7 @@ def make_imgbot(repo_path: pathlib.Path, templates: jinja2.Environment) -> List[
 
 
 # @management.register("automerge")
-def make_automerge_action(repo_path: pathlib.Path, templates: jinja2.Environment) -> List[str]:
+def make_automerge_action(repo_path: pathlib.Path, templates: Environment) -> List[str]:
 	"""
 	Add configuration for https://github.com/pascalgn/automerge-action to the desired repo.
 
@@ -273,7 +272,7 @@ def make_automerge_action(repo_path: pathlib.Path, templates: jinja2.Environment
 
 
 @management.register("artefact_cleaner")
-def make_artefact_cleaner(repo_path: pathlib.Path, templates: jinja2.Environment) -> List[str]:
+def make_artefact_cleaner(repo_path: pathlib.Path, templates: Environment) -> List[str]:
 	"""
 	Add configuration for https://github.com/marketplace/actions/github-actions-artifact-cleaner
 	to the desired repo.

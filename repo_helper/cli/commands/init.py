@@ -37,13 +37,12 @@ from apeye.requests_url import RequestsURL
 from consolekit.options import force_option
 from domdf_python_tools.paths import PathPlus, maybe_make
 from domdf_python_tools.stringlist import StringList
-from jinja2 import BaseLoader, Environment, StrictUndefined
 from southwark.click import commit_message_option, commit_option
 
 # this package
 from repo_helper.cli import cli_command
 from repo_helper.cli.utils import run_repo_helper
-from repo_helper.templates import init_repo_template_dir
+from repo_helper.templates import Environment, init_repo_template_dir
 
 __all__ = ["init", "init_repo", "base_license_url", "license_file_lookup"]
 
@@ -110,7 +109,7 @@ license_init_file_lookup = {
 		}
 
 
-def init_repo(repo_path: pathlib.Path, templates: jinja2.Environment) -> List[str]:
+def init_repo(repo_path: pathlib.Path, templates: Environment) -> List[str]:
 	"""
 	Initialise a new repository, creating the necessary files to get started.
 
@@ -121,7 +120,7 @@ def init_repo(repo_path: pathlib.Path, templates: jinja2.Environment) -> List[st
 	repo_path = PathPlus(repo_path)
 	templates.globals["len"] = len
 
-	init_repo_templates = jinja2.Environment(  # nosec: B701
+	init_repo_templates = Environment(  # nosec: B701
 		loader=jinja2.FileSystemLoader(str(init_repo_template_dir)),
 		undefined=jinja2.StrictUndefined,
 		)
@@ -187,8 +186,8 @@ def init_repo(repo_path: pathlib.Path, templates: jinja2.Environment) -> List[st
 				license_text = response.text
 
 	license_template = Environment(  # nosec: B701
-			loader=BaseLoader(),
-			undefined=StrictUndefined,
+			loader=jinja2.BaseLoader(),
+			undefined=jinja2.StrictUndefined,
 			).from_string(license_text)
 
 	(repo_path / "LICENSE").write_clean(
@@ -215,10 +214,10 @@ def init_repo(repo_path: pathlib.Path, templates: jinja2.Environment) -> List[st
 
 def enable_docs(
 		repo_path: pathlib.Path,
-		templates: jinja2.Environment,
-		init_repo_templates: jinja2.Environment,
+		templates: Environment,
+		init_repo_templates: Environment,
 		) -> List[str]:
-	docs_dir = repo_path / templates.globals["docs_dir"]
+	docs_dir = PathPlus(repo_path / templates.globals["docs_dir"])
 	docs_dir.maybe_make()
 	(docs_dir / "api").maybe_make()
 
@@ -227,9 +226,10 @@ def enable_docs(
 		(docs_dir / filename).write_clean(template.render())
 
 	api_buf = StringList()
-	api_buf.append('=' * (len(templates.globals["import_name"]) + 1))
+	header_line: str = '=' * (len(templates.globals["import_name"]) + 1)
+	api_buf.append(header_line)
 	api_buf.append(templates.globals["import_name"])
-	api_buf.append('=' * (len(templates.globals["import_name"]) + 1))
+	api_buf.append(header_line)
 	api_buf.blankline(ensure_single=True)
 	api_buf.append(f".. automodule:: {templates.globals['import_name']}")
 	api_buf.blankline(ensure_single=True)

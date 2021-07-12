@@ -30,13 +30,13 @@ from textwrap import indent
 from typing import Dict, Iterable, Iterator, List, Optional
 
 # 3rd party
-import jinja2
 from domdf_python_tools.paths import PathPlus
 from domdf_python_tools.stringlist import DelimitedList, StringList
 
 # this package
 from repo_helper.configupdater2 import ConfigUpdater
 from repo_helper.files import management
+from repo_helper.templates import Environment
 from repo_helper.utils import no_dev_versions, set_gh_actions_versions
 
 __all__ = [
@@ -55,7 +55,7 @@ __all__ = [
 
 
 @management.register("actions_deploy_conda", ["enable_conda"])
-def make_actions_deploy_conda(repo_path: pathlib.Path, templates: jinja2.Environment) -> List[str]:
+def make_actions_deploy_conda(repo_path: pathlib.Path, templates: Environment) -> List[str]:
 	"""
 	Add script to build Conda package and deploy to Anaconda.
 
@@ -86,7 +86,7 @@ def make_actions_deploy_conda(repo_path: pathlib.Path, templates: jinja2.Environ
 
 
 @management.register("actions")
-def make_github_ci(repo_path: pathlib.Path, templates: jinja2.Environment) -> List[str]:
+def make_github_ci(repo_path: pathlib.Path, templates: Environment) -> List[str]:
 	"""
 	Add configuration for `GitHub Actions` to the desired repo.
 
@@ -116,7 +116,7 @@ class ActionsManager:
 	.. versionadded:: 2020.12.18
 	"""
 
-	def __init__(self, repo_path: pathlib.Path, templates: jinja2.Environment):
+	def __init__(self, repo_path: pathlib.Path, templates: Environment):
 		self.repo_path = repo_path
 		self.templates = templates
 
@@ -444,7 +444,7 @@ Mapping of platform names to the GitHub Actions platform tags.
 
 
 @management.register("conda_actions")
-def make_conda_actions_ci(repo_path: pathlib.Path, templates: jinja2.Environment) -> List[str]:
+def make_conda_actions_ci(repo_path: pathlib.Path, templates: Environment) -> List[str]:
 	"""
 	Add configuration for testing conda packages on `GitHub Actions` to the desired repo.
 
@@ -477,7 +477,7 @@ def make_conda_actions_ci(repo_path: pathlib.Path, templates: jinja2.Environment
 
 
 @management.register("manylinux")
-def make_github_manylinux(repo_path: pathlib.Path, templates: jinja2.Environment) -> List[str]:
+def make_github_manylinux(repo_path: pathlib.Path, templates: Environment) -> List[str]:
 	"""
 	Add configuration for `GitHub Actions` manylinux wheel builds the desired repo.
 
@@ -516,7 +516,7 @@ def make_github_manylinux(repo_path: pathlib.Path, templates: jinja2.Environment
 
 
 @management.register("docs_action")
-def make_github_docs_test(repo_path: pathlib.Path, templates: jinja2.Environment) -> List[str]:
+def make_github_docs_test(repo_path: pathlib.Path, templates: Environment) -> List[str]:
 	"""
 	Add configuration for GitHub Actions documentation check to the desired repo.
 
@@ -543,7 +543,7 @@ def make_github_docs_test(repo_path: pathlib.Path, templates: jinja2.Environment
 
 
 @management.register("octocheese")
-def make_github_octocheese(repo_path: pathlib.Path, templates: jinja2.Environment) -> List[str]:
+def make_github_octocheese(repo_path: pathlib.Path, templates: Environment) -> List[str]:
 	"""
 	Add configuration for the OctoCheese GitHub Action.
 
@@ -563,7 +563,7 @@ def make_github_octocheese(repo_path: pathlib.Path, templates: jinja2.Environmen
 
 
 @management.register("flake8_action")
-def make_github_flake8(repo_path: pathlib.Path, templates: jinja2.Environment) -> List[str]:
+def make_github_flake8(repo_path: pathlib.Path, templates: Environment) -> List[str]:
 	"""
 	Add configuration for the Flake8 GitHub Action.
 
@@ -577,7 +577,7 @@ def make_github_flake8(repo_path: pathlib.Path, templates: jinja2.Environment) -
 
 
 @management.register("mypy_action")
-def make_github_mypy(repo_path: pathlib.Path, templates: jinja2.Environment) -> List[str]:
+def make_github_mypy(repo_path: pathlib.Path, templates: Environment) -> List[str]:
 	"""
 	Add configuration for the mypy GitHub Action.
 
@@ -594,7 +594,7 @@ def make_github_mypy(repo_path: pathlib.Path, templates: jinja2.Environment) -> 
 
 
 @management.register("bumpversion")
-def ensure_bumpversion(repo_path: pathlib.Path, templates: jinja2.Environment) -> List[str]:
+def ensure_bumpversion(repo_path: pathlib.Path, templates: Environment) -> List[str]:
 	"""
 	Add configuration for ``bumpversion`` to the desired repo.
 
@@ -672,7 +672,7 @@ def ensure_bumpversion(repo_path: pathlib.Path, templates: jinja2.Environment) -
 	return [bumpversion_file.name]
 
 
-def get_bumpversion_filenames(templates: jinja2.Environment) -> Iterable[str]:
+def get_bumpversion_filenames(templates: Environment) -> Iterable[str]:
 	"""
 	Returns an iterable of filenames to have the version number bumped in.
 
@@ -695,7 +695,7 @@ def get_bumpversion_filenames(templates: jinja2.Environment) -> Iterable[str]:
 		yield init_filename
 
 
-def get_init_filename(templates: jinja2.Environment) -> Optional[str]:
+def get_init_filename(templates: Environment) -> Optional[str]:
 	if templates.globals["py_modules"]:
 		for modname in templates.globals["py_modules"]:
 			return f"{templates.globals['source_dir']}{modname}.py"

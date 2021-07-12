@@ -28,7 +28,6 @@ import pathlib
 from typing import List
 
 # 3rd party
-import jinja2
 from domdf_python_tools.paths import PathPlus
 
 # this package
@@ -42,12 +41,13 @@ from repo_helper.blocks import (
 		short_desc_regex
 		)
 from repo_helper.files import management
+from repo_helper.templates import Environment
 
 __all__ = ["rewrite_readme"]
 
 
 @management.register("readme")
-def rewrite_readme(repo_path: pathlib.Path, templates: jinja2.Environment) -> List[str]:
+def rewrite_readme(repo_path: pathlib.Path, templates: Environment) -> List[str]:
 	"""
 	Update blocks in the ``README.rst`` file.
 

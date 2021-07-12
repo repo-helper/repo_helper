@@ -1,8 +1,9 @@
 # stdlib
 import re
-from typing import TYPE_CHECKING, Callable, List, Optional
+from typing import List, Optional
 
 # 3rd party
+from click import Command
 from coincidence.regressions import AdvancedFileRegressionFixture, check_file_regression
 from consolekit.testing import CliRunner, Result
 from domdf_python_tools.paths import PathPlus, in_directory
@@ -11,13 +12,6 @@ from southwark.repo import Repo
 
 # this package
 from repo_helper.cli.commands.release import major, minor, patch, release
-from tests import pypy_windows_dulwich
-
-if TYPE_CHECKING:
-	Command = Callable
-else:
-	# 3rd party
-	from click import Command
 
 
 def do_test_release(
@@ -74,7 +68,7 @@ def do_test_release(
 
 	with in_directory(temp_repo.path):
 		runner = CliRunner(mix_stderr=False)
-		result: Result = runner.invoke(command, args=args)  # type: ignore
+		result: Result = runner.invoke(command, args=args)
 		assert result.exit_code == 0
 
 		if force:
@@ -169,7 +163,7 @@ def test_release_unclean(temp_repo, advanced_file_regression: AdvancedFileRegres
 	for command in (major, minor, patch):
 		with in_directory(temp_repo.path):
 			runner = CliRunner(mix_stderr=False)
-			result = runner.invoke(command, catch_exceptions=False)  # type: ignore
+			result = runner.invoke(command, catch_exceptions=False)
 			assert result.exit_code == 1
 			assert result.stderr.splitlines() == [
 					"Git working directory is not clean:",

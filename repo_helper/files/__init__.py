@@ -32,12 +32,15 @@ from typing import Any, Callable, List, Optional, Sequence, Tuple
 import jinja2
 from domdf_python_tools.bases import UserList
 
+# this package
+from repo_helper.templates import Environment
+
 jinja2.Environment.__module__ = "jinja2"
 
 __all__ = ["Management", "management", "is_registered", "Manager"]
 
 #: Type hint for a function that manages files.
-Manager = Callable[[pathlib.Path, jinja2.Environment], List[str]]
+Manager = Callable[[pathlib.Path, Environment], List[str]]
 
 
 class Management(UserList[Tuple[Manager, str, Sequence[str]]]):

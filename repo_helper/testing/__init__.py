@@ -59,7 +59,7 @@ import repo_helper.utils
 from repo_helper.build import Builder, build_sdist, build_wheel
 from repo_helper.configuration import get_tox_python_versions
 from repo_helper.files.linting import lint_warn_list
-from repo_helper.templates import template_dir
+from repo_helper.templates import Environment, template_dir
 from repo_helper.utils import brace
 
 __all__ = [
@@ -74,7 +74,7 @@ __all__ = [
 
 
 @pytest.fixture()
-def demo_environment() -> jinja2.Environment:
+def demo_environment() -> Environment:
 	"""
 	Pytest fixture to create a jinja2 environment for use in tests.
 
@@ -133,7 +133,7 @@ def demo_environment() -> jinja2.Environment:
 			demo_environment.templates.globals["source_dir"] = "src"
 	"""
 
-	templates = jinja2.Environment(  # nosec: B701
+	templates = Environment(  # nosec: B701
 		loader=jinja2.FileSystemLoader(str(template_dir)),
 		undefined=jinja2.StrictUndefined,
 		)

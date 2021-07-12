@@ -47,6 +47,7 @@ from repo_helper.configuration import _pypy_version_re
 from repo_helper.configuration.utils import get_version_classifiers
 from repo_helper.files import management
 from repo_helper.files.docs import make_sphinx_config_dict
+from repo_helper.templates import Environment
 from repo_helper.utils import IniConfigurator, indent_join, indent_with_tab, license_lookup, reformat_file
 
 __all__ = [
@@ -80,7 +81,7 @@ class DefaultDict(Dict[_KT, _VT_co]):
 
 
 @management.register("manifest")
-def make_manifest(repo_path: pathlib.Path, templates: jinja2.Environment) -> List[str]:
+def make_manifest(repo_path: pathlib.Path, templates: Environment) -> List[str]:
 	"""
 	Update the ``MANIFEST.in`` file for ``setuptools``.
 
@@ -126,7 +127,7 @@ pre_release_re = re.compile(".*(-dev|alpha|beta)", re.IGNORECASE)
 
 
 @management.register("pyproject")
-def make_pyproject(repo_path: pathlib.Path, templates: jinja2.Environment) -> List[str]:
+def make_pyproject(repo_path: pathlib.Path, templates: Environment) -> List[str]:
 	"""
 	Create the ``pyproject.toml`` file for :pep:`517`.
 
@@ -299,7 +300,7 @@ def make_pyproject(repo_path: pathlib.Path, templates: jinja2.Environment) -> Li
 
 
 @management.register("setup")
-def make_setup(repo_path: pathlib.Path, templates: jinja2.Environment) -> List[str]:
+def make_setup(repo_path: pathlib.Path, templates: Environment) -> List[str]:
 	"""
 	Update the ``setup.py`` script.
 
@@ -320,8 +321,9 @@ def make_setup(repo_path: pathlib.Path, templates: jinja2.Environment) -> List[s
 				install_requires="install_requires",
 				description=repr(templates.globals["short_desc"]),
 				py_modules=templates.globals["py_modules"],
-				name=f"{normalize(templates.globals['modname'])!r}",  # TODO: remove once GitHub dependency graph fixed
+				name=f"{normalize(templates.globals['modname'])!r}",
 				)
+		# TODO: remove name once GitHub dependency graph fixed
 
 		if templates.globals["desktopfile"]:
 			data["data_files"] = "[('share/applications', ['{modname}.desktop'])]".format_map(templates.globals)
@@ -356,7 +358,7 @@ class SetupCfgConfig(IniConfigurator):
 			"options.entry_points",
 			]
 
-	def __init__(self, repo_path: pathlib.Path, templates: jinja2.Environment):
+	def __init__(self, repo_path: pathlib.Path, templates: Environment):
 		self._globals = templates.globals
 
 		super().__init__(base_path=repo_path)
@@ -500,7 +502,7 @@ class SetupCfgConfig(IniConfigurator):
 
 
 @management.register("setup_cfg")
-def make_setup_cfg(repo_path: pathlib.Path, templates: jinja2.Environment) -> List[str]:
+def make_setup_cfg(repo_path: pathlib.Path, templates: Environment) -> List[str]:
 	"""
 	Update the ``setup.py`` script.
 
@@ -520,7 +522,7 @@ def make_setup_cfg(repo_path: pathlib.Path, templates: jinja2.Environment) -> Li
 
 
 @management.register("pkginfo")
-def make_pkginfo(repo_path: pathlib.Path, templates: jinja2.Environment) -> List[str]:
+def make_pkginfo(repo_path: pathlib.Path, templates: Environment) -> List[str]:
 	"""
 	Update the ``__pkginfo__.py`` file.
 
