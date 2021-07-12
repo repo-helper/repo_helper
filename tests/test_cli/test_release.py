@@ -50,7 +50,6 @@ def do_test_release(
 			"license = GNU Lesser General Public License v3 or later (LGPLv3+)",
 			"keywords = utilities",
 			])
-	(temp_repo.path / "__pkginfo__.py").write_text('__version__ = "0.0.1"')
 	(temp_repo.path / "repo_helper_demo").maybe_make()
 	(temp_repo.path / "repo_helper_demo" / "__init__.py").write_text('__version__ = "0.0.1"')
 	(temp_repo.path / "README.rst").write_lines([
@@ -110,7 +109,6 @@ def do_test_release(
 		check_file(temp_repo.path / ".bumpversion.cfg", extension=".bumpversion.cfg")
 		check_file(temp_repo.path / "pyproject.toml", extension="_pyproject.toml")
 		check_file(temp_repo.path / "repo_helper.yml", extension="_repo_helper.yml")
-		check_file(temp_repo.path / "__pkginfo__.py", extension="_pkginfo._py")
 		check_file(temp_repo.path / "README.rst", extension="_readme.rst")
 		check_file(temp_repo.path / "repo_helper_demo" / "__init__.py", extension="_init._py")
 		check_file(temp_repo.path / "doc-source" / "index.rst", extension="_index.rst")

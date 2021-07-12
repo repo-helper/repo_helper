@@ -31,7 +31,6 @@ setup(
 		install_requires=install_requires,
 		name="hello-world",
 		py_modules=[],
-		version=__version__,
 		)
 
 shutil.rmtree("hello_world.egg-info", ignore_errors=True)

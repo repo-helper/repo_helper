@@ -617,7 +617,7 @@ def ensure_bumpversion(repo_path: pathlib.Path, templates: jinja2.Environment) -
 	bv = ConfigUpdater()
 	bv.read(str(bumpversion_file))
 
-	old_sections = ["bumpversion:file:git_helper.yml"]
+	old_sections = ["bumpversion:file:git_helper.yml", "bumpversion:file:__pkginfo__.py"]
 	required_sections = {f"bumpversion:file:{filename}" for filename in get_bumpversion_filenames(templates)}
 
 	if not templates.globals["enable_docs"]:
@@ -681,7 +681,7 @@ def get_bumpversion_filenames(templates: jinja2.Environment) -> Iterable[str]:
 	:param templates:
 	"""
 
-	yield from ["pyproject.toml", "repo_helper.yml", "__pkginfo__.py", "README.rst", "setup.cfg"]
+	yield from ["pyproject.toml", "repo_helper.yml", "README.rst", "setup.cfg"]
 
 	if templates.globals["enable_docs"]:
 		yield f"{templates.globals['docs_dir']}/index.rst"

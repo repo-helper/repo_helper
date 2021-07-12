@@ -298,13 +298,6 @@ def make_pyproject(repo_path: pathlib.Path, templates: jinja2.Environment) -> Li
 	return [pyproject_file.name]
 
 
-setup_py_defaults = dict(
-		extras_require="extras_require",
-		install_requires="install_requires",
-		version="__version__",
-		)
-
-
 @management.register("setup")
 def make_setup(repo_path: pathlib.Path, templates: jinja2.Environment) -> List[str]:
 	"""
@@ -322,10 +315,13 @@ def make_setup(repo_path: pathlib.Path, templates: jinja2.Environment) -> List[s
 	else:
 		setup = templates.get_template("setup._py")
 
-		data = copy.deepcopy(setup_py_defaults)
-		data["description"] = repr(templates.globals["short_desc"])
-		data["py_modules"] = templates.globals["py_modules"]
-		data["name"] = f"{normalize(templates.globals['modname'])!r}"  # TODO: remove once GitHub dependency graph fixed
+		data = dict(
+				extras_require="extras_require",
+				install_requires="install_requires",
+				description=repr(templates.globals["short_desc"]),
+				py_modules=templates.globals["py_modules"],
+				name=f"{normalize(templates.globals['modname'])!r}",  # TODO: remove once GitHub dependency graph fixed
+				)
 
 		if templates.globals["desktopfile"]:
 			data["data_files"] = "[('share/applications', ['{modname}.desktop'])]".format_map(templates.globals)
