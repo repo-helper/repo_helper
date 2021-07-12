@@ -4,6 +4,7 @@ name: {{ ci_name }}
 
 on:
   push:
+  pull_request:
 
 permissions:
   actions: write
