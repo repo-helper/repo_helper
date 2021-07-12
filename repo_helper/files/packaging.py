@@ -37,6 +37,7 @@ import jinja2
 from domdf_python_tools.compat import importlib_resources
 from domdf_python_tools.paths import PathPlus
 from natsort import natsorted
+from shippinglabel import normalize
 from shippinglabel.requirements import ComparableRequirement, combine_requirements
 
 # this package
@@ -324,7 +325,7 @@ def make_setup(repo_path: pathlib.Path, templates: jinja2.Environment) -> List[s
 		data = copy.deepcopy(setup_py_defaults)
 		data["description"] = repr(templates.globals["short_desc"])
 		data["py_modules"] = templates.globals["py_modules"]
-		data["name"] = f"{templates.globals['modname']!r}"  # TODO: remove once GitHub dependency graph fixed
+		data["name"] = f"{normalize(templates.globals['modname'])!r}"  # TODO: remove once GitHub dependency graph fixed
 
 		if templates.globals["desktopfile"]:
 			data["data_files"] = "[('share/applications', ['{modname}.desktop'])]".format_map(templates.globals)
