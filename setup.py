@@ -21,6 +21,7 @@ setup(
 		description="A tool to manage configuration files, build scripts etc. across multiple projects.",
 		extras_require=extras_require,
 		install_requires=install_requires,
+		name="repo_helper",
 		py_modules=[],
 		version=__version__,
 		)
