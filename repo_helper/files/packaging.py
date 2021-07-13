@@ -461,6 +461,7 @@ class SetupCfgConfig(IniConfigurator):
 		self._ini["mypy"]["namespace_packages"] = True
 		self._ini["mypy"]["check_untyped_defs"] = True
 		self._ini["mypy"]["warn_unused_ignores"] = True
+		self._ini["mypy"]["no_implicit_optional"] = True
 		if self["mypy_plugins"]:
 			self._ini["mypy"]["plugins"] = ", ".join(self["mypy_plugins"])
 
