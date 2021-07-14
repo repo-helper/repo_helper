@@ -105,7 +105,7 @@ def test_ensure_doc_requirements(tmp_pathplus, demo_environment):
 	assert (tmp_pathplus / managed_files[0]).read_lines() == [
 			"alabaster>=0.7.12",
 			"autodocsumm>=0.2.0",
-			"default-values>=0.4.2",
+			"default-values>=0.5.0",
 			"extras-require>=0.2.0",
 			"seed-intersphinx-mapping>=0.3.1",
 			"sphinx>=3.0.3",
@@ -115,9 +115,9 @@ def test_ensure_doc_requirements(tmp_pathplus, demo_environment):
 			"sphinx-prompt>=1.1.0",
 			"sphinx-pyproject>=0.1.0",
 			"sphinx-tabs>=1.1.13",
-			"sphinx-toolbox>=2.10.0",
+			"sphinx-toolbox>=2.13.0",
 			"sphinxemoji>=0.1.6",
-			"toctree-plus>=0.1.0",
+			"toctree-plus>=0.5.0",
 			'',
 			]
 
@@ -130,7 +130,7 @@ def test_ensure_doc_requirements(tmp_pathplus, demo_environment):
 	assert (tmp_pathplus / managed_files[0]).read_lines() == [
 			"alabaster>=0.7.12",
 			"autodocsumm>=0.2.0",
-			"default-values>=0.4.2",
+			"default-values>=0.5.0",
 			"extras-require>=0.2.0",
 			"lorem>=0.1.1",
 			"seed-intersphinx-mapping>=0.3.1",
@@ -141,9 +141,9 @@ def test_ensure_doc_requirements(tmp_pathplus, demo_environment):
 			"sphinx-prompt>=1.1.0",
 			"sphinx-pyproject>=0.1.0",
 			"sphinx-tabs>=1.1.13",
-			"sphinx-toolbox>=2.10.0",
+			"sphinx-toolbox>=2.13.0",
 			"sphinxemoji>=0.1.6",
-			"toctree-plus>=0.1.0",
+			"toctree-plus>=0.5.0",
 			'',
 			]
 

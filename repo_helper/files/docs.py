@@ -129,9 +129,9 @@ class DocRequirementsManager(RequirementsManager):
 		my_sphinx_extensions = {
 				"extras-require": ">=0.2.0",
 				"seed-intersphinx-mapping": ">=0.3.1",
-				"default-values": ">=0.4.2",
-				"toctree-plus": ">=0.1.0",
-				"sphinx-toolbox": ">=2.10.0",
+				"default-values": ">=0.5.0",
+				"toctree-plus": ">=0.5.0",
+				"sphinx-toolbox": ">=2.13.0",
 				"sphinx-debuginfo": ">=0.1.0",
 				}
 
