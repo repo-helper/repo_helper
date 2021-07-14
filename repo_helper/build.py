@@ -24,28 +24,22 @@
 #
 
 # stdlib
-import configparser
 import os
 import pathlib
 import posixpath
 import re
 import shutil
-import sys
 import tarfile
 import tempfile
+import warnings
 from datetime import datetime
 from email.message import EmailMessage
 from functools import partial
-from io import StringIO
-from subprocess import PIPE, Popen
-from textwrap import dedent, indent
 from typing import Iterator, Optional
-from zipfile import ZipFile
 
 # 3rd party
 import click
 from consolekit.terminal_colours import Fore, resolve_color_default
-from consolekit.utils import abort
 from domdf_python_tools.paths import PathPlus, traverse_to_file
 from domdf_python_tools.typing import PathLike
 from domdf_python_tools.utils import divide
@@ -87,6 +81,11 @@ class Builder(WheelBuilder):
 			verbose: bool = False,
 			colour: bool = None,
 			):
+
+		warnings.warn(
+				"'repo_helper.builder' is deprecated. Please switch to 'whey' and 'whey-conda'.",
+				DeprecationWarning,
+				)
 
 		# Walk up the tree until a "repo_helper.yml" or "git_helper.yml" (old name) file is found.
 		#: The repository
@@ -195,7 +194,7 @@ class Builder(WheelBuilder):
 
 		super().write_entry_points()
 
-	def write_license(self, dest_dir: PathPlus):
+	def write_license(self, dest_dir: PathPlus, dest_filename: str = "LICENSE"):
 		"""
 		Copy the any files matching ``LICEN[CS]E``.
 

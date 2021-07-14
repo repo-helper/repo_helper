@@ -88,7 +88,6 @@ class imgbot_ignore(ConfigVar):  # noqa
 	default: List[str] = []
 
 
-
 class exclude_files(ConfigVar):  # noqa
 	"""
 	A list of files not to manage with `repo_helper`.
