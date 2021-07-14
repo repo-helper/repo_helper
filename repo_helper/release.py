@@ -28,7 +28,7 @@ Functions for making tagged releases.
 # stdlib
 import os
 from datetime import date
-from typing import Dict, Optional
+from typing import Any, Dict, Iterable, Optional
 
 # 3rd party
 import click
@@ -36,8 +36,8 @@ from consolekit.terminal_colours import Fore
 from consolekit.utils import abort
 from domdf_python_tools.paths import PathPlus, traverse_to_file
 from domdf_python_tools.typing import PathLike
-from domdf_python_tools.versions import Version
 from dulwich.porcelain import tag_create
+from packaging.version import Version
 from southwark import assert_clean
 from southwark.repo import Repo
 from typing_extensions import TypedDict
@@ -49,6 +49,40 @@ from repo_helper.core import RepoHelper
 from repo_helper.files.ci_cd import get_bumpversion_filenames
 
 __all__ = ["Bumper", "BumpversionFileConfig"]
+
+
+class _Version(Version):
+
+	@classmethod
+	def from_parts(
+			cls,
+			release: Iterable,
+			pre: Optional[Iterable] = None,
+			post: Optional[Any] = None,
+			dev: Optional[Any] = None,
+			local: Optional[Any] = None
+			) -> Version:
+
+		# Release segment
+		parts = ['.'.join(str(x) for x in release)]
+
+		# Pre-release
+		if pre is not None:
+			parts.append(''.join(str(x) for x in pre))
+
+		# Post-release
+		if post is not None:
+			parts.append(f".post{post}")
+
+		# Development release
+		if dev is not None:
+			parts.append(f".dev{dev}")
+
+		# Local version segment
+		if local is not None:
+			parts.append(f"+{local}")
+
+		return cls(''.join(parts))
 
 
 class BumpversionFileConfig(TypedDict):
@@ -99,7 +133,7 @@ class Bumper:
 		:param message: The commit message.
 		"""
 
-		new_version = Version(self.current_version.major + 1, 0, 0)
+		new_version = _Version.from_parts((self.current_version.major + 1, 0, 0))
 		self.bump(new_version, commit, message)
 
 	def minor(self, commit: Optional[bool], message: str):
@@ -110,7 +144,7 @@ class Bumper:
 		:param message: The commit message.
 		"""
 
-		new_version = Version(self.current_version.major, self.current_version.minor + 1, 0)
+		new_version = _Version.from_parts((self.current_version.major, self.current_version.minor + 1, 0))
 		self.bump(new_version, commit, message)
 
 	def patch(self, commit: Optional[bool], message: str):
@@ -121,11 +155,11 @@ class Bumper:
 		:param message: The commit message.
 		"""
 
-		new_version = Version(
+		new_version = _Version.from_parts((
 				self.current_version.major,
 				self.current_version.minor,
-				self.current_version.patch + 1,
-				)
+				self.current_version.micro + 1,
+				))
 		self.bump(new_version, commit, message)
 
 	def today(self, commit: Optional[bool], message: str):
@@ -139,7 +173,7 @@ class Bumper:
 		"""
 
 		today = date.today()
-		new_version = Version(today.year, today.month, today.day)
+		new_version = _Version.from_parts((today.year, today.month, today.day))
 		self.bump(new_version, commit, message)
 
 	def bump(self, new_version: Version, commit: Optional[bool], message: str):
@@ -149,16 +183,21 @@ class Bumper:
 		:param new_version:
 		:param commit: Whether to commit automatically (:py:obj:`True`) or ask first (:py:obj:`None`).
 		:param message: The commit message.
+
+		.. versionchanged:: $VERSION
+
+			Now takes a :class:`packaging.version.Version` rather than a
+			:class:`domdf_python_tools.versions.Version`.
 		"""
 
-		new_version_str = str(new_version)[1:]
+		new_version_str = str(new_version)
 
 		dulwich_repo = Repo(self.repo.target_repo)
 
 		if f"v{new_version_str}".encode("UTF-8") in dulwich_repo.refs.as_dict(b"refs/tags"):
 			raise abort(f"The tag 'v{new_version_str}' already exists!")
 
-		bumpversion_config = self.get_bumpversion_config(str(self.current_version)[1:], new_version_str)
+		bumpversion_config = self.get_bumpversion_config(str(self.current_version), new_version_str)
 
 		changed_files = [self.bumpversion_file.relative_to(self.repo.target_repo).as_posix()]
 
@@ -194,7 +233,7 @@ class Bumper:
 		Returns the current version from the ``repo_helper.yml`` configuration file.
 		"""
 
-		return Version.from_str(self.repo.templates.globals["version"])
+		return Version(self.repo.templates.globals["version"])
 
 	def get_bumpversion_config(
 			self,
