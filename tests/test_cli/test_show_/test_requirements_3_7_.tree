@@ -10,8 +10,8 @@ repo_helper==2020.12.18
 │   ├── idna>=2.5
 │   └── requests>=2.24.0
 │       ├── certifi>=2017.4.17
-│       ├── chardet<5,>=3.0.2
-│       ├── idna<3,>=2.5
+│       ├── charset-normalizer~=2.0.0; python_version >= "3"
+│       ├── idna<4,>=2.5; python_version >= "3"
 │       └── urllib3<1.27,>=1.21.1
 ├── attrs>=20.2.0
 ├── click==7.1.2
@@ -130,8 +130,8 @@ repo_helper==2020.12.18
 │   │   │   ├── idna>=2.5
 │   │   │   └── requests>=2.24.0
 │   │   │       ├── certifi>=2017.4.17
-│   │   │       ├── chardet<5,>=3.0.2
-│   │   │       ├── idna<3,>=2.5
+│   │   │       ├── charset-normalizer~=2.0.0; python_version >= "3"
+│   │   │       ├── idna<4,>=2.5; python_version >= "3"
 │   │   │       └── urllib3<1.27,>=1.21.1
 │   │   ├── attr-utils>=0.5.6
 │   │   │   ├── attrs>=19.3.0
@@ -162,7 +162,7 @@ repo_helper==2020.12.18
 │   │   ├── packaging>=20.9
 │   │   │   └── pyparsing>=2.0.2
 │   │   ├── shippinglabel>=0.10.0
-│   │   │   ├── apeye>=0.7.0
+│   │   │   ├── apeye>=1.0.0
 │   │   │   │   ├── appdirs>=1.4.4
 │   │   │   │   ├── domdf-python-tools>=2.3.0
 │   │   │   │   │   ├── importlib-metadata>=3.6.0; python_version < "3.9"
@@ -173,18 +173,26 @@ repo_helper==2020.12.18
 │   │   │   │   ├── idna>=2.5
 │   │   │   │   └── requests>=2.24.0
 │   │   │   │       ├── certifi>=2017.4.17
-│   │   │   │       ├── chardet<5,>=3.0.2
-│   │   │   │       ├── idna<3,>=2.5
+│   │   │   │       ├── charset-normalizer~=2.0.0; python_version >= "3"
+│   │   │   │       ├── idna<4,>=2.5; python_version >= "3"
 │   │   │   │       └── urllib3<1.27,>=1.21.1
 │   │   │   ├── appdirs>=1.4.4
-│   │   │   ├── cawdrey>=0.4.1
-│   │   │   │   ├── domdf-python-tools>=1.1.0
+│   │   │   ├── dist-meta>=0.1.2
+│   │   │   │   ├── domdf-python-tools>=3.1.0
 │   │   │   │   │   ├── importlib-metadata>=3.6.0; python_version < "3.9"
 │   │   │   │   │   │   ├── typing-extensions>=3.6.4; python_version < "3.8"
 │   │   │   │   │   │   └── zipp>=0.5
 │   │   │   │   │   ├── natsort>=7.0.1
 │   │   │   │   │   └── typing-extensions>=3.7.4.1
-│   │   │   │   └── typing-extensions>=3.7.4.3
+│   │   │   │   ├── handy-archives>=0.1.0
+│   │   │   │   │   └── domdf-python-tools>=3.1.0
+│   │   │   │   │       ├── importlib-metadata>=3.6.0; python_version < "3.9"
+│   │   │   │   │       │   ├── typing-extensions>=3.6.4; python_version < "3.8"
+│   │   │   │   │       │   └── zipp>=0.5
+│   │   │   │   │       ├── natsort>=7.0.1
+│   │   │   │   │       └── typing-extensions>=3.7.4.1
+│   │   │   │   └── packaging>=20.9
+│   │   │   │       └── pyparsing>=2.0.2
 │   │   │   ├── dom-toml>=0.2.2
 │   │   │   │   ├── domdf-python-tools>=2.7.0
 │   │   │   │   │   ├── importlib-metadata>=3.6.0; python_version < "3.9"
@@ -193,7 +201,7 @@ repo_helper==2020.12.18
 │   │   │   │   │   ├── natsort>=7.0.1
 │   │   │   │   │   └── typing-extensions>=3.7.4.1
 │   │   │   │   └── toml>=0.10.2
-│   │   │   ├── domdf-python-tools>=2.8.0
+│   │   │   ├── domdf-python-tools>=3.1.0
 │   │   │   │   ├── importlib-metadata>=3.6.0; python_version < "3.9"
 │   │   │   │   │   ├── typing-extensions>=3.6.4; python_version < "3.8"
 │   │   │   │   │   └── zipp>=0.5
@@ -202,12 +210,11 @@ repo_helper==2020.12.18
 │   │   │   ├── packaging>=20.9
 │   │   │   │   └── pyparsing>=2.0.2
 │   │   │   ├── trove-classifiers>=2020.10.21
-│   │   │   ├── typing-extensions>=3.7.4.3
-│   │   │   └── wheel-filename>=1.2.0
+│   │   │   └── typing-extensions>=3.7.4.3
 │   │   ├── toml>=0.10.2
 │   │   └── typing-extensions>=3.7.4.3
 │   ├── shippinglabel>=0.13.0
-│   │   ├── apeye>=0.7.0
+│   │   ├── apeye>=1.0.0
 │   │   │   ├── appdirs>=1.4.4
 │   │   │   ├── domdf-python-tools>=2.3.0
 │   │   │   │   ├── importlib-metadata>=3.6.0; python_version < "3.9"
@@ -218,18 +225,26 @@ repo_helper==2020.12.18
 │   │   │   ├── idna>=2.5
 │   │   │   └── requests>=2.24.0
 │   │   │       ├── certifi>=2017.4.17
-│   │   │       ├── chardet<5,>=3.0.2
-│   │   │       ├── idna<3,>=2.5
+│   │   │       ├── charset-normalizer~=2.0.0; python_version >= "3"
+│   │   │       ├── idna<4,>=2.5; python_version >= "3"
 │   │   │       └── urllib3<1.27,>=1.21.1
 │   │   ├── appdirs>=1.4.4
-│   │   ├── cawdrey>=0.4.1
-│   │   │   ├── domdf-python-tools>=1.1.0
+│   │   ├── dist-meta>=0.1.2
+│   │   │   ├── domdf-python-tools>=3.1.0
 │   │   │   │   ├── importlib-metadata>=3.6.0; python_version < "3.9"
 │   │   │   │   │   ├── typing-extensions>=3.6.4; python_version < "3.8"
 │   │   │   │   │   └── zipp>=0.5
 │   │   │   │   ├── natsort>=7.0.1
 │   │   │   │   └── typing-extensions>=3.7.4.1
-│   │   │   └── typing-extensions>=3.7.4.3
+│   │   │   ├── handy-archives>=0.1.0
+│   │   │   │   └── domdf-python-tools>=3.1.0
+│   │   │   │       ├── importlib-metadata>=3.6.0; python_version < "3.9"
+│   │   │   │       │   ├── typing-extensions>=3.6.4; python_version < "3.8"
+│   │   │   │       │   └── zipp>=0.5
+│   │   │   │       ├── natsort>=7.0.1
+│   │   │   │       └── typing-extensions>=3.7.4.1
+│   │   │   └── packaging>=20.9
+│   │   │       └── pyparsing>=2.0.2
 │   │   ├── dom-toml>=0.2.2
 │   │   │   ├── domdf-python-tools>=2.7.0
 │   │   │   │   ├── importlib-metadata>=3.6.0; python_version < "3.9"
@@ -238,7 +253,7 @@ repo_helper==2020.12.18
 │   │   │   │   ├── natsort>=7.0.1
 │   │   │   │   └── typing-extensions>=3.7.4.1
 │   │   │   └── toml>=0.10.2
-│   │   ├── domdf-python-tools>=2.8.0
+│   │   ├── domdf-python-tools>=3.1.0
 │   │   │   ├── importlib-metadata>=3.6.0; python_version < "3.9"
 │   │   │   │   ├── typing-extensions>=3.6.4; python_version < "3.8"
 │   │   │   │   └── zipp>=0.5
@@ -247,8 +262,7 @@ repo_helper==2020.12.18
 │   │   ├── packaging>=20.9
 │   │   │   └── pyparsing>=2.0.2
 │   │   ├── trove-classifiers>=2020.10.21
-│   │   ├── typing-extensions>=3.7.4.3
-│   │   └── wheel-filename>=1.2.0
+│   │   └── typing-extensions>=3.7.4.3
 │   ├── typing-extensions>=3.7.4.3
 │   └── whey>=0.0.12
 │       ├── click>=7.1.2
@@ -298,8 +312,8 @@ repo_helper==2020.12.18
 │       │   │   ├── idna>=2.5
 │       │   │   └── requests>=2.24.0
 │       │   │       ├── certifi>=2017.4.17
-│       │   │       ├── chardet<5,>=3.0.2
-│       │   │       ├── idna<3,>=2.5
+│       │   │       ├── charset-normalizer~=2.0.0; python_version >= "3"
+│       │   │       ├── idna<4,>=2.5; python_version >= "3"
 │       │   │       └── urllib3<1.27,>=1.21.1
 │       │   ├── attr-utils>=0.5.6
 │       │   │   ├── attrs>=19.3.0
@@ -330,7 +344,7 @@ repo_helper==2020.12.18
 │       │   ├── packaging>=20.9
 │       │   │   └── pyparsing>=2.0.2
 │       │   ├── shippinglabel>=0.10.0
-│       │   │   ├── apeye>=0.7.0
+│       │   │   ├── apeye>=1.0.0
 │       │   │   │   ├── appdirs>=1.4.4
 │       │   │   │   ├── domdf-python-tools>=2.3.0
 │       │   │   │   │   ├── importlib-metadata>=3.6.0; python_version < "3.9"
@@ -341,18 +355,26 @@ repo_helper==2020.12.18
 │       │   │   │   ├── idna>=2.5
 │       │   │   │   └── requests>=2.24.0
 │       │   │   │       ├── certifi>=2017.4.17
-│       │   │   │       ├── chardet<5,>=3.0.2
-│       │   │   │       ├── idna<3,>=2.5
+│       │   │   │       ├── charset-normalizer~=2.0.0; python_version >= "3"
+│       │   │   │       ├── idna<4,>=2.5; python_version >= "3"
 │       │   │   │       └── urllib3<1.27,>=1.21.1
 │       │   │   ├── appdirs>=1.4.4
-│       │   │   ├── cawdrey>=0.4.1
-│       │   │   │   ├── domdf-python-tools>=1.1.0
+│       │   │   ├── dist-meta>=0.1.2
+│       │   │   │   ├── domdf-python-tools>=3.1.0
 │       │   │   │   │   ├── importlib-metadata>=3.6.0; python_version < "3.9"
 │       │   │   │   │   │   ├── typing-extensions>=3.6.4; python_version < "3.8"
 │       │   │   │   │   │   └── zipp>=0.5
 │       │   │   │   │   ├── natsort>=7.0.1
 │       │   │   │   │   └── typing-extensions>=3.7.4.1
-│       │   │   │   └── typing-extensions>=3.7.4.3
+│       │   │   │   ├── handy-archives>=0.1.0
+│       │   │   │   │   └── domdf-python-tools>=3.1.0
+│       │   │   │   │       ├── importlib-metadata>=3.6.0; python_version < "3.9"
+│       │   │   │   │       │   ├── typing-extensions>=3.6.4; python_version < "3.8"
+│       │   │   │   │       │   └── zipp>=0.5
+│       │   │   │   │       ├── natsort>=7.0.1
+│       │   │   │   │       └── typing-extensions>=3.7.4.1
+│       │   │   │   └── packaging>=20.9
+│       │   │   │       └── pyparsing>=2.0.2
 │       │   │   ├── dom-toml>=0.2.2
 │       │   │   │   ├── domdf-python-tools>=2.7.0
 │       │   │   │   │   ├── importlib-metadata>=3.6.0; python_version < "3.9"
@@ -361,7 +383,7 @@ repo_helper==2020.12.18
 │       │   │   │   │   ├── natsort>=7.0.1
 │       │   │   │   │   └── typing-extensions>=3.7.4.1
 │       │   │   │   └── toml>=0.10.2
-│       │   │   ├── domdf-python-tools>=2.8.0
+│       │   │   ├── domdf-python-tools>=3.1.0
 │       │   │   │   ├── importlib-metadata>=3.6.0; python_version < "3.9"
 │       │   │   │   │   ├── typing-extensions>=3.6.4; python_version < "3.8"
 │       │   │   │   │   └── zipp>=0.5
@@ -370,12 +392,11 @@ repo_helper==2020.12.18
 │       │   │   ├── packaging>=20.9
 │       │   │   │   └── pyparsing>=2.0.2
 │       │   │   ├── trove-classifiers>=2020.10.21
-│       │   │   ├── typing-extensions>=3.7.4.3
-│       │   │   └── wheel-filename>=1.2.0
+│       │   │   └── typing-extensions>=3.7.4.3
 │       │   ├── toml>=0.10.2
 │       │   └── typing-extensions>=3.7.4.3
 │       └── shippinglabel>=0.16.0
-│           ├── apeye>=0.7.0
+│           ├── apeye>=1.0.0
 │           │   ├── appdirs>=1.4.4
 │           │   ├── domdf-python-tools>=2.3.0
 │           │   │   ├── importlib-metadata>=3.6.0; python_version < "3.9"
@@ -386,18 +407,26 @@ repo_helper==2020.12.18
 │           │   ├── idna>=2.5
 │           │   └── requests>=2.24.0
 │           │       ├── certifi>=2017.4.17
-│           │       ├── chardet<5,>=3.0.2
-│           │       ├── idna<3,>=2.5
+│           │       ├── charset-normalizer~=2.0.0; python_version >= "3"
+│           │       ├── idna<4,>=2.5; python_version >= "3"
 │           │       └── urllib3<1.27,>=1.21.1
 │           ├── appdirs>=1.4.4
-│           ├── cawdrey>=0.4.1
-│           │   ├── domdf-python-tools>=1.1.0
+│           ├── dist-meta>=0.1.2
+│           │   ├── domdf-python-tools>=3.1.0
 │           │   │   ├── importlib-metadata>=3.6.0; python_version < "3.9"
 │           │   │   │   ├── typing-extensions>=3.6.4; python_version < "3.8"
 │           │   │   │   └── zipp>=0.5
 │           │   │   ├── natsort>=7.0.1
 │           │   │   └── typing-extensions>=3.7.4.1
-│           │   └── typing-extensions>=3.7.4.3
+│           │   ├── handy-archives>=0.1.0
+│           │   │   └── domdf-python-tools>=3.1.0
+│           │   │       ├── importlib-metadata>=3.6.0; python_version < "3.9"
+│           │   │       │   ├── typing-extensions>=3.6.4; python_version < "3.8"
+│           │   │       │   └── zipp>=0.5
+│           │   │       ├── natsort>=7.0.1
+│           │   │       └── typing-extensions>=3.7.4.1
+│           │   └── packaging>=20.9
+│           │       └── pyparsing>=2.0.2
 │           ├── dom-toml>=0.2.2
 │           │   ├── domdf-python-tools>=2.7.0
 │           │   │   ├── importlib-metadata>=3.6.0; python_version < "3.9"
@@ -406,7 +435,7 @@ repo_helper==2020.12.18
 │           │   │   ├── natsort>=7.0.1
 │           │   │   └── typing-extensions>=3.7.4.1
 │           │   └── toml>=0.10.2
-│           ├── domdf-python-tools>=2.8.0
+│           ├── domdf-python-tools>=3.1.0
 │           │   ├── importlib-metadata>=3.6.0; python_version < "3.9"
 │           │   │   ├── typing-extensions>=3.6.4; python_version < "3.8"
 │           │   │   └── zipp>=0.5
@@ -415,15 +444,14 @@ repo_helper==2020.12.18
 │           ├── packaging>=20.9
 │           │   └── pyparsing>=2.0.2
 │           ├── trove-classifiers>=2020.10.21
-│           ├── typing-extensions>=3.7.4.3
-│           └── wheel-filename>=1.2.0
+│           └── typing-extensions>=3.7.4.3
 ├── natsort>=7.0.1
 ├── packaging>=20.4
 │   └── pyparsing>=2.0.2
 ├── ruamel-yaml>=0.17.4
 │   └── ruamel.yaml.clib>=0.1.2; platform_python_implementation == "CPython" and python_version < "3.10"
 ├── shippinglabel>=0.8.2
-│   ├── apeye>=0.7.0
+│   ├── apeye>=1.0.0
 │   │   ├── appdirs>=1.4.4
 │   │   ├── domdf-python-tools>=2.3.0
 │   │   │   ├── importlib-metadata>=3.6.0; python_version < "3.9"
@@ -434,18 +462,26 @@ repo_helper==2020.12.18
 │   │   ├── idna>=2.5
 │   │   └── requests>=2.24.0
 │   │       ├── certifi>=2017.4.17
-│   │       ├── chardet<5,>=3.0.2
-│   │       ├── idna<3,>=2.5
+│   │       ├── charset-normalizer~=2.0.0; python_version >= "3"
+│   │       ├── idna<4,>=2.5; python_version >= "3"
 │   │       └── urllib3<1.27,>=1.21.1
 │   ├── appdirs>=1.4.4
-│   ├── cawdrey>=0.4.1
-│   │   ├── domdf-python-tools>=1.1.0
+│   ├── dist-meta>=0.1.2
+│   │   ├── domdf-python-tools>=3.1.0
 │   │   │   ├── importlib-metadata>=3.6.0; python_version < "3.9"
 │   │   │   │   ├── typing-extensions>=3.6.4; python_version < "3.8"
 │   │   │   │   └── zipp>=0.5
 │   │   │   ├── natsort>=7.0.1
 │   │   │   └── typing-extensions>=3.7.4.1
-│   │   └── typing-extensions>=3.7.4.3
+│   │   ├── handy-archives>=0.1.0
+│   │   │   └── domdf-python-tools>=3.1.0
+│   │   │       ├── importlib-metadata>=3.6.0; python_version < "3.9"
+│   │   │       │   ├── typing-extensions>=3.6.4; python_version < "3.8"
+│   │   │       │   └── zipp>=0.5
+│   │   │       ├── natsort>=7.0.1
+│   │   │       └── typing-extensions>=3.7.4.1
+│   │   └── packaging>=20.9
+│   │       └── pyparsing>=2.0.2
 │   ├── dom-toml>=0.2.2
 │   │   ├── domdf-python-tools>=2.7.0
 │   │   │   ├── importlib-metadata>=3.6.0; python_version < "3.9"
@@ -454,7 +490,7 @@ repo_helper==2020.12.18
 │   │   │   ├── natsort>=7.0.1
 │   │   │   └── typing-extensions>=3.7.4.1
 │   │   └── toml>=0.10.2
-│   ├── domdf-python-tools>=2.8.0
+│   ├── domdf-python-tools>=3.1.0
 │   │   ├── importlib-metadata>=3.6.0; python_version < "3.9"
 │   │   │   ├── typing-extensions>=3.6.4; python_version < "3.8"
 │   │   │   └── zipp>=0.5
@@ -463,8 +499,7 @@ repo_helper==2020.12.18
 │   ├── packaging>=20.9
 │   │   └── pyparsing>=2.0.2
 │   ├── trove-classifiers>=2020.10.21
-│   ├── typing-extensions>=3.7.4.3
-│   └── wheel-filename>=1.2.0
+│   └── typing-extensions>=3.7.4.3
 ├── southwark>=0.7.1
 │   ├── click>=7.1.2
 │   ├── consolekit>=0.1.2
@@ -544,8 +579,8 @@ repo_helper==2020.12.18
 │   │   │   ├── idna>=2.5
 │   │   │   └── requests>=2.24.0
 │   │   │       ├── certifi>=2017.4.17
-│   │   │       ├── chardet<5,>=3.0.2
-│   │   │       ├── idna<3,>=2.5
+│   │   │       ├── charset-normalizer~=2.0.0; python_version >= "3"
+│   │   │       ├── idna<4,>=2.5; python_version >= "3"
 │   │   │       └── urllib3<1.27,>=1.21.1
 │   │   ├── attr-utils>=0.5.6
 │   │   │   ├── attrs>=19.3.0
@@ -576,7 +611,7 @@ repo_helper==2020.12.18
 │   │   ├── packaging>=20.9
 │   │   │   └── pyparsing>=2.0.2
 │   │   ├── shippinglabel>=0.10.0
-│   │   │   ├── apeye>=0.7.0
+│   │   │   ├── apeye>=1.0.0
 │   │   │   │   ├── appdirs>=1.4.4
 │   │   │   │   ├── domdf-python-tools>=2.3.0
 │   │   │   │   │   ├── importlib-metadata>=3.6.0; python_version < "3.9"
@@ -587,18 +622,26 @@ repo_helper==2020.12.18
 │   │   │   │   ├── idna>=2.5
 │   │   │   │   └── requests>=2.24.0
 │   │   │   │       ├── certifi>=2017.4.17
-│   │   │   │       ├── chardet<5,>=3.0.2
-│   │   │   │       ├── idna<3,>=2.5
+│   │   │   │       ├── charset-normalizer~=2.0.0; python_version >= "3"
+│   │   │   │       ├── idna<4,>=2.5; python_version >= "3"
 │   │   │   │       └── urllib3<1.27,>=1.21.1
 │   │   │   ├── appdirs>=1.4.4
-│   │   │   ├── cawdrey>=0.4.1
-│   │   │   │   ├── domdf-python-tools>=1.1.0
+│   │   │   ├── dist-meta>=0.1.2
+│   │   │   │   ├── domdf-python-tools>=3.1.0
 │   │   │   │   │   ├── importlib-metadata>=3.6.0; python_version < "3.9"
 │   │   │   │   │   │   ├── typing-extensions>=3.6.4; python_version < "3.8"
 │   │   │   │   │   │   └── zipp>=0.5
 │   │   │   │   │   ├── natsort>=7.0.1
 │   │   │   │   │   └── typing-extensions>=3.7.4.1
-│   │   │   │   └── typing-extensions>=3.7.4.3
+│   │   │   │   ├── handy-archives>=0.1.0
+│   │   │   │   │   └── domdf-python-tools>=3.1.0
+│   │   │   │   │       ├── importlib-metadata>=3.6.0; python_version < "3.9"
+│   │   │   │   │       │   ├── typing-extensions>=3.6.4; python_version < "3.8"
+│   │   │   │   │       │   └── zipp>=0.5
+│   │   │   │   │       ├── natsort>=7.0.1
+│   │   │   │   │       └── typing-extensions>=3.7.4.1
+│   │   │   │   └── packaging>=20.9
+│   │   │   │       └── pyparsing>=2.0.2
 │   │   │   ├── dom-toml>=0.2.2
 │   │   │   │   ├── domdf-python-tools>=2.7.0
 │   │   │   │   │   ├── importlib-metadata>=3.6.0; python_version < "3.9"
@@ -607,7 +650,7 @@ repo_helper==2020.12.18
 │   │   │   │   │   ├── natsort>=7.0.1
 │   │   │   │   │   └── typing-extensions>=3.7.4.1
 │   │   │   │   └── toml>=0.10.2
-│   │   │   ├── domdf-python-tools>=2.8.0
+│   │   │   ├── domdf-python-tools>=3.1.0
 │   │   │   │   ├── importlib-metadata>=3.6.0; python_version < "3.9"
 │   │   │   │   │   ├── typing-extensions>=3.6.4; python_version < "3.8"
 │   │   │   │   │   └── zipp>=0.5
@@ -616,12 +659,11 @@ repo_helper==2020.12.18
 │   │   │   ├── packaging>=20.9
 │   │   │   │   └── pyparsing>=2.0.2
 │   │   │   ├── trove-classifiers>=2020.10.21
-│   │   │   ├── typing-extensions>=3.7.4.3
-│   │   │   └── wheel-filename>=1.2.0
+│   │   │   └── typing-extensions>=3.7.4.3
 │   │   ├── toml>=0.10.2
 │   │   └── typing-extensions>=3.7.4.3
 │   └── shippinglabel>=0.16.0
-│       ├── apeye>=0.7.0
+│       ├── apeye>=1.0.0
 │       │   ├── appdirs>=1.4.4
 │       │   ├── domdf-python-tools>=2.3.0
 │       │   │   ├── importlib-metadata>=3.6.0; python_version < "3.9"
@@ -632,18 +674,26 @@ repo_helper==2020.12.18
 │       │   ├── idna>=2.5
 │       │   └── requests>=2.24.0
 │       │       ├── certifi>=2017.4.17
-│       │       ├── chardet<5,>=3.0.2
-│       │       ├── idna<3,>=2.5
+│       │       ├── charset-normalizer~=2.0.0; python_version >= "3"
+│       │       ├── idna<4,>=2.5; python_version >= "3"
 │       │       └── urllib3<1.27,>=1.21.1
 │       ├── appdirs>=1.4.4
-│       ├── cawdrey>=0.4.1
-│       │   ├── domdf-python-tools>=1.1.0
+│       ├── dist-meta>=0.1.2
+│       │   ├── domdf-python-tools>=3.1.0
 │       │   │   ├── importlib-metadata>=3.6.0; python_version < "3.9"
 │       │   │   │   ├── typing-extensions>=3.6.4; python_version < "3.8"
 │       │   │   │   └── zipp>=0.5
 │       │   │   ├── natsort>=7.0.1
 │       │   │   └── typing-extensions>=3.7.4.1
-│       │   └── typing-extensions>=3.7.4.3
+│       │   ├── handy-archives>=0.1.0
+│       │   │   └── domdf-python-tools>=3.1.0
+│       │   │       ├── importlib-metadata>=3.6.0; python_version < "3.9"
+│       │   │       │   ├── typing-extensions>=3.6.4; python_version < "3.8"
+│       │   │       │   └── zipp>=0.5
+│       │   │       ├── natsort>=7.0.1
+│       │   │       └── typing-extensions>=3.7.4.1
+│       │   └── packaging>=20.9
+│       │       └── pyparsing>=2.0.2
 │       ├── dom-toml>=0.2.2
 │       │   ├── domdf-python-tools>=2.7.0
 │       │   │   ├── importlib-metadata>=3.6.0; python_version < "3.9"
@@ -652,7 +702,7 @@ repo_helper==2020.12.18
 │       │   │   ├── natsort>=7.0.1
 │       │   │   └── typing-extensions>=3.7.4.1
 │       │   └── toml>=0.10.2
-│       ├── domdf-python-tools>=2.8.0
+│       ├── domdf-python-tools>=3.1.0
 │       │   ├── importlib-metadata>=3.6.0; python_version < "3.9"
 │       │   │   ├── typing-extensions>=3.6.4; python_version < "3.8"
 │       │   │   └── zipp>=0.5
@@ -661,8 +711,7 @@ repo_helper==2020.12.18
 │       ├── packaging>=20.9
 │       │   └── pyparsing>=2.0.2
 │       ├── trove-classifiers>=2020.10.21
-│       ├── typing-extensions>=3.7.4.3
-│       └── wheel-filename>=1.2.0
+│       └── typing-extensions>=3.7.4.3
 ├── whey-conda>=0.1.2
 │   ├── click>=7.1.2
 │   ├── consolekit>=1.2.1
@@ -744,8 +793,8 @@ repo_helper==2020.12.18
 │   │   │   │   ├── idna>=2.5
 │   │   │   │   └── requests>=2.24.0
 │   │   │   │       ├── certifi>=2017.4.17
-│   │   │   │       ├── chardet<5,>=3.0.2
-│   │   │   │       ├── idna<3,>=2.5
+│   │   │   │       ├── charset-normalizer~=2.0.0; python_version >= "3"
+│   │   │   │       ├── idna<4,>=2.5; python_version >= "3"
 │   │   │   │       └── urllib3<1.27,>=1.21.1
 │   │   │   ├── attr-utils>=0.5.6
 │   │   │   │   ├── attrs>=19.3.0
@@ -776,7 +825,7 @@ repo_helper==2020.12.18
 │   │   │   ├── packaging>=20.9
 │   │   │   │   └── pyparsing>=2.0.2
 │   │   │   ├── shippinglabel>=0.10.0
-│   │   │   │   ├── apeye>=0.7.0
+│   │   │   │   ├── apeye>=1.0.0
 │   │   │   │   │   ├── appdirs>=1.4.4
 │   │   │   │   │   ├── domdf-python-tools>=2.3.0
 │   │   │   │   │   │   ├── importlib-metadata>=3.6.0; python_version < "3.9"
@@ -787,18 +836,26 @@ repo_helper==2020.12.18
 │   │   │   │   │   ├── idna>=2.5
 │   │   │   │   │   └── requests>=2.24.0
 │   │   │   │   │       ├── certifi>=2017.4.17
-│   │   │   │   │       ├── chardet<5,>=3.0.2
-│   │   │   │   │       ├── idna<3,>=2.5
+│   │   │   │   │       ├── charset-normalizer~=2.0.0; python_version >= "3"
+│   │   │   │   │       ├── idna<4,>=2.5; python_version >= "3"
 │   │   │   │   │       └── urllib3<1.27,>=1.21.1
 │   │   │   │   ├── appdirs>=1.4.4
-│   │   │   │   ├── cawdrey>=0.4.1
-│   │   │   │   │   ├── domdf-python-tools>=1.1.0
+│   │   │   │   ├── dist-meta>=0.1.2
+│   │   │   │   │   ├── domdf-python-tools>=3.1.0
 │   │   │   │   │   │   ├── importlib-metadata>=3.6.0; python_version < "3.9"
 │   │   │   │   │   │   │   ├── typing-extensions>=3.6.4; python_version < "3.8"
 │   │   │   │   │   │   │   └── zipp>=0.5
 │   │   │   │   │   │   ├── natsort>=7.0.1
 │   │   │   │   │   │   └── typing-extensions>=3.7.4.1
-│   │   │   │   │   └── typing-extensions>=3.7.4.3
+│   │   │   │   │   ├── handy-archives>=0.1.0
+│   │   │   │   │   │   └── domdf-python-tools>=3.1.0
+│   │   │   │   │   │       ├── importlib-metadata>=3.6.0; python_version < "3.9"
+│   │   │   │   │   │       │   ├── typing-extensions>=3.6.4; python_version < "3.8"
+│   │   │   │   │   │       │   └── zipp>=0.5
+│   │   │   │   │   │       ├── natsort>=7.0.1
+│   │   │   │   │   │       └── typing-extensions>=3.7.4.1
+│   │   │   │   │   └── packaging>=20.9
+│   │   │   │   │       └── pyparsing>=2.0.2
 │   │   │   │   ├── dom-toml>=0.2.2
 │   │   │   │   │   ├── domdf-python-tools>=2.7.0
 │   │   │   │   │   │   ├── importlib-metadata>=3.6.0; python_version < "3.9"
@@ -807,7 +864,7 @@ repo_helper==2020.12.18
 │   │   │   │   │   │   ├── natsort>=7.0.1
 │   │   │   │   │   │   └── typing-extensions>=3.7.4.1
 │   │   │   │   │   └── toml>=0.10.2
-│   │   │   │   ├── domdf-python-tools>=2.8.0
+│   │   │   │   ├── domdf-python-tools>=3.1.0
 │   │   │   │   │   ├── importlib-metadata>=3.6.0; python_version < "3.9"
 │   │   │   │   │   │   ├── typing-extensions>=3.6.4; python_version < "3.8"
 │   │   │   │   │   │   └── zipp>=0.5
@@ -816,12 +873,11 @@ repo_helper==2020.12.18
 │   │   │   │   ├── packaging>=20.9
 │   │   │   │   │   └── pyparsing>=2.0.2
 │   │   │   │   ├── trove-classifiers>=2020.10.21
-│   │   │   │   ├── typing-extensions>=3.7.4.3
-│   │   │   │   └── wheel-filename>=1.2.0
+│   │   │   │   └── typing-extensions>=3.7.4.3
 │   │   │   ├── toml>=0.10.2
 │   │   │   └── typing-extensions>=3.7.4.3
 │   │   ├── shippinglabel>=0.13.0
-│   │   │   ├── apeye>=0.7.0
+│   │   │   ├── apeye>=1.0.0
 │   │   │   │   ├── appdirs>=1.4.4
 │   │   │   │   ├── domdf-python-tools>=2.3.0
 │   │   │   │   │   ├── importlib-metadata>=3.6.0; python_version < "3.9"
@@ -832,18 +888,26 @@ repo_helper==2020.12.18
 │   │   │   │   ├── idna>=2.5
 │   │   │   │   └── requests>=2.24.0
 │   │   │   │       ├── certifi>=2017.4.17
-│   │   │   │       ├── chardet<5,>=3.0.2
-│   │   │   │       ├── idna<3,>=2.5
+│   │   │   │       ├── charset-normalizer~=2.0.0; python_version >= "3"
+│   │   │   │       ├── idna<4,>=2.5; python_version >= "3"
 │   │   │   │       └── urllib3<1.27,>=1.21.1
 │   │   │   ├── appdirs>=1.4.4
-│   │   │   ├── cawdrey>=0.4.1
-│   │   │   │   ├── domdf-python-tools>=1.1.0
+│   │   │   ├── dist-meta>=0.1.2
+│   │   │   │   ├── domdf-python-tools>=3.1.0
 │   │   │   │   │   ├── importlib-metadata>=3.6.0; python_version < "3.9"
 │   │   │   │   │   │   ├── typing-extensions>=3.6.4; python_version < "3.8"
 │   │   │   │   │   │   └── zipp>=0.5
 │   │   │   │   │   ├── natsort>=7.0.1
 │   │   │   │   │   └── typing-extensions>=3.7.4.1
-│   │   │   │   └── typing-extensions>=3.7.4.3
+│   │   │   │   ├── handy-archives>=0.1.0
+│   │   │   │   │   └── domdf-python-tools>=3.1.0
+│   │   │   │   │       ├── importlib-metadata>=3.6.0; python_version < "3.9"
+│   │   │   │   │       │   ├── typing-extensions>=3.6.4; python_version < "3.8"
+│   │   │   │   │       │   └── zipp>=0.5
+│   │   │   │   │       ├── natsort>=7.0.1
+│   │   │   │   │       └── typing-extensions>=3.7.4.1
+│   │   │   │   └── packaging>=20.9
+│   │   │   │       └── pyparsing>=2.0.2
 │   │   │   ├── dom-toml>=0.2.2
 │   │   │   │   ├── domdf-python-tools>=2.7.0
 │   │   │   │   │   ├── importlib-metadata>=3.6.0; python_version < "3.9"
@@ -852,7 +916,7 @@ repo_helper==2020.12.18
 │   │   │   │   │   ├── natsort>=7.0.1
 │   │   │   │   │   └── typing-extensions>=3.7.4.1
 │   │   │   │   └── toml>=0.10.2
-│   │   │   ├── domdf-python-tools>=2.8.0
+│   │   │   ├── domdf-python-tools>=3.1.0
 │   │   │   │   ├── importlib-metadata>=3.6.0; python_version < "3.9"
 │   │   │   │   │   ├── typing-extensions>=3.6.4; python_version < "3.8"
 │   │   │   │   │   └── zipp>=0.5
@@ -861,8 +925,7 @@ repo_helper==2020.12.18
 │   │   │   ├── packaging>=20.9
 │   │   │   │   └── pyparsing>=2.0.2
 │   │   │   ├── trove-classifiers>=2020.10.21
-│   │   │   ├── typing-extensions>=3.7.4.3
-│   │   │   └── wheel-filename>=1.2.0
+│   │   │   └── typing-extensions>=3.7.4.3
 │   │   ├── typing-extensions>=3.7.4.3
 │   │   └── whey>=0.0.12
 │   │       ├── click>=7.1.2
@@ -912,8 +975,8 @@ repo_helper==2020.12.18
 │   │       │   │   ├── idna>=2.5
 │   │       │   │   └── requests>=2.24.0
 │   │       │   │       ├── certifi>=2017.4.17
-│   │       │   │       ├── chardet<5,>=3.0.2
-│   │       │   │       ├── idna<3,>=2.5
+│   │       │   │       ├── charset-normalizer~=2.0.0; python_version >= "3"
+│   │       │   │       ├── idna<4,>=2.5; python_version >= "3"
 │   │       │   │       └── urllib3<1.27,>=1.21.1
 │   │       │   ├── attr-utils>=0.5.6
 │   │       │   │   ├── attrs>=19.3.0
@@ -944,7 +1007,7 @@ repo_helper==2020.12.18
 │   │       │   ├── packaging>=20.9
 │   │       │   │   └── pyparsing>=2.0.2
 │   │       │   ├── shippinglabel>=0.10.0
-│   │       │   │   ├── apeye>=0.7.0
+│   │       │   │   ├── apeye>=1.0.0
 │   │       │   │   │   ├── appdirs>=1.4.4
 │   │       │   │   │   ├── domdf-python-tools>=2.3.0
 │   │       │   │   │   │   ├── importlib-metadata>=3.6.0; python_version < "3.9"
@@ -955,18 +1018,26 @@ repo_helper==2020.12.18
 │   │       │   │   │   ├── idna>=2.5
 │   │       │   │   │   └── requests>=2.24.0
 │   │       │   │   │       ├── certifi>=2017.4.17
-│   │       │   │   │       ├── chardet<5,>=3.0.2
-│   │       │   │   │       ├── idna<3,>=2.5
+│   │       │   │   │       ├── charset-normalizer~=2.0.0; python_version >= "3"
+│   │       │   │   │       ├── idna<4,>=2.5; python_version >= "3"
 │   │       │   │   │       └── urllib3<1.27,>=1.21.1
 │   │       │   │   ├── appdirs>=1.4.4
-│   │       │   │   ├── cawdrey>=0.4.1
-│   │       │   │   │   ├── domdf-python-tools>=1.1.0
+│   │       │   │   ├── dist-meta>=0.1.2
+│   │       │   │   │   ├── domdf-python-tools>=3.1.0
 │   │       │   │   │   │   ├── importlib-metadata>=3.6.0; python_version < "3.9"
 │   │       │   │   │   │   │   ├── typing-extensions>=3.6.4; python_version < "3.8"
 │   │       │   │   │   │   │   └── zipp>=0.5
 │   │       │   │   │   │   ├── natsort>=7.0.1
 │   │       │   │   │   │   └── typing-extensions>=3.7.4.1
-│   │       │   │   │   └── typing-extensions>=3.7.4.3
+│   │       │   │   │   ├── handy-archives>=0.1.0
+│   │       │   │   │   │   └── domdf-python-tools>=3.1.0
+│   │       │   │   │   │       ├── importlib-metadata>=3.6.0; python_version < "3.9"
+│   │       │   │   │   │       │   ├── typing-extensions>=3.6.4; python_version < "3.8"
+│   │       │   │   │   │       │   └── zipp>=0.5
+│   │       │   │   │   │       ├── natsort>=7.0.1
+│   │       │   │   │   │       └── typing-extensions>=3.7.4.1
+│   │       │   │   │   └── packaging>=20.9
+│   │       │   │   │       └── pyparsing>=2.0.2
 │   │       │   │   ├── dom-toml>=0.2.2
 │   │       │   │   │   ├── domdf-python-tools>=2.7.0
 │   │       │   │   │   │   ├── importlib-metadata>=3.6.0; python_version < "3.9"
@@ -975,7 +1046,7 @@ repo_helper==2020.12.18
 │   │       │   │   │   │   ├── natsort>=7.0.1
 │   │       │   │   │   │   └── typing-extensions>=3.7.4.1
 │   │       │   │   │   └── toml>=0.10.2
-│   │       │   │   ├── domdf-python-tools>=2.8.0
+│   │       │   │   ├── domdf-python-tools>=3.1.0
 │   │       │   │   │   ├── importlib-metadata>=3.6.0; python_version < "3.9"
 │   │       │   │   │   │   ├── typing-extensions>=3.6.4; python_version < "3.8"
 │   │       │   │   │   │   └── zipp>=0.5
@@ -984,12 +1055,11 @@ repo_helper==2020.12.18
 │   │       │   │   ├── packaging>=20.9
 │   │       │   │   │   └── pyparsing>=2.0.2
 │   │       │   │   ├── trove-classifiers>=2020.10.21
-│   │       │   │   ├── typing-extensions>=3.7.4.3
-│   │       │   │   └── wheel-filename>=1.2.0
+│   │       │   │   └── typing-extensions>=3.7.4.3
 │   │       │   ├── toml>=0.10.2
 │   │       │   └── typing-extensions>=3.7.4.3
 │   │       └── shippinglabel>=0.16.0
-│   │           ├── apeye>=0.7.0
+│   │           ├── apeye>=1.0.0
 │   │           │   ├── appdirs>=1.4.4
 │   │           │   ├── domdf-python-tools>=2.3.0
 │   │           │   │   ├── importlib-metadata>=3.6.0; python_version < "3.9"
@@ -1000,18 +1070,26 @@ repo_helper==2020.12.18
 │   │           │   ├── idna>=2.5
 │   │           │   └── requests>=2.24.0
 │   │           │       ├── certifi>=2017.4.17
-│   │           │       ├── chardet<5,>=3.0.2
-│   │           │       ├── idna<3,>=2.5
+│   │           │       ├── charset-normalizer~=2.0.0; python_version >= "3"
+│   │           │       ├── idna<4,>=2.5; python_version >= "3"
 │   │           │       └── urllib3<1.27,>=1.21.1
 │   │           ├── appdirs>=1.4.4
-│   │           ├── cawdrey>=0.4.1
-│   │           │   ├── domdf-python-tools>=1.1.0
+│   │           ├── dist-meta>=0.1.2
+│   │           │   ├── domdf-python-tools>=3.1.0
 │   │           │   │   ├── importlib-metadata>=3.6.0; python_version < "3.9"
 │   │           │   │   │   ├── typing-extensions>=3.6.4; python_version < "3.8"
 │   │           │   │   │   └── zipp>=0.5
 │   │           │   │   ├── natsort>=7.0.1
 │   │           │   │   └── typing-extensions>=3.7.4.1
-│   │           │   └── typing-extensions>=3.7.4.3
+│   │           │   ├── handy-archives>=0.1.0
+│   │           │   │   └── domdf-python-tools>=3.1.0
+│   │           │   │       ├── importlib-metadata>=3.6.0; python_version < "3.9"
+│   │           │   │       │   ├── typing-extensions>=3.6.4; python_version < "3.8"
+│   │           │   │       │   └── zipp>=0.5
+│   │           │   │       ├── natsort>=7.0.1
+│   │           │   │       └── typing-extensions>=3.7.4.1
+│   │           │   └── packaging>=20.9
+│   │           │       └── pyparsing>=2.0.2
 │   │           ├── dom-toml>=0.2.2
 │   │           │   ├── domdf-python-tools>=2.7.0
 │   │           │   │   ├── importlib-metadata>=3.6.0; python_version < "3.9"
@@ -1020,7 +1098,7 @@ repo_helper==2020.12.18
 │   │           │   │   ├── natsort>=7.0.1
 │   │           │   │   └── typing-extensions>=3.7.4.1
 │   │           │   └── toml>=0.10.2
-│   │           ├── domdf-python-tools>=2.8.0
+│   │           ├── domdf-python-tools>=3.1.0
 │   │           │   ├── importlib-metadata>=3.6.0; python_version < "3.9"
 │   │           │   │   ├── typing-extensions>=3.6.4; python_version < "3.8"
 │   │           │   │   └── zipp>=0.5
@@ -1029,8 +1107,7 @@ repo_helper==2020.12.18
 │   │           ├── packaging>=20.9
 │   │           │   └── pyparsing>=2.0.2
 │   │           ├── trove-classifiers>=2020.10.21
-│   │           ├── typing-extensions>=3.7.4.3
-│   │           └── wheel-filename>=1.2.0
+│   │           └── typing-extensions>=3.7.4.3
 │   ├── pyproject-parser>=0.3.0
 │   │   ├── apeye>=1.0.0
 │   │   │   ├── appdirs>=1.4.4
@@ -1043,8 +1120,8 @@ repo_helper==2020.12.18
 │   │   │   ├── idna>=2.5
 │   │   │   └── requests>=2.24.0
 │   │   │       ├── certifi>=2017.4.17
-│   │   │       ├── chardet<5,>=3.0.2
-│   │   │       ├── idna<3,>=2.5
+│   │   │       ├── charset-normalizer~=2.0.0; python_version >= "3"
+│   │   │       ├── idna<4,>=2.5; python_version >= "3"
 │   │   │       └── urllib3<1.27,>=1.21.1
 │   │   ├── attr-utils>=0.5.6
 │   │   │   ├── attrs>=19.3.0
@@ -1075,7 +1152,7 @@ repo_helper==2020.12.18
 │   │   ├── packaging>=20.9
 │   │   │   └── pyparsing>=2.0.2
 │   │   ├── shippinglabel>=0.10.0
-│   │   │   ├── apeye>=0.7.0
+│   │   │   ├── apeye>=1.0.0
 │   │   │   │   ├── appdirs>=1.4.4
 │   │   │   │   ├── domdf-python-tools>=2.3.0
 │   │   │   │   │   ├── importlib-metadata>=3.6.0; python_version < "3.9"
@@ -1086,18 +1163,26 @@ repo_helper==2020.12.18
 │   │   │   │   ├── idna>=2.5
 │   │   │   │   └── requests>=2.24.0
 │   │   │   │       ├── certifi>=2017.4.17
-│   │   │   │       ├── chardet<5,>=3.0.2
-│   │   │   │       ├── idna<3,>=2.5
+│   │   │   │       ├── charset-normalizer~=2.0.0; python_version >= "3"
+│   │   │   │       ├── idna<4,>=2.5; python_version >= "3"
 │   │   │   │       └── urllib3<1.27,>=1.21.1
 │   │   │   ├── appdirs>=1.4.4
-│   │   │   ├── cawdrey>=0.4.1
-│   │   │   │   ├── domdf-python-tools>=1.1.0
+│   │   │   ├── dist-meta>=0.1.2
+│   │   │   │   ├── domdf-python-tools>=3.1.0
 │   │   │   │   │   ├── importlib-metadata>=3.6.0; python_version < "3.9"
 │   │   │   │   │   │   ├── typing-extensions>=3.6.4; python_version < "3.8"
 │   │   │   │   │   │   └── zipp>=0.5
 │   │   │   │   │   ├── natsort>=7.0.1
 │   │   │   │   │   └── typing-extensions>=3.7.4.1
-│   │   │   │   └── typing-extensions>=3.7.4.3
+│   │   │   │   ├── handy-archives>=0.1.0
+│   │   │   │   │   └── domdf-python-tools>=3.1.0
+│   │   │   │   │       ├── importlib-metadata>=3.6.0; python_version < "3.9"
+│   │   │   │   │       │   ├── typing-extensions>=3.6.4; python_version < "3.8"
+│   │   │   │   │       │   └── zipp>=0.5
+│   │   │   │   │       ├── natsort>=7.0.1
+│   │   │   │   │       └── typing-extensions>=3.7.4.1
+│   │   │   │   └── packaging>=20.9
+│   │   │   │       └── pyparsing>=2.0.2
 │   │   │   ├── dom-toml>=0.2.2
 │   │   │   │   ├── domdf-python-tools>=2.7.0
 │   │   │   │   │   ├── importlib-metadata>=3.6.0; python_version < "3.9"
@@ -1106,7 +1191,7 @@ repo_helper==2020.12.18
 │   │   │   │   │   ├── natsort>=7.0.1
 │   │   │   │   │   └── typing-extensions>=3.7.4.1
 │   │   │   │   └── toml>=0.10.2
-│   │   │   ├── domdf-python-tools>=2.8.0
+│   │   │   ├── domdf-python-tools>=3.1.0
 │   │   │   │   ├── importlib-metadata>=3.6.0; python_version < "3.9"
 │   │   │   │   │   ├── typing-extensions>=3.6.4; python_version < "3.8"
 │   │   │   │   │   └── zipp>=0.5
@@ -1115,12 +1200,11 @@ repo_helper==2020.12.18
 │   │   │   ├── packaging>=20.9
 │   │   │   │   └── pyparsing>=2.0.2
 │   │   │   ├── trove-classifiers>=2020.10.21
-│   │   │   ├── typing-extensions>=3.7.4.3
-│   │   │   └── wheel-filename>=1.2.0
+│   │   │   └── typing-extensions>=3.7.4.3
 │   │   ├── toml>=0.10.2
 │   │   └── typing-extensions>=3.7.4.3
 │   ├── shippinglabel>=0.15.0
-│   │   ├── apeye>=0.7.0
+│   │   ├── apeye>=1.0.0
 │   │   │   ├── appdirs>=1.4.4
 │   │   │   ├── domdf-python-tools>=2.3.0
 │   │   │   │   ├── importlib-metadata>=3.6.0; python_version < "3.9"
@@ -1131,18 +1215,26 @@ repo_helper==2020.12.18
 │   │   │   ├── idna>=2.5
 │   │   │   └── requests>=2.24.0
 │   │   │       ├── certifi>=2017.4.17
-│   │   │       ├── chardet<5,>=3.0.2
-│   │   │       ├── idna<3,>=2.5
+│   │   │       ├── charset-normalizer~=2.0.0; python_version >= "3"
+│   │   │       ├── idna<4,>=2.5; python_version >= "3"
 │   │   │       └── urllib3<1.27,>=1.21.1
 │   │   ├── appdirs>=1.4.4
-│   │   ├── cawdrey>=0.4.1
-│   │   │   ├── domdf-python-tools>=1.1.0
+│   │   ├── dist-meta>=0.1.2
+│   │   │   ├── domdf-python-tools>=3.1.0
 │   │   │   │   ├── importlib-metadata>=3.6.0; python_version < "3.9"
 │   │   │   │   │   ├── typing-extensions>=3.6.4; python_version < "3.8"
 │   │   │   │   │   └── zipp>=0.5
 │   │   │   │   ├── natsort>=7.0.1
 │   │   │   │   └── typing-extensions>=3.7.4.1
-│   │   │   └── typing-extensions>=3.7.4.3
+│   │   │   ├── handy-archives>=0.1.0
+│   │   │   │   └── domdf-python-tools>=3.1.0
+│   │   │   │       ├── importlib-metadata>=3.6.0; python_version < "3.9"
+│   │   │   │       │   ├── typing-extensions>=3.6.4; python_version < "3.8"
+│   │   │   │       │   └── zipp>=0.5
+│   │   │   │       ├── natsort>=7.0.1
+│   │   │   │       └── typing-extensions>=3.7.4.1
+│   │   │   └── packaging>=20.9
+│   │   │       └── pyparsing>=2.0.2
 │   │   ├── dom-toml>=0.2.2
 │   │   │   ├── domdf-python-tools>=2.7.0
 │   │   │   │   ├── importlib-metadata>=3.6.0; python_version < "3.9"
@@ -1151,7 +1243,7 @@ repo_helper==2020.12.18
 │   │   │   │   ├── natsort>=7.0.1
 │   │   │   │   └── typing-extensions>=3.7.4.1
 │   │   │   └── toml>=0.10.2
-│   │   ├── domdf-python-tools>=2.8.0
+│   │   ├── domdf-python-tools>=3.1.0
 │   │   │   ├── importlib-metadata>=3.6.0; python_version < "3.9"
 │   │   │   │   ├── typing-extensions>=3.6.4; python_version < "3.8"
 │   │   │   │   └── zipp>=0.5
@@ -1160,8 +1252,7 @@ repo_helper==2020.12.18
 │   │   ├── packaging>=20.9
 │   │   │   └── pyparsing>=2.0.2
 │   │   ├── trove-classifiers>=2020.10.21
-│   │   ├── typing-extensions>=3.7.4.3
-│   │   └── wheel-filename>=1.2.0
+│   │   └── typing-extensions>=3.7.4.3
 │   ├── typing-extensions>=3.7.4.3
 │   └── whey>=0.0.15
 │       ├── click>=7.1.2
@@ -1211,8 +1302,8 @@ repo_helper==2020.12.18
 │       │   │   ├── idna>=2.5
 │       │   │   └── requests>=2.24.0
 │       │   │       ├── certifi>=2017.4.17
-│       │   │       ├── chardet<5,>=3.0.2
-│       │   │       ├── idna<3,>=2.5
+│       │   │       ├── charset-normalizer~=2.0.0; python_version >= "3"
+│       │   │       ├── idna<4,>=2.5; python_version >= "3"
 │       │   │       └── urllib3<1.27,>=1.21.1
 │       │   ├── attr-utils>=0.5.6
 │       │   │   ├── attrs>=19.3.0
@@ -1243,7 +1334,7 @@ repo_helper==2020.12.18
 │       │   ├── packaging>=20.9
 │       │   │   └── pyparsing>=2.0.2
 │       │   ├── shippinglabel>=0.10.0
-│       │   │   ├── apeye>=0.7.0
+│       │   │   ├── apeye>=1.0.0
 │       │   │   │   ├── appdirs>=1.4.4
 │       │   │   │   ├── domdf-python-tools>=2.3.0
 │       │   │   │   │   ├── importlib-metadata>=3.6.0; python_version < "3.9"
@@ -1254,18 +1345,26 @@ repo_helper==2020.12.18
 │       │   │   │   ├── idna>=2.5
 │       │   │   │   └── requests>=2.24.0
 │       │   │   │       ├── certifi>=2017.4.17
-│       │   │   │       ├── chardet<5,>=3.0.2
-│       │   │   │       ├── idna<3,>=2.5
+│       │   │   │       ├── charset-normalizer~=2.0.0; python_version >= "3"
+│       │   │   │       ├── idna<4,>=2.5; python_version >= "3"
 │       │   │   │       └── urllib3<1.27,>=1.21.1
 │       │   │   ├── appdirs>=1.4.4
-│       │   │   ├── cawdrey>=0.4.1
-│       │   │   │   ├── domdf-python-tools>=1.1.0
+│       │   │   ├── dist-meta>=0.1.2
+│       │   │   │   ├── domdf-python-tools>=3.1.0
 │       │   │   │   │   ├── importlib-metadata>=3.6.0; python_version < "3.9"
 │       │   │   │   │   │   ├── typing-extensions>=3.6.4; python_version < "3.8"
 │       │   │   │   │   │   └── zipp>=0.5
 │       │   │   │   │   ├── natsort>=7.0.1
 │       │   │   │   │   └── typing-extensions>=3.7.4.1
-│       │   │   │   └── typing-extensions>=3.7.4.3
+│       │   │   │   ├── handy-archives>=0.1.0
+│       │   │   │   │   └── domdf-python-tools>=3.1.0
+│       │   │   │   │       ├── importlib-metadata>=3.6.0; python_version < "3.9"
+│       │   │   │   │       │   ├── typing-extensions>=3.6.4; python_version < "3.8"
+│       │   │   │   │       │   └── zipp>=0.5
+│       │   │   │   │       ├── natsort>=7.0.1
+│       │   │   │   │       └── typing-extensions>=3.7.4.1
+│       │   │   │   └── packaging>=20.9
+│       │   │   │       └── pyparsing>=2.0.2
 │       │   │   ├── dom-toml>=0.2.2
 │       │   │   │   ├── domdf-python-tools>=2.7.0
 │       │   │   │   │   ├── importlib-metadata>=3.6.0; python_version < "3.9"
@@ -1274,7 +1373,7 @@ repo_helper==2020.12.18
 │       │   │   │   │   ├── natsort>=7.0.1
 │       │   │   │   │   └── typing-extensions>=3.7.4.1
 │       │   │   │   └── toml>=0.10.2
-│       │   │   ├── domdf-python-tools>=2.8.0
+│       │   │   ├── domdf-python-tools>=3.1.0
 │       │   │   │   ├── importlib-metadata>=3.6.0; python_version < "3.9"
 │       │   │   │   │   ├── typing-extensions>=3.6.4; python_version < "3.8"
 │       │   │   │   │   └── zipp>=0.5
@@ -1283,12 +1382,11 @@ repo_helper==2020.12.18
 │       │   │   ├── packaging>=20.9
 │       │   │   │   └── pyparsing>=2.0.2
 │       │   │   ├── trove-classifiers>=2020.10.21
-│       │   │   ├── typing-extensions>=3.7.4.3
-│       │   │   └── wheel-filename>=1.2.0
+│       │   │   └── typing-extensions>=3.7.4.3
 │       │   ├── toml>=0.10.2
 │       │   └── typing-extensions>=3.7.4.3
 │       └── shippinglabel>=0.16.0
-│           ├── apeye>=0.7.0
+│           ├── apeye>=1.0.0
 │           │   ├── appdirs>=1.4.4
 │           │   ├── domdf-python-tools>=2.3.0
 │           │   │   ├── importlib-metadata>=3.6.0; python_version < "3.9"
@@ -1299,18 +1397,26 @@ repo_helper==2020.12.18
 │           │   ├── idna>=2.5
 │           │   └── requests>=2.24.0
 │           │       ├── certifi>=2017.4.17
-│           │       ├── chardet<5,>=3.0.2
-│           │       ├── idna<3,>=2.5
+│           │       ├── charset-normalizer~=2.0.0; python_version >= "3"
+│           │       ├── idna<4,>=2.5; python_version >= "3"
 │           │       └── urllib3<1.27,>=1.21.1
 │           ├── appdirs>=1.4.4
-│           ├── cawdrey>=0.4.1
-│           │   ├── domdf-python-tools>=1.1.0
+│           ├── dist-meta>=0.1.2
+│           │   ├── domdf-python-tools>=3.1.0
 │           │   │   ├── importlib-metadata>=3.6.0; python_version < "3.9"
 │           │   │   │   ├── typing-extensions>=3.6.4; python_version < "3.8"
 │           │   │   │   └── zipp>=0.5
 │           │   │   ├── natsort>=7.0.1
 │           │   │   └── typing-extensions>=3.7.4.1
-│           │   └── typing-extensions>=3.7.4.3
+│           │   ├── handy-archives>=0.1.0
+│           │   │   └── domdf-python-tools>=3.1.0
+│           │   │       ├── importlib-metadata>=3.6.0; python_version < "3.9"
+│           │   │       │   ├── typing-extensions>=3.6.4; python_version < "3.8"
+│           │   │       │   └── zipp>=0.5
+│           │   │       ├── natsort>=7.0.1
+│           │   │       └── typing-extensions>=3.7.4.1
+│           │   └── packaging>=20.9
+│           │       └── pyparsing>=2.0.2
 │           ├── dom-toml>=0.2.2
 │           │   ├── domdf-python-tools>=2.7.0
 │           │   │   ├── importlib-metadata>=3.6.0; python_version < "3.9"
@@ -1319,7 +1425,7 @@ repo_helper==2020.12.18
 │           │   │   ├── natsort>=7.0.1
 │           │   │   └── typing-extensions>=3.7.4.1
 │           │   └── toml>=0.10.2
-│           ├── domdf-python-tools>=2.8.0
+│           ├── domdf-python-tools>=3.1.0
 │           │   ├── importlib-metadata>=3.6.0; python_version < "3.9"
 │           │   │   ├── typing-extensions>=3.6.4; python_version < "3.8"
 │           │   │   └── zipp>=0.5
@@ -1328,8 +1434,7 @@ repo_helper==2020.12.18
 │           ├── packaging>=20.9
 │           │   └── pyparsing>=2.0.2
 │           ├── trove-classifiers>=2020.10.21
-│           ├── typing-extensions>=3.7.4.3
-│           └── wheel-filename>=1.2.0
+│           └── typing-extensions>=3.7.4.3
 └── yapf-isort>=0.5.2
     ├── asttokens>=2.0.4
     │   └── six

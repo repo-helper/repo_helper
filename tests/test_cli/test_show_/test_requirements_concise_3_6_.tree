@@ -5,9 +5,8 @@ repo_helper==2020.12.18
 ├── asttokens>=2.0.4
 ├── attr-utils>=0.5.6
 ├── attrs>=20.3.0
-├── cawdrey>=0.4.1
 ├── certifi>=2017.4.17
-├── chardet<5,>=3.0.2
+├── charset-normalizer~=2.0.0; python_version >= "3"
 ├── click==7.1.2
 ├── colorful>=0.4.0
 ├── configconfig>=0.5.0
@@ -16,13 +15,16 @@ repo_helper==2020.12.18
 ├── deprecation>=2.1.0
 ├── deprecation-alias>=0.1.1
 ├── dict2css>=0.2.0
+├── dist-meta>=0.1.2
 ├── dom-toml>=0.5.0
-├── domdf-python-tools>=2.9.1
+├── domdf-python-tools>=3.1.0
 ├── dulwich!=0.20.7,!=0.20.8,!=0.20.9,>=0.20.5
 ├── filelock>=3.0.12
 ├── first>=2.0.2
 ├── formate>=0.4.5
-├── idna<3,>=2.5
+├── handy-archives>=0.1.0
+├── idna>=2.5
+├── idna<4,>=2.5; python_version >= "3"
 ├── importlib-metadata>=3.6.0; python_version < "3.9"
 ├── importlib-metadata; python_version < "3.8"
 ├── importlib-resources>=3.0.0; python_version < "3.7"
@@ -58,7 +60,6 @@ repo_helper==2020.12.18
 ├── typing-inspect>=0.6.0; python_version == "3.6"
 ├── typing-inspect>=0.6.0
 ├── urllib3<1.27,>=1.24.1
-├── wheel-filename>=1.2.0
 ├── whey>=0.0.17
 ├── whey-conda>=0.1.2
 ├── yapf<0.32.0,>=0.30.0
