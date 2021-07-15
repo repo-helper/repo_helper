@@ -46,12 +46,21 @@ def make_recipe(out_dir: str = "./conda/"):
 	Make a Conda ``meta.yaml`` recipe.
 	"""
 
+	# stdlib
+	import warnings
+
 	# 3rd party
 	from consolekit.terminal_colours import Fore, resolve_color_default
 	from domdf_python_tools.paths import PathPlus, traverse_to_file
 
 	# this package
 	from repo_helper import conda
+
+	warnings.warn(
+			"'repo-helper make-recipe' is deprecated. "
+			"Please use 'mkrecipe' instead: https://mkrecipe.readthedocs.io/",
+			DeprecationWarning,
+			)
 
 	repo_dir = traverse_to_file(PathPlus.cwd(), "repo_helper.yml")
 

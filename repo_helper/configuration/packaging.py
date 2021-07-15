@@ -272,6 +272,11 @@ class use_experimental_backend(ConfigVar):  # noqa
 		from repo_helper.configuration.metadata import pure_python
 		from repo_helper.configuration.other import exclude_files
 
+		warnings.warn(
+				"'use_experimental_backend' is deprecated. Please switch to 'use_whey'.",
+				DeprecationWarning,
+				)
+
 		excluded_files = exclude_files.get(raw_config_vars)
 
 		# Options that the backend is incompatible with
