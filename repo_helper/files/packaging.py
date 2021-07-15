@@ -290,6 +290,19 @@ def make_pyproject(repo_path: pathlib.Path, templates: Environment) -> List[str]
 	else:
 		data["tool"].pop("sphinx-pyproject", None)
 
+	# [tool.mypy]
+	# This is added regardless of the supported mypy version.
+	# It isn't removed from setup.cfg unless the version is 0.901 or above
+	data["tool"].setdefault("mypy", {})
+
+	data["tool"]["mypy"]["python_version"] = templates.globals["min_py_version"]
+	data["tool"]["mypy"]["namespace_packages"] = True
+	data["tool"]["mypy"]["check_untyped_defs"] = True
+	data["tool"]["mypy"]["warn_unused_ignores"] = True
+	data["tool"]["mypy"]["no_implicit_optional"] = True
+	if templates.globals["mypy_plugins"]:
+		data["tool"]["mypy"]["plugins"] = templates.globals["mypy_plugins"]
+
 	if not data["tool"]:
 		del data["tool"]
 
@@ -500,6 +513,27 @@ class SetupCfgConfig(IniConfigurator):
 			self._ini.remove_section("metadata")
 			self._ini.remove_section("options")
 			self._ini.remove_section("options.packages.find")
+
+		if float(self["mypy_version"]) >= 0.901:
+			self._ini.remove_section("mypy")
+
+	def write_out(self):
+		"""
+		Write out to the ``.ini`` file.
+		"""
+
+		ini_file = PathPlus(self.base_path / self.filename)
+
+		for section_name in self.managed_sections:
+			getattr(self, re.sub("[:.-]", '_', section_name))()
+
+		self.merge_existing(ini_file)
+
+		if not self._ini.sections():
+			ini_file.unlink(missing_ok=True)
+		else:
+			self._output.append(str(self._ini))
+			ini_file.write_lines(self._output)
 
 
 @management.register("setup_cfg")

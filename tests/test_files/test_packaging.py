@@ -221,7 +221,8 @@ def test_make_pyproject_whey_extras(
 				pytest.param([], id="no_classifiers"),
 				]
 		)
-@pytest.mark.parametrize("use_whey", [True, False])
+@boolean_option("use_whey", "whey")
+@pytest.mark.parametrize("mypy_version", ["0.800", "0.910"])
 def test_make_setup_cfg(
 		tmp_pathplus: PathPlus,
 		demo_environment,
@@ -229,6 +230,7 @@ def test_make_setup_cfg(
 		classifiers: List[str],
 		python_versions,
 		use_whey: bool,
+		mypy_version: str,
 		):
 	# TODO: permutations to cover all branches
 
@@ -245,10 +247,15 @@ def test_make_setup_cfg(
 	demo_environment.globals["enable_docs"] = True
 	demo_environment.globals["entry_points"] = {}
 	demo_environment.globals["use_whey"] = use_whey
+	demo_environment.globals["mypy_version"] = mypy_version
 
 	managed_files = make_setup_cfg(tmp_pathplus, demo_environment)
 	assert managed_files == ["setup.cfg"]
-	check_file_output(tmp_pathplus / managed_files[0], file_regression)
+
+	if use_whey and mypy_version == "0.910":
+		assert not (tmp_pathplus / managed_files[0]).is_file()
+	else:
+		check_file_output(tmp_pathplus / managed_files[0], file_regression)
 
 
 @pytest.mark.parametrize("use_whey", [True, False])
@@ -284,6 +291,7 @@ def test_make_setup_cfg_existing(
 	demo_environment.globals["classifiers"] = []
 	demo_environment.globals["console_scripts"] = []
 	demo_environment.globals["mypy_plugins"] = []
+	demo_environment.globals["mypy_version"] = "0.910"
 	demo_environment.globals["use_experimental_backend"] = False
 	demo_environment.globals["enable_docs"] = True
 	demo_environment.globals["use_whey"] = True
