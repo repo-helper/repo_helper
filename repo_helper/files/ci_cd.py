@@ -237,6 +237,7 @@ class ActionsManager:
 							dependency_lines=self.get_linux_ci_requirements(),
 							gh_actions_versions=self.get_gh_actions_python_versions(),
 							code_file_filter=self._code_file_filter,
+							run_on_tags="    tags:\n      - '*'",
 							)
 					)
 		elif ci_file.is_file():
