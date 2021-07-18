@@ -681,7 +681,10 @@ def get_bumpversion_filenames(templates: Environment) -> Iterable[str]:
 	:param templates:
 	"""
 
-	yield from ["pyproject.toml", "repo_helper.yml", "README.rst", "setup.cfg"]
+	yield from ["pyproject.toml", "repo_helper.yml", "README.rst"]
+
+	if not templates.globals["use_whey"]:
+		yield "setup.cfg"
 
 	if templates.globals["enable_docs"]:
 		yield f"{templates.globals['docs_dir']}/index.rst"

@@ -93,10 +93,6 @@ class DocRequirementsManager(RequirementsManager):
 			ComparableRequirement("sphinxemoji>=0.1.6"),
 			ComparableRequirement("sphinx-notfound-page>=0.5"),
 			ComparableRequirement("sphinx-tabs>=1.1.13"),
-			ComparableRequirement("autodocsumm>=0.2.0"),
-			# ComparableRequirement("sphinx-gitstamp"),
-			# ComparableRequirement("gitpython"),
-			# ComparableRequirement("sphinx_autodoc_typehints>=1.11.0"),
 			ComparableRequirement("sphinx-copybutton>=0.2.12"),
 			ComparableRequirement("sphinx-prompt>=1.1.0"),
 			ComparableRequirement("sphinx-pyproject>=0.1.0"),
@@ -116,27 +112,30 @@ class DocRequirementsManager(RequirementsManager):
 			"furo": ">=2020.11.19b18",
 			}
 
+	# Mapping of pypi_name to version specifier
+	my_sphinx_extensions = {
+			"extras-require": ">=0.2.0",
+			"seed-intersphinx-mapping": ">=0.3.1",
+			"default-values": ">=0.5.0",
+			"toctree-plus": ">=0.5.0",
+			"sphinx-toolbox": ">=2.13.0",
+			"sphinx-debuginfo": ">=0.1.0",
+			}
+
 	def compile_target_requirements(self) -> None:
 
+		theme_name = normalize(self._globals["sphinx_html_theme"])
+		pypi_name = normalize(self._globals["pypi_name"])
+
 		for name, specifier in self.theme_versions.items():
-			if normalize(name) == normalize(self._globals["sphinx_html_theme"]):
+			if normalize(name) == theme_name:
 				self.target_requirements.add(ComparableRequirement(f"{name}{specifier}"))
 				break
 		else:
-			self.target_requirements.add(ComparableRequirement(normalize(self._globals["sphinx_html_theme"])))
+			self.target_requirements.add(ComparableRequirement(theme_name))
 
-		# Mapping of pypi_name to version specifier
-		my_sphinx_extensions = {
-				"extras-require": ">=0.2.0",
-				"seed-intersphinx-mapping": ">=0.3.1",
-				"default-values": ">=0.5.0",
-				"toctree-plus": ">=0.5.0",
-				"sphinx-toolbox": ">=2.13.0",
-				"sphinx-debuginfo": ">=0.1.0",
-				}
-
-		for name, specifier in my_sphinx_extensions.items():
-			if name != normalize(self._globals["pypi_name"]):
+		for name, specifier in self.my_sphinx_extensions.items():
+			if name != pypi_name:
 				self.target_requirements.add(ComparableRequirement(f"{name}{specifier}"))
 
 	def merge_requirements(self) -> List[str]:
@@ -151,11 +150,16 @@ class DocRequirementsManager(RequirementsManager):
 			else:
 				warnings.warn(f"Ignored invalid requirement {line!r}")
 
+		other_themes = list(self.theme_versions.keys())
+		theme_name = normalize(self._globals["sphinx_html_theme"])
+		if theme_name in other_themes:
+			other_themes.remove(theme_name)
+
 		for req in current_requirements:
 			req.name = normalize(req.name)
 			# if req.name not in self.get_target_requirement_names() and req.name not in self.theme_versions.keys():
-			if req.name not in self.theme_versions.keys():
-				if req.name == "sphinx-autodoc-typehints":
+			if req.name not in other_themes:
+				if req.name in {"sphinx-autodoc-typehints", "autodocsumm"}:
 					continue
 				else:
 					self.target_requirements.add(req)

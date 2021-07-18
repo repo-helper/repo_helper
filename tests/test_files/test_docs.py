@@ -104,7 +104,6 @@ def test_ensure_doc_requirements(tmp_pathplus, demo_environment):
 
 	assert (tmp_pathplus / managed_files[0]).read_lines() == [
 			"alabaster>=0.7.12",
-			"autodocsumm>=0.2.0",
 			"default-values>=0.5.0",
 			"extras-require>=0.2.0",
 			"seed-intersphinx-mapping>=0.3.1",
@@ -129,7 +128,6 @@ def test_ensure_doc_requirements(tmp_pathplus, demo_environment):
 
 	assert (tmp_pathplus / managed_files[0]).read_lines() == [
 			"alabaster>=0.7.12",
-			"autodocsumm>=0.2.0",
 			"default-values>=0.5.0",
 			"extras-require>=0.2.0",
 			"lorem>=0.1.1",
