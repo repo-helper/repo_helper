@@ -132,6 +132,39 @@ autodoc_exclude_members = [
     "__hash__",
 ]
 
+[tool.whey]
+base-classifiers = [
+    "Development Status :: 4 - Beta",
+    "Environment :: Console",
+    "Intended Audience :: Developers",
+    "Topic :: Software Development :: Build Tools",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+    "Topic :: Software Development :: Version Control :: Git",
+    "Topic :: System :: Archiving :: Packaging",
+    "Topic :: System :: Software Distribution",
+    "Topic :: Utilities",
+    "Typing :: Typed",
+]
+python-versions = [ "3.6", "3.7", "3.8", "3.9",]
+python-implementations = [ "CPython", "PyPy",]
+platforms = [ "Windows", "macOS", "Linux",]
+license-key = "LGPL-3.0-or-later"
+additional-files = [
+    "include repo_helper/testing/repo_helper_example.yml",
+    "recursive-include repo_helper/templates *",
+    "recursive-include repo_helper/blocks *.rst",
+    "recursive-include repo_helper/init_repo_files *",
+    "include repo_helper/files/isort.cfg",
+    "include repo_helper/repo_helper_schema.json",
+]
+
+[tool.mypy]
+python_version = "3.6"
+namespace_packages = true
+check_untyped_defs = true
+warn_unused_ignores = true
+no_implicit_optional = true
+
 [tool.dep_checker.name_mapping]
 attrs = "attr"
 ruamel-yaml = "ruamel.yaml"
