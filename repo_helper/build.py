@@ -39,7 +39,7 @@ from typing import Iterator, Optional
 
 # 3rd party
 import click
-from consolekit.terminal_colours import Fore, resolve_color_default
+from consolekit.terminal_colours import Fore, resolve_color_default, ColourTrilean
 from domdf_python_tools.paths import PathPlus, traverse_to_file
 from domdf_python_tools.typing import PathLike
 from domdf_python_tools.utils import divide
@@ -79,7 +79,7 @@ class Builder(WheelBuilder):
 			out_dir: Optional[PathLike] = None,
 			*,
 			verbose: bool = False,
-			colour: bool = None,
+			colour: ColourTrilean = None,
 			):
 
 		warnings.warn(
