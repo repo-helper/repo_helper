@@ -281,6 +281,8 @@ def make_pyproject(repo_path: pathlib.Path, templates: Environment) -> List[str]
 
 	if templates.globals["manifest_additional"]:
 		data["tool"]["whey"]["additional-files"] = templates.globals["manifest_additional"]
+	elif "additional-files" in data["tool"]["whey"]:
+		del data["tool"]["whey"]["additional-files"]
 
 	if not templates.globals["enable_tests"] and not templates.globals["stubs_package"]:
 		data["tool"]["importcheck"] = data["tool"].get("importcheck", {})
