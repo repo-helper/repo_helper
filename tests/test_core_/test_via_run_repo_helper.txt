@@ -21,6 +21,7 @@ The following files will be committed:
   doc-source/docutils.conf
   doc-source/git_download.png
   doc-source/index.rst
+  doc-source/license.rst
   doc-source/not-found.png
   doc-source/requirements.txt
   tests/requirements.txt

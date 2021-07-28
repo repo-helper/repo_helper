@@ -32,6 +32,13 @@ Installation
 
 	contributing
 	Source
+	license
+
+.. sidebar-links::
+	:caption: Links
+	:github:
+	:pypi: highlight
+
 
 .. start links
 .. end links

@@ -25,7 +25,7 @@ import sys
 
 # 3rd party
 import pytest
-from coincidence.regressions import check_file_output, check_file_regression
+from coincidence.regressions import AdvancedFileRegressionFixture, check_file_output, check_file_regression
 from domdf_python_tools.compat import importlib_resources
 from domdf_python_tools.paths import PathPlus
 from pytest_regressions.file_regression import FileRegressionFixture
@@ -39,6 +39,7 @@ from repo_helper.files.docs import (
 		make_404_page,
 		make_alabaster_theming,
 		make_conf,
+		make_docs_license_rst,
 		make_docs_source_rst,
 		make_docutils_conf,
 		make_readthedocs_theming,
@@ -94,6 +95,22 @@ def test_make_docs_source_rst(tmp_pathplus, demo_environment):
 	assert not (tmp_pathplus / "doc-source" / "Building.rst").is_file()
 
 
+def test_make_docs_license_rst(
+		tmp_pathplus,
+		demo_environment,
+		advanced_file_regression: AdvancedFileRegressionFixture,
+		):
+	demo_environment.globals["license"] = "MIT License"
+
+	(tmp_pathplus / "doc-source").mkdir()
+
+	managed_files = make_docs_license_rst(tmp_pathplus, demo_environment)
+	assert managed_files == ["doc-source/license.rst"]
+
+	assert (tmp_pathplus / managed_files[0]).is_file()
+	advanced_file_regression.check_file(tmp_pathplus / managed_files[0])
+
+
 def test_ensure_doc_requirements(tmp_pathplus, demo_environment):
 	(tmp_pathplus / "requirements.txt").write_text('')
 	(tmp_pathplus / "doc-source").mkdir()
@@ -110,6 +127,7 @@ def test_ensure_doc_requirements(tmp_pathplus, demo_environment):
 			"sphinx>=3.0.3",
 			"sphinx-copybutton>=0.2.12",
 			"sphinx-debuginfo>=0.1.0",
+			"sphinx-licenseinfo>=0.1.1",
 			"sphinx-notfound-page>=0.5",
 			"sphinx-prompt>=1.1.0",
 			"sphinx-pyproject>=0.1.0",
@@ -135,6 +153,7 @@ def test_ensure_doc_requirements(tmp_pathplus, demo_environment):
 			"sphinx>=3.0.3",
 			"sphinx-copybutton>=0.2.12",
 			"sphinx-debuginfo>=0.1.0",
+			"sphinx-licenseinfo>=0.1.1",
 			"sphinx-notfound-page>=0.5",
 			"sphinx-prompt>=1.1.0",
 			"sphinx-pyproject>=0.1.0",

@@ -32,7 +32,6 @@ import pathlib
 import shutil
 import warnings
 from contextlib import suppress
-from functools import partial
 from typing import Any, Dict, List, Mapping, MutableMapping, Tuple, Union
 
 # 3rd party
@@ -67,7 +66,7 @@ from repo_helper.blocks import (
 from repo_helper.configupdater2 import ConfigUpdater
 from repo_helper.files import management
 from repo_helper.templates import Environment, init_repo_template_dir, template_dir
-from repo_helper.utils import pformat_tabs, reformat_file
+from repo_helper.utils import license_lookup, pformat_tabs, reformat_file
 
 __all__ = [
 		"ensure_doc_requirements",
@@ -80,6 +79,7 @@ __all__ = [
 		"rewrite_docs_index",
 		"make_404_page",
 		"make_docs_source_rst",
+		"make_docs_license_rst",
 		]
 
 # Disable logging from cssutils
@@ -120,6 +120,7 @@ class DocRequirementsManager(RequirementsManager):
 			"toctree-plus": ">=0.5.0",
 			"sphinx-toolbox": ">=2.13.0",
 			"sphinx-debuginfo": ">=0.1.0",
+			"sphinx-licenseinfo": ">=0.1.1",
 			}
 
 	def compile_target_requirements(self) -> None:
@@ -685,6 +686,30 @@ def make_docs_source_rst(repo_path: pathlib.Path, templates: Environment) -> Lis
 			]
 
 
+@management.register("license_rst", ["enable_docs"])
+def make_docs_license_rst(repo_path: pathlib.Path, templates: Environment) -> List[str]:
+	"""
+	Create the "License" page in the documentation.
+
+	:param repo_path: Path to the repository root.
+	:param templates:
+	"""
+
+	docs_dir = PathPlus(repo_path / templates.globals["docs_dir"])
+	docs_license_rst = docs_dir / "license.rst"
+
+	license_key = {v: k
+					for k, v in license_lookup.items()}.get(
+							templates.globals["license"],
+							templates.globals["license"],
+							)
+
+	source_template = templates.get_template(docs_license_rst.name)
+	docs_license_rst.write_clean(source_template.render(license_key=license_key))
+
+	return [docs_license_rst.relative_to(repo_path).as_posix()]
+
+
 def make_sphinx_config_dict(templates: Environment) -> Dict[str, Any]:
 	"""
 	Returns a dictionary of configuration values for use in ``conf.py``.
@@ -720,6 +745,7 @@ def make_sphinx_config_dict(templates: Environment) -> Dict[str, Any]:
 			"sphinxcontrib.default_values",
 			"sphinxcontrib.toctree_plus",
 			"sphinx_debuginfo",
+			"sphinx_licenseinfo",
 			"seed_intersphinx_mapping",
 			*templates.globals["extra_sphinx_extensions"],
 			]
