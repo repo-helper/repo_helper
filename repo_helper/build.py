@@ -39,7 +39,7 @@ from typing import Iterator, Optional
 
 # 3rd party
 import click
-from consolekit.terminal_colours import Fore, resolve_color_default, ColourTrilean
+from consolekit.terminal_colours import ColourTrilean, Fore, resolve_color_default
 from domdf_python_tools.paths import PathPlus, traverse_to_file
 from domdf_python_tools.typing import PathLike
 from domdf_python_tools.utils import divide
