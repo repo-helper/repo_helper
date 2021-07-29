@@ -62,7 +62,8 @@ __all__ = [
 		"ensure_tests_requirements",
 		]
 
-allowed_rst_directives = ["envvar", "TODO", "extras-require"]
+allowed_rst_directives = ["envvar", "TODO", "extras-require", "license", "license-info"]
+allowed_rst_roles = ["choosealicense"]
 standard_flake8_excludes = [
 		"old",
 		"build",
@@ -487,6 +488,7 @@ class ToxConfig(IniConfigurator):
 		self._ini["flake8"]["select"] = f"{DelimitedList(lint_warn_list + code_only_warning): }"
 		self._ini["flake8"]["extend-exclude"] = ','.join([self["docs_dir"], *standard_flake8_excludes])
 		self._ini["flake8"]["rst-directives"] = indent_join(sorted(allowed_rst_directives))
+		self._ini["flake8"]["rst-roles"] = indent_join(sorted(allowed_rst_roles))
 		self._ini["flake8"]["per-file-ignores"] = indent_join([
 				'',
 				f"{self['tests_dir']}/*: {' '.join(str(e) for e in test_ignores)}",
@@ -587,14 +589,20 @@ class ToxConfig(IniConfigurator):
 				elif section.name == "coverage:report" and "omit" in section:
 					self._ini["coverage:report"]["omit"] = section["omit"].value
 				elif section.name == "flake8":
-					self.copy_existing_value(section, "rst-roles")
-
 					if "rst-directives" in section:
 						existing_directives = section["rst-directives"].value.splitlines()
 						new_directives = self._ini["flake8"]["rst-directives"].value.splitlines()
 						combined_directives = set(map(str.strip, (*new_directives, *existing_directives)))
 						self._ini["flake8"]["rst-directives"] = indent_join(
 								sorted(filter(bool, combined_directives))
+								)
+
+					if "rst-roles" in section:
+						existing_roles = section["rst-roles"].value.splitlines()
+						new_roles = self._ini["flake8"]["rst-roles"].value.splitlines()
+						combined_roles = set(map(str.strip, (*new_roles, *existing_roles)))
+						self._ini["flake8"]["rst-roles"] = indent_join(
+								sorted(filter(bool, combined_roles))
 								)
 
 	# TODO: for tox-isolation
