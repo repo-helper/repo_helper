@@ -290,6 +290,17 @@ lint_warn_list.extend([
 		"Y091",  # Function body must not contain "raise".
 		])
 
+# flake8-noqa
+lint_warn_list.extend([
+		"NQA001",  # "#noqa" must have a single space after the hash, e.g. "# noqa
+		"NQA002",  # "# noqa X000" must have a colon, e.g. "# noqa: X000
+		"NQA003",  # "# noqa : X000" must not have a space before the colon, e.g. "# noqa: X000"
+		"NQA004",  # "# noqa: X000" must have at most one space before the codes, e.g. "# noqa: X000
+		"NQA005",  # "# noqa: X000, X000" has duplicate codes, remove X00
+		"NQA102",  # "# noqa: X000" has no matching violation
+		"NQA103",  # "# noqa: X000, X001" has unmatched code(s), remove X00
+		])
+
 
 @management.register("pylintrc")
 def make_pylintrc(repo_path: pathlib.Path, templates: Environment) -> List[str]:
