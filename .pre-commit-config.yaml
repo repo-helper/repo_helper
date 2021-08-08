@@ -46,6 +46,7 @@ repos:
    rev: v0.4.0
    hooks:
     - id: flake2lint
+      files: ^(?!repo_helper/files/linting\.py).*$
 
  - repo: https://github.com/pre-commit/pygrep-hooks
    rev: v1.8.0
