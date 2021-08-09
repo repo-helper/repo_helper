@@ -602,9 +602,7 @@ class ToxConfig(IniConfigurator):
 						existing_roles = section["rst-roles"].value.splitlines()
 						new_roles = self._ini["flake8"]["rst-roles"].value.splitlines()
 						combined_roles = set(map(str.strip, (*new_roles, *existing_roles)))
-						self._ini["flake8"]["rst-roles"] = indent_join(
-								sorted(filter(bool, combined_roles))
-								)
+						self._ini["flake8"]["rst-roles"] = indent_join(sorted(filter(bool, combined_roles)))
 
 	# TODO: for tox-isolation
 	# [testenv:{py36,py37,py38,pypy3,py39}]
