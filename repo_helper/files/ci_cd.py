@@ -176,11 +176,11 @@ class ActionsManager:
 	def _is_experimental(version: str):
 		if version == "pypy3.7":
 			return True
-		else:
-			try:
-				return Version(version).is_prerelease
-			except InvalidVersion:
-				return True
+
+		try:
+			return Version(version).is_prerelease
+		except InvalidVersion:
+			return False
 
 	def make_windows(self) -> PathPlus:
 		"""
