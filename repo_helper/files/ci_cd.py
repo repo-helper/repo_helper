@@ -129,6 +129,8 @@ class ActionsManager:
 
 		if self.templates.globals["enable_docs"]:
 			code_file_filter.append(f"{templates.globals['docs_dir']}/**")
+		else:
+			code_file_filter.append(f"doc-source/**")
 
 		code_file_filter.extend([
 				"CONTRIBUTING.rst",
