@@ -32,6 +32,7 @@ from typing import Dict, Iterable, Iterator, List, Optional
 # 3rd party
 from domdf_python_tools.paths import PathPlus
 from domdf_python_tools.stringlist import DelimitedList, StringList
+from packaging.version import InvalidVersion, Version
 
 # this package
 from repo_helper.configupdater2 import ConfigUpdater
@@ -171,6 +172,16 @@ class ActionsManager:
 
 		return tox_travis_matrix
 
+	@staticmethod
+	def _is_experimental(version: str):
+		if version == "pypy3.7":
+			return True
+		else:
+			try:
+				return Version(version).is_prerelease
+			except InvalidVersion:
+				return True
+
 	def make_windows(self) -> PathPlus:
 		"""
 		Create, update or remove the Windows action, as appropriate.
@@ -189,6 +200,7 @@ class ActionsManager:
 							dependency_lines=self.get_windows_ci_requirements(),
 							gh_actions_versions=self.get_gh_actions_python_versions(),
 							code_file_filter=self._code_file_filter,
+							is_experimental=self._is_experimental
 							)
 					)
 		elif ci_file.is_file():
@@ -214,6 +226,7 @@ class ActionsManager:
 							dependency_lines=self.get_macos_ci_requirements(),
 							gh_actions_versions=self.get_gh_actions_python_versions(),
 							code_file_filter=self._code_file_filter,
+							is_experimental=self._is_experimental
 							)
 					)
 		elif ci_file.is_file():
@@ -240,6 +253,7 @@ class ActionsManager:
 							gh_actions_versions=self.get_gh_actions_python_versions(),
 							code_file_filter=self._code_file_filter,
 							run_on_tags="    tags:\n      - '*'",
+							is_experimental=self._is_experimental
 							)
 					)
 		elif ci_file.is_file():
