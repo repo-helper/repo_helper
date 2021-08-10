@@ -698,11 +698,8 @@ def make_docs_license_rst(repo_path: pathlib.Path, templates: Environment) -> Li
 	docs_dir = PathPlus(repo_path / templates.globals["docs_dir"])
 	docs_license_rst = docs_dir / "license.rst"
 
-	license_key = {v: k
-					for k, v in license_lookup.items()}.get(
-							templates.globals["license"],
-							templates.globals["license"],
-							)
+	license_key = templates.globals["license"]
+	license_key = {v: k for k, v in license_lookup.items()}.get(license_key, license_key)
 
 	source_template = templates.get_template(docs_license_rst.name)
 	docs_license_rst.write_clean(source_template.render(license_key=license_key))
