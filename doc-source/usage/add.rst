@@ -4,7 +4,7 @@ repo-helper add
 
 Add metadata.
 
-.. versionadded:: $VERSION
+.. versionadded:: 2021.8.11
 
 requirement
 ************

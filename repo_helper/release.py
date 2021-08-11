@@ -184,7 +184,7 @@ class Bumper:
 		:param commit: Whether to commit automatically (:py:obj:`True`) or ask first (:py:obj:`None`).
 		:param message: The commit message.
 
-		.. versionchanged:: $VERSION
+		.. versionchanged:: 2021.8.11
 
 			Now takes a :class:`packaging.version.Version` rather than a
 			:class:`domdf_python_tools.versions.Version`.

@@ -345,7 +345,7 @@ class ActionsManager:
 		"""
 		Create, update or remove the flake8 action, as appropriate.
 
-		.. versionadded:: $VERSION
+		.. versionadded:: 2021.8.11
 		"""
 
 		ci_file = self.workflows_dir / "flake8.yml"

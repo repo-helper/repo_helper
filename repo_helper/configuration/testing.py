@@ -198,7 +198,7 @@ class mypy_version(ConfigVar):  # noqa
 		mypy_version: 0.790
 
 	.. versionchanged:: 2021.2.18  The default is now ``0.800``
-	.. versionchanged:: $VERSION  The default is now ``0.910``
+	.. versionchanged:: 2021.8.11  The default is now ``0.910``
 	"""
 
 	dtype = Union[str, float]
@@ -269,7 +269,7 @@ class github_ci_requirements(ConfigVar):  # noqa
 	"""
 	Additional steps to run in GitHub actions before and after installing dependencies.
 
-	.. versionadded:: $VERSION
+	.. versionadded:: 2021.8.11
 
 	Example:
 
