@@ -125,7 +125,7 @@ def resolve_command(self, ctx, args: List[str]) -> Tuple[str, Command, List[str]
 	return cmd_name, cmd, args[1:]
 
 
-release.resolve_command = MethodType(resolve_command, release)  # type: ignore
+release.resolve_command = MethodType(resolve_command, release)
 
 release_command = partial(release.command, context_settings=CONTEXT_SETTINGS)
 
