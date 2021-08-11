@@ -8,7 +8,7 @@ from domdf_python_tools.paths import PathPlus, in_directory
 # this package
 from repo_helper.cli.commands import show
 
-pytest_mark = only_windows("Requirements differ on Windows")
+pytestmark = only_windows("Requirements differ on Windows")
 
 version_specific = pytest.mark.parametrize(
 		"py_version",
