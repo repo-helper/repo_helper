@@ -74,6 +74,7 @@ yapf_exclude:
 
 exclude_files:
  - pre-commit
+ - license_rst
 
 extras_require:
   testing:

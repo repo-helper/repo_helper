@@ -147,7 +147,6 @@ Installation
 
 	Home<self>
 
-
 .. toctree::
 	:caption: Configuration
 	:maxdepth: 6
@@ -163,7 +162,6 @@ Installation
 	config/conda & anaconda
 	config/other
 
-
 .. toctree::
 	:caption: Usage
 	:maxdepth: 6
@@ -171,7 +169,6 @@ Installation
 
 	usage/repo-helper
 	usage/*
-
 
 .. toctree::
 	:caption: Public API
@@ -186,14 +183,13 @@ Installation
 
 	api/**/index
 
-
 .. toctree::
 	:maxdepth: 3
 	:caption: Contributing
 
 	contributing
 	Source
-
+	license
 
 .. sidebar-links::
 	:caption: Links
@@ -201,6 +197,7 @@ Installation
 	:pypi: repo_helper
 
 	Contributing Guide <https://contributing.repo-helper.uk>
+
 
 .. start links
 
