@@ -29,20 +29,8 @@ repo_helper = "repo_helper.__main__:main"
 repo-helper = "repo_helper.__main__:main"
 
 [project.optional-dependencies]
-testing = [
-    "check-wheel-contents>=0.2.0",
-    "coincidence>=0.2.0",
-    "docutils==0.16",
-    "pytest>=6.0.0",
-    "twine>=3.2.0",
-]
-all = [
-    "check-wheel-contents>=0.2.0",
-    "coincidence>=0.2.0",
-    "docutils==0.16",
-    "pytest>=6.0.0",
-    "twine>=3.2.0",
-]
+testing = [ "check-wheel-contents>=0.2.0", "coincidence>=0.2.0", "pytest>=6.0.0",]
+all = [ "check-wheel-contents>=0.2.0", "coincidence>=0.2.0", "pytest>=6.0.0",]
 
 [tool.mkrecipe]
 extras = []

@@ -80,8 +80,6 @@ extras_require:
   testing:
    - pytest>=6.0.0
    - coincidence>=0.2.0
-   - twine>=3.2.0
-   - docutils==0.16
    - check_wheel_contents>=0.2.0
 
 conda_channels:
