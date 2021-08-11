@@ -604,6 +604,33 @@ class ToxConfig(IniConfigurator):
 						combined_roles = set(map(str.strip, (*new_roles, *existing_roles)))
 						self._ini["flake8"]["rst-roles"] = indent_join(sorted(filter(bool, combined_roles)))
 
+					if "per-file-ignores" in section:
+						combined_ignores = {}
+
+						# Existing first, so they're always overridden by our new ones
+						for line in section["per-file-ignores"].value.splitlines():
+							if not line.strip():
+								continue
+							glob, ignores = line.split(':', 1)
+							combined_ignores[glob.strip()] = ignores.strip()
+
+						for line in self._ini["flake8"]["per-file-ignores"].value.splitlines():
+							if not line.strip():
+								continue
+							glob, ignores = line.split(':', 1)
+							combined_ignores[glob.strip()] = ignores.strip()
+
+						# Always put tests/* and */*.pyi first
+						combined_ignores_strings = [
+								f"tests/*: {combined_ignores.pop('tests/*')}",
+								f"*/*.pyi: {combined_ignores.pop('*/*.pyi')}",
+								]
+
+						combined_ignores_strings.extend(
+								sorted(filter(bool, (map(": ".join, combined_ignores.items()))))
+								)
+						self._ini["flake8"]["per-file-ignores"] = indent_join(combined_ignores_strings)
+
 	# TODO: for tox-isolation
 	# [testenv:{py36,py37,py38,pypy3,py39}]
 	# isolate_dirs =

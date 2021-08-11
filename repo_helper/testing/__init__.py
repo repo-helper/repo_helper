@@ -34,29 +34,19 @@ import os
 import pathlib
 import secrets
 import sys
-import tempfile
-import time
-from io import BytesIO
 from pathlib import Path
-from typing import Tuple
 
 # 3rd party
 import check_wheel_contents.__main__  # type: ignore  # nodep
 import jinja2
 import pytest  # nodep
-import twine.cli  # nodep
 from apeye.url import URL
-from consolekit.testing import CliRunner, Result
-from domdf_python_tools.paths import PathPlus, in_directory
-from domdf_python_tools.typing import PathLike
+from domdf_python_tools.paths import PathPlus
 from dulwich.config import StackedConfig
-from dulwich.porcelain import default_bytes_err_stream
-from southwark import clone
 from southwark.repo import Repo
 
 # this package
 import repo_helper.utils
-from repo_helper.build import Builder, build_sdist, build_wheel
 from repo_helper.configuration import get_tox_python_versions
 from repo_helper.files.linting import lint_warn_list
 from repo_helper.templates import Environment, template_dir
@@ -270,104 +260,3 @@ def is_running_on_actions() -> bool:
 	# https://docs.github.com/en/free-pro-team@latest/actions/reference/environment-variables#default-environment-variables
 
 	return "GITHUB_ACTIONS" in os.environ
-
-
-def builder_smoke_test(
-		target_dir: PathLike,
-		username: str,
-		repository: str,
-		*,
-		actions: bool = False,
-		conda: bool = False
-		) -> Tuple[int, float]:
-	"""
-	Tests that the given repository can be successfully built with repo-helper's experimental :pep:`517` backend.
-
-	:param target_dir:
-	:param username:
-	:param repository:
-	:param actions: Whether to create GitHub Actions groups.
-	:param conda: Whether to test building a conda package.
-
-	:returns: A tuple comprising:
-		* A return code for the build process.
-		* The build duration.
-
-	"""
-
-	ret = 0
-	target_dir = PathPlus(target_dir)
-
-	url = GITHUB_COM / username / repository
-
-	if actions:
-		print(f"::group::{username}_{repository}")
-	else:
-		print("==============================================")
-	print(f"Cloning {url!s} -> {target_dir!s}")
-
-	if actions:
-		errstream = BytesIO()
-	else:
-		errstream = default_bytes_err_stream
-
-	clone(str(url), str(target_dir), depth=1, errstream=errstream)
-
-	with in_directory(target_dir):
-		# Run their tests
-		# make_pyproject(target_dir, templates)
-		# print((target_dir / "pyproject.toml").read_text())
-		# test_process = Popen(["python3", "-m", "tox", "-n", "test"])
-		# (output, err) = test_process.communicate()
-		# exit_code = test_process.wait()
-		# ret |= exit_code
-
-		# Test pyp517
-		# make_pyproject(target_dir, templates)
-		# print((target_dir / "pyproject.toml").read_text())
-		# tox_process = Popen(["python3", "-m", "tox", "-e", "build"])
-		# (output, err) = tox_process.communicate()
-		# exit_code = tox_process.wait()
-		# ret |= exit_code
-
-		# Test repo_helper.build
-		start_time = time.time()
-		build_wheel(target_dir / "dist")
-		build_sdist(target_dir / "dist")
-
-		if conda:
-			with tempfile.TemporaryDirectory() as tmpdir:
-				builder = Builder(
-						repo_dir=PathPlus.cwd(),
-						build_dir=tmpdir,
-						out_dir=target_dir / "conda_dist",
-						verbose=True,
-						)
-				builder.build_conda()
-
-		build_time = time.time() - start_time
-
-		sys.stdout.flush()
-
-		# Twine check
-		print("twine check")
-		ret |= twine.cli.dispatch(["check", os.path.join("dist", '*')])
-		sys.stdout.flush()
-
-		# check_wheel_contents
-		print("check_wheel_contents")
-		runner = CliRunner()
-		result: Result = runner.invoke(
-				check_wheel_contents.__main__.main,
-				catch_exceptions=False,
-				args=["dist"],
-				)
-		ret |= result.exit_code
-		print(result.stdout, flush=True)
-
-	if actions:
-		print("::endgroup::")
-
-	# TODO: create virtualenv and install package in it
-
-	return ret, build_time
