@@ -1,61 +1,14 @@
 # 3rd party
 import pytest
 from coincidence.regressions import AdvancedFileRegressionFixture
-from coincidence.selectors import min_version, not_pypy, not_windows, only_version
+from coincidence.selectors import min_version, not_pypy, only_version, only_windows
 from consolekit.testing import CliRunner, Result
 from domdf_python_tools.paths import PathPlus, in_directory
 
 # this package
 from repo_helper.cli.commands import show
-from tests import pypy_windows_dulwich
 
-
-@pypy_windows_dulwich
-def test_version(tmp_repo, advanced_file_regression: AdvancedFileRegressionFixture):
-
-	(tmp_repo / "repo_helper.yml").write_lines([
-			"modname: repo_helper",
-			'copyright_years: "2020"',
-			'author: "Dominic Davis-Foster"',
-			'email: "dominic@davis-foster.co.uk"',
-			'version: "2.0.0"',
-			'username: "domdfcoding"',
-			"license: 'LGPLv3+'",
-			"short_desc: 'Update multiple configuration files, build scripts etc. from a single location.'",
-			])
-
-	with in_directory(tmp_repo):
-		runner = CliRunner()
-		result: Result = runner.invoke(show.version, catch_exceptions=False)
-
-	assert result.exit_code == 0
-	result.check_stdout(advanced_file_regression)
-
-
-@pypy_windows_dulwich
-def test_changelog(tmp_repo, advanced_file_regression: AdvancedFileRegressionFixture):
-
-	# TODO: -n/--entries
-	# TODO: -r/--reverse
-
-	(tmp_repo / "repo_helper.yml").write_lines([
-			"modname: repo_helper",
-			'copyright_years: "2020"',
-			'author: "Dominic Davis-Foster"',
-			'email: "dominic@davis-foster.co.uk"',
-			'version: "2.0.0"',
-			'username: "domdfcoding"',
-			"license: 'LGPLv3+'",
-			"short_desc: 'Update multiple configuration files, build scripts etc. from a single location.'",
-			])
-
-	with in_directory(tmp_repo):
-		runner = CliRunner()
-		result: Result = runner.invoke(show.changelog, catch_exceptions=False)
-
-	assert result.exit_code == 0
-	result.check_stdout(advanced_file_regression)
-
+pytest_mark = only_windows("Requirements differ on Windows")
 
 version_specific = pytest.mark.parametrize(
 		"py_version",
@@ -74,7 +27,6 @@ show_directories = [
 		]
 
 
-@not_windows("Requirements differ on Windows")
 @not_pypy("Output differs on PyPy.")
 class TestShowRequirements:
 
@@ -143,19 +95,3 @@ class TestShowRequirements:
 
 			assert result.exit_code == 0
 			result.check_stdout(advanced_file_regression, extension=".tree")
-
-
-@pypy_windows_dulwich
-def test_log(tmp_repo, advanced_file_regression: AdvancedFileRegressionFixture):
-
-	# TODO: -n/--entries
-	# TODO: -r/--reverse
-	# TODO: --from-date
-	# TODO: --from-tag
-
-	with in_directory(tmp_repo):
-		runner = CliRunner()
-		result: Result = runner.invoke(show.log, catch_exceptions=False)
-
-	assert result.exit_code == 0
-	result.check_stdout(advanced_file_regression)

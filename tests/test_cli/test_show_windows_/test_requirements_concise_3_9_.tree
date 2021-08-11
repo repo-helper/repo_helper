@@ -1,0 +1,61 @@
+repo_helper==2020.12.18
+├── apeye>=1.0.0
+├── appdirs>=1.4.4
+├── astatine>=0.3.1
+├── asttokens>=2.0.4
+├── attr-utils>=0.5.5
+├── attrs>=20.3.0
+├── certifi>=2017.4.17
+├── charset-normalizer~=2.0.0; python_version >= "3"
+├── click==7.1.2
+├── colorama>=0.4.3; python_version < "3.10" and platform_system == "Windows"
+├── colorama; platform_system == "Windows"
+├── colorful>=0.4.0
+├── configconfig>=0.5.0
+├── consolekit>=1.2.2
+├── css-parser==1.0.6
+├── deprecation>=2.1.0
+├── deprecation-alias>=0.1.1
+├── dict2css>=0.2.0
+├── dist-meta>=0.1.2
+├── dom-toml>=0.5.0
+├── domdf-python-tools>=3.1.0
+├── dulwich!=0.20.7,!=0.20.8,!=0.20.9,>=0.20.5
+├── filelock>=3.0.12
+├── first>=2.0.2
+├── formate>=0.4.5
+├── handy-archives>=0.1.0
+├── idna>=2.5
+├── idna<4,>=2.5; python_version >= "3"
+├── isort<5.10.0,>=5.5.2
+├── jinja2>=2.11.3
+├── jsonschema>=3.2.0
+├── markupsafe>=2.0
+├── mistletoe>=0.7.2
+├── mkrecipe>=0.3.0
+├── mypy-extensions>=0.3.0
+├── natsort>=7.1.1
+├── packaging>=20.9
+├── prettyprinter>=0.18.0
+├── pygments>=2.2.0
+├── pyparsing>=2.0.2
+├── pyproject-parser>=0.3.0
+├── pyrsistent>=0.14.0
+├── requests>=2.24.0
+├── ruamel-yaml>=0.17.4
+├── ruamel-yaml-clib>=0.1.2; platform_python_implementation == "CPython" and python_version < "3.10"
+├── setuptools
+├── shippinglabel>=1.0.0
+├── six>=1.11.0
+├── southwark>=0.7.1
+├── tabulate>=0.8.8
+├── toml>=0.10.2
+├── toolz>=0.11.1
+├── trove-classifiers>=2020.10.21
+├── typing-extensions>=3.7.4.3
+├── typing-inspect>=0.6.0
+├── urllib3<1.27,>=1.24.1
+├── whey>=0.0.17
+├── whey-conda>=0.1.2
+├── yapf<0.32.0,>=0.30.0
+└── yapf-isort>=0.5.2
