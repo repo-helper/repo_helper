@@ -24,6 +24,7 @@ Configuration options.
 #
 
 # stdlib
+import itertools
 import json
 import re
 from contextlib import suppress
@@ -50,6 +51,7 @@ from configconfig.parser import Parser
 from configconfig.utils import make_schema
 from domdf_python_tools.compat import importlib_resources
 from domdf_python_tools.paths import PathPlus
+from domdf_python_tools.stringlist import StringList
 from domdf_python_tools.typing import PathLike
 from domdf_python_tools.versions import Version
 from first import first
@@ -257,6 +259,8 @@ __all__ = [
 		"github_ci_requirements",
 		]
 
+_REMOVED_KEYS_RE = re.compile("^(use_travis|travis_pypi_secure|travis_site)")
+
 
 def parse_yaml(repo_path: PathLike, allow_unknown_keys: bool = False) -> Dict:
 	"""
@@ -280,16 +284,16 @@ def parse_yaml(repo_path: PathLike, allow_unknown_keys: bool = False) -> Dict:
 	if not config_file.is_file():
 		raise FileNotFoundError(f"'repo_helper.yml' not found in {repo_path}")
 
-	config_file.write_lines([
-			line for line in config_file.read_lines()
-			if not re.match("^(use_travis|travis_pypi_secure|travis_site)", line)
-			])
+	content_lines = config_file.read_lines()
+
+	lines_without_removed_keys = StringList(itertools.filterfalse(_REMOVED_KEYS_RE.match, content_lines))
+	lines_without_removed_keys.blankline(ensure_single=True)
+
+	if lines_without_removed_keys != content_lines:
+		config_file.write_lines(lines_without_removed_keys)
 
 	parser = RepoHelperParser(allow_unknown_keys=allow_unknown_keys)
-	config_vars = parser.run(config_file)
-	config_file.write_clean(config_file.read_text())
-
-	return config_vars
+	return parser.run(config_file)
 
 
 all_values: List[ConfigVarMeta] = []
