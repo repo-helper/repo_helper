@@ -19,5 +19,4 @@ southwark>=0.7.1
 tabulate>=0.8.8
 typing-extensions>=3.7.4.1
 whey>=0.0.17
-whey-conda>=0.1.2
 yapf-isort>=0.5.2

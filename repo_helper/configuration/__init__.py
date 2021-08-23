@@ -138,7 +138,6 @@ from repo_helper.configuration.packaging import (
 		platforms,
 		py_modules,
 		setup_pre,
-		use_experimental_backend,
 		use_whey
 		)
 from repo_helper.configuration.python_versions_ import (
@@ -241,7 +240,6 @@ __all__ = [
 		"version",
 		"yapf_exclude",
 		"mypy_version",
-		"use_experimental_backend",
 		"enable_devmode",
 		"pre_commit_exclude",
 		"dump_schema",
@@ -259,7 +257,7 @@ __all__ = [
 		"github_ci_requirements",
 		]
 
-_REMOVED_KEYS_RE = re.compile("^(use_travis|travis_pypi_secure|travis_site)")
+_REMOVED_KEYS_RE = re.compile("^(use_travis|travis_pypi_secure|travis_site|use_experimental_backend)")
 
 
 def parse_yaml(repo_path: PathLike, allow_unknown_keys: bool = False) -> Dict:
@@ -378,9 +376,6 @@ class RepoHelperParser(Parser):
 
 		if (repo_path / parsed_config_vars["import_name"].replace('.', '/') / "py.typed").is_file():
 			parsed_config_vars["classifiers"].append("Typing :: Typed")
-
-		if parsed_config_vars["use_experimental_backend"]:
-			parsed_config_vars["tox_build_requirements"].append("repo_helper")
 
 		parsed_config_vars["classifiers"] = natsorted(set(parsed_config_vars["classifiers"]))
 

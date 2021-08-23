@@ -69,9 +69,7 @@ class CondaRecipeMaker(MaryBerry):
 		else:
 			config["extras"] = config["conda_extras"]
 
-		if config["use_experimental_backend"]:
-			config["requires"].append("repo-helper")
-		elif config["use_whey"]:
+		if config["use_whey"]:
 			config["requires"].append("whey")
 
 		url = "https://github.com/{username}/{repo_name}".format_map(config)

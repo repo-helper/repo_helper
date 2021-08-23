@@ -41,7 +41,6 @@ __all__ = [
 		"additional_requirements_files",
 		"setup_pre",
 		"platforms",
-		"use_experimental_backend",
 		"use_whey",
 		]
 
@@ -254,10 +253,12 @@ class platforms(ConfigVar):  # noqa
 	# 	return [x.lower() for x in value]
 
 
-class use_experimental_backend(ConfigVar):  # noqa
+class use_whey(ConfigVar):  # noqa
 	r"""
-	Whether to use ``repo_helper``\'s experimental build backend,
+	Whether to use `whey <https://whey.readthedocs.io/en/latest/>`_ to build distributions,
 	rather than ``setuptools.build_meta``.
+
+	.. versionadded:: 2021.3.8
 	"""  # noqa: D400
 
 	dtype = bool
@@ -271,11 +272,6 @@ class use_experimental_backend(ConfigVar):  # noqa
 		from repo_helper.configuration import desktopfile
 		from repo_helper.configuration.metadata import pure_python
 		from repo_helper.configuration.other import exclude_files
-
-		warnings.warn(
-				"'use_experimental_backend' is deprecated. Please switch to 'use_whey'.",
-				DeprecationWarning,
-				)
 
 		excluded_files = exclude_files.get(raw_config_vars)
 
@@ -301,15 +297,3 @@ class use_experimental_backend(ConfigVar):  # noqa
 				return False
 
 		return super().validate(raw_config_vars)
-
-
-class use_whey(use_experimental_backend):  # noqa
-	r"""
-	Whether to use `whey <https://whey.readthedocs.io/en/latest/>`_ to build distributions,
-	rather than ``setuptools.build_meta``.
-
-	.. versionadded:: 2021.3.8
-	"""  # noqa: D400
-
-	dtype = bool
-	default = False

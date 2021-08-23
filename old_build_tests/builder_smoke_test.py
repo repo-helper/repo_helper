@@ -45,9 +45,10 @@ from domdf_python_tools.typing import PathLike
 from dulwich.porcelain import default_bytes_err_stream
 from southwark import clone
 
-__all__ = ["builder_smoke_test"]
-
+# this package
 from repo_helper.testing import GITHUB_COM
+
+__all__ = ["builder_smoke_test"]
 
 
 def builder_smoke_test(

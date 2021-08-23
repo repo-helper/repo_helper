@@ -448,13 +448,6 @@
       ],
       "description": "The Travis Ubuntu version."
     },
-    "use_experimental_backend": {
-      "type": [
-        "boolean",
-        "string"
-      ],
-      "description": "Whether to use ``repo_helper``\\'s experimental build backend, rather than ``setuptools.build_meta``."
-    },
     "use_whey": {
       "type": [
         "boolean",

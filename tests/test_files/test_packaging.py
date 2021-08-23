@@ -79,7 +79,6 @@ def test_make_setup_case_1(
 		file_regression: FileRegressionFixture,
 		use_whey,
 		):
-	demo_environment.globals["use_experimental_backend"] = False
 	demo_environment.globals["desktopfile"] = {}
 	demo_environment.globals["use_whey"] = use_whey
 
@@ -94,7 +93,6 @@ def test_make_setup_case_1(
 
 @boolean_option("use_whey", "whey")
 def test_make_setup_case_2(tmp_pathplus, demo_environment, file_regression: FileRegressionFixture, use_whey):
-	demo_environment.globals["use_experimental_backend"] = False
 	demo_environment.globals["desktopfile"] = {}
 	demo_environment.globals["use_whey"] = use_whey
 
@@ -117,7 +115,7 @@ def test_make_setup_case_2(tmp_pathplus, demo_environment, file_regression: File
 		check_file_output(tmp_pathplus / managed_files[0], file_regression)
 
 
-@pytest.mark.parametrize("backend", ["whey", "experimental", "setuptools"])
+@pytest.mark.parametrize("backend", ["whey", "setuptools"])
 @boolean_option("enable_tests", "tests")
 @boolean_option("enable_docs", "docs")
 def test_make_pyproject(
@@ -148,14 +146,10 @@ def test_make_pyproject(
 	demo_environment.globals["tox_build_requirements"] = []
 	demo_environment.globals["copyright_years"] = "2020-2021"
 	demo_environment.globals["extra_sphinx_extensions"] = []
-
-	demo_environment.globals["use_experimental_backend"] = False
 	demo_environment.globals["use_whey"] = False
 
 	if backend == "whey":
 		demo_environment.globals["use_whey"] = True
-	elif backend == "experimental":
-		demo_environment.globals["use_experimental_backend"] = True
 
 	managed_files = make_pyproject(tmp_pathplus, demo_environment)
 	assert managed_files == ["pyproject.toml"]
@@ -180,7 +174,6 @@ def test_make_pyproject_whey_extras(
 	demo_environment.globals["classifiers"] = []
 	demo_environment.globals["console_scripts"] = []
 	demo_environment.globals["mypy_plugins"] = []
-	demo_environment.globals["use_experimental_backend"] = False
 	demo_environment.globals["enable_docs"] = True
 	demo_environment.globals["enable_tests"] = enable_tests
 	demo_environment.globals["conda_extras"] = ["none"]
@@ -243,7 +236,6 @@ def test_make_setup_cfg(
 	demo_environment.globals["python_versions"] = python_versions
 	demo_environment.globals["console_scripts"] = []
 	demo_environment.globals["mypy_plugins"] = []
-	demo_environment.globals["use_experimental_backend"] = False
 	demo_environment.globals["enable_docs"] = True
 	demo_environment.globals["entry_points"] = {}
 	demo_environment.globals["use_whey"] = use_whey
@@ -292,7 +284,6 @@ def test_make_setup_cfg_existing(
 	demo_environment.globals["console_scripts"] = []
 	demo_environment.globals["mypy_plugins"] = []
 	demo_environment.globals["mypy_version"] = "0.910"
-	demo_environment.globals["use_experimental_backend"] = False
 	demo_environment.globals["enable_docs"] = True
 	demo_environment.globals["use_whey"] = True
 	demo_environment.globals["entry_points"] = {}

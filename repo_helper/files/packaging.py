@@ -158,7 +158,7 @@ def make_pyproject(repo_path: pathlib.Path, templates: Environment) -> List[str]
 
 	build_requirements = sorted(combine_requirements(ComparableRequirement(req) for req in build_requirements_))
 
-	if templates.globals["use_whey"] or templates.globals["use_experimental_backend"]:
+	if templates.globals["use_whey"]:
 		for old_dep in ["setuptools", "wheel"]:
 			if old_dep in build_requirements:
 				build_requirements.remove(old_dep)  # type: ignore
@@ -168,9 +168,7 @@ def make_pyproject(repo_path: pathlib.Path, templates: Environment) -> List[str]
 	elif "whey" in build_requirements:
 		build_requirements.remove("whey")  # type: ignore
 
-	if templates.globals["use_experimental_backend"]:
-		build_backend = "repo_helper.build"
-	elif "repo-helper" in build_requirements:
+	if "repo-helper" in build_requirements:
 		build_requirements.remove("repo-helper")  # type: ignore
 
 	data["build-system"]["requires"] = list(map(str, build_requirements))
@@ -549,10 +547,6 @@ def make_setup_cfg(repo_path: pathlib.Path, templates: Environment) -> List[str]
 
 	# TODO: if "use_whey", remove this file, but ensure unmanaged sections are preserved
 
-	# if templates.globals["use_experimental_backend"]:
-	# 	if (repo_path / SetupCfgConfig.filename).is_file():
-	# 		(repo_path / SetupCfgConfig.filename).unlink()
-	# else:
 	SetupCfgConfig(repo_path=repo_path, templates=templates).write_out()
 
 	return [SetupCfgConfig.filename]
