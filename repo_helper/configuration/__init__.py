@@ -284,7 +284,12 @@ def parse_yaml(repo_path: PathLike, allow_unknown_keys: bool = False) -> Dict:
 
 	content_lines = config_file.read_lines()
 
-	lines_without_removed_keys = StringList(itertools.filterfalse(_REMOVED_KEYS_RE.match, content_lines))
+	lines_without_removed_keys = StringList(
+			itertools.filterfalse(
+					_REMOVED_KEYS_RE.match,  # type: ignore
+					content_lines,
+					),
+			)
 	lines_without_removed_keys.blankline(ensure_single=True)
 
 	if lines_without_removed_keys != content_lines:
