@@ -23,8 +23,8 @@
 	:target: https://github.com/octocat/REPO_NAME/actions?query=workflow%3A%22mypy%22
 	:alt: mypy status
 
-.. |requires_UNIQUE_NAME| image:: https://requires.io/github/octocat/REPO_NAME/requirements.svg?branch=master
-	:target: https://requires.io/github/octocat/REPO_NAME/requirements/?branch=master
+.. |requires_UNIQUE_NAME| image:: https://dependency-dash.herokuapp.com/github/octocat/REPO_NAME/badge.svg
+	:target: https://dependency-dash.herokuapp.com/github/octocat/REPO_NAME/
 	:alt: Requirements Status
 
 .. |codefactor_UNIQUE_NAME| image:: https://img.shields.io/codefactor/grade/github/octocat/REPO_NAME?logo=codefactor

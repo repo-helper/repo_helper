@@ -265,42 +265,45 @@ def test_make_requires_shield():
 	assert make_requires_shield(
 			"hello-world", "octocat"
 			) == f"""\
-.. image:: https://requires.io/github/octocat/hello-world/requirements.svg?branch=master
-	:target: https://requires.io/github/octocat/hello-world/requirements/?branch=master
+.. image:: https://dependency-dash.herokuapp.com/github/octocat/hello-world/badge.svg
+	:target: https://dependency-dash.herokuapp.com/github/octocat/hello-world/
 	:alt: Requirements Status"""
 
 	assert make_requires_shield(
 			"HELLO-WORLD", "octocat"
 			) == f"""\
-.. image:: https://requires.io/github/octocat/HELLO-WORLD/requirements.svg?branch=master
-	:target: https://requires.io/github/octocat/HELLO-WORLD/requirements/?branch=master
+.. image:: https://dependency-dash.herokuapp.com/github/octocat/HELLO-WORLD/badge.svg
+	:target: https://dependency-dash.herokuapp.com/github/octocat/HELLO-WORLD/
 	:alt: Requirements Status"""
 
 	assert make_requires_shield(
 			"hello_world", "octocat"
 			) == f"""\
-.. image:: https://requires.io/github/octocat/hello_world/requirements.svg?branch=master
-	:target: https://requires.io/github/octocat/hello_world/requirements/?branch=master
+.. image:: https://dependency-dash.herokuapp.com/github/octocat/hello_world/badge.svg
+	:target: https://dependency-dash.herokuapp.com/github/octocat/hello_world/
 	:alt: Requirements Status"""
 
 
 def test_make_docs_requires_shield():
-	assert make_docs_requires_shield(
+	assert make_requires_shield(
 			"hello-world", "octocat"
-			) == """\
-.. requires-io-shield::
+			) == f"""\
+.. image:: https://dependency-dash.herokuapp.com/github/octocat/hello-world/badge.svg
+	:target: https://dependency-dash.herokuapp.com/github/octocat/hello-world/
 	:alt: Requirements Status"""
 
-	assert make_docs_requires_shield(
+	assert make_requires_shield(
 			"HELLO-WORLD", "octocat"
-			) == """\
-.. requires-io-shield::
+			) == f"""\
+.. image:: https://dependency-dash.herokuapp.com/github/octocat/HELLO-WORLD/badge.svg
+	:target: https://dependency-dash.herokuapp.com/github/octocat/HELLO-WORLD/
 	:alt: Requirements Status"""
 
-	assert make_docs_requires_shield(
+	assert make_requires_shield(
 			"hello_world", "octocat"
-			) == """\
-.. requires-io-shield::
+			) == f"""\
+.. image:: https://dependency-dash.herokuapp.com/github/octocat/hello_world/badge.svg
+	:target: https://dependency-dash.herokuapp.com/github/octocat/hello_world/
 	:alt: Requirements Status"""
 
 

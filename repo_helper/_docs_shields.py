@@ -34,6 +34,7 @@ from repo_helper.shields import (
 		make_docker_automated_build_shield,
 		make_docker_build_status_shield,
 		make_docker_size_shield,
+		make_requires_shield,
 		make_typing_shield
 		)
 
@@ -169,7 +170,7 @@ def make_docs_actions_macos_shield(repo_name: str, username: str) -> str:
 
 def make_docs_requires_shield(repo_name: str, username: str) -> str:
 	"""
-	Create a shield to show the `requires.io <https://requires.io/>`_ requirements status.
+	Create a shield to show the `dependency-dash <dependency-dash.herokuapp.com>`_ requirements status.
 
 	:param repo_name: The name of the repository.
 	:param username: The username of the GitHub account that owns the repository.
@@ -177,9 +178,10 @@ def make_docs_requires_shield(repo_name: str, username: str) -> str:
 	:return: The shield.
 	"""
 
-	return """\
-.. requires-io-shield::
-	:alt: Requirements Status"""
+	# 	return """\
+	# .. requires-io-shield::
+	# 	:alt: Requirements Status"""
+	return make_requires_shield(repo_name, username)
 
 
 def make_docs_coveralls_shield(repo_name: str, username: str) -> str:

@@ -154,7 +154,7 @@ def make_actions_macos_shield(repo_name: str, username: str) -> str:
 
 def make_requires_shield(repo_name: str, username: str) -> str:
 	"""
-	Create a shield to show the `requires.io <https://requires.io/>`_ requirements status.
+	Create a shield to show the `dependency-dash <dependency-dash.herokuapp.com>`_ requirements status.
 
 	:param repo_name: The name of the repository.
 	:param username: The username of the GitHub account that owns the repository.
@@ -163,8 +163,8 @@ def make_requires_shield(repo_name: str, username: str) -> str:
 	"""
 
 	return f"""\
-.. image:: https://requires.io/github/{ username }/{ repo_name }/requirements.svg?branch=master
-	:target: https://requires.io/github/{ username }/{ repo_name }/requirements/?branch=master
+.. image:: https://dependency-dash.herokuapp.com/github/{ username }/{ repo_name }/badge.svg
+	:target: https://dependency-dash.herokuapp.com/github/{ username }/{ repo_name }/
 	:alt: Requirements Status"""
 
 
