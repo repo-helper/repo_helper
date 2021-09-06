@@ -781,6 +781,7 @@ def make_sphinx_config_dict(templates: Environment) -> Dict[str, Any]:
 	data["hide_none_rtype"] = True
 	data["all_typevars"] = True
 	data["overloads_location"] = "bottom"
+	data["html_codeblock_linenos_style"] = "table"
 
 	# Exclude "standard" methods.
 	data["autodoc_exclude_members"] = [
