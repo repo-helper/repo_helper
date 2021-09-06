@@ -334,15 +334,25 @@ def make_pre_commit(repo_path: pathlib.Path, templates: Environment) -> List[str
 	if custom_hooks_comment in raw_yaml:
 		custom_hooks_yaml = pre_commit_file.read_text().split(custom_hooks_comment)[1]
 
-		custom_hooks = [
-				Repo(**repo)
-				for repo in yaml_safe_loader.load(custom_hooks_yaml) or []
-				if repo["repo"] not in managed_hooks_urls
-				]
+		custom_hooks = []
+		local_hooks = []
+
+		for repo in yaml_safe_loader.load(custom_hooks_yaml) or []:
+			if repo["repo"] == "local":
+				local_hooks.append(repo)
+
+			elif repo["repo"] not in managed_hooks_urls:
+				custom_hooks.append(Repo(**repo))
 
 		for hook in custom_hooks:
 			buf = StringIO()
 			dumper.dump(hook.to_dict(), buf)
+			output.append(indent_re.sub(" - ", indent(buf.getvalue(), "   ")))
+			output.blankline(ensure_single=True)
+
+		for hook in local_hooks:
+			buf = StringIO()
+			dumper.dump(hook, buf)
 			output.append(indent_re.sub(" - ", indent(buf.getvalue(), "   ")))
 			output.blankline(ensure_single=True)
 
