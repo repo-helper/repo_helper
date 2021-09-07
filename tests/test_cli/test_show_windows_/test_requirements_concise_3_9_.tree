@@ -56,6 +56,5 @@ repo_helper==2020.12.18
 ├── typing-inspect>=0.6.0
 ├── urllib3<1.27,>=1.24.1
 ├── whey>=0.0.17
-├── whey-conda>=0.1.2
 ├── yapf<0.32.0,>=0.30.0
 └── yapf-isort>=0.5.2
