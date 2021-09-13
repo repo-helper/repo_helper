@@ -61,8 +61,8 @@ Note: The autocommit functionality is currently broken on Windows, but works OK 
 	:target: https://github.com/repo-helper/repo_helper/actions?query=workflow%3A%22mypy%22
 	:alt: mypy status
 
-.. |requires| image:: https://requires.io/github/repo-helper/repo_helper/requirements.svg?branch=master
-	:target: https://requires.io/github/repo-helper/repo_helper/requirements/?branch=master
+.. |requires| image:: https://dependency-dash.herokuapp.com/github/repo-helper/repo_helper/badge.svg
+	:target: https://dependency-dash.herokuapp.com/github/repo-helper/repo_helper/
 	:alt: Requirements Status
 
 .. |coveralls| image:: https://img.shields.io/coveralls/github/repo-helper/repo_helper/master?logo=coveralls
