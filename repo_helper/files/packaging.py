@@ -303,6 +303,32 @@ def make_pyproject(repo_path: pathlib.Path, templates: Environment) -> List[str]
 	if templates.globals["mypy_plugins"]:
 		data["tool"]["mypy"]["plugins"] = templates.globals["mypy_plugins"]
 
+	# [tool.dependency-dash]
+	data["tool"].setdefault("dependency-dash", {})
+	data["tool"]["dependency-dash"]["requirements.txt"] = {"order": 10}
+
+	if templates.globals["enable_tests"]:
+		data["tool"]["dependency-dash"]["tests/requirements.txt"] = {
+				"order": 20,
+				"include": False,
+				}
+
+	if templates.globals["enable_docs"]:
+		data["tool"]["dependency-dash"]["doc-source/requirements.txt"] = {
+				"order": 30,
+				"include": False,
+				}
+
+	# [tool.snippet-fmt]
+	data["tool"].setdefault("snippet-fmt", {})
+	data["tool"]["snippet-fmt"].setdefault("languages", {})
+	data["tool"]["snippet-fmt"].setdefault("directives", ["code-block"])
+
+	data["tool"]["snippet-fmt"]["languages"]["python"] = {"reformat": True}
+	data["tool"]["snippet-fmt"]["languages"]["TOML"] = {"reformat": True}
+	data["tool"]["snippet-fmt"]["languages"]["ini"] = {}
+	data["tool"]["snippet-fmt"]["languages"]["json"] = {}
+
 	if not data["tool"]:
 		del data["tool"]
 

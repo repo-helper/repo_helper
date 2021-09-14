@@ -264,10 +264,16 @@ def make_pre_commit(repo_path: pathlib.Path, templates: Environment) -> List[str
 					}]
 			)
 
+	snippet_fmt = Repo(
+			repo=make_github_url("python-formate", "snippet-fmt"),
+			rev="v0.1.0",
+			hooks=["snippet-fmt"],
+			)
+
 	formate_excludes = fr"^({'|'.join([*templates.globals['yapf_exclude'], *non_source_files])})\.(_)?py$"
 
 	formate = Repo(
-			repo=make_github_url("repo-helper", "formate"),
+			repo=make_github_url("python-formate", "formate"),
 			rev="v0.4.9",
 			hooks=[{"id": "formate", "exclude": formate_excludes}],
 			)
@@ -311,6 +317,7 @@ def make_pre_commit(repo_path: pathlib.Path, templates: Environment) -> List[str
 			pygrep_hooks,
 			pyupgrade,
 			lucas_c_hooks,
+			snippet_fmt,
 			formate,
 			]
 
