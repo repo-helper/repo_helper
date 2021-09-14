@@ -45,7 +45,7 @@ def do_test_release(
 			"keywords = utilities",
 			])
 	(temp_repo.path / "repo_helper_demo").maybe_make()
-	(temp_repo.path / "repo_helper_demo" / "__init__.py").write_text('__version__ = "0.0.1"')
+	(temp_repo.path / "repo_helper_demo" / "__init__.py").write_clean('__version__ = "0.0.1"')
 	(temp_repo.path / "README.rst").write_lines([
 			".. image:: https://img.shields.io/github/commits-since/domdfcoding/repo_helper/v0.0.1",
 			"\t:target: https://github.com/domdfcoding/repo_helper/pulse",

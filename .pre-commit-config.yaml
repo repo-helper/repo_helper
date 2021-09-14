@@ -1,11 +1,16 @@
 # This file is managed by 'repo_helper'. Don't edit it directly.
 ---
 
-exclude: ^.*\._py$
+exclude: ^repo_helper/templates/.*\.(_py|yml)$
 
 repos:
+ - repo: https://github.com/repo-helper/pyproject-parser
+   rev: v0.4.2
+   hooks:
+    - id: reformat-pyproject
+
  - repo: https://github.com/pre-commit/pre-commit-hooks
-   rev: v4.0.1
+   rev: v3.4.0
    hooks:
     - id: check-added-large-files
     - id: check-ast
@@ -15,9 +20,7 @@ repos:
     - id: check-executables-have-shebangs
     - id: check-json
     - id: check-toml
-      exclude: ^repo_helper/templates/.*\.toml$
     - id: check-yaml
-      exclude: ^repo_helper/templates/.*\.(yml|yaml)$
     - id: check-merge-conflict
     - id: check-symlinks
     - id: check-vcs-permalinks
@@ -33,7 +36,7 @@ repos:
       args:
        - --allow-git
     - id: check-docstring-first
-      exclude: ^(doc-source/conf|__pkginfo__|make_conda_recipe|setup|tests/.*)\.py$
+      exclude: ^(doc-source/conf|__pkginfo__|setup|tests/.*)\.py$
     - id: bind-requirements
 
  - repo: https://github.com/domdfcoding/flake8-dunder-all
@@ -43,10 +46,9 @@ repos:
       files: ^repo_helper/.*\.py$
 
  - repo: https://github.com/domdfcoding/flake2lint
-   rev: v0.4.0
+   rev: v0.4.1
    hooks:
     - id: flake2lint
-      files: ^(?!repo_helper/files/linting\.py).*$
 
  - repo: https://github.com/pre-commit/pygrep-hooks
    rev: v1.8.0
@@ -57,11 +59,12 @@ repos:
     - id: rst-inline-touching-normal
 
  - repo: https://github.com/asottile/pyupgrade
-   rev: v2.18.2
+   rev: v2.12.0
    hooks:
     - id: pyupgrade
       args:
        - --py36-plus
+       - --keep-runtime-typing
 
  - repo: https://github.com/Lucas-C/pre-commit-hooks
    rev: v1.1.10
@@ -69,11 +72,16 @@ repos:
     - id: remove-crlf
     - id: forbid-crlf
 
- - repo: https://github.com/repo-helper/formate
-   rev: v0.4.5
+ - repo: https://github.com/python-formate/snippet-fmt
+   rev: v0.1.0
+   hooks:
+    - id: snippet-fmt
+
+ - repo: https://github.com/python-formate/formate
+   rev: v0.4.9
    hooks:
     - id: formate
-      exclude: ^(repo_helper/templates/.*|doc-source/conf|__pkginfo__|make_conda_recipe|setup)\.(_)?py$
+      exclude: ^(repo_helper/templates/.*|doc-source/conf|__pkginfo__|setup)\.(_)?py$
 
  - repo: https://github.com/domdfcoding/dep_checker
    rev: v0.6.2
@@ -81,3 +89,5 @@ repos:
     - id: dep_checker
       args:
        - repo_helper
+
+# Custom hooks can be added below this comment

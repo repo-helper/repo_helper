@@ -15,7 +15,7 @@ docs_url: https://docs.repo-helper.uk
 python_deploy_version: 3.7
 min_coverage: 85
 tox_testenv_extras: all
-pre_commit_exclude: "^.*\\._py$"
+pre_commit_exclude: "^repo_helper/templates/.*\\.(_py|yml)$"
 
 additional_ignore:
  - Tokens
@@ -73,7 +73,6 @@ yapf_exclude:
  - "repo_helper/templates/.*"
 
 exclude_files:
- - pre-commit
  - license_rst
 
 extras_require:
