@@ -300,6 +300,7 @@ def make_pyproject(repo_path: pathlib.Path, templates: Environment) -> List[str]
 	data["tool"]["mypy"]["check_untyped_defs"] = True
 	data["tool"]["mypy"]["warn_unused_ignores"] = True
 	data["tool"]["mypy"]["no_implicit_optional"] = True
+	data["tool"]["mypy"]["show_error_codes"] = True
 	if templates.globals["mypy_plugins"]:
 		data["tool"]["mypy"]["plugins"] = templates.globals["mypy_plugins"]
 
@@ -501,6 +502,7 @@ class SetupCfgConfig(IniConfigurator):
 		self._ini["mypy"]["check_untyped_defs"] = True
 		self._ini["mypy"]["warn_unused_ignores"] = True
 		self._ini["mypy"]["no_implicit_optional"] = True
+		self._ini["mypy"]["show_error_codes"] = True
 		if self["mypy_plugins"]:
 			self._ini["mypy"]["plugins"] = ", ".join(self["mypy_plugins"])
 
