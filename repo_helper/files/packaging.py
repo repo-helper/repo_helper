@@ -29,11 +29,10 @@ import pathlib
 import posixpath
 import re
 import textwrap
-from typing import Any, Dict, Iterable, List, Tuple, TypeVar
+from typing import Any, Dict, List, Mapping, Tuple, TypeVar
 
 # 3rd party
 import dom_toml
-import jinja2
 from domdf_python_tools.compat import importlib_resources
 from domdf_python_tools.paths import PathPlus
 from natsort import natsorted
@@ -295,14 +294,7 @@ def make_pyproject(repo_path: pathlib.Path, templates: Environment) -> List[str]
 	# It isn't removed from setup.cfg unless the version is 0.901 or above
 	data["tool"].setdefault("mypy", {})
 
-	data["tool"]["mypy"]["python_version"] = templates.globals["min_py_version"]
-	data["tool"]["mypy"]["namespace_packages"] = True
-	data["tool"]["mypy"]["check_untyped_defs"] = True
-	data["tool"]["mypy"]["warn_unused_ignores"] = True
-	data["tool"]["mypy"]["no_implicit_optional"] = True
-	data["tool"]["mypy"]["show_error_codes"] = True
-	if templates.globals["mypy_plugins"]:
-		data["tool"]["mypy"]["plugins"] = templates.globals["mypy_plugins"]
+	data["tool"]["mypy"].update(_get_mypy_config(templates.globals))
 
 	# [tool.dependency-dash]
 	data["tool"].setdefault("dependency-dash", {})
@@ -497,14 +489,7 @@ class SetupCfgConfig(IniConfigurator):
 		``[mypy]``.
 		"""
 
-		self._ini["mypy"]["python_version"] = self["min_py_version"]
-		self._ini["mypy"]["namespace_packages"] = True
-		self._ini["mypy"]["check_untyped_defs"] = True
-		self._ini["mypy"]["warn_unused_ignores"] = True
-		self._ini["mypy"]["no_implicit_optional"] = True
-		self._ini["mypy"]["show_error_codes"] = True
-		if self["mypy_plugins"]:
-			self._ini["mypy"]["plugins"] = ", ".join(self["mypy_plugins"])
+		self._ini["mypy"].update(_get_mypy_config(self._globals))
 
 	def merge_existing(self, ini_file):
 
@@ -603,3 +588,18 @@ def make_pkginfo(repo_path: pathlib.Path, templates: Environment) -> List[str]:
 
 def split_entry_point(entry_point: str) -> Tuple[str, str]:
 	return tuple(map(str.strip, entry_point.split('=', 1)))  # type: ignore
+
+
+def _get_mypy_config(global_config: Mapping[str, Any]) -> Dict[str, Any]:
+	config = {}
+	config["python_version"] = global_config["min_py_version"]
+	config["namespace_packages"] = True
+	config["check_untyped_defs"] = True
+	config["warn_unused_ignores"] = True
+	config["no_implicit_optional"] = True
+	config["show_error_codes"] = True
+
+	if global_config["mypy_plugins"]:
+		config["plugins"] = ", ".join(global_config["mypy_plugins"])
+
+	return config
