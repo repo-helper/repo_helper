@@ -1,3 +1,4 @@
+{% set license_key = license_key.replace("-or-later", '') -%}
 =========
 License
 =========
