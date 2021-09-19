@@ -296,6 +296,9 @@ def make_pyproject(repo_path: pathlib.Path, templates: Environment) -> List[str]
 
 	data["tool"]["mypy"].update(_get_mypy_config(templates.globals))
 
+	if templates.globals["mypy_plugins"]:
+		data["tool"]["mypy"]["plugins"] = templates.globals["mypy_plugins"]
+
 	# [tool.dependency-dash]
 	data["tool"].setdefault("dependency-dash", {})
 	data["tool"]["dependency-dash"]["requirements.txt"] = {"order": 10}
@@ -490,6 +493,8 @@ class SetupCfgConfig(IniConfigurator):
 		"""
 
 		self._ini["mypy"].update(_get_mypy_config(self._globals))
+		if self["mypy_plugins"]:
+			self._ini["mypy"]["plugins"] = ", ".join(self["mypy_plugins"])
 
 	def merge_existing(self, ini_file):
 
@@ -598,8 +603,5 @@ def _get_mypy_config(global_config: Mapping[str, Any]) -> Dict[str, Any]:
 	config["warn_unused_ignores"] = True
 	config["no_implicit_optional"] = True
 	config["show_error_codes"] = True
-
-	if global_config["mypy_plugins"]:
-		config["plugins"] = ", ".join(global_config["mypy_plugins"])
 
 	return config

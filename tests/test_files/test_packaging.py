@@ -136,7 +136,7 @@ def test_make_pyproject(
 	demo_environment.globals["keywords"] = ["awesome", "python", "project"]
 	demo_environment.globals["classifiers"] = []
 	demo_environment.globals["console_scripts"] = []
-	demo_environment.globals["mypy_plugins"] = []
+	demo_environment.globals["mypy_plugins"] = ["my.mypy:plugin"]
 	demo_environment.globals["enable_docs"] = enable_docs
 	demo_environment.globals["enable_tests"] = enable_tests
 	demo_environment.globals["entry_points"] = {}
