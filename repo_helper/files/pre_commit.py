@@ -181,8 +181,7 @@ pygrep_hooks = Repo(
 				"python-no-eval",
 				"rst-backticks",
 				"rst-directive-colons",
-				"rst-inline-touching-normal",
-				# TODO: "python-check-blanket-type-ignore",
+				"rst-inline-touching-normal",  # TODO: "python-check-blanket-type-ignore",
 				],
 		)
 
