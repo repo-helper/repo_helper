@@ -266,7 +266,7 @@ def make_pre_commit(repo_path: pathlib.Path, templates: Environment) -> List[str
 
 	snippet_fmt = Repo(
 			repo=make_github_url("python-formate", "snippet-fmt"),
-			rev="v0.1.2",
+			rev="v0.1.3",
 			hooks=["snippet-fmt"],
 			)
 
