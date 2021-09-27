@@ -392,13 +392,14 @@ class ToxConfig(IniConfigurator):
 				"flake8-noqa>=1.1.0",
 				"flake8-pyi>=20.10.0",
 				"flake8-pytest-style>=1.3.0",
+				"flake8-quotes>=3.3.0",
 				"flake8-slots>=0.1.0",
 				"flake8-sphinx-links>=0.0.4",
 				"flake8-strftime>=0.1.1",
 				"flake8-typing-imports>=1.10.0",
-				"git+https://github.com/domdfcoding/flake8-quotes.git",
 				"git+https://github.com/domdfcoding/flake8-rst-docstrings-sphinx.git",
 				"git+https://github.com/domdfcoding/flake8-rst-docstrings.git",
+				"git+https://github.com/python-formate/flake8-unused-arguments.git@magic-methods",
 				"pydocstyle>=6.0.0",
 				"pygments>=2.7.1",
 				"importlib_metadata<4.5.0; python_version<'3.8'"
@@ -501,6 +502,10 @@ class ToxConfig(IniConfigurator):
 		self._ini["flake8"]["docstring-quotes"] = '"""'
 		self._ini["flake8"]["count"] = True
 		self._ini["flake8"]["min_python_version"] = self["requires_python"]
+		self._ini["flake8"]["unused-arguments-ignore-abstract-functions"] = True
+		self._ini["flake8"]["unused-arguments-ignore-overload-functions"] = True
+		self._ini["flake8"]["unused-arguments-ignore-magic-methods"] = True
+		self._ini["flake8"]["unused-arguments-ignore-variadic-names"] = True
 
 	def coverage_run(self):
 		"""
