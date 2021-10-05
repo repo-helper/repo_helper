@@ -462,7 +462,13 @@ def test_make_github_linux_case_4(
 	demo_environment.globals["enable_tests"] = False
 	demo_environment.globals["enable_conda"] = False
 	demo_environment.globals["enable_releases"] = False
-	demo_environment.globals["python_versions"] = ["3.6", "3.7", "3.8", "3.9", "3.10-dev"]
+	demo_environment.globals["python_versions"] = {
+			"3.6": {"experimental": False},
+			"3.7": {"experimental": False},
+			"3.8": {"experimental": False},
+			"3.9": {"experimental": False},
+			"3.10-dev": {"experimental": False}
+			}
 
 	demo_environment.globals["tox_py_versions"] = get_tox_python_versions(
 			demo_environment.globals["python_versions"]
@@ -518,12 +524,15 @@ def test_actions_manager_python_versions(
 
 		templates = SimpleNamespace()
 		templates.globals = {
-				"python_versions": python_versions,
+				"python_versions": {k: {"experimental": True} for k in python_versions},
 				"tox_py_versions": get_tox_python_versions(python_versions),
 				"third_party_version_matrix": {},
 				}
 
-	data_regression.check(ActionsManager.get_gh_actions_python_versions(FakeActionsManager()))  # type: ignore
+		get_gh_actions_python_versions = ActionsManager.get_gh_actions_python_versions
+		get_gh_actions_matrix = ActionsManager.get_gh_actions_matrix
+
+	data_regression.check(FakeActionsManager().get_gh_actions_python_versions())  # type: ignore
 
 
 @pytest.mark.parametrize(
@@ -547,9 +556,12 @@ def test_actions_manager_python_versions_matrix(
 
 		templates = SimpleNamespace()
 		templates.globals = {
-				"python_versions": python_versions,
+				"python_versions": {k: {"experimental": True} for k in python_versions},
 				"tox_py_versions": get_tox_python_versions(python_versions),
 				"third_party_version_matrix": {"attrs": ["19.3", "20.1", "20.2", "latest"]},
 				}
 
-	data_regression.check(ActionsManager.get_gh_actions_python_versions(FakeActionsManager()))  # type: ignore
+		get_gh_actions_python_versions = ActionsManager.get_gh_actions_python_versions
+		get_gh_actions_matrix = ActionsManager.get_gh_actions_matrix
+
+	data_regression.check(FakeActionsManager().get_gh_actions_python_versions())  # type: ignore

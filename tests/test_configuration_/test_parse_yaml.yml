@@ -84,10 +84,14 @@ py_modules: []
 pypi_name: repo_helper_demo
 python_deploy_version: '3.7'
 python_versions:
-- '3.6'
-- '3.7'
-- '3.8'
-- 3.9-dev
+  '3.6':
+    experimental: false
+  '3.7':
+    experimental: false
+  '3.8':
+    experimental: false
+  3.9-dev:
+    experimental: true
 repo_name: repo_helper_demo
 requires_python: 3.6.1
 rtfd_author: Dominic Davis-Foster

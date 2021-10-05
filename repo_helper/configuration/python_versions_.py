@@ -28,16 +28,11 @@ from typing import Any, Dict, Iterable, List, Optional, Sequence, Union
 
 # 3rd party
 from configconfig.configvar import ConfigVar
-from configconfig.utils import RawConfigVarsType
+from configconfig.utils import RawConfigVarsType, optional_getter
 from natsort import natsorted
+from packaging.version import InvalidVersion, Version
 
-__all__ = [
-		"python_deploy_version",
-		"requires_python",
-		"default_python_versions",
-		"python_versions",
-		"third_party_version_matrix"
-		]
+__all__ = ["python_deploy_version", "requires_python", "python_versions", "third_party_version_matrix"]
 
 
 class python_deploy_version(ConfigVar):  # noqa
@@ -85,19 +80,19 @@ class requires_python(ConfigVar):  # noqa
 			return None
 
 
-def default_python_versions(raw_config_vars: Optional[Dict[str, Any]]) -> List[str]:
+def _default_python_versions(raw_config_vars: Optional[Dict[str, Any]]) -> Dict[str, Dict[str, Any]]:
 	"""
 	Function to return the default value for :conf:`python_versions`.
 
 	:param raw_config_vars:
 	"""
 
-	return [python_deploy_version(raw_config_vars)]  # type: ignore
+	return {str(python_deploy_version(raw_config_vars)): {}}  # type: ignore
 
 
 class python_versions(ConfigVar):  # noqa
 	"""
-	A list of the version(s) of Python to use when performing tests with Tox, E.g.
+	A list of the version(s) of Python to use when performing tests with Tox, e.g.
 
 	.. code-block:: yaml
 
@@ -108,16 +103,103 @@ class python_versions(ConfigVar):  # noqa
 		  - pypy3
 
 	If undefined the value of :conf:`python_deploy_version` is used instead.
+
+	For more advanced configuration, this may instead be a mapping of version number strings
+	to mappings of options, e.g.:
+
+	.. code-block:: yaml
+
+		python_versions:
+		  3.6:
+		  3.7:
+		  3.8:
+		  pypy3:
+		    experimental: false
+
+	PyPy 3.7 and prerelease versions of CPython are treated as experimental by default unless overridden.
+
+	.. versionchanged:: $VERSION  Added support for mappings as well as lists.
 	"""
 
-	dtype = List[Union[str, float]]
-	rtype = List[str]
-	default = default_python_versions
+	# dtype = Union[List[Union[str, float]], Dict[str, Dict[str, Any]]]
+	dtype = Union[list, dict]
+	rtype = Dict[str, Dict[str, Any]]
+	default = _default_python_versions
 	category: str = "python versions"
 
+	@staticmethod
+	def _is_experimental(version: str):
+		if version == "pypy37":
+			return True
+
+		try:
+			return Version(version).is_prerelease
+		except InvalidVersion:
+			return False
+
 	@classmethod
-	def validator(cls, value: Iterable[str]) -> List[str]:  # noqa: D102
-		return natsorted(str(ver) for ver in value if ver)
+	def validator(cls, value) -> Dict[str, Dict[str, Any]]:  # noqa: D102
+		output = {}
+
+		for version, metadata in natsorted((str(k), v) for k, v in value.items() if k):
+			metadata.setdefault("experimental", cls._is_experimental(version))
+
+			output[version] = metadata
+
+		return output
+
+	@classmethod
+	def validate(cls, raw_config_vars: Optional[RawConfigVarsType] = None) -> Any:
+		"""
+		Validate the value obtained from the ``YAML`` file and coerce into the appropriate return type.
+
+		:param raw_config_vars: Dictionary to obtain the value from.
+
+		:rtype: See the :attr:`~.ConfigVar.rtype` attribute.
+		"""
+
+		if raw_config_vars is None:
+			raw_config_vars = {}
+
+		if cls.rtype is None:
+			cls.rtype = cls.dtype
+
+		if raw_config_vars is None:
+			raw_config_vars = {}
+
+		obj = optional_getter(raw_config_vars, cls, cls.required)
+
+		if isinstance(obj, Dict):
+			output = {}
+
+			for k, v in obj.items():
+				if v is None:
+					v = {}
+
+				if not isinstance(v, dict):
+					raise ValueError(f"'{cls.__name__}' must be a dictionary mapping strings to dictionaries")
+				output[str(k)] = {str(kk): vv for kk, vv in v.items()}
+
+			return output
+
+		elif isinstance(obj, List):
+
+			data = optional_getter(raw_config_vars, cls, cls.required)
+			if isinstance(data, str) or not isinstance(data, Iterable):
+				raise ValueError(f"'{cls.__name__}' must be a list of strings or floats")
+
+			buf: Dict[str, Dict[str, Any]] = {}
+			for ver in data:
+				if not isinstance(ver, (str, float)):
+					raise ValueError(f"Values in '{cls.__name__}' must be strings or floats")
+				buf[str(ver)] = {}
+
+			return buf
+
+		else:
+			raise ValueError(
+					f"'{cls.__name__}' must be a dictionary mapping strings to dictionaries, or a list of strings"
+					)
 
 
 class third_party_version_matrix(ConfigVar):  # noqa

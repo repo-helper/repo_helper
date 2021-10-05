@@ -201,10 +201,33 @@ def test_make_pyproject_whey_extras(
 @pytest.mark.parametrize(
 		"python_versions",
 		[
-				pytest.param([3.6, 3.7, 3.8], id="simple_versions"),
-				pytest.param([3.6, 3.7, 3.8, "3.10"], id="complex_versions"),
-				pytest.param([3.7, "3.10", 3.8, 3.6], id="unordered_versions"),
-				pytest.param([3.6, 3.7, 3.8, "pypy3"], id="pypy_versions"),
+				pytest.param({
+						3.6: {"experimental": False},
+						3.7: {"experimental": False},
+						3.8: {"experimental": False},
+						},
+								id="simple_versions"),
+				pytest.param({
+						3.6: {"experimental": False},
+						3.7: {"experimental": False},
+						3.8: {"experimental": False},
+						"3.10": {"experimental": False}
+						},
+								id="complex_versions"),
+				pytest.param({
+						3.7: {"experimental": False},
+						"3.10": {"experimental": False},
+						3.8: {"experimental": False},
+						3.6: {"experimental": False}
+						},
+								id="unordered_versions"),
+				pytest.param({
+						3.6: {"experimental": False},
+						3.7: {"experimental": False},
+						3.8: {"experimental": False},
+						"pypy3": {"experimental": False}
+						},
+								id="pypy_versions"),
 				]
 		)
 @pytest.mark.parametrize(

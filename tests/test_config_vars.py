@@ -599,16 +599,50 @@ class Test_python_deploy_version(OptionalStringTest):
 		super().test_success()
 
 
-class Test_python_versions(ListTest):
+class Test_python_versions(DictTest):
 	config_var = python_versions
-	test_value = ["3.6", "3.7", "pypy3"]
-	default_value = ["3.6"]
+	test_value = {"3.6": {"experimental": True}, "3.7": {}, "pypy3": {"option": "Value"}}
+	default_value = {"3.6": {"experimental": False}}
 
 	def test_success(self):
-		assert self.config_var.get({self.config_var.__name__: ["3.6", 3.7, "pypy3"]}) == self.test_value
-		assert python_versions.get({"python_deploy_version": 3.8}) == ["3.8"]
-		assert python_versions.get({"python_deploy_version": "3.8"}) == ["3.8"]
-		super().test_success()
+		value = ["3.6", 3.7, "pypy3"]
+		assert self.config_var.get({self.config_var.__name__: value}) == {
+				"3.6": {"experimental": False},
+				"3.7": {"experimental": False},
+				"pypy3": {"experimental": False},
+				}
+
+		value2 = {
+				"3.6": {"experimental": True},
+				"3.7": {"experimental": False},
+				"pypy3": {"option": "Value", "experimental": False}
+				}
+		assert self.config_var.get({self.config_var.__name__: self.test_value}) == value2
+		assert self.config_var.get({self.config_var.__name__: value2}) == value2
+
+		assert python_versions.get({"python_deploy_version": 3.8}) == {"3.8": {"experimental": False}}
+		assert python_versions.get({"python_deploy_version": "3.8"}) == {"3.8": {"experimental": False}}
+
+		assert self.config_var.get({self.config_var.__name__: ["3.6", 3.7, "pypy3"]}) == {
+				"3.6": {"experimental": False},
+				"3.7": {"experimental": False},
+				"pypy3": {"experimental": False},
+				}
+		assert self.config_var.get({self.config_var.__name__: ["3.6", "3.7", "pypy3"]}) == {
+				"3.6": {"experimental": False},
+				"3.7": {"experimental": False},
+				"pypy3": {"experimental": False},
+				}
+
+		assert self.config_var.get({self.config_var.__name__: {}}) == {}
+		assert self.config_var.get(self.different_key_value) == self.default_value
+		assert self.config_var.get() == self.default_value
+		assert self.config_var.get({}) == self.default_value
+
+	def test_error_list_int(self):
+		"""
+		This will pass as lists are also allowed
+		"""
 
 
 class Test_additional_setup_args(DictTest):

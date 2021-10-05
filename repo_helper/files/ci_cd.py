@@ -27,7 +27,7 @@ Manage configuration files for continuous integration / continuous deployment.
 import pathlib
 import posixpath
 from textwrap import indent
-from typing import Dict, Iterable, Iterator, List, Optional
+from typing import Dict, Iterable, Iterator, List, Optional, Tuple
 
 # 3rd party
 from domdf_python_tools.paths import PathPlus
@@ -153,8 +153,22 @@ class ActionsManager:
 		.. versionadded:: 2020.12.21
 		"""
 
+		gh_action_matrix = self.get_gh_actions_matrix()
+		version_mapping: Dict[str, str] = {}
+
+		for py_version, (testenvs, experimental) in gh_action_matrix.items():
+			version_mapping[str(py_version)] = testenvs
+
+		return version_mapping
+
+	def get_gh_actions_matrix(self) -> Dict[str, Tuple[str, bool]]:
+		"""
+		Determines the matrix of Python versions used in GitHub Actions.
+
+		.. versionadded:: $VERSION
+		"""
+
 		config = self.templates.globals
-		tox_travis_matrix: Dict[str, str] = {}
 
 		python_versions = config["python_versions"]
 		tox_py_versions = config["tox_py_versions"]
@@ -167,10 +181,19 @@ class ActionsManager:
 		else:
 			matrix_testenv_string = ''
 
-		for py_version, tox_py_version in zip(set_gh_actions_versions(python_versions), tox_py_versions):
-			tox_travis_matrix[str(py_version)] = f"{tox_py_version}{matrix_testenv_string},build"
+		output: Dict[str, Tuple[str, bool]] = {}
 
-		return tox_travis_matrix
+		for (py_version, metadata), gh_py_version, tox_py_version in zip(
+			python_versions.items(),
+			set_gh_actions_versions(python_versions),
+			tox_py_versions,
+			):
+			output[str(gh_py_version)] = (
+					f"{tox_py_version}{matrix_testenv_string},build",
+					metadata["experimental"],
+					)
+
+		return output
 
 	@staticmethod
 	def _is_experimental(version: str):
@@ -198,7 +221,7 @@ class ActionsManager:
 							ci_name=platform_name,
 							python_versions=set_gh_actions_versions(self.get_windows_ci_versions()),
 							dependency_lines=self.get_windows_ci_requirements(),
-							gh_actions_versions=self.get_gh_actions_python_versions(),
+							gh_actions_versions=self.get_gh_actions_matrix(),
 							code_file_filter=self._code_file_filter,
 							is_experimental=self._is_experimental
 							)
@@ -224,7 +247,7 @@ class ActionsManager:
 							ci_name=platform_name,
 							python_versions=set_gh_actions_versions(self.get_macos_ci_versions()),
 							dependency_lines=self.get_macos_ci_requirements(),
-							gh_actions_versions=self.get_gh_actions_python_versions(),
+							gh_actions_versions=self.get_gh_actions_matrix(),
 							code_file_filter=self._code_file_filter,
 							is_experimental=self._is_experimental
 							)
@@ -250,7 +273,7 @@ class ActionsManager:
 							ci_platform=platform_ci_names[platform_name],
 							ci_name=platform_name,
 							dependency_lines=self.get_linux_ci_requirements(),
-							gh_actions_versions=self.get_gh_actions_python_versions(),
+							gh_actions_versions=self.get_gh_actions_matrix(),
 							code_file_filter=self._code_file_filter,
 							run_on_tags="    tags:\n      - '*'",
 							is_experimental=self._is_experimental
@@ -361,7 +384,7 @@ class ActionsManager:
 		Returns the Python versions to run tests for on Windows.
 		"""
 
-		py_versions: List[str] = self.templates.globals["python_versions"][:]
+		py_versions: List[str] = list(self.templates.globals["python_versions"])
 
 		if not self.templates.globals["pure_python"] and "3.8" in py_versions:
 			py_versions.remove("3.8")  # FIXME: Python 3.8 tests fail on Windows for native wheels.

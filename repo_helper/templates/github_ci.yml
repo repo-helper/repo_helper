@@ -27,7 +27,8 @@ jobs:
       fail-fast: False
       matrix:
         config:{% for version in no_dev_versions(python_versions) %}
-          - {python-version: "{{ version }}", testenvs: "{{ gh_actions_versions[version] }}", experimental: {{ is_experimental(version) }}}{% endfor %}
+          {%- set testenvs, experimental = gh_actions_versions[version] %}
+          - {python-version: "{{ version }}", testenvs: "{{ testenvs }}", experimental: {{ experimental }}}{% endfor %}
 
     steps:
       - name: Checkout 🛎️

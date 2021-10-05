@@ -59,7 +59,6 @@ __all__ = [
 		"temp_empty_repo",
 		"example_config",
 		"is_running_on_actions",
-		"builder_smoke_test",
 		]
 
 
@@ -137,7 +136,7 @@ def demo_environment() -> Environment:
 					github_ci_requirements={"Linux": {"pre": [], "post": []}},
 					travis_additional_requirements=[],
 					conda_channels=["conda-forge"],
-					python_versions=["3.6", "3.7"],
+					python_versions={"3.6": {"experimental": False}, "3.7": {"experimental": False}},
 					enable_tests=True,
 					enable_conda=True,
 					enable_docs=True,

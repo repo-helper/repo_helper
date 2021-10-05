@@ -141,7 +141,6 @@ from repo_helper.configuration.packaging import (
 		use_whey
 		)
 from repo_helper.configuration.python_versions_ import (
-		default_python_versions,
 		python_deploy_version,
 		python_versions,
 		requires_python,
@@ -183,7 +182,6 @@ __all__ = [
 		"conda_description",
 		"console_scripts",
 		"copyright_years",
-		"default_python_versions",
 		"docker_name",
 		"docker_shields",
 		"docs_dir",

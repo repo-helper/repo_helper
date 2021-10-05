@@ -304,14 +304,11 @@
       "description": "The version of Python to use on Travis when deploying to PyPI, Anaconda and GitHub releases."
     },
     "python_versions": {
-      "type": "array",
-      "items": {
-        "type": [
-          "string",
-          "number"
-        ]
-      },
-      "description": "A list of the version(s) of Python to use when performing tests with Tox, E.g."
+      "type": [
+        "array",
+        "object"
+      ],
+      "description": "A list of the version(s) of Python to use when performing tests with Tox, e.g."
     },
     "repo_name": {
       "type": "string",
