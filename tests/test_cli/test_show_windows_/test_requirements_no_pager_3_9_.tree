@@ -18,9 +18,7 @@ repo_helper==2020.12.18
 │   │   └── typing-extensions>=3.7.4.1
 │   ├── jsonschema>=3.2.0
 │   │   ├── attrs>=17.4.0
-│   │   ├── pyrsistent>=0.14.0
-│   │   ├── setuptools
-│   │   └── six>=1.11.0
+│   │   └── pyrsistent!=0.17.0,!=0.17.1,!=0.17.2,>=0.14.0
 │   ├── ruamel-yaml>=0.16.12
 │   │   └── ruamel.yaml.clib>=0.1.2; platform_python_implementation == "CPython" and python_version < "3.10"
 │   ├── typing-extensions>=3.7.4.3
