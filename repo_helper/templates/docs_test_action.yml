@@ -32,6 +32,6 @@ jobs:
         uses: sphinx-toolbox/sphinx-action@sphinx-3.3.1
         {% if enable_tests %}if: steps.changes.outputs.code == 'true'{% endif %}
         with:
-          pre-build-command: python -m pip install tox
+          pre-build-command: python -m pip install "tox<4"
           docs-folder: "{{ docs_dir }}/"
           build-command: "{{ build_command }}"
