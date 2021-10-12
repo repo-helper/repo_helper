@@ -96,21 +96,26 @@ jobs:
           path: coverage
 
       - name: Display structure of downloaded files
+        id: show
         run: ls -R
         working-directory: coverage
+        continue-on-error: true
 
       - name: Combine Coverage 👷
+        if: ${{ steps.show.outcome != 'failure' }}
         run: |
           shopt -s globstar
           python -m coverage combine coverage/**/.coverage
 
       - name: "Upload Combined Coverage Artefact 🚀"
+        if: ${{ steps.show.outcome != 'failure' }}
         uses: actions/upload-artifact@v2
         with:
           name: "combined-coverage"
           path: .coverage
 
       - name: "Upload Combined Coverage to Coveralls"
+        if: ${{ steps.show.outcome != 'failure' }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
