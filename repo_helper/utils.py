@@ -447,10 +447,10 @@ def set_gh_actions_versions(py_versions: Iterable[str]) -> List[str]:
 		py_versions[py_versions.index("3.9-dev")] = "3.9"
 	if "3.10-dev" in py_versions:
 		py_versions[py_versions.index("3.10-dev")] = "3.10"
-	# if "3.10-dev" in py_versions:
-	# 	py_versions[py_versions.index("3.10-dev")] = "3.10.0-rc.2"
-	# if "3.10" in py_versions:
-	# 	py_versions[py_versions.index("3.10")] = "3.10.0-rc.2"
+	if "3.11-dev" in py_versions:
+		py_versions[py_versions.index("3.11-dev")] = "3.11.0-a1"
+	if "3.11" in py_versions:
+		py_versions[py_versions.index("3.11")] = "3.11.0-a1"
 	if "pypy3" in py_versions:
 		py_versions[py_versions.index("pypy3")] = "pypy-3.6"
 	if "pypy36" in py_versions:

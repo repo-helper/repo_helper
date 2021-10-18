@@ -550,6 +550,10 @@ def _pure_version_numbers(*version_numbers) -> Iterator[str]:
 			yield str(version_numbers)
 		elif pypy_version_match:
 			yield f"3.{pypy_version_match.group(1)}"
+		elif isinstance(version, str) and version.endswith('0'):
+			number, *zeros = version.partition('0')
+			with suppress(ValueError):
+				yield ''.join((str(float(number)), *zeros))
 		else:
 			with suppress(ValueError):
 				yield str(float(version))
