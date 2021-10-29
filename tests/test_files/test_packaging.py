@@ -32,6 +32,7 @@ from pytest_regressions.file_regression import FileRegressionFixture
 
 # this package
 from repo_helper.files.packaging import make_manifest, make_pkginfo, make_pyproject, make_setup, make_setup_cfg
+from tests.test_files.test_testing import AdvancedFileRegressionFixture
 
 
 def boolean_option(name: str, id: str):  # noqa: A002  # pylint: disable=redefined-builtin
@@ -159,9 +160,9 @@ def test_make_pyproject(
 
 @boolean_option("enable_tests", "tests")
 def test_make_pyproject_whey_extras(
-		tmp_pathplus,
+		tmp_pathplus: PathPlus,
 		demo_environment,
-		file_regression: FileRegressionFixture,
+		advanced_file_regression: AdvancedFileRegressionFixture,
 		enable_tests: bool,
 		):
 	# TODO: permutations to cover all branches
@@ -196,7 +197,7 @@ def test_make_pyproject_whey_extras(
 
 	managed_files = make_pyproject(tmp_pathplus, demo_environment)
 	assert managed_files == ["pyproject.toml"]
-	check_file_output(tmp_pathplus / managed_files[0], file_regression)
+	advanced_file_regression.check_file(tmp_pathplus / managed_files[0])
 
 
 @pytest.mark.parametrize(

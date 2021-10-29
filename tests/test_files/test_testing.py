@@ -26,7 +26,8 @@ from typing import Sequence
 
 # 3rd party
 import pytest
-from coincidence.regressions import check_file_output
+from coincidence.regressions import AdvancedFileRegressionFixture, check_file_output
+from domdf_python_tools.paths import PathPlus
 from pytest_regressions.file_regression import FileRegressionFixture
 
 # this package
@@ -77,143 +78,150 @@ class TestMakeTox:
 		demo_environment.globals["enable_docs"] = enable_docs
 		demo_environment.globals["enable_tests"] = enable_tests
 		demo_environment.globals["enable_devmode"] = enable_devmode
-		demo_environment.globals["code_only_warning"] = code_only_warning
 		demo_environment.globals["python_deploy_version"] = python_deploy_version
 
 	@boolean_option("enable_docs", "docs")
 	def test_tox_enable_docs(
 			self,
-			tmp_pathplus,
+			tmp_pathplus: PathPlus,
 			demo_environment,
-			file_regression: FileRegressionFixture,
+			advanced_file_regression: AdvancedFileRegressionFixture,
 			enable_docs,
 			):
 		self.set_globals(demo_environment, enable_docs=enable_docs)
 		make_tox(tmp_pathplus, demo_environment)
-		check_file_output(tmp_pathplus / "tox.ini", file_regression)
+		advanced_file_regression.check_file(tmp_pathplus / "tox.ini")
 
 	@boolean_option("enable_tests", "tests")
 	def test_tox_enable_tests(
 			self,
-			tmp_pathplus,
+			tmp_pathplus: PathPlus,
 			demo_environment,
-			file_regression: FileRegressionFixture,
+			advanced_file_regression: AdvancedFileRegressionFixture,
 			enable_tests,
 			):
 		self.set_globals(demo_environment, enable_tests=enable_tests)
 		make_tox(tmp_pathplus, demo_environment)
-		check_file_output(tmp_pathplus / "tox.ini", file_regression)
+		advanced_file_regression.check_file(tmp_pathplus / "tox.ini")
 
 	@boolean_option("enable_devmode", "devmode")
 	def test_tox_enable_devmode(
 			self,
-			tmp_pathplus,
+			tmp_pathplus: PathPlus,
 			demo_environment,
-			file_regression: FileRegressionFixture,
+			advanced_file_regression: AdvancedFileRegressionFixture,
 			enable_devmode,
 			):
 		self.set_globals(demo_environment, enable_devmode=enable_devmode)
 		make_tox(tmp_pathplus, demo_environment)
-		check_file_output(tmp_pathplus / "tox.ini", file_regression)
+		advanced_file_regression.check_file(tmp_pathplus / "tox.ini")
 
 	@boolean_option("stubs_package", "stubs")
 	def test_tox_stubs_package(
 			self,
-			tmp_pathplus,
+			tmp_pathplus: PathPlus,
 			demo_environment,
-			file_regression: FileRegressionFixture,
+			advanced_file_regression: AdvancedFileRegressionFixture,
 			stubs_package,
 			):
 		self.set_globals(demo_environment, stubs_package=stubs_package)
 		make_tox(tmp_pathplus, demo_environment)
-		check_file_output(tmp_pathplus / "tox.ini", file_regression)
+		advanced_file_regression.check_file(tmp_pathplus / "tox.ini")
 
 	@pytest.mark.parametrize("tox_testenv_extras", ["extra_a", ''])
 	def test_tox_tox_testenv_extras(
 			self,
-			tmp_pathplus,
+			tmp_pathplus: PathPlus,
 			demo_environment,
-			file_regression: FileRegressionFixture,
+			advanced_file_regression: AdvancedFileRegressionFixture,
 			tox_testenv_extras,
 			):
 		self.set_globals(demo_environment, tox_testenv_extras=tox_testenv_extras)
 		make_tox(tmp_pathplus, demo_environment)
-		check_file_output(tmp_pathplus / "tox.ini", file_regression)
+		advanced_file_regression.check_file(tmp_pathplus / "tox.ini")
 
 	@pytest.mark.parametrize("mypy_deps", [[], ["docutils-stubs"]])
 	def test_tox_mypy_deps(
 			self,
-			tmp_pathplus,
+			tmp_pathplus: PathPlus,
 			demo_environment,
-			file_regression: FileRegressionFixture,
+			advanced_file_regression: AdvancedFileRegressionFixture,
 			mypy_deps,
 			):
 		self.set_globals(demo_environment, mypy_deps=mypy_deps)
 		make_tox(tmp_pathplus, demo_environment)
-		check_file_output(tmp_pathplus / "tox.ini", file_regression)
+		advanced_file_regression.check_file(tmp_pathplus / "tox.ini")
 
 	@pytest.mark.parametrize("mypy_version", ["0.790", "0.782"])
 	def test_tox_mypy_version(
 			self,
-			tmp_pathplus,
+			tmp_pathplus: PathPlus,
 			demo_environment,
-			file_regression: FileRegressionFixture,
+			advanced_file_regression: AdvancedFileRegressionFixture,
 			mypy_version,
 			):
 		self.set_globals(demo_environment, mypy_version=mypy_version)
 		make_tox(tmp_pathplus, demo_environment)
-		check_file_output(tmp_pathplus / "tox.ini", file_regression)
+		advanced_file_regression.check_file(tmp_pathplus / "tox.ini")
 
 	@pytest.mark.parametrize("python_deploy_version", ["3.6", "3.7", "3.8"])
 	def test_tox_python_deploy_version(
 			self,
-			tmp_pathplus,
+			tmp_pathplus: PathPlus,
 			demo_environment,
-			file_regression: FileRegressionFixture,
+			advanced_file_regression: AdvancedFileRegressionFixture,
 			python_deploy_version,
 			):
 		self.set_globals(demo_environment, python_deploy_version=python_deploy_version)
 		make_tox(tmp_pathplus, demo_environment)
-		check_file_output(tmp_pathplus / "tox.ini", file_regression)
+		advanced_file_regression.check_file(tmp_pathplus / "tox.ini")
 
 	@pytest.mark.parametrize("py_modules", [["hello_world"], []])
 	def test_tox_py_modules(
 			self,
-			tmp_pathplus,
+			tmp_pathplus: PathPlus,
 			demo_environment,
-			file_regression: FileRegressionFixture,
+			advanced_file_regression: AdvancedFileRegressionFixture,
 			py_modules,
 			):
 		self.set_globals(demo_environment, py_modules=py_modules)
 		make_tox(tmp_pathplus, demo_environment)
-		check_file_output(tmp_pathplus / "tox.ini", file_regression)
+		advanced_file_regression.check_file(tmp_pathplus / "tox.ini")
 
 	def test_make_tox_matrix(
 			self,
-			tmp_pathplus,
+			tmp_pathplus: PathPlus,
 			demo_environment,
-			file_regression: FileRegressionFixture,
+			advanced_file_regression: AdvancedFileRegressionFixture,
 			):
 		self.set_globals(demo_environment, enable_docs=False, enable_devmode=False, py_modules=["hello_world"])
 		demo_environment.globals["third_party_version_matrix"] = {"attrs": ["19.3", "20.1", "20.2", "latest"]}
 
 		make_tox(tmp_pathplus, demo_environment)
-		check_file_output(tmp_pathplus / "tox.ini", file_regression)
+		advanced_file_regression.check_file(tmp_pathplus / "tox.ini")
 
 
-def test_make_yapf(tmp_pathplus, demo_environment, file_regression):
+def test_make_yapf(
+		tmp_pathplus: PathPlus,
+		demo_environment,
+		advanced_file_regression: AdvancedFileRegressionFixture,
+		):
 	managed_files = make_yapf(tmp_pathplus, demo_environment)
 	assert managed_files == [".style.yapf"]
-	check_file_output(tmp_pathplus / managed_files[0], file_regression)
+	advanced_file_regression.check_file(tmp_pathplus / managed_files[0])
 
 
-def test_make_isort(tmp_pathplus, demo_environment, file_regression):
+def test_make_isort(
+		tmp_pathplus: PathPlus,
+		demo_environment,
+		advanced_file_regression: AdvancedFileRegressionFixture,
+		):
 	managed_files = make_isort(tmp_pathplus, demo_environment)
 	assert managed_files == [".isort.cfg"]
 	assert not (tmp_pathplus / managed_files[0]).is_file()
 
 
-# def test_make_isort_case_1(tmp_pathplus, demo_environment, file_regression):
+# def test_make_isort_case_1(tmp_pathplus: PathPlus, demo_environment, advanced_file_regression: AdvancedFileRegressionFixture):
 # 	(tmp_pathplus / "tests").mkdir()
 # 	(tmp_pathplus / "tests" / "requirements.txt").write_text('')
 #
@@ -228,10 +236,10 @@ def test_make_isort(tmp_pathplus, demo_environment, file_regression):
 #
 # 	managed_files = make_isort(tmp_pathplus, demo_environment)
 # 	assert managed_files == [".isort.cfg"]
-# 	check_file_output(tmp_pathplus / managed_files[0], file_regression)
+# 	advanced_file_regression.check_file(tmp_pathplus / managed_files[0])
 #
 #
-# def test_make_isort_case_2(tmp_pathplus, demo_environment, file_regression):
+# def test_make_isort_case_2(tmp_pathplus: PathPlus, demo_environment, advanced_file_regression: AdvancedFileRegressionFixture):
 # 	(tmp_pathplus / "tests").mkdir()
 # 	(tmp_pathplus / "tests" / "requirements.txt").write_text('')
 #
@@ -248,10 +256,14 @@ def test_make_isort(tmp_pathplus, demo_environment, file_regression):
 #
 # 	managed_files = make_isort(tmp_pathplus, demo_environment)
 # 	assert managed_files == [".isort.cfg"]
-# 	check_file_output(tmp_pathplus / managed_files[0], file_regression)
+# 	advanced_file_regression.check_file(tmp_pathplus / managed_files[0])
 
 
-def test_make_formate_toml_case_1(tmp_pathplus, demo_environment, file_regression):
+def test_make_formate_toml_case_1(
+		tmp_pathplus: PathPlus,
+		demo_environment,
+		advanced_file_regression: AdvancedFileRegressionFixture
+		):
 	(tmp_pathplus / "tests").mkdir()
 	(tmp_pathplus / "tests" / "requirements.txt").write_text('')
 
@@ -266,11 +278,15 @@ def test_make_formate_toml_case_1(tmp_pathplus, demo_environment, file_regressio
 
 	managed_files = make_formate_toml(tmp_pathplus, demo_environment)
 	assert managed_files == ["formate.toml", ".isort.cfg"]
-	check_file_output(tmp_pathplus / managed_files[0], file_regression)
+	advanced_file_regression.check_file(tmp_pathplus / managed_files[0])
 	assert not (tmp_pathplus / managed_files[1]).is_file()
 
 
-def test_make_formate_toml_case_2(tmp_pathplus, demo_environment, file_regression):
+def test_make_formate_toml_case_2(
+		tmp_pathplus: PathPlus,
+		demo_environment,
+		advanced_file_regression: AdvancedFileRegressionFixture,
+		):
 	(tmp_pathplus / "tests").mkdir()
 	(tmp_pathplus / "tests" / "requirements.txt").write_text('')
 
@@ -287,11 +303,15 @@ def test_make_formate_toml_case_2(tmp_pathplus, demo_environment, file_regressio
 
 	managed_files = make_formate_toml(tmp_pathplus, demo_environment)
 	assert managed_files == ["formate.toml", ".isort.cfg"]
-	check_file_output(tmp_pathplus / managed_files[0], file_regression)
+	advanced_file_regression.check_file(tmp_pathplus / managed_files[0])
 	assert not (tmp_pathplus / managed_files[1]).is_file()
 
 
-def test_make_formate_toml_case_3(tmp_pathplus, demo_environment, file_regression):
+def test_make_formate_toml_case_3(
+		tmp_pathplus: PathPlus,
+		demo_environment,
+		advanced_file_regression: AdvancedFileRegressionFixture,
+		):
 	(tmp_pathplus / "tests").mkdir()
 	(tmp_pathplus / "tests" / "requirements.txt").write_text('')
 
@@ -310,7 +330,7 @@ def test_make_formate_toml_case_3(tmp_pathplus, demo_environment, file_regressio
 
 	managed_files = make_formate_toml(tmp_pathplus, demo_environment)
 	assert managed_files == ["formate.toml", ".isort.cfg"]
-	check_file_output(tmp_pathplus / managed_files[0], file_regression)
+	advanced_file_regression.check_file(tmp_pathplus / managed_files[0])
 	assert not (tmp_pathplus / managed_files[1]).is_file()
 
 
@@ -376,7 +396,11 @@ def test_ensure_tests_requirements_extras(tmp_pathplus, demo_environment):
 			]
 
 
-def test_make_pre_commit(tmp_pathplus, demo_environment, file_regression):
+def test_make_pre_commit(
+		tmp_pathplus: PathPlus,
+		demo_environment,
+		advanced_file_regression: AdvancedFileRegressionFixture,
+		):
 	# TODO: permutations to cover all branches
 	demo_environment.globals["yapf_exclude"] = []
 	demo_environment.globals["pre_commit_exclude"] = "^$"
@@ -385,4 +409,4 @@ def test_make_pre_commit(tmp_pathplus, demo_environment, file_regression):
 
 	managed_files = make_pre_commit(tmp_pathplus, demo_environment)
 	assert managed_files == [".pre-commit-config.yaml"]
-	check_file_output(tmp_pathplus / managed_files[0], file_regression)
+	advanced_file_regression.check_file(tmp_pathplus / managed_files[0])
