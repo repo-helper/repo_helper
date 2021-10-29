@@ -114,7 +114,7 @@ def demo_environment() -> Environment:
 
 	plus ``lint_warn_list`` = :py:data:`repo_helper.files.linting.lint_warn_list`.
 
-	Additional options can be set and values changed at the start of with:
+	Additional options can be set and values changed at the start of tests as follows:
 
 	.. code-block:: python
 

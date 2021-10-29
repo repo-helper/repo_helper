@@ -369,7 +369,6 @@ class ToxConfig(IniConfigurator):
 		``[testenv:lint]``.
 		"""
 
-		# TODO: https://github.com/asottile/yesqa
 		self._ini["testenv:lint"]["basepython"] = "python{python_deploy_version}".format(**self._globals)
 		self._ini["testenv:lint"]["changedir"] = "{toxinidir}"
 		self._ini["testenv:lint"]["ignore_errors"] = True
@@ -524,11 +523,6 @@ class ToxConfig(IniConfigurator):
 		if self["import_name"] != "coverage_pyver_pragma":
 			# TODO: allow user customisation
 			self._ini["coverage:run"]["plugins"] = "coverage_pyver_pragma"
-		# elif "plugins" in self._ini["coverage:run"]:
-		# 	del self._ini["coverage:run"]["plugins"]
-
-		# self._ini["coverage:run"]["source"] = self["import_name"]
-
 		else:
 			self._ini.remove_section("coverage:run")
 

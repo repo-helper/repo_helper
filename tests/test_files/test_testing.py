@@ -262,7 +262,7 @@ def test_make_isort(
 def test_make_formate_toml_case_1(
 		tmp_pathplus: PathPlus,
 		demo_environment,
-		advanced_file_regression: AdvancedFileRegressionFixture
+		advanced_file_regression: AdvancedFileRegressionFixture,
 		):
 	(tmp_pathplus / "tests").mkdir()
 	(tmp_pathplus / "tests" / "requirements.txt").write_text('')
