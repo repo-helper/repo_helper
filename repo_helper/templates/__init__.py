@@ -34,10 +34,10 @@ from domdf_python_tools.paths import PathPlus
 __all__ = ["template_dir", "init_repo_template_dir"]
 
 #: The templates directory.
-template_dir = (PathPlus(__file__).parent / "templates").absolute()
+template_dir = (PathPlus(__file__).parent).absolute()
 
 #: The directory representing the files used to initialise a new repository
-init_repo_template_dir = (PathPlus(__file__).parent / "init_repo_files").absolute()
+init_repo_template_dir = (PathPlus(__file__).parent.parent / "init_repo_files").absolute()
 
 
 class Environment(jinja2.Environment):
