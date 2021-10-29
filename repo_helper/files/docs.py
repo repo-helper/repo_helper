@@ -66,7 +66,7 @@ from repo_helper.blocks import (
 from repo_helper.configupdater2 import ConfigUpdater
 from repo_helper.files import management
 from repo_helper.templates import Environment, init_repo_template_dir, template_dir
-from repo_helper.utils import license_lookup, pformat_tabs, reformat_file
+from repo_helper.utils import license_lookup, pformat_tabs, reformat_file, resource
 
 __all__ = [
 		"ensure_doc_requirements",
@@ -366,7 +366,7 @@ def make_conf(repo_path: pathlib.Path, templates: Environment) -> List[str]:
 
 	file.write_clean(conf.render(pformat=pformat_tabs, enquote_value=enquote_value))
 
-	with importlib_resources.path(repo_helper.files, "isort.cfg") as isort_config:
+	with resource(repo_helper.files, "isort.cfg") as isort_config:
 		yapf_style = PathPlus(isort_config).parent.parent / "templates" / "style.yapf"
 		reformat_file(file, yapf_style=str(yapf_style), isort_config_file=str(isort_config))
 

@@ -81,6 +81,7 @@ from repo_helper.shields import (
 		make_rtfd_shield,
 		make_wheel_shield
 		)
+from repo_helper.utils import resource
 
 __all__ = [
 		"installation_regex",
@@ -119,7 +120,7 @@ def template_from_file(filename: str, **globals) -> Template:  # pylint: disable
 	:param \*\*globals:
 	"""
 
-	with importlib_resources.path("repo_helper.blocks", filename) as shields_block_template_file:
+	with resource("repo_helper.blocks", filename) as shields_block_template_file:
 		template_text = PathPlus(shields_block_template_file).read_text().replace("\\\n", '')
 
 		environment = Environment(loader=BaseLoader(), undefined=StrictUndefined)  # nosec: B701

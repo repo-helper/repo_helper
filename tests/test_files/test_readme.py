@@ -34,6 +34,7 @@ from readme_renderer.rst import render  # type: ignore
 # this package
 import tests.test_files.test_readme_input
 from repo_helper.files.readme import rewrite_readme
+from repo_helper.utils import resource
 
 
 @pytest.mark.parametrize("filename", [
@@ -59,7 +60,7 @@ def test_rewrite_readme(
 
 	readme_file = tmp_pathplus / "README.rst"
 
-	with importlib_resources.path(tests.test_files.test_readme_input, filename) as p:
+	with resource(tests.test_files.test_readme_input, filename) as p:
 		readme_file.write_clean(PathPlus(p).read_text())
 
 	managed_files = rewrite_readme(tmp_pathplus, demo_environment)

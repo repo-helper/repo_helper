@@ -28,9 +28,11 @@ import datetime
 import os
 import pathlib
 import re
+import sys
 import textwrap
 from datetime import date, timedelta
 from io import StringIO
+from types import ModuleType
 from typing import Any, Callable, Iterable, List, Optional, Union
 
 # 3rd party
@@ -38,6 +40,7 @@ import dulwich.repo
 import isort  # type: ignore
 import isort.settings  # type: ignore
 import yapf_isort
+from domdf_python_tools.compat import importlib_resources
 from domdf_python_tools.dates import calc_easter
 from domdf_python_tools.import_tools import discover_entry_points
 from domdf_python_tools.paths import PathPlus, sort_paths
@@ -47,11 +50,13 @@ from domdf_python_tools.typing import PathLike
 from ruamel.yaml import YAML
 from shippinglabel import normalize
 from southwark import open_repo_closing, status
+from typing_extensions import ContextManager
 
 # this package
 from repo_helper.configupdater2 import ConfigUpdater, Section
 
 __all__ = [
+		"resource",
 		"IniConfigurator",
 		"discover_entry_points",
 		"easter_egg",
@@ -475,3 +480,22 @@ def _round_trip_dump(obj: Any):
 	stream = StringIO()
 	_yaml_round_trip_dumper.dump(obj, stream=stream)
 	return stream.getvalue()
+
+
+def resource(
+		package: Union[str, ModuleType],
+		resource: PathLike,
+		) -> ContextManager[pathlib.Path]:
+	"""
+	Retrieve the path to a resource inside a package.
+
+	.. versionadded:: $VERSION
+
+	:param package: The name of the package, or a module object representing it.
+	:param resource: The name of the resource.
+	"""
+
+	if sys.version_info < (3, 7):
+		return importlib_resources.as_file(importlib_resources.files(package) / os.fspath(resource))
+	else:
+		return importlib_resources.path(package, resource)

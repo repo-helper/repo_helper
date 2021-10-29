@@ -47,7 +47,14 @@ from repo_helper.configuration.utils import get_version_classifiers
 from repo_helper.files import management
 from repo_helper.files.docs import make_sphinx_config_dict
 from repo_helper.templates import Environment
-from repo_helper.utils import IniConfigurator, indent_join, indent_with_tab, license_lookup, reformat_file
+from repo_helper.utils import (
+		IniConfigurator,
+		indent_join,
+		indent_with_tab,
+		license_lookup,
+		reformat_file,
+		resource
+		)
 
 __all__ = [
 		"make_manifest",
@@ -373,7 +380,7 @@ def make_setup(repo_path: pathlib.Path, templates: Environment) -> List[str]:
 				setup.render(additional_setup_args='\n'.join(f"\t\t{k}={v}," for k, v in setup_args))
 				)
 
-		with importlib_resources.path(repo_helper.files, "isort.cfg") as isort_config:
+		with resource(repo_helper.files, "isort.cfg") as isort_config:
 			yapf_style = PathPlus(isort_config).parent.parent / "templates" / "style.yapf"
 			reformat_file(setup_file, yapf_style=str(yapf_style), isort_config_file=str(isort_config))
 
@@ -596,7 +603,7 @@ def make_pkginfo(repo_path: pathlib.Path, templates: Environment) -> List[str]:
 	pkginfo_file = PathPlus(repo_path / "__pkginfo__.py")
 	pkginfo_file.write_clean(__pkginfo__.render())
 
-	with importlib_resources.path(repo_helper.files, "isort.cfg") as isort_config:
+	with resource(repo_helper.files, "isort.cfg") as isort_config:
 		yapf_style = PathPlus(isort_config).parent.parent / "templates" / "style.yapf"
 		reformat_file(pkginfo_file, yapf_style=str(yapf_style), isort_config_file=str(isort_config))
 

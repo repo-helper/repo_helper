@@ -47,6 +47,7 @@ from repo_helper.files.docs import (
 		rewrite_docs_index
 		)
 from repo_helper.files.old import remove_autodoc_augment_defaults
+from repo_helper.utils import resource
 
 
 def test_make_rtfd_case_1(tmp_pathplus, demo_environment, file_regression: FileRegressionFixture):
@@ -264,7 +265,7 @@ def test_rewrite_docs_index(
 	index_file = tmp_pathplus / "doc-source" / "index.rst"
 	index_file.parent.maybe_make()
 
-	with importlib_resources.path(tests.test_files.test_rewrite_docs_index_input, filename) as p:
+	with resource(tests.test_files.test_rewrite_docs_index_input, filename) as p:
 		index_file.write_clean(PathPlus(p).read_text())
 
 	managed_files = rewrite_docs_index(tmp_pathplus, demo_environment)

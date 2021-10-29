@@ -167,7 +167,7 @@ from repo_helper.configuration.travis import (
 		travis_ubuntu_version
 		)
 from repo_helper.configuration.utils import get_tox_python_versions, parse_extras
-from repo_helper.utils import no_dev_versions
+from repo_helper.utils import no_dev_versions, resource
 
 __all__ = [
 		"RepoHelperParser",
@@ -405,7 +405,7 @@ def dump_schema() -> Dict[str, Any]:
 
 	schema = make_schema(*all_values)
 
-	with importlib_resources.path(repo_helper, "repo_helper_schema.json") as schema_file:
+	with resource(repo_helper, "repo_helper_schema.json") as schema_file:
 		PathPlus(schema_file).write_clean(json.dumps(schema, indent=2))
 		click.echo(f"Wrote schema to {schema_file}")
 
