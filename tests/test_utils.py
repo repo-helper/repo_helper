@@ -25,11 +25,12 @@ from textwrap import dedent
 
 # 3rd party
 import pytest
+from coincidence import AdvancedDataRegressionFixture, AdvancedFileRegressionFixture
 from pytest_regressions.data_regression import DataRegressionFixture
 
 # this package
 from repo_helper.configuration.utils import get_version_classifiers
-from repo_helper.utils import indent_with_tab, pformat_tabs
+from repo_helper.utils import get_license_text, indent_with_tab, pformat_tabs
 
 
 def test_indent_with_tab():
@@ -90,5 +91,18 @@ def test_pformat_tabs():
 				("3.9-dev", "pypy3"),
 				]
 		)
-def test_get_version_classifiers(python_versions, data_regression: DataRegressionFixture):
-	data_regression.check(get_version_classifiers(python_versions))
+def test_get_version_classifiers(python_versions, advanced_data_regression: AdvancedDataRegressionFixture):
+	advanced_data_regression.check(get_version_classifiers(python_versions))
+
+
+@pytest.mark.parametrize("license_name", ["MIT", "MIT License", "GPLv3"])
+@pytest.mark.parametrize("copyright_years", [
+		pytest.param("2019-2021", id="str"),
+		pytest.param(2020, id="int"),
+		])
+def test_get_license_text(
+		license_name: str,
+		copyright_years,
+		advanced_file_regression: AdvancedFileRegressionFixture,
+		):
+	advanced_file_regression.check(get_license_text(license_name, copyright_years, "Joe Bloggs", "hello-world.c"))

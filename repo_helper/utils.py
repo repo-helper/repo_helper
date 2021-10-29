@@ -39,7 +39,9 @@ from typing import Any, Callable, Iterable, List, Optional, Union
 import dulwich.repo
 import isort  # type: ignore
 import isort.settings  # type: ignore
+import jinja2
 import yapf_isort
+from apeye.requests_url import RequestsURL
 from domdf_python_tools.compat import importlib_resources
 from domdf_python_tools.dates import calc_easter
 from domdf_python_tools.import_tools import discover_entry_points
@@ -47,6 +49,7 @@ from domdf_python_tools.paths import PathPlus, sort_paths
 from domdf_python_tools.pretty_print import FancyPrinter
 from domdf_python_tools.stringlist import StringList
 from domdf_python_tools.typing import PathLike
+from jinja2 import Environment
 from ruamel.yaml import YAML
 from shippinglabel import normalize
 from southwark import open_repo_closing, status
@@ -71,6 +74,7 @@ __all__ = [
 		"sort_paths",
 		"commit_changes",
 		"stage_changes",
+		"get_license_text",
 		"set_gh_actions_versions",
 		]
 
@@ -496,6 +500,98 @@ def resource(
 	"""
 
 	if sys.version_info < (3, 7):
-		return importlib_resources.as_file(importlib_resources.files(package) / os.fspath(resource))
+		return importlib_resources.as_file(
+				importlib_resources.files(package) / os.fspath(resource)
+				)  # type: ignore
 	else:
 		return importlib_resources.path(package, resource)
+
+
+base_license_url = RequestsURL("https://raw.githubusercontent.com/licenses/license-templates/master/templates/")
+
+license_file_lookup = dict([
+		(
+				"GNU Lesser General Public License v3 (LGPLv3)",
+				(base_license_url / "lgpl.txt", "lgpl3.py"),
+				),
+		(
+				"GNU Lesser General Public License v3 or later (LGPLv3+)",
+				(base_license_url / "lgpl.txt", "lgpl3_plus.py")
+				),
+		("GNU General Public License v3 (GPLv3)", (base_license_url / "gpl3.txt", "gpl3.py")),
+		("GNU General Public License v3 or later (GPLv3+)", (base_license_url / "gpl3.txt", "gpl3_plus.py")),
+		(
+				"GNU General Public License v2 (GPLv2)",
+				(RequestsURL("https://www.gnu.org/licenses/old-licenses/gpl-2.0.txt"), "gpl2.py"),
+				),
+		(
+				"GNU General Public License v2 or later (GPLv2+)",
+				(RequestsURL("https://www.gnu.org/licenses/old-licenses/gpl-2.0.txt"), "gpl2_plus.py")
+				),
+		("MIT License", (base_license_url / "mit.txt", "mit.py")),
+		])
+
+
+def get_license_text(
+		license_name: str,
+		copyright_years: Union[str, int],
+		author: str,
+		project_name: str,
+		):
+	"""
+	Obtain the license text for the given license.
+
+	.. versionadded:: $VERSION
+
+	:param license_name: The name of the license.
+	:param copyright_years: The copyright years (e.g. ``'2019-2021'``) to display in the license.
+		Not supported by all licenses.
+	:param author: The name of the author/copyright holder to display in the license.
+		Not supported by all licenses.
+	:param project_name: The name of the project to display in the license.
+		Not supported by all licenses.
+
+	Licenses are obtained from https://github.com/licenses/license-templates.
+	"""
+
+	if license_name in license_lookup:
+		license_name = license_lookup[license_name]
+
+	# Licenses from https://github.com/licenses/license-templates/tree/master/templates
+	license_url: Optional[RequestsURL] = None
+	license_text: str = ''
+
+	# TODO: 2 vs 3 clause BSD
+
+	if license_name in license_file_lookup:
+		license_url = license_file_lookup[license_name][0]
+	elif license_name == "BSD License":
+		license_url = base_license_url / "bsd2.txt"
+	elif license_name == "Apache Software License":
+		license_url = base_license_url / "apache.txt"
+
+	if license_url is not None:
+		for attempt in [1, 2]:
+
+			try:
+				response = license_url.get()
+			except Exception:
+				# except requests.exceptions.RequestException:
+				if attempt == 1:
+					continue
+				else:
+					raise
+
+			if response.status_code == 200:
+				license_text = response.text
+
+	license_template = Environment(
+			loader=jinja2.BaseLoader(),
+			undefined=jinja2.StrictUndefined,
+			).from_string(license_text)
+
+	return license_template.render(
+			year=copyright_years,
+			organization=author,
+			project=project_name,
+			)

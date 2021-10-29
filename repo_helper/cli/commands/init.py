@@ -43,8 +43,9 @@ from southwark.click import commit_message_option, commit_option
 from repo_helper.cli import cli_command
 from repo_helper.cli.utils import run_repo_helper
 from repo_helper.templates import Environment, init_repo_template_dir
+from repo_helper.utils import get_license_text
 
-__all__ = ["init", "init_repo", "base_license_url", "license_file_lookup"]
+__all__ = ["init", "init_repo"]
 
 
 @force_option(help_text="Run 'repo_helper' even when the git working directory is not clean.")
@@ -72,30 +73,6 @@ def init(ctx, force: bool, commit: bool, message: str):
 
 	sys.exit(ret)
 
-
-base_license_url = RequestsURL("https://raw.githubusercontent.com/licenses/license-templates/master/templates/")
-
-license_file_lookup = dict([
-		(
-				"GNU Lesser General Public License v3 (LGPLv3)",
-				(base_license_url / "lgpl.txt", "lgpl3.py"),
-				),
-		(
-				"GNU Lesser General Public License v3 or later (LGPLv3+)",
-				(base_license_url / "lgpl.txt", "lgpl3_plus.py")
-				),
-		("GNU General Public License v3 (GPLv3)", (base_license_url / "gpl3.txt", "gpl3.py")),
-		("GNU General Public License v3 or later (GPLv3+)", (base_license_url / "gpl3.txt", "gpl3_plus.py")),
-		(
-				"GNU General Public License v2 (GPLv2)",
-				(RequestsURL("https://www.gnu.org/licenses/old-licenses/gpl-2.0.txt"), "gpl2.py"),
-				),
-		(
-				"GNU General Public License v2 or later (GPLv2+)",
-				(RequestsURL("https://www.gnu.org/licenses/old-licenses/gpl-2.0.txt"), "gpl2_plus.py")
-				),
-		("MIT License", (base_license_url / "mit.txt", "mit.py")),
-		])
 
 license_init_file_lookup = {
 		# TODO: BSD 2 and 3
@@ -157,44 +134,12 @@ def init_repo(repo_path: pathlib.Path, templates: Environment) -> List[str]:
 		template = init_repo_templates.get_template(filename)
 		(repo_path / filename).write_clean(template.render())
 
-	# Licenses from https://github.com/licenses/license-templates/tree/master/templates
-	license_url: Optional[RequestsURL] = None
-	license_text: str = ''
-
-	# TODO: 2 vs 3 clause BSD
-
-	if repo_license in license_file_lookup:
-		license_url = license_file_lookup[repo_license][0]
-	elif repo_license == "BSD License":
-		license_url = base_license_url / "bsd2.txt"
-	elif repo_license == "Apache Software License":
-		license_url = base_license_url / "apache.txt"
-
-	if license_url is not None:
-		for attempt in [1, 2]:
-
-			try:
-				response = license_url.get()
-			except Exception:
-				# except requests.exceptions.RequestException:
-				if attempt == 1:
-					continue
-				else:
-					raise
-
-			if response.status_code == 200:
-				license_text = response.text
-
-	license_template = Environment(  # nosec: B701
-			loader=jinja2.BaseLoader(),
-			undefined=jinja2.StrictUndefined,
-			).from_string(license_text)
-
 	(repo_path / "LICENSE").write_clean(
-			license_template.render(
-					year=datetime.datetime.today().year,
-					organization=templates.globals["author"],
-					project=templates.globals["modname"],
+			get_license_text(
+					repo_license,
+					copyright_years=datetime.datetime.today().year,
+					author=templates.globals["author"],
+					project_name=templates.globals["modname"],
 					)
 			)
 
