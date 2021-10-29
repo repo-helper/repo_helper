@@ -267,7 +267,7 @@ def make_pyproject(repo_path: pathlib.Path, templates: Environment) -> List[str]
 			python_implementations.add("PyPy")
 			python_versions.add(f"3.{pypy_version_m.group(1)}")
 
-	data["tool"]["whey"]["python-versions"] = sorted(python_versions)
+	data["tool"]["whey"]["python-versions"] = natsorted(python_versions)
 	data["tool"]["whey"]["python-implementations"] = sorted(python_implementations)
 
 	data["tool"]["whey"]["platforms"] = templates.globals["platforms"]
