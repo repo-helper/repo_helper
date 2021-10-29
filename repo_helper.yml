@@ -16,6 +16,7 @@ python_deploy_version: 3.7
 min_coverage: 85
 tox_testenv_extras: all
 pre_commit_exclude: "^repo_helper/templates/.*\\.(_py|yml)$"
+use_whey: true
 
 additional_ignore:
  - Tokens
