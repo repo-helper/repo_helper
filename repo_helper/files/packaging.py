@@ -183,6 +183,10 @@ def make_pyproject(repo_path: pathlib.Path, templates: Environment) -> List[str]
 	data["project"]["authors"] = [{"name": templates.globals["author"], "email": templates.globals["email"]}]
 	data["project"]["license"] = {"file": "LICENSE"}
 
+	if templates.globals["requires_python"] is not None:
+		data["project"]["dynamic"].pop(0)
+		data["project"]["requires-python"] = f">={templates.globals['requires_python']}"
+
 	url = "https://github.com/{username}/{repo_name}".format_map(templates.globals)
 	data["project"]["urls"] = {
 			"Homepage": url,
@@ -460,7 +464,15 @@ class SetupCfgConfig(IniConfigurator):
 		``[options]``.
 		"""
 
-		self._ini["options"]["python_requires"] = f">={self['requires_python']}"
+		if self["requires_python"] is None:
+			if self["min_py_version"] in {"3.6", 3.6}:
+				requires_python = "3.6.1"
+			else:
+				requires_python = self["min_py_version"]
+		else:
+			requires_python = self["requires_python"]
+
+		self._ini["options"]["python_requires"] = f">={requires_python}"
 		self._ini["options"]["zip_safe"] = False
 		self._ini["options"]["include_package_data"] = True
 		if self["stubs_package"]:

@@ -501,7 +501,16 @@ class ToxConfig(IniConfigurator):
 		self._ini["flake8"]["multiline-quotes"] = '"""'
 		self._ini["flake8"]["docstring-quotes"] = '"""'
 		self._ini["flake8"]["count"] = True
-		self._ini["flake8"]["min_python_version"] = self["requires_python"]
+
+		if self["requires_python"] is None:
+			if self["min_py_version"] in {"3.6", 3.6}:
+				requires_python = "3.6.1"
+			else:
+				requires_python = self["min_py_version"]
+		else:
+			requires_python = self["requires_python"]
+
+		self._ini["flake8"]["min_python_version"] = requires_python
 		self._ini["flake8"]["unused-arguments-ignore-abstract-functions"] = True
 		self._ini["flake8"]["unused-arguments-ignore-overload-functions"] = True
 		self._ini["flake8"]["unused-arguments-ignore-magic-methods"] = True

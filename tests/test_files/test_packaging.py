@@ -147,6 +147,7 @@ def test_make_pyproject(
 	demo_environment.globals["copyright_years"] = "2020-2021"
 	demo_environment.globals["extra_sphinx_extensions"] = []
 	demo_environment.globals["use_whey"] = False
+	demo_environment.globals["requires_python"] = None
 
 	if backend == "whey":
 		demo_environment.globals["use_whey"] = True
