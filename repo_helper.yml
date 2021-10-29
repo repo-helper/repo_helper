@@ -52,12 +52,8 @@ classifiers:
  - 'Development Status :: 4 - Beta'
  - 'Environment :: Console'
  - 'Intended Audience :: Developers'
- - 'Topic :: Software Development :: Libraries :: Python Modules'
  - 'Topic :: Utilities'
- - 'Topic :: Software Development :: Build Tools'
  - 'Topic :: Software Development :: Version Control :: Git'
- - 'Topic :: System :: Archiving :: Packaging'
- - 'Topic :: System :: Software Distribution'
  - 'Environment :: Console'
 
 extra_sphinx_extensions:
