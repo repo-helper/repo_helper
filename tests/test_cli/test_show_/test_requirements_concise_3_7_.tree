@@ -38,7 +38,7 @@ repo_helper==2020.12.18
 ├── packaging>=20.9
 ├── prettyprinter>=0.18.0
 ├── pygments>=2.2.0
-├── pyparsing>=2.0.2
+├── pyparsing<3,>=2.0.2
 ├── pyproject-parser>=0.3.0
 ├── pyrsistent!=0.17.0,!=0.17.1,!=0.17.2,>=0.14.0
 ├── requests>=2.24.0
