@@ -33,7 +33,7 @@ import textwrap
 from datetime import date, timedelta
 from io import StringIO
 from types import ModuleType
-from typing import Any, Callable, Iterable, List, Optional, Union
+from typing import Any, Callable, Iterable, List, Optional, Union, no_type_check
 
 # 3rd party
 import dulwich.repo
@@ -341,7 +341,7 @@ class IniConfigurator:
 			self._ini[section.name][key] = section[key].value
 
 
-def easter_egg() -> None:  # noqa: D102,D103  # pragma: no cover
+def easter_egg() -> None:  # noqa: D103  # pragma: no cover
 	easter = calc_easter(today.year)
 	easter_margin = timedelta(days=7)
 
@@ -486,6 +486,7 @@ def _round_trip_dump(obj: Any):
 	return stream.getvalue()
 
 
+@no_type_check
 def resource(
 		package: Union[str, ModuleType],
 		resource: PathLike,
@@ -500,9 +501,7 @@ def resource(
 	"""
 
 	if sys.version_info < (3, 7):
-		return importlib_resources.as_file(
-				importlib_resources.files(package) / os.fspath(resource)
-				)  # type: ignore
+		return importlib_resources.as_file(importlib_resources.files(package) / os.fspath(resource))
 	else:
 		return importlib_resources.path(package, resource)
 

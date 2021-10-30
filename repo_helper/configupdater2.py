@@ -950,7 +950,7 @@ class ConfigUpdater(Container[Block], MutableMapping):
 
 		if self._filename is None:
 			raise NoConfigFileReadError()
-		with open(self._filename, 'w') as fb:
+		with open(self._filename, 'w', encoding="UTF-8") as fb:
 			self.write(fb)
 
 	def validate_format(self, **kwargs: Any) -> None:

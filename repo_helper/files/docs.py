@@ -808,7 +808,7 @@ def make_sphinx_config_dict(templates: Environment) -> Dict[str, Any]:
 
 class PythonFormatTomlEncoder(dom_toml.TomlEncoder):
 
-	def dump_list(self, v):  # noqa: D102
+	def dump_list(self, v):
 		values = DelimitedList(str(self.dump_value(u)) for u in v)
 		single_line = f"[{values:, }]"
 
