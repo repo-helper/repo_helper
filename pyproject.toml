@@ -158,7 +158,6 @@ directives = [ "code-block",]
 
 [tool.dep_checker.name_mapping]
 attrs = "attr"
-ruamel-yaml = "ruamel.yaml"
 
 [tool.dependency-dash."requirements.txt"]
 order = 10

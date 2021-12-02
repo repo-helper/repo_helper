@@ -41,7 +41,7 @@ repo_helper==2020.12.18
 ├── pyproject-parser>=0.3.0
 ├── pyrsistent!=0.17.0,!=0.17.1,!=0.17.2,>=0.14.0
 ├── requests>=2.24.0
-├── ruamel-yaml>=0.17.4
+├── ruamel.yaml>=0.17.4
 ├── shippinglabel>=1.0.0
 ├── six
 ├── southwark>=0.7.1
