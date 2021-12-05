@@ -40,7 +40,8 @@ __all__ = [
 		"remove_copy_pypi_2_github",
 		"remove_lint_roller",
 		"remove_make_conda_recipe",
-		"travis_bad"
+		"travis_bad",
+		"remove_artefact_cleaner",
 		]
 
 
@@ -52,6 +53,7 @@ def travis_bad(repo_path: pathlib.Path, templates: Environment) -> List[str]:
 	:param repo_path: Path to the repository root.
 	:param templates:
 	"""
+
 	if PathPlus(repo_path / ".travis.yml").is_file():
 		PathPlus(repo_path / ".travis.yml").unlink()
 
@@ -157,3 +159,26 @@ def make_lint_roller(repo_path: pathlib.Path, templates: Environment) -> List[st
 	lint_file.make_executable()
 
 	return [lint_file.name]
+
+
+@management.register("artefact_cleaner")
+def remove_artefact_cleaner(repo_path: pathlib.Path, templates: Environment) -> List[str]:
+	"""
+	Remove configuration for https://github.com/marketplace/actions/github-actions-artifact-cleaner
+	from the desired repo.
+
+	:param repo_path: Path to the repository root.
+	:param templates:
+
+	.. versionadded:: 2020.11.23
+	.. versionremoved:: $VERSION
+	"""  # noqa: D400
+
+	dot_github = PathPlus(repo_path / ".github")
+	(dot_github / "workflows").maybe_make(parents=True)
+
+	cleanup_workflow = dot_github / "workflows" / "cleanup.yml"
+	if cleanup_workflow.is_file():
+		cleanup_workflow.unlink()
+
+	return [cleanup_workflow.relative_to(repo_path).as_posix()]

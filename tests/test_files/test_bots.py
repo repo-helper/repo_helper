@@ -26,13 +26,13 @@ from coincidence.regressions import AdvancedFileRegressionFixture
 
 # this package
 from repo_helper.files.bots import (
-		make_artefact_cleaner,
 		make_auto_assign_action,
 		make_dependabot,
 		make_dependabotv2,
 		make_imgbot,
 		make_stale_bot
 		)
+from repo_helper.files.old import remove_artefact_cleaner
 
 
 def test_stale_bot(tmp_pathplus, demo_environment, advanced_file_regression: AdvancedFileRegressionFixture):
@@ -80,9 +80,9 @@ def test_make_dependabotv2(
 
 
 def test_artefact_cleaner(tmp_pathplus, demo_environment, advanced_file_regression: AdvancedFileRegressionFixture):
-	managed_files = make_artefact_cleaner(tmp_pathplus, demo_environment)
+	managed_files = remove_artefact_cleaner(tmp_pathplus, demo_environment)
 	assert managed_files == [".github/workflows/cleanup.yml"]
-	advanced_file_regression.check_file(tmp_pathplus / managed_files[0])
+	assert not (tmp_pathplus / managed_files[0]).is_file()
 
 
 @pytest.mark.parametrize(
