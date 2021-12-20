@@ -268,4 +268,3 @@ def make_automerge_action(repo_path: pathlib.Path, templates: Environment) -> Li
 			])
 
 	return [automerge_workflow.relative_to(repo_path).as_posix()]
-
