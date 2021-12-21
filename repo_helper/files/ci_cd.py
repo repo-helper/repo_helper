@@ -403,7 +403,12 @@ class ActionsManager:
 		Returns the Python versions to run tests for on macOS.
 		"""
 
-		return self.templates.globals["python_versions"]
+		py_versions: List[str] = list(self.templates.globals["python_versions"])
+
+		if "pypy36" in py_versions:
+			py_versions.remove("pypy36")  # PyPy 3.6 requires patching on Big Sur
+
+		return py_versions
 
 	standard_python_install_lines = [
 			"python -VV",
