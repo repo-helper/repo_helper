@@ -199,11 +199,12 @@ class mypy_version(ConfigVar):  # noqa
 
 	.. versionchanged:: 2021.2.18  The default is now ``0.800``
 	.. versionchanged:: 2021.8.11  The default is now ``0.910``
+	.. versionchanged:: $VERSION  The default is now ``0.931``
 	"""
 
 	dtype = Union[str, float]
 	rtype = str
-	default = "0.910"
+	default = "0.931"
 	category: str = "testing"
 
 
