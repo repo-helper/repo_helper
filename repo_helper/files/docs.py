@@ -121,6 +121,7 @@ class DocRequirementsManager(RequirementsManager):
 			"sphinx-toolbox": ">=2.13.0",
 			"sphinx-debuginfo": ">=0.1.0",
 			"sphinx-licenseinfo": ">=0.1.1",
+			"html-section": ">=0.1.0",
 			}
 
 	def compile_target_requirements(self) -> None:
@@ -147,6 +148,8 @@ class DocRequirementsManager(RequirementsManager):
 
 		for line in invalid_lines:
 			if line.startswith("git+"):
+				if line == "git+https://github.com/sphinx-toolbox/html-section.git":
+					continue
 				comments.append(line)
 			else:
 				warnings.warn(f"Ignored invalid requirement {line!r}")
@@ -744,6 +747,7 @@ def make_sphinx_config_dict(templates: Environment) -> Dict[str, Any]:
 			"sphinx_debuginfo",
 			"sphinx_licenseinfo",
 			"seed_intersphinx_mapping",
+			"html_section",
 			*templates.globals["extra_sphinx_extensions"],
 			]
 	# "sphinx.ext.autosectionlabel",
