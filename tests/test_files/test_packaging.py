@@ -22,7 +22,7 @@
 
 # stdlib
 from textwrap import dedent
-from typing import List
+from typing import Dict, List
 
 # 3rd party
 import pytest
@@ -318,16 +318,32 @@ def test_make_setup_cfg_existing(
 	check_file_output(tmp_pathplus / managed_files[0], file_regression)
 
 
-def test_make_pkginfo(tmp_pathplus, demo_environment, file_regression: FileRegressionFixture):
+@pytest.mark.parametrize(
+		"extras_require", [
+				pytest.param({}, id="without"),
+				pytest.param({"foo": ["bar", "baz"]}, id="with"),
+				]
+		)
+def test_make_pkginfo(
+		extras_require: Dict[str, List[str]],
+		tmp_pathplus: PathPlus,
+		demo_environment,
+		advanced_file_regression: AdvancedFileRegressionFixture,
+		):
 	# TODO: permutations to cover all branches
 
 	demo_environment.globals["author"] = "Joe Bloggs"
 	demo_environment.globals["email"] = "j.bloggs@example.com"
 	demo_environment.globals["license"] = "MIT License"
-	demo_environment.globals["extras_require"] = {}
+	demo_environment.globals["extras_require"] = extras_require
 	demo_environment.globals["copyright_years"] = 2020
 	demo_environment.globals["version"] = "1.2.3"
 
 	managed_files = make_pkginfo(tmp_pathplus, demo_environment)
 	assert managed_files == ["__pkginfo__.py"]
-	check_file_output(tmp_pathplus / managed_files[0], file_regression)
+
+	if extras_require:
+		advanced_file_regression.check_file(tmp_pathplus / managed_files[0])
+	else:
+		assert not (tmp_pathplus / managed_files[0]).is_file()
+		assert not (tmp_pathplus / managed_files[0]).exists()

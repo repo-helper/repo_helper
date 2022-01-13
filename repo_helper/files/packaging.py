@@ -598,14 +598,20 @@ def make_pkginfo(repo_path: pathlib.Path, templates: Environment) -> List[str]:
 	:param templates:
 	"""
 
-	__pkginfo__ = templates.get_template("__pkginfo__._py")
-
 	pkginfo_file = PathPlus(repo_path / "__pkginfo__.py")
-	pkginfo_file.write_clean(__pkginfo__.render())
 
-	with resource(repo_helper.files, "isort.cfg") as isort_config:
-		yapf_style = PathPlus(isort_config).parent.parent / "templates" / "style.yapf"
-		reformat_file(pkginfo_file, yapf_style=str(yapf_style), isort_config_file=str(isort_config))
+	if templates.globals["extras_require"]:
+
+		__pkginfo__ = templates.get_template("__pkginfo__._py")
+
+		pkginfo_file.write_clean(__pkginfo__.render())
+
+		with resource(repo_helper.files, "isort.cfg") as isort_config:
+			yapf_style = PathPlus(isort_config).parent.parent / "templates" / "style.yapf"
+			reformat_file(pkginfo_file, yapf_style=str(yapf_style), isort_config_file=str(isort_config))
+
+	else:
+		pkginfo_file.unlink(missing_ok=True)
 
 	return [pkginfo_file.name]
 
