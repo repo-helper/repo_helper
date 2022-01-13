@@ -84,6 +84,7 @@ def test_make_setup_case_1(
 		):
 	demo_environment.globals["desktopfile"] = {}
 	demo_environment.globals["use_whey"] = use_whey
+	demo_environment.globals["extras_require"] = {"foo": ["bar", "baz"]}
 
 	managed_files = make_setup(tmp_pathplus, demo_environment)
 	assert managed_files == ["setup.py"]
@@ -103,6 +104,7 @@ def test_make_setup_case_2(
 		):
 	demo_environment.globals["desktopfile"] = {}
 	demo_environment.globals["use_whey"] = use_whey
+	demo_environment.globals["extras_require"] = {"foo": ["bar", "baz"]}
 
 	demo_environment.globals.update(
 			dict(

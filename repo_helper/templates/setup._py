@@ -12,7 +12,7 @@ from setuptools import setup
 sys.path.append('.')
 
 # this package
-from __pkginfo__ import *  # pylint: disable=wildcard-import
+{% if extras_require %}from __pkginfo__ import *  # pylint: disable=wildcard-import{% endif %}
 
 {% if desktopfile %}
 from textwrap import dedent
