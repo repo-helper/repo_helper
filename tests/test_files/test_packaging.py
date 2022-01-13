@@ -26,9 +26,7 @@ from typing import Dict, List
 
 # 3rd party
 import pytest
-from coincidence.regressions import check_file_output
 from domdf_python_tools.paths import PathPlus
-from pytest_regressions.file_regression import FileRegressionFixture
 
 # this package
 from repo_helper.files.packaging import make_manifest, make_pkginfo, make_pyproject, make_setup, make_setup_cfg
@@ -47,7 +45,7 @@ def boolean_option(name: str, id: str):  # noqa: A002  # pylint: disable=redefin
 def test_make_manifest_case_1(
 		tmp_pathplus,
 		demo_environment,
-		file_regression: FileRegressionFixture,
+		advanced_file_regression: AdvancedFileRegressionFixture,
 		stubs_package,
 		use_whey,
 		):
@@ -60,24 +58,28 @@ def test_make_manifest_case_1(
 	if use_whey:
 		assert not (tmp_pathplus / managed_files[0]).is_file()
 	else:
-		check_file_output(tmp_pathplus / managed_files[0], file_regression)
+		advanced_file_regression.check_file(tmp_pathplus / managed_files[0])
 
 
-def test_make_manifest_case_2(tmp_pathplus, demo_environment, file_regression: FileRegressionFixture):
+def test_make_manifest_case_2(
+		tmp_pathplus,
+		demo_environment,
+		advanced_file_regression: AdvancedFileRegressionFixture,
+		):
 	demo_environment.globals["manifest_additional"] = ["recursive-include hello_world/templates *"]
 	demo_environment.globals["use_whey"] = False
 	demo_environment.globals["additional_requirements_files"] = ["hello_world/submodule/requirements.txt"]
 
 	managed_files = make_manifest(tmp_pathplus, demo_environment)
 	assert managed_files == ["MANIFEST.in"]
-	check_file_output(tmp_pathplus / managed_files[0], file_regression)
+	advanced_file_regression.check_file(tmp_pathplus / managed_files[0])
 
 
 @boolean_option("use_whey", "whey")
 def test_make_setup_case_1(
 		tmp_pathplus,
 		demo_environment,
-		file_regression: FileRegressionFixture,
+		advanced_file_regression: AdvancedFileRegressionFixture,
 		use_whey,
 		):
 	demo_environment.globals["desktopfile"] = {}
@@ -89,11 +91,16 @@ def test_make_setup_case_1(
 	if use_whey:
 		assert not (tmp_pathplus / managed_files[0]).is_file()
 	else:
-		check_file_output(tmp_pathplus / managed_files[0], file_regression)
+		advanced_file_regression.check_file(tmp_pathplus / managed_files[0])
 
 
 @boolean_option("use_whey", "whey")
-def test_make_setup_case_2(tmp_pathplus, demo_environment, file_regression: FileRegressionFixture, use_whey):
+def test_make_setup_case_2(
+		tmp_pathplus,
+		demo_environment,
+		advanced_file_regression: AdvancedFileRegressionFixture,
+		use_whey,
+		):
 	demo_environment.globals["desktopfile"] = {}
 	demo_environment.globals["use_whey"] = use_whey
 
@@ -113,7 +120,7 @@ def test_make_setup_case_2(tmp_pathplus, demo_environment, file_regression: File
 	if use_whey:
 		assert not (tmp_pathplus / managed_files[0]).is_file()
 	else:
-		check_file_output(tmp_pathplus / managed_files[0], file_regression)
+		advanced_file_regression.check_file(tmp_pathplus / managed_files[0])
 
 
 @pytest.mark.parametrize("backend", ["whey", "setuptools"])
@@ -122,7 +129,7 @@ def test_make_setup_case_2(tmp_pathplus, demo_environment, file_regression: File
 def test_make_pyproject(
 		tmp_pathplus,
 		demo_environment,
-		file_regression: FileRegressionFixture,
+		advanced_file_regression: AdvancedFileRegressionFixture,
 		enable_tests: bool,
 		enable_docs: bool,
 		backend: str,
@@ -155,7 +162,7 @@ def test_make_pyproject(
 
 	managed_files = make_pyproject(tmp_pathplus, demo_environment)
 	assert managed_files == ["pyproject.toml"]
-	check_file_output(tmp_pathplus / managed_files[0], file_regression)
+	advanced_file_regression.check_file(tmp_pathplus / managed_files[0])
 
 
 @boolean_option("enable_tests", "tests")
@@ -244,7 +251,7 @@ def test_make_pyproject_whey_extras(
 def test_make_setup_cfg(
 		tmp_pathplus: PathPlus,
 		demo_environment,
-		file_regression: FileRegressionFixture,
+		advanced_file_regression: AdvancedFileRegressionFixture,
 		classifiers: List[str],
 		python_versions,
 		use_whey: bool,
@@ -272,14 +279,14 @@ def test_make_setup_cfg(
 	if use_whey and mypy_version == "0.910":
 		assert not (tmp_pathplus / managed_files[0]).is_file()
 	else:
-		check_file_output(tmp_pathplus / managed_files[0], file_regression)
+		advanced_file_regression.check_file(tmp_pathplus / managed_files[0])
 
 
 @pytest.mark.parametrize("use_whey", [True, False])
 def test_make_setup_cfg_existing(
 		tmp_pathplus,
 		demo_environment,
-		file_regression: FileRegressionFixture,
+		advanced_file_regression: AdvancedFileRegressionFixture,
 		use_whey: bool,
 		):
 	# TODO: permutations to cover all branches
@@ -315,7 +322,7 @@ def test_make_setup_cfg_existing(
 
 	managed_files = make_setup_cfg(tmp_pathplus, demo_environment)
 	assert managed_files == ["setup.cfg"]
-	check_file_output(tmp_pathplus / managed_files[0], file_regression)
+	advanced_file_regression.check_file(tmp_pathplus / managed_files[0])
 
 
 @pytest.mark.parametrize(
