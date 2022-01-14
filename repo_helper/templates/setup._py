@@ -11,8 +11,10 @@ from setuptools import setup
 
 sys.path.append('.')
 
-# this package
-{% if extras_require %}from __pkginfo__ import *  # pylint: disable=wildcard-import{% endif %}
+{% if extras_require %}# this package
+from __pkginfo__ import *  # pylint: disable=wildcard-import
+{% else %}
+extras_require = {}{% endif %}
 
 {% if desktopfile %}
 from textwrap import dedent
