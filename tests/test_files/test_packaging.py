@@ -51,6 +51,7 @@ def test_make_manifest_case_1(
 		):
 	demo_environment.globals["stubs_package"] = stubs_package
 	demo_environment.globals["use_whey"] = use_whey
+	demo_environment.globals["extras_require"] = {"foo": ["bar", "baz"]}
 
 	managed_files = make_manifest(tmp_pathplus, demo_environment)
 	assert managed_files == ["MANIFEST.in"]
@@ -69,6 +70,7 @@ def test_make_manifest_case_2(
 	demo_environment.globals["manifest_additional"] = ["recursive-include hello_world/templates *"]
 	demo_environment.globals["use_whey"] = False
 	demo_environment.globals["additional_requirements_files"] = ["hello_world/submodule/requirements.txt"]
+	demo_environment.globals["extras_require"] = {}
 
 	managed_files = make_manifest(tmp_pathplus, demo_environment)
 	assert managed_files == ["MANIFEST.in"]

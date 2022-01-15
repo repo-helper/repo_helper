@@ -102,12 +102,14 @@ def make_manifest(repo_path: pathlib.Path, templates: Environment) -> List[str]:
 
 	else:
 		manifest_entries = [
-				"include __pkginfo__.py",
 				"include LICENSE",
 				"include requirements.txt",
 				"prune **/__pycache__",
 				*templates.globals["manifest_additional"],
 				]
+
+		if templates.globals["extras_require"]:
+			manifest_entries.insert(0, "include __pkginfo__.py")
 
 		for item in templates.globals["additional_requirements_files"]:
 			manifest_entries.append(f"include {pathlib.PurePosixPath(item)}")
