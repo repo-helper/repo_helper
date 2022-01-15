@@ -194,11 +194,12 @@ class ToxConfig(IniConfigurator):
 		``[tox]``.
 		"""
 
+		tox_envs = []
 		if self["third_party_version_matrix"]:
-			third_party_library = list(self["third_party_version_matrix"].keys())[0]
-			third_party_versions = DelimitedList(self["third_party_version_matrix"][third_party_library])
-			matrix_testenv_string = f"-{third_party_library}{{{third_party_versions:,}}}"
-			tox_envs = [v + matrix_testenv_string for v in self["tox_py_versions"]]
+			for third_party_library in self["third_party_version_matrix"]:
+				third_party_versions = DelimitedList(self["third_party_version_matrix"][third_party_library])
+				matrix_testenv_string = f"-{third_party_library}{{{third_party_versions:,}}}"
+				tox_envs.extend(v + matrix_testenv_string for v in self["tox_py_versions"])
 		else:
 			tox_envs = self["tox_py_versions"]
 
@@ -218,13 +219,19 @@ class ToxConfig(IniConfigurator):
 		``[envlists]``.
 		"""
 
+		tox_envs = []
 		if self["third_party_version_matrix"]:
-			third_party_library, third_party_versions, matrix_testenv_string = self.get_third_party_version_matrix()
-			tox_envs = [v + matrix_testenv_string for v in self["tox_py_versions"]]
-			cov_envlist = [
-					f"py{self['python_deploy_version'].replace('.', '')}-{third_party_library}{third_party_versions[0]}",
-					"coverage",
-					]
+			cov_envlist = []
+			for third_party_library in self["third_party_version_matrix"]:
+				third_party_versions = DelimitedList(self["third_party_version_matrix"][third_party_library])
+				matrix_testenv_string = f"-{third_party_library}{{{third_party_versions:,}}}"
+				tox_envs.extend(v + matrix_testenv_string for v in self["tox_py_versions"])
+
+				if not cov_envlist:
+					cov_envlist = [
+							f"py{self['python_deploy_version'].replace('.', '')}-{third_party_library}{third_party_versions[0]}",
+							"coverage",
+							]
 		else:
 			tox_envs = self["tox_py_versions"]
 			cov_envlist = [f"py{self['python_deploy_version']}".replace('.', ''), "coverage"]
@@ -263,18 +270,18 @@ class ToxConfig(IniConfigurator):
 			deps = [f"-r{{toxinidir}}/{self['tests_dir']}/requirements.txt"]
 
 			if self["third_party_version_matrix"]:
-				third_party_library = list(self["third_party_version_matrix"].keys())[0]
+				for third_party_library in self["third_party_version_matrix"].keys():
 
-				for version in self["third_party_version_matrix"][third_party_library]:
-					if version == "latest":
-						deps.append(f"{third_party_library}latest: {third_party_library}")
-					else:
-						v = Version(version)
-
-						if v.is_prerelease:
-							deps.append(f"{third_party_library}{version}: {third_party_library}=={version}")
+					for version in self["third_party_version_matrix"][third_party_library]:
+						if version == "latest":
+							deps.append(f"{third_party_library}latest: {third_party_library}")
 						else:
-							deps.append(f"{third_party_library}{version}: {third_party_library}~={version}.0")
+							v = Version(version)
+
+							if v.is_prerelease:
+								deps.append(f"{third_party_library}{version}: {third_party_library}=={version}")
+							else:
+								deps.append(f"{third_party_library}{version}: {third_party_library}~={version}.0")
 
 			self._ini["testenv"]["deps"] = indent_join(deps)
 

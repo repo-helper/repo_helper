@@ -174,6 +174,7 @@ class ActionsManager:
 		tox_py_versions = config["tox_py_versions"]
 		third_party_version_matrix = config["third_party_version_matrix"]
 
+		# TODO: support multi-library matrices
 		if third_party_version_matrix:
 			third_party_library = list(third_party_version_matrix.keys())[0]
 			third_party_versions = DelimitedList(third_party_version_matrix[third_party_library])
