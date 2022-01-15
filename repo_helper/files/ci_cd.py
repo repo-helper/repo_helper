@@ -197,7 +197,7 @@ class ActionsManager:
 
 	@staticmethod
 	def _is_experimental(version: str):
-		if version == "pypy-3.7":
+		if version in {"pypy-3.7", "pypy-3.8"}:
 			return True
 
 		try:

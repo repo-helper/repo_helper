@@ -605,11 +605,12 @@ class Test_python_versions(DictTest):
 	default_value = {"3.6": {"experimental": False}}
 
 	def test_success(self):
-		value = ["3.6", 3.7, "pypy3"]
+		value = ["3.6", 3.7, "pypy37", "pypy38"]
 		assert self.config_var.get({self.config_var.__name__: value}) == {
 				"3.6": {"experimental": False},
 				"3.7": {"experimental": False},
-				"pypy3": {"experimental": False},
+				"pypy37": {"experimental": True},
+				"pypy38": {"experimental": True},
 				}
 
 		value2 = {

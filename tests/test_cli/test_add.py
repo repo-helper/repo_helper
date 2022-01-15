@@ -221,6 +221,8 @@ def test_add_typed_pyproject(
 				"3.10-dev",
 				"pypy",
 				"pypy3",
+				"pypy3.7",
+				"pypy38",
 				"rustpython",
 				pytest.param(["3.6", "3.8"], id="multiple_1"),
 				pytest.param(["3.9", "rustpython"], id="multiple_2")

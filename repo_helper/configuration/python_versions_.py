@@ -129,7 +129,7 @@ class python_versions(ConfigVar):  # noqa
 
 	@staticmethod
 	def _is_experimental(version: str):
-		if version == "pypy37":
+		if version in {"pypy37", "pypy38"}:
 			return True
 
 		try:

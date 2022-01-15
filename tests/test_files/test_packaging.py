@@ -236,7 +236,8 @@ def test_make_pyproject_whey_extras(
 						3.6: {"experimental": False},
 						3.7: {"experimental": False},
 						3.8: {"experimental": False},
-						"pypy3": {"experimental": False}
+						"pypy36": {"experimental": False},
+						"pypy3.7": {"experimental": True},
 						},
 								id="pypy_versions"),
 				]
