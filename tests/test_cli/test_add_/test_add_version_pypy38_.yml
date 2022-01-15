@@ -1,0 +1,15 @@
+# Configuration for 'repo_helper' (https://github.com/repo-helper/repo_helper)
+---
+modname: repo_helper
+copyright_years: "2020"
+author: "Dominic Davis-Foster"
+email: "dominic@davis-foster.co.uk"
+version: "0.0.1"
+username: "domdfcoding"
+license: 'LGPLv3+'
+short_desc: 'Update multiple configuration files, build scripts etc. from a single location.'
+
+python_versions:
+ - '3.6'
+ - '3.7'
+ - pypy38
