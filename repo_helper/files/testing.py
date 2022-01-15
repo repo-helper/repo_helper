@@ -194,7 +194,7 @@ class ToxConfig(IniConfigurator):
 		``[tox]``.
 		"""
 
-		tox_envs = []
+		tox_envs: List[str] = []
 		if self["third_party_version_matrix"]:
 			for third_party_library in self["third_party_version_matrix"]:
 				third_party_versions = DelimitedList(self["third_party_version_matrix"][third_party_library])
@@ -219,9 +219,9 @@ class ToxConfig(IniConfigurator):
 		``[envlists]``.
 		"""
 
-		tox_envs = []
+		tox_envs: List[str] = []
 		if self["third_party_version_matrix"]:
-			cov_envlist = []
+			cov_envlist: List[str] = []
 			for third_party_library in self["third_party_version_matrix"]:
 				third_party_versions = DelimitedList(self["third_party_version_matrix"][third_party_library])
 				matrix_testenv_string = f"-{third_party_library}{{{third_party_versions:,}}}"

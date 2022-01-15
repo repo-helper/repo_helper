@@ -96,9 +96,11 @@ def wizard() -> None:
 	try:
 		default_author = git_config.get(("user", ), "name").decode("UTF-8")
 	except KeyError:
+		getpass_user = getpass.getuser()
 		try:
-			default_author = os.environ.get(
-					"GIT_AUTHOR_NAME", default=os.environ.get("GIT_COMMITTER_NAME", default=getpass.getuser())
+			default_author = os.getenv(
+					"GIT_AUTHOR_NAME",
+					default=os.getenv("GIT_COMMITTER_NAME", default=getpass_user),
 					)
 		except ImportError:
 			# Usually USERNAME is not set when trying getpass.getuser()
@@ -110,9 +112,9 @@ def wizard() -> None:
 	try:
 		default_email = git_config.get(("user", ), "email").decode("UTF-8")
 	except KeyError:
-		default_email = os.environ.get(
+		default_email = os.getenv(
 				"GIT_AUTHOR_EMAIL",
-				default=os.environ.get("GIT_COMMITTER_EMAIL", default=f"{author}@{socket.gethostname()}")
+				default=os.getenv("GIT_COMMITTER_EMAIL", default=f"{author}@{socket.gethostname()}")
 				)
 
 	click.echo("\nThe email address of the author. This will be shown on PyPI, amongst other places.")

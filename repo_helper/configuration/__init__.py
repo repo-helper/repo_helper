@@ -311,7 +311,7 @@ for module in [
 		travis,
 		]:
 
-	for item in module.__all__:  # type: ignore
+	for item in module.__all__:
 		confvar = getattr(module, item)
 		if isinstance(confvar, ConfigVarMeta):
 			all_values.append(confvar)
