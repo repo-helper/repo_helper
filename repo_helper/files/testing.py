@@ -645,6 +645,13 @@ class ToxConfig(IniConfigurator):
 								sorted(filter(bool, (map(": ".join, combined_ignores.items()))))
 								)
 						self._ini["flake8"]["per-file-ignores"] = indent_join(combined_ignores_strings)
+				elif section.name == "pytest":
+					if "filterwarnings" in section:
+						existing_value = set(map(str.strip, section["filterwarnings"].value.splitlines()))
+						self._ini["pytest"]["filterwarnings"] = indent_join(sorted(filter(bool, existing_value)))
+					if "markers" in section:
+						existing_value = set(map(str.strip, section["markers"].value.splitlines()))
+						self._ini["pytest"]["markers"] = indent_join(sorted(filter(bool, existing_value)))
 
 	# TODO: for tox-isolation
 	# [testenv:{py36,py37,py38,pypy3,py39}]
