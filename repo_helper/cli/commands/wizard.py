@@ -96,8 +96,8 @@ def wizard() -> None:
 	try:
 		default_author = git_config.get(("user", ), "name").decode("UTF-8")
 	except KeyError:
-		getpass_user = getpass.getuser()
 		try:
+			getpass_user = getpass.getuser()
 			default_author = os.getenv(
 					"GIT_AUTHOR_NAME",
 					default=os.getenv("GIT_COMMITTER_NAME", default=getpass_user),
