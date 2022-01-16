@@ -15,7 +15,7 @@ repo_helper==2020.12.18
 │       ├── charset-normalizer~=2.0.0; python_version >= "3"
 │       ├── idna<4,>=2.5; python_version >= "3"
 │       └── urllib3<1.27,>=1.21.1
-├── attrs>=20.2.0
+├── attrs>=20.3.0
 ├── click==7.1.2
 ├── configconfig>=0.5.0
 │   ├── domdf-python-tools>=0.10.0
@@ -40,7 +40,7 @@ repo_helper==2020.12.18
 │   └── typing-inspect>=0.6.0
 │       ├── mypy-extensions>=0.3.0
 │       └── typing-extensions>=3.7.4
-├── consolekit>=1.2.0
+├── consolekit>=1.2.2
 │   ├── click>=7.1.2
 │   ├── colorama>=0.4.3; python_version < "3.10" and platform_system == "Windows"
 │   ├── deprecation-alias>=0.1.1
@@ -79,7 +79,7 @@ repo_helper==2020.12.18
 │   │   ├── natsort>=7.0.1
 │   │   └── typing-extensions>=3.7.4.1
 │   └── toml>=0.10.2
-├── domdf-python-tools>=2.8.0
+├── domdf-python-tools>=3.1.0
 │   ├── importlib-metadata>=3.6.0; python_version < "3.9"
 │   │   ├── typing-extensions>=3.6.4; python_version < "3.8"
 │   │   └── zipp>=0.5
@@ -87,11 +87,11 @@ repo_helper==2020.12.18
 │   │   └── zipp>=3.1.0; python_version < "3.10"
 │   ├── natsort>=7.0.1
 │   └── typing-extensions>=3.7.4.1
-├── dulwich>=0.19.16
+├── dulwich>=0.20.5
 │   ├── certifi
 │   └── urllib3>=1.24.1
 ├── first>=2.0.2
-├── isort>=5.0.0
+├── isort>=5.5.2
 ├── jinja2>=2.11.3
 │   └── MarkupSafe>=2.0
 ├── mkrecipe>=0.3.0
@@ -504,8 +504,8 @@ repo_helper==2020.12.18
 │           │   └── pyparsing!=3.0.5,>=2.0.2
 │           ├── trove-classifiers>=2020.10.21
 │           └── typing-extensions>=3.7.4.3
-├── natsort>=7.0.1
-├── packaging>=20.4
+├── natsort>=7.1.1
+├── packaging>=20.9
 │   └── pyparsing!=3.0.5,>=2.0.2
 ├── ruamel.yaml>=0.17.4
 │   └── ruamel.yaml.clib>=0.2.6; platform_python_implementation == "CPython" and python_version < "3.11"
@@ -604,7 +604,7 @@ repo_helper==2020.12.18
 │   ├── filelock>=3.0.12
 │   └── typing-extensions>=3.7.4.3
 ├── tabulate>=0.8.8
-├── typing-extensions>=3.7.4.1
+├── typing-extensions>=3.7.4.3
 ├── whey>=0.0.17
 │   ├── click>=7.1.2
 │   ├── consolekit>=1.2.2
@@ -856,7 +856,7 @@ repo_helper==2020.12.18
     │   │   └── six
     │   ├── attr-utils>=0.5.5
     │   │   ├── attrs>=19.3.0
-    │   │   ├── domdf-python-tools>=2.7.0
+    │   │   ├── domdf-python-tools>=2.9.0
     │   │   │   ├── importlib-metadata>=3.6.0; python_version < "3.9"
     │   │   │   │   ├── typing-extensions>=3.6.4; python_version < "3.8"
     │   │   │   │   └── zipp>=0.5
