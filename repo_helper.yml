@@ -75,7 +75,7 @@ exclude_files:
 
 extras_require:
   testing:
-   - pytest>=6.0.0
+   - pytest>=6.2.0
    - coincidence>=0.2.0
    - check_wheel_contents>=0.2.0
 

@@ -8,7 +8,7 @@ importlib-metadata>=3.6.0
 iniconfig!=1.1.0,>=1.0.1
 lorem>=0.1.1
 pre-commit>=2.7.1
-pytest>=6.0.0
+pytest>=6.2.0
 pytest-cov>=2.8.1
 pytest-randomly>=3.7.0
 pytest-regressions>=2.0.1
