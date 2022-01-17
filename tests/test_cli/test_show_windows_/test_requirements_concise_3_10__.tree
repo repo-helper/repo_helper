@@ -18,7 +18,7 @@ repo_helper==2020.12.18
 ├── dict2css>=0.2.0
 ├── dist-meta>=0.1.2
 ├── dom-toml>=0.5.0
-├── domdf-python-tools>=3.1.0
+├── domdf-python-tools>=3.2.0
 ├── dulwich!=0.20.7,!=0.20.8,!=0.20.9,>=0.20.5
 ├── filelock>=3.0.12
 ├── first>=2.0.2
