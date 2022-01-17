@@ -27,7 +27,7 @@ Manage configuration files for continuous integration / continuous deployment.
 import pathlib
 import posixpath
 from textwrap import indent
-from typing import Dict, Iterable, Iterator, List, Optional, Tuple, Any
+from typing import Any, Dict, Iterable, Iterator, List, Optional, Tuple
 
 # 3rd party
 import dom_toml
@@ -523,7 +523,9 @@ def make_conda_actions_ci(repo_path: pathlib.Path, templates: Environment) -> Li
 			data: DefaultDict[str, Any] = DefaultDict(dom_toml.load(pyproject_file))
 			pip_dependencies.extend(data["build-system"]["requires"])
 
-		conda_ci_file.write_clean(actions.render(no_dev_versions=no_pypy_versions, pip_dependencies=pip_dependencies))
+		conda_ci_file.write_clean(
+				actions.render(no_dev_versions=no_pypy_versions, pip_dependencies=pip_dependencies)
+				)
 
 	else:
 		conda_ci_file.unlink(missing_ok=True)
