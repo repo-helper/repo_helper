@@ -27,9 +27,10 @@ Manage configuration files for continuous integration / continuous deployment.
 import pathlib
 import posixpath
 from textwrap import indent
-from typing import Dict, Iterable, Iterator, List, Optional, Tuple
+from typing import Dict, Iterable, Iterator, List, Optional, Tuple, Any
 
 # 3rd party
+import dom_toml
 from domdf_python_tools.paths import PathPlus
 from domdf_python_tools.stringlist import DelimitedList, StringList
 from packaging.version import InvalidVersion, Version
@@ -37,6 +38,7 @@ from packaging.version import InvalidVersion, Version
 # this package
 from repo_helper.configupdater2 import ConfigUpdater
 from repo_helper.files import management
+from repo_helper.files.packaging import DefaultDict
 from repo_helper.templates import Environment
 from repo_helper.utils import no_dev_versions, set_gh_actions_versions
 
@@ -514,7 +516,14 @@ def make_conda_actions_ci(repo_path: pathlib.Path, templates: Environment) -> Li
 
 			return [v for v in no_dev_versions(versions) if "pypy" not in v.lower()]
 
-		conda_ci_file.write_clean(actions.render(no_dev_versions=no_pypy_versions))
+		pip_dependencies = ["whey-conda"]
+
+		pyproject_file = PathPlus(repo_path / "pyproject.toml")
+		if pyproject_file.is_file():
+			data: DefaultDict[str, Any] = DefaultDict(dom_toml.load(pyproject_file))
+			pip_dependencies.extend(data["build-system"]["requires"])
+
+		conda_ci_file.write_clean(actions.render(no_dev_versions=no_pypy_versions, pip_dependencies=pip_dependencies))
 
 	else:
 		conda_ci_file.unlink(missing_ok=True)
