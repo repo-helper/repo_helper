@@ -334,7 +334,6 @@ class use_flit(ConfigVar):  # noqa
 				setup_pre,
 				py_modules,
 				desktopfile,
-				use_whey,
 				)
 
 		for key in disallowed_keys:
