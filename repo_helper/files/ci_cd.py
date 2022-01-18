@@ -269,6 +269,14 @@ class ActionsManager:
 		ci_file = self.workflows_dir / f"python_ci_{platform_name.lower()}.yml"
 
 		if platform_name in self.templates.globals["platforms"]:
+
+			conda_pip_dependencies = ["mkrecipe"]
+
+			pyproject_file = PathPlus(self.repo_path / "pyproject.toml")
+			if pyproject_file.is_file():
+				data: DefaultDict[str, Any] = DefaultDict(dom_toml.load(pyproject_file))
+				conda_pip_dependencies.extend(data["build-system"]["requires"])
+
 			ci_file.write_clean(
 					self.actions.render(
 							no_dev_versions=no_dev_versions,
@@ -279,7 +287,8 @@ class ActionsManager:
 							gh_actions_versions=self.get_gh_actions_matrix(),
 							code_file_filter=self._code_file_filter,
 							run_on_tags="    tags:\n      - '*'",
-							is_experimental=self._is_experimental
+							is_experimental=self._is_experimental,
+							conda_pip_dependencies=conda_pip_dependencies,
 							)
 					)
 		elif ci_file.is_file():
