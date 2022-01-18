@@ -2,7 +2,7 @@
 #
 #  test_packaging.py
 #
-#  Copyright © 2020 Dominic Davis-Foster <dominic@davis-foster.co.uk>
+#  Copyright © 2020-2022 Dominic Davis-Foster <dominic@davis-foster.co.uk>
 #
 #  This program is free software; you can redistribute it and/or modify
 #  it under the terms of the GNU Lesser General Public License as published by
@@ -22,7 +22,7 @@
 
 # stdlib
 from textwrap import dedent
-from typing import Dict, List
+from typing import Any, Dict, List
 
 # 3rd party
 import pytest
@@ -41,22 +41,29 @@ def boolean_option(name: str, id: str):  # noqa: A002  # pylint: disable=redefin
 
 
 @boolean_option("stubs_package", "stubs")
-@boolean_option("use_whey", "whey")
+@pytest.mark.parametrize(
+		"other_opts",
+		[
+				pytest.param({"use_whey": True}, id="backend_whey"),
+				pytest.param({"use_flit": True}, id="backend_flit"),
+				pytest.param({}, id="backend_setuptools"),
+				]
+		)
 def test_make_manifest_case_1(
 		tmp_pathplus,
 		demo_environment,
 		advanced_file_regression: AdvancedFileRegressionFixture,
 		stubs_package,
-		use_whey,
+		other_opts: Dict[str, Any],
 		):
 	demo_environment.globals["stubs_package"] = stubs_package
-	demo_environment.globals["use_whey"] = use_whey
+	demo_environment.globals.update(other_opts)
 	demo_environment.globals["extras_require"] = {"foo": ["bar", "baz"]}
 
 	managed_files = make_manifest(tmp_pathplus, demo_environment)
 	assert managed_files == ["MANIFEST.in"]
 
-	if use_whey:
+	if demo_environment.globals["use_whey"] or demo_environment.globals["use_flit"]:
 		assert not (tmp_pathplus / managed_files[0]).is_file()
 	else:
 		advanced_file_regression.check_file(tmp_pathplus / managed_files[0])
@@ -77,35 +84,49 @@ def test_make_manifest_case_2(
 	advanced_file_regression.check_file(tmp_pathplus / managed_files[0])
 
 
-@boolean_option("use_whey", "whey")
+@pytest.mark.parametrize(
+		"other_opts",
+		[
+				pytest.param({"use_whey": True}, id="backend_whey"),
+				pytest.param({"use_flit": True}, id="backend_flit"),
+				pytest.param({}, id="backend_setuptools"),
+				]
+		)
 def test_make_setup_case_1(
 		tmp_pathplus,
 		demo_environment,
 		advanced_file_regression: AdvancedFileRegressionFixture,
-		use_whey,
+		other_opts: Dict[str, Any],
 		):
 	demo_environment.globals["desktopfile"] = {}
-	demo_environment.globals["use_whey"] = use_whey
+	demo_environment.globals.update(other_opts)
 	demo_environment.globals["extras_require"] = {"foo": ["bar", "baz"]}
 
 	managed_files = make_setup(tmp_pathplus, demo_environment)
 	assert managed_files == ["setup.py"]
 
-	if use_whey:
+	if demo_environment.globals["use_whey"] or demo_environment.globals["use_flit"]:
 		assert not (tmp_pathplus / managed_files[0]).is_file()
 	else:
 		advanced_file_regression.check_file(tmp_pathplus / managed_files[0])
 
 
-@boolean_option("use_whey", "whey")
+@pytest.mark.parametrize(
+		"other_opts",
+		[
+				pytest.param({"use_whey": True}, id="backend_whey"),
+				pytest.param({"use_flit": True}, id="backend_flit"),
+				pytest.param({}, id="backend_setuptools"),
+				]
+		)
 def test_make_setup_case_2(
 		tmp_pathplus,
 		demo_environment,
 		advanced_file_regression: AdvancedFileRegressionFixture,
-		use_whey,
+		other_opts: Dict[str, Any],
 		):
 	demo_environment.globals["desktopfile"] = {}
-	demo_environment.globals["use_whey"] = use_whey
+	demo_environment.globals.update(other_opts)
 	demo_environment.globals["extras_require"] = {}
 
 	demo_environment.globals.update(
@@ -121,13 +142,20 @@ def test_make_setup_case_2(
 	managed_files = make_setup(tmp_pathplus, demo_environment)
 	assert managed_files == ["setup.py"]
 
-	if use_whey:
+	if demo_environment.globals["use_whey"] or demo_environment.globals["use_flit"]:
 		assert not (tmp_pathplus / managed_files[0]).is_file()
 	else:
 		advanced_file_regression.check_file(tmp_pathplus / managed_files[0])
 
 
-@pytest.mark.parametrize("backend", ["whey", "setuptools"])
+@pytest.mark.parametrize(
+		"other_opts",
+		[
+				pytest.param({"use_whey": True}, id="backend_whey"),
+				pytest.param({"use_flit": True}, id="backend_flit"),
+				pytest.param({}, id="backend_setuptools"),
+				]
+		)
 @boolean_option("enable_tests", "tests")
 @boolean_option("enable_docs", "docs")
 def test_make_pyproject(
@@ -136,7 +164,7 @@ def test_make_pyproject(
 		advanced_file_regression: AdvancedFileRegressionFixture,
 		enable_tests: bool,
 		enable_docs: bool,
-		backend: str,
+		other_opts: Dict[str, Any],
 		):
 	# TODO: permutations to cover all branches
 
@@ -158,11 +186,14 @@ def test_make_pyproject(
 	demo_environment.globals["tox_build_requirements"] = []
 	demo_environment.globals["copyright_years"] = "2020-2021"
 	demo_environment.globals["extra_sphinx_extensions"] = []
-	demo_environment.globals["use_whey"] = False
 	demo_environment.globals["requires_python"] = None
 
-	if backend == "whey":
-		demo_environment.globals["use_whey"] = True
+	demo_environment.globals.update(other_opts)
+
+	(tmp_pathplus / "requirements.txt").write_lines([
+			"toml>=0.10.2",
+			"domdf-python-tools>=2.8.0",
+			])
 
 	managed_files = make_pyproject(tmp_pathplus, demo_environment)
 	assert managed_files == ["pyproject.toml"]
@@ -251,7 +282,14 @@ def test_make_pyproject_whey_extras(
 				pytest.param([], id="no_classifiers"),
 				]
 		)
-@boolean_option("use_whey", "whey")
+@pytest.mark.parametrize(
+		"other_opts",
+		[
+				pytest.param({"use_whey": True}, id="backend_whey"),
+				pytest.param({"use_flit": True}, id="backend_flit"),
+				pytest.param({}, id="backend_setuptools"),
+				]
+		)
 @pytest.mark.parametrize("mypy_version", ["0.800", "0.910"])
 def test_make_setup_cfg(
 		tmp_pathplus: PathPlus,
@@ -259,7 +297,7 @@ def test_make_setup_cfg(
 		advanced_file_regression: AdvancedFileRegressionFixture,
 		classifiers: List[str],
 		python_versions,
-		use_whey: bool,
+		other_opts: Dict[str, Any],
 		mypy_version: str,
 		):
 	# TODO: permutations to cover all branches
@@ -275,13 +313,16 @@ def test_make_setup_cfg(
 	demo_environment.globals["mypy_plugins"] = []
 	demo_environment.globals["enable_docs"] = True
 	demo_environment.globals["entry_points"] = {}
-	demo_environment.globals["use_whey"] = use_whey
 	demo_environment.globals["mypy_version"] = mypy_version
+
+	demo_environment.globals.update(other_opts)
 
 	managed_files = make_setup_cfg(tmp_pathplus, demo_environment)
 	assert managed_files == ["setup.cfg"]
 
-	if use_whey and mypy_version == "0.910":
+	if demo_environment.globals["use_whey"] and mypy_version == "0.910":
+		assert not (tmp_pathplus / managed_files[0]).is_file()
+	elif demo_environment.globals["use_flit"] and mypy_version == "0.910":
 		assert not (tmp_pathplus / managed_files[0]).is_file()
 	else:
 		advanced_file_regression.check_file(tmp_pathplus / managed_files[0])

@@ -5,7 +5,7 @@ r"""
 :class:`~configconfig.configvar.ConfigVar`\s in the "packaging" category.
 """
 #
-#  Copyright © 2020 Dominic Davis-Foster <dominic@davis-foster.co.uk>
+#  Copyright © 2020-2022 Dominic Davis-Foster <dominic@davis-foster.co.uk>
 #
 #  This program is free software; you can redistribute it and/or modify
 #  it under the terms of the GNU Lesser General Public License as published by
@@ -42,6 +42,7 @@ __all__ = [
 		"setup_pre",
 		"platforms",
 		"use_whey",
+		"use_flit",
 		]
 
 
@@ -284,6 +285,56 @@ class use_whey(ConfigVar):  # noqa
 				setup_pre,
 				py_modules,
 				desktopfile,
+				use_flit,
+				)
+
+		for key in disallowed_keys:
+			if key.get(raw_config_vars):
+				return False
+
+		# Excluded files that the backend is incompatible with
+		disallowed_files = {"setup", "setup_cfg", "pyproject"}
+		for file in disallowed_files:
+			if file in excluded_files:
+				return False
+
+		return super().validate(raw_config_vars)
+
+
+class use_flit(ConfigVar):  # noqa
+	r"""
+	Whether to use `flit <https://flit.readthedocs.io/en/latest/>`_ to build distributions,
+	rather than ``setuptools.build_meta``.
+
+	.. versionadded:: $VERSION
+
+	.. note:: Support for flit is provisional and experimental.
+	"""  # noqa: D400
+
+	dtype = bool
+	default = False
+	category: str = "packaging"
+
+	@classmethod
+	def validate(cls, raw_config_vars: Optional[Dict[str, Any]] = None) -> Any:  # noqa: D102
+
+		# this package
+		from repo_helper.configuration import desktopfile
+		from repo_helper.configuration.metadata import pure_python
+		from repo_helper.configuration.other import exclude_files
+
+		excluded_files = exclude_files.get(raw_config_vars)
+
+		# Options that the backend is incompatible with
+		if not pure_python.get(raw_config_vars):
+			return False
+
+		disallowed_keys = (
+				additional_setup_args,
+				setup_pre,
+				py_modules,
+				desktopfile,
+				use_whey,
 				)
 
 		for key in disallowed_keys:

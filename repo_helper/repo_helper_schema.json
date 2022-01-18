@@ -445,6 +445,13 @@
       ],
       "description": "The Travis Ubuntu version."
     },
+    "use_flit": {
+      "type": [
+        "boolean",
+        "string"
+      ],
+      "description": "Whether to use `flit <https://flit.readthedocs.io/en/latest/>`_ to build distributions, rather than ``setuptools.build_meta``."
+    },
     "use_whey": {
       "type": [
         "boolean",

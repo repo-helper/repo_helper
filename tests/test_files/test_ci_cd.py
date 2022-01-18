@@ -2,7 +2,7 @@
 #
 #  test_ci_cd.py
 #
-#  Copyright © 2020-2021 Dominic Davis-Foster <dominic@davis-foster.co.uk>
+#  Copyright © 2020-2022 Dominic Davis-Foster <dominic@davis-foster.co.uk>
 #
 #  This program is free software; you can redistribute it and/or modify
 #  it under the terms of the GNU Lesser General Public License as published by
@@ -22,7 +22,7 @@
 
 # stdlib
 from types import SimpleNamespace
-from typing import List
+from typing import Any, Dict, List
 
 # 3rd party
 import pytest
@@ -318,21 +318,28 @@ def test_make_github_mypy_extra_install_only_linux(
 
 @pytest.mark.parametrize("py_versions", [["3.6", "3.7", "3.8"], ["3.6", "3.7"]])
 @boolean_option("enable_docs", "docs")
-@boolean_option("use_whey", "whey")
+@pytest.mark.parametrize(
+		"other_opts",
+		[
+				pytest.param({"use_whey": True}, id="backend_whey"),
+				pytest.param({"use_flit": True}, id="backend_flit"),
+				pytest.param({}, id="backend_setuptools"),
+				]
+		)
 @pytest.mark.parametrize("py_modules", [["hello_world.py"], []])
 def test_ensure_bumpversion(
 		tmp_pathplus: PathPlus,
 		demo_environment,
 		advanced_file_regression: AdvancedFileRegressionFixture,
 		enable_docs: bool,
-		use_whey: bool,
+		other_opts: Dict[str, Any],
 		py_versions,
 		py_modules,
 		):
 
 	demo_environment.globals["version"] = "1.2.3"
 	demo_environment.globals["enable_docs"] = enable_docs
-	demo_environment.globals["use_whey"] = use_whey
+	demo_environment.globals.update(other_opts)
 	assert ensure_bumpversion(tmp_pathplus, demo_environment) == [".bumpversion.cfg"]
 	advanced_file_regression.check_file(tmp_pathplus / ".bumpversion.cfg")
 

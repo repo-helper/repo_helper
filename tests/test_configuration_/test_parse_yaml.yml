@@ -117,6 +117,7 @@ tox_testenv_extras: all
 tox_unmanaged: []
 travis_additional_requirements: []
 travis_ubuntu_version: focal
+use_flit: false
 use_whey: false
 username: domdfcoding
 version: 0.0.1

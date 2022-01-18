@@ -10,7 +10,7 @@ Helpers for running tests with pytest.
 .. versionadded:: 2020.11.17
 """
 #
-#  Copyright © 2020 Dominic Davis-Foster <dominic@davis-foster.co.uk>
+#  Copyright © 2020-2022 Dominic Davis-Foster <dominic@davis-foster.co.uk>
 #
 #  This program is free software; you can redistribute it and/or modify
 #  it under the terms of the GNU Lesser General Public License as published by
@@ -109,7 +109,9 @@ def demo_environment() -> Environment:
 			"on_pypi": true,
 			"docs_fail_on_warning": false,
 			"requires_python": "3.6.1",
-			"third_party_version_matrix": {}
+			"third_party_version_matrix": {},
+			"use_whey": false,
+			"use_flit": false
 			}
 
 	plus ``lint_warn_list`` = :py:data:`repo_helper.files.linting.lint_warn_list`.
@@ -167,6 +169,8 @@ def demo_environment() -> Environment:
 					managed_message="This file is managed by 'repo_helper'. Don't edit it directly.",
 					short_desc="a short description",
 					on_pypi=True,
+					use_whey=False,
+					use_flit=False,
 					docs_fail_on_warning=False,
 					brace=brace,
 					third_party_version_matrix={},

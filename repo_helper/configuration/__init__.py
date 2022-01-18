@@ -5,7 +5,7 @@
 Configuration options.
 """
 #
-#  Copyright © 2020 Dominic Davis-Foster <dominic@davis-foster.co.uk>
+#  Copyright © 2020-2022 Dominic Davis-Foster <dominic@davis-foster.co.uk>
 #
 #  This program is free software; you can redistribute it and/or modify
 #  it under the terms of the GNU Lesser General Public License as published by
@@ -138,6 +138,7 @@ from repo_helper.configuration.packaging import (
 		platforms,
 		py_modules,
 		setup_pre,
+		use_flit,
 		use_whey
 		)
 from repo_helper.configuration.python_versions_ import (
@@ -252,6 +253,7 @@ __all__ = [
 		"min_coverage",
 		"docs_fail_on_warning",
 		"use_whey",
+		"use_flit",
 		"github_ci_requirements",
 		]
 

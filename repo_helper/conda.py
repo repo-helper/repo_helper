@@ -5,7 +5,7 @@
 Utilities for Conda packages.
 """
 #
-#  Copyright © 2020 Dominic Davis-Foster <dominic@davis-foster.co.uk>
+#  Copyright © 2020-2022 Dominic Davis-Foster <dominic@davis-foster.co.uk>
 #
 #  This program is free software; you can redistribute it and/or modify
 #  it under the terms of the GNU Lesser General Public License as published by
@@ -71,6 +71,9 @@ class CondaRecipeMaker(MaryBerry):
 
 		if config["use_whey"]:
 			config["requires"].append("whey")
+
+		elif config["use_flit"]:
+			config["requires"].append("flit_core>=3.2,<4")
 
 		url = "https://github.com/{username}/{repo_name}".format_map(config)
 		config["urls"] = {

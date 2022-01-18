@@ -5,7 +5,7 @@
 Manage configuration files for continuous integration / continuous deployment.
 """
 #
-#  Copyright © 2020-2021 Dominic Davis-Foster <dominic@davis-foster.co.uk>
+#  Copyright © 2020-2022 Dominic Davis-Foster <dominic@davis-foster.co.uk>
 #
 #  This program is free software; you can redistribute it and/or modify
 #  it under the terms of the GNU Lesser General Public License as published by
@@ -692,7 +692,7 @@ def ensure_bumpversion(repo_path: pathlib.Path, templates: Environment) -> List[
 	if not templates.globals["enable_conda"]:
 		old_sections.append(f"bumpversion:file:.github/workflows/conda_ci.yml")
 
-	if templates.globals["use_whey"]:
+	if templates.globals["use_whey"] or templates.globals["use_flit"]:
 		old_sections.append("bumpversion:file:setup.cfg")
 
 	for section in old_sections:
@@ -749,7 +749,7 @@ def get_bumpversion_filenames(templates: Environment) -> Iterable[str]:
 
 	yield from ["pyproject.toml", "repo_helper.yml", "README.rst"]
 
-	if not templates.globals["use_whey"]:
+	if not (templates.globals["use_whey"] or templates.globals["use_flit"]):
 		yield "setup.cfg"
 
 	if templates.globals["enable_docs"]:

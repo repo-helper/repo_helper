@@ -5,7 +5,7 @@
 Manage configuration files for packaging tools.
 """
 #
-#  Copyright © 2020 Dominic Davis-Foster <dominic@davis-foster.co.uk>
+#  Copyright © 2020-2022 Dominic Davis-Foster <dominic@davis-foster.co.uk>
 #
 #  This program is free software; you can redistribute it and/or modify
 #  it under the terms of the GNU Lesser General Public License as published by
@@ -33,11 +33,10 @@ from typing import Any, Dict, List, Mapping, Tuple, TypeVar
 
 # 3rd party
 import dom_toml
-from domdf_python_tools.compat import importlib_resources
 from domdf_python_tools.paths import PathPlus
 from natsort import natsorted
 from shippinglabel import normalize
-from shippinglabel.requirements import ComparableRequirement, combine_requirements
+from shippinglabel.requirements import ComparableRequirement, combine_requirements, read_requirements
 
 # this package
 import repo_helper.files
@@ -97,7 +96,7 @@ def make_manifest(repo_path: pathlib.Path, templates: Environment) -> List[str]:
 
 	file = PathPlus(repo_path / "MANIFEST.in")
 
-	if templates.globals["use_whey"]:
+	if templates.globals["use_whey"] or templates.globals["use_flit"]:
 		file.unlink(missing_ok=True)
 
 	else:
@@ -160,13 +159,14 @@ def make_pyproject(repo_path: pathlib.Path, templates: Environment) -> List[str]
 			"wheel>=0.34.2",
 			"whey",
 			"repo-helper",
+			"flit-core<4,>=3.2",
 			*templates.globals["tox_build_requirements"],
 			*data["build-system"].get("requires", [])
 			}
 
 	build_requirements = sorted(combine_requirements(ComparableRequirement(req) for req in build_requirements_))
 
-	if templates.globals["use_whey"]:
+	if templates.globals["use_whey"] or templates.globals["use_flit"]:
 		for old_dep in ["setuptools", "wheel"]:
 			if old_dep in build_requirements:
 				build_requirements.remove(old_dep)  # type: ignore
@@ -175,6 +175,11 @@ def make_pyproject(repo_path: pathlib.Path, templates: Environment) -> List[str]
 		build_backend = "whey"
 	elif "whey" in build_requirements:
 		build_requirements.remove("whey")  # type: ignore
+
+	if templates.globals["use_flit"]:
+		build_backend = "flit_core.buildapi"
+	elif "flit-core<4,>=3.2" in build_requirements:
+		build_requirements.remove("flit-core<4,>=3.2")  # type: ignore
 
 	if "repo-helper" in build_requirements:
 		build_requirements.remove("repo-helper")  # type: ignore
@@ -205,6 +210,24 @@ def make_pyproject(repo_path: pathlib.Path, templates: Environment) -> List[str]
 
 	if templates.globals["enable_docs"]:
 		data["project"]["urls"]["Documentation"] = templates.globals["docs_url"]
+
+	if templates.globals["use_flit"]:
+		data["project"]["dynamic"] = []
+
+		if templates.globals["requires_python"] is None:
+			if templates.globals["min_py_version"] in {"3.6", 3.6}:
+				requires_python = "3.6.1"
+			else:
+				requires_python = templates.globals["min_py_version"]
+		else:
+			requires_python = templates.globals["requires_python"]
+
+		data["project"]["requires-python"] = f">={requires_python}"
+		data["project"]["classifiers"] = _get_classifiers(templates.globals)
+		parsed_requirements, comments, invalid_lines = read_requirements(repo_path / "requirements.txt", include_invalid=True)
+		if invalid_lines:
+			raise NotImplementedError(f"Unsupported requirement type(s): {invalid_lines}")
+		data["project"]["dependencies"] = sorted(parsed_requirements)
 
 	# extras-require
 
@@ -358,7 +381,7 @@ def make_setup(repo_path: pathlib.Path, templates: Environment) -> List[str]:
 
 	setup_file = PathPlus(repo_path / "setup.py")
 
-	if templates.globals["use_whey"]:
+	if templates.globals["use_whey"] or templates.globals["use_flit"]:
 		setup_file.unlink(missing_ok=True)
 
 	else:
@@ -444,29 +467,7 @@ class SetupCfgConfig(IniConfigurator):
 			project_urls.insert(0, "Documentation = {docs_url}".format_map(self._globals))
 
 		self._ini["metadata"]["project_urls"] = indent_with_tab('\n' + textwrap.dedent('\n'.join(project_urls)))
-		self._ini["metadata"]["classifiers"] = self._get_classifiers()
-
-	def _get_classifiers(self) -> List[str]:
-
-		classifiers = set(self["classifiers"])
-
-		if self["license"] in license_lookup.values():
-			classifiers.add(f"License :: OSI Approved :: {self['license']}")
-
-		for c in get_version_classifiers(self["python_versions"]):
-			classifiers.add(c)
-
-		if set(self["platforms"]) == {"Windows", "macOS", "Linux"}:
-			classifiers.add("Operating System :: OS Independent")
-		else:
-			if "Windows" in self["platforms"]:
-				classifiers.add("Operating System :: Microsoft :: Windows")
-			if "Linux" in self["platforms"]:
-				classifiers.add("Operating System :: POSIX :: Linux")
-			if "macOS" in self["platforms"]:
-				classifiers.add("Operating System :: MacOS")
-
-		return natsorted(classifiers)
+		self._ini["metadata"]["classifiers"] = _get_classifiers(self._globals)
 
 	def options(self):
 		"""
@@ -548,7 +549,7 @@ class SetupCfgConfig(IniConfigurator):
 		if not self._ini["options.entry_points"].options():
 			self._ini.remove_section("options.entry_points")
 
-		if self["use_whey"]:
+		if self["use_whey"] or self["use_flit"]:
 			self._ini.remove_section("metadata")
 			self._ini.remove_section("options")
 			self._ini.remove_section("options.packages.find")
@@ -584,11 +585,36 @@ def make_setup_cfg(repo_path: pathlib.Path, templates: Environment) -> List[str]
 	:param templates:
 	"""
 
-	# TODO: if "use_whey", remove this file, but ensure unmanaged sections are preserved
+	# TODO: if "use_whey" or "use_flit", remove this file, but ensure unmanaged sections are preserved
 
 	SetupCfgConfig(repo_path=repo_path, templates=templates).write_out()
 
 	return [SetupCfgConfig.filename]
+
+
+def _get_classifiers(__globals: Dict[str, Any]) -> List[str]:
+
+	the_globals = __globals
+
+	classifiers = set(the_globals["classifiers"])
+
+	if the_globals["license"] in license_lookup.values():
+		classifiers.add(f"License :: OSI Approved :: {the_globals['license']}")
+
+	for c in get_version_classifiers(the_globals["python_versions"]):
+		classifiers.add(c)
+
+	if set(the_globals["platforms"]) == {"Windows", "macOS", "Linux"}:
+		classifiers.add("Operating System :: OS Independent")
+	else:
+		if "Windows" in the_globals["platforms"]:
+			classifiers.add("Operating System :: Microsoft :: Windows")
+		if "Linux" in the_globals["platforms"]:
+			classifiers.add("Operating System :: POSIX :: Linux")
+		if "macOS" in the_globals["platforms"]:
+			classifiers.add("Operating System :: MacOS")
+
+	return natsorted(classifiers)
 
 
 @management.register("pkginfo")
