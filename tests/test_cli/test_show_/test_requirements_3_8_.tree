@@ -74,7 +74,7 @@ repo_helper==2020.12.18
 │   └── MarkupSafe>=2.0
 ├── mkrecipe>=0.3.0
 │   ├── click>=7.1.2
-│   ├── consolekit>=1.1.1
+│   ├── consolekit>=1.2.0
 │   │   ├── click>=7.1.2
 │   │   ├── deprecation-alias>=0.1.1
 │   │   │   ├── deprecation>=2.1.0
@@ -89,14 +89,14 @@ repo_helper==2020.12.18
 │   │   │   └── typing-extensions>=3.7.4.1
 │   │   ├── mistletoe>=0.7.2
 │   │   └── typing-extensions>=3.7.4.3
-│   ├── dom-toml>=0.3.0
+│   ├── dom-toml>=0.4.0
 │   │   ├── domdf-python-tools>=2.7.0
 │   │   │   ├── importlib-metadata>=3.6.0; python_version < "3.9"
 │   │   │   │   └── zipp>=0.5
 │   │   │   ├── natsort>=7.0.1
 │   │   │   └── typing-extensions>=3.7.4.1
 │   │   └── toml>=0.10.2
-│   ├── domdf-python-tools>=2.7.0
+│   ├── domdf-python-tools>=2.8.0
 │   │   ├── importlib-metadata>=3.6.0; python_version < "3.9"
 │   │   │   └── zipp>=0.5
 │   │   ├── natsort>=7.0.1
@@ -183,7 +183,7 @@ repo_helper==2020.12.18
 │   │   │   └── typing-extensions>=3.7.4.3
 │   │   ├── toml>=0.10.2
 │   │   └── typing-extensions>=3.7.4.3
-│   ├── shippinglabel>=0.13.0
+│   ├── shippinglabel>=0.15.0
 │   │   ├── apeye>=1.0.0
 │   │   │   ├── appdirs>=1.4.4
 │   │   │   ├── domdf-python-tools>=2.3.0
