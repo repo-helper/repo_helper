@@ -19,36 +19,12 @@ requirements:
     - python
     - apeye>=0.3.0
     - attrs>=20.2.0
-    - click==7.1.2
-    - domdf_python_tools>=1.1.0
-    - dulwich>=0.19.16
-    - email-validator==1.1.1
-    - isort>=5.0.0
-    - jinja2>=2.11.2
-    - lxml
-    - packaging>=20.4
-    - pre-commit>=2.7.1
-    - ruamel.yaml>=0.16.12
     - setuptools
-    - tomlkit>=0.7.0
-    - typing-extensions>=3.7.4.3
     - wheel
   run:
     - python
     - apeye>=0.3.0
     - attrs>=20.2.0
-    - click==7.1.2
-    - domdf_python_tools>=1.1.0
-    - dulwich>=0.19.16
-    - email-validator==1.1.1
-    - isort>=5.0.0
-    - jinja2>=2.11.2
-    - lxml
-    - packaging>=20.4
-    - pre-commit>=2.7.1
-    - ruamel.yaml>=0.16.12
-    - tomlkit>=0.7.0
-    - typing-extensions>=3.7.4.3
 
 test:
   imports:

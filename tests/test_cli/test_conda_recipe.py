@@ -79,3 +79,61 @@ def test_conda_recipe_specifiers(
 			raise NotImplementedError(os.sep)
 
 	check_file_output(tmp_pathplus / "conda/meta.yaml", file_regression)
+
+
+def test_conda_recipe_extras(
+		tmp_pathplus,
+		file_regression: FileRegressionFixture,
+		example_config,
+		):
+
+	config = example_config.replace("repo_helper_demo", "repo_helper").replace("0.0.1", "2021.3.8")
+	(tmp_pathplus / "repo_helper.yml").write_text(f"{config}\n\nconda_extras:\n- schema")
+
+	(tmp_pathplus / "requirements.txt").write_lines([
+			'apeye>=0.3.0; python_version < "3.10"',
+			"attrs[extra]>=20.2.0",
+			])
+
+	with in_directory(tmp_pathplus):
+		runner = CliRunner()
+		result: Result = runner.invoke(make_recipe, catch_exceptions=False)
+		assert result.exit_code == 0
+
+		if os.sep == '/':
+			assert re.match(r"Wrote recipe to .*/conda/meta\.yaml", result.stdout)
+		elif os.sep == '\\':
+			assert re.match(r"Wrote recipe to .*(\\)?conda\\meta\.yaml", result.stdout.splitlines()[0])
+		else:
+			raise NotImplementedError(os.sep)
+
+	check_file_output(tmp_pathplus / "conda/meta.yaml", file_regression)
+
+
+def test_conda_recipe_no_extras(
+		tmp_pathplus,
+		file_regression: FileRegressionFixture,
+		example_config,
+		):
+
+	config = example_config.replace("repo_helper_demo", "repo_helper").replace("0.0.1", "2021.3.8")
+	(tmp_pathplus / "repo_helper.yml").write_text(f"{config}\n\nconda_extras:\n- none")
+
+	(tmp_pathplus / "requirements.txt").write_lines([
+			'apeye>=0.3.0; python_version < "3.10"',
+			"attrs[extra]>=20.2.0",
+			])
+
+	with in_directory(tmp_pathplus):
+		runner = CliRunner()
+		result: Result = runner.invoke(make_recipe, catch_exceptions=False)
+		assert result.exit_code == 0
+
+		if os.sep == '/':
+			assert re.match(r"Wrote recipe to .*/conda/meta\.yaml", result.stdout)
+		elif os.sep == '\\':
+			assert re.match(r"Wrote recipe to .*(\\)?conda\\meta\.yaml", result.stdout.splitlines()[0])
+		else:
+			raise NotImplementedError(os.sep)
+
+	check_file_output(tmp_pathplus / "conda/meta.yaml", file_regression)
