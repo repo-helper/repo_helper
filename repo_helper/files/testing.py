@@ -647,8 +647,10 @@ class ToxConfig(IniConfigurator):
 						self._ini["flake8"]["per-file-ignores"] = indent_join(combined_ignores_strings)
 				elif section.name == "pytest":
 					if "filterwarnings" in section:
-						existing_value = set(map(str.strip, section["filterwarnings"].value.splitlines()))
-						self._ini["pytest"]["filterwarnings"] = indent_join(sorted(filter(bool, existing_value)))
+						existing_filterwarnings = section["filterwarnings"].value.splitlines()
+						filterwarnings = list(filter(bool, map(str.strip, existing_filterwarnings)))
+						filterwarnings_list = sorted(set(filterwarnings), key=filterwarnings.index)
+						self._ini["pytest"]["filterwarnings"] = indent_join(filterwarnings_list)
 					if "markers" in section:
 						existing_value = set(map(str.strip, section["markers"].value.splitlines()))
 						self._ini["pytest"]["markers"] = indent_join(sorted(filter(bool, existing_value)))
