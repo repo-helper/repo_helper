@@ -654,6 +654,13 @@ class ToxConfig(IniConfigurator):
 					if "markers" in section:
 						existing_value = set(map(str.strip, section["markers"].value.splitlines()))
 						self._ini["pytest"]["markers"] = indent_join(sorted(filter(bool, existing_value)))
+				elif section.name == "envlists":
+					for key in section.options():
+						if key not in {"test", "qa", "cov"}:
+							existing_envlist = section[key].value.splitlines()
+							new_envlist = list(filter(bool, map(str.strip, existing_envlist)))
+							new_envlist_list = sorted(set(new_envlist), key=new_envlist.index)
+							self._ini["envlists"][key] = indent_join(new_envlist_list)
 
 	# TODO: for tox-isolation
 	# [testenv:{py36,py37,py38,pypy3,py39}]
