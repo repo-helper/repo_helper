@@ -548,6 +548,7 @@ repo_helper==2020.12.18
     │   ├── prettyprinter>=0.18.0
     │   │   ├── Pygments>=2.2.0
     │   │   └── colorful>=0.4.0
+    │   │       └── colorama; platform_system == "Windows"
     │   ├── typing-extensions>=3.7.4.3
     │   └── yapf<0.32.0,>=0.30.0
     ├── isort<=5.6.4,>=5.5.2

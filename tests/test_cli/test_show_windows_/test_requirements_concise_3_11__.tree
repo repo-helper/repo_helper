@@ -41,7 +41,6 @@ repo_helper==2020.12.18
 ├── pyproject-parser>=0.3.0
 ├── pyrsistent!=0.17.0,!=0.17.1,!=0.17.2,>=0.14.0
 ├── requests>=2.24.0
-├── ruamel-yaml-clib>=0.2.6; platform_python_implementation == "CPython" and python_version < "3.11"
 ├── ruamel.yaml>=0.17.4
 ├── shippinglabel>=1.0.0
 ├── six
@@ -49,7 +48,6 @@ repo_helper==2020.12.18
 ├── tabulate>=0.8.8
 ├── toml>=0.10.2
 ├── toolz>=0.11.1
-├── trove-classifiers>=2020.10.21
 ├── typing-extensions>=3.7.4.3
 ├── typing-inspect>=0.6.0
 ├── urllib3<1.27,>=1.24.1
