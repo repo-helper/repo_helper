@@ -26,6 +26,7 @@ Manage configuration files for continuous integration / continuous deployment.
 # stdlib
 import pathlib
 import posixpath
+from itertools import filterfalse
 from textwrap import indent
 from typing import Any, Dict, Iterable, Iterator, List, Optional, Tuple
 
@@ -37,6 +38,7 @@ from packaging.version import InvalidVersion, Version
 
 # this package
 from repo_helper.configupdater2 import ConfigUpdater
+from repo_helper.configuration import get_tox_python_versions
 from repo_helper.files import management
 from repo_helper.files.packaging import DefaultDict
 from repo_helper.templates import Environment
@@ -173,16 +175,8 @@ class ActionsManager:
 		config = self.templates.globals
 
 		python_versions = config["python_versions"]
-		tox_py_versions = config["tox_py_versions"]
+		tox_py_versions = get_tox_python_versions(config["python_versions"])
 		third_party_version_matrix = config["third_party_version_matrix"]
-
-		# TODO: support multi-library matrices
-		if third_party_version_matrix:
-			third_party_library = list(third_party_version_matrix.keys())[0]
-			third_party_versions = DelimitedList(third_party_version_matrix[third_party_library])
-			matrix_testenv_string = f"-{third_party_library}{{{third_party_versions:,}}}"
-		else:
-			matrix_testenv_string = ''
 
 		output: Dict[str, Tuple[str, bool]] = {}
 
@@ -191,6 +185,20 @@ class ActionsManager:
 			set_gh_actions_versions(python_versions),
 			tox_py_versions,
 			):
+
+			# TODO: support multi-library matrices
+			if third_party_version_matrix:
+				third_party_library = list(third_party_version_matrix.keys())[0]
+				third_party_versions = third_party_version_matrix[third_party_library]
+
+				if "matrix_exclude" in metadata:
+					third_party_exclude = list(map(str, metadata["matrix_exclude"].get(third_party_library, [])))
+					third_party_versions = filterfalse(third_party_exclude.__contains__, third_party_versions)
+
+				matrix_testenv_string = f"-{third_party_library}{{{','.join(third_party_versions)}}}"
+			else:
+				matrix_testenv_string = ''
+
 			output[str(gh_py_version)] = (
 					f"{tox_py_version}{matrix_testenv_string},build",
 					metadata["experimental"],

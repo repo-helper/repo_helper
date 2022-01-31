@@ -368,11 +368,7 @@ class RepoHelperParser(Parser):
 		if Version.from_str(parsed_config_vars["python_deploy_version"]) < smallest_py_version:
 			parsed_config_vars["python_deploy_version"] = min_py_version
 
-		# Tox & Travis
-		py_versions = parsed_config_vars["python_versions"]
-		tox_py_versions = get_tox_python_versions(py_versions)
-		parsed_config_vars["tox_py_versions"] = tox_py_versions
-
+		# Tox
 		if (repo_path / parsed_config_vars["import_name"].replace('.', '/') / "py.typed").is_file():
 			parsed_config_vars["classifiers"].append("Typing :: Typed")
 

@@ -143,6 +143,7 @@ class python_versions(ConfigVar):  # noqa
 
 		for version, metadata in natsorted((str(k), v) for k, v in value.items() if k):
 			metadata.setdefault("experimental", cls._is_experimental(version))
+			metadata.setdefault("matrix_exclude", {})
 
 			output[version] = metadata
 

@@ -29,6 +29,7 @@ import pathlib
 import posixpath
 import re
 import warnings
+from itertools import filterfalse
 from operator import attrgetter
 from typing import Any, Dict, List, Tuple
 
@@ -48,6 +49,7 @@ from shippinglabel.requirements import (
 
 # this package
 from repo_helper.configupdater2 import ConfigUpdater
+from repo_helper.configuration import get_tox_python_versions
 from repo_helper.files import management
 from repo_helper.files.linting import code_only_warning, lint_warn_list
 from repo_helper.templates import Environment
@@ -189,19 +191,48 @@ class ToxConfig(IniConfigurator):
 
 		return commands
 
+	def _get_third_party_envs(self) -> Tuple[List[str], List[str]]:
+		tox_envs: List[str] = []
+		cov_envlist: List[str] = []
+
+		for third_party_library in self["third_party_version_matrix"]:
+
+			python_versions = self["python_versions"]
+			tox_py_versions = get_tox_python_versions(self["python_versions"])
+
+			for (py_version, metadata), tox_py_version in zip(
+				python_versions.items(),
+				tox_py_versions,
+				):
+				third_party_versions = self["third_party_version_matrix"][third_party_library]
+
+				if "matrix_exclude" in metadata:
+					third_party_exclude = list(map(str, metadata["matrix_exclude"].get(third_party_library, [])))
+					third_party_versions = filterfalse(third_party_exclude.__contains__, third_party_versions)
+
+				matrix_testenv_string = f"-{third_party_library}{{{','.join(third_party_versions)}}}"
+
+				tox_envs.append(tox_py_version + matrix_testenv_string)
+
+				if not cov_envlist:
+					cov_envlist = [
+							f"py{self['python_deploy_version'].replace('.', '')}-"
+							f"{third_party_library}{third_party_versions[0]}",
+							"coverage",
+							]
+
+		return tox_envs, cov_envlist
+
 	def tox(self):
 		"""
 		``[tox]``.
 		"""
 
-		tox_envs: List[str] = []
+		tox_envs: List[str]
 		if self["third_party_version_matrix"]:
-			for third_party_library in self["third_party_version_matrix"]:
-				third_party_versions = DelimitedList(self["third_party_version_matrix"][third_party_library])
-				matrix_testenv_string = f"-{third_party_library}{{{third_party_versions:,}}}"
-				tox_envs.extend(v + matrix_testenv_string for v in self["tox_py_versions"])
+			tox_envs = self._get_third_party_envs()[0]
 		else:
-			tox_envs = self["tox_py_versions"]
+			tox_envs = get_tox_python_versions(self["python_versions"])
 
 		self._ini["tox"]["envlist"] = [*tox_envs, "mypy", "build"]
 		self._ini["tox"]["skip_missing_interpreters"] = True
@@ -219,21 +250,11 @@ class ToxConfig(IniConfigurator):
 		``[envlists]``.
 		"""
 
-		tox_envs: List[str] = []
+		tox_envs: List[str]
 		if self["third_party_version_matrix"]:
-			cov_envlist: List[str] = []
-			for third_party_library in self["third_party_version_matrix"]:
-				third_party_versions = DelimitedList(self["third_party_version_matrix"][third_party_library])
-				matrix_testenv_string = f"-{third_party_library}{{{third_party_versions:,}}}"
-				tox_envs.extend(v + matrix_testenv_string for v in self["tox_py_versions"])
-
-				if not cov_envlist:
-					cov_envlist = [
-							f"py{self['python_deploy_version'].replace('.', '')}-{third_party_library}{third_party_versions[0]}",
-							"coverage",
-							]
+			tox_envs, cov_envlist = self._get_third_party_envs()
 		else:
-			tox_envs = self["tox_py_versions"]
+			tox_envs = get_tox_python_versions(self["python_versions"])
 			cov_envlist = [f"py{self['python_deploy_version']}".replace('.', ''), "coverage"]
 
 		self._ini["envlists"]["test"] = tox_envs

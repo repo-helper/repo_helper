@@ -86,12 +86,16 @@ python_deploy_version: '3.7'
 python_versions:
   '3.6':
     experimental: false
+    matrix_exclude: {}
   '3.7':
     experimental: false
+    matrix_exclude: {}
   '3.8':
     experimental: false
+    matrix_exclude: {}
   3.9-dev:
     experimental: true
+    matrix_exclude: {}
 repo_name: repo_helper_demo
 requires_python: null
 rtfd_author: Dominic Davis-Foster
@@ -107,11 +111,6 @@ stubs_package: false
 tests_dir: tests
 third_party_version_matrix: {}
 tox_build_requirements: []
-tox_py_versions:
-- py36
-- py37
-- py38
-- py39-dev
 tox_requirements: []
 tox_testenv_extras: all
 tox_unmanaged: []

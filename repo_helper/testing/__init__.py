@@ -181,7 +181,6 @@ def demo_environment() -> Environment:
 					)
 			)
 
-	templates.globals["tox_py_versions"] = get_tox_python_versions(templates.globals["python_versions"])
 
 	return templates
 

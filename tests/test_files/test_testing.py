@@ -26,12 +26,10 @@ from typing import Sequence
 
 # 3rd party
 import pytest
-from coincidence.regressions import AdvancedFileRegressionFixture, check_file_output
+from coincidence.regressions import AdvancedFileRegressionFixture
 from domdf_python_tools.paths import PathPlus
-from pytest_regressions.file_regression import FileRegressionFixture
 
 # this package
-from repo_helper.files.linting import code_only_warning
 from repo_helper.files.pre_commit import make_pre_commit
 from repo_helper.files.testing import ensure_tests_requirements, make_formate_toml, make_isort, make_tox, make_yapf
 
@@ -53,7 +51,6 @@ class TestMakeTox:
 			py_modules: Sequence[str] = (),
 			mypy_deps: Sequence[str] = (),
 			mypy_version: str = "0.790",
-			tox_py_versions: Sequence[str] = ("py36", "py37", "py38"),
 			tox_requirements: Sequence[str] = (),
 			tox_build_requirements: Sequence[str] = (),
 			tox_unmanaged: Sequence[str] = (),
@@ -69,7 +66,11 @@ class TestMakeTox:
 		demo_environment.globals["py_modules"] = list(py_modules)
 		demo_environment.globals["mypy_deps"] = list(mypy_deps)
 		demo_environment.globals["mypy_version"] = mypy_version
-		demo_environment.globals["tox_py_versions"] = list(tox_py_versions)
+		demo_environment.globals["python_versions"] = {
+				"py36": {"experimental": False},
+				"py37": {"experimental": False},
+				"py38": {"experimental": False},
+				}
 		demo_environment.globals["tox_requirements"] = list(tox_requirements)
 		demo_environment.globals["tox_build_requirements"] = list(tox_build_requirements)
 		demo_environment.globals["tox_unmanaged"] = list(tox_unmanaged)

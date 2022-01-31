@@ -534,7 +534,6 @@ def test_actions_manager_python_versions(
 		templates = SimpleNamespace()
 		templates.globals = {
 				"python_versions": py_versions,
-				"tox_py_versions": get_tox_python_versions(python_versions),
 				"third_party_version_matrix": {},
 				}
 
@@ -568,7 +567,6 @@ def test_actions_manager_python_versions_matrix(
 		templates = SimpleNamespace()
 		templates.globals = {
 				"python_versions": py_versions,
-				"tox_py_versions": get_tox_python_versions(python_versions),
 				"third_party_version_matrix": {"attrs": ["19.3", "20.1", "20.2", "latest"]},
 				}
 
