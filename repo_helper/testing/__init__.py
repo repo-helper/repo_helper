@@ -181,7 +181,6 @@ def demo_environment() -> Environment:
 					)
 			)
 
-
 	return templates
 
 
