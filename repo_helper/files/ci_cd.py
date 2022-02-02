@@ -193,7 +193,9 @@ class ActionsManager:
 
 				if "matrix_exclude" in metadata:
 					third_party_exclude = list(map(str, metadata["matrix_exclude"].get(third_party_library, [])))
-					third_party_versions = list(filterfalse(third_party_exclude.__contains__, third_party_versions))
+					third_party_versions = list(
+							filterfalse(third_party_exclude.__contains__, third_party_versions)
+							)
 
 				matrix_testenv_string = f"-{third_party_library}{{{','.join(third_party_versions)}}}"
 			else:
