@@ -58,6 +58,7 @@ jobs:
       - name: "Run Tests"
         run: |
           rm -rf {{ import_name.replace(".", "/") }}
+          $CONDA/bin/conda install pytest coincidence || exit 1
           pip install -r tests/requirements.txt
-          python -m pytest tests/
+          pytest tests/
 {% endif %}

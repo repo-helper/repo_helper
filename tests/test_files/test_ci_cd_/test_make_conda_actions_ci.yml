@@ -58,5 +58,6 @@ jobs:
       - name: "Run Tests"
         run: |
           rm -rf hello_world
+          $CONDA/bin/conda install pytest coincidence || exit 1
           pip install -r tests/requirements.txt
-          python -m pytest tests/
+          pytest tests/
