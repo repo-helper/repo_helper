@@ -112,6 +112,6 @@ jobs:
         if: startsWith(github.ref, 'refs/tags/')
         run: |
           python -m pip install --upgrade github3.py packaging
-          python milestones.py
+          python .github/milestones.py
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
