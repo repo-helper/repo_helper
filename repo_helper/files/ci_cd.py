@@ -56,6 +56,7 @@ __all__ = [
 		"make_conda_actions_ci",
 		"ActionsManager",
 		"get_bumpversion_filenames",
+		"make_actions_milestones",
 		]
 
 
@@ -88,6 +89,24 @@ def make_actions_deploy_conda(repo_path: pathlib.Path, templates: Environment) -
 			deploy_file.relative_to(repo_path).as_posix(),
 			old_deploy_file.relative_to(repo_path).as_posix(),
 			]
+
+
+@management.register("actions_milestones")
+def make_actions_milestones(repo_path: pathlib.Path, templates: Environment) -> List[str]:
+	"""
+	Add script to close milestones on release.
+
+	:param repo_path: Path to the repository root.
+	:param templates:
+	"""
+
+	milestones_file = PathPlus(repo_path / ".github" / "milestones.py")
+	milestones_file.parent.maybe_make()
+
+	milestones_file.write_clean(templates.get_template("milestones._py").render())
+	milestones_file.make_executable()
+
+	return [milestones_file.relative_to(repo_path).as_posix()]
 
 
 @management.register("actions")

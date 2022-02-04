@@ -6,6 +6,7 @@
 - .github/ISSUE_TEMPLATE/feature_request.md
 - .github/auto_assign.yml
 - .github/dependabot.yml
+- .github/milestones.py
 - .github/stale.yml
 - .github/workflow/assign.yml
 - .github/workflows/assign.yml
