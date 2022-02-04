@@ -291,6 +291,12 @@ def test_make_pyproject_whey_extras(
 				]
 		)
 @pytest.mark.parametrize("mypy_version", ["0.800", "0.910"])
+@pytest.mark.parametrize(
+		"entry_points", [
+				pytest.param({"foo": "bar.baz:main"}, id="with_entry_points"),
+				pytest.param({}, id="no_entry_points"),
+				]
+		)
 def test_make_setup_cfg(
 		tmp_pathplus: PathPlus,
 		demo_environment,
@@ -298,6 +304,7 @@ def test_make_setup_cfg(
 		classifiers: List[str],
 		python_versions,
 		other_opts: Dict[str, Any],
+		entry_points: Dict[str, str],
 		mypy_version: str,
 		):
 	# TODO: permutations to cover all branches
@@ -312,7 +319,7 @@ def test_make_setup_cfg(
 	demo_environment.globals["console_scripts"] = []
 	demo_environment.globals["mypy_plugins"] = []
 	demo_environment.globals["enable_docs"] = True
-	demo_environment.globals["entry_points"] = {}
+	demo_environment.globals["entry_points"] = entry_points
 	demo_environment.globals["mypy_version"] = mypy_version
 
 	demo_environment.globals.update(other_opts)

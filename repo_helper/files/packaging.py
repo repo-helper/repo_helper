@@ -503,6 +503,9 @@ class SetupCfgConfig(IniConfigurator):
 		``[options.entry_points]``.
 		"""
 
+		if self["use_whey"] or self["use_flit"]:
+			return
+
 		if self["console_scripts"]:
 			self._ini["options.entry_points"]["console_scripts"] = self["console_scripts"]
 
@@ -540,14 +543,9 @@ class SetupCfgConfig(IniConfigurator):
 				elif section.name == "mypy":
 					self.copy_existing_value(section, "incremental")
 
-		if "options.entry_points" not in self._ini.sections():
-			self._ini.add_section("options.entry_points")
-
-		# if self["console_scripts"]:
-		# 	self._ini["options.entry_points"]["console_scripts"] = self["console_scripts"]
-		# else:
-		if not self._ini["options.entry_points"].options():
-			self._ini.remove_section("options.entry_points")
+		if "options.entry_points" in self._ini.sections():
+			if self["use_whey"] or self["use_flit"] or not self._ini["options.entry_points"].options():
+				self._ini.remove_section("options.entry_points")
 
 		if self["use_whey"] or self["use_flit"]:
 			self._ini.remove_section("metadata")
