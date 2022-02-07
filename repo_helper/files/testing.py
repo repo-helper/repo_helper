@@ -461,7 +461,7 @@ class ToxConfig(IniConfigurator):
 		``[testenv:pyup]``.
 		"""
 
-		self._ini["testenv:pyup"]["basepython"] = "python{min_py_version}".format(**self._globals)
+		self._ini["testenv:pyup"]["basepython"] = "python{python_deploy_version}".format(**self._globals)
 		self._ini["testenv:pyup"]["skip_install"] = True
 		self._ini["testenv:pyup"]["ignore_errors"] = True
 		self._ini["testenv:pyup"]["changedir"] = "{toxinidir}"
@@ -479,7 +479,7 @@ class ToxConfig(IniConfigurator):
 		"""
 
 		if self["enable_tests"]:
-			self._ini["testenv:coverage"]["basepython"] = f"python{self['min_py_version']}"
+			self._ini["testenv:coverage"]["basepython"] = f"python{self['python_deploy_version']}"
 			self._ini["testenv:coverage"]["skip_install"] = True
 			self._ini["testenv:coverage"]["ignore_errors"] = True
 			self._ini["testenv:coverage"]["whitelist_externals"] = "/bin/bash"
