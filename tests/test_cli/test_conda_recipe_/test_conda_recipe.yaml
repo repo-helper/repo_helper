@@ -16,7 +16,7 @@ requirements:
     - wheel
   host:
     - pip
-    - python
+    - python>=3.6.1
     - apeye>=0.3.0
     - attrs>=20.2.0
     - click==7.1.2
@@ -34,7 +34,7 @@ requirements:
     - typing-extensions>=3.7.4.3
     - wheel
   run:
-    - python
+    - python>=3.6.1
     - apeye>=0.3.0
     - attrs>=20.2.0
     - click==7.1.2

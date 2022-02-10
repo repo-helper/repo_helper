@@ -96,6 +96,16 @@ class CondaRecipeMaker(MaryBerry):
 		license_ = config["license"]
 		config["license-key"] = {v: k for k, v in license_lookup.items()}.get(license_, license_)
 
+		if config["requires_python"] is None:
+			if config["min_py_version"] in {"3.6", 3.6}:
+				requires_python = "3.6.1"
+			else:
+				requires_python = config["min_py_version"]
+		else:
+			requires_python = config["requires_python"]
+
+		config["requires_python"] = f">={requires_python}"
+
 		return config
 
 

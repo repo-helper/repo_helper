@@ -16,14 +16,14 @@ requirements:
     - wheel
   host:
     - pip
-    - python
+    - python>=3.6.1
     - apeye>=0.3.0
     - attrs>=20.2.0
     - lxml
     - setuptools
     - wheel
   run:
-    - python
+    - python>=3.6.1
     - apeye>=0.3.0
     - attrs>=20.2.0
     - lxml
