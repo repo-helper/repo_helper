@@ -66,8 +66,9 @@ def test_actions_deploy_conda(
 			".github/actions_deploy_conda.sh",
 			".ci/actions_deploy_conda.sh",
 			]
-	advanced_file_regression.check_file(tmp_pathplus / managed_files[0], extension="_build.sh")
-	advanced_file_regression.check_file(tmp_pathplus / managed_files[2], extension="_deploy.sh")
+
+	for file in managed_files:
+		assert not (tmp_pathplus / file).exists()
 
 
 def test_github_ci_case_1(

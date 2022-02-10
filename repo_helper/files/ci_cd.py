@@ -69,26 +69,17 @@ def make_actions_deploy_conda(repo_path: pathlib.Path, templates: Environment) -
 	:param templates:
 	"""
 
-	old_deploy_file = PathPlus(repo_path / ".ci" / "actions_deploy_conda.sh")
-	old_build_file = PathPlus(repo_path / ".ci" / "actions_build_conda.sh")
-	old_deploy_file.unlink(missing_ok=True)
-	old_build_file.unlink(missing_ok=True)
-
-	deploy_file = PathPlus(repo_path / ".github" / "actions_deploy_conda.sh")
-	build_file = PathPlus(repo_path / ".github" / "actions_build_conda.sh")
-	deploy_file.parent.maybe_make()
-
-	build_file.write_clean(templates.get_template(build_file.name).render())
-	build_file.make_executable()
-	deploy_file.write_clean(templates.get_template(deploy_file.name).render())
-	deploy_file.make_executable()
-
-	return [
-			build_file.relative_to(repo_path).as_posix(),
-			old_build_file.relative_to(repo_path).as_posix(),
-			deploy_file.relative_to(repo_path).as_posix(),
-			old_deploy_file.relative_to(repo_path).as_posix(),
+	files = [
+			PathPlus(repo_path / ".github" / "actions_build_conda.sh"),
+			PathPlus(repo_path / ".ci" / "actions_build_conda.sh"),
+			PathPlus(repo_path / ".github" / "actions_deploy_conda.sh"),
+			PathPlus(repo_path / ".ci" / "actions_deploy_conda.sh"),
 			]
+
+	for file in files:
+		file.unlink(missing_ok=True)
+
+	return [x.relative_to(repo_path).as_posix() for x in files]
 
 
 @management.register("actions_milestones")
