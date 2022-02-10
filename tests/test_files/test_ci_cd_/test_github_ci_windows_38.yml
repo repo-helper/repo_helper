@@ -51,6 +51,7 @@ jobs:
         uses: "actions/setup-python@v2"
         with:
           python-version: "${{ matrix.config.python-version }}"
+          cache: 'pip'
 
       - name: Install dependencies 🔧
         if: steps.setup-python.outcome == 'success'

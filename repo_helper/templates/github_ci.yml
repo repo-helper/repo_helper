@@ -51,6 +51,7 @@ jobs:
         uses: "actions/setup-python@v2"
         with:
           python-version: "${{ brace('matrix.config.python-version')}}"
+          cache: 'pip'
 
       - name: Install dependencies 🔧
         if: steps.setup-python.outcome == 'success'
@@ -80,6 +81,7 @@ jobs:
         uses: "actions/setup-python@v2"
         with:
           python-version: 3.8
+          cache: 'pip'
 
       - name: Install dependencies 🔧
         run: |
@@ -131,6 +133,7 @@ jobs:
         if: startsWith(github.ref, 'refs/tags/')
         with:
           python-version: 3.8
+          cache: 'pip'
 
       - name: Install dependencies 🔧
         if: startsWith(github.ref, 'refs/tags/')
@@ -173,6 +176,7 @@ jobs:
       - name: Setup Python 🐍
         uses: "actions/setup-python@v2"
         with:
+          cache: 'pip'
           python-version: 3.8
 
       - name: Setup Conda

@@ -52,6 +52,7 @@ jobs:
         uses: "actions/setup-python@v2"
         with:
           python-version: "${{ matrix.config.python-version }}"
+          cache: 'pip'
 
       - name: Install dependencies 🔧
         if: steps.setup-python.outcome == 'success'
@@ -81,6 +82,7 @@ jobs:
         if: startsWith(github.ref, 'refs/tags/')
         with:
           python-version: 3.8
+          cache: 'pip'
 
       - name: Install dependencies 🔧
         if: startsWith(github.ref, 'refs/tags/')
