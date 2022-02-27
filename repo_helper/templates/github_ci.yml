@@ -207,7 +207,7 @@ jobs:
           $CONDA/bin/conda install anaconda-client
           $CONDA/bin/conda info -a
 
-          for f in conda/dist/noarch/consolekit-*.tar.bz2; do
+          for f in conda/dist/noarch/{{ pypi_name.lower() }}-*.tar.bz2; do
             [ -e "$f" ] || continue
             echo "$f"
             conda install "$f" || exit 1
