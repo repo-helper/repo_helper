@@ -300,7 +300,7 @@ def make_pyproject(repo_path: pathlib.Path, templates: Environment) -> List[str]
 	license_ = templates.globals["license"]
 	data["tool"]["whey"]["license-key"] = {v: k for k, v in license_lookup.items()}.get(license_, license_)
 
-	if templates.globals["source_dir"]:
+	if templates.globals["use_whey"] and templates.globals["source_dir"]:
 		raise NotImplementedError("Whey does not support custom source directories")
 
 	elif templates.globals["import_name"] != templates.globals["pypi_name"]:
