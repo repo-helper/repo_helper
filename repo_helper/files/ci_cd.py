@@ -211,10 +211,17 @@ class ActionsManager:
 			else:
 				matrix_testenv_string = ''
 
-			output[str(gh_py_version)] = (
-					f"{tox_py_version}{matrix_testenv_string},build",
-					metadata["experimental"],
-					)
+			# TODO: depends on https://github.com/pyca/cryptography/issues/6924
+			if tox_py_version == "pypy39":
+				output[str(gh_py_version)] = (
+						f"{tox_py_version}{matrix_testenv_string}",
+						metadata["experimental"],
+						)
+			else:
+				output[str(gh_py_version)] = (
+						f"{tox_py_version}{matrix_testenv_string},build",
+						metadata["experimental"],
+						)
 
 		return output
 
