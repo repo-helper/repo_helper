@@ -1,5 +1,6 @@
 backports-entry-points-selectable>=1.0.2
 betamax>=0.8.1
+check-wheel-contents>=0.2.0
 coincidence>=0.2.0
 coverage>=5.1
 coverage-pyver-pragma>=0.2.1
