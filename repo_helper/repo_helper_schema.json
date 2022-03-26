@@ -154,12 +154,26 @@
       },
       "description": "A list of files not to manage with `repo_helper`."
     },
+    "extra_lint_paths": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "A list of additional files or directories to check with flake8 and mypy."
+    },
     "extra_sphinx_extensions": {
       "type": "array",
       "items": {
         "type": "string"
       },
       "description": "A list of additional extensions to enable for Sphinx."
+    },
+    "extra_testenv_commands": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "A list of additional commands to run in the primary testenv, after running the tests themselves."
     },
     "extras_require": {
       "type": "object",

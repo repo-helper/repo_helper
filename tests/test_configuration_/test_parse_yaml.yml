@@ -34,8 +34,10 @@ enable_releases: true
 enable_tests: true
 entry_points: {}
 exclude_files: []
+extra_lint_paths: []
 extra_sphinx_extensions:
 - configconfig.autoconfig
+extra_testenv_commands: []
 extras_require:
   all:
   - lxml

@@ -585,23 +585,27 @@ def make_github_manylinux(repo_path: pathlib.Path, templates: Environment) -> Li
 
 	if not templates.globals["pure_python"] and "Linux" in templates.globals["platforms"]:
 		actions = templates.get_template(file.name)
-		wheel_py_versions = []
-		PYVERSIONS = []
 
-		for pyver in range(6, 8):
-			if f"3.{pyver}" in templates.globals["python_versions"]:
-				wheel_py_versions.append(f"cp3{pyver}-cp3{pyver}m")
-				PYVERSIONS.append(f'"3{pyver}"')
+		matrix_config = []
 
-		for pyver in range(8, 10):
-			if f"3.{pyver}" in templates.globals["python_versions"]:
-				wheel_py_versions.append(f"cp3{pyver}-cp3{pyver}")
-				PYVERSIONS.append(f'"3{pyver}"')
+		for version in templates.globals["python_versions"]:
+			if version.endswith("-dev"):
+				continue
+			elif "pypy" in version:
+				continue
 
-		file.write_clean(actions.render(
-				wheel_py_versions=wheel_py_versions,
-				PYVERSIONS=' '.join(PYVERSIONS),
-				))
+			major, minor = map(int, version.split(".", 1))
+			testenv = f"py{major}{minor}"
+
+			if minor < 8:
+				tag = f"cp{major}{minor}-cp{major}{minor}m"
+			else:
+				tag = f"cp{major}{minor}-cp{major}{minor}"
+
+			matrix_config.append((version, testenv, tag))
+
+		file.write_clean(actions.render(matrix_config=matrix_config))
+
 	elif file.is_file():
 		file.unlink()
 

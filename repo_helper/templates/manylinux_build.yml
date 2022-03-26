@@ -1,69 +1,94 @@
-# {{ managed_message }}
+# {{ managed_message }} {% set tag = "${{ matrix.config.tag }}" %}
 ---
 name: Build manylinux Wheels
 
 on:
   push:
-    branches: ["master"]
+    branches-ignore:
+      - 'repo-helper-update'
+      - 'pre-commit-ci-update-config'
+      - 'imgbot'
+    tags:
+      - '*'
   pull_request:
-    branches: ["master"]
+
+permissions:
+  actions: write
+  issues: write
+  contents: read
 
 jobs:
   build:
-    name: "manylinux${{ "{{" }} matrix.manylinux {{ "}}" }}"
-    runs-on: ubuntu-latest
+    name: "manylinux-{{ tag }}"
+    runs-on: "ubuntu-20.04"
+
+    strategy:
+      fail-fast: False
+      matrix:
+        config:{% for version, testenv, tag in matrix_config %}
+          - {python-version: "{{ version }}", testenv: "{{ testenv }}", tag: "{{ tag }}"}{% endfor %}
 
     steps:
       - name: Checkout 🛎️
-        uses: actions/checkout@v2
+        uses: "actions/checkout@v2"
+
       - name: Set up Python 🐍
         uses: actions/setup-python@v1
         with:
-          python-version: 3.8
+          python-version: "${{ brace('matrix.config.python-version') }}"
+
       - name: Install dependencies 🔧
         run: |
+          python -VV
+          python -m site
           python -m pip install --upgrade pip setuptools wheel
-          pip install twine tox
-      - name: Build manylinux1 Python wheels 🎡
-        uses: RalfG/python-wheels-manylinux-build@v0.2.2-manylinux1_x86_64
-        with:
-          python-versions: '{{ " ".join(wheel_py_versions) }}'
-#          build-requirements: 'cython numpy'
-#          system-packages: 'lrzip-devel zlib-devel'
-          package-path: ''
-          pip-wheel-args: '--no-deps'
+          python -m pip install --upgrade twine tox
+
       - name: Build manylinux2010 Python wheels 🎡
-        uses: RalfG/python-wheels-manylinux-build@v0.2.2-manylinux2010_x86_64
+        uses: RalfG/python-wheels-manylinux-build@v0.4.2-manylinux2010_x86_64
         with:
-          python-versions: '{{ " ".join(wheel_py_versions) }}'
+          python-versions: '{{ tag }}'
           package-path: ''
-          pip-wheel-args: '--no-deps'
+          pip-wheel-args: '--no-deps -w ./wheelhouse'
+
       - name: Build manylinux2014 Python wheels 🎡
-        uses: RalfG/python-wheels-manylinux-build@v0.2.2-manylinux2014_x86_64
+        uses: RalfG/python-wheels-manylinux-build@v0.4.2-manylinux2014_x86_64
         with:
-          python-versions: '{{ " ".join(wheel_py_versions) }}'
+          python-versions: '{{ tag }}'
           package-path: ''
-          pip-wheel-args: '--no-deps'
+          pip-wheel-args: '--no-deps -w ./wheelhouse'
+
+      - name: Build manylinux_2_24 Python wheels 🎡
+        uses: RalfG/python-wheels-manylinux-build@v0.4.2-manylinux_2_24_x86_64
+        with:
+          python-versions: '{{ tag }}'
+          package-path: ''
+          pip-wheel-args: '--no-deps -w ./wheelhouse'
+
       - name: Upload Artifacts 🚀
         uses: actions/upload-artifact@v2
         with:
-          name: wheels
+          name: "wheels-${{ brace('matrix.config.tag') }}"
           path: wheelhouse/
+
       - name: "Run Tests"
         run: |
-          PYVERSIONS=({{ PYVERSIONS }})
-          for PYVERSION in "${PYVERSIONS[@]}"; do
-            for whl in wheelhouse/{{ import_name }}-*-cp${PYVERSION}-cp${PYVERSION}*-manylinux*.whl; do
-              # Test tox with wheels
-              python -m tox -r -e py${PYVERSION} --installpkg "$whl"
-              # TODO: Upload coverage to coveralls
-            done
+          for whl in wheelhouse/{{ import_name }}-*-{{ tag }}*-manylinux*.whl; do
+            # Test tox with wheels
+            python -m tox -r -e ${{ brace('matrix.config.testenv') }} --installpkg "$whl"
+            # TODO: Upload coverage to coveralls
           done
+
+      - uses: actions/upload-artifact@v3
+        with:
+          name: wheels-{{ tag }}
+          path: wheelhouse/
+
       - name: Upload distribution 📦 to PyPI
         if: startsWith(github.ref, 'refs/tags/')
         uses: pypa/gh-action-pypi-publish@master
         with:
           user: __token__
-          password: ${{ "{{" }} secrets.PYPI_TOKEN {{ "}}" }}
+          password: ${{ brace('secrets.PYPI_TOKEN') }}
           packages_dir: wheelhouse/
           skip_existing: true
