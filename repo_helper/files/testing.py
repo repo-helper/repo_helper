@@ -153,6 +153,9 @@ class ToxConfig(IniConfigurator):
 		if self._globals["enable_tests"]:
 			source_files.append(self._globals["tests_dir"])
 
+		if self["extra_lint_paths"]:
+			source_files.extend(self["extra_lint_paths"])
+
 		return source_files
 
 	def get_mypy_dependencies(self) -> List[str]:
@@ -164,13 +167,13 @@ class ToxConfig(IniConfigurator):
 
 		# mypy_deps.append("lxml")
 
-		if self._globals["enable_tests"]:
-			mypy_deps.append(f"-r{{toxinidir}}/{self._globals['tests_dir']}/requirements.txt")
+		if self["enable_tests"]:
+			mypy_deps.append(f"-r{{toxinidir}}/{self['tests_dir']}/requirements.txt")
 
 		if (self.base_path / "stubs.txt").is_file():
 			mypy_deps.append("-r{toxinidir}/stubs.txt")
 
-		mypy_deps.extend(self._globals["mypy_deps"])
+		mypy_deps.extend(self["mypy_deps"])
 
 		return mypy_deps
 
@@ -183,7 +186,7 @@ class ToxConfig(IniConfigurator):
 
 		if self["stubs_package"] and self["enable_tests"]:
 			commands.append(f"stubtest {self['import_name']} {{posargs}}")
-			commands.append("mypy tests")
+			commands.append("mypy {}".format(self["tests_dir"]))
 		elif self["stubs_package"]:
 			commands.append(f"stubtest {self['import_name']} {{posargs}}")
 		else:
@@ -343,6 +346,8 @@ class ToxConfig(IniConfigurator):
 		elif not self["stubs_package"]:
 			testenv_commands.append("python -m importcheck {posargs}")
 
+		testenv_commands.extend(self["extra_testenv_commands"])
+
 		self._ini["testenv"]["commands"] = indent_join(testenv_commands)
 
 	def testenv_docs(self):
@@ -444,8 +449,8 @@ class ToxConfig(IniConfigurator):
 		self._ini["testenv:mypy"]["ignore_errors"] = True
 		self._ini["testenv:mypy"]["changedir"] = "{toxinidir}"
 
-		if self._globals["tox_testenv_extras"]:
-			self._ini["testenv:mypy"]["extras"] = self._globals["tox_testenv_extras"]
+		if self["tox_testenv_extras"]:
+			self._ini["testenv:mypy"]["extras"] = self["tox_testenv_extras"]
 
 		self._ini["testenv:mypy"]["deps"] = indent_join(self.get_mypy_dependencies())
 

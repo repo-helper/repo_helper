@@ -5,7 +5,7 @@ r"""
 :class:`~configconfig.configvar.ConfigVar`\s in the "testing" category.
 """
 #
-#  Copyright © 2020 Dominic Davis-Foster <dominic@davis-foster.co.uk>
+#  Copyright © 2020-2022 Dominic Davis-Foster <dominic@davis-foster.co.uk>
 #
 #  This program is free software; you can redistribute it and/or modify
 #  it under the terms of the GNU Lesser General Public License as published by
@@ -44,6 +44,8 @@ __all__ = [
 		"tox_unmanaged",
 		"min_coverage",
 		"github_ci_requirements",
+		"extra_lint_paths",
+		"extra_testenv_commands",
 		]
 
 
@@ -162,6 +164,42 @@ class mypy_plugins(ConfigVar):  # noqa
 		  - custom_plugin:custom_entry_point
 
 	See https://mypy.readthedocs.io/en/stable/extending_mypy.html#extending-mypy-using-plugins for more info.
+	"""
+
+	dtype = List[str]
+	default: List[str] = []
+	category: str = "testing"
+
+
+class extra_lint_paths(ConfigVar):  # noqa
+	"""
+	A list of additional files or directories to check with flake8 and mypy.
+
+	.. code-block:: yaml
+
+		extra_lint_paths:
+		  - tools
+		  - utils
+		  - demo.py
+
+	.. versionadded:: $VERSION
+	"""
+
+	dtype = List[str]
+	default: List[str] = []
+	category: str = "testing"
+
+
+class extra_testenv_commands(ConfigVar):  # noqa
+	"""
+	A list of additional commands to run in the primary testenv, after running the tests themselves.
+
+	.. code-block:: yaml
+
+		extra_testenv_commands:
+		  - python coverage-fixup.py
+
+	.. versionadded:: $VERSION
 	"""
 
 	dtype = List[str]
