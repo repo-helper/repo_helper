@@ -242,7 +242,7 @@ class mypy_version(ConfigVar):  # noqa
 
 	dtype = Union[str, float]
 	rtype = str
-	default = "0.931"
+	default = "0.942"
 	category: str = "testing"
 
 
