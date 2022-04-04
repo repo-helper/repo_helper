@@ -225,16 +225,6 @@ class ActionsManager:
 
 		return output
 
-	@staticmethod
-	def _is_experimental(version: str):
-		if version in {"pypy-3.7", "pypy-3.8", "pypy-3.9"}:
-			return True
-
-		try:
-			return Version(version).is_prerelease
-		except InvalidVersion:
-			return False
-
 	def make_windows(self) -> PathPlus:
 		"""
 		Create, update or remove the Windows action, as appropriate.
@@ -253,7 +243,6 @@ class ActionsManager:
 							dependency_lines=self.get_windows_ci_requirements(),
 							gh_actions_versions=self.get_gh_actions_matrix(),
 							code_file_filter=self._code_file_filter,
-							is_experimental=self._is_experimental
 							)
 					)
 		elif ci_file.is_file():
@@ -279,7 +268,6 @@ class ActionsManager:
 							dependency_lines=self.get_macos_ci_requirements(),
 							gh_actions_versions=self.get_gh_actions_matrix(),
 							code_file_filter=self._code_file_filter,
-							is_experimental=self._is_experimental
 							)
 					)
 		elif ci_file.is_file():
@@ -314,7 +302,6 @@ class ActionsManager:
 							gh_actions_versions=self.get_gh_actions_matrix(),
 							code_file_filter=self._code_file_filter,
 							run_on_tags="    tags:\n      - '*'",
-							is_experimental=self._is_experimental,
 							conda_pip_dependencies=conda_pip_dependencies,
 							)
 					)
