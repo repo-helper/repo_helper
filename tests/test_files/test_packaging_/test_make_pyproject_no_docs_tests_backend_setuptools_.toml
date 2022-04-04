@@ -8,7 +8,17 @@ version = "2020.1.1"
 description = "a short description"
 readme = "README.rst"
 keywords = [ "awesome", "project", "python",]
-dynamic = [ "requires-python", "classifiers", "dependencies",]
+dynamic = []
+requires-python = ">=3.6.1"
+classifiers = [
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: Microsoft :: Windows",
+    "Programming Language :: Python",
+    "Programming Language :: Python :: 3 :: Only",
+    "Programming Language :: Python :: 3.6",
+    "Programming Language :: Python :: 3.7",
+    "Programming Language :: Python :: Implementation :: CPython",
+]
 
 [[project.authors]]
 name = "E. Xample"
@@ -22,6 +32,11 @@ file = "LICENSE"
 Homepage = "https://github.com/octocat/hello-world"
 "Issue Tracker" = "https://github.com/octocat/hello-world/issues"
 "Source Code" = "https://github.com/octocat/hello-world"
+
+[tool.setuptools]
+zip-safe = false
+include-package-data = true
+platforms = [ "Windows", "macOS", "Linux",]
 
 [tool.mkrecipe]
 conda-channels = []

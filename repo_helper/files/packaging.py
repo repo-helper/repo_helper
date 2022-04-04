@@ -152,6 +152,8 @@ def make_pyproject(repo_path: pathlib.Path, templates: Environment) -> List[str]
 		data = DefaultDict()
 
 	data.set_default("build-system", {})
+	data.set_default("tool", {})
+
 	build_backend = "setuptools.build_meta"
 
 	build_requirements_ = {
@@ -198,8 +200,44 @@ def make_pyproject(repo_path: pathlib.Path, templates: Environment) -> List[str]
 	data["project"]["license"] = {"file": "LICENSE"}
 
 	if templates.globals["requires_python"] is not None:
-		data["project"]["dynamic"].pop(0)
+		data["project"]["dynamic"].remove("requires-python")
 		data["project"]["requires-python"] = f">={templates.globals['requires_python']}"
+	elif not templates.globals["use_whey"]:
+		if templates.globals["requires_python"] is None:
+			if templates.globals["min_py_version"] in {"3.6", 3.6}:
+				requires_python = "3.6.1"
+			else:
+				requires_python = templates.globals["min_py_version"]
+		else:
+			requires_python = templates.globals["requires_python"]
+		if "requires-python" in data["project"]["dynamic"]:
+			data["project"]["dynamic"].remove("requires-python")
+
+		data["project"]["requires-python"] = f">={requires_python}"
+	elif "requires-python" in data["project"]:
+		del data["project"]["requires-python"]
+
+	if not templates.globals["use_whey"]:
+		data["project"]["dynamic"] = []
+		data["project"]["classifiers"] = _get_classifiers(templates.globals)
+
+		if templates.globals["use_flit"]:
+			parsed_requirements, comments, invalid_lines = read_requirements(repo_path / "requirements.txt", include_invalid=True)
+			if invalid_lines:
+				raise NotImplementedError(f"Unsupported requirement type(s): {invalid_lines}")
+			data["project"]["dependencies"] = sorted(parsed_requirements)
+		else:
+			# TODO: currently broken by setuptools; have to omit for it to work
+			# data["project"]["dynamic"].append("dependencies")
+
+			data["tool"].setdefault("setuptools", {})
+			data["tool"]["setuptools"]["zip-safe"] = False
+			data["tool"]["setuptools"]["include-package-data"] = True
+			data["tool"]["setuptools"]["platforms"] = [
+					"Windows",
+					"macOS",
+					"Linux",
+					]
 
 	url = "https://github.com/{username}/{repo_name}".format_map(templates.globals)
 	data["project"]["urls"] = {
@@ -211,26 +249,7 @@ def make_pyproject(repo_path: pathlib.Path, templates: Environment) -> List[str]
 	if templates.globals["enable_docs"]:
 		data["project"]["urls"]["Documentation"] = templates.globals["docs_url"]
 
-	if templates.globals["use_flit"]:
-		data["project"]["dynamic"] = []
-
-		if templates.globals["requires_python"] is None:
-			if templates.globals["min_py_version"] in {"3.6", 3.6}:
-				requires_python = "3.6.1"
-			else:
-				requires_python = templates.globals["min_py_version"]
-		else:
-			requires_python = templates.globals["requires_python"]
-
-		data["project"]["requires-python"] = f">={requires_python}"
-		data["project"]["classifiers"] = _get_classifiers(templates.globals)
-		parsed_requirements, comments, invalid_lines = read_requirements(repo_path / "requirements.txt", include_invalid=True)
-		if invalid_lines:
-			raise NotImplementedError(f"Unsupported requirement type(s): {invalid_lines}")
-		data["project"]["dependencies"] = sorted(parsed_requirements)
-
 	# extras-require
-
 	data["project"]["optional-dependencies"] = {}
 
 	for extra, dependencies in templates.globals["extras_require"].items():
@@ -253,7 +272,6 @@ def make_pyproject(repo_path: pathlib.Path, templates: Environment) -> List[str]
 		del data["project"]["entry-points"]
 
 	# tool
-	data.set_default("tool", {})
 
 	# tool.mkrecipe
 	if templates.globals["enable_conda"]:
@@ -311,6 +329,8 @@ def make_pyproject(repo_path: pathlib.Path, templates: Environment) -> List[str]
 					# templates.globals["source_dir"],
 					templates.globals["import_name"].split('.', 1)[0],
 					)
+	elif "package" in data["tool"]["whey"]:
+		del data["tool"]["whey"]["package"]
 
 	if templates.globals["manifest_additional"]:
 		data["tool"]["whey"]["additional-files"] = templates.globals["manifest_additional"]
