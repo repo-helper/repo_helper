@@ -502,7 +502,7 @@ def resource(
 	"""
 	Retrieve the path to a resource inside a package.
 
-	.. versionadded:: $VERSION
+	.. versionadded:: 2022.4.4
 
 	:param package: The name of the package, or a module object representing it.
 	:param resource: The name of the resource.
@@ -548,7 +548,7 @@ def get_license_text(
 	"""
 	Obtain the license text for the given license.
 
-	.. versionadded:: $VERSION
+	.. versionadded:: 2022.4.4
 
 	:param license_name: The name of the license.
 	:param copyright_years: The copyright years (e.g. ``'2019-2021'``) to display in the license.

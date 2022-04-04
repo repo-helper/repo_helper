@@ -306,7 +306,7 @@ class use_flit(ConfigVar):  # noqa
 	Whether to use `flit <https://flit.readthedocs.io/en/latest/>`_ to build distributions,
 	rather than ``setuptools.build_meta``.
 
-	.. versionadded:: $VERSION
+	.. versionadded:: 2022.4.4
 
 	.. note:: Support for flit is provisional and experimental.
 	"""  # noqa: D400

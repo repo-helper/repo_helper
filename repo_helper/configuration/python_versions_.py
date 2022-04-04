@@ -118,7 +118,7 @@ class python_versions(ConfigVar):  # noqa
 
 	PyPy 3.7 and prerelease versions of CPython are treated as experimental by default unless overridden.
 
-	.. versionchanged:: $VERSION  Added support for mappings as well as lists.
+	.. versionchanged:: 2022.4.4  Added support for mappings as well as lists.
 	"""
 
 	# dtype = Union[List[Union[str, float]], Dict[str, Dict[str, Any]]]

@@ -4,7 +4,7 @@ build-backend = "whey"
 
 [project]
 name = "repo_helper"
-version = "2021.8.11"
+version = "2022.4.4"
 description = "A tool to manage configuration files, build scripts etc. across multiple projects."
 readme = "README.rst"
 keywords = [ "configuration",]

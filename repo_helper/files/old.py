@@ -171,7 +171,7 @@ def remove_artefact_cleaner(repo_path: pathlib.Path, templates: Environment) -> 
 	:param templates:
 
 	.. versionadded:: 2020.11.23
-	.. versionremoved:: $VERSION
+	.. versionremoved:: 2022.4.4
 	"""  # noqa: D400
 
 	dot_github = PathPlus(repo_path / ".github")

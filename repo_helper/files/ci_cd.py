@@ -179,7 +179,7 @@ class ActionsManager:
 		"""
 		Determines the matrix of Python versions used in GitHub Actions.
 
-		.. versionadded:: $VERSION
+		.. versionadded:: 2022.4.4
 		"""
 
 		config = self.templates.globals
