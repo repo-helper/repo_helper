@@ -62,6 +62,7 @@ __all__ = [
 		"make_isort",
 		"make_formate_toml",
 		"ensure_tests_requirements",
+		"make_justfile",
 		]
 
 allowed_rst_directives = ["envvar", "TODO", "extras-require", "license", "license-info"]
@@ -948,3 +949,20 @@ def ensure_tests_requirements(repo_path: pathlib.Path, templates: Environment) -
 
 	TestsRequirementsManager(repo_path, templates).run()
 	return [(PathPlus(templates.globals["tests_dir"]) / "requirements.txt").as_posix()]
+
+
+@management.register("justfile")
+def make_justfile(repo_path: pathlib.Path, templates: Environment) -> List[str]:
+	"""
+	Add configuration for ``just``.
+
+	https://github.com/casey/just
+
+	:param repo_path: Path to the repository root.
+	:param templates:
+	"""
+
+	file = PathPlus(repo_path) / "justfile"
+	file.write_clean(templates.get_template("justfile.t").render())
+	return [file.name]
+
