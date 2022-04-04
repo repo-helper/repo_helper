@@ -594,7 +594,7 @@ def make_github_manylinux(repo_path: pathlib.Path, templates: Environment) -> Li
 			elif "pypy" in version:
 				continue
 
-			major, minor = map(int, version.split(".", 1))
+			major, minor = map(int, version.split('.', 1))
 			testenv = f"py{major}{minor}"
 
 			if minor < 8:
