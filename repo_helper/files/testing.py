@@ -965,4 +965,3 @@ def make_justfile(repo_path: pathlib.Path, templates: Environment) -> List[str]:
 	file = PathPlus(repo_path) / "justfile"
 	file.write_clean(templates.get_template("justfile.t").render())
 	return [file.name]
-
