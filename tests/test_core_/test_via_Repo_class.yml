@@ -48,6 +48,7 @@
 - doc-source/requirements.txt
 - formate.toml
 - git_helper.yml
+- justfile
 - lint_roller.sh
 - pyproject.toml
 - repo_helper.yml

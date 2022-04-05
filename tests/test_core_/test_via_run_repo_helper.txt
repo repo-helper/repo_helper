@@ -37,6 +37,7 @@ The following files will be committed:
   README.rst
   __pkginfo__.py
   formate.toml
+  justfile
   pyproject.toml
   repo_helper.yml
   setup.cfg
