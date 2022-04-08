@@ -193,7 +193,7 @@ pyupgrade = Repo(
 
 lucas_c_hooks = Repo(
 		repo=make_github_url("Lucas-C", "pre-commit-hooks"),
-		rev="v1.1.11",
+		rev="v1.1.13",
 		hooks=["remove-crlf", "forbid-crlf"],
 		)
 
@@ -205,7 +205,7 @@ flake2lint = Repo(
 
 pyproject_parser = Repo(
 		repo=make_github_url("repo-helper", "pyproject-parser"),
-		rev="v0.4.2",
+		rev="v0.4.3",
 		hooks=["reformat-pyproject"],  # TODO: add check-pyproject
 		)
 
@@ -274,7 +274,7 @@ def make_pre_commit(repo_path: pathlib.Path, templates: Environment) -> List[str
 
 	formate = Repo(
 			repo=make_github_url("python-formate", "formate"),
-			rev="v0.4.9",
+			rev="v0.4.10",
 			hooks=[{"id": "formate", "exclude": formate_excludes}],
 			)
 
