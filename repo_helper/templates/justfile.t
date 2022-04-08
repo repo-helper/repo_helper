@@ -1,3 +1,5 @@
+default: lint
+
 pdf-docs: latex-docs
 	make -C doc-source/build/latex/
 
@@ -19,6 +21,3 @@ bare-ignore:
 
 lint: unused-imports incomplete-defs bare-ignore
 	tox -n qa
-
-default: lint
-	true
