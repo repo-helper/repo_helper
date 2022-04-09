@@ -157,7 +157,7 @@ def make_pyproject(repo_path: pathlib.Path, templates: Environment) -> List[str]
 	build_backend = "setuptools.build_meta"
 
 	build_requirements_ = {
-			"setuptools>=40.6.0",
+			"setuptools>=40.6.0,!=61.*",
 			"wheel>=0.34.2",
 			"whey",
 			"repo-helper",
@@ -194,13 +194,11 @@ def make_pyproject(repo_path: pathlib.Path, templates: Environment) -> List[str]
 	data["project"]["version"] = templates.globals["version"]
 	data["project"]["description"] = templates.globals["short_desc"]
 	data["project"]["readme"] = "README.rst"
-	data["project"]["keywords"] = sorted(templates.globals["keywords"])
-	data["project"]["dynamic"] = ["requires-python", "classifiers", "dependencies"]
-	data["project"]["authors"] = [{"name": templates.globals["author"], "email": templates.globals["email"]}]
-	data["project"]["license"] = {"file": "LICENSE"}
+
+	dynamic = ["requires-python", "classifiers", "dependencies"]
 
 	if templates.globals["requires_python"] is not None:
-		data["project"]["dynamic"].remove("requires-python")
+		dynamic.remove("requires-python")
 		data["project"]["requires-python"] = f">={templates.globals['requires_python']}"
 	elif not templates.globals["use_whey"]:
 		if templates.globals["requires_python"] is None:
@@ -210,16 +208,24 @@ def make_pyproject(repo_path: pathlib.Path, templates: Environment) -> List[str]
 				requires_python = templates.globals["min_py_version"]
 		else:
 			requires_python = templates.globals["requires_python"]
-		if "requires-python" in data["project"]["dynamic"]:
-			data["project"]["dynamic"].remove("requires-python")
+		if "requires-python" in dynamic:
+			dynamic.remove("requires-python")
 
 		data["project"]["requires-python"] = f">={requires_python}"
 	elif "requires-python" in data["project"]:
 		del data["project"]["requires-python"]
 
+	data["project"]["keywords"] = sorted(templates.globals["keywords"])
+
+	if not templates.globals["use_whey"]:
+		data["project"]["classifiers"] = _get_classifiers(templates.globals)
+
+	data["project"]["dynamic"] = dynamic
+	data["project"]["authors"] = [{"name": templates.globals["author"], "email": templates.globals["email"]}]
+	data["project"]["license"] = {"file": "LICENSE"}
+
 	if not templates.globals["use_whey"]:
 		data["project"]["dynamic"] = []
-		data["project"]["classifiers"] = _get_classifiers(templates.globals)
 
 		if templates.globals["use_flit"]:
 			parsed_requirements, comments, invalid_lines = read_requirements(repo_path / "requirements.txt", include_invalid=True)
@@ -227,8 +233,7 @@ def make_pyproject(repo_path: pathlib.Path, templates: Environment) -> List[str]
 				raise NotImplementedError(f"Unsupported requirement type(s): {invalid_lines}")
 			data["project"]["dependencies"] = sorted(parsed_requirements)
 		else:
-			# TODO: currently broken by setuptools; have to omit for it to work
-			# data["project"]["dynamic"].append("dependencies")
+			data["project"]["dynamic"].append("dependencies")
 
 			data["tool"].setdefault("setuptools", {})
 			data["tool"]["setuptools"]["zip-safe"] = False

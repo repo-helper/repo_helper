@@ -1,5 +1,5 @@
 [build-system]
-requires = [ "setuptools>=40.6.0", "wheel>=0.34.2",]
+requires = [ "setuptools!=61.*,>=40.6.0", "wheel>=0.34.2",]
 build-backend = "setuptools.build_meta"
 
 [project]
@@ -7,9 +7,8 @@ name = "hello-world"
 version = "2020.1.1"
 description = "a short description"
 readme = "README.rst"
-keywords = [ "awesome", "project", "python",]
-dynamic = []
 requires-python = ">=3.6.1"
+keywords = [ "awesome", "project", "python",]
 classifiers = [
     "License :: OSI Approved :: MIT License",
     "Operating System :: Microsoft :: Windows",
@@ -19,6 +18,7 @@ classifiers = [
     "Programming Language :: Python :: 3.7",
     "Programming Language :: Python :: Implementation :: CPython",
 ]
+dynamic = [ "dependencies",]
 
 [[project.authors]]
 name = "E. Xample"

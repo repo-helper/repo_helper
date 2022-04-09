@@ -7,9 +7,9 @@ name = "hello-world"
 version = "2020.1.1"
 description = "a short description"
 readme = "README.rst"
+requires-python = ">=3.6.1"
 keywords = [ "awesome", "project", "python",]
 dynamic = [ "classifiers", "dependencies",]
-requires-python = ">=3.6.1"
 
 [[project.authors]]
 name = "E. Xample"
