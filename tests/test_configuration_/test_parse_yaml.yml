@@ -73,6 +73,7 @@ modname: repo_helper_demo
 mypy_deps: []
 mypy_plugins: []
 mypy_version: '0.942'
+on_conda_forge: false
 on_pypi: true
 platforms:
 - Windows

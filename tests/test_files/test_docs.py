@@ -26,7 +26,6 @@ import sys
 # 3rd party
 import pytest
 from coincidence.regressions import AdvancedFileRegressionFixture, check_file_output, check_file_regression
-from domdf_python_tools.compat import importlib_resources
 from domdf_python_tools.paths import PathPlus
 from pytest_regressions.file_regression import FileRegressionFixture
 
@@ -262,6 +261,48 @@ def test_rewrite_docs_index(
 	demo_environment.globals["enable_pre_commit"] = True
 	demo_environment.globals["license"] = "MIT"
 	demo_environment.globals["primary_conda_channel"] = "octocat"
+	demo_environment.globals["preserve_custom_theme"] = False
+
+	index_file = tmp_pathplus / "doc-source" / "index.rst"
+	index_file.parent.maybe_make()
+
+	with resource(tests.test_files.test_rewrite_docs_index_input, filename) as p:
+		index_file.write_clean(PathPlus(p).read_text())
+
+	managed_files = rewrite_docs_index(tmp_pathplus, demo_environment)
+	assert managed_files == ["doc-source/index.rst"]
+
+	check_file_output(index_file, file_regression)
+
+
+@pytest.mark.parametrize(
+		"filename",
+		[
+				"input_a.rst",
+				"input_b.rst",
+				"input_c.rst",
+				"input_d.rst",
+				"input_e.rst",
+				"input_f.rst",
+				"input_g.rst",
+				"input_h.rst",
+				]
+		)
+def test_rewrite_docs_index_conda_forge(
+		tmp_pathplus,
+		demo_environment,
+		file_regression: FileRegressionFixture,
+		filename,
+		fixed_date,
+		):
+	demo_environment.globals["version"] = "1.2.3"
+	demo_environment.globals["enable_docs"] = True
+	demo_environment.globals["docker_shields"] = False
+	demo_environment.globals["docker_name"] = ''
+	demo_environment.globals["enable_pre_commit"] = True
+	demo_environment.globals["license"] = "MIT"
+	demo_environment.globals["primary_conda_channel"] = "octocat"
+	demo_environment.globals["on_conda_forge"] = True
 	demo_environment.globals["preserve_custom_theme"] = False
 
 	index_file = tmp_pathplus / "doc-source" / "index.rst"

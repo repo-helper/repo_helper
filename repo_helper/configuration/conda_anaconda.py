@@ -32,7 +32,14 @@ from configconfig.configvar import ConfigVar
 # this package
 from repo_helper.configuration import metadata
 
-__all__ = ["enable_conda", "conda_channels", "conda_description", "conda_extras", "primary_conda_channel"]
+__all__ = [
+		"enable_conda",
+		"conda_channels",
+		"conda_description",
+		"conda_extras",
+		"primary_conda_channel",
+		"on_conda_forge",
+		]
 
 
 class enable_conda(ConfigVar):  # noqa
@@ -149,4 +156,25 @@ class primary_conda_channel(ConfigVar):  # noqa
 
 	dtype = str
 	default = metadata.username
-	category: str = "metadata"
+	category: str = "conda & anaconda"
+
+
+class on_conda_forge(ConfigVar):  # noqa
+	"""
+	Flag to indicate the package is available on conda-forge.
+
+	If this flag is :py:obj:`True` the documentation will recommend installing from conda-forge
+	over the :conf:`primary_conda_channel`.
+
+	Example:
+
+	.. code-block:: yaml
+
+		on_conda_forge: True
+
+	.. versionadded:: $VERSION
+	"""
+
+	dtype = bool
+	default = False
+	category: str = "conda & anaconda"

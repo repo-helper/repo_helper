@@ -556,6 +556,13 @@ def rewrite_docs_index(repo_path: pathlib.Path, templates: Environment) -> List[
 	index_rst_file = PathPlus(repo_path / templates.globals["docs_dir"] / "index.rst")
 	index_rst_file.parent.maybe_make()
 
+	if templates.globals["on_conda_forge"]:
+		conda_channels = ["conda-forge"]
+		primary_conda_channel = "conda-forge"
+	else:
+		conda_channels = templates.globals["conda_channels"]
+		primary_conda_channel = templates.globals["primary_conda_channel"]
+
 	# Set up the blocks
 	sb = ShieldsBlock(
 			username=templates.globals["username"],
@@ -570,7 +577,7 @@ def rewrite_docs_index(repo_path: pathlib.Path, templates: Environment) -> List[
 			platforms=templates.globals["platforms"],
 			pre_commit=templates.globals["enable_pre_commit"],
 			on_pypi=templates.globals["on_pypi"],
-			primary_conda_channel=templates.globals["primary_conda_channel"],
+			primary_conda_channel=primary_conda_channel,
 			)
 
 	sb.set_docs_mode()
@@ -597,7 +604,7 @@ def rewrite_docs_index(repo_path: pathlib.Path, templates: Environment) -> List[
 			templates.globals["enable_conda"],
 			templates.globals["on_pypi"],
 			templates.globals["pypi_name"],
-			templates.globals["conda_channels"],
+			conda_channels,
 			) + '\n'
 
 	links_block = create_docs_links_block(

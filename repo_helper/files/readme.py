@@ -59,6 +59,13 @@ def rewrite_readme(repo_path: pathlib.Path, templates: Environment) -> List[str]
 
 	readme_file = PathPlus(repo_path / "README.rst")
 
+	if templates.globals["on_conda_forge"]:
+		conda_channels = ["conda-forge"]
+		primary_conda_channel = "conda-forge"
+	else:
+		conda_channels = templates.globals["conda_channels"]
+		primary_conda_channel = templates.globals["primary_conda_channel"]
+
 	shields_block = ShieldsBlock(
 			username=templates.globals["username"],
 			repo_name=templates.globals["repo_name"],
@@ -73,7 +80,7 @@ def rewrite_readme(repo_path: pathlib.Path, templates: Environment) -> List[str]
 			pre_commit=templates.globals["enable_pre_commit"],
 			on_pypi=templates.globals["on_pypi"],
 			docs_url=templates.globals["docs_url"],
-			primary_conda_channel=templates.globals["primary_conda_channel"],
+			primary_conda_channel=primary_conda_channel,
 			).make()
 
 	if templates.globals["on_pypi"]:
@@ -83,7 +90,7 @@ def rewrite_readme(repo_path: pathlib.Path, templates: Environment) -> List[str]
 				templates.globals["enable_conda"],
 				templates.globals["on_pypi"],
 				templates.globals["pypi_name"],
-				templates.globals["conda_channels"],
+				conda_channels,
 				)
 	else:
 		install_block = get_readme_installation_block_no_pypi_template().render(

@@ -370,7 +370,6 @@ class ShieldsBlock:
 			docker_shields: bool = False,
 			docker_name: str = '',
 			platforms: Optional[Iterable[str]] = None,
-			pre_commit: bool = False,
 			on_pypi: bool = True,
 			primary_conda_channel: Optional[str] = None,
 			):

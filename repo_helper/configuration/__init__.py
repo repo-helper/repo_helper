@@ -76,6 +76,7 @@ from repo_helper.configuration.conda_anaconda import (
 		conda_description,
 		conda_extras,
 		enable_conda,
+		on_conda_forge,
 		primary_conda_channel
 		)
 from repo_helper.configuration.documentation import (
@@ -180,6 +181,7 @@ __all__ = [
 		"author",
 		"classifiers",
 		"conda_channels",
+		"on_conda_forge",
 		"primary_conda_channel",
 		"conda_extras",
 		"conda_description",

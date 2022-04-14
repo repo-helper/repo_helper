@@ -259,6 +259,13 @@
       ],
       "description": "The version of ``mypy`` to use."
     },
+    "on_conda_forge": {
+      "type": [
+        "boolean",
+        "string"
+      ],
+      "description": "Flag to indicate the package is available on conda-forge."
+    },
     "on_pypi": {
       "type": [
         "boolean",
