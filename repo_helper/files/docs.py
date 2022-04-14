@@ -575,7 +575,6 @@ def rewrite_docs_index(repo_path: pathlib.Path, templates: Environment) -> List[
 			docker_shields=templates.globals["docker_shields"],
 			docker_name=templates.globals["docker_name"],
 			platforms=templates.globals["platforms"],
-			pre_commit=templates.globals["enable_pre_commit"],
 			on_pypi=templates.globals["on_pypi"],
 			primary_conda_channel=primary_conda_channel,
 			)
