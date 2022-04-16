@@ -83,7 +83,6 @@ repo_helper==2020.12.18
 │   ├── domdf-python-tools>=2.8.0
 │   │   ├── natsort>=7.0.1
 │   │   └── typing-extensions>=3.7.4.1
-│   ├── first>=2.0.2
 │   ├── jinja2>=2.11.3
 │   │   └── MarkupSafe>=2.0
 │   ├── packaging>=20.9
