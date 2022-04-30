@@ -219,6 +219,8 @@ def make_pyproject(repo_path: pathlib.Path, templates: Environment) -> List[str]
 
 	if not templates.globals["use_whey"]:
 		data["project"]["classifiers"] = _get_classifiers(templates.globals)
+	elif "classifiers" in data["project"]:
+		del data["project"]["classifiers"]
 
 	data["project"]["dynamic"] = dynamic
 	data["project"]["authors"] = [{"name": templates.globals["author"], "email": templates.globals["email"]}]
