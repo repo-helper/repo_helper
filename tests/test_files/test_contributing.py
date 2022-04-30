@@ -27,7 +27,7 @@ import sys
 import pytest
 from coincidence.regressions import check_file_output, check_file_regression
 from pytest_regressions.file_regression import FileRegressionFixture
-from readme_renderer.rst import render  # type: ignore
+from readme_renderer.rst import render
 
 # this package
 from repo_helper.files.contributing import (
@@ -64,6 +64,7 @@ def test_make_contributing(tmp_pathplus, demo_environment, file_regression: File
 	assert (tmp_pathplus / "CONTRIBUTING.rst").is_file()
 
 	rendered = render((tmp_pathplus / "CONTRIBUTING.rst").read_text(), stream=sys.stderr)
+	assert rendered is not None
 	check_file_regression(rendered, file_regression, extension=".html")
 
 
