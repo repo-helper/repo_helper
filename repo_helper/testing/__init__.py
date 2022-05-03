@@ -37,7 +37,6 @@ import sys
 from pathlib import Path
 
 # 3rd party
-import check_wheel_contents.__main__  # type: ignore  # nodep
 import jinja2
 import pytest  # nodep
 from apeye.url import URL
@@ -47,7 +46,6 @@ from southwark.repo import Repo
 
 # this package
 import repo_helper.utils
-from repo_helper.configuration import get_tox_python_versions
 from repo_helper.files.linting import lint_warn_list
 from repo_helper.templates import Environment, template_dir
 from repo_helper.utils import brace

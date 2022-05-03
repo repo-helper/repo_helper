@@ -21,7 +21,7 @@
 #
 
 # 3rd party
-import lorem  # type: ignore
+import lorem  # type: ignore[import]
 import pytest
 from coincidence.regressions import AdvancedFileRegressionFixture
 

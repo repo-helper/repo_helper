@@ -1,7 +1,6 @@
 # 3rd party
-from coincidence.regressions import AdvancedFileRegressionFixture, check_file_output
+from coincidence.regressions import AdvancedFileRegressionFixture
 from domdf_python_tools.paths import PathPlus
-from pytest_regressions.file_regression import FileRegressionFixture
 
 # this package
 from repo_helper.files.linting import make_pylintrc

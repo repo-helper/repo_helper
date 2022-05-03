@@ -1,5 +1,4 @@
 # stdlib
-import os
 import re
 
 # 3rd party

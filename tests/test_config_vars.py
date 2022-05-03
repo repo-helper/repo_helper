@@ -490,7 +490,7 @@ class Test_py_modules(ListTest):
 			super().test_success()
 
 		# check that the message matches
-		assert record[0].message.args == (  # type: ignore
+		assert record[0].message.args == (  # type: ignore[union-attr]
 			"The 'py_modules' configuration value is deprecated. Please make your module into a package instead.",
 			)
 

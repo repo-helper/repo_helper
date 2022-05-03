@@ -41,7 +41,7 @@ __all__ = ["make_recipe"]
 		show_default=True,
 		)
 @cli_command()
-def make_recipe(out_dir: str = "./conda/"):
+def make_recipe(out_dir: str = "./conda/") -> None:
 	"""
 	Make a Conda ``meta.yaml`` recipe.
 	"""

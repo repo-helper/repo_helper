@@ -49,7 +49,6 @@ import click
 from configconfig.metaclass import ConfigVarMeta
 from configconfig.parser import Parser
 from configconfig.utils import make_schema
-from domdf_python_tools.compat import importlib_resources
 from domdf_python_tools.paths import PathPlus
 from domdf_python_tools.stringlist import StringList
 from domdf_python_tools.typing import PathLike
@@ -292,7 +291,7 @@ def parse_yaml(repo_path: PathLike, allow_unknown_keys: bool = False) -> Dict:
 
 	lines_without_removed_keys = StringList(
 			itertools.filterfalse(
-					_REMOVED_KEYS_RE.match,  # type: ignore
+					_REMOVED_KEYS_RE.match,  # type: ignore[arg-type]
 					content_lines,
 					),
 			)
@@ -423,13 +422,13 @@ class YamlEditor(YAML):
 	.. versionadded:: 2020.11.23
 	"""
 
-	width: Optional[int]  # type: ignore
+	width: Optional[int]  # type: ignore[assignment]
 
 	#: Whether to preserve quotes when writing to file.
-	preserve_quotes: Optional[bool]  # type: ignore
+	preserve_quotes: Optional[bool]  # type: ignore[assignment]
 
 	#: Whether to include an explicit start to the document when writing to file.
-	explicit_start: Optional[bool]  # type: ignore
+	explicit_start: Optional[bool]  # type: ignore[assignment]
 
 	def __init__(self, **kwargs):
 		super().__init__(**kwargs)
@@ -530,10 +529,10 @@ class YamlEditor(YAML):
 					return values
 
 		if key in data:
-			data[key] = sort_func({*data[key], *new_value})  # type: ignore
+			data[key] = sort_func({*data[key], *new_value})  # type: ignore[misc]
 			self.dump_to_file(data, filename, mode='w')
 		else:
-			self.dump_to_file({key: sort_func(new_value)}, filename, mode='a')  # type: ignore
+			self.dump_to_file({key: sort_func(new_value)}, filename, mode='a')  # type: ignore[arg-type]
 
 
 _pypy_version_re = re.compile(r"pypy3([0-9])", flags=re.IGNORECASE)

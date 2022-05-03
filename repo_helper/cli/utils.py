@@ -49,7 +49,7 @@ __all__ = [
 
 with suppress(ImportError):
 	# 3rd party
-	from pre_commit.commands import install_uninstall  # type: ignore
+	from pre_commit.commands import install_uninstall  # type: ignore[import]
 
 	# Disable logging from pre-commit install command
 	logging.getLogger(install_uninstall.__name__).addHandler(logging.NullHandler())
@@ -89,7 +89,7 @@ def commit_changed_files(
 	if enable_pre_commit and platform.system() == "Linux":
 		with in_directory(repo_path), suppress(ImportError):
 			# 3rd party
-			import pre_commit.main  # type: ignore
+			import pre_commit.main  # type: ignore[import]
 			pre_commit.main.main(["install"])
 
 	if staged_files:
@@ -106,7 +106,7 @@ def commit_changed_files(
 		if commit:
 			if enable_pre_commit or "pre-commit" in r.hooks:
 				# Ensure the working directory for pre-commit is correct
-				r.hooks["pre-commit"].cwd = str(repo_path.absolute())  # type: ignore
+				r.hooks["pre-commit"].cwd = str(repo_path.absolute())  # type: ignore[attr-defined]
 
 			try:
 				commit_id = commit_changes(r, message.decode("UTF-8"))

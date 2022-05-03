@@ -20,9 +20,6 @@
 #  MA 02110-1301, USA.
 #
 
-# stdlib
-import sys
-
 # 3rd party
 import pytest
 from coincidence.regressions import AdvancedFileRegressionFixture, check_file_output, check_file_regression

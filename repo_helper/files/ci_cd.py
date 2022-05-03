@@ -34,7 +34,6 @@ from typing import Any, Dict, Iterable, Iterator, List, Optional, Tuple
 import dom_toml
 from domdf_python_tools.paths import PathPlus
 from domdf_python_tools.stringlist import DelimitedList, StringList
-from packaging.version import InvalidVersion, Version
 
 # this package
 from repo_helper.configupdater2 import ConfigUpdater

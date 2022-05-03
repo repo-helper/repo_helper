@@ -212,7 +212,11 @@ def detect_languages(directory: pathlib.Path) -> Iterator[str]:
 @flag_option("-t", "--force-tty", help="Force repo-helper to treat stdout as a TTY")
 @flag_option("--add/--no-add", help="Add the classifiers to the 'repo_helper.yml' file.", default=None)
 @suggest_command()
-def stubs(add: Optional[bool] = None, force_tty: bool = False, no_pager: bool = False):
+def stubs(
+		add: Optional[bool] = None,
+		force_tty: bool = False,
+		no_pager: bool = False,
+		) -> None:
 	"""
 	Suggest :pep:`561` type stubs.
 	"""

@@ -38,7 +38,6 @@ from typing import Any, Dict, List, Mapping, MutableMapping, Tuple, Union
 import dict2css
 import dom_toml
 import ruamel.yaml as yaml
-from domdf_python_tools.compat import importlib_resources
 from domdf_python_tools.paths import PathPlus
 from domdf_python_tools.stringlist import DelimitedList, StringList
 from domdf_python_tools.typing import PathLike
@@ -57,7 +56,6 @@ from repo_helper.blocks import (
 		ShieldsBlock,
 		create_docs_install_block,
 		create_docs_links_block,
-		create_short_desc_block,
 		installation_regex,
 		links_regex,
 		shields_regex,

@@ -24,7 +24,6 @@ Manage configuration files for packaging tools.
 #
 
 # stdlib
-import copy
 import pathlib
 import posixpath
 import re
@@ -171,20 +170,20 @@ def make_pyproject(repo_path: pathlib.Path, templates: Environment) -> List[str]
 	if templates.globals["use_whey"] or templates.globals["use_flit"]:
 		for old_dep in ["setuptools", "wheel"]:
 			if old_dep in build_requirements:
-				build_requirements.remove(old_dep)  # type: ignore
+				build_requirements.remove(old_dep)  # type: ignore[arg-type]
 
 	if templates.globals["use_whey"]:
 		build_backend = "whey"
 	elif "whey" in build_requirements:
-		build_requirements.remove("whey")  # type: ignore
+		build_requirements.remove("whey")  # type: ignore[arg-type]
 
 	if templates.globals["use_flit"]:
 		build_backend = "flit_core.buildapi"
 	elif "flit-core<4,>=3.2" in build_requirements:
-		build_requirements.remove("flit-core<4,>=3.2")  # type: ignore
+		build_requirements.remove("flit-core<4,>=3.2")  # type: ignore[arg-type]
 
 	if "repo-helper" in build_requirements:
-		build_requirements.remove("repo-helper")  # type: ignore
+		build_requirements.remove("repo-helper")  # type: ignore[arg-type]
 
 	data["build-system"]["requires"] = list(map(str, build_requirements))
 	data["build-system"]["build-backend"] = build_backend
@@ -670,7 +669,7 @@ def make_pkginfo(repo_path: pathlib.Path, templates: Environment) -> List[str]:
 
 
 def split_entry_point(entry_point: str) -> Tuple[str, str]:
-	return tuple(map(str.strip, entry_point.split('=', 1)))  # type: ignore
+	return tuple(map(str.strip, entry_point.split('=', 1)))  # type: ignore[return-value]
 
 
 def _get_mypy_config(global_config: Mapping[str, Any]) -> Dict[str, Any]:

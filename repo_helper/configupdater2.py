@@ -907,7 +907,7 @@ class ConfigUpdater(Container[Block], MutableMapping):
 							e = self._handle_error(e, fpname, lineno, line)
 						optname = self.optionxform(optname.rstrip())
 						if self._strict and (sectname, optname) in elements_added:
-							raise DuplicateOptionError(sectname, optname, fpname, lineno)  # type: ignore
+							raise DuplicateOptionError(sectname, optname, fpname, lineno)  # type: ignore[arg-type]
 						elements_added.add((sectname, optname))
 						# This check is fine because the OPTCRE cannot
 						# match if it would set optval to None
@@ -968,7 +968,7 @@ class ConfigUpdater(Container[Block], MutableMapping):
 				empty_lines_in_values=self._empty_lines_in_values
 				)
 		args.update(kwargs)
-		parser = ConfigParser(**args)  # type: ignore
+		parser = ConfigParser(**args)  # type: ignore[call-overload]
 		updated_cfg = str(self)
 		parser.read_string(updated_cfg)
 
@@ -1050,7 +1050,7 @@ class ConfigUpdater(Container[Block], MutableMapping):
 		"""
 
 		if section in self.sections():
-			raise DuplicateSectionError(section)  # type: ignore
+			raise DuplicateSectionError(section)  # type: ignore[arg-type]
 
 		if isinstance(section, str):
 			# create a new section
@@ -1070,7 +1070,7 @@ class ConfigUpdater(Container[Block], MutableMapping):
 			raise NoSectionError(section) from None
 		return self[section].options()
 
-	def get(self, section: str, option: str):  # type: ignore
+	def get(self, section: str, option: str):  # type: ignore[override]
 		"""Gets an option value for a given section.
 
 		:param section: section name
@@ -1091,9 +1091,9 @@ class ConfigUpdater(Container[Block], MutableMapping):
 
 		return value
 
-	def items(  # type: ignore
+	def items(  # type: ignore[override]
 			self,
-			section: str = _UNSET,  # type: ignore
+			section: str = _UNSET,  # type: ignore[assignment]
 			) -> List[Tuple[str, Any]]:
 		"""
 		Return a list of ``(name, value)`` tuples for options or sections.

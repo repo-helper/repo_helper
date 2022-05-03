@@ -26,7 +26,6 @@ from textwrap import dedent
 # 3rd party
 import pytest
 from coincidence import AdvancedDataRegressionFixture, AdvancedFileRegressionFixture
-from pytest_regressions.data_regression import DataRegressionFixture
 
 # this package
 from repo_helper.configuration.utils import get_version_classifiers

@@ -37,8 +37,8 @@ from typing import Any, Callable, Iterable, List, Optional, Union, no_type_check
 
 # 3rd party
 import dulwich.repo
-import isort  # type: ignore
-import isort.settings  # type: ignore
+import isort  # type: ignore[import]
+import isort.settings  # type: ignore[import]
 import jinja2
 import yapf_isort
 from apeye.requests_url import RequestsURL
@@ -426,7 +426,14 @@ def commit_changes(
 
 	with open_repo_closing(repo) as repo:
 		current_time = datetime.datetime.now(datetime.timezone.utc).astimezone()
-		current_timezone = current_time.tzinfo.utcoffset(None).total_seconds()  # type: ignore
+
+		tzinfo = current_time.tzinfo
+		assert tzinfo is not None
+
+		time_offset = tzinfo.utcoffset(None)
+		assert time_offset is not None
+
+		current_timezone = time_offset.total_seconds()
 
 		commit_sha = repo.do_commit(
 				message=message.encode("UTF-8"),

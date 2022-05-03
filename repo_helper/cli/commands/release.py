@@ -26,7 +26,7 @@ Make a release.
 # stdlib
 from functools import partial
 from types import MethodType
-from typing import Callable, List, Optional, Tuple, cast
+from typing import List, Optional, Tuple, cast
 
 # 3rd party
 import click
@@ -109,7 +109,7 @@ def resolve_command(self, ctx, args: List[str]) -> Tuple[str, Command, List[str]
 				type=click.STRING,
 				)
 		@release_command()
-		def version(version: str, commit: Optional[bool], message: str, force: bool):
+		def version(version: str, commit: Optional[bool], message: str, force: bool) -> None:
 
 			# 3rd party
 			from packaging.version import Version
@@ -132,7 +132,7 @@ release_command = partial(release.command, context_settings=CONTEXT_SETTINGS)
 
 @release_options
 @release_command()
-def major(commit: Optional[bool], message: str, force: bool):
+def major(commit: Optional[bool], message: str, force: bool) -> None:
 	"""
 	Bump to the next major version.
 	"""
@@ -146,7 +146,7 @@ def major(commit: Optional[bool], message: str, force: bool):
 
 @release_options
 @release_command()
-def minor(commit: Optional[bool], message: str, force: bool):
+def minor(commit: Optional[bool], message: str, force: bool) -> None:
 	"""
 	Bump to the next minor version.
 	"""
@@ -160,7 +160,7 @@ def minor(commit: Optional[bool], message: str, force: bool):
 
 @release_options
 @release_command()
-def patch(commit: Optional[bool], message: str, force: bool):
+def patch(commit: Optional[bool], message: str, force: bool) -> None:
 	"""
 	Bump to the next patch version.
 	"""
@@ -174,7 +174,7 @@ def patch(commit: Optional[bool], message: str, force: bool):
 
 @release_options
 @release_command()
-def today(commit: Optional[bool], message: str, force: bool):
+def today(commit: Optional[bool], message: str, force: bool) -> None:
 	"""
 	Bump to the calver version for today's date, such as 2020.12.25.
 	"""

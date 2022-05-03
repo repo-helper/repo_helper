@@ -28,12 +28,11 @@ import datetime
 import pathlib
 import posixpath
 import sys
-from typing import List, Optional, Sequence
+from typing import List, Sequence
 
 # 3rd party
 import click
 import jinja2
-from apeye.requests_url import RequestsURL
 from consolekit.options import force_option
 from domdf_python_tools.paths import PathPlus, maybe_make
 from domdf_python_tools.stringlist import StringList

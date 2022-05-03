@@ -37,7 +37,7 @@ from io import BytesIO
 from typing import Tuple
 
 # 3rd party
-import check_wheel_contents.__main__  # type: ignore  # nodep
+import check_wheel_contents.__main__  # type: ignore[import]  # nodep
 import twine.cli  # nodep
 from consolekit.testing import CliRunner, Result
 from domdf_python_tools.paths import PathPlus, in_directory

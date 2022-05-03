@@ -64,7 +64,7 @@ def depycache(base_dir: pathlib.Path, quiet: bool = False):
 		shutil.rmtree(dirname)
 
 
-def demypycache(base_dir: pathlib.Path, quiet: bool = False):
+def demypycache(base_dir: pathlib.Path, quiet: bool = False) -> None:
 	"""
 	Removes the  ``.mypy_cache`` directory.
 
@@ -75,7 +75,7 @@ def demypycache(base_dir: pathlib.Path, quiet: bool = False):
 	rmdir(base_dir / ".mypy_cache", quiet)
 
 
-def depytestcache(base_dir: pathlib.Path, quiet: bool = False):
+def depytestcache(base_dir: pathlib.Path, quiet: bool = False) -> None:
 	"""
 	Removes the  ``.pytest_cache`` directory.
 
@@ -121,7 +121,7 @@ def crack(base_dir: pathlib.Path, quiet: bool = False):
 		rmdir(dirname, quiet)
 
 
-def rmdir(directory: pathlib.Path, quiet: bool = False):
+def rmdir(directory: pathlib.Path, quiet: bool = False) -> None:
 	"""
 	Removes the given directory.
 
@@ -140,7 +140,7 @@ def rmdir(directory: pathlib.Path, quiet: bool = False):
 @flag_option("--rm-tox", help="Also remove the '.tox' directory")
 @flag_option("-v", "--verbose", help="Show verbose output.")
 @cli_command(cls=MarkdownHelpCommand)
-def broomstick(rm_tox: bool = False, verbose: bool = False):
+def broomstick(rm_tox: bool = False, verbose: bool = False) -> None:
 	r"""
 	Clean up build and test artefacts 🧹.
 

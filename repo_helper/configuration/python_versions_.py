@@ -87,7 +87,7 @@ def _default_python_versions(raw_config_vars: Optional[Dict[str, Any]]) -> Dict[
 	:param raw_config_vars:
 	"""
 
-	return {str(python_deploy_version(raw_config_vars)): {}}  # type: ignore
+	return {str(python_deploy_version(raw_config_vars)): {}}  # type: ignore[arg-type]
 
 
 class python_versions(ConfigVar):  # noqa

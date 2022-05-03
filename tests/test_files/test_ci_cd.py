@@ -541,7 +541,7 @@ def test_actions_manager_python_versions(
 		get_gh_actions_python_versions = ActionsManager.get_gh_actions_python_versions
 		get_gh_actions_matrix = ActionsManager.get_gh_actions_matrix
 
-	data_regression.check(FakeActionsManager().get_gh_actions_python_versions())  # type: ignore
+	data_regression.check(FakeActionsManager().get_gh_actions_python_versions())  # type: ignore[misc]
 
 
 @pytest.mark.parametrize(
@@ -574,4 +574,4 @@ def test_actions_manager_python_versions_matrix(
 		get_gh_actions_python_versions = ActionsManager.get_gh_actions_python_versions
 		get_gh_actions_matrix = ActionsManager.get_gh_actions_matrix
 
-	data_regression.check(FakeActionsManager().get_gh_actions_python_versions())  # type: ignore
+	data_regression.check(FakeActionsManager().get_gh_actions_python_versions())  # type: ignore[misc]

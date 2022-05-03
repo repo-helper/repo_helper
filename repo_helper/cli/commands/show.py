@@ -244,7 +244,7 @@ def requirements(
 			for directory in (venv_dir / "lib").glob("python3.*"):
 				search_path.append(str(directory / "site-packages"))
 
-			importlib_metadata.DistributionFinder.Context.path = search_path  # type: ignore
+			importlib_metadata.DistributionFinder.Context.path = search_path  # type: ignore[assignment]
 
 		if concise:
 			concise_requirements = []
@@ -254,7 +254,7 @@ def requirements(
 					if isinstance(item, str):
 						yield item
 					else:
-						yield from flatten(item)  # type: ignore
+						yield from flatten(item)  # type: ignore[arg-type]
 
 			for requirement in raw_requirements:
 				concise_requirements.append(requirement)

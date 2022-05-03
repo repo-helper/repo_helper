@@ -35,8 +35,6 @@ from packaging.version import Version
 from shippinglabel.classifiers import validate_classifiers
 
 # this package
-from repo_helper.configuration.packaging import platforms
-from repo_helper.configuration.utils import get_version_classifiers
 from repo_helper.utils import license_lookup
 
 __all__ = [
@@ -337,12 +335,14 @@ class classifiers(ConfigVar):  # noqa
 
 		data = optional_getter(raw_config_vars, cls, cls.required)
 		if isinstance(data, str) or not isinstance(data, Iterable):
-			raise ValueError(f"'classifiers' must be a List of {cls.dtype.__args__[0]}") from None  # type: ignore
+			raise ValueError(
+					f"'classifiers' must be a List of {cls.dtype.__args__[0]}",  # type: ignore[attr-defined]
+					) from None
 
 		for classifier in data:
 			if not isinstance(classifier, str):
 				raise ValueError(
-						f"'classifiers' must be a List of {cls.dtype.__args__[0]}"  # type: ignore
+						f"'classifiers' must be a List of {cls.dtype.__args__[0]}"  # type: ignore[attr-defined]
 						) from None
 
 		for classifier in data:

@@ -29,7 +29,6 @@ import re
 from typing import Iterable, Optional, Sequence, Union
 
 # 3rd party
-from domdf_python_tools.compat import importlib_resources
 from domdf_python_tools.paths import PathPlus
 from domdf_python_tools.stringlist import DelimitedList, StringList
 from jinja2 import BaseLoader, Environment, StrictUndefined, Template

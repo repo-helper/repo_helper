@@ -26,7 +26,6 @@ import sys
 # 3rd party
 import pytest
 from coincidence.regressions import check_file_output, check_file_regression
-from domdf_python_tools.compat import importlib_resources
 from domdf_python_tools.paths import PathPlus
 from pytest_regressions.file_regression import FileRegressionFixture
 from readme_renderer.rst import render
