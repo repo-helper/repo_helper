@@ -112,3 +112,8 @@ div.toctree-wrapper.compound > ul > li {
 	}
 
 }
+
+
+.longtable.autosummary {
+	width: 100%
+}

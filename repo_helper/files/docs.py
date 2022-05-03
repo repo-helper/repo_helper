@@ -521,9 +521,10 @@ def copy_docs_styling(repo_path: pathlib.Path, templates: Environment) -> List[s
 		style_css_lines.append(make_alabaster_theming())
 	elif sphinx_html_theme == "furo":
 		style_css_lines.append(make_furo_theming())
-	else:
-		style_css_lines.clear()
+	# else:
+	# 	style_css_lines.clear()
 
+	style_css_lines.append("\n.longtable.autosummary {\n\twidth: 100%\n}\n")
 	style_css.write_lines(style_css_lines)
 
 	with suppress(FileNotFoundError):
