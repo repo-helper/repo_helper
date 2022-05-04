@@ -33,7 +33,7 @@ from typing import Any, Dict, List, Mapping, Tuple, TypeVar
 # 3rd party
 import dom_toml
 from domdf_python_tools.paths import PathPlus
-from natsort import natsorted
+from natsort import natsorted, ns
 from shippinglabel import normalize
 from shippinglabel.requirements import ComparableRequirement, combine_requirements, read_requirements
 
@@ -214,7 +214,7 @@ def make_pyproject(repo_path: pathlib.Path, templates: Environment) -> List[str]
 	elif "requires-python" in data["project"]:
 		del data["project"]["requires-python"]
 
-	data["project"]["keywords"] = sorted(templates.globals["keywords"])
+	data["project"]["keywords"] = natsorted(templates.globals["keywords"], alg=ns.GROUPLETTERS)
 
 	if not templates.globals["use_whey"]:
 		data["project"]["classifiers"] = _get_classifiers(templates.globals)
