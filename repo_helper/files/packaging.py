@@ -674,7 +674,7 @@ def split_entry_point(entry_point: str) -> Tuple[str, str]:
 
 def _get_mypy_config(global_config: Mapping[str, Any]) -> Dict[str, Any]:
 	config = {}
-	config["python_version"] = global_config["min_py_version"]
+	config["python_version"] = global_config["python_deploy_version"]
 	config["namespace_packages"] = True
 	config["check_untyped_defs"] = True
 	config["warn_unused_ignores"] = True
