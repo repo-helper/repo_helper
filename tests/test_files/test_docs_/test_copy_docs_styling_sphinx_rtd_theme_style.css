@@ -8,7 +8,6 @@ li p:last-child {
 	margin-bottom: 12px !important;
 }
 
-
 .longtable.autosummary {
-	width: 100%
+	width: 100%;
 }

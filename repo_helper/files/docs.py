@@ -374,11 +374,9 @@ def make_conf(repo_path: pathlib.Path, templates: Environment) -> List[str]:
 	return [file.relative_to(repo_path).as_posix()]
 
 
-def make_alabaster_theming() -> str:
+def get_alabaster_theming() -> Dict[str, Mapping]:
 	"""
-	Make the custom stylesheet for the alabaster Sphinx theme.
-
-	:return: The custom stylesheet.
+	Returns the custom stylesheet for the alabaster Sphinx theme, as a dictionary.
 	"""
 
 	# Common options
@@ -458,7 +456,31 @@ def make_alabaster_theming() -> str:
 
 	style["@media screen and (min-width: 870px)"] = {"div.sphinxsidebar": {"width": "250px"}}
 
-	return dict2css.dumps(style, trailing_semicolon=True)
+	return style
+
+
+def make_alabaster_theming() -> str:
+	"""
+	Make the custom stylesheet for the alabaster Sphinx theme.
+
+	:return: The custom stylesheet.
+	"""
+
+	return dict2css.dumps(get_alabaster_theming(), trailing_semicolon=True)
+
+
+def get_readthedocs_theming() -> Dict[str, Mapping]:
+	"""
+	Returns the custom stylesheet for the ReadTheDocs Sphinx theme as a dictionary.
+	"""
+
+	style: Dict[str, Mapping] = {
+			".wy-nav-content": {"max-width": (dict2css.px(1200), dict2css.IMPORTANT)},
+			"li p:last-child": {"margin-bottom": (dict2css.px(12), dict2css.IMPORTANT)},
+			# "html": {"scroll-behavior": "smooth"},
+			}
+
+	return style
 
 
 def make_readthedocs_theming() -> str:
@@ -468,13 +490,23 @@ def make_readthedocs_theming() -> str:
 	:return: The custom stylesheet.
 	"""
 
+	return dict2css.dumps(get_readthedocs_theming(), trailing_semicolon=True)
+
+
+def get_furo_theming() -> Dict[str, Mapping]:
+	"""
+	Returns the custom stylesheet for the `Furo <https://github.com/pradyunsg/furo>`_ Sphinx theme.
+
+	:return: The custom stylesheet, as a dictionary.
+	"""
+
 	style: Dict[str, Mapping] = {
-			".wy-nav-content": {"max-width": (dict2css.px(1200), dict2css.IMPORTANT)},
-			"li p:last-child": {"margin-bottom": (dict2css.px(12), dict2css.IMPORTANT)},
-			# "html": {"scroll-behavior": "smooth"},
+			"div.highlight": {"-moz-tab-size": 4, "tab-size": 4},
+			".field-list dt, dl.simple dt": {"margin-top": ".5rem"},
+			"div.versionchanged ul, div.versionremoved ul": {"margin-left": "20px", "margin-top": 0},
 			}
 
-	return dict2css.dumps(style, trailing_semicolon=True)
+	return style
 
 
 def make_furo_theming() -> str:
@@ -484,13 +516,7 @@ def make_furo_theming() -> str:
 	:return: The custom stylesheet.
 	"""
 
-	style: Dict[str, Mapping] = {
-			"div.highlight": {"-moz-tab-size": 4, "tab-size": 4},
-			".field-list dt, dl.simple dt": {"margin-top": ".5rem"},
-			"div.versionchanged ul, div.versionremoved ul": {"margin-left": "20px", "margin-top": 0},
-			}
-
-	return dict2css.dumps(style, trailing_semicolon=True)
+	return dict2css.dumps(get_furo_theming(), trailing_semicolon=True)
 
 
 def copy_docs_styling(repo_path: pathlib.Path, templates: Environment) -> List[str]:
@@ -511,19 +537,23 @@ def copy_docs_styling(repo_path: pathlib.Path, templates: Environment) -> List[s
 		directory.maybe_make(parents=True)
 
 	sphinx_html_theme = templates.globals["sphinx_html_theme"]
-	style_css_lines = [f"/* {templates.globals['managed_message']} */", '']
 
 	if sphinx_html_theme == "sphinx-rtd-theme":
-		style_css_lines.append(make_readthedocs_theming())
+		style_dict = get_readthedocs_theming()
 	elif sphinx_html_theme == "alabaster":
-		style_css_lines.append(make_alabaster_theming())
+		style_dict = get_alabaster_theming()
 	elif sphinx_html_theme == "furo":
-		style_css_lines.append(make_furo_theming())
-	# else:
-	# 	style_css_lines.clear()
+		style_dict = get_furo_theming()
+	else:
+		style_dict = {}
 
-	style_css_lines.append("\n.longtable.autosummary {\n\twidth: 100%\n}\n")
-	style_css.write_lines(style_css_lines)
+	style_dict[".longtable.autosummary"] = {"width": "100%"}
+
+	style_css.write_lines([
+			f"/* {templates.globals['managed_message']} */",
+			'',
+			dict2css.dumps(style_dict, trailing_semicolon=True),
+			])
 
 	with suppress(FileNotFoundError):
 		shutil.rmtree(furo_navigation.parent)
