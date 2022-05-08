@@ -374,7 +374,7 @@ def make_conf(repo_path: pathlib.Path, templates: Environment) -> List[str]:
 	return [file.relative_to(repo_path).as_posix()]
 
 
-def get_alabaster_theming() -> Dict[str, Mapping]:
+def get_alabaster_theming() -> Dict[str, MutableMapping]:
 	"""
 	Returns the custom stylesheet for the alabaster Sphinx theme, as a dictionary.
 	"""
@@ -537,6 +537,8 @@ def copy_docs_styling(repo_path: pathlib.Path, templates: Environment) -> List[s
 		directory.maybe_make(parents=True)
 
 	sphinx_html_theme = templates.globals["sphinx_html_theme"]
+
+	style_dict: Dict
 
 	if sphinx_html_theme == "sphinx-rtd-theme":
 		style_dict = get_readthedocs_theming()
