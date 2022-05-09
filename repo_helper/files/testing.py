@@ -337,7 +337,7 @@ class ToxConfig(IniConfigurator):
 
 		if self["enable_tests"]:
 			testenv_commands.append(
-					f"python -m pytest --cov={self['import_name']} -r aR {self['tests_dir']}/ {{posargs}}"
+					f"python -m pytest --cov -r aR {self['tests_dir']}/ {{posargs}}"
 					)
 			# TODO: for tox-isolation
 			# testenv_commands.append(
@@ -558,6 +558,13 @@ class ToxConfig(IniConfigurator):
 		if self["import_name"] != "coverage_pyver_pragma":
 			# TODO: allow user customisation
 			self._ini["coverage:run"]["plugins"] = "coverage_pyver_pragma"
+
+			coverage_source = [self["import_name"]]
+
+			if self["enable_tests"]:
+				coverage_source.append(self["tests_dir"])
+
+			self._ini["coverage:run"]["source"] = indent_join(coverage_source)
 		else:
 			self._ini.remove_section("coverage:run")
 
