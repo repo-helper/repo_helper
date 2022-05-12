@@ -31,8 +31,8 @@ from typing import Any, Dict, Iterable, List
 from domdf_python_tools.paths import PathPlus
 from domdf_python_tools.typing import PathLike
 from mkrecipe import MaryBerry
-from shippinglabel.conda import compile_requirements, validate_requirements
 from shippinglabel.requirements import read_requirements
+from shippinglabel_conda import compile_requirements, validate_requirements
 from whey.config.whey import license_lookup
 
 # this package
