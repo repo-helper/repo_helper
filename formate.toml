@@ -79,6 +79,7 @@ known_third_party = [
     "ruamel_yaml",
     "sdjson",
     "shippinglabel",
+    "shippinglabel_conda",
     "southwark",
     "tabulate",
     "toml",

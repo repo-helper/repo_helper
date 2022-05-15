@@ -13,6 +13,7 @@ jinja2>=2.11.3
 mkrecipe>=0.3.0
 natsort>=7.1.1
 packaging>=20.9
+pypi-json>=0.2.1
 ruamel.yaml>=0.17.4
 shippinglabel>=1.0.0
 shippinglabel-conda>=0.1.0

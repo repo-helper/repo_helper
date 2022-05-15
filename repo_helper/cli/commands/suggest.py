@@ -5,7 +5,7 @@
 Suggest trove classifiers and keywords.
 """
 #
-#  Copyright © 2020-2021 Dominic Davis-Foster <dominic@davis-foster.co.uk>
+#  Copyright © 2020-2022 Dominic Davis-Foster <dominic@davis-foster.co.uk>
 #
 #  This program is free software; you can redistribute it and/or modify
 #  it under the terms of the GNU Lesser General Public License as published by
@@ -227,13 +227,12 @@ def stubs(
 	from itertools import chain
 
 	# 3rd party
+	import pypi_json
 	import tabulate
-	from apeye import URL
-	from apeye.requests_url import TrailingRequestsURL
 	from domdf_python_tools.paths import PathPlus
 	from domdf_python_tools.stringlist import StringList
+	from packaging.requirements import InvalidRequirement
 	from shippinglabel import normalize
-	from shippinglabel.pypi import PYPI_API
 	from shippinglabel.requirements import combine_requirements, read_requirements
 
 	# this package
@@ -264,28 +263,22 @@ def stubs(
 
 	suggestions = {}
 
-	for requirement in all_requirements:
-		if normalize(requirement.name) in {"typing-extensions"}:
-			continue
-
-		types_url = TrailingRequestsURL(PYPI_API / f"types-{requirement.name.lower()}" / "json/")
-		stubs_url = TrailingRequestsURL(PYPI_API / f"{requirement.name.lower()}-stubs" / "json/")
-
-		response = stubs_url.head()
-		if response.status_code == 404:
-			# No stubs found for -stubs
-			response = types_url.head()
-			if response.status_code == 404:
-				# No stubs found for types-
+	with pypi_json.PyPIJSON() as client:
+		for requirement in all_requirements:
+			if normalize(requirement.name) in {"typing-extensions"}:
 				continue
-			else:
-				response_url = URL(response.url)
-				suggestions[str(requirement)] = response_url.parent.name
-				# print(requirement, response.url)
-		else:
-			response_url = URL(response.url)
-			suggestions[str(requirement)] = response_url.parent.name
-			# print(requirement, response.url)
+
+			try:
+				metadata = client.get_metadata(f"types-{requirement.name.lower()}")
+			except InvalidRequirement:
+				# No stubs found for -stubs
+				try:
+					metadata = client.get_metadata(f"{requirement.name.lower()}-stubs")
+				except InvalidRequirement:
+					# No stubs found for types-
+					continue
+
+			suggestions[str(requirement)] = metadata.name
 
 	if not suggestions:
 		if sys.stdout.isatty() or force_tty:
