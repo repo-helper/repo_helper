@@ -46,7 +46,7 @@ __all__ = [
 		]
 
 
-class manifest_additional(ConfigVar):  # noqa
+class manifest_additional(ConfigVar):
 	"""
 	A list of additional entries for ``MANIFEST.in``.
 
@@ -63,7 +63,7 @@ class manifest_additional(ConfigVar):  # noqa
 	category: str = "packaging"
 
 
-class py_modules(ConfigVar):  # noqa
+class py_modules(ConfigVar):
 	"""
 	A list of values for ``py_modules`` in ``setup.py``, which indicate the single-file modules to include in the distributions.
 
@@ -93,7 +93,7 @@ class py_modules(ConfigVar):  # noqa
 		return modules
 
 
-class console_scripts(ConfigVar):  # noqa
+class console_scripts(ConfigVar):
 	"""
 	A list of entries for ``console_scripts`` in ``setup.py``. Each entry must follow the same format as required in ``setup.py``.
 
@@ -111,7 +111,7 @@ class console_scripts(ConfigVar):  # noqa
 	category: str = "packaging"
 
 
-class entry_points(ConfigVar):  # noqa
+class entry_points(ConfigVar):
 	"""
 	A mapping of entry point categories to a list of entries for each category.
 
@@ -135,7 +135,7 @@ class entry_points(ConfigVar):  # noqa
 # 	return '\n'.join(["\t\t{}={},".format(*x) for x in setup_args.items()])
 
 
-class additional_setup_args(ConfigVar):  # noqa
+class additional_setup_args(ConfigVar):
 	"""
 	A dictionary of additional keyword arguments for :func:`setuptools.setup()`.
 	The values can refer to variables in ``__pkginfo__.py``.
@@ -155,7 +155,7 @@ class additional_setup_args(ConfigVar):  # noqa
 	category: str = "packaging"
 
 
-class extras_require(ConfigVar):  # noqa
+class extras_require(ConfigVar):
 	"""
 	A dictionary of extra requirements, where the keys are the names of the extras and the values are a list of requirements.
 
@@ -187,7 +187,7 @@ class extras_require(ConfigVar):  # noqa
 	category: str = "packaging"
 
 
-class additional_requirements_files(ConfigVar):  # noqa
+class additional_requirements_files(ConfigVar):
 	"""
 	A list of files containing additional requirements.
 
@@ -210,7 +210,7 @@ class additional_requirements_files(ConfigVar):  # noqa
 	category: str = "packaging"
 
 
-class setup_pre(ConfigVar):  # noqa
+class setup_pre(ConfigVar):
 	"""
 	A list of additional python lines to insert at the beginnning of ``setup.py``.
 
@@ -228,7 +228,7 @@ class setup_pre(ConfigVar):  # noqa
 	category: str = "packaging"
 
 
-class platforms(ConfigVar):  # noqa
+class platforms(ConfigVar):
 	"""
 	A case-insensitive list of platforms to perform tests for.
 
@@ -254,7 +254,7 @@ class platforms(ConfigVar):  # noqa
 	# 	return [x.lower() for x in value]
 
 
-class use_whey(ConfigVar):  # noqa
+class use_whey(ConfigVar):
 	r"""
 	Whether to use `whey <https://whey.readthedocs.io/en/latest/>`_ to build distributions,
 	rather than ``setuptools.build_meta``.
@@ -301,7 +301,7 @@ class use_whey(ConfigVar):  # noqa
 		return super().validate(raw_config_vars)
 
 
-class use_flit(ConfigVar):  # noqa
+class use_flit(ConfigVar):
 	r"""
 	Whether to use `flit <https://flit.readthedocs.io/en/latest/>`_ to build distributions,
 	rather than ``setuptools.build_meta``.

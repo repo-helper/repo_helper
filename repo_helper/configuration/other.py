@@ -40,7 +40,7 @@ __all__ = [
 		]
 
 
-class additional_ignore(ConfigVar):  # noqa
+class additional_ignore(ConfigVar):
 	"""
 	A list of additional entries for ``.gitignore``.
 
@@ -56,7 +56,7 @@ class additional_ignore(ConfigVar):  # noqa
 	default: List[str] = []
 
 
-class yapf_exclude(ConfigVar):  # noqa
+class yapf_exclude(ConfigVar):
 	"""
 	A list of regular expressions to use to exclude files and directories from autoformatting.
 
@@ -72,7 +72,7 @@ class yapf_exclude(ConfigVar):  # noqa
 	default: List[str] = []
 
 
-class imgbot_ignore(ConfigVar):  # noqa
+class imgbot_ignore(ConfigVar):
 	"""
 	A list of additional glob ignores for imgbot.
 
@@ -88,7 +88,7 @@ class imgbot_ignore(ConfigVar):  # noqa
 	default: List[str] = []
 
 
-class exclude_files(ConfigVar):  # noqa
+class exclude_files(ConfigVar):
 	"""
 	A list of files not to manage with `repo_helper`.
 
@@ -131,7 +131,7 @@ class exclude_files(ConfigVar):  # noqa
 	default: List[str] = []
 
 
-class pre_commit_exclude(ConfigVar):  # noqa
+class pre_commit_exclude(ConfigVar):
 	r"""
 	Regular expression for files that should not be checked by pre_commit.
 
@@ -148,7 +148,7 @@ class pre_commit_exclude(ConfigVar):  # noqa
 		return re.compile(super().validate(raw_config_vars)).pattern
 
 
-class desktopfile(ConfigVar):  # noqa
+class desktopfile(ConfigVar):
 	"""
 	A key value mapping of entries for a Linux ``.desktop`` file.
 

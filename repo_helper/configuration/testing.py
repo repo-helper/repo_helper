@@ -49,7 +49,7 @@ __all__ = [
 		]
 
 
-class enable_tests(ConfigVar):  # noqa
+class enable_tests(ConfigVar):
 	"""
 	Whether tests should be performed with pytest.
 
@@ -65,7 +65,7 @@ class enable_tests(ConfigVar):  # noqa
 	category: str = "testing"
 
 
-class tox_requirements(ConfigVar):  # noqa
+class tox_requirements(ConfigVar):
 	"""
 	A list of additional Python requirements for Tox.
 
@@ -82,7 +82,7 @@ class tox_requirements(ConfigVar):  # noqa
 	category: str = "testing"
 
 
-class tox_build_requirements(ConfigVar):  # noqa
+class tox_build_requirements(ConfigVar):
 	"""
 	A list of additional Python build requirements for Tox.
 
@@ -99,7 +99,7 @@ class tox_build_requirements(ConfigVar):  # noqa
 	category: str = "testing"
 
 
-class tox_testenv_extras(ConfigVar):  # noqa
+class tox_testenv_extras(ConfigVar):
 	"""
 	The "Extra" requirement to install when installing the package in the Tox testenv.
 
@@ -117,7 +117,7 @@ class tox_testenv_extras(ConfigVar):  # noqa
 	category: str = "testing"
 
 
-class tests_dir(ConfigVar):  # noqa
+class tests_dir(ConfigVar):
 	"""
 	The directory containing tests, relative to the repository root.
 
@@ -133,7 +133,7 @@ class tests_dir(ConfigVar):  # noqa
 	category: str = "testing"
 
 
-class mypy_deps(ConfigVar):  # noqa
+class mypy_deps(ConfigVar):
 	"""
 	A list of additional packages to install in Tox when running mypy. Usually type stubs.
 
@@ -150,7 +150,7 @@ class mypy_deps(ConfigVar):  # noqa
 	category: str = "testing"
 
 
-class mypy_plugins(ConfigVar):  # noqa
+class mypy_plugins(ConfigVar):
 	"""
 	A list of plugins to enable for mypy.
 
@@ -171,7 +171,7 @@ class mypy_plugins(ConfigVar):  # noqa
 	category: str = "testing"
 
 
-class extra_lint_paths(ConfigVar):  # noqa
+class extra_lint_paths(ConfigVar):
 	"""
 	A list of additional files or directories to check with flake8 and mypy.
 
@@ -190,7 +190,7 @@ class extra_lint_paths(ConfigVar):  # noqa
 	category: str = "testing"
 
 
-class extra_testenv_commands(ConfigVar):  # noqa
+class extra_testenv_commands(ConfigVar):
 	"""
 	A list of additional commands to run in the primary testenv, after running the tests themselves.
 
@@ -207,7 +207,7 @@ class extra_testenv_commands(ConfigVar):  # noqa
 	category: str = "testing"
 
 
-class enable_devmode(ConfigVar):  # noqa
+class enable_devmode(ConfigVar):
 	"""
 	Enable `Python Development Mode`_ when running tests.
 
@@ -225,7 +225,7 @@ class enable_devmode(ConfigVar):  # noqa
 	category: str = "testing"
 
 
-class mypy_version(ConfigVar):  # noqa
+class mypy_version(ConfigVar):
 	"""
 	The version of ``mypy`` to use.
 
@@ -246,7 +246,7 @@ class mypy_version(ConfigVar):  # noqa
 	category: str = "testing"
 
 
-class min_coverage(ConfigVar):  # noqa
+class min_coverage(ConfigVar):
 	"""
 	The minimum permitted test coverage percentage.
 
@@ -265,7 +265,7 @@ class min_coverage(ConfigVar):  # noqa
 	category: str = "testing"
 
 
-class tox_unmanaged(ConfigVar):  # noqa
+class tox_unmanaged(ConfigVar):
 	"""
 	A list of section names in ``tox.ini`` which should not be managed by ``repo-helper``.
 
@@ -304,7 +304,7 @@ class _Validator(Validator):
 			return super().visit_dict(raw_config_vars)
 
 
-class github_ci_requirements(ConfigVar):  # noqa
+class github_ci_requirements(ConfigVar):
 	"""
 	Additional steps to run in GitHub actions before and after installing dependencies.
 

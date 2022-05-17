@@ -60,7 +60,7 @@ __all__ = [
 
 
 # Metadata
-class author(ConfigVar):  # noqa
+class author(ConfigVar):
 	"""
 	The name of the package author.
 
@@ -76,7 +76,7 @@ class author(ConfigVar):  # noqa
 	category: str = "metadata"
 
 
-class email(ConfigVar):  # noqa
+class email(ConfigVar):
 	"""
 	The email address of the author or maintainer.
 
@@ -92,7 +92,7 @@ class email(ConfigVar):  # noqa
 	category: str = "metadata"
 
 
-class username(ConfigVar):  # noqa
+class username(ConfigVar):
 	"""
 	The username of the GitHub account hosting the repository.
 
@@ -108,7 +108,7 @@ class username(ConfigVar):  # noqa
 	category: str = "metadata"
 
 
-class assignee(ConfigVar):  # noqa
+class assignee(ConfigVar):
 	"""
 	The username of the GitHub account to assign issues to.
 
@@ -129,7 +129,7 @@ class assignee(ConfigVar):  # noqa
 	category: str = "metadata"
 
 
-class modname(ConfigVar):  # noqa
+class modname(ConfigVar):
 	"""
 	The name of the package.
 
@@ -145,7 +145,7 @@ class modname(ConfigVar):  # noqa
 	category: str = "metadata"
 
 
-class version(ConfigVar):  # noqa
+class version(ConfigVar):
 	"""
 	The version of the package.
 
@@ -167,7 +167,7 @@ class version(ConfigVar):  # noqa
 		return str(v)
 
 
-class copyright_years(ConfigVar):  # noqa
+class copyright_years(ConfigVar):
 	"""
 	The copyright_years of the package.
 
@@ -190,7 +190,7 @@ class copyright_years(ConfigVar):  # noqa
 	category: str = "metadata"
 
 
-class repo_name(ConfigVar):  # noqa
+class repo_name(ConfigVar):
 	"""
 	The name of GitHub repository, if different to :conf:`modname`.
 
@@ -206,7 +206,7 @@ class repo_name(ConfigVar):  # noqa
 	category: str = "metadata"
 
 
-class pypi_name(ConfigVar):  # noqa
+class pypi_name(ConfigVar):
 	"""
 	The name of project on PyPI, if different to :conf:`modname`.
 
@@ -222,7 +222,7 @@ class pypi_name(ConfigVar):  # noqa
 	category: str = "metadata"
 
 
-class import_name(ConfigVar):  # noqa
+class import_name(ConfigVar):
 	"""
 	The name the package is imported with, if different to :conf:`modname`.
 
@@ -304,7 +304,7 @@ class InvalidName(SyntaxError):
 				)
 
 
-class classifiers(ConfigVar):  # noqa
+class classifiers(ConfigVar):
 	"""
 	A list of `"trove classifiers" <https://pypi.org/classifiers/>`_ for PyPI.
 
@@ -353,7 +353,7 @@ class classifiers(ConfigVar):  # noqa
 		return natsorted(classifier_list)
 
 
-class keywords(ConfigVar):  # noqa
+class keywords(ConfigVar):
 	"""
 	A list of keywords for the project.
 
@@ -399,7 +399,7 @@ class license(ConfigVar):  # noqa  # pylint: disable=redefined-builtin
 		return value
 
 
-class short_desc(ConfigVar):  # noqa
+class short_desc(ConfigVar):
 	"""
 	A short description of the project. Used by PyPI.
 
@@ -419,7 +419,7 @@ class short_desc(ConfigVar):  # noqa
 		return value.strip()
 
 
-class source_dir(ConfigVar):  # noqa
+class source_dir(ConfigVar):
 	"""
 	The directory containing the source code of the project.
 
@@ -442,7 +442,7 @@ class source_dir(ConfigVar):  # noqa
 		return os.path.join(value, '')
 
 
-class pure_python(ConfigVar):  # noqa
+class pure_python(ConfigVar):
 	"""
 	Flag to indicate the package is pure Python.
 
@@ -458,7 +458,7 @@ class pure_python(ConfigVar):  # noqa
 	category: str = "metadata"
 
 
-class on_pypi(ConfigVar):  # noqa
+class on_pypi(ConfigVar):
 	"""
 	Flag to indicate the package is available on PyPI.
 
@@ -474,7 +474,7 @@ class on_pypi(ConfigVar):  # noqa
 	category: str = "metadata"
 
 
-class stubs_package(ConfigVar):  # noqa
+class stubs_package(ConfigVar):
 	"""
 	Flag to indicate the package is a PEP 561 stubs package.
 

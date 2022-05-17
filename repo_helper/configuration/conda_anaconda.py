@@ -42,7 +42,7 @@ __all__ = [
 		]
 
 
-class enable_conda(ConfigVar):  # noqa
+class enable_conda(ConfigVar):
 	"""
 	Whether conda packages should be built and deployed.
 
@@ -58,7 +58,7 @@ class enable_conda(ConfigVar):  # noqa
 	category: str = "conda & anaconda"
 
 
-class conda_channels(ConfigVar):  # noqa
+class conda_channels(ConfigVar):
 	"""
 	A list of Anaconda channels required to build and use the Conda package.
 
@@ -77,7 +77,7 @@ class conda_channels(ConfigVar):  # noqa
 	category: str = "conda & anaconda"
 
 
-class conda_extras(ConfigVar):  # noqa
+class conda_extras(ConfigVar):
 	"""
 	A list of extras (see :conf:`extras_require`) to include as requirements in the Conda package.
 
@@ -118,7 +118,7 @@ class conda_extras(ConfigVar):  # noqa
 		return extras
 
 
-class conda_description(ConfigVar):  # noqa
+class conda_description(ConfigVar):
 	"""
 	A short description of the project for Anaconda.
 
@@ -136,7 +136,7 @@ class conda_description(ConfigVar):  # noqa
 	category: str = "conda & anaconda"
 
 
-class primary_conda_channel(ConfigVar):  # noqa
+class primary_conda_channel(ConfigVar):
 	"""
 	The Conda channel the package can be downloaded from.
 
@@ -159,7 +159,7 @@ class primary_conda_channel(ConfigVar):  # noqa
 	category: str = "conda & anaconda"
 
 
-class on_conda_forge(ConfigVar):  # noqa
+class on_conda_forge(ConfigVar):
 	"""
 	Flag to indicate the package is available on conda-forge.
 

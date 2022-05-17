@@ -38,7 +38,7 @@ __all__ = [
 		]
 
 
-class travis_ubuntu_version(ConfigVar):  # noqa
+class travis_ubuntu_version(ConfigVar):
 	"""
 	The Travis Ubuntu version.
 
@@ -54,7 +54,7 @@ class travis_ubuntu_version(ConfigVar):  # noqa
 	category: str = "travis"
 
 
-class travis_extra_install_pre(ConfigVar):  # noqa
+class travis_extra_install_pre(ConfigVar):
 	"""
 	Additional steps to run in Travis before installing dependencies.
 
@@ -72,7 +72,7 @@ class travis_extra_install_pre(ConfigVar):  # noqa
 	category: str = "travis"
 
 
-class travis_extra_install_post(ConfigVar):  # noqa
+class travis_extra_install_post(ConfigVar):
 	"""
 	Additional steps to run in Travis after installing dependencies.
 
@@ -89,7 +89,7 @@ class travis_extra_install_post(ConfigVar):  # noqa
 	default: List[str] = []
 
 
-class travis_additional_requirements(ConfigVar):  # noqa
+class travis_additional_requirements(ConfigVar):
 	"""
 	A list of additional Python requirements for Travis.
 

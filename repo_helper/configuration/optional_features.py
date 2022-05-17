@@ -29,7 +29,7 @@ from configconfig.configvar import ConfigVar
 __all__ = ["enable_releases", "enable_pre_commit", "docker_shields", "docker_name"]
 
 
-class enable_releases(ConfigVar):  # noqa
+class enable_releases(ConfigVar):
 	"""
 	Whether packages should be copied from PyPI to GitHub Releases.
 
@@ -45,7 +45,7 @@ class enable_releases(ConfigVar):  # noqa
 	category: str = "optional features"
 
 
-class enable_pre_commit(ConfigVar):  # noqa
+class enable_pre_commit(ConfigVar):
 	"""
 	Whether pre-commit should be installed and configured.
 
@@ -61,7 +61,7 @@ class enable_pre_commit(ConfigVar):  # noqa
 	category: str = "optional features"
 
 
-class docker_shields(ConfigVar):  # noqa
+class docker_shields(ConfigVar):
 	"""
 	Whether shields for docker container image size and build status should be shown.
 
@@ -77,7 +77,7 @@ class docker_shields(ConfigVar):  # noqa
 	category: str = "optional features"
 
 
-class docker_name(ConfigVar):  # noqa
+class docker_name(ConfigVar):
 	"""
 	The name of the docker image on dockerhub.
 

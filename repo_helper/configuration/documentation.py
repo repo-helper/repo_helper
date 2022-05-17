@@ -51,7 +51,7 @@ __all__ = [
 		]
 
 
-class rtfd_author(ConfigVar):  # noqa
+class rtfd_author(ConfigVar):
 	"""
 	The name of the author to show on ReadTheDocs, if different.
 
@@ -67,7 +67,7 @@ class rtfd_author(ConfigVar):  # noqa
 	category: str = "documentation"
 
 
-class preserve_custom_theme(ConfigVar):  # noqa
+class preserve_custom_theme(ConfigVar):
 	"""
 	Whether custom documentation theme styling in ``_static/style.css`` and ``_templates/layout.html`` should be preserved.
 
@@ -83,7 +83,7 @@ class preserve_custom_theme(ConfigVar):  # noqa
 	category: str = "documentation"
 
 
-class sphinx_html_theme(ConfigVar):  # noqa
+class sphinx_html_theme(ConfigVar):
 	"""
 	The HTML theme to use for Sphinx.
 
@@ -121,7 +121,7 @@ class sphinx_html_theme(ConfigVar):  # noqa
 		return str(value).replace('_', '-')
 
 
-class extra_sphinx_extensions(ConfigVar):  # noqa
+class extra_sphinx_extensions(ConfigVar):
 	"""
 	A list of additional extensions to enable for Sphinx.
 
@@ -140,7 +140,7 @@ class extra_sphinx_extensions(ConfigVar):  # noqa
 	category: str = "documentation"
 
 
-class intersphinx_mapping(ConfigVar):  # noqa
+class intersphinx_mapping(ConfigVar):
 	"""
 	A list of additional entries for ``intersphinx_mapping`` for Sphinx.
 
@@ -159,7 +159,7 @@ class intersphinx_mapping(ConfigVar):  # noqa
 	category: str = "documentation"
 
 
-class sphinx_conf_preamble(ConfigVar):  # noqa
+class sphinx_conf_preamble(ConfigVar):
 	"""
 	A list of lines of Python code to add to the top of ``conf.py``.
 
@@ -182,7 +182,7 @@ class sphinx_conf_preamble(ConfigVar):  # noqa
 	category: str = "documentation"
 
 
-class sphinx_conf_epilogue(ConfigVar):  # noqa
+class sphinx_conf_epilogue(ConfigVar):
 	"""
 	Like :conf:`sphinx_conf_preamble`, but the lines are inserted at the end of the file.
 
@@ -194,7 +194,7 @@ class sphinx_conf_epilogue(ConfigVar):  # noqa
 	category: str = "documentation"
 
 
-class html_theme_options(ConfigVar):  # noqa
+class html_theme_options(ConfigVar):
 	"""
 	A dictionary of configuration values for the documentation HTML theme.
 
@@ -215,7 +215,7 @@ class html_theme_options(ConfigVar):  # noqa
 	category: str = "documentation"
 
 
-class html_context(ConfigVar):  # noqa
+class html_context(ConfigVar):
 	"""
 	A dictionary of configuration values for the documentation HTML context.
 
@@ -235,7 +235,7 @@ class html_context(ConfigVar):  # noqa
 	category: str = "documentation"
 
 
-class enable_docs(ConfigVar):  # noqa
+class enable_docs(ConfigVar):
 	"""
 	Whether documentation should be built and deployed.
 
@@ -251,7 +251,7 @@ class enable_docs(ConfigVar):  # noqa
 	category: str = "documentation"
 
 
-class docs_dir(ConfigVar):  # noqa
+class docs_dir(ConfigVar):
 	"""
 	The directory containing the docs code of the project.
 
@@ -268,7 +268,7 @@ class docs_dir(ConfigVar):  # noqa
 	category: str = "documentation"
 
 
-class standalone_contrib_guide(ConfigVar):  # noqa
+class standalone_contrib_guide(ConfigVar):
 	"""
 	Whether the contributing guide for the documentation should be a standlone page.
 
@@ -284,7 +284,7 @@ class standalone_contrib_guide(ConfigVar):  # noqa
 	category: str = "documentation"
 
 
-class docs_url(ConfigVar):  # noqa
+class docs_url(ConfigVar):
 	"""
 	The URL of the documentation, if it uses a custom domain. Default ``https://{repo_name}.readthedocs.io``.
 
@@ -317,7 +317,7 @@ class docs_url(ConfigVar):  # noqa
 			return super().validate(raw_config_vars)
 
 
-class docs_fail_on_warning(ConfigVar):  # noqa
+class docs_fail_on_warning(ConfigVar):
 	"""
 	Whether the documentation check on GitHub Actions should fail on warnings.
 

@@ -35,7 +35,7 @@ from packaging.version import InvalidVersion, Version
 __all__ = ["python_deploy_version", "requires_python", "python_versions", "third_party_version_matrix"]
 
 
-class python_deploy_version(ConfigVar):  # noqa
+class python_deploy_version(ConfigVar):
 	"""
 	The version of Python to use on Travis when deploying to PyPI, Anaconda and GitHub releases.
 
@@ -52,7 +52,7 @@ class python_deploy_version(ConfigVar):  # noqa
 	category: str = "python versions"
 
 
-class requires_python(ConfigVar):  # noqa
+class requires_python(ConfigVar):
 	"""
 	The minimum required version of Python.
 
@@ -90,7 +90,7 @@ def _default_python_versions(raw_config_vars: Optional[Dict[str, Any]]) -> Dict[
 	return {str(python_deploy_version(raw_config_vars)): {}}  # type: ignore[arg-type]
 
 
-class python_versions(ConfigVar):  # noqa
+class python_versions(ConfigVar):
 	"""
 	A list of the version(s) of Python to use when performing tests with Tox, e.g.
 
@@ -203,7 +203,7 @@ class python_versions(ConfigVar):  # noqa
 					)
 
 
-class third_party_version_matrix(ConfigVar):  # noqa
+class third_party_version_matrix(ConfigVar):
 	"""
 	A mapping of third party library names to the version number(s) to test.
 
