@@ -345,7 +345,7 @@ class ToxConfig(IniConfigurator):
 			# 		)
 
 		elif not self["stubs_package"]:
-			testenv_commands.append("python -m importcheck {posargs}")
+			testenv_commands.append("python -m importcheck {posargs:--show}")
 
 		testenv_commands.extend(self["extra_testenv_commands"])
 
