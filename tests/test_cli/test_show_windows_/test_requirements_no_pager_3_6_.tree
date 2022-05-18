@@ -206,14 +206,6 @@ repo_helper==2020.12.18
 │   │   │   │   │   ├── natsort>=7.0.1
 │   │   │   │   │   └── typing-extensions>=3.7.4.1
 │   │   │   │   ├── handy-archives>=0.1.0
-│   │   │   │   │   └── domdf-python-tools>=3.1.0
-│   │   │   │   │       ├── importlib-metadata>=3.6.0; python_version < "3.9"
-│   │   │   │   │       │   ├── typing-extensions>=3.6.4; python_version < "3.8"
-│   │   │   │   │       │   └── zipp>=0.5
-│   │   │   │   │       ├── importlib-resources>=3.0.0; python_version < "3.7"
-│   │   │   │   │       │   └── zipp>=3.1.0; python_version < "3.10"
-│   │   │   │   │       ├── natsort>=7.0.1
-│   │   │   │   │       └── typing-extensions>=3.7.4.1
 │   │   │   │   └── packaging>=20.9
 │   │   │   │       └── pyparsing!=3.0.5,>=2.0.2
 │   │   │   ├── dom-toml>=0.2.2
@@ -267,14 +259,6 @@ repo_helper==2020.12.18
 │   │   │   │   ├── natsort>=7.0.1
 │   │   │   │   └── typing-extensions>=3.7.4.1
 │   │   │   ├── handy-archives>=0.1.0
-│   │   │   │   └── domdf-python-tools>=3.1.0
-│   │   │   │       ├── importlib-metadata>=3.6.0; python_version < "3.9"
-│   │   │   │       │   ├── typing-extensions>=3.6.4; python_version < "3.8"
-│   │   │   │       │   └── zipp>=0.5
-│   │   │   │       ├── importlib-resources>=3.0.0; python_version < "3.7"
-│   │   │   │       │   └── zipp>=3.1.0; python_version < "3.10"
-│   │   │   │       ├── natsort>=7.0.1
-│   │   │   │       └── typing-extensions>=3.7.4.1
 │   │   │   └── packaging>=20.9
 │   │   │       └── pyparsing!=3.0.5,>=2.0.2
 │   │   ├── dom-toml>=0.2.2
@@ -331,14 +315,6 @@ repo_helper==2020.12.18
 │       │   │   ├── natsort>=7.0.1
 │       │   │   └── typing-extensions>=3.7.4.1
 │       │   ├── handy-archives>=0.1.0
-│       │   │   └── domdf-python-tools>=3.1.0
-│       │   │       ├── importlib-metadata>=3.6.0; python_version < "3.9"
-│       │   │       │   ├── typing-extensions>=3.6.4; python_version < "3.8"
-│       │   │       │   └── zipp>=0.5
-│       │   │       ├── importlib-resources>=3.0.0; python_version < "3.7"
-│       │   │       │   └── zipp>=3.1.0; python_version < "3.10"
-│       │   │       ├── natsort>=7.0.1
-│       │   │       └── typing-extensions>=3.7.4.1
 │       │   └── packaging>=20.9
 │       │       └── pyparsing!=3.0.5,>=2.0.2
 │       ├── dom-toml>=0.4.0
@@ -360,14 +336,6 @@ repo_helper==2020.12.18
 │       │   ├── natsort>=7.0.1
 │       │   └── typing-extensions>=3.7.4.1
 │       ├── handy-archives>=0.1.0
-│       │   └── domdf-python-tools>=3.1.0
-│       │       ├── importlib-metadata>=3.6.0; python_version < "3.9"
-│       │       │   ├── typing-extensions>=3.6.4; python_version < "3.8"
-│       │       │   └── zipp>=0.5
-│       │       ├── importlib-resources>=3.0.0; python_version < "3.7"
-│       │       │   └── zipp>=3.1.0; python_version < "3.10"
-│       │       ├── natsort>=7.0.1
-│       │       └── typing-extensions>=3.7.4.1
 │       ├── natsort>=7.1.1
 │       ├── packaging>=20.9
 │       │   └── pyparsing!=3.0.5,>=2.0.2
@@ -437,14 +405,6 @@ repo_helper==2020.12.18
 │       │   │   │   │   ├── natsort>=7.0.1
 │       │   │   │   │   └── typing-extensions>=3.7.4.1
 │       │   │   │   ├── handy-archives>=0.1.0
-│       │   │   │   │   └── domdf-python-tools>=3.1.0
-│       │   │   │   │       ├── importlib-metadata>=3.6.0; python_version < "3.9"
-│       │   │   │   │       │   ├── typing-extensions>=3.6.4; python_version < "3.8"
-│       │   │   │   │       │   └── zipp>=0.5
-│       │   │   │   │       ├── importlib-resources>=3.0.0; python_version < "3.7"
-│       │   │   │   │       │   └── zipp>=3.1.0; python_version < "3.10"
-│       │   │   │   │       ├── natsort>=7.0.1
-│       │   │   │   │       └── typing-extensions>=3.7.4.1
 │       │   │   │   └── packaging>=20.9
 │       │   │   │       └── pyparsing!=3.0.5,>=2.0.2
 │       │   │   ├── dom-toml>=0.2.2
@@ -498,14 +458,6 @@ repo_helper==2020.12.18
 │           │   │   ├── natsort>=7.0.1
 │           │   │   └── typing-extensions>=3.7.4.1
 │           │   ├── handy-archives>=0.1.0
-│           │   │   └── domdf-python-tools>=3.1.0
-│           │   │       ├── importlib-metadata>=3.6.0; python_version < "3.9"
-│           │   │       │   ├── typing-extensions>=3.6.4; python_version < "3.8"
-│           │   │       │   └── zipp>=0.5
-│           │   │       ├── importlib-resources>=3.0.0; python_version < "3.7"
-│           │   │       │   └── zipp>=3.1.0; python_version < "3.10"
-│           │   │       ├── natsort>=7.0.1
-│           │   │       └── typing-extensions>=3.7.4.1
 │           │   └── packaging>=20.9
 │           │       └── pyparsing!=3.0.5,>=2.0.2
 │           ├── dom-toml>=0.2.2
@@ -562,14 +514,6 @@ repo_helper==2020.12.18
 │   │   │   ├── natsort>=7.0.1
 │   │   │   └── typing-extensions>=3.7.4.1
 │   │   ├── handy-archives>=0.1.0
-│   │   │   └── domdf-python-tools>=3.1.0
-│   │   │       ├── importlib-metadata>=3.6.0; python_version < "3.9"
-│   │   │       │   ├── typing-extensions>=3.6.4; python_version < "3.8"
-│   │   │       │   └── zipp>=0.5
-│   │   │       ├── importlib-resources>=3.0.0; python_version < "3.7"
-│   │   │       │   └── zipp>=3.1.0; python_version < "3.10"
-│   │   │       ├── natsort>=7.0.1
-│   │   │       └── typing-extensions>=3.7.4.1
 │   │   └── packaging>=20.9
 │   │       └── pyparsing!=3.0.5,>=2.0.2
 │   ├── dom-toml>=0.2.2
@@ -661,14 +605,6 @@ repo_helper==2020.12.18
 │   │   │   ├── natsort>=7.0.1
 │   │   │   └── typing-extensions>=3.7.4.1
 │   │   ├── handy-archives>=0.1.0
-│   │   │   └── domdf-python-tools>=3.1.0
-│   │   │       ├── importlib-metadata>=3.6.0; python_version < "3.9"
-│   │   │       │   ├── typing-extensions>=3.6.4; python_version < "3.8"
-│   │   │       │   └── zipp>=0.5
-│   │   │       ├── importlib-resources>=3.0.0; python_version < "3.7"
-│   │   │       │   └── zipp>=3.1.0; python_version < "3.10"
-│   │   │       ├── natsort>=7.0.1
-│   │   │       └── typing-extensions>=3.7.4.1
 │   │   └── packaging>=20.9
 │   │       └── pyparsing!=3.0.5,>=2.0.2
 │   ├── dom-toml>=0.4.0
@@ -690,14 +626,6 @@ repo_helper==2020.12.18
 │   │   ├── natsort>=7.0.1
 │   │   └── typing-extensions>=3.7.4.1
 │   ├── handy-archives>=0.1.0
-│   │   └── domdf-python-tools>=3.1.0
-│   │       ├── importlib-metadata>=3.6.0; python_version < "3.9"
-│   │       │   ├── typing-extensions>=3.6.4; python_version < "3.8"
-│   │       │   └── zipp>=0.5
-│   │       ├── importlib-resources>=3.0.0; python_version < "3.7"
-│   │       │   └── zipp>=3.1.0; python_version < "3.10"
-│   │       ├── natsort>=7.0.1
-│   │       └── typing-extensions>=3.7.4.1
 │   ├── natsort>=7.1.1
 │   ├── packaging>=20.9
 │   │   └── pyparsing!=3.0.5,>=2.0.2
@@ -767,14 +695,6 @@ repo_helper==2020.12.18
 │   │   │   │   │   ├── natsort>=7.0.1
 │   │   │   │   │   └── typing-extensions>=3.7.4.1
 │   │   │   │   ├── handy-archives>=0.1.0
-│   │   │   │   │   └── domdf-python-tools>=3.1.0
-│   │   │   │   │       ├── importlib-metadata>=3.6.0; python_version < "3.9"
-│   │   │   │   │       │   ├── typing-extensions>=3.6.4; python_version < "3.8"
-│   │   │   │   │       │   └── zipp>=0.5
-│   │   │   │   │       ├── importlib-resources>=3.0.0; python_version < "3.7"
-│   │   │   │   │       │   └── zipp>=3.1.0; python_version < "3.10"
-│   │   │   │   │       ├── natsort>=7.0.1
-│   │   │   │   │       └── typing-extensions>=3.7.4.1
 │   │   │   │   └── packaging>=20.9
 │   │   │   │       └── pyparsing!=3.0.5,>=2.0.2
 │   │   │   ├── dom-toml>=0.2.2
@@ -828,14 +748,6 @@ repo_helper==2020.12.18
 │       │   │   ├── natsort>=7.0.1
 │       │   │   └── typing-extensions>=3.7.4.1
 │       │   ├── handy-archives>=0.1.0
-│       │   │   └── domdf-python-tools>=3.1.0
-│       │   │       ├── importlib-metadata>=3.6.0; python_version < "3.9"
-│       │   │       │   ├── typing-extensions>=3.6.4; python_version < "3.8"
-│       │   │       │   └── zipp>=0.5
-│       │   │       ├── importlib-resources>=3.0.0; python_version < "3.7"
-│       │   │       │   └── zipp>=3.1.0; python_version < "3.10"
-│       │   │       ├── natsort>=7.0.1
-│       │   │       └── typing-extensions>=3.7.4.1
 │       │   └── packaging>=20.9
 │       │       └── pyparsing!=3.0.5,>=2.0.2
 │       ├── dom-toml>=0.2.2
