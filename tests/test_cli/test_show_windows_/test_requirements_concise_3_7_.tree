@@ -11,7 +11,7 @@ repo_helper==2020.12.18
 ├── colorama; platform_system == "Windows"
 ├── colorful>=0.4.0
 ├── configconfig>=0.5.0
-├── consolekit>=1.2.2
+├── consolekit>=1.4.1
 ├── cssutils>=2.2.0
 ├── deprecation>=2.1.0
 ├── deprecation-alias>=0.1.1
@@ -43,7 +43,7 @@ repo_helper==2020.12.18
 ├── pygments>=2.2.0
 ├── pyparsing!=3.0.5,>=2.0.2
 ├── pypi-json>=0.2.1
-├── pyproject-parser>=0.3.0
+├── pyproject-parser>=0.6.0
 ├── pyrsistent!=0.17.0,!=0.17.1,!=0.17.2,>=0.14.0
 ├── requests>=2.26.0
 ├── ruamel-yaml-clib>=0.2.6; platform_python_implementation == "CPython" and python_version < "3.11"
