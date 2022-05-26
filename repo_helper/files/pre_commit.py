@@ -193,7 +193,7 @@ pyupgrade = Repo(
 
 lucas_c_hooks = Repo(
 		repo=make_github_url("Lucas-C", "pre-commit-hooks"),
-		rev="v1.1.14",
+		rev="v1.2.0",
 		hooks=["remove-crlf", "forbid-crlf"],
 		)
 
@@ -205,7 +205,7 @@ flake2lint = Repo(
 
 pyproject_parser = Repo(
 		repo=make_github_url("repo-helper", "pyproject-parser"),
-		rev="v0.5.0",
+		rev="v0.6.1",
 		hooks=["reformat-pyproject"],  # TODO: add check-pyproject
 		)
 
