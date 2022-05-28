@@ -154,7 +154,11 @@ def typed():
 	setup_cfg = rh.target_repo / "setup.cfg"
 	pyproject_file = rh.target_repo / "pyproject.toml"
 
-	if setup_cfg.is_file() and not (rh.templates.globals["use_whey"] or rh.templates.globals["use_flit"]):
+	if setup_cfg.is_file() and not any((
+			rh.templates.globals["use_whey"],
+			rh.templates.globals["use_flit"],
+			rh.templates.globals["use_maturin"],
+			)):
 		content = setup_cfg.read_text()
 
 		config = ConfigUpdater()

@@ -46,12 +46,13 @@ from repo_helper.files import management
 from repo_helper.files.docs import make_sphinx_config_dict
 from repo_helper.templates import Environment
 from repo_helper.utils import (
+		get_keys,
 		IniConfigurator,
 		indent_join,
 		indent_with_tab,
 		license_lookup,
 		reformat_file,
-		resource
+		resource,
 		)
 
 __all__ = [
@@ -95,7 +96,7 @@ def make_manifest(repo_path: pathlib.Path, templates: Environment) -> List[str]:
 
 	file = PathPlus(repo_path / "MANIFEST.in")
 
-	if templates.globals["use_whey"] or templates.globals["use_flit"]:
+	if any(get_keys(templates.globals, "use_whey", "use_flit", "use_maturin")):
 		file.unlink(missing_ok=True)
 
 	else:
@@ -167,7 +168,7 @@ def make_pyproject(repo_path: pathlib.Path, templates: Environment) -> List[str]
 
 	build_requirements = sorted(combine_requirements(ComparableRequirement(req) for req in build_requirements_))
 
-	if templates.globals["use_whey"] or templates.globals["use_flit"]:
+	if any(get_keys(templates.globals, "use_whey", "use_flit", "use_maturin")):
 		for old_dep in ["setuptools", "wheel"]:
 			if old_dep in build_requirements:
 				build_requirements.remove(old_dep)  # type: ignore[arg-type]
@@ -181,6 +182,11 @@ def make_pyproject(repo_path: pathlib.Path, templates: Environment) -> List[str]
 		build_backend = "flit_core.buildapi"
 	elif "flit-core<4,>=3.2" in build_requirements:
 		build_requirements.remove("flit-core<4,>=3.2")  # type: ignore[arg-type]
+
+	if templates.globals["use_maturin"]:
+		build_backend = "maturin"
+	elif "maturin<0.13,>=0.12.0" in build_requirements:
+		build_requirements.remove("maturin<0.13,>=0.12.0")  # type: ignore[arg-type]
 
 	if "repo-helper" in build_requirements:
 		build_requirements.remove("repo-helper")  # type: ignore[arg-type]
@@ -225,10 +231,13 @@ def make_pyproject(repo_path: pathlib.Path, templates: Environment) -> List[str]
 	data["project"]["authors"] = [{"name": templates.globals["author"], "email": templates.globals["email"]}]
 	data["project"]["license"] = {"file": "LICENSE"}
 
+	if not (templates.globals["use_flit"] or templates.globals["use_maturin"]) and "dependencies" in data["project"]:
+		del data["project"]["dependencies"]
+
 	if not templates.globals["use_whey"]:
 		data["project"]["dynamic"] = []
 
-		if templates.globals["use_flit"]:
+		if templates.globals["use_flit"] or templates.globals["use_maturin"]:
 			parsed_requirements, comments, invalid_lines = read_requirements(repo_path / "requirements.txt", include_invalid=True)
 			if invalid_lines:
 				raise NotImplementedError(f"Unsupported requirement type(s): {invalid_lines}")
@@ -407,7 +416,7 @@ def make_setup(repo_path: pathlib.Path, templates: Environment) -> List[str]:
 
 	setup_file = PathPlus(repo_path / "setup.py")
 
-	if templates.globals["use_whey"] or templates.globals["use_flit"]:
+	if templates.globals["use_whey"] or templates.globals["use_flit"] or templates.globals["use_maturin"]:
 		setup_file.unlink(missing_ok=True)
 
 	else:
@@ -529,7 +538,7 @@ class SetupCfgConfig(IniConfigurator):
 		``[options.entry_points]``.
 		"""
 
-		if self["use_whey"] or self["use_flit"]:
+		if self["use_whey"] or self["use_flit"] or self["use_maturin"]:
 			return
 
 		if self["console_scripts"]:
@@ -570,10 +579,10 @@ class SetupCfgConfig(IniConfigurator):
 					self.copy_existing_value(section, "incremental")
 
 		if "options.entry_points" in self._ini.sections():
-			if self["use_whey"] or self["use_flit"] or not self._ini["options.entry_points"].options():
+			if self["use_whey"] or self["use_flit"] or self["use_maturin"] or not self._ini["options.entry_points"].options():
 				self._ini.remove_section("options.entry_points")
 
-		if self["use_whey"] or self["use_flit"]:
+		if self["use_whey"] or self["use_flit"] or self["use_maturin"]:
 			self._ini.remove_section("metadata")
 			self._ini.remove_section("options")
 			self._ini.remove_section("options.packages.find")
@@ -609,7 +618,7 @@ def make_setup_cfg(repo_path: pathlib.Path, templates: Environment) -> List[str]
 	:param templates:
 	"""
 
-	# TODO: if "use_whey" or "use_flit", remove this file, but ensure unmanaged sections are preserved
+	# TODO: if "use_whey", "use_flit" or "use_maturin", remove this file, but ensure unmanaged sections are preserved
 
 	SetupCfgConfig(repo_path=repo_path, templates=templates).write_out()
 

@@ -30,6 +30,7 @@ from domdf_python_tools.paths import PathPlus
 
 # this package
 from repo_helper.files.packaging import make_manifest, make_pkginfo, make_pyproject, make_setup, make_setup_cfg
+from repo_helper.utils import get_keys
 from tests.test_files.test_testing import AdvancedFileRegressionFixture
 
 
@@ -46,6 +47,7 @@ def boolean_option(name: str, id: str):  # noqa: A002  # pylint: disable=redefin
 		[
 				pytest.param({"use_whey": True}, id="backend_whey"),
 				pytest.param({"use_flit": True}, id="backend_flit"),
+				pytest.param({"use_maturin": True}, id="backend_maturin"),
 				pytest.param({}, id="backend_setuptools"),
 				]
 		)
@@ -63,7 +65,7 @@ def test_make_manifest_case_1(
 	managed_files = make_manifest(tmp_pathplus, demo_environment)
 	assert managed_files == ["MANIFEST.in"]
 
-	if demo_environment.globals["use_whey"] or demo_environment.globals["use_flit"]:
+	if any(get_keys(demo_environment.globals, "use_whey", "use_flit", "use_maturin")):
 		assert not (tmp_pathplus / managed_files[0]).is_file()
 	else:
 		advanced_file_regression.check_file(tmp_pathplus / managed_files[0])
@@ -89,6 +91,7 @@ def test_make_manifest_case_2(
 		[
 				pytest.param({"use_whey": True}, id="backend_whey"),
 				pytest.param({"use_flit": True}, id="backend_flit"),
+				pytest.param({"use_maturin": True}, id="backend_maturin"),
 				pytest.param({}, id="backend_setuptools"),
 				]
 		)
@@ -105,7 +108,7 @@ def test_make_setup_case_1(
 	managed_files = make_setup(tmp_pathplus, demo_environment)
 	assert managed_files == ["setup.py"]
 
-	if demo_environment.globals["use_whey"] or demo_environment.globals["use_flit"]:
+	if any(get_keys(demo_environment.globals, "use_whey", "use_flit", "use_maturin")):
 		assert not (tmp_pathplus / managed_files[0]).is_file()
 	else:
 		advanced_file_regression.check_file(tmp_pathplus / managed_files[0])
@@ -116,6 +119,7 @@ def test_make_setup_case_1(
 		[
 				pytest.param({"use_whey": True}, id="backend_whey"),
 				pytest.param({"use_flit": True}, id="backend_flit"),
+				pytest.param({"use_maturin": True}, id="backend_maturin"),
 				pytest.param({}, id="backend_setuptools"),
 				]
 		)
@@ -142,7 +146,7 @@ def test_make_setup_case_2(
 	managed_files = make_setup(tmp_pathplus, demo_environment)
 	assert managed_files == ["setup.py"]
 
-	if demo_environment.globals["use_whey"] or demo_environment.globals["use_flit"]:
+	if any(get_keys(demo_environment.globals, "use_whey", "use_flit", "use_maturin")):
 		assert not (tmp_pathplus / managed_files[0]).is_file()
 	else:
 		advanced_file_regression.check_file(tmp_pathplus / managed_files[0])
@@ -153,6 +157,7 @@ def test_make_setup_case_2(
 		[
 				pytest.param({"use_whey": True}, id="backend_whey"),
 				pytest.param({"use_flit": True}, id="backend_flit"),
+				pytest.param({"use_maturin": True}, id="backend_maturin"),
 				pytest.param({}, id="backend_setuptools"),
 				]
 		)
@@ -287,6 +292,7 @@ def test_make_pyproject_whey_extras(
 		[
 				pytest.param({"use_whey": True}, id="backend_whey"),
 				pytest.param({"use_flit": True}, id="backend_flit"),
+				pytest.param({"use_maturin": True}, id="backend_maturin"),
 				pytest.param({}, id="backend_setuptools"),
 				]
 		)
@@ -330,6 +336,8 @@ def test_make_setup_cfg(
 	if demo_environment.globals["use_whey"] and mypy_version == "0.910":
 		assert not (tmp_pathplus / managed_files[0]).is_file()
 	elif demo_environment.globals["use_flit"] and mypy_version == "0.910":
+		assert not (tmp_pathplus / managed_files[0]).is_file()
+	elif demo_environment.globals["use_maturin"] and mypy_version == "0.910":
 		assert not (tmp_pathplus / managed_files[0]).is_file()
 	else:
 		advanced_file_regression.check_file(tmp_pathplus / managed_files[0])

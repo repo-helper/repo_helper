@@ -473,6 +473,13 @@
       ],
       "description": "Whether to use `flit <https://flit.readthedocs.io/en/latest/>`_ to build distributions, rather than ``setuptools.build_meta``."
     },
+    "use_maturin": {
+      "type": [
+        "boolean",
+        "string"
+      ],
+      "description": "Whether to use `maturin <https://maturin.rs/>`_ to build distributions, rather than ``setuptools.build_meta``."
+    },
     "use_whey": {
       "type": [
         "boolean",

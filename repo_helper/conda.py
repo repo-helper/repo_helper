@@ -75,6 +75,9 @@ class CondaRecipeMaker(MaryBerry):
 		elif config["use_flit"]:
 			config["requires"].append("flit_core>=3.2,<4")
 
+		elif config["use_maturin"]:
+			config["requires"].append("maturin<0.13,>=0.12.0")
+
 		url = "https://github.com/{username}/{repo_name}".format_map(config)
 		config["urls"] = {
 				"Homepage": url,
