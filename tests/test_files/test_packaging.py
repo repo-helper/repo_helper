@@ -333,11 +333,7 @@ def test_make_setup_cfg(
 	managed_files = make_setup_cfg(tmp_pathplus, demo_environment)
 	assert managed_files == ["setup.cfg"]
 
-	if demo_environment.globals["use_whey"] and mypy_version == "0.910":
-		assert not (tmp_pathplus / managed_files[0]).is_file()
-	elif demo_environment.globals["use_flit"] and mypy_version == "0.910":
-		assert not (tmp_pathplus / managed_files[0]).is_file()
-	elif demo_environment.globals["use_maturin"] and mypy_version == "0.910":
+	if any(get_keys(demo_environment.globals, "use_whey", "use_flit", "use_maturin")) and mypy_version == "0.910":
 		assert not (tmp_pathplus / managed_files[0]).is_file()
 	else:
 		advanced_file_regression.check_file(tmp_pathplus / managed_files[0])
