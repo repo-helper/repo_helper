@@ -93,6 +93,7 @@ class ToxConfig(IniConfigurator):
 			"testenv:docs",
 			"testenv:build",
 			"testenv:lint",
+			"testenv:perflint",
 			"testenv:mypy",
 			"testenv:pyup",
 			"flake8",
@@ -440,6 +441,21 @@ class ToxConfig(IniConfigurator):
 				])
 		cmd = f"python3 -m flake8_rst_docstrings_sphinx {' '.join(self.get_source_files())} --allow-toolbox {{posargs}}"
 		self._ini["testenv:lint"]["commands"] = cmd
+
+	def testenv_perflint(self):
+		"""
+		``[testenv:perflint]``.
+		"""
+
+		self._ini["testenv:perflint"]["basepython"] = "python{python_deploy_version}".format(**self._globals)
+		self._ini["testenv:perflint"]["changedir"] = "{toxinidir}"
+		self._ini["testenv:perflint"]["ignore_errors"] = True
+
+		self._ini["testenv:perflint"]["skip_install"] = True
+
+		self._ini["testenv:perflint"]["deps"] = "perflint"
+		cmd = f"python3 -m perflint {self['import_name']} {{posargs}}"
+		self._ini["testenv:perflint"]["commands"] = cmd
 
 	def testenv_mypy(self):
 		"""
