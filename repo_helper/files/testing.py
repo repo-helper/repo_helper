@@ -360,6 +360,7 @@ class ToxConfig(IniConfigurator):
 		if self["enable_docs"]:
 			envvars = ["SHOW_TODOS = 1"]
 			self._ini["testenv:docs"]["setenv"] = indent_join(envvars)
+			self._ini["testenv:docs"]["passenv"] = "SPHINX_BUILDER"
 
 			self._ini["testenv:docs"]["basepython"] = "python3.8"
 			self._ini["testenv:docs"]["changedir"] = f"{{toxinidir}}/{self['docs_dir']}"
