@@ -46,13 +46,13 @@ from repo_helper.files import management
 from repo_helper.files.docs import make_sphinx_config_dict
 from repo_helper.templates import Environment
 from repo_helper.utils import (
-		get_keys,
 		IniConfigurator,
+		get_keys,
 		indent_join,
 		indent_with_tab,
 		license_lookup,
 		reformat_file,
-		resource,
+		resource
 		)
 
 __all__ = [
@@ -231,7 +231,7 @@ def make_pyproject(repo_path: pathlib.Path, templates: Environment) -> List[str]
 	data["project"]["authors"] = [{"name": templates.globals["author"], "email": templates.globals["email"]}]
 	data["project"]["license"] = {"file": "LICENSE"}
 
-	if not (templates.globals["use_flit"] or templates.globals["use_maturin"]) and "dependencies" in data["project"]:
+	if not any(get_keys(templates.globals, "use_flit", "use_maturin")) and "dependencies" in data["project"]:
 		del data["project"]["dependencies"]
 
 	if not templates.globals["use_whey"]:
@@ -579,7 +579,10 @@ class SetupCfgConfig(IniConfigurator):
 					self.copy_existing_value(section, "incremental")
 
 		if "options.entry_points" in self._ini.sections():
-			if self["use_whey"] or self["use_flit"] or self["use_maturin"] or not self._ini["options.entry_points"].options():
+			if (
+					any(get_keys(self._globals, "use_whey", "use_flit", "use_maturin"))
+					or not self._ini["options.entry_points"].options()
+					):
 				self._ini.remove_section("options.entry_points")
 
 		if self["use_whey"] or self["use_flit"] or self["use_maturin"]:
