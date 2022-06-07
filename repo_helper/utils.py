@@ -33,7 +33,7 @@ import textwrap
 from datetime import date, timedelta
 from io import StringIO
 from types import ModuleType
-from typing import Any, Callable, Iterable, List, Optional, Union, no_type_check
+from typing import Any, Callable, Iterable, Iterator, List, Mapping, Optional, TypeVar, Union, no_type_check
 
 # 3rd party
 import dulwich.repo
@@ -77,6 +77,9 @@ __all__ = [
 		"get_license_text",
 		"set_gh_actions_versions",
 		]
+
+KT = TypeVar("KT")
+VT = TypeVar("VT")
 
 #: Under normal circumstances returns :meth:`datetime.date.today`.
 today: date = date.today()
@@ -609,3 +612,15 @@ def get_license_text(
 			organization=author,
 			project=project_name,
 			)
+
+
+def get_keys(mapping: Mapping[KT, VT], *keys: KT) -> Iterator[VT]:
+	r"""
+	Returns an iterator over ``\*keys`` from ``mapping``.
+
+	:param mapping:
+	:param \*keys:
+	"""
+
+	for key in keys:
+		yield mapping[key]

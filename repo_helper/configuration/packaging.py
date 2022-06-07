@@ -43,6 +43,7 @@ __all__ = [
 		"platforms",
 		"use_whey",
 		"use_flit",
+		"use_maturin",
 		]
 
 
@@ -286,6 +287,7 @@ class use_whey(ConfigVar):
 				py_modules,
 				desktopfile,
 				use_flit,
+				use_maturin,
 				)
 
 		for key in disallowed_keys:
@@ -328,6 +330,49 @@ class use_flit(ConfigVar):
 		# Options that the backend is incompatible with
 		if not pure_python.get(raw_config_vars):
 			return False
+
+		disallowed_keys = (
+				additional_setup_args,
+				setup_pre,
+				py_modules,
+				desktopfile,
+				)
+
+		for key in disallowed_keys:
+			if key.get(raw_config_vars):
+				return False
+
+		# Excluded files that the backend is incompatible with
+		disallowed_files = {"setup", "setup_cfg", "pyproject"}
+		for file in disallowed_files:
+			if file in excluded_files:
+				return False
+
+		return super().validate(raw_config_vars)
+
+
+class use_maturin(ConfigVar):
+	r"""
+	Whether to use `maturin <https://maturin.rs/>`_ to build distributions,
+	rather than ``setuptools.build_meta``.
+
+	.. versionadded:: $VERSION
+
+	.. note:: Support for maturin is provisional and experimental.
+	"""  # noqa: D400
+
+	dtype = bool
+	default = False
+	category: str = "packaging"
+
+	@classmethod
+	def validate(cls, raw_config_vars: Optional[Dict[str, Any]] = None) -> Any:  # noqa: D102
+
+		# this package
+		from repo_helper.configuration import desktopfile
+		from repo_helper.configuration.other import exclude_files
+
+		excluded_files = exclude_files.get(raw_config_vars)
 
 		disallowed_keys = (
 				additional_setup_args,

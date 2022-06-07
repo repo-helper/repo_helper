@@ -139,6 +139,7 @@ from repo_helper.configuration.packaging import (
 		py_modules,
 		setup_pre,
 		use_flit,
+		use_maturin,
 		use_whey
 		)
 from repo_helper.configuration.python_versions_ import (
@@ -259,6 +260,7 @@ __all__ = [
 		"docs_fail_on_warning",
 		"use_whey",
 		"use_flit",
+		"use_maturin",
 		"github_ci_requirements",
 		]
 
