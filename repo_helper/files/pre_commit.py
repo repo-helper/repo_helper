@@ -205,7 +205,7 @@ flake2lint = Repo(
 
 pyproject_parser = Repo(
 		repo=make_github_url("repo-helper", "pyproject-parser"),
-		rev="v0.6.1",
+		rev="v0.7.0",
 		hooks=["reformat-pyproject"],  # TODO: add check-pyproject
 		)
 
@@ -244,7 +244,7 @@ def make_pre_commit(repo_path: pathlib.Path, templates: Environment) -> List[str
 
 	domdfcoding_hooks = Repo(
 			repo=make_github_url("domdfcoding", "pre-commit-hooks"),
-			rev="v0.3.0",
+			rev="v0.4.0",
 			hooks=[
 					{"id": "requirements-txt-sorter", "args": ["--allow-git"]},
 					{
@@ -281,11 +281,16 @@ def make_pre_commit(repo_path: pathlib.Path, templates: Environment) -> List[str
 	dep_checker_args = [templates.globals["import_name"].replace('.', '/')]
 
 	if templates.globals["source_dir"]:
-		dep_checker_args.extend(["--work-dir", templates.globals["source_dir"]])
+		dep_checker_args.extend((
+				"--work-dir",
+				templates.globals["source_dir"],
+				"--req-file",
+				"../requirements.txt",
+				))
 
 	dep_checker = Repo(
 			repo=make_github_url("domdfcoding", "dep_checker"),
-			rev="v0.6.2",
+			rev="v0.7.0",
 			hooks=[{"id": "dep_checker", "args": dep_checker_args}]
 			)
 
