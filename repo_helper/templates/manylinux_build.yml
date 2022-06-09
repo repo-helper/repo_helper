@@ -73,6 +73,7 @@ jobs:
 
       - name: "Run Tests"
         run: |
+          sudo rm wheelhouse/{{ import_name }}-*-${{ brace("matrix.config.tag") }}*-linux*.whl
           for whl in wheelhouse/{{ import_name }}-*-{{ tag }}*-manylinux*.whl; do
             # Test tox with wheels
             python -m tox -r -e ${{ brace('matrix.config.testenv') }} --installpkg "$whl"
