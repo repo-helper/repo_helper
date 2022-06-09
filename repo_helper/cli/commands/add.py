@@ -158,6 +158,7 @@ def typed():
 			rh.templates.globals["use_whey"],
 			rh.templates.globals["use_flit"],
 			rh.templates.globals["use_maturin"],
+			rh.templates.globals["use_hatch"],
 			)):
 		content = setup_cfg.read_text()
 

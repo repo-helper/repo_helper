@@ -78,6 +78,9 @@ class CondaRecipeMaker(MaryBerry):
 		elif config["use_maturin"]:
 			config["requires"].append("maturin<0.13,>=0.12.0")
 
+		elif config["use_hatch"]:
+			config["requires"].append("hatchling")
+
 		url = "https://github.com/{username}/{repo_name}".format_map(config)
 		config["urls"] = {
 				"Homepage": url,

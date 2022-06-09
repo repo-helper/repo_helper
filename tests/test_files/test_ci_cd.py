@@ -325,6 +325,7 @@ def test_make_github_mypy_extra_install_only_linux(
 				pytest.param({"use_whey": True}, id="backend_whey"),
 				pytest.param({"use_flit": True}, id="backend_flit"),
 				pytest.param({"use_maturin": True}, id="backend_maturin"),
+				pytest.param({"use_hatch": True}, id="backend_hatch"),
 				pytest.param({}, id="backend_setuptools"),
 				]
 		)

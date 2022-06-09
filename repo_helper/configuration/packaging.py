@@ -44,6 +44,7 @@ __all__ = [
 		"use_whey",
 		"use_flit",
 		"use_maturin",
+		"use_hatch",
 		]
 
 
@@ -288,6 +289,7 @@ class use_whey(ConfigVar):
 				desktopfile,
 				use_flit,
 				use_maturin,
+				use_hatch,
 				)
 
 		for key in disallowed_keys:
@@ -359,6 +361,49 @@ class use_maturin(ConfigVar):
 	.. versionadded:: $VERSION
 
 	.. note:: Support for maturin is provisional and experimental.
+	"""  # noqa: D400
+
+	dtype = bool
+	default = False
+	category: str = "packaging"
+
+	@classmethod
+	def validate(cls, raw_config_vars: Optional[Dict[str, Any]] = None) -> Any:  # noqa: D102
+
+		# this package
+		from repo_helper.configuration import desktopfile
+		from repo_helper.configuration.other import exclude_files
+
+		excluded_files = exclude_files.get(raw_config_vars)
+
+		disallowed_keys = (
+				additional_setup_args,
+				setup_pre,
+				py_modules,
+				desktopfile,
+				)
+
+		for key in disallowed_keys:
+			if key.get(raw_config_vars):
+				return False
+
+		# Excluded files that the backend is incompatible with
+		disallowed_files = {"setup", "setup_cfg", "pyproject"}
+		for file in disallowed_files:
+			if file in excluded_files:
+				return False
+
+		return super().validate(raw_config_vars)
+
+
+class use_hatch(ConfigVar):
+	r"""
+	Whether to use `hatch <https://hatch.pypa.io/latest/>`_ to build distributions,
+	rather than ``setuptools.build_meta``.
+
+	.. versionadded:: $VERSION
+
+	.. note:: Support for hatch is provisional and experimental.
 	"""  # noqa: D400
 
 	dtype = bool

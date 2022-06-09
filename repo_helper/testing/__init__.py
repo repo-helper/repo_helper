@@ -113,6 +113,7 @@ def demo_environment() -> Environment:
 			"use_whey": false,
 			"use_flit": false
 			"use_maturin": false
+			"use_hatch": false
 			"on_conda_forge": false
 			}
 
@@ -177,6 +178,7 @@ def demo_environment() -> Environment:
 					use_whey=False,
 					use_flit=False,
 					use_maturin=False,
+					use_hatch=False,
 					docs_fail_on_warning=False,
 					brace=brace,
 					third_party_version_matrix={},

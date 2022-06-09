@@ -96,7 +96,7 @@ def make_manifest(repo_path: pathlib.Path, templates: Environment) -> List[str]:
 
 	file = PathPlus(repo_path / "MANIFEST.in")
 
-	if any(get_keys(templates.globals, "use_whey", "use_flit", "use_maturin")):
+	if any(get_keys(templates.globals, "use_whey", "use_flit", "use_maturin", "use_hatch")):
 		file.unlink(missing_ok=True)
 
 	else:
@@ -162,13 +162,14 @@ def make_pyproject(repo_path: pathlib.Path, templates: Environment) -> List[str]
 			"whey",
 			"repo-helper",
 			"flit-core<4,>=3.2",
+			"hatchling",
 			*templates.globals["tox_build_requirements"],
 			*data["build-system"].get("requires", [])
 			}
 
 	build_requirements = sorted(combine_requirements(ComparableRequirement(req) for req in build_requirements_))
 
-	if any(get_keys(templates.globals, "use_whey", "use_flit", "use_maturin")):
+	if any(get_keys(templates.globals, "use_whey", "use_flit", "use_maturin", "use_hatch")):
 		for old_dep in ["setuptools", "wheel"]:
 			if old_dep in build_requirements:
 				build_requirements.remove(old_dep)  # type: ignore[arg-type]
@@ -187,6 +188,11 @@ def make_pyproject(repo_path: pathlib.Path, templates: Environment) -> List[str]
 		build_backend = "maturin"
 	elif "maturin<0.13,>=0.12.0" in build_requirements:
 		build_requirements.remove("maturin<0.13,>=0.12.0")  # type: ignore[arg-type]
+
+	if templates.globals["use_hatch"]:
+		build_backend = "hatchling.build"
+	elif "hatchling" in build_requirements:
+		build_requirements.remove("hatchling")  # type: ignore[arg-type]
 
 	if "repo-helper" in build_requirements:
 		build_requirements.remove("repo-helper")  # type: ignore[arg-type]
@@ -231,14 +237,43 @@ def make_pyproject(repo_path: pathlib.Path, templates: Environment) -> List[str]
 	data["project"]["authors"] = [{"name": templates.globals["author"], "email": templates.globals["email"]}]
 	data["project"]["license"] = {"file": "LICENSE"}
 
-	if not any(get_keys(templates.globals, "use_flit", "use_maturin")) and "dependencies" in data["project"]:
+	if not any(get_keys(templates.globals, "use_flit", "use_maturin", "use_hatch")) and "dependencies" in data["project"]:
 		del data["project"]["dependencies"]
 
-	if not templates.globals["use_whey"]:
+	if templates.globals["use_hatch"]:
+		if "dependencies" in data["project"]:
+			data["project"]["dynamic"] = []
+			parsed_requirements, comments, invalid_lines = read_requirements(
+					repo_path / "requirements.txt",
+					include_invalid=True,
+					)
+			if invalid_lines:
+				raise NotImplementedError(f"Unsupported requirement type(s): {invalid_lines}")
+			data["project"]["dependencies"] = sorted(parsed_requirements)
+		else:
+			data["project"]["dynamic"] = ["dependencies"]
+
+		hatch_build = data["tool"].setdefault("hatch", {}).setdefault("build", {})
+		hatch_build.setdefault("sdist", {})
+		hatch_build.setdefault("wheel", {})
+
+		hatch_build["exclude"] = [
+				"/*",
+				f"!{templates.globals['import_name']}",
+				"!requirements.txt",
+				"tests",
+				"doc-source",
+				]
+		hatch_build["sdist"]["include"] = [templates.globals['import_name'], "requirements.txt"]
+		hatch_build["wheel"]["include"] = [templates.globals['import_name']]
+
+	if not any(get_keys(templates.globals, "use_whey", "use_hatch")):
 		data["project"]["dynamic"] = []
 
 		if templates.globals["use_flit"] or templates.globals["use_maturin"]:
-			parsed_requirements, comments, invalid_lines = read_requirements(repo_path / "requirements.txt", include_invalid=True)
+			parsed_requirements, comments, invalid_lines = read_requirements(
+					repo_path / "requirements.txt", include_invalid=True,
+					)
 			if invalid_lines:
 				raise NotImplementedError(f"Unsupported requirement type(s): {invalid_lines}")
 			data["project"]["dependencies"] = sorted(parsed_requirements)
@@ -416,7 +451,7 @@ def make_setup(repo_path: pathlib.Path, templates: Environment) -> List[str]:
 
 	setup_file = PathPlus(repo_path / "setup.py")
 
-	if templates.globals["use_whey"] or templates.globals["use_flit"] or templates.globals["use_maturin"]:
+	if any(get_keys(templates.globals, "use_whey", "use_flit", "use_maturin", "use_hatch")):
 		setup_file.unlink(missing_ok=True)
 
 	else:
@@ -538,7 +573,7 @@ class SetupCfgConfig(IniConfigurator):
 		``[options.entry_points]``.
 		"""
 
-		if self["use_whey"] or self["use_flit"] or self["use_maturin"]:
+		if self["use_whey"] or self["use_flit"] or self["use_maturin"] or self["use_hatch"]:
 			return
 
 		if self["console_scripts"]:
@@ -580,12 +615,12 @@ class SetupCfgConfig(IniConfigurator):
 
 		if "options.entry_points" in self._ini.sections():
 			if (
-					any(get_keys(self._globals, "use_whey", "use_flit", "use_maturin"))
+					any(get_keys(self._globals, "use_whey", "use_flit", "use_maturin", "use_hatch"))
 					or not self._ini["options.entry_points"].options()
 					):
 				self._ini.remove_section("options.entry_points")
 
-		if self["use_whey"] or self["use_flit"] or self["use_maturin"]:
+		if self["use_whey"] or self["use_flit"] or self["use_maturin"] or self["use_hatch"]:
 			self._ini.remove_section("metadata")
 			self._ini.remove_section("options")
 			self._ini.remove_section("options.packages.find")
@@ -621,7 +656,7 @@ def make_setup_cfg(repo_path: pathlib.Path, templates: Environment) -> List[str]
 	:param templates:
 	"""
 
-	# TODO: if "use_whey", "use_flit" or "use_maturin", remove this file, but ensure unmanaged sections are preserved
+	# TODO: if "use_whey", "use_flit" or "use_maturin" or "use_hatch", remove this file, but ensure unmanaged sections are preserved
 
 	SetupCfgConfig(repo_path=repo_path, templates=templates).write_out()
 

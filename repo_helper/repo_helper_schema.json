@@ -473,6 +473,13 @@
       ],
       "description": "Whether to use `flit <https://flit.readthedocs.io/en/latest/>`_ to build distributions, rather than ``setuptools.build_meta``."
     },
+    "use_hatch": {
+      "type": [
+        "boolean",
+        "string"
+      ],
+      "description": "Whether to use `hatch <https://hatch.pypa.io/latest/>`_ to build distributions, rather than ``setuptools.build_meta``."
+    },
     "use_maturin": {
       "type": [
         "boolean",

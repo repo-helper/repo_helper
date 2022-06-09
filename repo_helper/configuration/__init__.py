@@ -139,6 +139,7 @@ from repo_helper.configuration.packaging import (
 		py_modules,
 		setup_pre,
 		use_flit,
+		use_hatch,
 		use_maturin,
 		use_whey
 		)
@@ -261,6 +262,7 @@ __all__ = [
 		"use_whey",
 		"use_flit",
 		"use_maturin",
+		"use_hatch",
 		"github_ci_requirements",
 		]
 

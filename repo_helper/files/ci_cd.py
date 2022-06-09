@@ -709,7 +709,7 @@ def ensure_bumpversion(repo_path: pathlib.Path, templates: Environment) -> List[
 	if not templates.globals["enable_conda"]:
 		old_sections.append(f"bumpversion:file:.github/workflows/conda_ci.yml")
 
-	if any(get_keys(templates.globals, "use_whey", "use_flit", "use_maturin")):
+	if any(get_keys(templates.globals, "use_whey", "use_flit", "use_maturin", "use_hatch")):
 		old_sections.append("bumpversion:file:setup.cfg")
 
 	for section in old_sections:
@@ -766,7 +766,7 @@ def get_bumpversion_filenames(templates: Environment) -> Iterable[str]:
 
 	yield from ["pyproject.toml", "repo_helper.yml", "README.rst"]
 
-	if not any(get_keys(templates.globals, "use_whey", "use_flit", "use_maturin")):
+	if not any(get_keys(templates.globals, "use_whey", "use_flit", "use_maturin", "use_hatch")):
 		yield "setup.cfg"
 
 	if templates.globals["enable_docs"]:
