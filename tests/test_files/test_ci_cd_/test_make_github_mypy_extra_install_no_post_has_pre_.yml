@@ -49,7 +49,7 @@ jobs:
           python -VV
           python -m site
           python -m pip install --upgrade pip setuptools wheel
-          python -m pip install --upgrade tox virtualenv
+          python -m pip install --upgrade tox virtualenv!=20.16.0
 
       - name: Install dependencies (Windows) 🔧
         if: ${{ matrix.os != 'ubuntu-20.04' && steps.changes.outputs.code == 'true' }}
@@ -57,7 +57,7 @@ jobs:
           python -VV
           python -m site
           python -m pip install --upgrade pip setuptools wheel
-          python -m pip install --upgrade tox virtualenv
+          python -m pip install --upgrade tox virtualenv!=20.16.0
 
       - name: "Run mypy"
         if: steps.changes.outputs.code == 'true'

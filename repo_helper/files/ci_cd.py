@@ -441,7 +441,8 @@ class ActionsManager:
 			"python -VV",
 			"python -m site",
 			"python -m pip install --upgrade pip setuptools wheel",
-			"python -m pip install --upgrade tox virtualenv",
+			"python -m pip install --upgrade tox virtualenv!=20.16.0",
+			# Virtualenv 20.16.0 ships broken version of pip (https://github.com/pypa/pip/issues/11294)
 			]
 
 	def _get_additional_requirements(self) -> Iterator[str]:

@@ -245,10 +245,12 @@ class ToxConfig(IniConfigurator):
 		self._ini["tox"]["skip_missing_interpreters"] = True
 		self._ini["tox"]["isolated_build"] = True
 
-		tox_requires = {"pip>=21", *self["tox_requirements"]}
+		tox_requires = {"pip>=21,!=22.2", *self["tox_requirements"]}
 
 		if self["pypi_name"] != "tox-envlist":
 			tox_requires.add("tox-envlist>=0.2.1")
+
+		tox_requires.add("virtualenv!=20.16.0")
 
 		self._ini["tox"]["requires"] = indent_join(sorted(tox_requires))
 
@@ -456,6 +458,7 @@ class ToxConfig(IniConfigurator):
 		self._ini["testenv:perflint"]["skip_install"] = True
 
 		self._ini["testenv:perflint"]["deps"] = "perflint"
+		# self._ini["testenv:perflint"]["deps"] = indent_join(["perflint", "pylint<2.14.0"])
 		cmd = f"python3 -m perflint {self['import_name']} {{posargs}}"
 		self._ini["testenv:perflint"]["commands"] = cmd
 
