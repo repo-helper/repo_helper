@@ -163,6 +163,7 @@ def make_pyproject(repo_path: pathlib.Path, templates: Environment) -> List[str]
 			"repo-helper",
 			"flit-core<4,>=3.2",
 			"hatchling",
+			"maturin<0.13,>=0.12.0",
 			*templates.globals["tox_build_requirements"],
 			*data["build-system"].get("requires", [])
 			}
