@@ -293,7 +293,8 @@ def test_make_github_mypy_extra_install(
 		extra_install_post: List[str],
 		):
 	demo_environment.globals["github_ci_requirements"] = {
-			"Linux": {"pre": extra_install_pre, "post": extra_install_post}
+			"Linux": {"pre": extra_install_pre, "post": extra_install_post},
+			"Windows": {"pre": [], "post": []},
 			}
 
 	assert make_github_mypy(tmp_pathplus, demo_environment) == [".github/workflows/mypy.yml"]

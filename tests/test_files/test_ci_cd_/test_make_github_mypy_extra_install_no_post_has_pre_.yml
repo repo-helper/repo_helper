@@ -51,7 +51,7 @@ jobs:
           python -m pip install --upgrade pip setuptools wheel
           python -m pip install --upgrade tox virtualenv
 
-      - name: Install dependencies (Win/mac) 🔧
+      - name: Install dependencies (Windows) 🔧
         if: ${{ matrix.os != 'ubuntu-20.04' && steps.changes.outputs.code == 'true' }}
         run: |
           python -VV

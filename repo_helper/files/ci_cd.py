@@ -359,6 +359,7 @@ class ActionsManager:
 					])
 			with dependencies_block.with_indent("  ", 2):
 				dependencies_block.extend(self.standard_python_install_lines)
+				dependencies_block.extend(self.templates.globals["github_ci_requirements"]["Linux"]["post"])
 		else:
 			dependencies_block = StringList([
 					"- name: Install dependencies (Linux) 🔧",
@@ -371,12 +372,13 @@ class ActionsManager:
 			if self.templates.globals["platforms"] != ["Linux"]:
 				dependencies_block.blankline(ensure_single=True)
 				dependencies_block.extend([
-						"- name: Install dependencies (Win/mac) 🔧",
+						"- name: Install dependencies (Windows) 🔧",
 						f"  if: ${{{{ matrix.os != '{linux_platform}' && steps.changes.outputs.code == 'true' }}}}",
 						"  run: |",
 						])
 				with dependencies_block.with_indent("  ", 2):
 					dependencies_block.extend(self.standard_python_install_lines)
+					dependencies_block.extend(self.templates.globals["github_ci_requirements"]["Windows"]["post"])
 
 		ci_file.write_clean(
 				template.render(
