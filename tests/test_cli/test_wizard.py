@@ -9,15 +9,16 @@ from coincidence.regressions import AdvancedFileRegressionFixture
 from consolekit.testing import CliRunner, Result
 from domdf_python_tools.paths import PathPlus, in_directory
 from dulwich.config import StackedConfig
+from dulwich.repo import Repo
 
 # this package
 from repo_helper.cli.commands.wizard import wizard
 
 
+@pytest.mark.usefixtures("fixed_date")
 def test_wizard(
 		temp_empty_repo,
 		advanced_file_regression: AdvancedFileRegressionFixture,
-		fixed_date,
 		):
 	with in_directory(temp_empty_repo.path):
 		runner = CliRunner()
@@ -76,10 +77,10 @@ def test_wizard(
 		assert stdout[6] == "Aborted!"
 
 
+@pytest.mark.usefixtures("fixed_date")
 def test_wizard_validation(
 		temp_empty_repo,
 		advanced_file_regression: AdvancedFileRegressionFixture,
-		fixed_date,
 		):
 	with in_directory(temp_empty_repo.path):
 
@@ -116,10 +117,10 @@ def test_wizard_validation(
 		advanced_file_regression.check_file(temp_empty_repo.path / "repo_helper.yml")
 
 
+@pytest.mark.usefixtures("fixed_date")
 def test_wizard_git_config(
 		temp_empty_repo,
 		advanced_file_regression: AdvancedFileRegressionFixture,
-		fixed_date,
 		):
 	with in_directory(temp_empty_repo.path):
 
@@ -155,11 +156,11 @@ def test_wizard_git_config(
 		condition=sys.platform == "win32",
 		reason="Environment variable not being read.",
 		)
+@pytest.mark.usefixtures("fixed_date")
 def test_wizard_env_vars(
-		temp_empty_repo,
+		temp_empty_repo: Repo,
 		advanced_file_regression: AdvancedFileRegressionFixture,
 		monkeypatch,
-		fixed_date,
 		):
 	# Monkeypatch dulwich so it doesn't try to use the global config.
 	monkeypatch.setattr(StackedConfig, "default_backends", lambda *args: [], raising=True)

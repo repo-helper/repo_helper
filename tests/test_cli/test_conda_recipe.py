@@ -5,14 +5,14 @@ import re
 # 3rd party
 from coincidence.regressions import AdvancedFileRegressionFixture
 from consolekit.testing import CliRunner, Result
-from domdf_python_tools.paths import in_directory
+from domdf_python_tools.paths import PathPlus, in_directory
 
 # this package
 from repo_helper.cli.commands.conda_recipe import make_recipe
 
 
 def test_conda_recipe(
-		tmp_pathplus,
+		tmp_pathplus: PathPlus,
 		advanced_file_regression: AdvancedFileRegressionFixture,
 		example_config,
 		):
@@ -52,7 +52,7 @@ def test_conda_recipe(
 
 
 def test_conda_recipe_specifiers(
-		tmp_pathplus,
+		tmp_pathplus: PathPlus,
 		advanced_file_regression: AdvancedFileRegressionFixture,
 		example_config,
 		):
@@ -81,7 +81,7 @@ def test_conda_recipe_specifiers(
 
 
 def test_conda_recipe_extras(
-		tmp_pathplus,
+		tmp_pathplus: PathPlus,
 		advanced_file_regression: AdvancedFileRegressionFixture,
 		example_config,
 		):
@@ -110,7 +110,7 @@ def test_conda_recipe_extras(
 
 
 def test_conda_recipe_no_extras(
-		tmp_pathplus,
+		tmp_pathplus: PathPlus,
 		advanced_file_regression: AdvancedFileRegressionFixture,
 		example_config,
 		):

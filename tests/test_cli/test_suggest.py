@@ -1,9 +1,11 @@
+# stdlib
+from typing import List
+
 # 3rd party
 import pytest
-from coincidence.regressions import AdvancedFileRegressionFixture
+from coincidence.regressions import AdvancedDataRegressionFixture, AdvancedFileRegressionFixture
 from consolekit.testing import CliRunner, Result
-from domdf_python_tools.paths import in_directory
-from pytest_regressions.data_regression import DataRegressionFixture
+from domdf_python_tools.paths import PathPlus, in_directory
 
 # this package
 from repo_helper.cli.commands import suggest
@@ -47,7 +49,7 @@ from repo_helper.cli.commands import suggest
 				("file.src.SH", "Unix Shell"),
 				]
 		)
-def test_suggest_classifiers_filetypes(tmp_pathplus, filename, language):
+def test_suggest_classifiers_filetypes(tmp_pathplus: PathPlus, filename: str, language: str):
 	(tmp_pathplus / "repo_helper.yml").write_lines([
 			"modname: repo_helper",
 			'copyright_years: "2020"',
@@ -75,7 +77,11 @@ def test_suggest_classifiers_filetypes(tmp_pathplus, filename, language):
 
 
 @pytest.mark.parametrize("stage", [1, 2, 3, 4, 5, 6, 7])
-def test_suggest_classifiers_stage(tmp_pathplus, data_regression: DataRegressionFixture, stage):
+def test_suggest_classifiers_stage(
+		tmp_pathplus: PathPlus,
+		advanced_data_regression: AdvancedDataRegressionFixture,
+		stage: int,
+		):
 	(tmp_pathplus / "repo_helper.yml").write_lines([
 			"modname: repo_helper",
 			'copyright_years: "2020"',
@@ -92,14 +98,17 @@ def test_suggest_classifiers_stage(tmp_pathplus, data_regression: DataRegression
 
 	with in_directory(tmp_pathplus):
 		runner = CliRunner()
-		result: Result = runner.invoke(suggest.classifiers, catch_exceptions=False, args=["-s", stage, "-l"])
+		result: Result = runner.invoke(suggest.classifiers, catch_exceptions=False, args=["-s", str(stage), "-l"])
 		assert result.exit_code == 0
 
 	classifiers = result.stdout.splitlines()
-	data_regression.check(classifiers)
+	advanced_data_regression.check(classifiers)
 
 
-def test_suggest_classifiers_add(tmp_pathplus, advanced_file_regression: AdvancedFileRegressionFixture):
+def test_suggest_classifiers_add(
+		tmp_pathplus: PathPlus,
+		advanced_file_regression: AdvancedFileRegressionFixture,
+		):
 	(tmp_pathplus / "repo_helper.yml").write_lines([
 			"modname: repo_helper",
 			'copyright_years: "2020"',
@@ -124,7 +133,10 @@ def test_suggest_classifiers_add(tmp_pathplus, advanced_file_regression: Advance
 	advanced_file_regression.check_file(tmp_pathplus / "repo_helper.yml")
 
 
-def test_suggest_classifiers_add_existing(tmp_pathplus, advanced_file_regression: AdvancedFileRegressionFixture):
+def test_suggest_classifiers_add_existing(
+		tmp_pathplus: PathPlus,
+		advanced_file_regression: AdvancedFileRegressionFixture,
+		):
 	(tmp_pathplus / "repo_helper.yml").write_lines([
 			"modname: repo_helper",
 			'copyright_years: "2020"',
@@ -153,7 +165,7 @@ def test_suggest_classifiers_add_existing(tmp_pathplus, advanced_file_regression
 	advanced_file_regression.check_file(tmp_pathplus / "repo_helper.yml")
 
 
-def test_suggest_classifiers_invalid_input(tmp_pathplus, data_regression: DataRegressionFixture):
+def test_suggest_classifiers_invalid_input(tmp_pathplus: PathPlus):
 	# TODO: other invalid values
 
 	with in_directory(tmp_pathplus):
@@ -203,7 +215,11 @@ Error: Invalid value for '-s' / '--status': 0 is not in the valid range of 1 to 
 				pytest.param(["pytest", "flake8"], id="pytest_flake8"),
 				]
 		)
-def test_suggest_classifiers_requirements(tmp_pathplus, requirements, data_regression):
+def test_suggest_classifiers_requirements(
+		tmp_pathplus: PathPlus,
+		requirements: List[str],
+		advanced_data_regression: AdvancedDataRegressionFixture,
+		):
 	(tmp_pathplus / "repo_helper.yml").write_lines([
 			"modname: repo_helper",
 			'copyright_years: "2020"',
@@ -223,7 +239,7 @@ def test_suggest_classifiers_requirements(tmp_pathplus, requirements, data_regre
 		assert result.exit_code == 0
 
 	classifiers = result.stdout.splitlines()
-	data_regression.check(classifiers)
+	advanced_data_regression.check(classifiers)
 
 
 # TODO: requirements

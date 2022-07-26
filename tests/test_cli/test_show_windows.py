@@ -32,12 +32,10 @@ show_directories = [
 class TestShowRequirements:
 
 	@version_specific
+	@pytest.mark.usefixtures("tmp_repo", "py_version", "fixed_version_number")
 	def test_requirements(
 			self,
-			tmp_repo,
 			advanced_file_regression: AdvancedFileRegressionFixture,
-			py_version,
-			fixed_version_number,
 			):
 		# TODO: depth
 
@@ -50,13 +48,11 @@ class TestShowRequirements:
 			assert result.exit_code == 0
 			result.check_stdout(advanced_file_regression, extension=".tree")
 
+	@pytest.mark.usefixtures("tmp_repo", "py_version", "fixed_version_number")
 	@version_specific
 	def test_requirements_concise(
 			self,
-			tmp_repo,
 			advanced_file_regression: AdvancedFileRegressionFixture,
-			py_version,
-			fixed_version_number,
 			):
 
 		for directory in show_directories:
@@ -77,13 +73,11 @@ class TestShowRequirements:
 			assert result.exit_code == 0
 			result.check_stdout(advanced_file_regression, extension=".tree")
 
+	@pytest.mark.usefixtures("tmp_repo", "py_version", "fixed_version_number")
 	@version_specific
 	def test_requirements_no_pager(
 			self,
-			tmp_repo,
 			advanced_file_regression: AdvancedFileRegressionFixture,
-			py_version,
-			fixed_version_number,
 			):
 
 		for directory in show_directories:

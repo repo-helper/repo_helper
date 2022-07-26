@@ -1,14 +1,14 @@
 # 3rd party
 import pytest
 from consolekit.testing import CliRunner, Result
-from domdf_python_tools.paths import in_directory
+from domdf_python_tools.paths import PathPlus, in_directory
 
 # this package
 from repo_helper.cli.commands.broomstick import broomstick
 
 
 @pytest.fixture()
-def broomstick_tmpdir(tmp_pathplus):
+def broomstick_tmpdir(tmp_pathplus: PathPlus) -> PathPlus:
 	(tmp_pathplus / ".mypy_cache").mkdir()
 	(tmp_pathplus / ".mypy_cache" / "3.7").mkdir()
 
@@ -42,7 +42,7 @@ def broomstick_tmpdir(tmp_pathplus):
 	return tmp_pathplus
 
 
-def test_broomstick(broomstick_tmpdir):
+def test_broomstick(broomstick_tmpdir: PathPlus):
 
 	with in_directory(broomstick_tmpdir):
 		runner = CliRunner()
@@ -67,7 +67,7 @@ def test_broomstick(broomstick_tmpdir):
 	assert not (broomstick_tmpdir / "py_package.egg-info").is_dir()
 
 
-def test_broomstick_detox(broomstick_tmpdir):
+def test_broomstick_detox(broomstick_tmpdir: PathPlus):
 
 	with in_directory(broomstick_tmpdir):
 		runner = CliRunner()

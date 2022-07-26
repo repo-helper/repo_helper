@@ -4,13 +4,13 @@ import re
 
 # 3rd party
 from consolekit.testing import CliRunner, Result
-from domdf_python_tools.paths import in_directory
+from domdf_python_tools.paths import PathPlus, in_directory
 
 # this package
 from repo_helper.cli.commands.make_schema import make_schema
 
 
-def test_make_schema(tmp_pathplus):
+def test_make_schema(tmp_pathplus: PathPlus):
 
 	with in_directory(tmp_pathplus):
 		runner = CliRunner()

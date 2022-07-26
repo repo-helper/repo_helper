@@ -125,7 +125,7 @@ class Bumper:
 		#: The path to the bumpversion configuration file.
 		self.bumpversion_file = self.repo.target_repo / ".bumpversion.cfg"
 
-	def major(self, commit: Optional[bool], message: str):
+	def major(self, commit: Optional[bool], message: str) -> None:
 		"""
 		Bump to the next major version.
 
@@ -136,7 +136,7 @@ class Bumper:
 		new_version = _Version.from_parts((self.current_version.major + 1, 0, 0))
 		self.bump(new_version, commit, message)
 
-	def minor(self, commit: Optional[bool], message: str):
+	def minor(self, commit: Optional[bool], message: str) -> None:
 		"""
 		Bump to the next minor version.
 
@@ -147,7 +147,7 @@ class Bumper:
 		new_version = _Version.from_parts((self.current_version.major, self.current_version.minor + 1, 0))
 		self.bump(new_version, commit, message)
 
-	def patch(self, commit: Optional[bool], message: str):
+	def patch(self, commit: Optional[bool], message: str) -> None:
 		"""
 		Bump to the next patch version.
 
@@ -162,7 +162,7 @@ class Bumper:
 				))
 		self.bump(new_version, commit, message)
 
-	def today(self, commit: Optional[bool], message: str):
+	def today(self, commit: Optional[bool], message: str) -> None:
 		"""
 		Bump to the calver version for today's date.
 
@@ -176,7 +176,7 @@ class Bumper:
 		new_version = _Version.from_parts((today.year, today.month, today.day))
 		self.bump(new_version, commit, message)
 
-	def bump(self, new_version: Version, commit: Optional[bool], message: str):
+	def bump(self, new_version: Version, commit: Optional[bool], message: str) -> None:
 		"""
 		Bump to the given version.
 
@@ -274,7 +274,7 @@ class Bumper:
 
 		return config
 
-	def bump_version_for_file(self, filename: PathLike, config: BumpversionFileConfig):
+	def bump_version_for_file(self, filename: PathLike, config: BumpversionFileConfig) -> None:
 		"""
 		Bumps the version for the given file.
 

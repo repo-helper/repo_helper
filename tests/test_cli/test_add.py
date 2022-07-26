@@ -1,3 +1,6 @@
+# stdlib
+from typing import Iterator
+
 # 3rd party
 import pytest
 import requests
@@ -13,7 +16,7 @@ from repo_helper.cli.commands import add
 
 
 @pytest.fixture()
-def cassette(request: FixtureRequest, monkeypatch):
+def cassette(request: FixtureRequest, monkeypatch) -> Iterator[requests.Session]:
 	"""
 	Provides a Betamax cassette scoped to the test function
 	which record and plays back interactions with the PyPI API.
@@ -37,11 +40,11 @@ def cassette(request: FixtureRequest, monkeypatch):
 				"coincidence",
 				]
 		)
+@pytest.mark.usefixtures("cassette")
 def test_add_requirement(
 		tmp_pathplus: PathPlus,
 		requirement: str,
-		cassette,
-		advanced_file_regression: AdvancedFileRegressionFixture
+		advanced_file_regression: AdvancedFileRegressionFixture,
 		):
 	(tmp_pathplus / "repo_helper.yml").touch()
 	(tmp_pathplus / "requirements.txt").touch()
@@ -65,7 +68,11 @@ def test_add_requirement(
 	advanced_file_regression.check_file(tmp_pathplus / "tests" / "requirements.txt")
 
 
-def test_add_typed(tmp_pathplus: PathPlus, advanced_file_regression: AdvancedFileRegressionFixture, tmp_repo):
+@pytest.mark.usefixtures("tmp_repo")
+def test_add_typed(
+		tmp_pathplus: PathPlus,
+		advanced_file_regression: AdvancedFileRegressionFixture,
+		):
 	(tmp_pathplus / "repo_helper.yml").write_lines([
 			"modname: repo_helper",
 			'copyright_years: "2020"',
@@ -135,8 +142,10 @@ def test_add_typed(tmp_pathplus: PathPlus, advanced_file_regression: AdvancedFil
 	assert stat.staged["delete"] == []
 
 
+@pytest.mark.usefixtures("tmp_repo")
 def test_add_typed_pyproject(
-		tmp_pathplus: PathPlus, advanced_file_regression: AdvancedFileRegressionFixture, tmp_repo
+		tmp_pathplus: PathPlus,
+		advanced_file_regression: AdvancedFileRegressionFixture,
 		):
 	(tmp_pathplus / "repo_helper.yml").write_lines([
 			"modname: importcheck",

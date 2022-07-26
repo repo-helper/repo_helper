@@ -304,7 +304,7 @@ class IniConfigurator:
 
 		self._output.blankline(ensure_single=True)
 
-	def merge_existing(self, ini_file: pathlib.Path):
+	def merge_existing(self, ini_file: pathlib.Path) -> None:
 		"""
 		Merge existing sections in the configuration file into the new configuration.
 
@@ -318,7 +318,7 @@ class IniConfigurator:
 				if section.name not in self.managed_sections:
 					self._ini.add_section(section)
 
-	def write_out(self):
+	def write_out(self) -> None:
 		"""
 		Write out to the ``.ini`` file.
 		"""
@@ -332,7 +332,7 @@ class IniConfigurator:
 		self._output.append(str(self._ini))
 		ini_file.write_lines(self._output)
 
-	def copy_existing_value(self, section: Section, key: str):
+	def copy_existing_value(self, section: Section, key: str) -> None:
 		"""
 		Copy the existing value for ``key``, if present, to the new configuration.
 
@@ -498,7 +498,7 @@ _yaml_round_trip_dumper = YAML(typ="rt")
 _yaml_round_trip_dumper.default_flow_style = False
 
 
-def _round_trip_dump(obj: Any):
+def _round_trip_dump(obj: Any) -> str:
 	stream = StringIO()
 	_yaml_round_trip_dumper.dump(obj, stream=stream)
 	return stream.getvalue()
@@ -554,7 +554,7 @@ def get_license_text(
 		copyright_years: Union[str, int],
 		author: str,
 		project_name: str,
-		):
+		) -> str:
 	"""
 	Obtain the license text for the given license.
 

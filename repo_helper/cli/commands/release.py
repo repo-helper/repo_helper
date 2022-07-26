@@ -68,7 +68,7 @@ def release_options(f: _C) -> _C:
 	return force_deco(commit_deco(message_deco(f)))
 
 
-def resolve_command(self, ctx, args: List[str]) -> Tuple[str, Command, List[str]]:
+def resolve_command(self, ctx: click.Context, args: List[str]) -> Tuple[str, Command, List[str]]:
 	"""
 	Modified version of :class:`click.core.MultiCommand.resolve_command`
 	which bumps the version to the given string if it isn't one of

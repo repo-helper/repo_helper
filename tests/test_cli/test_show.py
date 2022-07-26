@@ -11,7 +11,10 @@ from tests import pypy_windows_dulwich
 
 
 @pypy_windows_dulwich
-def test_version(tmp_repo, advanced_file_regression: AdvancedFileRegressionFixture):
+def test_version(
+		tmp_repo: PathPlus,
+		advanced_file_regression: AdvancedFileRegressionFixture,
+		):
 
 	(tmp_repo / "repo_helper.yml").write_lines([
 			"modname: repo_helper",
@@ -33,7 +36,10 @@ def test_version(tmp_repo, advanced_file_regression: AdvancedFileRegressionFixtu
 
 
 @pypy_windows_dulwich
-def test_changelog(tmp_repo, advanced_file_regression: AdvancedFileRegressionFixture):
+def test_changelog(
+		tmp_repo: PathPlus,
+		advanced_file_regression: AdvancedFileRegressionFixture,
+		):
 
 	# TODO: -n/--entries
 	# TODO: -r/--reverse
@@ -79,13 +85,11 @@ show_directories = [
 @not_pypy("Output differs on PyPy.")
 class TestShowRequirements:
 
+	@pytest.mark.usefixtures("tmp_repo", "py_version", "fixed_version_number")
 	@version_specific
 	def test_requirements(
 			self,
-			tmp_repo,
 			advanced_file_regression: AdvancedFileRegressionFixture,
-			py_version,
-			fixed_version_number,
 			):
 		# TODO: depth
 
@@ -98,13 +102,11 @@ class TestShowRequirements:
 			assert result.exit_code == 0
 			result.check_stdout(advanced_file_regression, extension=".tree")
 
+	@pytest.mark.usefixtures("tmp_repo", "py_version", "fixed_version_number")
 	@version_specific
 	def test_requirements_concise(
 			self,
-			tmp_repo,
 			advanced_file_regression: AdvancedFileRegressionFixture,
-			py_version,
-			fixed_version_number,
 			):
 
 		for directory in show_directories:
@@ -125,13 +127,11 @@ class TestShowRequirements:
 			assert result.exit_code == 0
 			result.check_stdout(advanced_file_regression, extension=".tree")
 
+	@pytest.mark.usefixtures("tmp_repo", "py_version", "fixed_version_number")
 	@version_specific
 	def test_requirements_no_pager(
 			self,
-			tmp_repo,
 			advanced_file_regression: AdvancedFileRegressionFixture,
-			py_version,
-			fixed_version_number,
 			):
 
 		for directory in show_directories:
@@ -147,7 +147,10 @@ class TestShowRequirements:
 
 
 @pypy_windows_dulwich
-def test_log(tmp_repo, advanced_file_regression: AdvancedFileRegressionFixture):
+def test_log(
+		tmp_repo: PathPlus,
+		advanced_file_regression: AdvancedFileRegressionFixture,
+		):
 
 	# TODO: -n/--entries
 	# TODO: -r/--reverse

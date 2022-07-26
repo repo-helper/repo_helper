@@ -78,7 +78,7 @@ class DefaultDict(Dict[_KT, _VT_co]):
 	def set_default(self, key: _KT, default: _VT_co) -> None:
 		self.__defaults[key] = default
 
-	def __getitem__(self, item) -> _VT_co:
+	def __getitem__(self, item) -> _VT_co:  # noqa: MAN001
 		if item not in self and item in self.__defaults:
 			self[item] = self.__defaults[item]
 
@@ -238,16 +238,17 @@ def make_pyproject(repo_path: pathlib.Path, templates: Environment) -> List[str]
 	data["project"]["authors"] = [{"name": templates.globals["author"], "email": templates.globals["email"]}]
 	data["project"]["license"] = {"file": "LICENSE"}
 
-	if not any(get_keys(templates.globals, "use_flit", "use_maturin", "use_hatch")) and "dependencies" in data["project"]:
+	_enabled_backends = get_keys(templates.globals, "use_flit", "use_maturin", "use_hatch")
+	if not any(_enabled_backends) and "dependencies" in data["project"]:
 		del data["project"]["dependencies"]
 
 	if templates.globals["use_hatch"]:
 		if "dependencies" in data["project"]:
 			data["project"]["dynamic"] = []
 			parsed_requirements, comments, invalid_lines = read_requirements(
-					repo_path / "requirements.txt",
-					include_invalid=True,
-					)
+				repo_path / "requirements.txt",
+				include_invalid=True,
+				)
 			if invalid_lines:
 				raise NotImplementedError(f"Unsupported requirement type(s): {invalid_lines}")
 			data["project"]["dependencies"] = sorted(parsed_requirements)
@@ -265,16 +266,17 @@ def make_pyproject(repo_path: pathlib.Path, templates: Environment) -> List[str]
 				"tests",
 				"doc-source",
 				]
-		hatch_build["sdist"]["include"] = [templates.globals['import_name'], "requirements.txt"]
-		hatch_build["wheel"]["include"] = [templates.globals['import_name']]
+		hatch_build["sdist"]["include"] = [templates.globals["import_name"], "requirements.txt"]
+		hatch_build["wheel"]["include"] = [templates.globals["import_name"]]
 
 	if not any(get_keys(templates.globals, "use_whey", "use_hatch")):
 		data["project"]["dynamic"] = []
 
 		if templates.globals["use_flit"] or templates.globals["use_maturin"]:
 			parsed_requirements, comments, invalid_lines = read_requirements(
-					repo_path / "requirements.txt", include_invalid=True,
-					)
+				repo_path / "requirements.txt",
+				include_invalid=True,
+				)
 			if invalid_lines:
 				raise NotImplementedError(f"Unsupported requirement type(s): {invalid_lines}")
 			data["project"]["dependencies"] = sorted(parsed_requirements)
