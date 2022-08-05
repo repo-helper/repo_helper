@@ -46,7 +46,7 @@ repos:
       files: ^repo_helper/.*\.py$
 
  - repo: https://github.com/domdfcoding/flake2lint
-   rev: v0.4.1
+   rev: v0.4.2
    hooks:
     - id: flake2lint
 
