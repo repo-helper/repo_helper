@@ -26,6 +26,7 @@ import sys
 # 3rd party
 import pytest
 from coincidence.regressions import check_file_output, check_file_regression
+from coincidence.selectors import min_version, only_version
 from domdf_python_tools.paths import PathPlus
 from pytest_regressions.file_regression import FileRegressionFixture
 from readme_renderer.rst import render
@@ -36,6 +37,12 @@ from repo_helper.files.readme import rewrite_readme
 from repo_helper.utils import resource
 
 
+@pytest.mark.parametrize(
+		"py_version", [
+				pytest.param("3.6", marks=only_version("3.6")),
+				pytest.param("3.7", marks=min_version("3.7")),
+				]
+		)
 @pytest.mark.parametrize("filename", [
 		"input_a.rst",
 		"input_b.rst",
@@ -43,11 +50,12 @@ from repo_helper.utils import resource
 		"input_d.rst",
 		])
 def test_rewrite_readme(
-		tmp_pathplus,
+		tmp_pathplus: PathPlus,
 		demo_environment,
 		file_regression: FileRegressionFixture,
 		filename,
 		fixed_date,
+		py_version,
 		):
 	demo_environment.globals["version"] = "1.2.3"
 	demo_environment.globals["enable_docs"] = True
@@ -72,6 +80,12 @@ def test_rewrite_readme(
 	check_file_regression(rendered, file_regression, extension=".html")
 
 
+@pytest.mark.parametrize(
+		"py_version", [
+				pytest.param("3.6", marks=only_version("3.6")),
+				pytest.param("3.7", marks=min_version("3.7")),
+				]
+		)
 @pytest.mark.parametrize("filename", [
 		"input_a.rst",
 		"input_b.rst",
@@ -79,11 +93,12 @@ def test_rewrite_readme(
 		"input_d.rst",
 		])
 def test_rewrite_readme_conda_forge(
-		tmp_pathplus,
+		tmp_pathplus: PathPlus,
 		demo_environment,
 		file_regression: FileRegressionFixture,
 		filename,
 		fixed_date,
+		py_version,
 		):
 	demo_environment.globals["version"] = "1.2.3"
 	demo_environment.globals["enable_docs"] = True

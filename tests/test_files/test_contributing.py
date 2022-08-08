@@ -26,6 +26,8 @@ import sys
 # 3rd party
 import pytest
 from coincidence.regressions import check_file_output, check_file_regression
+from coincidence.selectors import min_version, only_version
+from domdf_python_tools.paths import PathPlus
 from pytest_regressions.file_regression import FileRegressionFixture
 from readme_renderer.rst import render
 
@@ -51,7 +53,18 @@ def test_github_bash_block(file_regression: FileRegressionFixture, commands):
 	check_file_regression(github_bash_block(*commands), file_regression, extension=".rst")
 
 
-def test_make_contributing(tmp_pathplus, demo_environment, file_regression: FileRegressionFixture):
+@pytest.mark.parametrize(
+		"py_version", [
+				pytest.param("3.6", marks=only_version("3.6")),
+				pytest.param("3.7", marks=min_version("3.7")),
+				]
+		)
+def test_make_contributing(
+		tmp_pathplus: PathPlus,
+		py_version,
+		demo_environment,
+		file_regression: FileRegressionFixture,
+		):
 	assert make_contributing(tmp_pathplus, demo_environment) == ["CONTRIBUTING.rst", "CONTRIBUTING.md"]
 	assert not (tmp_pathplus / "CONTRIBUTING.md").is_file()
 	assert (tmp_pathplus / "CONTRIBUTING.rst").is_file()

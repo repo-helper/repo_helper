@@ -1,9 +1,12 @@
+# Docutils 0.19+ no longer support Python 3.6 but have differing output which breaks the regression tests.
+asttokens==2.0.5
 backports-entry-points-selectable>=1.0.2
 betamax>=0.8.1
 check-wheel-contents>=0.2.0
 coincidence>=0.2.0
 coverage>=5.1
 coverage-pyver-pragma>=0.2.1
+docutils==0.18.1
 domdf-python-tools[testing]>=2.0.1
 importlib-metadata>=3.6.0
 iniconfig!=1.1.0,>=1.0.1

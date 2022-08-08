@@ -4,7 +4,7 @@ and <a href="https://pre-commit.com" rel="nofollow">pre-commit</a> to maintain c
 <pre>$ python -m pip install pre-commit
 $ pre-commit install
 </pre>
-<div class="section" id="coding-style">
+<div id="coding-style">
 <h2>Coding style</h2>
 <p><a href="https://formate.readthedocs.io" rel="nofollow">formate</a> is used for code formatting.</p>
 <p>It can be run manually via <tt><span class="pre">pre-commit</span></tt>:</p>
@@ -14,7 +14,7 @@ $ pre-commit install
 <pre>$ pre-commit run -a
 </pre>
 </div>
-<div class="section" id="automated-tests">
+<div id="automated-tests">
 <h2>Automated tests</h2>
 <p>Tests are run with <tt>tox</tt> and <tt>pytest</tt>.
 To run tests for a specific Python version, such as Python 3.6:</p>
@@ -24,13 +24,13 @@ To run tests for a specific Python version, such as Python 3.6:</p>
 <pre>$ tox
 </pre>
 </div>
-<div class="section" id="type-annotations">
+<div id="type-annotations">
 <h2>Type Annotations</h2>
 <p>Type annotations are checked using <tt>mypy</tt>. Run <tt>mypy</tt> using <tt>tox</tt>:</p>
 <pre>$ tox -e mypy
 </pre>
 </div>
-<div class="section" id="build-documentation-locally">
+<div id="build-documentation-locally">
 <h2>Build documentation locally</h2>
 <p>The documentation is powered by Sphinx. A local copy of the documentation can be built with <tt>tox</tt>:</p>
 <pre>$ tox -e docs
