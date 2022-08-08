@@ -34,6 +34,7 @@ default_section = "THIRDPARTY"
 known_third_party = [
     "apeye",
     "appdirs",
+    "asttokens",
     "attrs",
     "backports_entry_points_selectable",
     "betamax",
@@ -48,6 +49,7 @@ known_third_party = [
     "coverage_pyver_pragma",
     "css_parser",
     "dict2css",
+    "docutils",
     "dom_toml",
     "domdf_python_tools",
     "dulwich",
