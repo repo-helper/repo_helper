@@ -514,6 +514,7 @@ class ToxConfig(IniConfigurator):
 					"COV_PYTHON_VERSION",
 					"COV_PLATFORM",
 					"COV_PYTHON_IMPLEMENTATION",
+					'*',
 					])
 			self._ini["testenv:coverage"]["changedir"] = "{toxinidir}"
 
