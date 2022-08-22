@@ -293,7 +293,9 @@ class ToxConfig(IniConfigurator):
 		"""
 
 		if self["enable_devmode"]:
-			self._ini["testenv"]["setenv"] = indent_join(("PYTHONDEVMODE=1", "PIP_DISABLE_PIP_VERSION_CHECK=1"))
+			self._ini["testenv"]["setenv"] = indent_join(
+					("PYTHONDEVMODE=1", "PIP_DISABLE_PIP_VERSION_CHECK=1", "SETUPTOOLS_USE_DISTUTILS=stdlib")
+					)
 
 		if self["enable_tests"]:
 
