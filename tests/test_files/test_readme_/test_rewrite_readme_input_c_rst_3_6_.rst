@@ -49,8 +49,8 @@ repo_helper
 	:target: https://github.com/octocat/hello-world/actions?query=workflow%3A%22mypy%22
 	:alt: mypy status
 
-.. |requires| image:: https://dependency-dash.herokuapp.com/github/octocat/hello-world/badge.svg
-	:target: https://dependency-dash.herokuapp.com/github/octocat/hello-world/
+.. |requires| image:: https://dependency-dash.repo-helper.uk/github/octocat/hello-world/badge.svg
+	:target: https://dependency-dash.repo-helper.uk/github/octocat/hello-world/
 	:alt: Requirements Status
 
 .. |coveralls| image:: https://img.shields.io/coveralls/github/octocat/hello-world/master?logo=coveralls

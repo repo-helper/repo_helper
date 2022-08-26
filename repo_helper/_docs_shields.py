@@ -170,7 +170,7 @@ def make_docs_actions_macos_shield(repo_name: str, username: str) -> str:
 
 def make_docs_requires_shield(repo_name: str, username: str) -> str:
 	"""
-	Create a shield to show the `dependency-dash <dependency-dash.herokuapp.com>`_ requirements status.
+	Create a shield to show the `dependency-dash <dependency-dash.repo-helper.uk>`_ requirements status.
 
 	:param repo_name: The name of the repository.
 	:param username: The username of the GitHub account that owns the repository.

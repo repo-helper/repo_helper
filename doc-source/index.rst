@@ -64,8 +64,8 @@ This project is in an early stage, and some things might not work correctly or b
 		:workflow: mypy
 		:alt: mypy status
 
-	.. |requires| image:: https://dependency-dash.herokuapp.com/github/repo-helper/repo_helper/badge.svg
-		:target: https://dependency-dash.herokuapp.com/github/repo-helper/repo_helper/
+	.. |requires| image:: https://dependency-dash.repo-helper.uk/github/repo-helper/repo_helper/badge.svg
+		:target: https://dependency-dash.repo-helper.uk/github/repo-helper/repo_helper/
 		:alt: Requirements Status
 
 	.. |coveralls| coveralls-shield::

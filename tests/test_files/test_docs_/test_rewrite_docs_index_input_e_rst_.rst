@@ -52,8 +52,8 @@ repo_helper
 		:workflow: mypy
 		:alt: mypy status
 
-	.. |requires| image:: https://dependency-dash.herokuapp.com/github/octocat/hello-world/badge.svg
-		:target: https://dependency-dash.herokuapp.com/github/octocat/hello-world/
+	.. |requires| image:: https://dependency-dash.repo-helper.uk/github/octocat/hello-world/badge.svg
+		:target: https://dependency-dash.repo-helper.uk/github/octocat/hello-world/
 		:alt: Requirements Status
 
 	.. |coveralls| coveralls-shield::

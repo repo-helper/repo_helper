@@ -47,8 +47,8 @@
 	:target: https://github.com/octocat/REPO_NAME/actions?query=workflow%3A%22mypy%22
 	:alt: mypy status
 
-.. |requires| image:: https://dependency-dash.herokuapp.com/github/octocat/REPO_NAME/badge.svg
-	:target: https://dependency-dash.herokuapp.com/github/octocat/REPO_NAME/
+.. |requires| image:: https://dependency-dash.repo-helper.uk/github/octocat/REPO_NAME/badge.svg
+	:target: https://dependency-dash.repo-helper.uk/github/octocat/REPO_NAME/
 	:alt: Requirements Status
 
 .. |coveralls| image:: https://img.shields.io/coveralls/github/octocat/REPO_NAME/master?logo=coveralls
