@@ -308,6 +308,9 @@ def make_pre_commit(repo_path: pathlib.Path, templates: Environment) -> List[str
 			'',
 			f"exclude: {templates.globals['pre_commit_exclude']}",
 			'',
+			"ci:",
+			"  autoupdate_schedule: quarterly",
+			'',
 			"repos:",
 			])
 
