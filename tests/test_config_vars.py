@@ -583,8 +583,8 @@ class Test_platforms:
 
 class Test_python_deploy_version(OptionalStringTest):
 	config_var = python_deploy_version
-	test_value = "3.8"
-	default_value = "3.6"
+	test_value = "3.9"
+	default_value = "3.8"
 
 	@property
 	def wrong_values(self) -> List[Dict[str, Any]]:  # noqa: D102
@@ -602,7 +602,7 @@ class Test_python_deploy_version(OptionalStringTest):
 class Test_python_versions(DictTest):
 	config_var = python_versions
 	test_value = {"3.6": {"experimental": True}, "3.7": {}, "pypy3": {"option": "Value"}}
-	default_value = {"3.6": {"experimental": False, "matrix_exclude": {}}}
+	default_value = {"3.8": {"experimental": False, "matrix_exclude": {}}}
 
 	def test_success(self):
 		value = ["3.6", 3.7, "pypy37", "pypy38"]
@@ -641,8 +641,12 @@ class Test_python_versions(DictTest):
 
 		assert self.config_var.get({self.config_var.__name__: {}}) == {}
 		assert self.config_var.get(self.different_key_value) == self.default_value
+
 		assert self.config_var.get() == self.default_value
 		assert self.config_var.get({}) == self.default_value
+
+		expected_3_6 = {"3.6": {"experimental": False, "matrix_exclude": {}}}
+		assert self.config_var.get({**self.different_key_value, "python_versions": [3.6]}) == expected_3_6
 
 	def test_error_list_int(self):
 		"""
