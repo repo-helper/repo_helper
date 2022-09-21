@@ -238,11 +238,12 @@ class mypy_version(ConfigVar):
 	.. versionchanged:: 2021.2.18  The default is now ``0.800``
 	.. versionchanged:: 2021.8.11  The default is now ``0.910``
 	.. versionchanged:: 2022.4.4  The default is now ``0.931``
+	.. versionchanged:: $VERSION  The default is now ``0.971``
 	"""
 
 	dtype = Union[str, float]
 	rtype = str
-	default = "0.942"
+	default = "0.971"
 	category: str = "testing"
 
 
