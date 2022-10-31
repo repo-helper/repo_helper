@@ -87,6 +87,15 @@ py_modules: []
 pypi_name: repo_helper_demo
 python_deploy_version: '3.7'
 python_versions:
+  '3.10':
+    experimental: false
+    matrix_exclude: {}
+  3.11-dev:
+    experimental: true
+    matrix_exclude: {}
+  3.12-dev:
+    experimental: true
+    matrix_exclude: {}
   '3.6':
     experimental: false
     matrix_exclude: {}
@@ -96,8 +105,8 @@ python_versions:
   '3.8':
     experimental: false
     matrix_exclude: {}
-  3.9-dev:
-    experimental: true
+  '3.9':
+    experimental: false
     matrix_exclude: {}
 repo_name: repo_helper_demo
 requires_python: null

@@ -478,7 +478,9 @@ def test_make_github_linux_case_4(
 			"3.7": {"experimental": False},
 			"3.8": {"experimental": False},
 			"3.9": {"experimental": False},
-			"3.10-dev": {"experimental": False}
+			"3.10-dev": {"experimental": False},
+			"3.11-dev": {"experimental": False},
+			"3.12-dev": {"experimental": True},
 			}
 
 	demo_environment.globals["tox_py_versions"] = get_tox_python_versions(
