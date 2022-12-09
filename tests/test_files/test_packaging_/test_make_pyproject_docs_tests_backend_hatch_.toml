@@ -1,5 +1,5 @@
 [build-system]
-requires = [ "hatchling",]
+requires = [ "hatch-requirements-txt",]
 build-backend = "hatchling.build"
 
 [project]
@@ -138,7 +138,14 @@ plugins = [ "my.mypy:plugin",]
 directives = [ "code-block",]
 
 [tool.hatch.build]
-exclude = [ "/*", "!hello_world", "!requirements.txt", "tests", "doc-source",]
+exclude = [
+    "/*",
+    "!/hello_world",
+    "!/hello_world/**/requirements.txt",
+    "!/requirements.txt",
+    "tests",
+    "doc-source",
+]
 
 [tool.dependency-dash."requirements.txt"]
 order = 10
@@ -166,3 +173,6 @@ reformat = true
 [tool.snippet-fmt.languages.ini]
 
 [tool.snippet-fmt.languages.json]
+
+[tool.hatch.metadata.hooks.requirements_txt]
+files = [ "requirements.txt",]
