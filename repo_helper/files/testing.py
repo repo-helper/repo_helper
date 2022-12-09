@@ -245,7 +245,11 @@ class ToxConfig(IniConfigurator):
 		self._ini["tox"]["skip_missing_interpreters"] = True
 		self._ini["tox"]["isolated_build"] = True
 
-		tox_requires = {"pip>=21,!=22.2", *self["tox_requirements"]}
+		tox_requires = {
+				"tox~=3.0",
+				"pip>=21,!=22.2",
+				*self["tox_requirements"],
+				}
 
 		if self["pypi_name"] != "tox-envlist":
 			tox_requires.add("tox-envlist>=0.2.1")
