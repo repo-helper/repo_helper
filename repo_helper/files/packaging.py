@@ -162,6 +162,7 @@ def make_pyproject(repo_path: pathlib.Path, templates: Environment) -> List[str]
 			"whey",
 			"repo-helper",
 			"flit-core<4,>=3.2",
+			"hatchling",
 			"hatch-requirements-txt",
 			"maturin<0.13,>=0.12.0",
 			*templates.globals["tox_build_requirements"],
@@ -192,8 +193,16 @@ def make_pyproject(repo_path: pathlib.Path, templates: Environment) -> List[str]
 
 	if templates.globals["use_hatch"]:
 		build_backend = "hatchling.build"
-	elif "hatch-requirements-txt" in build_requirements:
-		build_requirements.remove("hatch-requirements-txt")  # type: ignore[arg-type]
+		if templates.globals["pypi_name"] == "hatch-requirements-txt":
+			build_requirements.remove("hatch-requirements-txt")  # type: ignore[arg-type]
+		else:
+			build_requirements.remove("hatchling")  # type: ignore[arg-type]
+	else:
+		if "hatch-requirements-txt" in build_requirements:
+			build_requirements.remove("hatch-requirements-txt")  # type: ignore[arg-type]
+		if "hatchling" in build_requirements:
+			build_requirements.remove("hatchling")  # type: ignore[arg-type]
+		
 
 	if "repo-helper" in build_requirements:
 		build_requirements.remove("repo-helper")  # type: ignore[arg-type]
@@ -270,9 +279,10 @@ def make_pyproject(repo_path: pathlib.Path, templates: Environment) -> List[str]
 		hatch_build["sdist"]["include"] = [templates.globals["import_name"], "requirements.txt"]
 		hatch_build["wheel"]["include"] = [templates.globals["import_name"]]
 		
-		hatch_metadata = data["tool"].setdefault("hatch", {}).setdefault("metadata", {})
-		hatch_metadata.setdefault("hooks", {}).setdefault("requirements_txt", {})
-		hatch_metadata["hooks"]["requirements_txt"] = {"files": ["requirements.txt"]}
+		if templates.globals["pypi_name"] != "hatch-requirements-txt":
+			hatch_metadata = data["tool"].setdefault("hatch", {}).setdefault("metadata", {})
+			hatch_metadata.setdefault("hooks", {}).setdefault("requirements_txt", {})
+			hatch_metadata["hooks"]["requirements_txt"] = {"files": ["requirements.txt"]}
 
 	if not any(get_keys(templates.globals, "use_whey", "use_hatch")):
 		data["project"]["dynamic"] = []
