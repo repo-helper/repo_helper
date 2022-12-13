@@ -33,7 +33,7 @@ jobs:
         uses: "actions/checkout@v3"
 
       - name: Set up Python 🐍
-        uses: actions/setup-python@v1
+        uses: "actions/setup-python@v4"
         with:
           python-version: "${{ brace('matrix.config.python-version') }}"
 
@@ -42,7 +42,7 @@ jobs:
           python -VV
           python -m site
           python -m pip install --upgrade pip setuptools wheel
-          python -m pip install --upgrade twine tox
+          python -m pip install --upgrade twine tox~=3.0
 
       - name: Build manylinux2010 Python wheels 🎡
         uses: RalfG/python-wheels-manylinux-build@v0.4.2-manylinux2010_x86_64
