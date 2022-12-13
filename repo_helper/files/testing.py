@@ -90,6 +90,7 @@ class ToxConfig(IniConfigurator):
 			"tox",
 			"envlists",
 			"testenv",
+			"testenv:py312-dev",
 			"testenv:docs",
 			"testenv:build",
 			"testenv:lint",
@@ -359,6 +360,19 @@ class ToxConfig(IniConfigurator):
 		testenv_commands.extend(self["extra_testenv_commands"])
 
 		self._ini["testenv"]["commands"] = indent_join(testenv_commands)
+
+	def testenv_py312_dev(self):
+		"""
+		``[testenv:py312-dev]``.
+		"""
+
+		if "3.12-dev" in self["python_versions"]:
+			if self["enable_devmode"]:
+				self._ini["testenv:py312-dev"]["setenv"] = indent_join(
+						("PYTHONDEVMODE=1", "PIP_DISABLE_PIP_VERSION_CHECK=1")
+						)
+		else:
+			self._ini.remove_section("testenv:py312-dev")
 
 	def testenv_docs(self):
 		"""
