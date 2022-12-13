@@ -366,13 +366,26 @@ class ToxConfig(IniConfigurator):
 		``[testenv:py312-dev]``.
 		"""
 
+		third_party_envs = []
+
+		for third_party_library in self["third_party_version_matrix"]:
+			third_party_versions = self["third_party_version_matrix"][third_party_library]
+			third_party_envs.append(f"testenv:py312-dev-{third_party_library}{{{','.join(third_party_versions)}}}")
+
 		if "3.12-dev" in self["python_versions"]:
 			if self["enable_devmode"]:
 				self._ini["testenv:py312-dev"]["setenv"] = indent_join(
 						("PYTHONDEVMODE=1", "PIP_DISABLE_PIP_VERSION_CHECK=1")
 						)
+
+				for env in third_party_envs:
+					self._ini.add_section(env)
+					self._ini[env]["setenv"] = indent_join(("PYTHONDEVMODE=1", "PIP_DISABLE_PIP_VERSION_CHECK=1"))
+
 		else:
 			self._ini.remove_section("testenv:py312-dev")
+			for env in third_party_envs:
+				self._ini.remove_section(env)
 
 	def testenv_docs(self):
 		"""
@@ -670,6 +683,9 @@ class ToxConfig(IniConfigurator):
 			existing_config.read(str(ini_file))
 
 			for section in existing_config.sections_blocks():
+				if section.name.startswith("testenv:py312-dev-") and section.name in self._ini.sections():
+					continue
+
 				if section.name not in self.managed_sections:
 					self._ini.add_section(section)
 				elif section.name == "coverage:report" and "omit" in section:
