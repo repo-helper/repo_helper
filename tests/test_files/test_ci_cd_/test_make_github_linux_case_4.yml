@@ -23,7 +23,7 @@ jobs:
     runs-on: "ubuntu-20.04"
     continue-on-error: ${{ matrix.config.experimental }}
     env:
-      USING_COVERAGE: '3.6,3.7,3.8,3.9,3.10,3.11,3.12.0-alpha.3'
+      USING_COVERAGE: '3.6,3.7,3.8,3.9,3.10,3.11,3.12.0-alpha.4'
 
     strategy:
       fail-fast: False
@@ -35,7 +35,7 @@ jobs:
           - {python-version: "3.9", testenvs: "py39,build", experimental: False}
           - {python-version: "3.10", testenvs: "py310-dev,build", experimental: False}
           - {python-version: "3.11", testenvs: "py311-dev,build", experimental: False}
-          - {python-version: "3.12.0-alpha.3", testenvs: "py312-dev,build", experimental: True}
+          - {python-version: "3.12.0-alpha.4", testenvs: "py312-dev,build", experimental: True}
 
     steps:
       - name: Checkout 🛎️
@@ -56,7 +56,9 @@ jobs:
         if: ${{ steps.changes.outputs.code == 'true' || steps.changes.outcome == 'skipped' }}
         uses: "actions/setup-python@v4"
         with:
-          python-version: "${{ matrix.config.python-version }}"
+          python-version: |
+            ${{ matrix.config.python-version }}
+            3.8
 
       - name: Install dependencies 🔧
         if: steps.setup-python.outcome == 'success'
