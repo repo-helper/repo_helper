@@ -50,9 +50,7 @@ jobs:
         if: ${{ brace("steps.changes.outputs.code == 'true' || steps.changes.outcome == 'skipped'") }}
         uses: "actions/setup-python@v4"
         with:
-          python-version: |
-            ${{ brace('matrix.config.python-version')}}
-            3.8
+          python-version: "${{ brace('matrix.config.python-version')}}"
 
       - name: Install dependencies 🔧
         if: steps.setup-python.outcome == 'success'
