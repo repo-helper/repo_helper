@@ -1,31 +1,31 @@
 <p><span class="docutils literal"><span class="pre">hello-world</span></span> uses <a href="https://tox.readthedocs.io" rel="nofollow">tox</a> to automate testing and packaging,
 and <a href="https://pre-commit.com" rel="nofollow">pre-commit</a> to maintain code quality.</p>
 <p>Install <span class="docutils literal"><span class="pre">pre-commit</span></span> with <span class="docutils literal">pip</span> and install the git hook:</p>
-<pre><code>$ python -m pip install pre-commit
-$ pre-commit install</code></pre>
+<pre><code>$<span class="w"> </span>python<span class="w"> </span>-m<span class="w"> </span>pip<span class="w"> </span>install<span class="w"> </span>pre-commit<span class="w">
+</span>$<span class="w"> </span>pre-commit<span class="w"> </span>install</code></pre>
 <section id="coding-style">
 <h2>Coding style</h2>
 <p><a href="https://formate.readthedocs.io" rel="nofollow">formate</a> is used for code formatting.</p>
 <p>It can be run manually via <span class="docutils literal"><span class="pre">pre-commit</span></span>:</p>
-<pre><code>$ pre-commit run formate -a</code></pre>
+<pre><code>$<span class="w"> </span>pre-commit<span class="w"> </span>run<span class="w"> </span>formate<span class="w"> </span>-a</code></pre>
 <p>Or, to run the complete autoformatting suite:</p>
-<pre><code>$ pre-commit run -a</code></pre>
+<pre><code>$<span class="w"> </span>pre-commit<span class="w"> </span>run<span class="w"> </span>-a</code></pre>
 </section>
 <section id="automated-tests">
 <h2>Automated tests</h2>
 <p>Tests are run with <span class="docutils literal">tox</span> and <span class="docutils literal">pytest</span>.
 To run tests for a specific Python version, such as Python 3.6:</p>
-<pre><code>$ tox -e py36</code></pre>
+<pre><code>$<span class="w"> </span>tox<span class="w"> </span>-e<span class="w"> </span>py36</code></pre>
 <p>To run tests for all Python versions, simply run:</p>
-<pre><code>$ tox</code></pre>
+<pre><code>$<span class="w"> </span>tox</code></pre>
 </section>
 <section id="type-annotations">
 <h2>Type Annotations</h2>
 <p>Type annotations are checked using <span class="docutils literal">mypy</span>. Run <span class="docutils literal">mypy</span> using <span class="docutils literal">tox</span>:</p>
-<pre><code>$ tox -e mypy</code></pre>
+<pre><code>$<span class="w"> </span>tox<span class="w"> </span>-e<span class="w"> </span>mypy</code></pre>
 </section>
 <section id="build-documentation-locally">
 <h2>Build documentation locally</h2>
 <p>The documentation is powered by Sphinx. A local copy of the documentation can be built with <span class="docutils literal">tox</span>:</p>
-<pre><code>$ tox -e docs</code></pre>
+<pre><code>$<span class="w"> </span>tox<span class="w"> </span>-e<span class="w"> </span>docs</code></pre>
 </section>
