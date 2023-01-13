@@ -202,7 +202,6 @@ def make_pyproject(repo_path: pathlib.Path, templates: Environment) -> List[str]
 			build_requirements.remove("hatch-requirements-txt")  # type: ignore[arg-type]
 		if "hatchling" in build_requirements:
 			build_requirements.remove("hatchling")  # type: ignore[arg-type]
-		
 
 	if "repo-helper" in build_requirements:
 		build_requirements.remove("repo-helper")  # type: ignore[arg-type]
@@ -278,7 +277,7 @@ def make_pyproject(repo_path: pathlib.Path, templates: Environment) -> List[str]
 				]
 		hatch_build["sdist"]["include"] = [templates.globals["import_name"], "requirements.txt"]
 		hatch_build["wheel"]["include"] = [templates.globals["import_name"]]
-		
+
 		if templates.globals["pypi_name"] != "hatch-requirements-txt":
 			hatch_metadata = data["tool"].setdefault("hatch", {}).setdefault("metadata", {})
 			hatch_metadata.setdefault("hooks", {}).setdefault("requirements_txt", {})

@@ -255,7 +255,9 @@ class platforms(ConfigVar):
 	# def validator(value):
 	# 	return [x.lower() for x in value]
 
+
 # TODO: error if multiple of use_whey, use_flit or use_hatch set
+
 
 class use_whey(ConfigVar):
 	r"""
