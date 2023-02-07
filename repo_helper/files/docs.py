@@ -94,6 +94,7 @@ class DocRequirementsManager(RequirementsManager):
 			ComparableRequirement("sphinx-copybutton>=0.2.12"),
 			ComparableRequirement("sphinx-prompt>=1.1.0"),
 			ComparableRequirement("sphinx-pyproject>=0.1.0"),
+			# ComparableRequirement("sphinx-autodoc-typehints==1.11.1"),
 			}
 
 	def __init__(self, repo_path: PathLike, templates: Environment):
@@ -652,7 +653,7 @@ def rewrite_docs_index(repo_path: pathlib.Path, templates: Environment) -> List[
 			index_rst,
 			)
 
-	if ":caption: Links" not in index_rst and not templates.globals["preserve_custom_theme"]:
+	if ".. sidebar-links" not in index_rst and not templates.globals["preserve_custom_theme"]:
 		index_rst = index_rst.replace(
 				".. start links",
 				'\n'.join([
