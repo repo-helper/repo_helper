@@ -749,6 +749,12 @@ def ensure_bumpversion(repo_path: pathlib.Path, templates: Environment) -> List[
 			pp_toml_section["search"] = 'version = "{current_version}"'
 			pp_toml_section["replace"] = 'version = "{new_version}"'
 
+	if "bumpversion:file:.github/workflows/conda_ci.yml" in bv.sections():
+		conda_ci_section = bv["bumpversion:file:.github/workflows/conda_ci.yml"]
+		if "search" not in conda_ci_section:
+			conda_ci_section["search"] = "={current_version}=py_1"
+			conda_ci_section["replace"] = "={new_version}=py_1"
+
 	bv["bumpversion"]["current_version"] = templates.globals["version"]
 	bv["bumpversion"]["commit"] = "True"
 	bv["bumpversion"]["tag"] = "True"
