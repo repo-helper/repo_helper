@@ -90,6 +90,7 @@ class ToxConfig(IniConfigurator):
 			"tox",
 			"envlists",
 			"testenv",
+			"testenv:.package",
 			"testenv:py312-dev",
 			"testenv:docs",
 			"testenv:build",
@@ -387,6 +388,19 @@ class ToxConfig(IniConfigurator):
 			for env in third_party_envs:
 				self._ini.remove_section(env)
 
+	def testenv__package(self):
+		"""
+		``[testenv:.package]``.
+		"""
+
+		if self["enable_devmode"]:
+			self._ini["testenv:.package"]["setenv"] = indent_join(
+					("PYTHONDEVMODE=1", "PIP_DISABLE_PIP_VERSION_CHECK=1")
+					)
+
+		else:
+			self._ini.remove_section("testenv:.package")
+
 	def testenv_docs(self):
 		"""
 		``[testenv:docs]``.
@@ -421,7 +435,9 @@ class ToxConfig(IniConfigurator):
 		"""
 
 		if self["enable_devmode"]:
-			self._ini["testenv:build"]["setenv"] = indent_join(("PYTHONDEVMODE=1", "PIP_DISABLE_PIP_VERSION_CHECK=1"))
+			self._ini["testenv:build"]["setenv"] = indent_join(
+					("PYTHONDEVMODE=1", "PIP_DISABLE_PIP_VERSION_CHECK=1")
+					)
 
 		self._ini["testenv:build"]["skip_install"] = True
 		self._ini["testenv:build"]["changedir"] = "{toxinidir}"
