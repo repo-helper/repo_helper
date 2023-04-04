@@ -33,7 +33,19 @@ import textwrap
 from datetime import date, timedelta
 from io import StringIO
 from types import ModuleType
-from typing import Any, Callable, Iterable, Iterator, List, Mapping, Optional, TypeVar, Union, no_type_check
+from typing import (
+		Any,
+		Callable,
+		ContextManager,
+		Iterable,
+		Iterator,
+		List,
+		Mapping,
+		Optional,
+		TypeVar,
+		Union,
+		no_type_check
+		)
 
 # 3rd party
 import dulwich.repo
@@ -53,7 +65,6 @@ from jinja2 import Environment
 from ruamel.yaml import YAML
 from shippinglabel import normalize
 from southwark import open_repo_closing, status
-from typing_extensions import ContextManager
 
 # this package
 from repo_helper.configupdater2 import ConfigUpdater, Section

@@ -194,7 +194,7 @@ class Bumper:
 
 		dulwich_repo = Repo(self.repo.target_repo)
 
-		if f"v{new_version_str}".encode("UTF-8") in dulwich_repo.refs.as_dict(b"refs/tags"):
+		if f"v{new_version_str}".encode() in dulwich_repo.refs.as_dict(b"refs/tags"):
 			raise abort(f"The tag 'v{new_version_str}' already exists!")
 
 		bumpversion_config = self.get_bumpversion_config(str(self.current_version), new_version_str)
