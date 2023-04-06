@@ -176,7 +176,7 @@ pre_commit_hooks = Repo(
 
 pygrep_hooks = Repo(
 		repo=make_github_url("pre-commit", "pygrep-hooks"),
-		rev="v1.9.0",
+		rev="v1.10.0",
 		hooks=[
 				"python-no-eval",
 				"rst-backticks",
@@ -193,7 +193,7 @@ pyupgrade = Repo(
 
 lucas_c_hooks = Repo(
 		repo=make_github_url("Lucas-C", "pre-commit-hooks"),
-		rev="v1.3.1",
+		rev="v1.5.1",
 		hooks=["remove-crlf", "forbid-crlf"],
 		)
 
