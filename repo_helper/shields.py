@@ -28,6 +28,9 @@ import datetime
 import urllib.parse
 from typing import Union
 
+# 3rd party
+from shippinglabel import normalize
+
 __all__ = [
 		"make_actions_linux_shield",
 		"make_actions_macos_shield",
@@ -70,10 +73,10 @@ def make_rtfd_shield(repo_name: str, target: str = "https://{}.readthedocs.io/en
 	:return: The shield.
 	"""
 
-	target = target.format(repo_name.lower())
+	target = target.format(normalize(repo_name))
 
 	return f"""\
-.. image:: https://img.shields.io/readthedocs/{repo_name.lower()}/latest?logo=read-the-docs
+.. image:: https://img.shields.io/readthedocs/{normalize(repo_name)}/latest?logo=read-the-docs
 	:target: {target}
 	:alt: Documentation Build Status"""
 

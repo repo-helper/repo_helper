@@ -56,6 +56,7 @@ from domdf_python_tools.versions import Version
 from first import first
 from natsort import natsorted
 from ruamel.yaml import YAML
+from shippinglabel import normalize
 
 # this package
 import repo_helper
@@ -384,7 +385,7 @@ class RepoHelperParser(Parser):
 		parsed_config_vars["classifiers"] = natsorted(set(parsed_config_vars["classifiers"]))
 
 		if parsed_config_vars["docs_url"] is None:
-			url = f"https://{parsed_config_vars['repo_name'].lower()}.readthedocs.io/en/latest"
+			url = f"https://{normalize(parsed_config_vars['repo_name'])}.readthedocs.io/en/latest"
 			parsed_config_vars["docs_url"] = url
 
 		parsed_config_vars["conda_channels"] = sorted({

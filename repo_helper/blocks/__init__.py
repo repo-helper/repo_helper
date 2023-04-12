@@ -32,6 +32,7 @@ from typing import Iterable, Optional, Sequence, Union
 from domdf_python_tools.paths import PathPlus
 from domdf_python_tools.stringlist import DelimitedList, StringList
 from jinja2 import BaseLoader, Environment, StrictUndefined, Template
+from shippinglabel import normalize
 
 # this package
 from repo_helper._docs_shields import (
@@ -382,7 +383,7 @@ class ShieldsBlock:
 		self.conda: bool = conda
 		self.tests: bool = tests
 		self.docs: bool = docs
-		self.docs_url: str = docs_url.format(self.repo_name.lower())
+		self.docs_url: str = docs_url.format(normalize(self.repo_name))
 		self.pypi_name: str = pypi_name or repo_name
 		self.unique_name: str = str(unique_name)
 		self.docker_shields: bool = docker_shields

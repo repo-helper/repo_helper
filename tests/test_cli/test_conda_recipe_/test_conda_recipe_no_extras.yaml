@@ -40,7 +40,7 @@ Before installing please ensure you have added the following channels: conda-for
 "
   home: 'https://github.com/domdfcoding/repo_helper'
   dev_url: 'https://github.com/domdfcoding/repo_helper'
-  doc_url: 'https://repo_helper.readthedocs.io/en/latest'
+  doc_url: 'https://repo-helper.readthedocs.io/en/latest'
 
 extra:
   maintainers:

@@ -19,8 +19,8 @@
 	* - Other
 	  - |license| |language| |requires|
 
-.. |docs| image:: https://img.shields.io/readthedocs/repo_name/latest?logo=read-the-docs
-	:target: https://repo_name.readthedocs.io/en/latest/?badge=latest
+.. |docs| image:: https://img.shields.io/readthedocs/repo-name/latest?logo=read-the-docs
+	:target: https://repo-name.readthedocs.io/en/latest/?badge=latest
 	:alt: Documentation Build Status
 
 .. |docs_check| image:: https://github.com/octocat/REPO_NAME/workflows/Docs%20Check/badge.svg

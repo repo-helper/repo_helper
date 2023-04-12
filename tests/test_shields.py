@@ -49,8 +49,8 @@ def test_make_rtfd_shield():
 	assert make_rtfd_shield(
 			"hello_world"
 			) == f"""\
-.. image:: https://img.shields.io/readthedocs/hello_world/latest?logo=read-the-docs
-	:target: https://hello_world.readthedocs.io/en/latest/?badge=latest
+.. image:: https://img.shields.io/readthedocs/hello-world/latest?logo=read-the-docs
+	:target: https://hello-world.readthedocs.io/en/latest/?badge=latest
 	:alt: Documentation Build Status"""
 
 
@@ -73,7 +73,7 @@ def test_make_docs_rtfd_shield():
 			"hello_world"
 			) == """\
 .. rtfd-shield::
-	:project: hello_world
+	:project: hello-world
 	:alt: Documentation Build Status"""
 
 

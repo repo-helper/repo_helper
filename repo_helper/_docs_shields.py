@@ -27,6 +27,9 @@ Shields for use with sphinx-toolbox.
 import datetime
 from typing import Union
 
+# 3rd party
+from shippinglabel import normalize
+
 # this package
 from repo_helper.shields import (
 		make_conda_platform_shield,
@@ -81,7 +84,7 @@ def make_docs_rtfd_shield(repo_name: str, target: str = '') -> str:
 
 	return f"""\
 .. rtfd-shield::
-	:project: {repo_name.lower()}
+	:project: {normalize(repo_name)}
 	:alt: Documentation Build Status"""
 
 
