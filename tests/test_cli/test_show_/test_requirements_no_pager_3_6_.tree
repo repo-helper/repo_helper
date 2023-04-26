@@ -43,7 +43,7 @@ repo_helper==2020.12.18
 │   │   ├── pyrsistent>=0.14.0
 │   │   ├── setuptools
 │   │   └── six>=1.11.0
-│   ├── ruamel-yaml>=0.16.12
+│   ├── ruamel.yaml>=0.16.12
 │   │   └── ruamel.yaml.clib>=0.2.6; platform_python_implementation == "CPython" and python_version < "3.11"
 │   ├── typing-extensions>=3.7.4.3
 │   └── typing-inspect>=0.6.0
