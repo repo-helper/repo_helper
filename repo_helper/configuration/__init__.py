@@ -41,7 +41,8 @@ from typing import (
 		Optional,
 		Sequence,
 		Set,
-		Union
+		Union,
+		cast
 		)
 
 # 3rd party
@@ -270,7 +271,7 @@ __all__ = [
 _REMOVED_KEYS_RE = re.compile("^(use_travis|travis_pypi_secure|travis_site|use_experimental_backend)")
 
 
-def parse_yaml(repo_path: PathLike, allow_unknown_keys: bool = False) -> Dict:
+def parse_yaml(repo_path: PathLike, allow_unknown_keys: bool = False) -> Dict[str, Any]:
 	"""
 	Parse configuration values from ``repo_helper.yml``.
 
@@ -306,7 +307,7 @@ def parse_yaml(repo_path: PathLike, allow_unknown_keys: bool = False) -> Dict:
 		config_file.write_lines(lines_without_removed_keys)
 
 	parser = RepoHelperParser(allow_unknown_keys=allow_unknown_keys)
-	return parser.run(config_file)
+	return cast(Dict[str, Any], parser.run(config_file))
 
 
 all_values: List[ConfigVarMeta] = []
@@ -427,13 +428,13 @@ class YamlEditor(YAML):
 	.. versionadded:: 2020.11.23
 	"""
 
-	width: Optional[int]  # type: ignore[assignment]
+	width: Optional[int]
 
 	#: Whether to preserve quotes when writing to file.
-	preserve_quotes: Optional[bool]  # type: ignore[assignment]
+	preserve_quotes: Optional[bool]
 
 	#: Whether to include an explicit start to the document when writing to file.
-	explicit_start: Optional[bool]  # type: ignore[assignment]
+	explicit_start: Optional[bool]
 
 	def __init__(self, **kwargs):
 		super().__init__(**kwargs)

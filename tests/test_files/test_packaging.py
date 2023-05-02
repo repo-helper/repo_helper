@@ -168,7 +168,7 @@ def test_make_setup_case_2(
 @boolean_option("enable_tests", "tests")
 @boolean_option("enable_docs", "docs")
 def test_make_pyproject(
-		tmp_pathplus,
+		tmp_pathplus: PathPlus,
 		demo_environment,
 		advanced_file_regression: AdvancedFileRegressionFixture,
 		enable_tests: bool,
