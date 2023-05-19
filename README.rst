@@ -33,7 +33,7 @@ Note: The autocommit functionality is currently broken on Windows, but works OK 
 	* - Other
 	  - |license| |language| |requires|
 
-.. |docs| image:: https://img.shields.io/readthedocs/repo_helper/latest?logo=read-the-docs
+.. |docs| image:: https://img.shields.io/readthedocs/repo-helper/latest?logo=read-the-docs
 	:target: https://docs.repo-helper.uk
 	:alt: Documentation Build Status
 
