@@ -17,7 +17,7 @@ repo_helper==2020.12.18
 │       ├── certifi>=2017.4.17
 │       ├── charset-normalizer<4,>=2
 │       ├── idna<4,>=2.5
-│       └── urllib3<1.27,>=1.21.1
+│       └── urllib3<3,>=1.21.1
 ├── attrs>=20.3.0
 ├── click==7.1.2
 ├── configconfig>=0.5.0
@@ -33,7 +33,7 @@ repo_helper==2020.12.18
 │   │   ├── pkgutil-resolve-name>=1.3.10; python_version < "3.9"
 │   │   └── pyrsistent!=0.17.0,!=0.17.1,!=0.17.2,>=0.14.0
 │   ├── ruamel.yaml>=0.16.12
-│   │   └── ruamel.yaml.clib>=0.2.6; platform_python_implementation == "CPython" and python_version < "3.11"
+│   │   └── ruamel.yaml.clib>=0.2.7; platform_python_implementation == "CPython" and python_version < "3.12"
 │   ├── typing-extensions>=3.7.4.3
 │   └── typing-inspect>=0.6.0
 │       ├── mypy-extensions>=0.3.0
@@ -150,7 +150,7 @@ repo_helper==2020.12.18
 │   │   │   │       ├── certifi>=2017.4.17
 │   │   │   │       ├── charset-normalizer<4,>=2
 │   │   │   │       ├── idna<4,>=2.5
-│   │   │   │       └── urllib3<1.27,>=1.21.1
+│   │   │   │       └── urllib3<3,>=1.21.1
 │   │   │   ├── dist-meta>=0.1.2
 │   │   │   │   ├── domdf-python-tools>=3.1.0
 │   │   │   │   │   ├── importlib-metadata>=3.6.0; python_version < "3.9"
@@ -175,6 +175,7 @@ repo_helper==2020.12.18
 │   │   │   ├── platformdirs>=2.3.0
 │   │   │   └── typing-extensions>=3.7.4.3
 │   │   ├── toml>=0.10.2
+│   │   ├── tomli>=1.2.3; python_version < "3.11"
 │   │   └── typing-extensions>=3.7.4.3
 │   ├── shippinglabel-conda>=0.1.0
 │   │   ├── apeye>=1.0.0
@@ -195,7 +196,7 @@ repo_helper==2020.12.18
 │   │   │       ├── certifi>=2017.4.17
 │   │   │       ├── charset-normalizer<4,>=2
 │   │   │       ├── idna<4,>=2.5
-│   │   │       └── urllib3<1.27,>=1.21.1
+│   │   │       └── urllib3<3,>=1.21.1
 │   │   ├── domdf-python-tools>=3.3.0
 │   │   │   ├── importlib-metadata>=3.6.0; python_version < "3.9"
 │   │   │   │   └── zipp>=0.5
@@ -222,7 +223,7 @@ repo_helper==2020.12.18
 │   │       │       ├── certifi>=2017.4.17
 │   │       │       ├── charset-normalizer<4,>=2
 │   │       │       ├── idna<4,>=2.5
-│   │       │       └── urllib3<1.27,>=1.21.1
+│   │       │       └── urllib3<3,>=1.21.1
 │   │       ├── dist-meta>=0.1.2
 │   │       │   ├── domdf-python-tools>=3.1.0
 │   │       │   │   ├── importlib-metadata>=3.6.0; python_version < "3.9"
@@ -265,7 +266,7 @@ repo_helper==2020.12.18
 │   │   │       ├── certifi>=2017.4.17
 │   │   │       ├── charset-normalizer<4,>=2
 │   │   │       ├── idna<4,>=2.5
-│   │   │       └── urllib3<1.27,>=1.21.1
+│   │   │       └── urllib3<3,>=1.21.1
 │   │   ├── dist-meta>=0.5.0
 │   │   │   ├── domdf-python-tools>=3.1.0
 │   │   │   │   ├── importlib-metadata>=3.6.0; python_version < "3.9"
@@ -299,18 +300,18 @@ repo_helper==2020.12.18
 │   │   │   │       ├── certifi>=2017.4.17
 │   │   │   │       ├── charset-normalizer<4,>=2
 │   │   │   │       ├── idna<4,>=2.5
-│   │   │   │       └── urllib3<1.27,>=1.21.1
+│   │   │   │       └── urllib3<3,>=1.21.1
 │   │   │   ├── packaging>=21.0
 │   │   │   └── requests>=2.26.0
 │   │   │       ├── certifi>=2017.4.17
 │   │   │       ├── charset-normalizer<4,>=2
 │   │   │       ├── idna<4,>=2.5
-│   │   │       └── urllib3<1.27,>=1.21.1
+│   │   │       └── urllib3<3,>=1.21.1
 │   │   ├── requests>=2.27.1
 │   │   │   ├── certifi>=2017.4.17
 │   │   │   ├── charset-normalizer<4,>=2
 │   │   │   ├── idna<4,>=2.5
-│   │   │   └── urllib3<1.27,>=1.21.1
+│   │   │   └── urllib3<3,>=1.21.1
 │   │   └── shippinglabel>=1.3.1
 │   │       ├── apeye>=1.0.0
 │   │       │   ├── apeye-core>=1.0.0b2
@@ -330,7 +331,7 @@ repo_helper==2020.12.18
 │   │       │       ├── certifi>=2017.4.17
 │   │       │       ├── charset-normalizer<4,>=2
 │   │       │       ├── idna<4,>=2.5
-│   │       │       └── urllib3<1.27,>=1.21.1
+│   │       │       └── urllib3<3,>=1.21.1
 │   │       ├── dist-meta>=0.1.2
 │   │       │   ├── domdf-python-tools>=3.1.0
 │   │       │   │   ├── importlib-metadata>=3.6.0; python_version < "3.9"
@@ -373,7 +374,7 @@ repo_helper==2020.12.18
 │   │   │       ├── certifi>=2017.4.17
 │   │   │       ├── charset-normalizer<4,>=2
 │   │   │       ├── idna<4,>=2.5
-│   │   │       └── urllib3<1.27,>=1.21.1
+│   │   │       └── urllib3<3,>=1.21.1
 │   │   ├── dist-meta>=0.1.2
 │   │   │   ├── domdf-python-tools>=3.1.0
 │   │   │   │   ├── importlib-metadata>=3.6.0; python_version < "3.9"
@@ -479,7 +480,7 @@ repo_helper==2020.12.18
 │       │   │   │       ├── certifi>=2017.4.17
 │       │   │   │       ├── charset-normalizer<4,>=2
 │       │   │   │       ├── idna<4,>=2.5
-│       │   │   │       └── urllib3<1.27,>=1.21.1
+│       │   │   │       └── urllib3<3,>=1.21.1
 │       │   │   ├── dist-meta>=0.1.2
 │       │   │   │   ├── domdf-python-tools>=3.1.0
 │       │   │   │   │   ├── importlib-metadata>=3.6.0; python_version < "3.9"
@@ -504,6 +505,7 @@ repo_helper==2020.12.18
 │       │   │   ├── platformdirs>=2.3.0
 │       │   │   └── typing-extensions>=3.7.4.3
 │       │   ├── toml>=0.10.2
+│       │   ├── tomli>=1.2.3; python_version < "3.11"
 │       │   └── typing-extensions>=3.7.4.3
 │       └── shippinglabel>=0.16.0
 │           ├── apeye>=1.0.0
@@ -524,7 +526,7 @@ repo_helper==2020.12.18
 │           │       ├── certifi>=2017.4.17
 │           │       ├── charset-normalizer<4,>=2
 │           │       ├── idna<4,>=2.5
-│           │       └── urllib3<1.27,>=1.21.1
+│           │       └── urllib3<3,>=1.21.1
 │           ├── dist-meta>=0.1.2
 │           │   ├── domdf-python-tools>=3.1.0
 │           │   │   ├── importlib-metadata>=3.6.0; python_version < "3.9"
@@ -569,15 +571,15 @@ repo_helper==2020.12.18
 │   │       ├── certifi>=2017.4.17
 │   │       ├── charset-normalizer<4,>=2
 │   │       ├── idna<4,>=2.5
-│   │       └── urllib3<1.27,>=1.21.1
+│   │       └── urllib3<3,>=1.21.1
 │   ├── packaging>=21.0
 │   └── requests>=2.26.0
 │       ├── certifi>=2017.4.17
 │       ├── charset-normalizer<4,>=2
 │       ├── idna<4,>=2.5
-│       └── urllib3<1.27,>=1.21.1
+│       └── urllib3<3,>=1.21.1
 ├── ruamel.yaml>=0.17.4
-│   └── ruamel.yaml.clib>=0.2.6; platform_python_implementation == "CPython" and python_version < "3.11"
+│   └── ruamel.yaml.clib>=0.2.7; platform_python_implementation == "CPython" and python_version < "3.12"
 ├── shippinglabel>=1.0.0
 │   ├── apeye>=1.0.0
 │   │   ├── apeye-core>=1.0.0b2
@@ -597,7 +599,7 @@ repo_helper==2020.12.18
 │   │       ├── certifi>=2017.4.17
 │   │       ├── charset-normalizer<4,>=2
 │   │       ├── idna<4,>=2.5
-│   │       └── urllib3<1.27,>=1.21.1
+│   │       └── urllib3<3,>=1.21.1
 │   ├── dist-meta>=0.1.2
 │   │   ├── domdf-python-tools>=3.1.0
 │   │   │   ├── importlib-metadata>=3.6.0; python_version < "3.9"
@@ -640,7 +642,7 @@ repo_helper==2020.12.18
 │   │       ├── certifi>=2017.4.17
 │   │       ├── charset-normalizer<4,>=2
 │   │       ├── idna<4,>=2.5
-│   │       └── urllib3<1.27,>=1.21.1
+│   │       └── urllib3<3,>=1.21.1
 │   ├── domdf-python-tools>=3.3.0
 │   │   ├── importlib-metadata>=3.6.0; python_version < "3.9"
 │   │   │   └── zipp>=0.5
@@ -667,7 +669,7 @@ repo_helper==2020.12.18
 │       │       ├── certifi>=2017.4.17
 │       │       ├── charset-normalizer<4,>=2
 │       │       ├── idna<4,>=2.5
-│       │       └── urllib3<1.27,>=1.21.1
+│       │       └── urllib3<3,>=1.21.1
 │       ├── dist-meta>=0.1.2
 │       │   ├── domdf-python-tools>=3.1.0
 │       │   │   ├── importlib-metadata>=3.6.0; python_version < "3.9"
@@ -799,7 +801,7 @@ repo_helper==2020.12.18
 │   │   │   │       ├── certifi>=2017.4.17
 │   │   │   │       ├── charset-normalizer<4,>=2
 │   │   │   │       ├── idna<4,>=2.5
-│   │   │   │       └── urllib3<1.27,>=1.21.1
+│   │   │   │       └── urllib3<3,>=1.21.1
 │   │   │   ├── dist-meta>=0.1.2
 │   │   │   │   ├── domdf-python-tools>=3.1.0
 │   │   │   │   │   ├── importlib-metadata>=3.6.0; python_version < "3.9"
@@ -824,6 +826,7 @@ repo_helper==2020.12.18
 │   │   │   ├── platformdirs>=2.3.0
 │   │   │   └── typing-extensions>=3.7.4.3
 │   │   ├── toml>=0.10.2
+│   │   ├── tomli>=1.2.3; python_version < "3.11"
 │   │   └── typing-extensions>=3.7.4.3
 │   └── shippinglabel>=0.16.0
 │       ├── apeye>=1.0.0
@@ -844,7 +847,7 @@ repo_helper==2020.12.18
 │       │       ├── certifi>=2017.4.17
 │       │       ├── charset-normalizer<4,>=2
 │       │       ├── idna<4,>=2.5
-│       │       └── urllib3<1.27,>=1.21.1
+│       │       └── urllib3<3,>=1.21.1
 │       ├── dist-meta>=0.1.2
 │       │   ├── domdf-python-tools>=3.1.0
 │       │   │   ├── importlib-metadata>=3.6.0; python_version < "3.9"
