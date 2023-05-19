@@ -37,7 +37,7 @@ This project is in an early stage, and some things might not work correctly or b
 		  - |license| |language| |requires|
 
 	.. |docs| rtfd-shield::
-		:project: repo_helper
+		:project: repo-helper
 		:alt: Documentation Build Status
 
 	.. |docs_check| actions-shield::
