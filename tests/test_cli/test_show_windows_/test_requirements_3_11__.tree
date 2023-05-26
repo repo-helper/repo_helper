@@ -24,6 +24,7 @@ repo_helper==2020.12.18
 │   │   ├── attrs>=17.4.0
 │   │   └── pyrsistent!=0.17.0,!=0.17.1,!=0.17.2,>=0.14.0
 │   ├── ruamel.yaml>=0.16.12
+│   │   └── ruamel.yaml.clib>=0.2.7; platform_python_implementation == "CPython" and python_version < "3.12"
 │   ├── typing-extensions>=3.7.4.3
 │   └── typing-inspect>=0.6.0
 │       ├── mypy-extensions>=0.3.0
@@ -133,7 +134,6 @@ repo_helper==2020.12.18
 │   │   │   ├── platformdirs>=2.3.0
 │   │   │   └── typing-extensions>=3.7.4.3
 │   │   ├── toml>=0.10.2
-│   │   ├── tomli>=1.2.3; python_version < "3.11"
 │   │   └── typing-extensions>=3.7.4.3
 │   ├── shippinglabel-conda>=0.1.0
 │   │   ├── apeye>=1.0.0
@@ -390,7 +390,6 @@ repo_helper==2020.12.18
 │       │   │   ├── platformdirs>=2.3.0
 │       │   │   └── typing-extensions>=3.7.4.3
 │       │   ├── toml>=0.10.2
-│       │   ├── tomli>=1.2.3; python_version < "3.11"
 │       │   └── typing-extensions>=3.7.4.3
 │       └── shippinglabel>=0.16.0
 │           ├── apeye>=1.0.0
@@ -450,6 +449,7 @@ repo_helper==2020.12.18
 │       ├── idna<4,>=2.5
 │       └── urllib3<3,>=1.21.1
 ├── ruamel.yaml>=0.17.4
+│   └── ruamel.yaml.clib>=0.2.7; platform_python_implementation == "CPython" and python_version < "3.12"
 ├── shippinglabel>=1.0.0
 │   ├── apeye>=1.0.0
 │   │   ├── apeye-core>=1.0.0b2
@@ -640,7 +640,6 @@ repo_helper==2020.12.18
 │   │   │   ├── platformdirs>=2.3.0
 │   │   │   └── typing-extensions>=3.7.4.3
 │   │   ├── toml>=0.10.2
-│   │   ├── tomli>=1.2.3; python_version < "3.11"
 │   │   └── typing-extensions>=3.7.4.3
 │   └── shippinglabel>=0.16.0
 │       ├── apeye>=1.0.0
