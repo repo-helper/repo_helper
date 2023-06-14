@@ -202,11 +202,6 @@ def make_rtfd(repo_path: pathlib.Path, templates: Environment) -> List[str]:
 
 	docs_dir = PathPlus(repo_path / templates.globals["docs_dir"])
 
-	sphinx_config = {
-			"builder": "html",
-			"configuration": f"{templates.globals['docs_dir']}/conf.py",
-			}
-
 	install_requirements = [
 			"requirements.txt",
 			f"{templates.globals['docs_dir']}/requirements.txt",
@@ -217,20 +212,27 @@ def make_rtfd(repo_path: pathlib.Path, templates: Environment) -> List[str]:
 
 	if (docs_dir / "rtd-extra-deps.txt").is_file():
 		install_config.append({"requirements": f"{templates.globals['docs_dir']}/rtd-extra-deps.txt"})
-	elif templates.globals["tox_testenv_extras"]:
-		install_config.append({
-				"method": "pip",
-				"path": '.',
-				"extra_requirements": [templates.globals["tox_testenv_extras"]],
-				})
 
+	if templates.globals["tox_testenv_extras"]:
+		post_create_command = f"pip install .[{templates.globals['tox_testenv_extras']}]"
 	else:
-		install_config.append({"method": "pip", "path": '.'})
-
-	python_config = {"version": 3.8, "install": install_config}
+		post_create_command = "pip install ."
 
 	# Formats: Optionally build your docs in additional formats such as PDF and ePub
-	config = {"version": 2, "sphinx": sphinx_config, "formats": ["pdf", "htmlzip"], "python": python_config}
+	config = {
+			"version": 2,
+			"sphinx": {
+					"builder": "html",
+					"configuration": f"{templates.globals['docs_dir']}/conf.py",
+					},
+			"formats": ["pdf", "htmlzip"],
+			"python": {"install": install_config},
+			"build": {
+					"os": "ubuntu-20.04",
+					"tools": {"python": "3.9"},
+					"jobs": {"post_create_environment": [post_create_command]}
+					}
+			}
 
 	# TODO: support user customisation of search rankings
 	# https://docs.readthedocs.io/en/stable/config-file/v2.html#search-ranking
