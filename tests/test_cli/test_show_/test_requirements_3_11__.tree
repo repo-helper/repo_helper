@@ -134,7 +134,7 @@ repo_helper==2020.12.18
 │   │   │   ├── platformdirs>=2.3.0
 │   │   │   └── typing-extensions>=3.7.4.3
 │   │   ├── toml>=0.10.2
-│   │   └── typing-extensions>=3.7.4.3
+│   │   └── typing-extensions!=4.7.0,>=3.7.4.3
 │   ├── shippinglabel-conda>=0.1.0
 │   │   ├── apeye>=1.0.0
 │   │   │   ├── apeye-core>=1.0.0b2
@@ -390,7 +390,7 @@ repo_helper==2020.12.18
 │       │   │   ├── platformdirs>=2.3.0
 │       │   │   └── typing-extensions>=3.7.4.3
 │       │   ├── toml>=0.10.2
-│       │   └── typing-extensions>=3.7.4.3
+│       │   └── typing-extensions!=4.7.0,>=3.7.4.3
 │       └── shippinglabel>=0.16.0
 │           ├── apeye>=1.0.0
 │           │   ├── apeye-core>=1.0.0b2
@@ -640,7 +640,7 @@ repo_helper==2020.12.18
 │   │   │   ├── platformdirs>=2.3.0
 │   │   │   └── typing-extensions>=3.7.4.3
 │   │   ├── toml>=0.10.2
-│   │   └── typing-extensions>=3.7.4.3
+│   │   └── typing-extensions!=4.7.0,>=3.7.4.3
 │   └── shippinglabel>=0.16.0
 │       ├── apeye>=1.0.0
 │       │   ├── apeye-core>=1.0.0b2
