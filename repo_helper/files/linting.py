@@ -188,7 +188,8 @@ lint_warn_list.extend((
 lint_warn_list.extend((
 		"A001",  # variable "{0}" is shadowing a python builtin
 		"A002",  # argument "{0}" is shadowing a python builtin
-		"A003",  # class attribute "{0}" is shadowing a python builtin
+		# Disabled A003 as it triggers unnecessarily. The odds of shadowing within a class are low
+		# "A003",  # class attribute "{0}" is shadowing a python builtin
 		))
 
 # walrus, py38 only
