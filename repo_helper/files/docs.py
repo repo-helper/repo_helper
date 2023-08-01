@@ -90,9 +90,7 @@ class DocRequirementsManager(RequirementsManager):
 	target_requirements = {
 			ComparableRequirement("sphinxemoji>=0.1.6"),
 			ComparableRequirement("sphinx-notfound-page>=0.5"),
-			ComparableRequirement("sphinx-tabs>=1.1.13"),
 			ComparableRequirement("sphinx-copybutton>=0.2.12"),
-			ComparableRequirement("sphinx-prompt>=1.1.0"),
 			ComparableRequirement("sphinx-pyproject>=0.1.0"),
 			# ComparableRequirement("sphinx-autodoc-typehints==1.11.1"),
 			}
