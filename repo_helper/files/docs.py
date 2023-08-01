@@ -88,9 +88,9 @@ logging.getLogger("CSSUTILS").addFilter(lambda record: False)
 
 class DocRequirementsManager(RequirementsManager):
 	target_requirements = {
-			ComparableRequirement("sphinxemoji>=0.1.6"),
-			ComparableRequirement("sphinx-notfound-page>=0.5"),
-			ComparableRequirement("sphinx-copybutton>=0.2.12"),
+			ComparableRequirement("sphinxemoji>=0.1.6"),  # latest 0.2.0
+			ComparableRequirement("sphinx-notfound-page>=0.5"),  # latest 0.8.3
+			ComparableRequirement("sphinx-copybutton>=0.2.12"),  # latest 0.5.2
 			ComparableRequirement("sphinx-pyproject>=0.1.0"),
 			# ComparableRequirement("sphinx-autodoc-typehints==1.11.1"),
 			}
@@ -111,14 +111,14 @@ class DocRequirementsManager(RequirementsManager):
 
 	# Mapping of pypi_name to version specifier
 	my_sphinx_extensions = {
-			"extras-require": ">=0.2.0",
-			"seed-intersphinx-mapping": ">=0.3.1",
-			"default-values": ">=0.5.0",
-			"toctree-plus": ">=0.5.0",
-			"sphinx-toolbox": ">=2.13.0",
-			"sphinx-debuginfo": ">=0.1.0",
-			"sphinx-licenseinfo": ">=0.1.1",
-			"html-section": ">=0.1.0",
+			"extras-require": ">=0.5.0",
+			"seed-intersphinx-mapping": ">=1.2.2",
+			"default-values": ">=0.6.0",
+			"toctree-plus": ">=0.6.1",
+			"sphinx-toolbox": ">=3.5.0",
+			"sphinx-debuginfo": ">=0.2.2",
+			"sphinx-licenseinfo": ">=0.3.1",
+			"html-section": ">=0.3.0",
 			}
 
 	def compile_target_requirements(self) -> None:
