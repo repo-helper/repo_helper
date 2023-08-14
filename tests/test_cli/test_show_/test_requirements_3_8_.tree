@@ -909,14 +909,14 @@ repo_helper==2020.12.18
     │   ├── asttokens>=2.0.4
     │   │   └── six
     │   ├── attr-utils>=0.5.5
-    │   │   ├── attrs>=19.3.0
-    │   │   ├── domdf-python-tools>=2.9.0
+    │   │   ├── attrs>=21.2.0
+    │   │   ├── domdf-python-tools>=3.6.1
     │   │   │   ├── importlib-metadata>=3.6.0; python_version < "3.9"
     │   │   │   │   └── zipp>=0.5
     │   │   │   ├── natsort>=7.0.1
     │   │   │   └── typing-extensions>=3.7.4.1
     │   │   ├── toolz>=0.11.1
-    │   │   └── typing-extensions>=3.7.4.3
+    │   │   └── typing-extensions>=4.0.0
     │   ├── attrs>=20.3.0
     │   ├── click>=7.1.2
     │   ├── consolekit>=1.0.0

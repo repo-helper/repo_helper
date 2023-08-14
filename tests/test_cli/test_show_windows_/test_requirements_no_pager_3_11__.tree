@@ -21,8 +21,15 @@ repo_helper==2020.12.18
 │   │   ├── natsort>=7.0.1
 │   │   └── typing-extensions>=3.7.4.1
 │   ├── jsonschema>=3.2.0
-│   │   ├── attrs>=17.4.0
-│   │   └── pyrsistent!=0.17.0,!=0.17.1,!=0.17.2,>=0.14.0
+│   │   ├── attrs>=22.2.0
+│   │   ├── jsonschema-specifications>=2023.03.6
+│   │   │   └── referencing>=0.28.0
+│   │   │       ├── attrs>=22.2.0
+│   │   │       └── rpds-py>=0.7.0
+│   │   ├── referencing>=0.28.4
+│   │   │   ├── attrs>=22.2.0
+│   │   │   └── rpds-py>=0.7.0
+│   │   └── rpds-py>=0.7.1
 │   ├── ruamel.yaml>=0.16.12
 │   │   └── ruamel.yaml.clib>=0.2.7; platform_python_implementation == "CPython" and python_version < "3.12"
 │   ├── typing-extensions>=3.7.4.3
@@ -134,7 +141,7 @@ repo_helper==2020.12.18
 │   │   │   ├── platformdirs>=2.3.0
 │   │   │   └── typing-extensions>=3.7.4.3
 │   │   ├── toml>=0.10.2
-│   │   └── typing-extensions>=3.7.4.3
+│   │   └── typing-extensions!=4.7.0,>=3.7.4.3
 │   ├── shippinglabel-conda>=0.1.0
 │   │   ├── apeye>=1.0.0
 │   │   │   ├── apeye-core>=1.0.0b2
@@ -390,7 +397,7 @@ repo_helper==2020.12.18
 │       │   │   ├── platformdirs>=2.3.0
 │       │   │   └── typing-extensions>=3.7.4.3
 │       │   ├── toml>=0.10.2
-│       │   └── typing-extensions>=3.7.4.3
+│       │   └── typing-extensions!=4.7.0,>=3.7.4.3
 │       └── shippinglabel>=0.16.0
 │           ├── apeye>=1.0.0
 │           │   ├── apeye-core>=1.0.0b2
@@ -640,7 +647,7 @@ repo_helper==2020.12.18
 │   │   │   ├── platformdirs>=2.3.0
 │   │   │   └── typing-extensions>=3.7.4.3
 │   │   ├── toml>=0.10.2
-│   │   └── typing-extensions>=3.7.4.3
+│   │   └── typing-extensions!=4.7.0,>=3.7.4.3
 │   └── shippinglabel>=0.16.0
 │       ├── apeye>=1.0.0
 │       │   ├── apeye-core>=1.0.0b2
@@ -702,12 +709,12 @@ repo_helper==2020.12.18
     │   ├── asttokens>=2.0.4
     │   │   └── six
     │   ├── attr-utils>=0.5.5
-    │   │   ├── attrs>=19.3.0
-    │   │   ├── domdf-python-tools>=2.9.0
+    │   │   ├── attrs>=21.2.0
+    │   │   ├── domdf-python-tools>=3.6.1
     │   │   │   ├── natsort>=7.0.1
     │   │   │   └── typing-extensions>=3.7.4.1
     │   │   ├── toolz>=0.11.1
-    │   │   └── typing-extensions>=3.7.4.3
+    │   │   └── typing-extensions>=4.0.0
     │   ├── attrs>=20.3.0
     │   ├── click>=7.1.2
     │   ├── consolekit>=1.0.0
