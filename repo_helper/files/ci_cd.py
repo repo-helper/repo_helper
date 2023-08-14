@@ -210,17 +210,10 @@ class ActionsManager:
 			else:
 				matrix_testenv_string = ''
 
-			# TODO: depends on https://github.com/pyca/cryptography/issues/6924
-			if tox_py_version == "pypy39":
-				output[str(gh_py_version)] = (
-						f"{tox_py_version}{matrix_testenv_string}",
-						metadata["experimental"],
-						)
-			else:
-				output[str(gh_py_version)] = (
-						f"{tox_py_version}{matrix_testenv_string},build",
-						metadata["experimental"],
-						)
+			output[str(gh_py_version)] = (
+					f"{tox_py_version}{matrix_testenv_string},build",
+					metadata["experimental"],
+					)
 
 		return output
 
@@ -232,6 +225,13 @@ class ActionsManager:
 		platform_name = "Windows"
 		ci_file = self.workflows_dir / "python_ci.yml"
 
+		gh_actions_versions = self.get_gh_actions_matrix()
+		if "pypy-3.6" in gh_actions_versions:
+			gh_actions_versions["pypy-3.6"] = (
+					gh_actions_versions["pypy-3.6"][0].replace(",build", ''),
+					gh_actions_versions["pypy-3.6"][1],
+					)
+
 		if platform_name in self.templates.globals["platforms"]:
 			ci_file.write_clean(
 					self.actions.render(
@@ -240,7 +240,7 @@ class ActionsManager:
 							ci_name=platform_name,
 							python_versions=set_gh_actions_versions(self.get_windows_ci_versions()),
 							dependency_lines=self.get_windows_ci_requirements(),
-							gh_actions_versions=self.get_gh_actions_matrix(),
+							gh_actions_versions=gh_actions_versions,
 							code_file_filter=self._code_file_filter,
 							)
 					)
