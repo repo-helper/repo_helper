@@ -37,7 +37,6 @@ Installation
 .. sidebar-links::
 	:caption: Links
 	:github:
-	:pypi: highlight
 
 
 .. start links
