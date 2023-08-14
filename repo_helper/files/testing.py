@@ -439,7 +439,7 @@ class ToxConfig(IniConfigurator):
 
 		if self["enable_devmode"]:
 			self._ini["testenv:build"]["setenv"] = indent_join(
-					("PYTHONDEVMODE=1", "PIP_DISABLE_PIP_VERSION_CHECK=1")
+					("PYTHONDEVMODE=1", "PIP_DISABLE_PIP_VERSION_CHECK=1", "PIP_PREFER_BINARY=1")
 					)
 
 		self._ini["testenv:build"]["skip_install"] = True
