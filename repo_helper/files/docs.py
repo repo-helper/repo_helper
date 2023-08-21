@@ -106,7 +106,7 @@ class DocRequirementsManager(RequirementsManager):
 			"sphinx-rtd-theme": "<0.5",
 			"domdf-sphinx-theme": ">=0.3.0",
 			"repo-helper-sphinx_theme": ">=0.0.2",
-			"furo": ">=2020.11.19b18",
+			"furo": "==2021.06.18b36",
 			}
 
 	# Mapping of pypi_name to version specifier
