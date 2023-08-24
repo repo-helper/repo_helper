@@ -221,8 +221,10 @@ class ToxConfig(IniConfigurator):
 
 				if not third_party_versions:
 					continue
-
-				matrix_testenv_string = f"-{third_party_library}{{{','.join(third_party_versions)}}}"
+				elif len(third_party_versions) == 1:
+					matrix_testenv_string = f"-{third_party_library}{','.join(third_party_versions)}"
+				else:
+					matrix_testenv_string = f"-{third_party_library}{{{','.join(third_party_versions)}}}"
 
 				tox_envs.append(tox_py_version + matrix_testenv_string)
 

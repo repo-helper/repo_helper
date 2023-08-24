@@ -195,25 +195,36 @@ class ActionsManager:
 			tox_py_versions,
 			):
 
+			envs = []
+
 			# TODO: support multi-library matrices
 			if third_party_version_matrix:
-				third_party_library = list(third_party_version_matrix.keys())[0]
-				third_party_versions = third_party_version_matrix[third_party_library]
+				for third_party_library in third_party_version_matrix.keys():
+					third_party_versions = third_party_version_matrix[third_party_library]
 
-				if "matrix_exclude" in metadata:
-					third_party_exclude = list(map(str, metadata["matrix_exclude"].get(third_party_library, [])))
-					third_party_versions = list(
-							filterfalse(third_party_exclude.__contains__, third_party_versions)
-							)
+					if "matrix_exclude" in metadata:
+						third_party_exclude = list(
+								map(str, metadata["matrix_exclude"].get(third_party_library, []))
+								)
+						third_party_versions = list(
+								filterfalse(third_party_exclude.__contains__, third_party_versions)
+								)
 
-				matrix_testenv_string = f"-{third_party_library}{{{','.join(third_party_versions)}}}"
+					if not third_party_versions:
+						continue
+					elif len(third_party_versions) == 1:
+						matrix_testenv_string = f"-{third_party_library}{','.join(third_party_versions)}"
+					else:
+						matrix_testenv_string = f"-{third_party_library}{{{','.join(third_party_versions)}}}"
+
+					envs.append(f"{tox_py_version}{matrix_testenv_string}")
+
+				envs.append("build")
+
 			else:
-				matrix_testenv_string = ''
+				envs = [tox_py_version, "build"]
 
-			output[str(gh_py_version)] = (
-					f"{tox_py_version}{matrix_testenv_string},build",
-					metadata["experimental"],
-					)
+			output[str(gh_py_version)] = (','.join(envs), metadata["experimental"])
 
 		return output
 
