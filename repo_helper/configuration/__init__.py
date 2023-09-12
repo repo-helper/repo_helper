@@ -541,7 +541,7 @@ class YamlEditor(YAML):
 			self.dump_to_file({key: sort_func(new_value)}, filename, mode='a')  # type: ignore[arg-type]
 
 
-_pypy_version_re = re.compile(r"pypy3([0-9])", flags=re.IGNORECASE)
+_pypy_version_re = re.compile(r"pypy3([0-9]+)", flags=re.IGNORECASE)
 
 
 def _pure_version_numbers(*version_numbers) -> Iterator[str]:
