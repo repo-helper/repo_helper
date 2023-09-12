@@ -129,7 +129,14 @@ class python_versions(ConfigVar):
 
 	@staticmethod
 	def _is_experimental(version: str):
-		if version in {"pypy39", "pypy3.9", "pypy310", "pypy3.10", "pypy311", "pypy3.11", }:
+		if version in {
+				"pypy39",
+				"pypy3.9",
+				"pypy310",
+				"pypy3.10",
+				"pypy311",
+				"pypy3.11",
+				}:
 			return True
 
 		try:
