@@ -565,6 +565,7 @@ repo_helper==2020.12.18
 │   ├── dulwich!=0.20.7,!=0.20.8,!=0.20.9,>=0.20.5
 │   │   └── urllib3>=1.25
 │   ├── filelock>=3.0.12
+│   │   └── typing-extensions>=4.7.1; python_version < "3.11"
 │   └── typing-extensions>=3.7.4.3
 ├── tabulate>=0.8.8
 ├── typing-extensions>=3.7.4.3
