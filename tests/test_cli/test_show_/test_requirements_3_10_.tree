@@ -31,7 +31,7 @@ repo_helper==2020.12.18
 │   │   │   └── rpds-py>=0.7.0
 │   │   └── rpds-py>=0.7.1
 │   ├── ruamel.yaml>=0.16.12
-│   │   └── ruamel.yaml.clib>=0.2.7; platform_python_implementation == "CPython" and python_version < "3.12"
+│   │   └── ruamel.yaml.clib>=0.2.7; platform_python_implementation == "CPython" and python_version < "3.13"
 │   ├── typing-extensions>=3.7.4.3
 │   └── typing-inspect>=0.6.0
 │       ├── mypy-extensions>=0.3.0
@@ -458,7 +458,7 @@ repo_helper==2020.12.18
 │       ├── idna<4,>=2.5
 │       └── urllib3<3,>=1.21.1
 ├── ruamel.yaml>=0.17.4
-│   └── ruamel.yaml.clib>=0.2.7; platform_python_implementation == "CPython" and python_version < "3.12"
+│   └── ruamel.yaml.clib>=0.2.7; platform_python_implementation == "CPython" and python_version < "3.13"
 ├── shippinglabel>=1.0.0
 │   ├── apeye>=1.0.0
 │   │   ├── apeye-core>=1.0.0b2
@@ -565,7 +565,6 @@ repo_helper==2020.12.18
 │   ├── dulwich!=0.20.7,!=0.20.8,!=0.20.9,>=0.20.5
 │   │   └── urllib3>=1.25
 │   ├── filelock>=3.0.12
-│   │   └── typing-extensions>=4.7.1; python_version < "3.11"
 │   └── typing-extensions>=3.7.4.3
 ├── tabulate>=0.8.8
 ├── typing-extensions>=3.7.4.3
