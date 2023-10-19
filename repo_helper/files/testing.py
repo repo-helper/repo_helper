@@ -92,6 +92,7 @@ class ToxConfig(IniConfigurator):
 			"testenv",
 			"testenv:.package",
 			"testenv:py312-dev",
+			"testenv:py312",
 			"testenv:docs",
 			"testenv:build",
 			"testenv:lint",
@@ -367,6 +368,9 @@ class ToxConfig(IniConfigurator):
 
 		self._ini["testenv"]["commands"] = indent_join(testenv_commands)
 
+	def testenv_py312(self):
+		pass
+
 	def testenv_py312_dev(self):
 		"""
 		``[testenv:py312-dev]``.
@@ -377,21 +381,25 @@ class ToxConfig(IniConfigurator):
 		for third_party_library in self["third_party_version_matrix"]:
 			third_party_versions = self["third_party_version_matrix"][third_party_library]
 			third_party_envs.append(f"testenv:py312-dev-{third_party_library}{{{','.join(third_party_versions)}}}")
+			third_party_envs.append(f"testenv:py312-{third_party_library}{{{','.join(third_party_versions)}}}")
 
-		if "3.12-dev" in self["python_versions"]:
-			if self["enable_devmode"]:
-				self._ini["testenv:py312-dev"]["setenv"] = indent_join(
-						("PYTHONDEVMODE=1", "PIP_DISABLE_PIP_VERSION_CHECK=1")
-						)
+		for fixup_version in ["3.12-dev", "3.12"]:
+			if fixup_version in self["python_versions"]:
+				if self["enable_devmode"]:
+					self._ini[f"testenv:py{fixup_version.replace('.', '')}"]["setenv"] = indent_join(
+							("PYTHONDEVMODE=1", "PIP_DISABLE_PIP_VERSION_CHECK=1")
+							)
 
+					for env in third_party_envs:
+						self._ini.add_section(env)
+						self._ini[env]["setenv"] = indent_join(
+								("PYTHONDEVMODE=1", "PIP_DISABLE_PIP_VERSION_CHECK=1")
+								)
+
+			else:
+				self._ini.remove_section(f"testenv:py{fixup_version.replace('.', '')}")
 				for env in third_party_envs:
-					self._ini.add_section(env)
-					self._ini[env]["setenv"] = indent_join(("PYTHONDEVMODE=1", "PIP_DISABLE_PIP_VERSION_CHECK=1"))
-
-		else:
-			self._ini.remove_section("testenv:py312-dev")
-			for env in third_party_envs:
-				self._ini.remove_section(env)
+					self._ini.remove_section(env)
 
 	def testenv__package(self):
 		"""
@@ -709,7 +717,7 @@ class ToxConfig(IniConfigurator):
 			existing_config.read(str(ini_file))
 
 			for section in existing_config.sections_blocks():
-				if section.name.startswith("testenv:py312-dev-") and section.name in self._ini.sections():
+				if section.name.startswith("testenv:py312-") and section.name in self._ini.sections():
 					continue
 
 				if section.name not in self.managed_sections:
