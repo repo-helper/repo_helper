@@ -23,6 +23,7 @@
 # 3rd party
 import pytest
 from coincidence.regressions import AdvancedFileRegressionFixture
+from domdf_python_tools.paths import PathPlus
 
 # this package
 from repo_helper.files.bots import (
@@ -35,14 +36,20 @@ from repo_helper.files.bots import (
 from repo_helper.files.old import remove_artefact_cleaner
 
 
-def test_stale_bot(tmp_pathplus, demo_environment, advanced_file_regression: AdvancedFileRegressionFixture):
+def test_stale_bot(
+		tmp_pathplus: PathPlus,
+		demo_environment,
+		advanced_file_regression: AdvancedFileRegressionFixture,
+		):
 	managed_files = make_stale_bot(tmp_pathplus, demo_environment)
 	assert managed_files == [".github/stale.yml"]
 	advanced_file_regression.check_file(tmp_pathplus / managed_files[0])
 
 
 def test_auto_assign_action(
-		tmp_pathplus, demo_environment, advanced_file_regression: AdvancedFileRegressionFixture
+		tmp_pathplus: PathPlus,
+		demo_environment,
+		advanced_file_regression: AdvancedFileRegressionFixture,
 		):
 	wrong_file = tmp_pathplus / ".github" / "workflow" / "assign.yml"
 	wrong_file.parent.mkdir(parents=True)
@@ -65,21 +72,27 @@ def test_auto_assign_action(
 	assert not old_file.is_file()
 
 
-def test_dependabot(tmp_pathplus, demo_environment, advanced_file_regression: AdvancedFileRegressionFixture):
+def test_dependabot(
+		tmp_pathplus: PathPlus,
+		demo_environment,
+		advanced_file_regression: AdvancedFileRegressionFixture,
+		):
 	managed_files = make_dependabot(tmp_pathplus, demo_environment)
 	assert managed_files == [".dependabot/config.yml"]
 	advanced_file_regression.check_file(tmp_pathplus / managed_files[0])
 
 
 def test_make_dependabotv2(
-		tmp_pathplus, demo_environment, advanced_file_regression: AdvancedFileRegressionFixture
+		tmp_pathplus: PathPlus,
+		demo_environment,
+		advanced_file_regression: AdvancedFileRegressionFixture,
 		):
 	managed_files = make_dependabotv2(tmp_pathplus, demo_environment)
 	assert managed_files == [".github/dependabot.yml"]
 	advanced_file_regression.check_file(tmp_pathplus / managed_files[0])
 
 
-def test_artefact_cleaner(tmp_pathplus, demo_environment, advanced_file_regression: AdvancedFileRegressionFixture):
+def test_artefact_cleaner(tmp_pathplus: PathPlus, demo_environment):
 	managed_files = remove_artefact_cleaner(tmp_pathplus, demo_environment)
 	assert managed_files == [".github/workflows/cleanup.yml"]
 	assert not (tmp_pathplus / managed_files[0]).is_file()
@@ -92,7 +105,12 @@ def test_artefact_cleaner(tmp_pathplus, demo_environment, advanced_file_regressi
 				pytest.param(["ignore_dir/*", "**/wildcard_dir/*", "*.jpg"], id="something"),
 				]
 		)
-def test_imgbot(tmp_pathplus, demo_environment, advanced_file_regression: AdvancedFileRegressionFixture, ignore):
+def test_imgbot(
+		tmp_pathplus: PathPlus,
+		demo_environment,
+		advanced_file_regression: AdvancedFileRegressionFixture,
+		ignore,
+		):
 	demo_environment.globals["imgbot_ignore"] = ignore
 
 	managed_files = make_imgbot(tmp_pathplus, demo_environment)

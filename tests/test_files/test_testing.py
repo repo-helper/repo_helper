@@ -22,7 +22,7 @@
 
 # stdlib
 import posixpath
-from typing import Sequence
+from typing import List, Sequence
 
 # 3rd party
 import pytest
@@ -87,7 +87,7 @@ class TestMakeTox:
 			tmp_pathplus: PathPlus,
 			demo_environment,
 			advanced_file_regression: AdvancedFileRegressionFixture,
-			enable_docs,
+			enable_docs: bool,
 			):
 		self.set_globals(demo_environment, enable_docs=enable_docs)
 		make_tox(tmp_pathplus, demo_environment)
@@ -99,7 +99,7 @@ class TestMakeTox:
 			tmp_pathplus: PathPlus,
 			demo_environment,
 			advanced_file_regression: AdvancedFileRegressionFixture,
-			enable_tests,
+			enable_tests: bool,
 			):
 		self.set_globals(demo_environment, enable_tests=enable_tests)
 		make_tox(tmp_pathplus, demo_environment)
@@ -111,7 +111,7 @@ class TestMakeTox:
 			tmp_pathplus: PathPlus,
 			demo_environment,
 			advanced_file_regression: AdvancedFileRegressionFixture,
-			enable_devmode,
+			enable_devmode: bool,
 			):
 		self.set_globals(demo_environment, enable_devmode=enable_devmode)
 		make_tox(tmp_pathplus, demo_environment)
@@ -123,7 +123,7 @@ class TestMakeTox:
 			tmp_pathplus: PathPlus,
 			demo_environment,
 			advanced_file_regression: AdvancedFileRegressionFixture,
-			stubs_package,
+			stubs_package: bool,
 			):
 		self.set_globals(demo_environment, stubs_package=stubs_package)
 		make_tox(tmp_pathplus, demo_environment)
@@ -135,7 +135,7 @@ class TestMakeTox:
 			tmp_pathplus: PathPlus,
 			demo_environment,
 			advanced_file_regression: AdvancedFileRegressionFixture,
-			tox_testenv_extras,
+			tox_testenv_extras: str,
 			):
 		self.set_globals(demo_environment, tox_testenv_extras=tox_testenv_extras)
 		make_tox(tmp_pathplus, demo_environment)
@@ -147,7 +147,7 @@ class TestMakeTox:
 			tmp_pathplus: PathPlus,
 			demo_environment,
 			advanced_file_regression: AdvancedFileRegressionFixture,
-			mypy_deps,
+			mypy_deps: List[str],
 			):
 		self.set_globals(demo_environment, mypy_deps=mypy_deps)
 		make_tox(tmp_pathplus, demo_environment)
@@ -159,7 +159,7 @@ class TestMakeTox:
 			tmp_pathplus: PathPlus,
 			demo_environment,
 			advanced_file_regression: AdvancedFileRegressionFixture,
-			mypy_version,
+			mypy_version: str,
 			):
 		self.set_globals(demo_environment, mypy_version=mypy_version)
 		make_tox(tmp_pathplus, demo_environment)
@@ -171,7 +171,7 @@ class TestMakeTox:
 			tmp_pathplus: PathPlus,
 			demo_environment,
 			advanced_file_regression: AdvancedFileRegressionFixture,
-			python_deploy_version,
+			python_deploy_version: str,
 			):
 		self.set_globals(demo_environment, python_deploy_version=python_deploy_version)
 		make_tox(tmp_pathplus, demo_environment)
@@ -215,7 +215,6 @@ def test_make_yapf(
 def test_make_isort(
 		tmp_pathplus: PathPlus,
 		demo_environment,
-		advanced_file_regression: AdvancedFileRegressionFixture,
 		):
 	managed_files = make_isort(tmp_pathplus, demo_environment)
 	assert managed_files == [".isort.cfg"]
@@ -335,7 +334,7 @@ def test_make_formate_toml_case_3(
 	assert not (tmp_pathplus / managed_files[1]).is_file()
 
 
-def test_ensure_tests_requirements(tmp_pathplus, demo_environment):
+def test_ensure_tests_requirements(tmp_pathplus: PathPlus, demo_environment):
 	(tmp_pathplus / "requirements.txt").touch()
 	(tmp_pathplus / "tests").mkdir()
 	(tmp_pathplus / "tests" / "requirements.txt").write_text('')
@@ -375,7 +374,7 @@ def test_ensure_tests_requirements(tmp_pathplus, demo_environment):
 			]
 
 
-def test_ensure_tests_requirements_extras(tmp_pathplus, demo_environment):
+def test_ensure_tests_requirements_extras(tmp_pathplus: PathPlus, demo_environment):
 	(tmp_pathplus / "requirements.txt").write_text("domdf_python_tools>=1.5.0")
 	(tmp_pathplus / "tests").mkdir()
 	(tmp_pathplus / "tests" / "requirements.txt").write_text("some_package[extra]>=1.5.0")

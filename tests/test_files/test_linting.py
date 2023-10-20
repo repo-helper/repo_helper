@@ -17,7 +17,7 @@ def test_pylintrc(
 	advanced_file_regression.check_file(tmp_pathplus / managed_files[0])
 
 
-def test_lint_roller_removal(tmp_pathplus, demo_environment):
+def test_lint_roller_removal(tmp_pathplus: PathPlus, demo_environment):
 	managed_files = remove_lint_roller(tmp_pathplus, demo_environment)
 	assert managed_files == ["lint_roller.sh"]
 	assert not (tmp_pathplus / managed_files[0]).exists()

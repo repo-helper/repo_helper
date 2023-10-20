@@ -5,7 +5,7 @@ import re
 import pytest
 from click import Abort
 from coincidence.regressions import check_file_regression
-from domdf_python_tools.paths import in_directory
+from domdf_python_tools.paths import PathPlus, in_directory
 from pytest_regressions.data_regression import DataRegressionFixture
 from pytest_regressions.file_regression import FileRegressionFixture
 from southwark import status
@@ -112,7 +112,7 @@ def test_repo_name(temp_repo):
 	assert rh.repo_name == "repo_helper_demo"
 
 
-def test_not_repo_dir(tmp_pathplus, capsys):
+def test_not_repo_dir(tmp_pathplus: PathPlus, capsys):
 	with pytest.raises(Abort):
 		run_repo_helper(tmp_pathplus, force=False, initialise=False, commit=False, message='')
 

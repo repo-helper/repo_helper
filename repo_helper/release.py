@@ -34,7 +34,7 @@ from typing import Any, Dict, Iterable, Optional
 import click
 from consolekit.terminal_colours import Fore
 from consolekit.utils import abort
-from domdf_python_tools.paths import PathPlus, traverse_to_file
+from domdf_python_tools.paths import PathPlus, in_directory, traverse_to_file
 from domdf_python_tools.typing import PathLike
 from dulwich.porcelain import tag_create
 from packaging.version import Version

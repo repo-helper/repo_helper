@@ -369,10 +369,10 @@ class ToxConfig(IniConfigurator):
 
 		self._ini["testenv"]["commands"] = indent_join(testenv_commands)
 
-	def testenv_py312(self):
+	def testenv_py312(self):  # noqa: D102
 		pass
 
-	def testenv_py313_dev(self):
+	def testenv_py313_dev(self):  # noqa: D102
 		pass
 
 	def testenv_py312_dev(self):

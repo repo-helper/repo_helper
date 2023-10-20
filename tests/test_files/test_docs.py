@@ -46,14 +46,14 @@ from repo_helper.files.old import remove_autodoc_augment_defaults
 from repo_helper.utils import resource
 
 
-def test_make_rtfd_case_1(tmp_pathplus, demo_environment, file_regression: FileRegressionFixture):
+def test_make_rtfd_case_1(tmp_pathplus: PathPlus, demo_environment, file_regression: FileRegressionFixture):
 	demo_environment.globals["tox_testenv_extras"] = "all"
 	managed_files = make_rtfd(tmp_pathplus, demo_environment)
 	assert managed_files == [".readthedocs.yml"]
 	check_file_output(tmp_pathplus / managed_files[0], file_regression)
 
 
-def test_make_rtfd_case_2(tmp_pathplus, demo_environment, file_regression: FileRegressionFixture):
+def test_make_rtfd_case_2(tmp_pathplus: PathPlus, demo_environment, file_regression: FileRegressionFixture):
 	demo_environment.globals["tox_testenv_extras"] = "all"
 	demo_environment.globals["additional_requirements_files"] = ["hello_world/submodule/requirements.txt"]
 	demo_environment.globals["docs_dir"] = "userguide"
@@ -63,7 +63,7 @@ def test_make_rtfd_case_2(tmp_pathplus, demo_environment, file_regression: FileR
 	check_file_output(tmp_pathplus / managed_files[0], file_regression)
 
 
-def test_make_404_page(tmp_pathplus, demo_environment):
+def test_make_404_page(tmp_pathplus: PathPlus, demo_environment):
 	(tmp_pathplus / "doc-source").mkdir()
 
 	managed_files = make_404_page(tmp_pathplus, demo_environment)
@@ -72,7 +72,7 @@ def test_make_404_page(tmp_pathplus, demo_environment):
 		assert (tmp_pathplus / filename).is_file()
 
 
-def test_make_docs_source_rst(tmp_pathplus, demo_environment):
+def test_make_docs_source_rst(tmp_pathplus: PathPlus, demo_environment):
 	(tmp_pathplus / "doc-source").mkdir()
 
 	managed_files = make_docs_source_rst(tmp_pathplus, demo_environment)
@@ -93,7 +93,7 @@ def test_make_docs_source_rst(tmp_pathplus, demo_environment):
 
 
 def test_make_docs_license_rst(
-		tmp_pathplus,
+		tmp_pathplus: PathPlus,
 		demo_environment,
 		advanced_file_regression: AdvancedFileRegressionFixture,
 		):
@@ -108,7 +108,7 @@ def test_make_docs_license_rst(
 	advanced_file_regression.check_file(tmp_pathplus / managed_files[0])
 
 
-def test_ensure_doc_requirements(tmp_pathplus, demo_environment):
+def test_ensure_doc_requirements(tmp_pathplus: PathPlus, demo_environment):
 	(tmp_pathplus / "requirements.txt").write_text('')
 	(tmp_pathplus / "doc-source").mkdir()
 	(tmp_pathplus / "doc-source" / "requirements.txt").write_text('')
@@ -160,7 +160,7 @@ def test_ensure_doc_requirements(tmp_pathplus, demo_environment):
 			]
 
 
-def test_make_docutils_conf(tmp_pathplus, demo_environment, file_regression):
+def test_make_docutils_conf(tmp_pathplus: PathPlus, demo_environment, file_regression):
 	managed_files = make_docutils_conf(tmp_pathplus, demo_environment)
 	assert managed_files == ["doc-source/docutils.conf"]
 	check_file_output(tmp_pathplus / managed_files[0], file_regression)
@@ -172,7 +172,7 @@ def test_make_docutils_conf(tmp_pathplus, demo_environment, file_regression):
 		"domdf-sphinx-theme",
 		"furo",
 		])
-def test_make_conf(tmp_pathplus, demo_environment, file_regression, theme):
+def test_make_conf(tmp_pathplus: PathPlus, demo_environment, file_regression, theme):
 	demo_environment.globals["sphinx_html_theme"] = theme
 
 	# TODO: with values for these
@@ -195,7 +195,7 @@ def test_make_readthedocs_theming(file_regression):
 	check_file_regression(make_readthedocs_theming(), file_regression, "style.css")
 
 
-def test_remove_autodoc_augment_defaults(tmp_pathplus, demo_environment):
+def test_remove_autodoc_augment_defaults(tmp_pathplus: PathPlus, demo_environment):
 	(tmp_pathplus / "doc-source").mkdir(parents=True)
 	(tmp_pathplus / "doc-source" / "autodoc_augment_defaults.py").touch()
 	assert (tmp_pathplus / "doc-source" / "autodoc_augment_defaults.py").is_file()
@@ -211,7 +211,7 @@ def test_remove_autodoc_augment_defaults(tmp_pathplus, demo_environment):
 		"domdf-sphinx-theme",
 		"furo",
 		])
-def test_copy_docs_styling(tmp_pathplus, demo_environment, file_regression, theme):
+def test_copy_docs_styling(tmp_pathplus: PathPlus, demo_environment, file_regression, theme):
 	demo_environment.globals["sphinx_html_theme"] = theme
 	managed_files = copy_docs_styling(tmp_pathplus, demo_environment)
 	assert managed_files == [
@@ -241,7 +241,7 @@ def test_copy_docs_styling(tmp_pathplus, demo_environment, file_regression, them
 				]
 		)
 def test_rewrite_docs_index(
-		tmp_pathplus,
+		tmp_pathplus: PathPlus,
 		demo_environment,
 		file_regression: FileRegressionFixture,
 		filename,
@@ -282,7 +282,7 @@ def test_rewrite_docs_index(
 				]
 		)
 def test_rewrite_docs_index_conda_forge(
-		tmp_pathplus,
+		tmp_pathplus: PathPlus,
 		demo_environment,
 		file_regression: FileRegressionFixture,
 		filename,

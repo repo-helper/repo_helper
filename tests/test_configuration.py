@@ -1,5 +1,6 @@
 # 3rd party
 import pytest
+from domdf_python_tools.paths import PathPlus
 from pytest_regressions.data_regression import DataRegressionFixture
 
 # this package
@@ -23,6 +24,6 @@ def test_get_tox_python_versions(data_regression: DataRegressionFixture, python_
 	data_regression.check(get_tox_python_versions(python_versions))
 
 
-def test_parse_yaml(tmp_pathplus, data_regression, example_config):
+def test_parse_yaml(tmp_pathplus: PathPlus, data_regression, example_config):
 	(tmp_pathplus / "repo_helper.yml").write_text(example_config)
 	data_regression.check(parse_yaml(tmp_pathplus))

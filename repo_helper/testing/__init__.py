@@ -202,7 +202,7 @@ FAKE_DATE = datetime.date(2020, 7, 25)
 
 
 @pytest.fixture()
-def temp_empty_repo(tmp_pathplus, monkeypatch) -> Repo:
+def temp_empty_repo(tmp_pathplus: PathPlus, monkeypatch) -> Repo:
 	"""
 	Pytest fixture to return an empty git repository in a temporary location.
 

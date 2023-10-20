@@ -209,7 +209,7 @@ def test_make_github_manylinux_pure_python(
 @pytest.mark.parametrize("fail_on_warning", [True, False])
 @boolean_option("enable_tests", "tests")
 def test_make_github_docs_test(
-		tmp_pathplus,
+		tmp_pathplus: PathPlus,
 		demo_environment,
 		advanced_file_regression: AdvancedFileRegressionFixture,
 		fail_on_warning,
@@ -232,7 +232,9 @@ def test_make_github_docs_test(
 
 
 def test_make_github_octocheese(
-		tmp_pathplus, demo_environment, advanced_file_regression: AdvancedFileRegressionFixture
+		tmp_pathplus: PathPlus,
+		demo_environment,
+		advanced_file_regression: AdvancedFileRegressionFixture,
 		):
 	assert make_github_octocheese(tmp_pathplus, demo_environment) == [".github/workflows/octocheese.yml"]
 	assert (tmp_pathplus / ".github/workflows/octocheese.yml").is_file()
@@ -243,7 +245,7 @@ def test_make_github_octocheese(
 
 
 def test_make_github_flake8(
-		tmp_pathplus,
+		tmp_pathplus: PathPlus,
 		demo_environment,
 		advanced_file_regression: AdvancedFileRegressionFixture,
 		):

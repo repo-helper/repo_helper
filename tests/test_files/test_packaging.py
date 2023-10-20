@@ -53,7 +53,7 @@ def boolean_option(name: str, id: str):  # noqa: A002  # pylint: disable=redefin
 				]
 		)
 def test_make_manifest_case_1(
-		tmp_pathplus,
+		tmp_pathplus: PathPlus,
 		demo_environment,
 		advanced_file_regression: AdvancedFileRegressionFixture,
 		stubs_package,
@@ -73,7 +73,7 @@ def test_make_manifest_case_1(
 
 
 def test_make_manifest_case_2(
-		tmp_pathplus,
+		tmp_pathplus: PathPlus,
 		demo_environment,
 		advanced_file_regression: AdvancedFileRegressionFixture,
 		):
@@ -98,7 +98,7 @@ def test_make_manifest_case_2(
 				]
 		)
 def test_make_setup_case_1(
-		tmp_pathplus,
+		tmp_pathplus: PathPlus,
 		demo_environment,
 		advanced_file_regression: AdvancedFileRegressionFixture,
 		other_opts: Dict[str, Any],
@@ -127,7 +127,7 @@ def test_make_setup_case_1(
 				]
 		)
 def test_make_setup_case_2(
-		tmp_pathplus,
+		tmp_pathplus: PathPlus,
 		demo_environment,
 		advanced_file_regression: AdvancedFileRegressionFixture,
 		other_opts: Dict[str, Any],
@@ -348,7 +348,7 @@ def test_make_setup_cfg(
 
 @pytest.mark.parametrize("use_whey", [True, False])
 def test_make_setup_cfg_existing(
-		tmp_pathplus,
+		tmp_pathplus: PathPlus,
 		demo_environment,
 		advanced_file_regression: AdvancedFileRegressionFixture,
 		use_whey: bool,

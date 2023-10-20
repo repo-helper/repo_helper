@@ -83,7 +83,7 @@ def test_make_contributing(
 
 @pytest.mark.parametrize("standlone_contrib", [True, False])
 def test_make_docs_contributing(
-		tmp_pathplus,
+		tmp_pathplus: PathPlus,
 		demo_environment,
 		file_regression: FileRegressionFixture,
 		standlone_contrib,
@@ -94,7 +94,7 @@ def test_make_docs_contributing(
 	check_file_output(tmp_pathplus / "doc-source/contributing.rst", file_regression)
 
 
-def test_make_issue_templates(tmp_pathplus, demo_environment, file_regression: FileRegressionFixture):
+def test_make_issue_templates(tmp_pathplus: PathPlus, demo_environment, file_regression: FileRegressionFixture):
 	managed_files = make_issue_templates(tmp_pathplus, demo_environment)
 	assert managed_files == [".github/ISSUE_TEMPLATE/bug_report.md", ".github/ISSUE_TEMPLATE/feature_request.md"]
 
