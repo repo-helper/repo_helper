@@ -372,6 +372,9 @@ class ToxConfig(IniConfigurator):
 	def testenv_py312(self):
 		pass
 
+	def testenv_py313_dev(self):
+		pass
+
 	def testenv_py312_dev(self):
 		"""
 		``[testenv:py312-dev]``.
