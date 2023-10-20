@@ -28,7 +28,7 @@ repo_helper==2020.12.18
 ├── importlib-metadata>=3.6.0; python_version < "3.9"
 ├── importlib-metadata; python_version < "3.8"
 ├── importlib-resources>=3.0.0; python_version < "3.7"
-├── isort<5.11.0,>=5.5.2
+├── isort<=5.6.4,>=5.5.2
 ├── jinja2>=2.11.3
 ├── jsonschema>=3.2.0
 ├── markupsafe>=2.0
