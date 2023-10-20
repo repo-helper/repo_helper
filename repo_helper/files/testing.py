@@ -91,6 +91,7 @@ class ToxConfig(IniConfigurator):
 			"envlists",
 			"testenv",
 			"testenv:.package",
+			"testenv:py313-dev",
 			"testenv:py312-dev",
 			"testenv:py312",
 			"testenv:docs",
@@ -380,10 +381,11 @@ class ToxConfig(IniConfigurator):
 
 		for third_party_library in self["third_party_version_matrix"]:
 			third_party_versions = self["third_party_version_matrix"][third_party_library]
-			third_party_envs.append(f"testenv:py312-dev-{third_party_library}{{{','.join(third_party_versions)}}}")
-			third_party_envs.append(f"testenv:py312-{third_party_library}{{{','.join(third_party_versions)}}}")
+			third_party_envs.append(f"{third_party_library}{{{','.join(third_party_versions)}}}")
+			# third_party_envs.append(f"testenv:py312-dev-{third_party_library}{{{','.join(third_party_versions)}}}")
+			# third_party_envs.append(f"testenv:py312-{third_party_library}{{{','.join(third_party_versions)}}}")
 
-		for fixup_version in ["3.12-dev", "3.12"]:
+		for fixup_version in ["3.12-dev", "3.12", "3.13-dev"]:
 			if fixup_version in self["python_versions"]:
 				if self["enable_devmode"]:
 					self._ini[f"testenv:py{fixup_version.replace('.', '')}"]["setenv"] = indent_join(
@@ -391,8 +393,9 @@ class ToxConfig(IniConfigurator):
 							)
 
 					for env in third_party_envs:
-						self._ini.add_section(env)
-						self._ini[env]["setenv"] = indent_join(
+						env_name = f"testenv:py{fixup_version.replace('.', '')}-{env}"
+						self._ini.add_section(env_name)
+						self._ini[env_name]["setenv"] = indent_join(
 								("PYTHONDEVMODE=1", "PIP_DISABLE_PIP_VERSION_CHECK=1")
 								)
 
@@ -718,6 +721,8 @@ class ToxConfig(IniConfigurator):
 
 			for section in existing_config.sections_blocks():
 				if section.name.startswith("testenv:py312-") and section.name in self._ini.sections():
+					continue
+				if section.name.startswith("testenv:py313-") and section.name in self._ini.sections():
 					continue
 
 				if section.name not in self.managed_sections:

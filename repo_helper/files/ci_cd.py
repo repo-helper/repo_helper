@@ -586,6 +586,16 @@ def make_github_manylinux(repo_path: pathlib.Path, templates: Environment) -> Li
 	if not templates.globals["pure_python"] and "Linux" in templates.globals["platforms"]:
 		actions = templates.get_template(file.name)
 
+		dependency_lines = [
+				*templates.globals["github_ci_requirements"]["Linux"]["pre"],
+				"python -VV",
+				"python -m site",
+				"python -m pip install --upgrade pip setuptools wheel",
+				"python -m pip install --upgrade tox~=3.0 virtualenv!=20.16.0",
+				# Virtualenv 20.16.0 ships broken version of pip (https://github.com/pypa/pip/issues/11294)
+				*templates.globals["github_ci_requirements"]["Linux"]["post"]
+				]
+
 		matrix_config = []
 
 		for version in templates.globals["python_versions"]:
@@ -604,7 +614,7 @@ def make_github_manylinux(repo_path: pathlib.Path, templates: Environment) -> Li
 
 			matrix_config.append((version, testenv, tag))
 
-		file.write_clean(actions.render(matrix_config=matrix_config))
+		file.write_clean(actions.render(matrix_config=matrix_config, dependency_lines=dependency_lines))
 
 	elif file.is_file():
 		file.unlink()
