@@ -21,14 +21,14 @@ repo_helper==2020.12.18
 ├── dulwich!=0.20.7,!=0.20.8,!=0.20.9,>=0.20.5
 ├── filelock>=3.0.12
 ├── first>=2.0.2
-├── formate>=0.4.5
+├── formate>=0.7.0
 ├── handy-archives>=0.1.0
 ├── idna>=2.5
 ├── idna<4,>=2.5; python_version >= "3"
 ├── importlib-metadata>=3.6.0; python_version < "3.9"
 ├── importlib-metadata; python_version < "3.8"
 ├── importlib-resources>=3.0.0; python_version < "3.7"
-├── isort<=5.6.4,>=5.5.2
+├── isort>=5.5.2
 ├── jinja2>=2.11.3
 ├── jsonschema>=3.2.0
 ├── markupsafe>=2.0
@@ -63,7 +63,7 @@ repo_helper==2020.12.18
 ├── typing-inspect>=0.6.0
 ├── urllib3<1.27,>=1.25
 ├── whey>=0.0.17
-├── yapf<0.32.0,>=0.30.0
+├── yapf>=0.30.0
 ├── yapf-isort>=0.5.2
 ├── zipp>=3.1.0; python_version < "3.10"
 └── zipp>=0.5
