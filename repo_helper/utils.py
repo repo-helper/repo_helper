@@ -37,8 +37,8 @@ from typing import Any, Callable, Iterable, Iterator, List, Mapping, Optional, T
 
 # 3rd party
 import dulwich.repo
-import isort  # type: ignore[import]
-import isort.settings  # type: ignore[import]
+import isort
+import isort.settings
 import jinja2
 import yapf_isort
 from apeye.requests_url import RequestsURL
