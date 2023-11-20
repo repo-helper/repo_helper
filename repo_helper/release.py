@@ -190,43 +190,45 @@ class Bumper:
 			:class:`domdf_python_tools.versions.Version`.
 		"""
 
-		new_version_str = str(new_version)
+		with in_directory(self.repo.target_repo):
 
-		dulwich_repo = Repo(self.repo.target_repo)
+			new_version_str = str(new_version)
 
-		if f"v{new_version_str}".encode("UTF-8") in dulwich_repo.refs.as_dict(b"refs/tags"):
-			raise abort(f"The tag 'v{new_version_str}' already exists!")
+			dulwich_repo = Repo(self.repo.target_repo)
 
-		bumpversion_config = self.get_bumpversion_config(str(self.current_version), new_version_str)
+			if f"v{new_version_str}".encode("UTF-8") in dulwich_repo.refs.as_dict(b"refs/tags"):
+				raise abort(f"The tag 'v{new_version_str}' already exists!")
 
-		changed_files = [self.bumpversion_file.relative_to(self.repo.target_repo).as_posix()]
+			bumpversion_config = self.get_bumpversion_config(str(self.current_version), new_version_str)
 
-		for filename in bumpversion_config.keys():
-			if not os.path.isfile(filename):
-				raise FileNotFoundError(filename)
+			changed_files = [self.bumpversion_file.relative_to(self.repo.target_repo).as_posix()]
 
-		for filename, config in bumpversion_config.items():
-			self.bump_version_for_file(filename, config)
-			changed_files.append(filename)
+			for filename in bumpversion_config.keys():
+				if not os.path.isfile(filename):
+					raise FileNotFoundError(filename)
 
-		# Update number in .bumpversion.cfg
-		bv = ConfigUpdater()
-		bv.read(self.bumpversion_file)
-		bv["bumpversion"]["current_version"] = new_version_str
-		self.bumpversion_file.write_clean(str(bv))
+			for filename, config in bumpversion_config.items():
+				self.bump_version_for_file(filename, config)
+				changed_files.append(filename)
 
-		commit_message = message.format(current_version=self.current_version, new_version=new_version)
-		click.echo(commit_message)
+			# Update number in .bumpversion.cfg
+			bv = ConfigUpdater()
+			bv.read(self.bumpversion_file)
+			bv["bumpversion"]["current_version"] = new_version_str
+			self.bumpversion_file.write_clean(str(bv))
 
-		if commit_changed_files(
-				self.repo.target_repo,
-				managed_files=changed_files,
-				commit=commit,
-				message=commit_message.encode("UTF-8"),
-				enable_pre_commit=False,
-				):
+			commit_message = message.format(current_version=self.current_version, new_version=new_version)
+			click.echo(commit_message)
 
-			tag_create(dulwich_repo, f"v{new_version_str}")
+			if commit_changed_files(
+					self.repo.target_repo,
+					managed_files=changed_files,
+					commit=commit,
+					message=commit_message.encode("UTF-8"),
+					enable_pre_commit=False,
+					):
+
+				tag_create(dulwich_repo, f"v{new_version_str}")
 
 	def get_current_version(self) -> Version:
 		"""
