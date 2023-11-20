@@ -266,6 +266,7 @@ class ToxConfig(IniConfigurator):
 		tox_requires.add("virtualenv!=20.16.0")
 
 		self._ini["tox"]["requires"] = indent_join(sorted(tox_requires))
+		# self._ini["tox"]["toxworkdir"] = "{env:TOX_WORK_DIR:.tox}"
 
 	def envlists(self):
 		"""
@@ -391,9 +392,11 @@ class ToxConfig(IniConfigurator):
 		for fixup_version in ["3.12-dev", "3.12", "3.13-dev"]:
 			if fixup_version in self["python_versions"]:
 				if self["enable_devmode"]:
-					self._ini[f"testenv:py{fixup_version.replace('.', '')}"]["setenv"] = indent_join(
-							("PYTHONDEVMODE=1", "PIP_DISABLE_PIP_VERSION_CHECK=1")
-							)
+					env_name = f"testenv:py{fixup_version.replace('.', '')}"
+					if env_name in self._ini:
+						self._ini[env_name]["setenv"] = indent_join(
+								("PYTHONDEVMODE=1", "PIP_DISABLE_PIP_VERSION_CHECK=1")
+								)
 
 					for env in third_party_envs:
 						env_name = f"testenv:py{fixup_version.replace('.', '')}-{env}"
