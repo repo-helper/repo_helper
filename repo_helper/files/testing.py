@@ -466,7 +466,8 @@ class ToxConfig(IniConfigurator):
 		self._ini["testenv:build"]["deps"] = indent_join([
 				"build[virtualenv]>=0.3.1",
 				"check-wheel-contents>=0.1.0",
-				"twine>=3.2.0",
+				'twine>=3.2.0; python_version < "3.13"',
+				'twine@git+https://github.com/pypa/twine; python_version >= "3.13"',
 				'cryptography<40; implementation_name == "pypy" and python_version <= "3.7"',
 				*self["tox_build_requirements"],
 				])
