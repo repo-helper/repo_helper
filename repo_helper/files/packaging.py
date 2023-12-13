@@ -642,7 +642,7 @@ class SetupCfgConfig(IniConfigurator):
 			self._ini.remove_section("options")
 			self._ini.remove_section("options.packages.find")
 
-		if float(self["mypy_version"]) >= 0.901:
+		if self["mypy_version"].startswith("1.") or float(self["mypy_version"]) >= 0.901:
 			self._ini.remove_section("mypy")
 
 	def write_out(self):
