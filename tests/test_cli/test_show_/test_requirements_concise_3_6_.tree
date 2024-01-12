@@ -48,7 +48,7 @@ repo_helper==2020.12.18
 ├── ruamel-yaml-clib>=0.2.7; platform_python_implementation == "CPython" and python_version < "3.13"
 ├── ruamel.yaml>=0.17.4
 ├── setuptools
-├── shippinglabel>=1.6.0
+├── shippinglabel>=1.7.1
 ├── shippinglabel-conda>=0.1.0
 ├── shippinglabel-pypi>=0.1.0
 ├── six>=1.11.0

@@ -610,7 +610,7 @@ repo_helper==2020.12.18
 │       └── urllib3<3,>=1.21.1
 ├── ruamel.yaml>=0.17.4
 │   └── ruamel.yaml.clib>=0.2.7; platform_python_implementation == "CPython" and python_version < "3.13"
-├── shippinglabel>=1.6.0
+├── shippinglabel>=1.7.1
 │   ├── apeye>=1.0.0
 │   │   ├── apeye-core>=1.0.0b2
 │   │   │   ├── domdf-python-tools>=2.6.0

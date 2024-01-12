@@ -24,6 +24,7 @@ Show information about the repository.
 #
 
 # stdlib
+import sys
 from datetime import datetime
 from functools import partial
 from typing import Iterable, List, Optional, Union
@@ -212,7 +213,6 @@ def requirements(
 	import shutil
 
 	# 3rd party
-	from domdf_python_tools.compat import importlib_metadata
 	from domdf_python_tools.iterative import make_tree
 	from domdf_python_tools.paths import PathPlus, in_directory
 	from domdf_python_tools.stringlist import StringList
@@ -237,15 +237,14 @@ def requirements(
 		tree: List[Union[str, List[str], List[Union[str, List]]]] = []
 		venv_dir = (rh.target_repo / "venv")
 
+		search_path = sys.path
+
 		if venv_dir.is_dir() and not no_venv:
 			# Use virtualenv as it exists
 			search_path = []
 
 			for directory in (venv_dir / "lib").glob("python3.*"):
 				search_path.append(str(directory / "site-packages"))
-
-			importlib_metadata.DistributionFinder.Context.path = search_path  # type: ignore[assignment]
-
 		if concise:
 			concise_requirements = []
 
@@ -258,8 +257,7 @@ def requirements(
 
 			for requirement in raw_requirements:
 				concise_requirements.append(requirement)
-				# TODO: remove "extra == " marker
-				for req in flatten(list_requirements(str(requirement), depth=depth - 1)):
+				for req in flatten(list_requirements(str(requirement), depth=depth - 1, path=search_path)):
 					concise_requirements.append(ComparableRequirement(re.sub('; extra == ".*"', '', req)))
 
 			concise_requirements = sorted(set(combine_requirements(concise_requirements)))
@@ -268,7 +266,7 @@ def requirements(
 		else:
 			for requirement in raw_requirements:
 				tree.append(str(requirement))
-				deps = list(list_requirements(str(requirement), depth=depth - 1))
+				deps = list(list_requirements(str(requirement), depth=depth - 1, path=search_path))
 				if deps:
 					tree.append(deps)
 
