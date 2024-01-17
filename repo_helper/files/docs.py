@@ -216,6 +216,16 @@ def make_rtfd(repo_path: pathlib.Path, templates: Environment) -> List[str]:
 	else:
 		post_create_command = "pip install ."
 
+	pinned_sphinxcontrib_deps = [
+			"sphinxcontrib-applehelp==1.0.4",
+			"sphinxcontrib-devhelp==1.0.2",
+			"sphinxcontrib-htmlhelp==2.0.1",
+			"sphinxcontrib-jsmath==1.0.1",
+			"sphinxcontrib-qthelp==1.0.3",
+			"sphinxcontrib-serializinghtml==1.1.5",
+			]
+	post_install_command = "pip install " + ' '.join(pinned_sphinxcontrib_deps)
+
 	# Formats: Optionally build your docs in additional formats such as PDF and ePub
 	config = {
 			"version": 2,
@@ -228,7 +238,10 @@ def make_rtfd(repo_path: pathlib.Path, templates: Environment) -> List[str]:
 			"build": {
 					"os": "ubuntu-20.04",
 					"tools": {"python": "3.9"},
-					"jobs": {"post_create_environment": [post_create_command]}
+					"jobs": {
+							"post_create_environment": [post_create_command],
+							"post_install": [post_install_command],
+							}
 					}
 			}
 
