@@ -51,6 +51,7 @@ repo_helper==2020.12.18
 │       └── typing-extensions>=3.7.4
 ├── consolekit>=1.2.2
 │   ├── click>=7.1.2
+│   ├── colorama>=0.4.3; python_version < "3.10" and platform_system == "Windows"
 │   ├── deprecation-alias>=0.1.1
 │   │   ├── deprecation>=2.1.0
 │   │   │   └── packaging
@@ -1321,6 +1322,7 @@ repo_helper==2020.12.18
         ├── click>=7.1.2
         ├── consolekit>=1.0.0
         │   ├── click>=7.1.2
+        │   ├── colorama>=0.4.3; python_version < "3.10" and platform_system == "Windows"
         │   ├── deprecation-alias>=0.1.1
         │   │   ├── deprecation>=2.1.0
         │   │   │   └── packaging
@@ -1359,5 +1361,6 @@ repo_helper==2020.12.18
         ├── prettyprinter>=0.18.0
         │   ├── Pygments>=2.2.0
         │   └── colorful>=0.4.0
+        │   │   └── colorama; platform_system == "Windows"
         ├── typing-extensions>=3.7.4.3
         └── yapf>=0.30.0
