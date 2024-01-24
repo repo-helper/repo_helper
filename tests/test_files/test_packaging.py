@@ -30,11 +30,12 @@ from domdf_python_tools.paths import PathPlus
 
 # this package
 from repo_helper.files.packaging import make_manifest, make_pkginfo, make_pyproject, make_setup, make_setup_cfg
+from repo_helper.templates import Environment
 from repo_helper.utils import get_keys
 from tests.test_files.test_testing import AdvancedFileRegressionFixture
 
 
-def boolean_option(name: str, id: str):  # noqa: A002  # pylint: disable=redefined-builtin
+def boolean_option(name: str, id: str):  # noqa: A002,MAN002  # pylint: disable=redefined-builtin
 	return pytest.mark.parametrize(name, [
 			pytest.param(True, id=id),
 			pytest.param(False, id=f"no {id}"),
@@ -54,9 +55,9 @@ def boolean_option(name: str, id: str):  # noqa: A002  # pylint: disable=redefin
 		)
 def test_make_manifest_case_1(
 		tmp_pathplus: PathPlus,
-		demo_environment,
+		demo_environment: Environment,
 		advanced_file_regression: AdvancedFileRegressionFixture,
-		stubs_package,
+		stubs_package: bool,
 		other_opts: Dict[str, Any],
 		):
 	demo_environment.globals["stubs_package"] = stubs_package
@@ -74,7 +75,7 @@ def test_make_manifest_case_1(
 
 def test_make_manifest_case_2(
 		tmp_pathplus: PathPlus,
-		demo_environment,
+		demo_environment: Environment,
 		advanced_file_regression: AdvancedFileRegressionFixture,
 		):
 	demo_environment.globals["manifest_additional"] = ["recursive-include hello_world/templates *"]
@@ -99,7 +100,7 @@ def test_make_manifest_case_2(
 		)
 def test_make_setup_case_1(
 		tmp_pathplus: PathPlus,
-		demo_environment,
+		demo_environment: Environment,
 		advanced_file_regression: AdvancedFileRegressionFixture,
 		other_opts: Dict[str, Any],
 		):
@@ -128,7 +129,7 @@ def test_make_setup_case_1(
 		)
 def test_make_setup_case_2(
 		tmp_pathplus: PathPlus,
-		demo_environment,
+		demo_environment: Environment,
 		advanced_file_regression: AdvancedFileRegressionFixture,
 		other_opts: Dict[str, Any],
 		):
@@ -169,7 +170,7 @@ def test_make_setup_case_2(
 @boolean_option("enable_docs", "docs")
 def test_make_pyproject(
 		tmp_pathplus: PathPlus,
-		demo_environment,
+		demo_environment: Environment,
 		advanced_file_regression: AdvancedFileRegressionFixture,
 		enable_tests: bool,
 		enable_docs: bool,
@@ -212,7 +213,7 @@ def test_make_pyproject(
 @boolean_option("enable_tests", "tests")
 def test_make_pyproject_whey_extras(
 		tmp_pathplus: PathPlus,
-		demo_environment,
+		demo_environment: Environment,
 		advanced_file_regression: AdvancedFileRegressionFixture,
 		enable_tests: bool,
 		):
@@ -310,10 +311,10 @@ def test_make_pyproject_whey_extras(
 		)
 def test_make_setup_cfg(
 		tmp_pathplus: PathPlus,
-		demo_environment,
+		demo_environment: Environment,
 		advanced_file_regression: AdvancedFileRegressionFixture,
 		classifiers: List[str],
-		python_versions,
+		python_versions: str,
 		other_opts: Dict[str, Any],
 		entry_points: Dict[str, str],
 		mypy_version: str,
@@ -349,7 +350,7 @@ def test_make_setup_cfg(
 @pytest.mark.parametrize("use_whey", [True, False])
 def test_make_setup_cfg_existing(
 		tmp_pathplus: PathPlus,
-		demo_environment,
+		demo_environment: Environment,
 		advanced_file_regression: AdvancedFileRegressionFixture,
 		use_whey: bool,
 		):
@@ -381,7 +382,7 @@ def test_make_setup_cfg_existing(
 	demo_environment.globals["mypy_plugins"] = []
 	demo_environment.globals["mypy_version"] = "0.910"
 	demo_environment.globals["enable_docs"] = True
-	demo_environment.globals["use_whey"] = True
+	demo_environment.globals["use_whey"] = use_whey
 	demo_environment.globals["entry_points"] = {}
 
 	managed_files = make_setup_cfg(tmp_pathplus, demo_environment)
@@ -398,7 +399,7 @@ def test_make_setup_cfg_existing(
 def test_make_pkginfo(
 		extras_require: Dict[str, List[str]],
 		tmp_pathplus: PathPlus,
-		demo_environment,
+		demo_environment: Environment,
 		advanced_file_regression: AdvancedFileRegressionFixture,
 		):
 	# TODO: permutations to cover all branches

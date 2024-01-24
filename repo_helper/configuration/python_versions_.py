@@ -128,7 +128,7 @@ class python_versions(ConfigVar):
 	category: str = "python versions"
 
 	@staticmethod
-	def _is_experimental(version: str):
+	def _is_experimental(version: str) -> bool:
 		if version in {
 				"pypy39",
 				"pypy3.9",

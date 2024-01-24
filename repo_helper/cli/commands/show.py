@@ -27,7 +27,7 @@ Show information about the repository.
 import sys
 from datetime import datetime
 from functools import partial
-from typing import Iterable, List, Optional, Union
+from typing import Iterable, Iterator, List, Optional, Union
 
 # 3rd party
 import click
@@ -153,7 +153,7 @@ def changelog(
 		reverse: bool = False,
 		colour: Optional[bool] = None,
 		no_pager: bool = False,
-		):
+		) -> None:
 	"""
 	Show commits since the last version tag.
 	"""
@@ -203,7 +203,7 @@ def requirements(
 		depth: int = -1,
 		concise: bool = False,
 		no_venv: bool = False,
-		):
+		) -> None:
 	"""
 	Lists the requirements of this library, and their dependencies.
 	"""
@@ -248,7 +248,7 @@ def requirements(
 		if concise:
 			concise_requirements = []
 
-			def flatten(iterable: Iterable[Union[Requirement, Iterable]]):
+			def flatten(iterable: Iterable[Union[Requirement, Iterable]]) -> Iterator:
 				for item in iterable:
 					if isinstance(item, str):
 						yield item

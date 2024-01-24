@@ -344,7 +344,7 @@ class RepoHelperParser(Parser):
 			raw_config_vars: Mapping[str, Any],
 			parsed_config_vars: MutableMapping[str, Any],
 			filename: PathPlus,
-			):
+			) -> MutableMapping[str, Any]:
 		"""
 		Custom parsing step.
 
@@ -471,7 +471,12 @@ class YamlEditor(YAML):
 		finally:
 			self.explicit_start = original_exp_start
 
-	def dump_to_file(self, data: Union[MutableMapping, Sequence], filename: PathLike, mode: str = 'w'):
+	def dump_to_file(
+			self,
+			data: Union[MutableMapping, Sequence],
+			filename: PathLike,
+			mode: str = 'w',
+			) -> None:
 		"""
 		Dump the given data to the specified file.
 
@@ -500,7 +505,7 @@ class YamlEditor(YAML):
 			new_value: Union[MutableMapping, Sequence, Set, str, float],
 			*,
 			sort: bool = False,
-			):
+			) -> None:
 		"""
 		Set ``key`` in ``filename`` to ``new_value``.
 

@@ -20,6 +20,9 @@
 #  MA 02110-1301, USA.
 #
 
+# stdlib
+from typing import List
+
 # 3rd party
 import pytest
 from coincidence.regressions import AdvancedFileRegressionFixture
@@ -34,11 +37,12 @@ from repo_helper.files.bots import (
 		make_stale_bot
 		)
 from repo_helper.files.old import remove_artefact_cleaner
+from repo_helper.templates import Environment
 
 
 def test_stale_bot(
 		tmp_pathplus: PathPlus,
-		demo_environment,
+		demo_environment: Environment,
 		advanced_file_regression: AdvancedFileRegressionFixture,
 		):
 	managed_files = make_stale_bot(tmp_pathplus, demo_environment)
@@ -48,7 +52,7 @@ def test_stale_bot(
 
 def test_auto_assign_action(
 		tmp_pathplus: PathPlus,
-		demo_environment,
+		demo_environment: Environment,
 		advanced_file_regression: AdvancedFileRegressionFixture,
 		):
 	wrong_file = tmp_pathplus / ".github" / "workflow" / "assign.yml"
@@ -74,7 +78,7 @@ def test_auto_assign_action(
 
 def test_dependabot(
 		tmp_pathplus: PathPlus,
-		demo_environment,
+		demo_environment: Environment,
 		advanced_file_regression: AdvancedFileRegressionFixture,
 		):
 	managed_files = make_dependabot(tmp_pathplus, demo_environment)
@@ -84,7 +88,7 @@ def test_dependabot(
 
 def test_make_dependabotv2(
 		tmp_pathplus: PathPlus,
-		demo_environment,
+		demo_environment: Environment,
 		advanced_file_regression: AdvancedFileRegressionFixture,
 		):
 	managed_files = make_dependabotv2(tmp_pathplus, demo_environment)
@@ -92,7 +96,7 @@ def test_make_dependabotv2(
 	advanced_file_regression.check_file(tmp_pathplus / managed_files[0])
 
 
-def test_artefact_cleaner(tmp_pathplus: PathPlus, demo_environment):
+def test_artefact_cleaner(tmp_pathplus: PathPlus, demo_environment: Environment):
 	managed_files = remove_artefact_cleaner(tmp_pathplus, demo_environment)
 	assert managed_files == [".github/workflows/cleanup.yml"]
 	assert not (tmp_pathplus / managed_files[0]).is_file()
@@ -107,9 +111,9 @@ def test_artefact_cleaner(tmp_pathplus: PathPlus, demo_environment):
 		)
 def test_imgbot(
 		tmp_pathplus: PathPlus,
-		demo_environment,
+		demo_environment: Environment,
 		advanced_file_regression: AdvancedFileRegressionFixture,
-		ignore,
+		ignore: List[str],
 		):
 	demo_environment.globals["imgbot_ignore"] = ignore
 

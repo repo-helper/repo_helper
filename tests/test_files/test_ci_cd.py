@@ -28,7 +28,6 @@ from typing import Any, Dict, List
 import pytest
 from coincidence.regressions import AdvancedDataRegressionFixture, AdvancedFileRegressionFixture
 from domdf_python_tools.paths import PathPlus
-from pytest_regressions.data_regression import DataRegressionFixture
 
 # this package
 from repo_helper.configuration import get_tox_python_versions
@@ -45,20 +44,17 @@ from repo_helper.files.ci_cd import (
 		make_github_octocheese
 		)
 from repo_helper.files.old import remove_copy_pypi_2_github, remove_make_conda_recipe
+from repo_helper.templates import Environment
 
 
-def boolean_option(name: str, id: str):  # noqa: A002  # pylint: disable=redefined-builtin
+def boolean_option(name: str, id: str):  # noqa: A002,MAN002  # pylint: disable=redefined-builtin
 	return pytest.mark.parametrize(name, [
 			pytest.param(True, id=id),
 			pytest.param(False, id=f"no {id}"),
 			])
 
 
-def test_actions_deploy_conda(
-		tmp_pathplus: PathPlus,
-		demo_environment,
-		advanced_file_regression: AdvancedFileRegressionFixture,
-		):
+def test_actions_deploy_conda(tmp_pathplus: PathPlus, demo_environment: Environment):
 	managed_files = make_actions_deploy_conda(tmp_pathplus, demo_environment)
 	assert managed_files == [
 			".github/actions_build_conda.sh",
@@ -73,7 +69,7 @@ def test_actions_deploy_conda(
 
 def test_github_ci_case_1(
 		tmp_pathplus: PathPlus,
-		demo_environment,
+		demo_environment: Environment,
 		advanced_file_regression: AdvancedFileRegressionFixture,
 		advanced_data_regression: AdvancedDataRegressionFixture,
 		):
@@ -88,7 +84,7 @@ def test_github_ci_case_1(
 
 def test_github_ci_case_2(
 		tmp_pathplus: PathPlus,
-		demo_environment,
+		demo_environment: Environment,
 		advanced_file_regression: AdvancedFileRegressionFixture,
 		advanced_data_regression: AdvancedDataRegressionFixture,
 		):
@@ -106,7 +102,7 @@ def test_github_ci_case_2(
 
 def test_github_ci_windows_38(
 		tmp_pathplus: PathPlus,
-		demo_environment,
+		demo_environment: Environment,
 		advanced_file_regression: AdvancedFileRegressionFixture,
 		):
 
@@ -126,7 +122,7 @@ def test_github_ci_windows_38(
 
 def test_github_ci_case_3(
 		tmp_pathplus: PathPlus,
-		demo_environment,
+		demo_environment: Environment,
 		advanced_data_regression: AdvancedDataRegressionFixture,
 		):
 
@@ -153,7 +149,7 @@ def test_github_ci_case_3(
 	assert not (tmp_pathplus / managed_files[1]).is_file()
 
 
-def test_remove_copy_pypi_2_github(tmp_pathplus: PathPlus, demo_environment):
+def test_remove_copy_pypi_2_github(tmp_pathplus: PathPlus, demo_environment: Environment):
 	(tmp_pathplus / ".ci").mkdir()
 	(tmp_pathplus / ".ci" / "copy_pypi_2_github.py").touch()
 	assert (tmp_pathplus / ".ci" / "copy_pypi_2_github.py").is_file()
@@ -163,7 +159,7 @@ def test_remove_copy_pypi_2_github(tmp_pathplus: PathPlus, demo_environment):
 	assert not (tmp_pathplus / ".ci" / "copy_pypi_2_github.py").is_file()
 
 
-def test_remove_make_conda_recipe(tmp_pathplus: PathPlus, demo_environment):
+def test_remove_make_conda_recipe(tmp_pathplus: PathPlus, demo_environment: Environment):
 	assert remove_make_conda_recipe(tmp_pathplus, demo_environment) == ["make_conda_recipe.py"]
 	assert not (tmp_pathplus / "make_conda_recipe.py").is_file()
 
@@ -172,10 +168,10 @@ def test_remove_make_conda_recipe(tmp_pathplus: PathPlus, demo_environment):
 @pytest.mark.parametrize("platforms", [["Linux"], ["Linux", "Windows"]])
 def test_make_github_manylinux(
 		tmp_pathplus: PathPlus,
-		demo_environment,
+		demo_environment: Environment,
 		advanced_file_regression: AdvancedFileRegressionFixture,
-		platforms,
-		py_versions,
+		platforms: List[str],
+		py_versions: List[str],
 		):
 
 	demo_environment.globals["platforms"] = platforms
@@ -194,9 +190,8 @@ def test_make_github_manylinux(
 @pytest.mark.parametrize("platforms", [["Linux"], ["Linux", "Windows"]])
 def test_make_github_manylinux_pure_python(
 		tmp_pathplus: PathPlus,
-		demo_environment,
-		advanced_file_regression: AdvancedFileRegressionFixture,
-		platforms,
+		demo_environment: Environment,
+		platforms: List[str],
 		):
 
 	demo_environment.globals["platforms"] = platforms
@@ -210,9 +205,9 @@ def test_make_github_manylinux_pure_python(
 @boolean_option("enable_tests", "tests")
 def test_make_github_docs_test(
 		tmp_pathplus: PathPlus,
-		demo_environment,
+		demo_environment: Environment,
 		advanced_file_regression: AdvancedFileRegressionFixture,
-		fail_on_warning,
+		fail_on_warning: bool,
 		enable_tests: bool,
 		):
 	demo_environment.globals["docs_fail_on_warning"] = fail_on_warning
@@ -233,7 +228,7 @@ def test_make_github_docs_test(
 
 def test_make_github_octocheese(
 		tmp_pathplus: PathPlus,
-		demo_environment,
+		demo_environment: Environment,
 		advanced_file_regression: AdvancedFileRegressionFixture,
 		):
 	assert make_github_octocheese(tmp_pathplus, demo_environment) == [".github/workflows/octocheese.yml"]
@@ -246,7 +241,7 @@ def test_make_github_octocheese(
 
 def test_make_github_flake8(
 		tmp_pathplus: PathPlus,
-		demo_environment,
+		demo_environment: Environment,
 		advanced_file_regression: AdvancedFileRegressionFixture,
 		):
 	assert make_github_flake8(tmp_pathplus, demo_environment) == [".github/workflows/flake8.yml"]
@@ -264,7 +259,7 @@ def test_make_github_flake8(
 		)
 def test_make_github_mypy(
 		tmp_pathplus: PathPlus,
-		demo_environment,
+		demo_environment: Environment,
 		advanced_file_regression: AdvancedFileRegressionFixture,
 		platforms,
 		):
@@ -289,7 +284,7 @@ def test_make_github_mypy(
 		)
 def test_make_github_mypy_extra_install(
 		tmp_pathplus: PathPlus,
-		demo_environment,
+		demo_environment: Environment,
 		advanced_file_regression: AdvancedFileRegressionFixture,
 		extra_install_pre: List[str],
 		extra_install_post: List[str],
@@ -306,7 +301,7 @@ def test_make_github_mypy_extra_install(
 
 def test_make_github_mypy_extra_install_only_linux(
 		tmp_pathplus: PathPlus,
-		demo_environment,
+		demo_environment: Environment,
 		advanced_file_regression: AdvancedFileRegressionFixture,
 		):
 
@@ -335,12 +330,12 @@ def test_make_github_mypy_extra_install_only_linux(
 @pytest.mark.parametrize("py_modules", [["hello_world.py"], []])
 def test_ensure_bumpversion(
 		tmp_pathplus: PathPlus,
-		demo_environment,
+		demo_environment: Environment,
 		advanced_file_regression: AdvancedFileRegressionFixture,
 		enable_docs: bool,
 		other_opts: Dict[str, Any],
-		py_versions,
-		py_modules,
+		py_versions: List[str],
+		py_modules: List[str],
 		):
 
 	demo_environment.globals["version"] = "1.2.3"
@@ -352,7 +347,7 @@ def test_ensure_bumpversion(
 
 def test_ensure_bumpversion_remove_docs(
 		tmp_pathplus: PathPlus,
-		demo_environment,
+		demo_environment: Environment,
 		advanced_file_regression: AdvancedFileRegressionFixture,
 		):
 
@@ -369,7 +364,7 @@ def test_ensure_bumpversion_remove_docs(
 
 def test_ensure_bumpversion_remove_setup_cfg(
 		tmp_pathplus: PathPlus,
-		demo_environment,
+		demo_environment: Environment,
 		advanced_file_regression: AdvancedFileRegressionFixture,
 		):
 
@@ -386,7 +381,7 @@ def test_ensure_bumpversion_remove_setup_cfg(
 
 def test_make_github_linux_case_1(
 		tmp_pathplus: PathPlus,
-		demo_environment,
+		demo_environment: Environment,
 		advanced_file_regression: AdvancedFileRegressionFixture,
 		advanced_data_regression: AdvancedDataRegressionFixture,
 		):
@@ -404,7 +399,7 @@ def test_make_github_linux_case_1(
 
 def test_make_github_linux_case_2(
 		tmp_pathplus: PathPlus,
-		demo_environment,
+		demo_environment: Environment,
 		advanced_file_regression: AdvancedFileRegressionFixture,
 		advanced_data_regression: AdvancedDataRegressionFixture,
 		):
@@ -435,11 +430,11 @@ def test_make_github_linux_case_2(
 def test_make_github_linux_case_3(
 		tmp_pathplus: PathPlus,
 		advanced_file_regression: AdvancedFileRegressionFixture,
-		demo_environment,
-		pure_python,
-		enable_conda,
-		enable_tests,
-		enable_releases,
+		demo_environment: Environment,
+		pure_python: bool,
+		enable_conda: bool,
+		enable_tests: bool,
+		enable_releases: bool,
 		advanced_data_regression: AdvancedDataRegressionFixture,
 		):
 
@@ -462,7 +457,7 @@ def test_make_github_linux_case_3(
 def test_make_github_linux_case_4(
 		tmp_pathplus: PathPlus,
 		advanced_file_regression: AdvancedFileRegressionFixture,
-		demo_environment,
+		demo_environment: Environment,
 		advanced_data_regression: AdvancedDataRegressionFixture,
 		):
 
@@ -501,7 +496,7 @@ def test_make_github_linux_case_4(
 
 def test_make_conda_actions_ci(
 		tmp_pathplus: PathPlus,
-		demo_environment,
+		demo_environment: Environment,
 		advanced_file_regression: AdvancedFileRegressionFixture,
 		):
 	demo_environment.globals["version"] = "1.2.3"
@@ -532,7 +527,7 @@ def test_make_conda_actions_ci(
 		)
 def test_actions_manager_python_versions(
 		python_versions: List[str],
-		data_regression: DataRegressionFixture,
+		advanced_data_regression: AdvancedDataRegressionFixture,
 		):
 
 	py_versions = {k: {"experimental": True} for k in python_versions}
@@ -548,7 +543,7 @@ def test_actions_manager_python_versions(
 		get_gh_actions_python_versions = ActionsManager.get_gh_actions_python_versions
 		get_gh_actions_matrix = ActionsManager.get_gh_actions_matrix
 
-	data_regression.check(FakeActionsManager().get_gh_actions_python_versions())  # type: ignore[misc]
+	advanced_data_regression.check(FakeActionsManager().get_gh_actions_python_versions())  # type: ignore[misc]
 
 
 @pytest.mark.parametrize(
@@ -565,7 +560,7 @@ def test_actions_manager_python_versions(
 		)
 def test_actions_manager_python_versions_matrix(
 		python_versions: List[str],
-		data_regression: DataRegressionFixture,
+		advanced_data_regression: AdvancedDataRegressionFixture,
 		):
 
 	py_versions = {k: {"experimental": True} for k in python_versions}
@@ -581,4 +576,4 @@ def test_actions_manager_python_versions_matrix(
 		get_gh_actions_python_versions = ActionsManager.get_gh_actions_python_versions
 		get_gh_actions_matrix = ActionsManager.get_gh_actions_matrix
 
-	data_regression.check(FakeActionsManager().get_gh_actions_python_versions())  # type: ignore[misc]
+	advanced_data_regression.check(FakeActionsManager().get_gh_actions_python_versions())  # type: ignore[misc]

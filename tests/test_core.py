@@ -4,11 +4,14 @@ import re
 # 3rd party
 import pytest
 from click import Abort
-from coincidence.regressions import check_file_regression
+from coincidence.regressions import (
+		AdvancedDataRegressionFixture,
+		AdvancedFileRegressionFixture,
+		check_file_regression
+		)
 from domdf_python_tools.paths import PathPlus, in_directory
-from pytest_regressions.data_regression import DataRegressionFixture
-from pytest_regressions.file_regression import FileRegressionFixture
 from southwark import status
+from southwark.repo import Repo
 
 # this package
 from repo_helper.cli.utils import run_repo_helper
@@ -16,11 +19,10 @@ from repo_helper.core import RepoHelper
 
 
 def test_via_run_repo_helper(
-		temp_empty_repo,
+		temp_empty_repo: Repo,
 		capsys,
-		file_regression: FileRegressionFixture,
-		monkeypatch,
-		example_config,
+		advanced_file_regression: AdvancedFileRegressionFixture,
+		example_config: str,
 		):
 
 	(temp_empty_repo.path / "repo_helper.yml").write_text(example_config)
@@ -59,16 +61,14 @@ def test_via_run_repo_helper(
 	sha = "6d8cf72fff6adc4e570cb046ca417db7f2e10a3b"
 	stdout = re.sub(f"Committed as [A-Za-z0-9]{{{len(sha)}}}", f"Committed as {sha}", capsys.readouterr().out)
 	assert not capsys.readouterr().err
-	check_file_regression(stdout, file_regression)
+	check_file_regression(stdout, advanced_file_regression)
 
 
 def test_via_Repo_class(
-		temp_repo,
+		temp_repo: Repo,
 		capsys,
-		file_regression: FileRegressionFixture,
-		data_regression: DataRegressionFixture,
-		monkeypatch,
-		example_config,
+		advanced_data_regression: AdvancedDataRegressionFixture,
+		example_config: str,
 		):
 
 	with in_directory(temp_repo.path):
@@ -85,7 +85,7 @@ def test_via_Repo_class(
 		rh.load_settings()
 		managed_files = rh.run()
 
-	data_regression.check(sorted(managed_files))
+	advanced_data_regression.check(sorted(managed_files))
 
 	assert capsys.readouterr().out == ''
 	assert capsys.readouterr().err == ''

@@ -14,7 +14,7 @@ from repo_helper.cli.commands.conda_recipe import make_recipe
 def test_conda_recipe(
 		tmp_pathplus: PathPlus,
 		advanced_file_regression: AdvancedFileRegressionFixture,
-		example_config,
+		example_config: str,
 		):
 
 	config = example_config.replace("repo_helper_demo", "repo_helper").replace("0.0.1", "2021.3.8")
@@ -54,7 +54,7 @@ def test_conda_recipe(
 def test_conda_recipe_specifiers(
 		tmp_pathplus: PathPlus,
 		advanced_file_regression: AdvancedFileRegressionFixture,
-		example_config,
+		example_config: str,
 		):
 
 	config = example_config.replace("repo_helper_demo", "repo_helper").replace("0.0.1", "2021.3.8")
@@ -83,7 +83,7 @@ def test_conda_recipe_specifiers(
 def test_conda_recipe_extras(
 		tmp_pathplus: PathPlus,
 		advanced_file_regression: AdvancedFileRegressionFixture,
-		example_config,
+		example_config: str,
 		):
 
 	config = example_config.replace("repo_helper_demo", "repo_helper").replace("0.0.1", "2021.3.8")
@@ -112,7 +112,7 @@ def test_conda_recipe_extras(
 def test_conda_recipe_no_extras(
 		tmp_pathplus: PathPlus,
 		advanced_file_regression: AdvancedFileRegressionFixture,
-		example_config,
+		example_config: str,
 		):
 
 	config = example_config.replace("repo_helper_demo", "repo_helper").replace("0.0.1", "2021.3.8")

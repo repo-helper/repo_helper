@@ -22,13 +22,13 @@
 
 # stdlib
 import sys
+from typing import List
 
 # 3rd party
 import pytest
-from coincidence.regressions import check_file_output, check_file_regression
+from coincidence.regressions import AdvancedFileRegressionFixture, check_file_output, check_file_regression
 from coincidence.selectors import min_version, only_version
 from domdf_python_tools.paths import PathPlus
-from pytest_regressions.file_regression import FileRegressionFixture
 from readme_renderer.rst import render
 
 # this package
@@ -38,6 +38,7 @@ from repo_helper.files.contributing import (
 		make_docs_contributing,
 		make_issue_templates
 		)
+from repo_helper.templates import Environment
 
 
 @pytest.mark.parametrize(
@@ -49,8 +50,8 @@ from repo_helper.files.contributing import (
 				[],
 				]
 		)
-def test_github_bash_block(file_regression: FileRegressionFixture, commands):
-	check_file_regression(github_bash_block(*commands), file_regression, extension=".rst")
+def test_github_bash_block(advanced_file_regression: AdvancedFileRegressionFixture, commands: List[str]):
+	check_file_regression(github_bash_block(*commands), advanced_file_regression, extension=".rst")
 
 
 @pytest.mark.parametrize(
@@ -61,14 +62,14 @@ def test_github_bash_block(file_regression: FileRegressionFixture, commands):
 		)
 def test_make_contributing(
 		tmp_pathplus: PathPlus,
-		py_version,
-		demo_environment,
-		file_regression: FileRegressionFixture,
+		py_version: str,
+		demo_environment: Environment,
+		advanced_file_regression: AdvancedFileRegressionFixture,
 		):
 	assert make_contributing(tmp_pathplus, demo_environment) == ["CONTRIBUTING.rst", "CONTRIBUTING.md"]
 	assert not (tmp_pathplus / "CONTRIBUTING.md").is_file()
 	assert (tmp_pathplus / "CONTRIBUTING.rst").is_file()
-	check_file_output(tmp_pathplus / "CONTRIBUTING.rst", file_regression)
+	check_file_output(tmp_pathplus / "CONTRIBUTING.rst", advanced_file_regression)
 
 	(tmp_pathplus / "CONTRIBUTING.md").touch()
 	assert (tmp_pathplus / "CONTRIBUTING.md").is_file()
@@ -78,28 +79,32 @@ def test_make_contributing(
 
 	rendered = render((tmp_pathplus / "CONTRIBUTING.rst").read_text(), stream=sys.stderr)
 	assert rendered is not None
-	check_file_regression(rendered, file_regression, extension=".html")
+	check_file_regression(rendered, advanced_file_regression, extension=".html")
 
 
 @pytest.mark.parametrize("standlone_contrib", [True, False])
 def test_make_docs_contributing(
 		tmp_pathplus: PathPlus,
-		demo_environment,
-		file_regression: FileRegressionFixture,
-		standlone_contrib,
+		demo_environment: Environment,
+		advanced_file_regression: AdvancedFileRegressionFixture,
+		standlone_contrib: bool,
 		):
 	demo_environment.globals["standalone_contrib_guide"] = standlone_contrib
 	assert make_docs_contributing(tmp_pathplus, demo_environment) == ["doc-source/contributing.rst"]
 	assert (tmp_pathplus / "doc-source/contributing.rst").is_file()
-	check_file_output(tmp_pathplus / "doc-source/contributing.rst", file_regression)
+	check_file_output(tmp_pathplus / "doc-source/contributing.rst", advanced_file_regression)
 
 
-def test_make_issue_templates(tmp_pathplus: PathPlus, demo_environment, file_regression: FileRegressionFixture):
+def test_make_issue_templates(
+		tmp_pathplus: PathPlus,
+		demo_environment: Environment,
+		advanced_file_regression: AdvancedFileRegressionFixture
+		):
 	managed_files = make_issue_templates(tmp_pathplus, demo_environment)
 	assert managed_files == [".github/ISSUE_TEMPLATE/bug_report.md", ".github/ISSUE_TEMPLATE/feature_request.md"]
 
 	data = (tmp_pathplus / managed_files[0]).read_text()
-	check_file_regression(data, file_regression, ".bug.md")
+	check_file_regression(data, advanced_file_regression, ".bug.md")
 
 	data = (tmp_pathplus / managed_files[1]).read_text()
-	check_file_regression(data, file_regression, ".feature.md")
+	check_file_regression(data, advanced_file_regression, ".feature.md")

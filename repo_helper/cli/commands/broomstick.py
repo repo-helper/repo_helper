@@ -46,7 +46,7 @@ __all__ = [
 		]
 
 
-def depycache(base_dir: pathlib.Path, quiet: bool = False):
+def depycache(base_dir: pathlib.Path, quiet: bool = False) -> None:
 	"""
 	Removes any ``__pycache__`` directories.
 
@@ -87,7 +87,7 @@ def depytestcache(base_dir: pathlib.Path, quiet: bool = False) -> None:
 		rmdir(dirname, quiet)
 
 
-def demolish(base_dir: pathlib.Path, quiet: bool = False):
+def demolish(base_dir: pathlib.Path, quiet: bool = False) -> None:
 	"""
 	Removes the ``build`` directory.
 
@@ -98,7 +98,7 @@ def demolish(base_dir: pathlib.Path, quiet: bool = False):
 	rmdir(base_dir / "build", quiet)
 
 
-def detox(base_dir: pathlib.Path, quiet: bool = False):
+def detox(base_dir: pathlib.Path, quiet: bool = False) -> None:
 	"""
 	Removes the ``.tox`` directory.
 

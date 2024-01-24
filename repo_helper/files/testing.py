@@ -239,7 +239,7 @@ class ToxConfig(IniConfigurator):
 
 		return tox_envs, cov_envlist
 
-	def tox(self):
+	def tox(self) -> None:
 		"""
 		``[tox]``.
 		"""
@@ -268,7 +268,7 @@ class ToxConfig(IniConfigurator):
 		self._ini["tox"]["requires"] = indent_join(sorted(tox_requires))
 		# self._ini["tox"]["toxworkdir"] = "{env:TOX_WORK_DIR:.tox}"
 
-	def envlists(self):
+	def envlists(self) -> None:
 		"""
 		``[envlists]``.
 		"""
@@ -301,7 +301,7 @@ class ToxConfig(IniConfigurator):
 		matrix_testenv_string = f"-{third_party_library}{{{third_party_versions:,}}}"
 		return third_party_library, third_party_versions, matrix_testenv_string
 
-	def testenv(self):
+	def testenv(self) -> None:
 		"""
 		``[testenv]``.
 		"""
@@ -370,10 +370,10 @@ class ToxConfig(IniConfigurator):
 
 		self._ini["testenv"]["commands"] = indent_join(testenv_commands)
 
-	def testenv_py312(self):  # noqa: D102
+	def testenv_py312(self) -> None:  # noqa: D102
 		pass
 
-	def testenv_py313_dev(self):  # noqa: D102
+	def testenv_py313_dev(self) -> None:  # noqa: D102
 		pass
 
 	def testenv_py312_dev(self):
@@ -410,7 +410,7 @@ class ToxConfig(IniConfigurator):
 				for env in third_party_envs:
 					self._ini.remove_section(env)
 
-	def testenv__package(self):
+	def testenv__package(self) -> None:
 		"""
 		``[testenv:.package]``.
 		"""
@@ -423,7 +423,7 @@ class ToxConfig(IniConfigurator):
 		else:
 			self._ini.remove_section("testenv:.package")
 
-	def testenv_docs(self):
+	def testenv_docs(self) -> None:
 		"""
 		``[testenv:docs]``.
 		"""
@@ -451,7 +451,7 @@ class ToxConfig(IniConfigurator):
 		else:
 			self._ini.remove_section("testenv:docs")
 
-	def testenv_build(self):
+	def testenv_build(self) -> None:
 		"""
 		``[testenv:build]``.
 		"""
@@ -479,7 +479,7 @@ class ToxConfig(IniConfigurator):
 				"check-wheel-contents dist/",
 				])
 
-	def testenv_lint(self):
+	def testenv_lint(self) -> None:
 		"""
 		``[testenv:lint]``.
 		"""
@@ -522,7 +522,7 @@ class ToxConfig(IniConfigurator):
 		cmd = f"python3 -m flake8_rst_docstrings_sphinx {' '.join(self.get_source_files())} --allow-toolbox {{posargs}}"
 		self._ini["testenv:lint"]["commands"] = cmd
 
-	def testenv_perflint(self):
+	def testenv_perflint(self) -> None:
 		"""
 		``[testenv:perflint]``.
 		"""
@@ -538,7 +538,7 @@ class ToxConfig(IniConfigurator):
 		cmd = f"python3 -m perflint {self['import_name']} {{posargs}}"
 		self._ini["testenv:perflint"]["commands"] = cmd
 
-	def testenv_mypy(self):
+	def testenv_mypy(self) -> None:
 		"""
 		``[testenv:mypy]``.
 		"""
@@ -559,7 +559,7 @@ class ToxConfig(IniConfigurator):
 		else:
 			self._ini.remove_section("testenv:mypy")
 
-	def testenv_pyup(self):
+	def testenv_pyup(self) -> None:
 		"""
 		``[testenv:pyup]``.
 		"""
@@ -576,7 +576,7 @@ class ToxConfig(IniConfigurator):
 		commands = f"pyup_dirs {' '.join(self.get_source_files())} --py36-plus --recursive"
 		self._ini["testenv:pyup"]["commands"] = commands
 
-	def testenv_coverage(self):
+	def testenv_coverage(self) -> None:
 		"""
 		``[testenv:coverage]``.
 		"""
@@ -608,7 +608,7 @@ class ToxConfig(IniConfigurator):
 		else:
 			self._ini.remove_section("testenv:coverage")
 
-	def flake8(self):
+	def flake8(self) -> None:
 		"""
 		``[flake8]``.
 		"""
@@ -648,7 +648,7 @@ class ToxConfig(IniConfigurator):
 		self._ini["flake8"]["unused-arguments-ignore-magic-methods"] = True
 		self._ini["flake8"]["unused-arguments-ignore-variadic-names"] = True
 
-	def coverage_run(self):
+	def coverage_run(self) -> None:
 		"""
 		``[coverage:run]``.
 		"""
@@ -659,7 +659,7 @@ class ToxConfig(IniConfigurator):
 		else:
 			self._ini.remove_section("coverage:run")
 
-	def coverage_report(self):
+	def coverage_report(self) -> None:
 		"""
 		``[coverage:report]``.
 		"""
@@ -676,7 +676,7 @@ class ToxConfig(IniConfigurator):
 				"if __name__ == .__main__.:",
 				])
 
-	def check_wheel_contents(self):
+	def check_wheel_contents(self) -> None:
 		"""
 		``[check-wheel-contents]``.
 		"""
@@ -703,7 +703,7 @@ class ToxConfig(IniConfigurator):
 						self["import_name"].split('.')[0],
 						)
 
-	def pytest(self):
+	def pytest(self) -> None:
 		"""
 		``[pytest]``.
 		"""
@@ -715,7 +715,7 @@ class ToxConfig(IniConfigurator):
 		else:
 			self._ini.remove_section("pytest")
 
-	def merge_existing(self, ini_file):
+	def merge_existing(self, ini_file: pathlib.Path) -> None:
 		"""
 		Merge existing sections in the configuration file into the new configuration.
 

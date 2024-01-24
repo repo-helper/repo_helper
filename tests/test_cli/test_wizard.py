@@ -17,7 +17,7 @@ from repo_helper.cli.commands.wizard import wizard
 
 @pytest.mark.usefixtures("fixed_date")
 def test_wizard(
-		temp_empty_repo,
+		temp_empty_repo: Repo,
 		advanced_file_regression: AdvancedFileRegressionFixture,
 		):
 	with in_directory(temp_empty_repo.path):
@@ -79,7 +79,7 @@ def test_wizard(
 
 @pytest.mark.usefixtures("fixed_date")
 def test_wizard_validation(
-		temp_empty_repo,
+		temp_empty_repo: Repo,
 		advanced_file_regression: AdvancedFileRegressionFixture,
 		):
 	with in_directory(temp_empty_repo.path):
@@ -119,7 +119,7 @@ def test_wizard_validation(
 
 @pytest.mark.usefixtures("fixed_date")
 def test_wizard_git_config(
-		temp_empty_repo,
+		temp_empty_repo: Repo,
 		advanced_file_regression: AdvancedFileRegressionFixture,
 		):
 	with in_directory(temp_empty_repo.path):

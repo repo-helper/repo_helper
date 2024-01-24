@@ -22,6 +22,7 @@
 
 # stdlib
 import datetime
+from typing import Union
 
 # 3rd party
 import pytest
@@ -551,7 +552,7 @@ def test_make_wheel_shield():
 		"hello-world",
 		"hello_world",
 		])
-def test_make_docs_implementation_shield(pypi_name):
+def test_make_docs_implementation_shield(pypi_name: str):
 	assert make_docs_python_implementations_shield(
 			pypi_name
 			) == f"""\
@@ -635,7 +636,7 @@ def test_make_license_shield():
 		"hello-world",
 		"hello_world",
 		])
-def test_make_docs_wheel_shield(pypi_name):
+def test_make_docs_wheel_shield(pypi_name: str):
 	assert make_docs_wheel_shield(
 			pypi_name
 			) == f"""\
@@ -670,7 +671,7 @@ def test_make_language_shield():
 		"hello-world",
 		"hello_world",
 		])
-def test_make_docs_language_shield(pypi_name):
+def test_make_docs_language_shield(pypi_name: str):
 	assert make_docs_language_shield(
 			pypi_name,
 			"octocat",
@@ -714,7 +715,7 @@ def test_make_activity_shield():
 		"1.2.3",
 		1.2,
 		])
-def test_make_docs_activity_shield(version):
+def test_make_docs_activity_shield(version: Union[str, float]):
 	assert make_docs_activity_shield(
 			"hello_world",
 			"octocat",

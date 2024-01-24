@@ -62,7 +62,7 @@ __all__ = ["cli", "cli_command", "cli_group"]
 @commit_option(default=None)
 @commit_message_option("Updated files with 'repo_helper'.")
 @click.pass_context
-def cli(ctx: Context, force: bool, commit: Optional[bool], message: str):
+def cli(ctx: Context, force: bool, commit: Optional[bool], message: str) -> None:
 	"""
 	Update files in the given repositories, based on settings in 'repo_helper.yml'.
 	"""

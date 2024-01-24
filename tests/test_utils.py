@@ -22,6 +22,7 @@
 
 # stdlib
 from textwrap import dedent
+from typing import Tuple
 
 # 3rd party
 import pytest
@@ -90,7 +91,10 @@ def test_pformat_tabs():
 				("3.9-dev", "pypy3"),
 				]
 		)
-def test_get_version_classifiers(python_versions, advanced_data_regression: AdvancedDataRegressionFixture):
+def test_get_version_classifiers(
+		python_versions: Tuple[str, ...],
+		advanced_data_regression: AdvancedDataRegressionFixture,
+		):
 	advanced_data_regression.check(get_version_classifiers(python_versions))
 
 
@@ -101,7 +105,7 @@ def test_get_version_classifiers(python_versions, advanced_data_regression: Adva
 		])
 def test_get_license_text(
 		license_name: str,
-		copyright_years,
+		copyright_years: str,
 		advanced_file_regression: AdvancedFileRegressionFixture,
 		):
 	advanced_file_regression.check(get_license_text(license_name, copyright_years, "Joe Bloggs", "hello-world.c"))

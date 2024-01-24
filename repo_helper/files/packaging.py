@@ -530,7 +530,7 @@ class SetupCfgConfig(IniConfigurator):
 
 		return self._globals[item]
 
-	def metadata(self):
+	def metadata(self) -> None:
 		"""
 		``[metadata]``.
 		"""
@@ -556,7 +556,7 @@ class SetupCfgConfig(IniConfigurator):
 		self._ini["metadata"]["project_urls"] = indent_with_tab('\n' + textwrap.dedent('\n'.join(project_urls)))
 		self._ini["metadata"]["classifiers"] = _get_classifiers(self._globals)
 
-	def options(self):
+	def options(self) -> None:
 		"""
 		``[options]``.
 		"""
@@ -577,7 +577,7 @@ class SetupCfgConfig(IniConfigurator):
 		else:
 			self._ini["options"]["packages"] = "find:"
 
-	def options_packages_find(self):
+	def options_packages_find(self) -> None:
 		"""
 		``[options.packages.find]``.
 		"""
@@ -585,7 +585,7 @@ class SetupCfgConfig(IniConfigurator):
 		excludes = [self["tests_dir"], f"{self['tests_dir']}.*", self["docs_dir"]]
 		self._ini["options.packages.find"]["exclude"] = indent_join(sorted(set(excludes)))
 
-	def options_entry_points(self):
+	def options_entry_points(self) -> None:
 		"""
 		``[options.entry_points]``.
 		"""
@@ -599,7 +599,7 @@ class SetupCfgConfig(IniConfigurator):
 		for group, entry_points in self["entry_points"].items():
 			self._ini["options.entry_points"][group] = entry_points
 
-	def mypy(self):
+	def mypy(self) -> None:
 		"""
 		``[mypy]``.
 		"""
@@ -608,7 +608,7 @@ class SetupCfgConfig(IniConfigurator):
 		if self["mypy_plugins"]:
 			self._ini["mypy"]["plugins"] = ", ".join(self["mypy_plugins"])
 
-	def merge_existing(self, ini_file):
+	def merge_existing(self, ini_file: pathlib.Path) -> None:
 
 		if ini_file.is_file():
 			existing_config = ConfigUpdater()
@@ -645,7 +645,7 @@ class SetupCfgConfig(IniConfigurator):
 		if self["mypy_version"].startswith("1.") or float(self["mypy_version"]) >= 0.901:
 			self._ini.remove_section("mypy")
 
-	def write_out(self):
+	def write_out(self) -> None:
 		"""
 		Write out to the ``.ini`` file.
 		"""

@@ -2,10 +2,12 @@
 import pytest
 import requests.exceptions
 from apeye.requests_url import RequestsURL
-from coincidence.regressions import check_file_output
+from coincidence.regressions import AdvancedDataRegressionFixture, AdvancedFileRegressionFixture, check_file_output
+from southwark.repo import Repo
 
 # this package
 from repo_helper.cli.commands.init import init_repo
+from repo_helper.templates import Environment
 
 has_internet = True
 try:
@@ -14,14 +16,14 @@ except (requests.exceptions.Timeout, requests.exceptions.ConnectionError):
 	has_internet = False
 
 
+@pytest.mark.usefixtures("fixed_date")
 @pytest.mark.flaky(reruns=2, reruns_delay=10)
 @pytest.mark.skipif(condition=not has_internet, reason="Requires internet connection.")
 def test_init_repo(
-		temp_empty_repo,
-		demo_environment,
-		file_regression,
-		data_regression,
-		fixed_date,
+		temp_empty_repo: Repo,
+		demo_environment: Environment,
+		advanced_file_regression: AdvancedFileRegressionFixture,
+		advanced_data_regression: AdvancedDataRegressionFixture,
 		):
 	demo_environment.globals["copyright_years"] = "2020-2021"
 	demo_environment.globals["author"] = "Joe Bloggs"
@@ -46,17 +48,17 @@ def test_init_repo(
 
 	listing.sort()
 
-	data_regression.check(listing)
+	advanced_data_regression.check(listing)
 	# assert set(listing) == set(managed_files)
 
 	assert (temp_empty_repo.path / "requirements.txt").read_text() == ''
-	check_file_output(temp_empty_repo.path / "README.rst", file_regression, extension=".README.rst")
-	check_file_output(temp_empty_repo.path / "LICENSE", file_regression, extension=".LICENSE.txt")
+	check_file_output(temp_empty_repo.path / "README.rst", advanced_file_regression, extension=".README.rst")
+	check_file_output(temp_empty_repo.path / "LICENSE", advanced_file_regression, extension=".LICENSE.txt")
 
 	assert (temp_empty_repo.path / "hello_world").is_dir()
 	check_file_output(
 			temp_empty_repo.path / "hello_world" / "__init__.py",
-			file_regression,
+			advanced_file_regression,
 			extension=".init._py_",
 			)
 
@@ -67,12 +69,12 @@ def test_init_repo(
 	assert (temp_empty_repo.path / "doc-source").is_dir()
 	check_file_output(
 			temp_empty_repo.path / "doc-source/index.rst",
-			file_regression,
+			advanced_file_regression,
 			extension=".docs_index.rst",
 			)
 	assert (temp_empty_repo.path / "doc-source" / "api").is_dir()
 	check_file_output(
 			temp_empty_repo.path / "doc-source/api/hello-world.rst",
-			file_regression,
+			advanced_file_regression,
 			extension=".docs_hello-world.rst",
 			)

@@ -530,11 +530,11 @@ class Option(Block):
 		if line:
 			self.lines.append(line)
 
-	def add_line(self, line):
+	def add_line(self, line) -> None:
 		super().add_line(line)
 		self._values.append(line.strip())
 
-	def _join_multiline_value(self):
+	def _join_multiline_value(self) -> None:
 		if not self._multiline_value_joined and not self._value_is_none:
 			# do what `_join_multiline_value` in ConfigParser would do
 			self._value = '\n'.join(x for x in self._values if x and not x.lstrip()[0] in ";#").rstrip()
@@ -553,7 +553,7 @@ class Option(Block):
 			delim = self._delimiter
 		return f"{self._key}{delim}{self._value}\n"
 
-	def __repr__(self):
+	def __repr__(self) -> str:
 		return f"<Option: {self.key} = {self.value}>"
 
 	@property

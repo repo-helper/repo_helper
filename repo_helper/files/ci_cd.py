@@ -543,7 +543,7 @@ def make_conda_actions_ci(repo_path: pathlib.Path, templates: Environment) -> Li
 		actions = templates.get_template("github_conda_ci.yml")
 		workflows_dir.maybe_make(parents=True)
 
-		def no_pypy_versions(versions):
+		def no_pypy_versions(versions: List[str]) -> List[str]:
 			"""
 			Returns the subset of ``versions`` which does not end with ``-dev``.
 

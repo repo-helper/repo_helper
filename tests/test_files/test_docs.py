@@ -43,6 +43,7 @@ from repo_helper.files.docs import (
 		rewrite_docs_index
 		)
 from repo_helper.files.old import remove_autodoc_augment_defaults
+from repo_helper.templates import Environment
 from repo_helper.utils import resource
 
 
@@ -172,7 +173,12 @@ def test_make_docutils_conf(tmp_pathplus: PathPlus, demo_environment, file_regre
 		"domdf-sphinx-theme",
 		"furo",
 		])
-def test_make_conf(tmp_pathplus: PathPlus, demo_environment, file_regression, theme):
+def test_make_conf(
+		tmp_pathplus: PathPlus,
+		demo_environment: Environment,
+		advanced_file_regression: AdvancedFileRegressionFixture,
+		theme
+		):
 	demo_environment.globals["sphinx_html_theme"] = theme
 
 	# TODO: with values for these
@@ -184,18 +190,18 @@ def test_make_conf(tmp_pathplus: PathPlus, demo_environment, file_regression, th
 
 	managed_files = make_conf(tmp_pathplus, demo_environment)
 	assert managed_files == ["doc-source/conf.py"]
-	check_file_output(tmp_pathplus / managed_files[0], file_regression)
+	check_file_output(tmp_pathplus / managed_files[0], advanced_file_regression)
 
 
-def test_make_alabaster_theming(file_regression):
-	check_file_regression(make_alabaster_theming(), file_regression, "_style.css")
+def test_make_alabaster_theming(advanced_file_regression: AdvancedFileRegressionFixture):
+	check_file_regression(make_alabaster_theming(), advanced_file_regression, "_style.css")
 
 
-def test_make_readthedocs_theming(file_regression):
-	check_file_regression(make_readthedocs_theming(), file_regression, "style.css")
+def test_make_readthedocs_theming(advanced_file_regression: AdvancedFileRegressionFixture):
+	check_file_regression(make_readthedocs_theming(), advanced_file_regression, "style.css")
 
 
-def test_remove_autodoc_augment_defaults(tmp_pathplus: PathPlus, demo_environment):
+def test_remove_autodoc_augment_defaults(tmp_pathplus: PathPlus, demo_environment: Environment):
 	(tmp_pathplus / "doc-source").mkdir(parents=True)
 	(tmp_pathplus / "doc-source" / "autodoc_augment_defaults.py").touch()
 	assert (tmp_pathplus / "doc-source" / "autodoc_augment_defaults.py").is_file()
@@ -211,7 +217,12 @@ def test_remove_autodoc_augment_defaults(tmp_pathplus: PathPlus, demo_environmen
 		"domdf-sphinx-theme",
 		"furo",
 		])
-def test_copy_docs_styling(tmp_pathplus: PathPlus, demo_environment, file_regression, theme):
+def test_copy_docs_styling(
+		tmp_pathplus: PathPlus,
+		demo_environment: Environment,
+		advanced_file_regression: AdvancedFileRegressionFixture,
+		theme: str,
+		):
 	demo_environment.globals["sphinx_html_theme"] = theme
 	managed_files = copy_docs_styling(tmp_pathplus, demo_environment)
 	assert managed_files == [
@@ -222,7 +233,7 @@ def test_copy_docs_styling(tmp_pathplus: PathPlus, demo_environment, file_regres
 			]
 	for file in managed_files:
 		if (tmp_pathplus / file).exists():
-			check_file_output(tmp_pathplus / file, file_regression, (tmp_pathplus / file).name)
+			check_file_output(tmp_pathplus / file, advanced_file_regression, (tmp_pathplus / file).name)
 
 	assert not (tmp_pathplus / "doc-source/_templates/sidebar/navigation.html").is_file()
 
@@ -240,12 +251,12 @@ def test_copy_docs_styling(tmp_pathplus: PathPlus, demo_environment, file_regres
 				"input_h.rst",
 				]
 		)
+@pytest.mark.usefixtures("fixed_date")
 def test_rewrite_docs_index(
 		tmp_pathplus: PathPlus,
 		demo_environment,
-		file_regression: FileRegressionFixture,
+		advanced_file_regression: AdvancedFileRegressionFixture,
 		filename,
-		fixed_date,
 		):
 	demo_environment.globals["version"] = "1.2.3"
 	demo_environment.globals["enable_docs"] = True
@@ -265,7 +276,7 @@ def test_rewrite_docs_index(
 	managed_files = rewrite_docs_index(tmp_pathplus, demo_environment)
 	assert managed_files == ["doc-source/index.rst"]
 
-	check_file_output(index_file, file_regression)
+	check_file_output(index_file, advanced_file_regression)
 
 
 @pytest.mark.parametrize(
@@ -284,7 +295,7 @@ def test_rewrite_docs_index(
 def test_rewrite_docs_index_conda_forge(
 		tmp_pathplus: PathPlus,
 		demo_environment,
-		file_regression: FileRegressionFixture,
+		advanced_file_regression: AdvancedFileRegressionFixture,
 		filename,
 		fixed_date,
 		):
@@ -307,4 +318,4 @@ def test_rewrite_docs_index_conda_forge(
 	managed_files = rewrite_docs_index(tmp_pathplus, demo_environment)
 	assert managed_files == ["doc-source/index.rst"]
 
-	check_file_output(index_file, file_regression)
+	check_file_output(index_file, advanced_file_regression)

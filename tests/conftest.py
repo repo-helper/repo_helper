@@ -22,6 +22,7 @@
 
 # stdlib
 import datetime
+from typing import Iterator
 
 # 3rd party
 import pytest
@@ -33,13 +34,13 @@ pytest_plugins = ("coincidence", "repo_helper.testing")
 
 
 @pytest.fixture()
-def fixed_version_number(monkeypatch):
+def fixed_version_number(monkeypatch) -> Iterator[None]:
 	monkeypatch.setattr(metadata.version, "validator", lambda *args: "2020.12.18")
 	yield
 
 
 @pytest.fixture()
-def fixed_date(monkeypatch):
+def fixed_date(monkeypatch) -> None:
 
 	class DT(datetime.datetime):
 

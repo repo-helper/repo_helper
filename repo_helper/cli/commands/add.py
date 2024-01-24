@@ -61,7 +61,7 @@ class BadRequirement(click.BadParameter):
 	def __init__(self, requirement: str, error: Exception):
 		super().__init__(f"{requirement!r}: {error}")
 
-	def format_message(self):
+	def format_message(self) -> str:
 		return f"Invalid requirement {self.message}"
 
 

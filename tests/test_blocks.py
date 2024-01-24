@@ -20,6 +20,9 @@
 #  MA 02110-1301, USA.
 #
 
+# stdlib
+from typing import Any, Dict
+
 # 3rd party
 import lorem  # type: ignore[import]
 import pytest
@@ -46,7 +49,7 @@ from repo_helper.blocks import (
 				f".. start installation\n{lorem.paragraph()}\n..end installation"
 				]
 		)
-def test_installation_regex(value):
+def test_installation_regex(value: str):
 	m = installation_regex.sub(value, "hello world")
 	assert m == "hello world"
 
@@ -54,7 +57,7 @@ def test_installation_regex(value):
 @pytest.mark.parametrize(
 		"value", [".. start links\n\n..end links", f".. start links\n{lorem.paragraph()}\n..end links"]
 		)
-def test_links_regex(value):
+def test_links_regex(value: str):
 	m = links_regex.sub(value, "hello world")
 	assert m == "hello world"
 
@@ -62,7 +65,7 @@ def test_links_regex(value):
 @pytest.mark.parametrize(
 		"value", [".. start shields\n\n..end shields", f".. start shields\n{lorem.paragraph()}\n..end shields"]
 		)
-def test_shields_regex(value):
+def test_shields_regex(value: str):
 	m = shields_regex.sub(value, "hello world")
 	assert m == "hello world"
 
@@ -71,7 +74,7 @@ def test_shields_regex(value):
 		"value",
 		[".. start short_desc\n\n..end short_desc", f".. start short_desc\n{lorem.paragraph()}\n..end short_desc"]
 		)
-def test_short_desc_regex(value):
+def test_short_desc_regex(value: str):
 	m = short_desc_regex.sub(value, "hello world")
 	assert m == "hello world"
 
@@ -127,7 +130,8 @@ def test_short_desc_regex(value):
 						),
 				]
 		)
-def test_create_shields_block(advanced_file_regression: AdvancedFileRegressionFixture, kwargs, fixed_date):
+@pytest.mark.usefixtures("fixed_date")
+def test_create_shields_block(advanced_file_regression: AdvancedFileRegressionFixture, kwargs: Dict[str, Any]):
 	result = str(ShieldsBlock(**kwargs).make())
 	advanced_file_regression.check(result, extension=".rst")
 
@@ -165,7 +169,10 @@ def test_create_shields_block(advanced_file_regression: AdvancedFileRegressionFi
 						),
 				]
 		)
-def test_create_docs_install_block(advanced_file_regression: AdvancedFileRegressionFixture, kwargs):
+def test_create_docs_install_block(
+		advanced_file_regression: AdvancedFileRegressionFixture,
+		kwargs: Dict[str, Any],
+		):
 	result = create_docs_install_block(**kwargs)
 	advanced_file_regression.check(result, extension=".rst")
 

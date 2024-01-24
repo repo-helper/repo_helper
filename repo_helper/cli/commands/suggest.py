@@ -89,7 +89,7 @@ def classifiers(
 		add: bool,
 		status: Optional[int] = None,
 		library: Optional[bool] = None,
-		):
+		) -> None:
 	"""
 	Suggest trove classifiers based on repository metadata.
 	"""

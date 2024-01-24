@@ -229,7 +229,7 @@ def temp_empty_repo(tmp_pathplus: PathPlus, monkeypatch) -> Repo:
 
 
 @pytest.fixture()
-def temp_repo(temp_empty_repo, example_config) -> Repo:
+def temp_repo(temp_empty_repo: Repo, example_config: str) -> Repo:
 	"""
 	Pytest fixture to return a git repository in a temporary location.
 

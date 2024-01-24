@@ -25,15 +25,15 @@ import sys
 
 # 3rd party
 import pytest
-from coincidence.regressions import check_file_output, check_file_regression
+from coincidence.regressions import AdvancedFileRegressionFixture, check_file_output, check_file_regression
 from coincidence.selectors import min_version, only_version
 from domdf_python_tools.paths import PathPlus
-from pytest_regressions.file_regression import FileRegressionFixture
 from readme_renderer.rst import render
 
 # this package
 import tests.test_files.test_readme_input
 from repo_helper.files.readme import rewrite_readme
+from repo_helper.templates import Environment
 from repo_helper.utils import resource
 
 
@@ -49,13 +49,13 @@ from repo_helper.utils import resource
 		"input_c.rst",
 		"input_d.rst",
 		])
+@pytest.mark.usefixtures("fixed_date")
 def test_rewrite_readme(
 		tmp_pathplus: PathPlus,
-		demo_environment,
-		file_regression: FileRegressionFixture,
-		filename,
-		fixed_date,
-		py_version,
+		demo_environment: Environment,
+		advanced_file_regression: AdvancedFileRegressionFixture,
+		filename: str,
+		py_version: str,
 		):
 	demo_environment.globals["version"] = "1.2.3"
 	demo_environment.globals["enable_docs"] = True
@@ -73,11 +73,11 @@ def test_rewrite_readme(
 	managed_files = rewrite_readme(tmp_pathplus, demo_environment)
 	assert managed_files == ["README.rst"]
 
-	check_file_output(readme_file, file_regression)
+	check_file_output(readme_file, advanced_file_regression)
 
 	rendered = render(readme_file.read_text(), stream=sys.stderr)
 	assert rendered is not None
-	check_file_regression(rendered, file_regression, extension=".html")
+	check_file_regression(rendered, advanced_file_regression, extension=".html")
 
 
 @pytest.mark.parametrize(
@@ -92,13 +92,13 @@ def test_rewrite_readme(
 		"input_c.rst",
 		"input_d.rst",
 		])
+@pytest.mark.usefixtures("fixed_date")
 def test_rewrite_readme_conda_forge(
 		tmp_pathplus: PathPlus,
-		demo_environment,
-		file_regression: FileRegressionFixture,
-		filename,
-		fixed_date,
-		py_version,
+		demo_environment: Environment,
+		advanced_file_regression: AdvancedFileRegressionFixture,
+		filename: str,
+		py_version: str,
 		):
 	demo_environment.globals["version"] = "1.2.3"
 	demo_environment.globals["enable_docs"] = True
@@ -117,8 +117,8 @@ def test_rewrite_readme_conda_forge(
 	managed_files = rewrite_readme(tmp_pathplus, demo_environment)
 	assert managed_files == ["README.rst"]
 
-	check_file_output(readme_file, file_regression)
+	check_file_output(readme_file, advanced_file_regression)
 
 	rendered = render(readme_file.read_text(), stream=sys.stderr)
 	assert rendered is not None
-	check_file_regression(rendered, file_regression, extension=".html")
+	check_file_regression(rendered, advanced_file_regression, extension=".html")

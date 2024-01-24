@@ -5,11 +5,12 @@ from domdf_python_tools.paths import PathPlus
 # this package
 from repo_helper.files.linting import make_pylintrc
 from repo_helper.files.old import remove_lint_roller
+from repo_helper.templates import Environment
 
 
 def test_pylintrc(
 		tmp_pathplus: PathPlus,
-		demo_environment,
+		demo_environment: Environment,
 		advanced_file_regression: AdvancedFileRegressionFixture,
 		):
 	managed_files = make_pylintrc(tmp_pathplus, demo_environment)
@@ -17,7 +18,7 @@ def test_pylintrc(
 	advanced_file_regression.check_file(tmp_pathplus / managed_files[0])
 
 
-def test_lint_roller_removal(tmp_pathplus: PathPlus, demo_environment):
+def test_lint_roller_removal(tmp_pathplus: PathPlus, demo_environment: Environment):
 	managed_files = remove_lint_roller(tmp_pathplus, demo_environment)
 	assert managed_files == ["lint_roller.sh"]
 	assert not (tmp_pathplus / managed_files[0]).exists()

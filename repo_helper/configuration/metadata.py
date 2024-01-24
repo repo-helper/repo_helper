@@ -323,7 +323,7 @@ class classifiers(ConfigVar):
 	category: str = "metadata"
 
 	@classmethod
-	def validate(cls, raw_config_vars: Optional[Dict[str, Any]] = None):  # noqa: D102
+	def validate(cls, raw_config_vars: Optional[Dict[str, Any]] = None) -> List[str]:  # noqa: D102
 
 		if raw_config_vars is None:
 			raw_config_vars = {}
@@ -390,7 +390,7 @@ class license(ConfigVar):  # noqa  # pylint: disable=redefined-builtin
 	category: str = "metadata"
 
 	@classmethod
-	def validator(cls, value):  # noqa: D102
+	def validator(cls, value: str) -> str:  # noqa: D102
 		value = value.replace(' ', '')
 
 		if value in license_lookup:
