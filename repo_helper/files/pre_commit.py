@@ -193,7 +193,7 @@ pyupgrade = Repo(
 
 lucas_c_hooks = Repo(
 		repo=make_github_url("Lucas-C", "pre-commit-hooks"),
-		rev="v1.5.4",
+		rev="v1.5.1",
 		hooks=["remove-crlf", "forbid-crlf"],
 		)
 
