@@ -193,19 +193,19 @@ pyupgrade = Repo(
 
 lucas_c_hooks = Repo(
 		repo=make_github_url("Lucas-C", "pre-commit-hooks"),
-		rev="v1.5.1",
+		rev="v1.5.4",
 		hooks=["remove-crlf", "forbid-crlf"],
 		)
 
 flake2lint = Repo(
 		repo=make_github_url("domdfcoding", "flake2lint"),
-		rev="v0.4.2",
+		rev="v0.4.3",
 		hooks=["flake2lint"],
 		)
 
 pyproject_parser = Repo(
 		repo=make_github_url("repo-helper", "pyproject-parser"),
-		rev="v0.9.0",
+		rev="v0.9.1",
 		hooks=["reformat-pyproject"],  # TODO: add check-pyproject
 		)
 
@@ -257,7 +257,7 @@ def make_pre_commit(repo_path: pathlib.Path, templates: Environment) -> List[str
 
 	flake8_dunder_all = Repo(
 			repo=make_github_url("domdfcoding", "flake8-dunder-all"),
-			rev="v0.3.0",
+			rev="v0.3.1",
 			hooks=[{
 					"id": "ensure-dunder-all",
 					"files": fr"^{import_name}{'-stubs' if stubs_package else ''}/.*\.py$"
@@ -266,7 +266,7 @@ def make_pre_commit(repo_path: pathlib.Path, templates: Environment) -> List[str
 
 	snippet_fmt = Repo(
 			repo=make_github_url("python-formate", "snippet-fmt"),
-			rev="v0.1.4",
+			rev="v0.1.5",
 			hooks=["snippet-fmt"],
 			)
 
@@ -274,7 +274,7 @@ def make_pre_commit(repo_path: pathlib.Path, templates: Environment) -> List[str
 
 	formate = Repo(
 			repo=make_github_url("python-formate", "formate"),
-			rev="v0.5.0",
+			rev="v0.7.0",
 			hooks=[{"id": "formate", "exclude": formate_excludes}],
 			)
 
@@ -290,7 +290,7 @@ def make_pre_commit(repo_path: pathlib.Path, templates: Environment) -> List[str
 
 	dep_checker = Repo(
 			repo=make_github_url("domdfcoding", "dep_checker"),
-			rev="v0.7.1",
+			rev="v0.8.0",
 			hooks=[{"id": "dep_checker", "args": dep_checker_args}]
 			)
 
