@@ -65,7 +65,7 @@ jobs:
           pip-wheel-args: '--no-deps -w ./wheelhouse'
 
       - name: Upload Artifacts 🚀
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: "wheels-${{ brace('matrix.config.tag') }}"
           path: wheelhouse/
@@ -79,7 +79,7 @@ jobs:
             # TODO: Upload coverage to coveralls
           done
 
-      - uses: actions/upload-artifact@v3
+      - uses: actions/upload-artifact@v4
         with:
           name: wheels-{{ tag }}
           path: wheelhouse/

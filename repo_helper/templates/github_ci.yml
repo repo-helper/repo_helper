@@ -62,7 +62,7 @@ jobs:
         run: python -m tox -e "${{ brace('matrix.config.testenvs') }}" -s false
 {% if enable_tests and not stubs_package %}
       - name: "Upload Coverage 🚀"
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         if: ${{ brace("always() && steps.setup-python.outcome == 'success'") }}
         with:
           name: "coverage-${{ brace('matrix.config.python-version')}}"
@@ -105,7 +105,7 @@ jobs:
 
       - name: "Upload Combined Coverage Artefact 🚀"
         if: ${{ brace("steps.show.outcome != 'failure'") }}
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: "combined-coverage"
           path: .coverage
