@@ -901,12 +901,14 @@ def make_formate_toml(repo_path: pathlib.Path, templates: Environment) -> List[s
 	:param templates:
 	"""
 
+	known_first_party = set()
 	known_third_party = set()
 
 	isort_file = PathPlus(repo_path / ".isort.cfg")
 	formate_file = PathPlus(repo_path / "formate.toml")
 
 	isort_config = get_isort_config(repo_path, templates)
+	known_first_party.update(isort_config["known_first_party"])
 	known_third_party.update(isort_config["known_third_party"])
 
 	if formate_file.is_file():
@@ -919,13 +921,20 @@ def make_formate_toml(repo_path: pathlib.Path, templates: Environment) -> List[s
 		isort = ConfigUpdater()
 		isort.read(str(isort_file))
 
-		if "settings" in isort.sections() and "known_third_party" in isort["settings"]:
-			known_third_party.update(re.split(r"(\n|,\s*)", isort["settings"]["known_third_party"].value))
+		if "settings" in isort.sections():
+			if "known_first_party" in isort["settings"]:
+				existing_known_first_party = isort["settings"]["known_first_party"].value
+				if isinstance(existing_known_first_party, str):
+					existing_known_first_party = [existing_known_first_party]
+				known_first_party.update(re.split(r"(\n|,\s*)", existing_known_first_party))
+			if "known_third_party" in isort["settings"]:
+				known_third_party.update(re.split(r"(\n|,\s*)", isort["settings"]["known_third_party"].value))
 
 	isort_file.unlink(missing_ok=True)
 
 	if "hooks" in formate_config and "isort" in formate_config["hooks"]:
 		if "kwargs" in formate_config["hooks"]["isort"]:
+			known_first_party.update(formate_config["hooks"]["isort"]["kwargs"].get("known_first_party", ()))
 			known_third_party.update(formate_config["hooks"]["isort"]["kwargs"].get("known_third_party", ()))
 
 			for existing_key, value in formate_config["hooks"]["isort"]["kwargs"].items():
@@ -935,6 +944,7 @@ def make_formate_toml(repo_path: pathlib.Path, templates: Environment) -> List[s
 	def normalise_underscore(name: str) -> str:
 		return normalize(name.strip()).replace('-', '_')
 
+	isort_config["known_first_party"] = sorted(set(filter(bool, map(normalise_underscore, known_first_party))))
 	isort_config["known_third_party"] = sorted(set(filter(bool, map(normalise_underscore, known_third_party))))
 
 	hooks = {
@@ -1002,7 +1012,7 @@ def get_isort_config(repo_path: pathlib.Path, templates: Environment) -> Dict[st
 
 	known_third_party = [req.replace('-', '_') for req in sorted(all_requirements)]
 	isort["known_third_party"] = known_third_party
-	isort["known_first_party"] = templates.globals["import_name"]
+	isort["known_first_party"] = [templates.globals["import_name"]]
 
 	return isort
 

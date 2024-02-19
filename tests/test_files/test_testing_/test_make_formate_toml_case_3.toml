@@ -47,4 +47,4 @@ known_third_party = [
     "tox",
     "wheel",
 ]
-known_first_party = "hello_world"
+known_first_party = [ "hello_world",]
