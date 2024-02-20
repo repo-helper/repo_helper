@@ -925,8 +925,8 @@ def make_formate_toml(repo_path: pathlib.Path, templates: Environment) -> List[s
 			if "known_first_party" in isort["settings"]:
 				existing_known_first_party = isort["settings"]["known_first_party"].value
 				if isinstance(existing_known_first_party, str):
-					existing_known_first_party = [existing_known_first_party]
-				known_first_party.update(re.split(r"(\n|,\s*)", existing_known_first_party))
+					existing_known_first_party = re.split(r"(\n|,\s*)", existing_known_first_party)
+				known_first_party.update(existing_known_first_party)
 			if "known_third_party" in isort["settings"]:
 				known_third_party.update(re.split(r"(\n|,\s*)", isort["settings"]["known_third_party"].value))
 
@@ -934,10 +934,15 @@ def make_formate_toml(repo_path: pathlib.Path, templates: Environment) -> List[s
 
 	if "hooks" in formate_config and "isort" in formate_config["hooks"]:
 		if "kwargs" in formate_config["hooks"]["isort"]:
-			known_first_party.update(formate_config["hooks"]["isort"]["kwargs"].get("known_first_party", ()))
-			known_third_party.update(formate_config["hooks"]["isort"]["kwargs"].get("known_third_party", ()))
+			isort_kwargs = formate_config["hooks"]["isort"]["kwargs"]
+			existing_known_first_party = isort_kwargs.get("known_first_party", ())
+			if isinstance(existing_known_first_party, str):
+				known_first_party.add(existing_known_first_party)
+			else:
+				known_first_party.update(existing_known_first_party)
+			known_third_party.update(isort_kwargs.get("known_third_party", ()))
 
-			for existing_key, value in formate_config["hooks"]["isort"]["kwargs"].items():
+			for existing_key, value in isort_kwargs.items():
 				if existing_key not in isort_config:
 					isort_config[existing_key] = value
 
