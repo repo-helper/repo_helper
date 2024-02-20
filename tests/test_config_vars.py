@@ -207,7 +207,7 @@ class Test_conda_description:
 					({}, "A value for 'short_desc' is required."),
 					]
 			)
-	def test_errors(self, wrong_value: Dict[str, Any], match):
+	def test_errors(self, wrong_value: Dict[str, Any], match: str):
 		with pytest.raises(ValueError, match=match):
 			conda_description.get(wrong_value)
 
@@ -340,7 +340,7 @@ def test_classifiers(config_dict: Dict[str, Any], data_regression: DataRegressio
 				{"classifiers": test_list_int},
 				]
 		)
-def test_classifiers_errors(wrong_value):
+def test_classifiers_errors(wrong_value: Dict[str, Any]):
 	with pytest.raises(ValueError, match="'classifiers' must be a List of <class 'str'>"):
 		classifiers.get(wrong_value)
 

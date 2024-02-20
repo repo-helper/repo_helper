@@ -24,7 +24,7 @@ r"""
 #
 
 # stdlib
-from typing import Any, Dict, Iterable, List, Optional, Sequence, Union
+from typing import Any, Dict, Iterable, List, Mapping, Optional, Sequence, Union
 
 # 3rd party
 from configconfig.configvar import ConfigVar
@@ -145,7 +145,7 @@ class python_versions(ConfigVar):
 			return False
 
 	@classmethod
-	def validator(cls, value) -> Dict[str, Dict[str, Any]]:  # noqa: D102
+	def validator(cls, value: Mapping[str, Any]) -> Dict[str, Dict[str, Any]]:  # noqa: D102
 		output = {}
 
 		for version, metadata in natsorted((str(k), v) for k, v in value.items() if k):

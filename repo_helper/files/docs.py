@@ -863,7 +863,7 @@ def make_sphinx_config_dict(templates: Environment) -> Dict[str, Any]:
 
 class PythonFormatTomlEncoder(dom_toml.TomlEncoder):
 
-	def dump_list(self, v) -> str:
+	def dump_list(self, v: List) -> str:
 		values = DelimitedList(str(self.dump_value(u)) for u in v)
 		single_line = f"[{values:, }]"
 
@@ -880,7 +880,7 @@ class PythonFormatTomlEncoder(dom_toml.TomlEncoder):
 
 		return str(retval)
 
-	def dump_value(self, v) -> str:
+	def dump_value(self, v: Any) -> str:
 		if isinstance(v, bool):
 			return str(v)
 

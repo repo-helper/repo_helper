@@ -261,7 +261,7 @@ def test_make_github_mypy(
 		tmp_pathplus: PathPlus,
 		demo_environment: Environment,
 		advanced_file_regression: AdvancedFileRegressionFixture,
-		platforms,
+		platforms: List[str],
 		):
 	demo_environment.globals["platforms"] = platforms
 

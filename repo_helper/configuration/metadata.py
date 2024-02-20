@@ -262,7 +262,7 @@ class import_name(ConfigVar):
 			return cls.validator(cls.validate(raw_config_vars))
 
 	@classmethod
-	def validate(cls, raw_config_vars: Optional[Dict[str, Any]] = None):  # noqa: D102
+	def validate(cls, raw_config_vars: Optional[Dict[str, Any]] = None) -> str:  # noqa: D102
 		if raw_config_vars is None:
 			raw_config_vars = {}
 

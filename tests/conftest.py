@@ -45,11 +45,11 @@ def fixed_date(monkeypatch) -> None:
 	class DT(datetime.datetime):
 
 		@classmethod
-		def today(cls):
+		def today(cls):  # noqa: MAN002
 			return datetime.datetime(2020, 10, 13)
 
 		@classmethod
-		def now(cls, tz=None):
+		def now(cls, tz=None):  # noqa: MAN001,MAN002
 			return datetime.datetime(2020, 10, 13, 2, 20)
 
 	monkeypatch.setattr(datetime, "datetime", DT)

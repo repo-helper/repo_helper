@@ -211,7 +211,10 @@ def test_create_docs_install_block(
 						),
 				]
 		)
-def test_create_readme_install_block(advanced_file_regression: AdvancedFileRegressionFixture, kwargs):
+def test_create_readme_install_block(
+		advanced_file_regression: AdvancedFileRegressionFixture,
+		kwargs: Dict[str, Any],
+		):
 	result = create_readme_install_block(**kwargs)
 	advanced_file_regression.check(result, extension=".rst")
 

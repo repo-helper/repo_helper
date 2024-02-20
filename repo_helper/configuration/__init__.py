@@ -533,7 +533,7 @@ class YamlEditor(YAML):
 			sort_func = natsorted
 		else:
 
-			def sort_func(values):
+			def sort_func(values: Iterable) -> Iterable:
 				if isinstance(values, Set):
 					return list(values)
 				else:

@@ -514,7 +514,7 @@ def test_make_python_implementations_shield():
 		"hello-world",
 		"hello_world",
 		])
-def test_make_docs_python_implementations_shield(pypi_name):
+def test_make_docs_python_implementations_shield(pypi_name: str):
 	assert make_docs_python_implementations_shield(
 			pypi_name
 			) == f"""\

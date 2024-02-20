@@ -127,7 +127,7 @@ def requirement(requirement: str, file: Optional[str] = None) -> int:
 
 
 @add_command()
-def typed():
+def typed() -> None:
 	"""
 	Add a 'py.typed' file and the associated trove classifier.
 	"""
@@ -189,7 +189,7 @@ def typed():
 
 @click.argument("version", type=click.STRING, nargs=-1)
 @add_command()
-def version(version: str):
+def version(version: str) -> int:
 	"""
 	Add a new Python version to test on.
 	"""
@@ -210,7 +210,7 @@ def version(version: str):
 	if not isinstance(data, dict):
 		return 1
 
-	def sort_key(value: str):
+	def sort_key(value: str) -> str:
 		if value.endswith("-dev"):
 			return value[:-4]
 		else:
@@ -225,3 +225,5 @@ def version(version: str):
 				rh.target_repo / "repo_helper.yml",
 				mode='a',
 				)
+
+	return 0

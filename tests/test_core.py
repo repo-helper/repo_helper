@@ -91,7 +91,7 @@ def test_via_Repo_class(
 	assert capsys.readouterr().err == ''
 
 
-def test_managed_message(temp_repo):
+def test_managed_message(temp_repo: Repo):
 	rh = RepoHelper(temp_repo.path)
 	managed_message = "This file is managed by 'repo_helper'. Don't edit it directly."
 	assert rh.managed_message == managed_message
@@ -106,7 +106,7 @@ def test_managed_message(temp_repo):
 	assert rh.templates.globals["managed_message"] == "Managed message 3"
 
 
-def test_repo_name(temp_repo):
+def test_repo_name(temp_repo: Repo):
 	rh = RepoHelper(temp_repo.path)
 	rh.load_settings()
 	assert rh.repo_name == "repo_helper_demo"

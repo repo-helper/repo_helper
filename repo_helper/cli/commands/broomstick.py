@@ -109,7 +109,7 @@ def detox(base_dir: pathlib.Path, quiet: bool = False) -> None:
 	rmdir(base_dir / ".tox", quiet)
 
 
-def crack(base_dir: pathlib.Path, quiet: bool = False):
+def crack(base_dir: pathlib.Path, quiet: bool = False) -> None:
 	"""
 	Removes the ``*.egg-info`` directory.
 

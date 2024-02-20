@@ -376,7 +376,7 @@ class ToxConfig(IniConfigurator):
 	def testenv_py313_dev(self) -> None:  # noqa: D102
 		pass
 
-	def testenv_py312_dev(self):
+	def testenv_py312_dev(self) -> None:
 		"""
 		``[testenv:py312-dev]``.
 		"""

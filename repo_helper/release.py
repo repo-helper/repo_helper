@@ -252,7 +252,7 @@ class Bumper:
 		bv = ConfigUpdater()
 		bv.read(self.bumpversion_file)
 
-		def default():
+		def default() -> BumpversionFileConfig:
 			return {"search": current_version, "replace": new_version}
 
 		# populate with the sections which are managed by repo_helper

@@ -124,7 +124,7 @@ def commit_changed_files(
 
 
 def run_repo_helper(
-		path,
+		path: PathLike,
 		force: bool,
 		initialise: bool,
 		commit: Optional[bool],

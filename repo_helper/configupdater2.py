@@ -75,6 +75,7 @@ from typing import (
 		Sequence,
 		Set,
 		Tuple,
+		Type,
 		TypeVar,
 		Union,
 		cast
@@ -143,7 +144,7 @@ class Block(ABC):
 	a reference to a container wherein the object resides.
 	"""
 
-	def __init__(self, container: Container, **kwargs):
+	def __init__(self, container: Union[Container, List["Block"], None], **kwargs):
 		self._container = container
 		self.lines: List[str] = []
 		self._updated: bool = False
@@ -155,13 +156,13 @@ class Block(ABC):
 	def __len__(self) -> int:
 		return len(self.lines)
 
-	def __eq__(self, other) -> bool:
+	def __eq__(self, other) -> bool:  # noqa: MAN001
 		if isinstance(other, self.__class__):
 			return self.lines == other.lines
 		else:
 			return False
 
-	def add_line(self, line: str):
+	def add_line(self, line: str) -> "Block":
 		"""
 		Add a line to the current block.
 
@@ -172,7 +173,7 @@ class Block(ABC):
 		return self
 
 	@property
-	def container(self) -> Container:
+	def container(self) -> Union[Container, List["Block"], None]:
 		return self._container
 
 	# @property
@@ -199,7 +200,7 @@ class BlockBuilder:
 	Builder that injects blocks at a given index position.
 	"""
 
-	def __init__(self, container: Container, idx):
+	def __init__(self, container: Container, idx: int):
 		self._container: Container = container
 		self._idx = idx
 
@@ -292,7 +293,7 @@ class Comment(Block):
 	Comment block.
 	"""
 
-	def __init__(self, container=None):
+	def __init__(self, container: Union[Container, List[Block], None] = None):
 		super().__init__(container=container)
 
 	def __repr__(self) -> str:
@@ -307,7 +308,7 @@ class Space(Block):
 	def __init__(self, container=None):
 		super().__init__(container=container)
 
-	def __repr__(self):
+	def __repr__(self) -> str:
 		return "<Space>"
 
 
@@ -326,7 +327,7 @@ class Section(Block, Container, MutableMapping):
 		self._updated = False
 		super().__init__(container=container, **kwargs)
 
-	def add_option(self, entry: "Option"):
+	def add_option(self, entry: "Option") -> "Section":
 		"""
 		Add an Option object to the section.
 
@@ -338,7 +339,7 @@ class Section(Block, Container, MutableMapping):
 		self._structure.append(entry)
 		return self
 
-	def add_comment(self, line: str):
+	def add_comment(self, line: str) -> "Section":
 		"""
 		Add a Comment object to the section.
 
@@ -353,7 +354,7 @@ class Section(Block, Container, MutableMapping):
 		self.last_item.add_line(line)
 		return self
 
-	def add_space(self, line: str):
+	def add_space(self, line: str) -> "Section":
 		"""
 		Add a Space object to the section.
 
@@ -368,7 +369,7 @@ class Section(Block, Container, MutableMapping):
 		self.last_item.add_line(line)
 		return self
 
-	def _get_option_idx(self, key):
+	def _get_option_idx(self, key: str) -> int:
 		idx = [i for i, entry in enumerate(self._structure) if isinstance(entry, Option) and entry.key == key]
 		if idx:
 			return idx[0]
@@ -391,12 +392,12 @@ class Section(Block, Container, MutableMapping):
 	def __repr__(self) -> str:
 		return f"<Section: {self.name}>"
 
-	def __getitem__(self, key) -> "Option":
+	def __getitem__(self, key: str):  # noqa: MAN002
 		if key not in self.options():
 			raise KeyError(key)
 		return self._structure[self._get_option_idx(key=key)]
 
-	def __setitem__(self, key, value):
+	def __setitem__(self, key: str, value: Any) -> None:
 		str_value = convert_to_string(value, key)
 
 		if key in self:
@@ -407,26 +408,26 @@ class Section(Block, Container, MutableMapping):
 			option.value = str_value
 			self._structure.append(option)
 
-	def __delitem__(self, key):
+	def __delitem__(self, key: str) -> None:
 		if key not in self.options():
 			raise KeyError(key)
 		idx = self._get_option_idx(key=key)
 		del self._structure[idx]
 
-	def __contains__(self, key):
+	def __contains__(self, key) -> bool:  # noqa: MAN001
 		return key in self.options()
 
 	def __len__(self) -> int:
 		return len(self._structure)
 
-	def __iter__(self):
+	def __iter__(self) -> Iterator[Block]:
 		"""
 		Return all entries, not just options.
 		"""
 
 		return self._structure.__iter__()
 
-	def __eq__(self, other) -> bool:
+	def __eq__(self, other) -> bool:  # noqa: MAN001
 		if isinstance(other, self.__class__):
 			return self.name == other.name and self._structure == other._structure
 		else:
@@ -471,7 +472,7 @@ class Section(Block, Container, MutableMapping):
 		return self._name
 
 	@name.setter
-	def name(self, value):
+	def name(self, value: str) -> None:
 		self._name = str(value)
 		self._updated = True
 
@@ -513,10 +514,10 @@ class Option(Block):
 			self,
 			key: str,
 			value: Optional[str],
-			container,
+			container: Container,
 			delimiter: str = '=',
 			space_around_delimiters: bool = True,
-			line=None,
+			line: Optional[str] = None,
 			):
 		super().__init__(container=container)
 		self._key: str = key
@@ -530,9 +531,10 @@ class Option(Block):
 		if line:
 			self.lines.append(line)
 
-	def add_line(self, line) -> None:
+	def add_line(self, line: str) -> "Option":
 		super().add_line(line)
 		self._values.append(line.strip())
+		return self
 
 	def _join_multiline_value(self) -> None:
 		if not self._multiline_value_joined and not self._value_is_none:
@@ -570,7 +572,7 @@ class Option(Block):
 		return self._key
 
 	@key.setter
-	def key(self, value: str):
+	def key(self, value: str) -> None:
 		self._join_multiline_value()
 		self._key = value
 		self._updated = True
@@ -581,7 +583,7 @@ class Option(Block):
 		return cast(str, self._value)
 
 	@value.setter
-	def value(self, value: str):
+	def value(self, value: str) -> None:
 		self._updated = True
 		self._multiline_value_joined = True
 		self._value = value
@@ -695,14 +697,14 @@ class ConfigUpdater(Container[Block], MutableMapping):
 		self._empty_lines_in_values = False
 		super().__init__()
 
-	def _get_section_idx(self, name):
+	def _get_section_idx(self, name: str) -> int:
 		idx = [i for i, entry in enumerate(self._structure) if isinstance(entry, Section) and entry.name == name]
 		if idx:
 			return idx[0]
 		else:
 			raise ValueError
 
-	def read(self, filename: PathLike, encoding: Optional[str] = "UTF-8"):
+	def read(self, filename: PathLike, encoding: Optional[str] = "UTF-8") -> None:
 		"""
 		Read and parse a filename.
 
@@ -711,11 +713,11 @@ class ConfigUpdater(Container[Block], MutableMapping):
 		"""
 
 		with open(filename, encoding=encoding) as fp:
-			self._read(fp, filename)
+			self._read(fp, os.fspath(filename))
 
 		self._filename = os.path.abspath(filename)
 
-	def read_file(self, f: IO, source: Optional[str] = None):
+	def read_file(self, f: IO, source: Optional[str] = None) -> None:
 		"""
 		Like read() but the argument must be a file-like object.
 
@@ -736,7 +738,7 @@ class ConfigUpdater(Container[Block], MutableMapping):
 				source = "<???>"
 		self._read(f, source)
 
-	def read_string(self, string: str, source: str = "<string>"):
+	def read_string(self, string: str, source: str = "<string>") -> None:
 		"""
 		Read configuration from a given string.
 
@@ -756,12 +758,12 @@ class ConfigUpdater(Container[Block], MutableMapping):
 		"""
 		return optionstr.lower()
 
-	def _update_curr_block(self, block_type):
+	def _update_curr_block(self, block_type: Type[Block]) -> None:
 		if not isinstance(self.last_item, block_type):
 			new_block = block_type(container=self)
 			self._structure.append(new_block)
 
-	def _add_comment(self, line):
+	def _add_comment(self, line: str) -> None:
 		if isinstance(self.last_item, Section):
 			self.last_item.add_comment(line)
 		elif self.last_item is not None:
@@ -770,12 +772,12 @@ class ConfigUpdater(Container[Block], MutableMapping):
 		# else:
 		# 	raise ValueError("Cannot add a comment without somewhere to add it to.")
 
-	def _add_section(self, sectname, line):
+	def _add_section(self, sectname: str, line: str) -> None:
 		new_section = Section(sectname, container=self)
 		new_section.add_line(line)
 		self._structure.append(new_section)
 
-	def _add_option(self, key, vi, value, line):
+	def _add_option(self, key: str, vi: str, value: Optional[str], line: str) -> None:
 		entry = Option(
 				key,
 				value,
@@ -786,14 +788,14 @@ class ConfigUpdater(Container[Block], MutableMapping):
 				)
 		self.last_item.add_option(entry)
 
-	def _add_space(self, line):
+	def _add_space(self, line: str) -> None:
 		if isinstance(self.last_item, Section):
 			self.last_item.add_space(line)
 		else:
 			self._update_curr_block(Space)
 			self.last_item.add_line(line)
 
-	def _read(self, fp, fpname):
+	def _read(self, fp: IO, fpname: str) -> None:
 		"""
 		Parse a sectioned configuration file.
 
@@ -928,7 +930,7 @@ class ConfigUpdater(Container[Block], MutableMapping):
 		if e:
 			raise e
 
-	def _handle_error(self, exc, fpname, lineno, line):
+	def _handle_error(self, exc: Optional[ParsingError], fpname: str, lineno: int, line: str) -> ParsingError:
 		if not exc:
 			exc = ParsingError(fpname)
 		exc.append(lineno, repr(line))
@@ -1013,7 +1015,7 @@ class ConfigUpdater(Container[Block], MutableMapping):
 			raise KeyError(section)
 		self.remove_section(section)
 
-	def __contains__(self, section) -> bool:
+	def __contains__(self, section) -> bool:  # noqa: MAN001
 		"""
 		Returns whether the given section exists.
 		"""
@@ -1034,13 +1036,13 @@ class ConfigUpdater(Container[Block], MutableMapping):
 
 		return self._structure.__iter__()
 
-	def __eq__(self, other) -> bool:
+	def __eq__(self, other) -> bool:  # noqa: MAN001
 		if isinstance(other, self.__class__):
 			return self._structure == other._structure
 		else:
 			return False
 
-	def add_section(self, section: Union[str, Section]):
+	def add_section(self, section: Union[str, Section]) -> None:
 		"""Create a new section in the configuration.
 
 		:raises: :exc:`~.DuplicateSectionError` if a section by the specified name already exists.
@@ -1070,7 +1072,7 @@ class ConfigUpdater(Container[Block], MutableMapping):
 			raise NoSectionError(section) from None
 		return self[section].options()
 
-	def get(self, section: str, option: str):  # type: ignore[override]
+	def get(self, section: str, option: str) -> "Option":  # type: ignore[override]
 		"""Gets an option value for a given section.
 
 		:param section: section name
@@ -1198,7 +1200,7 @@ class ConfigUpdater(Container[Block], MutableMapping):
 		return {sect: self[sect].to_dict() for sect in self.sections()}
 
 
-def convert_to_string(value, key):
+def convert_to_string(value: Any, key: str) -> str:
 	if isinstance(value, str):
 
 		split_lines = value.split('\n')
