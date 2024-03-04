@@ -629,6 +629,7 @@ class SetupCfgConfig(IniConfigurator):
 					self._ini.add_section(section)
 				elif section.name == "mypy":
 					self.copy_existing_value(section, "incremental")
+					self.copy_existing_value(section, "exclude")
 
 		if "options.entry_points" in self._ini.sections():
 			if (
