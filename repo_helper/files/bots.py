@@ -180,6 +180,7 @@ def make_dependabotv2(repo_path: pathlib.Path, templates: Environment) -> List[s
 			"package-ecosystem": "pip",
 			"directory": '/',
 			"schedule": {"interval": "weekly"},
+			"open-pull-requests-limit": '0',
 			"reviewers": [templates.globals["assignee"]],
 			}
 
