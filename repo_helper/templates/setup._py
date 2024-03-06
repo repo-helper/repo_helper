@@ -21,7 +21,7 @@ from textwrap import dedent
 with open('{{ modname }}.desktop', 'w', encoding="UTF-8") as desktop:
 	desktop.write(dedent(f"""\
 [Desktop Entry]
-Version={__version__}
+Version={{ version }}
 Name={{ modname }}
 Comment={{ short_desc }}
 {% for k, v in desktopfile.items() %}{{ k }}={{ v }}

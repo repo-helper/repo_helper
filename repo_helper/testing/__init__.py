@@ -115,6 +115,7 @@ def demo_environment() -> Environment:
 			"use_maturin": false
 			"use_hatch": false
 			"on_conda_forge": false
+			"desktopfile": {}}
 			}
 
 	plus ``lint_warn_list`` = :py:data:`repo_helper.files.linting.lint_warn_list`.
@@ -164,6 +165,7 @@ def demo_environment() -> Environment:
 					source_dir='',
 					tests_dir="tests",
 					additional_setup_args={},
+					desktopfile={},
 					setup_pre=[],
 					docs_dir="doc-source",
 					sphinx_html_theme="alabaster",
