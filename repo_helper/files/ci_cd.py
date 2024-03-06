@@ -358,29 +358,44 @@ class ActionsManager:
 		if "macOS" in platforms:
 			platforms.remove("macOS")
 
-		platforms = set(filter(None, (platform_ci_names.get(p, None) for p in platforms)))
-
-		dependency_lines = self.get_linux_mypy_requirements()
+		linux_dependency_lines = self.get_mypy_requirements("Linux")
+		windows_dependency_lines = self.get_mypy_requirements("Windows")
 		linux_platform = platform_ci_names["Linux"]
 
-		if dependency_lines == self.standard_python_install_lines:
+		platform_specific_blocks = True
+
+		if "Linux" not in platforms:
+			linux_dependency_lines = self.standard_python_install_lines
+
+		if linux_dependency_lines == self.standard_python_install_lines:
+			platform_specific_blocks = False
+		if linux_dependency_lines == windows_dependency_lines:
+			platform_specific_blocks = False
+		if "Linux" in platforms and "Windows" not in platforms:
+			platform_specific_blocks = False
+
+		if not platform_specific_blocks:
 			dependencies_block = StringList([
+					'',
 					"- name: Install dependencies 🔧",
 					"  run: |",
 					])
 			with dependencies_block.with_indent("  ", 2):
-				dependencies_block.extend(self.standard_python_install_lines)
-				dependencies_block.extend(self.templates.globals["github_ci_requirements"]["Linux"]["post"])
+				dependencies_block.extend(linux_dependency_lines)
 		else:
-			dependencies_block = StringList([
-					"- name: Install dependencies (Linux) 🔧",
-					f"  if: ${{{{ matrix.os == '{linux_platform}' && steps.changes.outputs.code == 'true' }}}}",
-					"  run: |",
-					])
-			with dependencies_block.with_indent("  ", 2):
-				dependencies_block.extend(dependency_lines)
+			dependencies_block = StringList()
 
-			if self.templates.globals["platforms"] != ["Linux"]:
+			if "Linux" in platforms:
+				dependencies_block.blankline(ensure_single=True)
+				dependencies_block.extend([
+						"- name: Install dependencies (Linux) 🔧",
+						f"  if: ${{{{ matrix.os == '{linux_platform}' && steps.changes.outputs.code == 'true' }}}}",
+						"  run: |",
+						])
+				with dependencies_block.with_indent("  ", 2):
+					dependencies_block.extend(linux_dependency_lines)
+
+			if "Windows" in platforms:
 				dependencies_block.blankline(ensure_single=True)
 				dependencies_block.extend([
 						"- name: Install dependencies (Windows) 🔧",
@@ -388,8 +403,9 @@ class ActionsManager:
 						"  run: |",
 						])
 				with dependencies_block.with_indent("  ", 2):
-					dependencies_block.extend(self.standard_python_install_lines)
-					dependencies_block.extend(self.templates.globals["github_ci_requirements"]["Windows"]["post"])
+					dependencies_block.extend(windows_dependency_lines)
+
+		platforms = set(filter(None, (platform_ci_names.get(p, None) for p in platforms)))
 
 		ci_file.write_clean(
 				template.render(
@@ -490,17 +506,6 @@ class ActionsManager:
 
 		return dependency_lines
 
-	def get_linux_mypy_requirements(self) -> List[str]:
-		"""
-		Returns the Python requirements to run tests for on Linux.
-		"""
-
-		dependency_lines = StringList(self.templates.globals["github_ci_requirements"]["Linux"]["pre"])
-		dependency_lines.extend(self.standard_python_install_lines)
-		dependency_lines.extend(self.templates.globals["github_ci_requirements"]["Linux"]["post"])
-
-		return dependency_lines
-
 	def get_macos_ci_requirements(self) -> List[str]:
 		"""
 		Returns the Python requirements to run tests for on macOS.
@@ -508,9 +513,30 @@ class ActionsManager:
 
 		dependency_lines = StringList(self.templates.globals["github_ci_requirements"]["macOS"]["pre"])
 		dependency_lines.extend(self.standard_python_install_lines)
-
 		dependency_lines.extend(self._get_additional_requirements())
 		dependency_lines.extend(self.templates.globals["github_ci_requirements"]["macOS"]["post"])
+
+		return dependency_lines
+
+	def get_linux_mypy_requirements(self) -> List[str]:
+		"""
+		Returns the Python requirements to run tests for on Linux.
+		"""
+
+		return self.get_mypy_requirements("Linux")
+
+	def get_mypy_requirements(self, platform: str) -> List[str]:
+		"""
+		Returns the Python requirements to run tests for on the given platform.
+		"""
+
+		dependency_lines = StringList()
+		platform_deps = self.templates.globals["github_ci_requirements"].get(platform, None)
+		if platform_deps:
+			dependency_lines.extend(platform_deps["pre"])
+		dependency_lines.extend(self.standard_python_install_lines)
+		if platform_deps:
+			dependency_lines.extend(platform_deps["post"])
 
 		return dependency_lines
 

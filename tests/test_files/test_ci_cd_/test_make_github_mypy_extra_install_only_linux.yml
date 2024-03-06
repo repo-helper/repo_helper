@@ -42,8 +42,7 @@ jobs:
         with:
           python-version: "3.6"
 
-      - name: Install dependencies (Linux) 🔧
-        if: ${{ matrix.os == 'ubuntu-20.04' && steps.changes.outputs.code == 'true' }}
+      - name: Install dependencies 🔧
         run: |
           sudo apt update
           python -VV

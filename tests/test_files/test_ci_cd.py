@@ -289,6 +289,7 @@ def test_make_github_mypy_extra_install(
 		extra_install_pre: List[str],
 		extra_install_post: List[str],
 		):
+	demo_environment.globals["platforms"] = ["Linux", "Windows"]
 	demo_environment.globals["github_ci_requirements"] = {
 			"Linux": {"pre": extra_install_pre, "post": extra_install_post},
 			"Windows": {"pre": [], "post": []},
