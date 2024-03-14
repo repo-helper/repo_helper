@@ -140,24 +140,17 @@ def make_dependabot(repo_path: pathlib.Path, templates: Environment) -> List[str
 	"""
 
 	dependabot_file = PathPlus(repo_path / ".dependabot" / "config.yml")
-	dependabot_file.parent.maybe_make()
+	return_filename = dependabot_file.relative_to(repo_path).as_posix()
 
-	update_configs = {
-			"package_manager": "python",
-			"directory": '/',
-			"update_schedule": "weekly",
-			"default_reviewers": [templates.globals["assignee"]],
-			}
+	if dependabot_file.is_file():
+		dependabot_file.unlink()
 
-	config = {"version": 1, "update_configs": [update_configs]}
+	try:
+		dependabot_file.parent.rmdir()
+	except OSError:  # Not empty or doesn't exist
+		pass
 
-	dependabot_file.write_lines([
-			f"# {templates.globals['managed_message']}",
-			"---",
-			_round_trip_dump(config),
-			])
-
-	return [dependabot_file.relative_to(repo_path).as_posix()]
+	return [return_filename]
 
 
 @management.register("dependabotv2")

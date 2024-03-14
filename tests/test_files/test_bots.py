@@ -83,7 +83,7 @@ def test_dependabot(
 		):
 	managed_files = make_dependabot(tmp_pathplus, demo_environment)
 	assert managed_files == [".dependabot/config.yml"]
-	advanced_file_regression.check_file(tmp_pathplus / managed_files[0])
+	assert not (tmp_pathplus / managed_files[0]).is_file()
 
 
 def test_make_dependabotv2(
