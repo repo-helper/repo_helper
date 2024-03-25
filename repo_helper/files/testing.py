@@ -670,8 +670,8 @@ class ToxConfig(IniConfigurator):
 				"raise NotImplementedError",
 				"if 0:",
 				"if False:",
-				"if TYPE_CHECKING:",
-				"if typing.TYPE_CHECKING:",
+				"if TYPE_CHECKING",
+				"if typing.TYPE_CHECKING",
 				"if __name__ == .__main__.:",
 				])
 
