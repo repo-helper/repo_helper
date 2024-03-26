@@ -23,7 +23,7 @@ repo_helper==2020.12.18
 ├── filelock>=3.0.12
 ├── first>=2.0.2
 ├── formate>=0.7.0
-├── handy-archives>=0.1.0
+├── handy-archives>=0.2.0
 ├── idna<4,>=2.5
 ├── importlib-metadata>=6.6.0
 ├── isort>=5.5.2
