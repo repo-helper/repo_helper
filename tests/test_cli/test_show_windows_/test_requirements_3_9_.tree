@@ -758,7 +758,7 @@ repo_helper==2020.12.18
         ├── asttokens>=2.0.4
         │   └── six
         ├── attr-utils>=0.5.5
-        │   ├── attrs>=21.2.0
+        │   ├── attrs<23.2.0,>=21.2.0
         │   ├── domdf-python-tools>=3.6.1
         │   │   ├── natsort>=7.0.1
         │   │   └── typing-extensions>=3.7.4.1

@@ -425,6 +425,7 @@ repo_helper==2020.12.18
 │   │   └── typing-extensions>=3.7.4.3
 │   ├── typing-extensions>=3.7.4.3
 │   └── whey>=0.0.12
+│       ├── attrs>=22.2.0
 │       ├── click>=7.1.2
 │       ├── consolekit>=1.4.1
 │       │   ├── click>=7.1.2
@@ -460,7 +461,7 @@ repo_helper==2020.12.18
 │       │   │   └── zipp>=0.5
 │       │   ├── natsort>=7.0.1
 │       │   └── typing-extensions>=3.7.4.1
-│       ├── handy-archives>=0.1.0
+│       ├── handy-archives>=0.2.0
 │       ├── natsort>=7.1.1
 │       ├── packaging>=20.9
 │       ├── pyproject-parser>=0.6.0
@@ -762,6 +763,7 @@ repo_helper==2020.12.18
 ├── tabulate>=0.8.8
 ├── typing-extensions>=3.7.4.3
 ├── whey>=0.0.17
+│   ├── attrs>=22.2.0
 │   ├── click>=7.1.2
 │   ├── consolekit>=1.4.1
 │   │   ├── click>=7.1.2
@@ -797,7 +799,7 @@ repo_helper==2020.12.18
 │   │   │   └── zipp>=0.5
 │   │   ├── natsort>=7.0.1
 │   │   └── typing-extensions>=3.7.4.1
-│   ├── handy-archives>=0.1.0
+│   ├── handy-archives>=0.2.0
 │   ├── natsort>=7.1.1
 │   ├── packaging>=20.9
 │   ├── pyproject-parser>=0.6.0
@@ -953,7 +955,7 @@ repo_helper==2020.12.18
         ├── asttokens>=2.0.4
         │   └── six
         ├── attr-utils>=0.5.5
-        │   ├── attrs>=21.2.0
+        │   ├── attrs<23.2.0,>=21.2.0
         │   ├── domdf-python-tools>=3.6.1
         │   │   ├── importlib-metadata>=3.6.0; python_version < "3.9"
         │   │   │   └── zipp>=0.5
