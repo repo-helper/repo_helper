@@ -105,6 +105,29 @@ class ToxConfig(IniConfigurator):
 			"pytest",
 			]
 
+	def get_setenv(self, prefer_binary: bool = True, setuptools_stdlib=True) -> List[str]:
+		"""
+		Return environment variables to be set in the testenv.
+
+		:param prefer_binary: Whether pip should be configured to prefer older binary packages over newer source packages.
+		:param setuptools_stdlib: Whether setuptools should be configured to use the stdlib distutils.
+		"""
+
+		setenv = []
+
+		if self["enable_devmode"]:
+			setenv.append("PYTHONDEVMODE=1")
+
+		setenv.append("PIP_DISABLE_PIP_VERSION_CHECK=1")
+
+		if prefer_binary:
+			setenv.append("PIP_PREFER_BINARY=1")
+
+		if setuptools_stdlib:
+			setenv.append("SETUPTOOLS_USE_DISTUTILS=stdlib")
+
+		return setenv
+
 	def __init__(self, repo_path: pathlib.Path, templates: Environment):
 		self._globals = templates.globals
 
@@ -306,10 +329,7 @@ class ToxConfig(IniConfigurator):
 		``[testenv]``.
 		"""
 
-		if self["enable_devmode"]:
-			self._ini["testenv"]["setenv"] = indent_join(
-					("PYTHONDEVMODE=1", "PIP_DISABLE_PIP_VERSION_CHECK=1", "SETUPTOOLS_USE_DISTUTILS=stdlib")
-					)
+		self._ini["testenv"]["setenv"] = indent_join(self.get_setenv(False))
 
 		if self["enable_tests"]:
 
@@ -391,19 +411,15 @@ class ToxConfig(IniConfigurator):
 
 		for fixup_version in ["3.12-dev", "3.12", "3.13-dev"]:
 			if fixup_version in self["python_versions"]:
-				if self["enable_devmode"]:
-					env_name = f"testenv:py{fixup_version.replace('.', '')}"
-					if env_name in self._ini:
-						self._ini[env_name]["setenv"] = indent_join(
-								("PYTHONDEVMODE=1", "PIP_DISABLE_PIP_VERSION_CHECK=1")
-								)
+				setenv = self.get_setenv(False, False)
+				env_name = f"testenv:py{fixup_version.replace('.', '')}"
+				if env_name in self._ini:
+					self._ini[env_name]["setenv"] = indent_join(setenv)
 
-					for env in third_party_envs:
-						env_name = f"testenv:py{fixup_version.replace('.', '')}-{env}"
-						self._ini.add_section(env_name)
-						self._ini[env_name]["setenv"] = indent_join(
-								("PYTHONDEVMODE=1", "PIP_DISABLE_PIP_VERSION_CHECK=1")
-								)
+				for env in third_party_envs:
+					env_name = f"testenv:py{fixup_version.replace('.', '')}-{env}"
+					self._ini.add_section(env_name)
+					self._ini[env_name]["setenv"] = indent_join(setenv)
 
 			else:
 				self._ini.remove_section(f"testenv:py{fixup_version.replace('.', '')}")
@@ -416,10 +432,7 @@ class ToxConfig(IniConfigurator):
 		"""
 
 		if self["enable_devmode"]:
-			self._ini["testenv:.package"]["setenv"] = indent_join(
-					("PYTHONDEVMODE=1", "PIP_DISABLE_PIP_VERSION_CHECK=1")
-					)
-
+			self._ini["testenv:.package"]["setenv"] = indent_join(self.get_setenv(False, False))
 		else:
 			self._ini.remove_section("testenv:.package")
 
@@ -456,11 +469,7 @@ class ToxConfig(IniConfigurator):
 		``[testenv:build]``.
 		"""
 
-		if self["enable_devmode"]:
-			self._ini["testenv:build"]["setenv"] = indent_join(
-					("PYTHONDEVMODE=1", "PIP_DISABLE_PIP_VERSION_CHECK=1", "PIP_PREFER_BINARY=1")
-					)
-
+		self._ini["testenv:build"]["setenv"] = indent_join(self.get_setenv(setuptools_stdlib=False))
 		self._ini["testenv:build"]["skip_install"] = True
 		self._ini["testenv:build"]["changedir"] = "{toxinidir}"
 		self._ini["testenv:build"]["deps"] = indent_join([
