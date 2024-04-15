@@ -790,8 +790,7 @@ def make_sphinx_config_dict(templates: Environment) -> Dict[str, Any]:
 			"sphinx.ext.intersphinx",
 			"sphinx.ext.mathjax",
 			"sphinxcontrib.extras_require",
-			"sphinx.ext.todo",
-			"sphinxemoji.sphinxemoji",
+			"sphinx.ext.todo",  # "sphinxemoji.sphinxemoji",
 			"notfound.extension",
 			"sphinx_copybutton",
 			"sphinxcontrib.default_values",
@@ -804,7 +803,7 @@ def make_sphinx_config_dict(templates: Environment) -> Dict[str, Any]:
 	# "sphinx.ext.autosectionlabel",
 	# "sphinx_gitstamp",
 
-	data["sphinxemoji_style"] = "twemoji"
+	# data["sphinxemoji_style"] = "twemoji"
 	data["gitstamp_fmt"] = "%d %b %Y"
 	data["templates_path"] = ["_templates"]
 	data["html_static_path"] = ["_static"]
