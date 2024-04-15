@@ -17,7 +17,7 @@ repo_helper==2020.12.18
 ├── deprecation-alias>=0.3.2
 ├── dict2css>=0.2.0
 ├── dist-meta>=0.5.0
-├── dom-toml>=0.5.0
+├── dom-toml>=2.0.0
 ├── domdf-python-tools>=3.8.0
 ├── dulwich!=0.20.7,!=0.20.8,!=0.20.9,>=0.20.5
 ├── filelock>=3.0.12
@@ -40,7 +40,7 @@ repo_helper==2020.12.18
 ├── prettyprinter>=0.18.0
 ├── pygments>=2.2.0
 ├── pypi-json>=0.2.1
-├── pyproject-parser>=0.6.0
+├── pyproject-parser>=0.11.0
 ├── referencing>=0.31.0
 ├── requests>=2.27.1
 ├── rpds-py>=0.7.1
@@ -52,7 +52,6 @@ repo_helper==2020.12.18
 ├── six
 ├── southwark>=0.7.1
 ├── tabulate>=0.8.8
-├── toml>=0.10.2
 ├── tomli>=2.0.1
 ├── toolz>=0.11.1
 ├── typing-extensions!=3.10.0.1,!=4.7.0,>=4.0.0
