@@ -863,8 +863,8 @@ def make_sphinx_config_dict(templates: Environment) -> Dict[str, Any]:
 
 class PythonFormatTomlEncoder(dom_toml.TomlEncoder):
 
-	def dump_list(self, v: List) -> str:
-		values = DelimitedList(str(self.dump_value(u)) for u in v)
+	def format_inline_array(self, obj: Union[Tuple, List], nest_level: int) -> str:
+		values = DelimitedList(str(self.format_literal(u)) for u in obj)
 		single_line = f"[{values:, }]"
 
 		if len(single_line) <= self.max_width:
@@ -873,18 +873,18 @@ class PythonFormatTomlEncoder(dom_toml.TomlEncoder):
 		retval = StringList(['['])
 
 		with retval.with_indent("    ", 1):
-			for u in v:
-				retval.append(f"{str(self.dump_value(u))},")
+			for u in obj:
+				retval.append(f"{str(self.format_literal(u))},")
 
 		retval.append(']')
 
 		return str(retval)
 
-	def dump_value(self, v: Any) -> str:
-		if isinstance(v, bool):
-			return str(v)
+	def format_literal(self, obj: object, *, nest_level: int = 0) -> str:
+		if isinstance(obj, bool):
+			return str(obj)
 
-		return super().dump_value(v)
+		return super().format_literal(obj, nest_level=nest_level)
 
 
 def _template_with_custom_css(managed_message: str, filename: str) -> List[str]:

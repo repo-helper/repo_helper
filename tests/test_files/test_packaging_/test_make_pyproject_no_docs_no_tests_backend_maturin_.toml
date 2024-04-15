@@ -25,7 +25,6 @@ dependencies = [ "domdf-python-tools>=2.8.0", "toml>=0.10.2",]
 name = "E. Xample"
 email = "j.bloggs@example.com"
 
-
 [project.license]
 file = "LICENSE"
 
@@ -57,11 +56,11 @@ no_implicit_optional = true
 show_error_codes = true
 plugins = [ "my.mypy:plugin",]
 
-[tool.snippet-fmt]
-directives = [ "code-block",]
-
 [tool.dependency-dash."requirements.txt"]
 order = 10
+
+[tool.snippet-fmt]
+directives = [ "code-block",]
 
 [tool.snippet-fmt.languages.python]
 reformat = true

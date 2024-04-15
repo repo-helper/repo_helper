@@ -15,7 +15,6 @@ dynamic = [ "classifiers", "dependencies",]
 name = "E. Xample"
 email = "j.bloggs@example.com"
 
-
 [project.license]
 file = "LICENSE"
 
@@ -127,9 +126,6 @@ warn_unused_ignores = true
 no_implicit_optional = true
 show_error_codes = true
 
-[tool.snippet-fmt]
-directives = [ "code-block",]
-
 [tool.dependency-dash."requirements.txt"]
 order = 10
 
@@ -140,6 +136,9 @@ include = false
 [tool.dependency-dash."doc-source/requirements.txt"]
 order = 30
 include = false
+
+[tool.snippet-fmt]
+directives = [ "code-block",]
 
 [tool.snippet-fmt.languages.python]
 reformat = true

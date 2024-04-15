@@ -14,7 +14,6 @@ dynamic = [ "requires-python", "classifiers", "dependencies",]
 name = "E. Xample"
 email = "j.bloggs@example.com"
 
-
 [project.license]
 file = "LICENSE"
 
@@ -126,15 +125,15 @@ no_implicit_optional = true
 show_error_codes = true
 plugins = [ "my.mypy:plugin",]
 
-[tool.snippet-fmt]
-directives = [ "code-block",]
-
 [tool.dependency-dash."requirements.txt"]
 order = 10
 
 [tool.dependency-dash."doc-source/requirements.txt"]
 order = 30
 include = false
+
+[tool.snippet-fmt]
+directives = [ "code-block",]
 
 [tool.snippet-fmt.languages.python]
 reformat = true

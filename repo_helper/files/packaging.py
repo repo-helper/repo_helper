@@ -32,6 +32,7 @@ from typing import Any, Dict, List, Mapping, Tuple, TypeVar
 
 # 3rd party
 import dom_toml
+import pyproject_parser
 from domdf_python_tools.paths import PathPlus
 from natsort import natsorted, ns
 from shippinglabel import normalize
@@ -259,7 +260,7 @@ def make_pyproject(repo_path: pathlib.Path, templates: Environment) -> List[str]
 				)
 			if invalid_lines:
 				raise NotImplementedError(f"Unsupported requirement type(s): {invalid_lines}")
-			data["project"]["dependencies"] = sorted(parsed_requirements)
+			data["project"]["dependencies"] = list(map(str, sorted(parsed_requirements)))
 		else:
 			data["project"]["dynamic"] = ["dependencies"]
 
@@ -452,7 +453,7 @@ def make_pyproject(repo_path: pathlib.Path, templates: Environment) -> List[str]
 		del data["tool"]
 
 	# TODO: managed message
-	dom_toml.dump(data, pyproject_file, encoder=dom_toml.TomlEncoder)
+	dom_toml.dump(data, pyproject_file, encoder=pyproject_parser.PyProjectTomlEncoder)
 
 	return [pyproject_file.name]
 
@@ -472,7 +473,7 @@ def make_setup(repo_path: pathlib.Path, templates: Environment) -> List[str]:
 		setup_file.unlink(missing_ok=True)
 
 	else:
-		setup = templates.get_template("setup._py")
+		setup_template = templates.get_template("setup._py")
 
 		data = dict(
 				extras_require="extras_require",
@@ -487,10 +488,8 @@ def make_setup(repo_path: pathlib.Path, templates: Environment) -> List[str]:
 			data["data_files"] = "[('share/applications', ['{modname}.desktop'])]".format_map(templates.globals)
 
 		setup_args = sorted({**data, **templates.globals["additional_setup_args"]}.items())
-
-		setup_file.write_clean(
-				setup.render(additional_setup_args='\n'.join(f"\t\t{k}={v}," for k, v in setup_args))
-				)
+		setup = setup_template.render(additional_setup_args='\n'.join(f"\t\t{k}={v}," for k, v in setup_args))
+		setup_file.write_clean(setup)
 
 		with resource(repo_helper.files, "isort.cfg") as isort_config:
 			yapf_style = PathPlus(isort_config).parent.parent / "templates" / "style.yapf"

@@ -67,6 +67,7 @@ known_third_party = [
     "packaging",
     "pre_commit",
     "pypi_json",
+    "pyproject_parser",
     "pyreadline",
     "pytest",
     "pytest_cov",
