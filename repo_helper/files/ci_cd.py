@@ -543,7 +543,7 @@ class ActionsManager:
 
 platform_ci_names = {
 		"Windows": "windows-2019",
-		"macOS": "macos-latest",
+		"macOS": "macos-13",
 		"Linux": "ubuntu-20.04",
 		}
 """
