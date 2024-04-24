@@ -466,7 +466,9 @@ class ToxConfig(IniConfigurator):
 		``[testenv:build]``.
 		"""
 
-		self._ini["testenv:build"]["setenv"] = indent_join(self.get_setenv(setuptools_stdlib=False))
+		self._ini["testenv:build"]["setenv"] = indent_join(
+				(*self.get_setenv(setuptools_stdlib=False), "UNSAFE_PYO3_SKIP_VERSION_CHECK=1")
+				)
 		self._ini["testenv:build"]["skip_install"] = True
 		self._ini["testenv:build"]["changedir"] = "{toxinidir}"
 		self._ini["testenv:build"]["deps"] = indent_join([
@@ -532,6 +534,10 @@ class ToxConfig(IniConfigurator):
 		``[testenv:perflint]``.
 		"""
 
+		# self._ini["testenv:perflint"]["setenv"] = indent_join([
+		# 		*self.get_setenv(),
+		# 		"PYTHONWARNINGS=ignore",
+		# 		])
 		self._ini["testenv:perflint"]["basepython"] = "python{python_deploy_version}".format(**self._globals)
 		self._ini["testenv:perflint"]["changedir"] = "{toxinidir}"
 		self._ini["testenv:perflint"]["ignore_errors"] = True
