@@ -257,7 +257,7 @@ def make_pre_commit(repo_path: pathlib.Path, templates: Environment) -> List[str
 
 	flake8_dunder_all = Repo(
 			repo=make_github_url("domdfcoding", "flake8-dunder-all"),
-			rev="v0.3.1",
+			rev="v0.4.1",
 			hooks=[{
 					"id": "ensure-dunder-all",
 					"files": fr"^{import_name}{'-stubs' if stubs_package else ''}/.*\.py$"
