@@ -431,10 +431,7 @@ class ToxConfig(IniConfigurator):
 		``[testenv:.package]``.
 		"""
 
-		if self["enable_devmode"]:
-			self._ini["testenv:.package"]["setenv"] = indent_join(self.get_setenv(False, False))
-		else:
-			self._ini.remove_section("testenv:.package")
+		self._ini["testenv:.package"]["setenv"] = indent_join(self.get_setenv(False, False))
 
 	def testenv_docs(self) -> None:
 		"""
