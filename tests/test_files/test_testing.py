@@ -68,9 +68,10 @@ class TestMakeTox:
 		demo_environment.globals["mypy_deps"] = list(mypy_deps)
 		demo_environment.globals["mypy_version"] = mypy_version
 		demo_environment.globals["python_versions"] = {
-				"py36": {"experimental": False},
-				"py37": {"experimental": False},
-				"py38": {"experimental": False},
+				"3.6": {"experimental": False},
+				"3.7": {"experimental": False},
+				"3.8": {"experimental": False},
+				"3.13-dev": {"experimental": True},
 				}
 		demo_environment.globals["tox_requirements"] = list(tox_requirements)
 		demo_environment.globals["tox_build_requirements"] = list(tox_build_requirements)
