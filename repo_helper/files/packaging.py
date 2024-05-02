@@ -210,7 +210,7 @@ def make_pyproject(repo_path: pathlib.Path, templates: Environment) -> List[str]
 	data["build-system"]["requires"] = list(map(str, build_requirements))
 	data["build-system"]["build-backend"] = build_backend
 
-	data["project"] = DefaultDict(data.get("project", {}))
+	data["project"] = {}
 	data["project"]["name"] = templates.globals["pypi_name"]
 	data["project"]["version"] = templates.globals["version"]
 	data["project"]["description"] = templates.globals["short_desc"]
@@ -244,8 +244,8 @@ def make_pyproject(repo_path: pathlib.Path, templates: Environment) -> List[str]
 		del data["project"]["classifiers"]
 
 	data["project"]["dynamic"] = dynamic
-	data["project"]["authors"] = [{"name": templates.globals["author"], "email": templates.globals["email"]}]
 	data["project"]["license"] = {"file": "LICENSE"}
+	data["project"]["authors"] = [{"name": templates.globals["author"], "email": templates.globals["email"]}]
 
 	_enabled_backends = get_keys(templates.globals, "use_flit", "use_maturin", "use_hatch")
 	if not any(_enabled_backends) and "dependencies" in data["project"]:

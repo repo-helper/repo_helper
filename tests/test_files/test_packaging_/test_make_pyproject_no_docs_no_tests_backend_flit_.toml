@@ -21,12 +21,12 @@ classifiers = [
 dynamic = []
 dependencies = [ "domdf-python-tools>=2.8.0", "toml>=0.10.2",]
 
+[project.license]
+file = "LICENSE"
+
 [[project.authors]]
 name = "E. Xample"
 email = "j.bloggs@example.com"
-
-[project.license]
-file = "LICENSE"
 
 [project.urls]
 Homepage = "https://github.com/octocat/hello-world"

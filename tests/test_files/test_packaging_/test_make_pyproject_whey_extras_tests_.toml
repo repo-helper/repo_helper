@@ -11,12 +11,12 @@ requires-python = ">=3.6.1"
 keywords = [ "awesome", "project", "python",]
 dynamic = [ "classifiers", "dependencies",]
 
+[project.license]
+file = "LICENSE"
+
 [[project.authors]]
 name = "E. Xample"
 email = "j.bloggs@example.com"
-
-[project.license]
-file = "LICENSE"
 
 [project.urls]
 Homepage = "https://github.com/octocat/hello-world"
