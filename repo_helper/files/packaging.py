@@ -317,15 +317,6 @@ def make_pyproject(repo_path: pathlib.Path, templates: Environment) -> List[str]
 	if templates.globals["enable_docs"]:
 		data["project"]["urls"]["Documentation"] = templates.globals["docs_url"]
 
-	# extras-require
-	data["project"]["optional-dependencies"] = {}
-
-	for extra, dependencies in templates.globals["extras_require"].items():
-		data["project"]["optional-dependencies"][extra] = list(map(str, dependencies))
-
-	if not data["project"]["optional-dependencies"]:
-		del data["project"]["optional-dependencies"]
-
 	# entry-points
 
 	if templates.globals["console_scripts"]:
@@ -338,6 +329,15 @@ def make_pyproject(repo_path: pathlib.Path, templates: Environment) -> List[str]
 
 	if not data["project"]["entry-points"]:
 		del data["project"]["entry-points"]
+
+	# extras-require
+	data["project"]["optional-dependencies"] = {}
+
+	for extra, dependencies in templates.globals["extras_require"].items():
+		data["project"]["optional-dependencies"][extra] = list(map(str, dependencies))
+
+	if not data["project"]["optional-dependencies"]:
+		del data["project"]["optional-dependencies"]
 
 	# tool
 
