@@ -23,13 +23,13 @@ Homepage = "https://github.com/repo-helper/repo_helper"
 "Source Code" = "https://github.com/repo-helper/repo_helper"
 Documentation = "https://docs.repo-helper.uk"
 
-[project.scripts]
-repo_helper = "repo_helper.__main__:main"
-repo-helper = "repo_helper.__main__:main"
-
 [project.optional-dependencies]
 testing = [ "check-wheel-contents>=0.2.0", "coincidence>=0.2.0", "pytest>=6.2.0",]
 all = [ "check-wheel-contents>=0.2.0", "coincidence>=0.2.0", "pytest>=6.2.0",]
+
+[project.scripts]
+repo_helper = "repo_helper.__main__:main"
+repo-helper = "repo_helper.__main__:main"
 
 [tool.mkrecipe]
 extras = []
