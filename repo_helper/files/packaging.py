@@ -28,7 +28,7 @@ import pathlib
 import posixpath
 import re
 import textwrap
-from typing import Any, Dict, List, Mapping, Tuple, TypeVar
+from typing import Any, Dict, List, Mapping, Optional, Tuple, TypeVar
 
 # 3rd party
 import dom_toml
@@ -210,6 +210,12 @@ def make_pyproject(repo_path: pathlib.Path, templates: Environment) -> List[str]
 	data["build-system"]["requires"] = list(map(str, build_requirements))
 	data["build-system"]["build-backend"] = build_backend
 
+	existing_dependencies: Optional[List[str]]
+	if "dependencies" in data.get("project", {}):
+		existing_dependencies = data["project"]["dependencies"]
+	else:
+		existing_dependencies = None
+
 	data["project"] = {}
 	data["project"]["name"] = templates.globals["pypi_name"]
 	data["project"]["version"] = templates.globals["version"]
@@ -242,6 +248,9 @@ def make_pyproject(repo_path: pathlib.Path, templates: Environment) -> List[str]
 		data["project"]["classifiers"] = _get_classifiers(templates.globals)
 	elif "classifiers" in data["project"]:
 		del data["project"]["classifiers"]
+
+	if existing_dependencies is not None:
+		data["project"]["dependencies"] = existing_dependencies
 
 	data["project"]["dynamic"] = dynamic
 	data["project"]["license"] = {"file": "LICENSE"}
