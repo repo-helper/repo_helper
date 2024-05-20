@@ -158,7 +158,7 @@ def make_pyproject(repo_path: pathlib.Path, templates: Environment) -> List[str]
 	build_backend = "setuptools.build_meta"
 
 	build_requirements_ = {
-			"setuptools>=40.6.0,!=61.*",
+			"setuptools!=61.*,<=67.1.0,>=40.6.0",
 			"wheel>=0.34.2",
 			"whey",
 			"repo-helper",
