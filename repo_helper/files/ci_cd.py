@@ -274,6 +274,10 @@ class ActionsManager:
 		ci_file = self.workflows_dir / f"python_ci_{platform_name.lower()}.yml"
 
 		if platform_name in self.templates.globals["platforms"]:
+			gh_actions_versions = self.get_gh_actions_matrix()
+			if "pypy-3.6" in gh_actions_versions:
+				gh_actions_versions.pop("pypy-3.6")
+
 			ci_file.write_clean(
 					self.actions.render(
 							no_dev_versions=no_dev_versions,
@@ -281,7 +285,7 @@ class ActionsManager:
 							ci_name=platform_name,
 							python_versions=set_gh_actions_versions(self.get_macos_ci_versions()),
 							dependency_lines=self.get_macos_ci_requirements(),
-							gh_actions_versions=self.get_gh_actions_matrix(),
+							gh_actions_versions=gh_actions_versions,
 							code_file_filter=self._code_file_filter,
 							)
 					)
@@ -464,8 +468,11 @@ class ActionsManager:
 
 		py_versions: List[str] = list(self.templates.globals["python_versions"])
 
+		# PyPy 3.6 requires patching on Big Sur
 		if "pypy36" in py_versions:
-			py_versions.remove("pypy36")  # PyPy 3.6 requires patching on Big Sur
+			py_versions.remove("pypy36")
+		if "pypy3.6" in py_versions:
+			py_versions.remove("pypy3.6")
 
 		return py_versions
 
