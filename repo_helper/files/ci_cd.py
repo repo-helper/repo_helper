@@ -243,6 +243,11 @@ class ActionsManager:
 					gh_actions_versions["pypy-3.6"][1],
 					)
 
+		if "pypy-3.9" in gh_actions_versions:
+			gh_actions_versions["pypy-3.9-v7.3.15"] = gh_actions_versions.pop("pypy-3.9")
+		if "pypy-3.10" in gh_actions_versions:
+			gh_actions_versions["pypy-3.10-v7.3.15"] = gh_actions_versions.pop("pypy-3.10")
+
 		if platform_name in self.templates.globals["platforms"]:
 			ci_file.write_clean(
 					self.actions.render(

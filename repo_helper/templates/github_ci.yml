@@ -27,7 +27,7 @@ jobs:
     strategy:
       fail-fast: False
       matrix:
-        config:{% for version in no_dev_versions(python_versions) %}
+        config:{% for version in gh_actions_versions %}
           {%- set testenvs, experimental = gh_actions_versions[version] %}
           - {python-version: "{{ version }}", testenvs: "{{ testenvs }}", experimental: {{ experimental }}}{% endfor %}
 
