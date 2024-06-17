@@ -744,6 +744,8 @@ class ToxConfig(IniConfigurator):
 				if section.name.startswith("testenv:py312-") and section.name in self._ini.sections():
 					continue
 				if section.name.startswith("testenv:py313-") and section.name in self._ini.sections():
+					if section.name == "testenv:py313-dev" and "pip_pre" in section:
+						self._ini["testenv:py313-dev"]["pip_pre"] = section["pip_pre"].value
 					continue
 
 				if section.name not in self.managed_sections:
