@@ -36,6 +36,7 @@ repo_helper==2020.12.18
 ├── markupsafe>=2.0
 ├── mistletoe>=0.7.2
 ├── mkrecipe>=0.3.0
+├── more-itertools
 ├── mypy-extensions>=0.3.0
 ├── natsort>=7.1.1
 ├── packaging>=21.3
