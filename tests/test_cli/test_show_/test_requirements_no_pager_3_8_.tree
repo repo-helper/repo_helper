@@ -1015,7 +1015,7 @@ repo_helper==2020.12.18
         ├── asttokens>=2.0.4
         │   └── six
         ├── attr-utils>=0.5.5
-        │   ├── attrs<23.2.0,>=21.2.0
+        │   ├── attrs>=21.2.0
         │   ├── domdf-python-tools>=3.6.1
         │   │   ├── importlib-metadata>=3.6.0; python_version < "3.9"
         │   │   │   └── zipp>=0.5

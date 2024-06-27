@@ -1172,7 +1172,7 @@ repo_helper==2020.12.18
         ├── asttokens>=2.0.4
         │   └── six
         ├── attr-utils>=0.5.5
-        │   ├── attrs<23.2.0,>=21.2.0
+        │   ├── attrs>=21.2.0
         │   │   └── importlib-metadata; python_version < "3.8"
         │   │       ├── typing-extensions>=3.6.4; python_version < "3.8"
         │   │       └── zipp>=0.5
