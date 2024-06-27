@@ -88,11 +88,16 @@ logging.getLogger("CSSUTILS").addFilter(lambda record: False)
 
 class DocRequirementsManager(RequirementsManager):
 	target_requirements = {
-			ComparableRequirement("sphinxemoji>=0.1.6"),  # latest 0.2.0
-			ComparableRequirement("sphinx-notfound-page>=0.5"),  # latest 0.8.3
-			ComparableRequirement("sphinx-copybutton>=0.2.12"),  # latest 0.5.2
+			ComparableRequirement("sphinxemoji>=0.1.6"),
+			ComparableRequirement("sphinx-notfound-page>=0.5"),
+			ComparableRequirement("sphinx-copybutton>=0.2.12"),
 			ComparableRequirement("sphinx-pyproject>=0.1.0"),
-			# ComparableRequirement("sphinx-autodoc-typehints==1.11.1"),
+			ComparableRequirement("sphinxcontrib-applehelp==1.0.4"),
+			ComparableRequirement("sphinxcontrib-devhelp==1.0.2"),
+			ComparableRequirement("sphinxcontrib-htmlhelp==2.0.1"),
+			ComparableRequirement("sphinxcontrib-jsmath==1.0.1"),
+			ComparableRequirement("sphinxcontrib-qthelp==1.0.3"),
+			ComparableRequirement("sphinxcontrib-serializinghtml==1.1.5"),
 			}
 
 	def __init__(self, repo_path: PathLike, templates: Environment):
