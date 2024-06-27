@@ -63,6 +63,8 @@ class CondaRecipeMaker(MaryBerry):
 		config["optional-dependencies"] = config["extras_require"]
 		config["dependencies"] = sorted(read_requirements(self.project_dir / "requirements.txt")[0])
 		config["requires"] = ["setuptools", "wheel"]
+		config["max-python-version"] = None  # TODO
+		config["min-python-version"] = None  # TODO
 
 		if config["conda_extras"] in (["none"], ["all"]):
 			config["extras"] = config["conda_extras"][0]
