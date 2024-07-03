@@ -171,6 +171,11 @@ class DocRequirementsManager(RequirementsManager):
 					self.target_requirements.add(req)
 
 		self.target_requirements = set(combine_requirements(self.target_requirements))
+		self.target_requirements = {
+				req
+				for req in self.target_requirements
+				if req.name not in {"sphinx-tabs", "sphinx-prompt"}
+				}
 
 		return comments
 
