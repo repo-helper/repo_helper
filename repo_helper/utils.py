@@ -526,10 +526,7 @@ def resource(
 	:param resource: The name of the resource.
 	"""
 
-	if sys.version_info < (3, 7) or sys.version_info >= (3, 11):
-		return importlib_resources.as_file(importlib_resources.files(package) / os.fspath(resource))
-	else:
-		return importlib_resources.path(package, resource)
+	return importlib_resources.as_file(importlib_resources.files(package) / os.fspath(resource))
 
 
 base_license_url = RequestsURL("https://raw.githubusercontent.com/licenses/license-templates/master/templates/")
