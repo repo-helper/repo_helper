@@ -15,12 +15,12 @@ repo_helper==2020.12.18
 ├── consolekit>=1.4.1
 ├── cssutils>=2.2.0
 ├── deprecation>=2.1.0
-├── deprecation-alias>=0.3.2
+├── deprecation-alias>=0.1.1
 ├── dict2css>=0.2.0
 ├── dist-meta>=0.5.0
 ├── dom-toml>=2.0.0
 ├── domdf-python-tools>=3.8.0
-├── dulwich!=0.20.7,!=0.20.8,!=0.20.9,>=0.20.5
+├── dulwich!=0.20.7,!=0.20.8,!=0.20.9,<=0.20.33,>=0.20.5
 ├── filelock>=3.0.12
 ├── first>=2.0.2
 ├── formate>=0.7.0
@@ -61,7 +61,7 @@ repo_helper==2020.12.18
 ├── toolz>=0.11.1
 ├── typing-extensions!=3.10.0.1,!=4.7.0,>=4.0.0
 ├── typing-inspect>=0.6.0
-├── urllib3<3,>=1.25
+├── urllib3<3,>=1.24.1
 ├── whey>=0.0.17
 ├── yapf>=0.30.0
 ├── yapf-isort>=0.5.2
