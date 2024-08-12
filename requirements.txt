@@ -9,7 +9,6 @@ dict2css>=0.2.0
 dom-toml>=2.0.0
 domdf-python-tools>=3.2.0
 dulwich>=0.20.5
-dulwich<=0.20.33,>=0.19.16
 first>=2.0.2
 isort>=5.5.2
 jinja2>=2.11.3

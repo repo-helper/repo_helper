@@ -81,6 +81,8 @@ extras_require:
    - pytest>=6.2.0
    - coincidence>=0.2.0
    - check_wheel_contents>=0.2.0
+  cli:
+   - dulwich<=0.20.33,>=0.20.5
 
 conda_channels:
  - conda-forge
