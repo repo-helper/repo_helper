@@ -63,9 +63,6 @@ repo_helper==2020.12.18
 ├── dulwich>=0.20.5
 │   ├── certifi
 │   └── urllib3>=1.24.1
-├── dulwich<=0.20.33,>=0.19.16
-│   ├── certifi
-│   └── urllib3>=1.24.1
 ├── first>=2.0.2
 ├── isort>=5.5.2
 ├── jinja2>=2.11.3
