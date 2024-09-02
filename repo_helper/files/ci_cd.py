@@ -376,8 +376,11 @@ class ActionsManager:
 		if "Linux" not in platforms:
 			linux_dependency_lines = self.standard_python_install_lines
 
-		if linux_dependency_lines == self.standard_python_install_lines:
-			platform_specific_blocks = False
+		if linux_dependency_lines != self.standard_python_install_lines:
+			platform_specific_blocks = True
+		if windows_dependency_lines != self.standard_python_install_lines:
+			platform_specific_blocks = True
+
 		if linux_dependency_lines == windows_dependency_lines:
 			platform_specific_blocks = False
 		if "Linux" in platforms and "Windows" not in platforms:
