@@ -61,4 +61,4 @@ repo_helper==2020.12.18
 ├── whey>=0.0.17
 ├── yapf>=0.30.0
 ├── yapf-isort>=0.5.2
-└── zipp>=0.5
+└── zipp>=3.20
