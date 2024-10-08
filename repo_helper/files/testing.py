@@ -92,6 +92,7 @@ class ToxConfig(IniConfigurator):
 			"testenv",
 			"testenv:.package",
 			"testenv:py313-dev",
+			"testenv:py313",
 			"testenv:py312-dev",
 			"testenv:py312",
 			"testenv:docs",
@@ -393,6 +394,9 @@ class ToxConfig(IniConfigurator):
 	def testenv_py312(self) -> None:  # noqa: D102
 		pass
 
+	def testenv_py313(self) -> None:  # noqa: D102
+		pass
+
 	def testenv_py313_dev(self) -> None:  # noqa: D102
 		pass
 
@@ -409,13 +413,14 @@ class ToxConfig(IniConfigurator):
 			# third_party_envs.append(f"testenv:py312-dev-{third_party_library}{{{','.join(third_party_versions)}}}")
 			# third_party_envs.append(f"testenv:py312-{third_party_library}{{{','.join(third_party_versions)}}}")
 
-		for fixup_version in ["3.12-dev", "3.12", "3.13-dev"]:
+		for fixup_version in ["3.12-dev", "3.12",  "3.13", "3.13-dev"]:
 			if fixup_version in self["python_versions"]:
 				setenv = self.get_setenv(False, False)
 				if fixup_version.startswith("3.13"):
 					setenv.append("UNSAFE_PYO3_SKIP_VERSION_CHECK=1")
 
 				env_name = f"testenv:py{fixup_version.replace('.', '')}"
+				self._ini[env_name]["download"] = True
 				if env_name in self._ini:
 					self._ini[env_name]["setenv"] = indent_join(setenv)
 
