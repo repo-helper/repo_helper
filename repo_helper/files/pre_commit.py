@@ -205,7 +205,7 @@ flake2lint = Repo(
 
 pyproject_parser = Repo(
 		repo=make_github_url("repo-helper", "pyproject-parser"),
-		rev="v0.11.0",
+		rev="v0.11.1",
 		hooks=["reformat-pyproject"],  # TODO: add check-pyproject
 		)
 
@@ -256,7 +256,7 @@ def make_pre_commit(repo_path: pathlib.Path, templates: Environment) -> List[str
 			)
 
 	flake8_dunder_all = Repo(
-			repo=make_github_url("domdfcoding", "flake8-dunder-all"),
+			repo=make_github_url("python-formate", "flake8-dunder-all"),
 			rev="v0.4.1",
 			hooks=[{
 					"id": "ensure-dunder-all",
@@ -289,7 +289,7 @@ def make_pre_commit(repo_path: pathlib.Path, templates: Environment) -> List[str
 				))
 
 	dep_checker = Repo(
-			repo=make_github_url("domdfcoding", "dep_checker"),
+			repo=make_github_url("python-coincidence", "dep_checker"),
 			rev="v0.8.0",
 			hooks=[{"id": "dep_checker", "args": dep_checker_args}]
 			)
