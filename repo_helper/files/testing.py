@@ -413,7 +413,7 @@ class ToxConfig(IniConfigurator):
 			# third_party_envs.append(f"testenv:py312-dev-{third_party_library}{{{','.join(third_party_versions)}}}")
 			# third_party_envs.append(f"testenv:py312-{third_party_library}{{{','.join(third_party_versions)}}}")
 
-		for fixup_version in ["3.12-dev", "3.12",  "3.13", "3.13-dev"]:
+		for fixup_version in ["3.12-dev", "3.12", "3.13", "3.13-dev"]:
 			if fixup_version in self["python_versions"]:
 				setenv = self.get_setenv(False, False)
 				if fixup_version.startswith("3.13"):
