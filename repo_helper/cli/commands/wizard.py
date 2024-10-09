@@ -102,7 +102,7 @@ def wizard() -> None:
 					"GIT_AUTHOR_NAME",
 					default=os.getenv("GIT_COMMITTER_NAME", default=getpass_user),
 					)
-		except ImportError:
+		except (ImportError, OSError):
 			# Usually USERNAME is not set when trying getpass.getuser()
 			default_author = ''
 
