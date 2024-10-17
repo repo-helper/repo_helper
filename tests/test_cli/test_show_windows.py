@@ -1,4 +1,5 @@
 # stdlib
+import string
 import sys
 
 # 3rd party
@@ -41,8 +42,8 @@ show_directories = [
 @not_pypy("Output differs on PyPy.")
 class TestShowRequirements:
 
-	@version_specific
 	@pytest.mark.usefixtures("tmp_repo", "py_version", "fixed_version_number")
+	@version_specific
 	def test_requirements(
 			self,
 			advanced_file_regression: AdvancedFileRegressionFixture,
@@ -83,10 +84,11 @@ class TestShowRequirements:
 			assert result.exit_code == 0
 			result.check_stdout(advanced_file_regression, extension=".tree")
 
-	@pytest.mark.usefixtures("tmp_repo", "py_version", "fixed_version_number")
+	@pytest.mark.usefixtures("tmp_repo", "fixed_version_number")
 	@version_specific
 	def test_requirements_no_pager(
 			self,
+			py_version: str,
 			advanced_file_regression: AdvancedFileRegressionFixture,
 			):
 
@@ -99,4 +101,9 @@ class TestShowRequirements:
 						)
 
 			assert result.exit_code == 0
-			result.check_stdout(advanced_file_regression, extension=".tree")
+			py_version = py_version.translate(str.maketrans({char: '_' for char in string.punctuation}))
+			result.check_stdout(
+					advanced_file_regression,
+					extension=".tree",
+					basename=f"test_requirements_{py_version}_",
+					)
