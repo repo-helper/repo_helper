@@ -420,13 +420,14 @@ class ToxConfig(IniConfigurator):
 					setenv.append("UNSAFE_PYO3_SKIP_VERSION_CHECK=1")
 
 				env_name = f"testenv:py{fixup_version.replace('.', '')}"
-				self._ini[env_name]["download"] = True
 				if env_name in self._ini:
+					self._ini[env_name]["download"] = True
 					self._ini[env_name]["setenv"] = indent_join(setenv)
 
 				for env in third_party_envs:
 					env_name = f"testenv:py{fixup_version.replace('.', '')}-{env}"
 					self._ini.add_section(env_name)
+					self._ini[env_name]["download"] = True
 					self._ini[env_name]["setenv"] = indent_join(setenv)
 
 			else:
