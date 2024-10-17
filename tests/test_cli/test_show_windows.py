@@ -101,7 +101,8 @@ class TestShowRequirements:
 						)
 
 			assert result.exit_code == 0
-			py_version = py_version.translate(str.maketrans({char: '_' for char in string.punctuation}))
+			transmap = str.maketrans({char: '_' for char in string.punctuation})
+			py_version = py_version.translate(transmap)
 			result.check_stdout(
 					advanced_file_regression,
 					extension=".tree",

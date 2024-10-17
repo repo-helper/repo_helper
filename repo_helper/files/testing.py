@@ -106,7 +106,7 @@ class ToxConfig(IniConfigurator):
 			"pytest",
 			]
 
-	def get_setenv(self, prefer_binary: bool = True, setuptools_stdlib=True) -> List[str]:
+	def get_setenv(self, prefer_binary: bool = True, setuptools_stdlib: bool = True) -> List[str]:
 		"""
 		Return environment variables to be set in the testenv.
 
