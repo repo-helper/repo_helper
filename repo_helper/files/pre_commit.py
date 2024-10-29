@@ -34,7 +34,6 @@ from typing import Iterable, List, MutableMapping, Union
 
 # 3rd party
 import attr
-import ruamel.yaml
 from apeye.url import URL
 from domdf_python_tools.paths import PathPlus
 from domdf_python_tools.stringlist import StringList
@@ -150,6 +149,15 @@ class Repo:
 				"hooks": self.hooks,
 				}
 
+	def replace_hooks(self: "Repo", hooks: Iterable[Union[str, Hook]]) -> "Repo":
+		"""
+		Return a new instance of this repo with the new hooks provided.
+
+		:param hooks:
+		"""
+
+		return Repo(self.repo, self.rev, hooks)
+
 
 pre_commit_hooks = Repo(
 		repo=make_github_url("pre-commit", "pre-commit-hooks"),
@@ -209,17 +217,27 @@ pyproject_parser = Repo(
 		hooks=["reformat-pyproject"],  # TODO: add check-pyproject
 		)
 
-# shellcheck = Repo(
-# 		repo=make_github_url("shellcheck-py", "shellcheck-py"),
-# 		rev="v0.7.1.1",
-# 		hooks=["shellcheck"]
-# 		)
-#
-# yamllint = Repo(
-# 		repo=make_github_url("adrienverge", "yamllint"),
-# 		rev="v1.23.0",
-# 		hooks=["yamllint"]
-# 		)
+snippet_fmt = Repo(
+		repo=make_github_url("python-formate", "snippet-fmt"),
+		rev="v0.1.5",
+		hooks=["snippet-fmt"],
+		)
+
+domdfcoding_hooks = Repo(
+		repo=make_github_url("domdfcoding", "pre-commit-hooks"),
+		rev="v0.4.0",
+		hooks=[
+				{"id": "requirements-txt-sorter", "args": ["--allow-git"]},
+				{"id": "check-docstring-first", "exclude": fr"^(doc-source/conf|__pkginfo__|setup|tests/.*)\.py$"},
+				"bind-requirements",
+				]
+		)
+
+formate = Repo(
+		repo=make_github_url("python-formate", "formate"),
+		rev="v0.7.0",
+		hooks=[{"id": "formate", "exclude": r"^(doc-source/conf|__pkginfo__|setup)\.(_)?py$"}],
+		)
 
 
 @management.register("pre-commit", ["enable_pre_commit"])
@@ -242,9 +260,7 @@ def make_pre_commit(repo_path: pathlib.Path, templates: Environment) -> List[str
 
 	non_source_files = [posixpath.join(docs_dir, "conf"), "__pkginfo__", "setup"]
 
-	domdfcoding_hooks = Repo(
-			repo=make_github_url("domdfcoding", "pre-commit-hooks"),
-			rev="v0.4.0",
+	domdfcoding_hooks_custom = domdfcoding_hooks.replace_hooks(
 			hooks=[
 					{"id": "requirements-txt-sorter", "args": ["--allow-git"]},
 					{
@@ -264,19 +280,9 @@ def make_pre_commit(repo_path: pathlib.Path, templates: Environment) -> List[str
 					}]
 			)
 
-	snippet_fmt = Repo(
-			repo=make_github_url("python-formate", "snippet-fmt"),
-			rev="v0.1.5",
-			hooks=["snippet-fmt"],
-			)
-
 	formate_excludes = fr"^({'|'.join([*templates.globals['yapf_exclude'], *non_source_files])})\.(_)?py$"
 
-	formate = Repo(
-			repo=make_github_url("python-formate", "formate"),
-			rev="v0.7.0",
-			hooks=[{"id": "formate", "exclude": formate_excludes}],
-			)
+	formate_custom = formate.replace_hooks(hooks=[{"id": "formate", "exclude": formate_excludes}])
 
 	dep_checker_args = [templates.globals["import_name"].replace('.', '/')]
 
@@ -299,7 +305,7 @@ def make_pre_commit(repo_path: pathlib.Path, templates: Environment) -> List[str
 	if not pre_commit_file.is_file():
 		pre_commit_file.touch()
 
-	dumper = ruamel.yaml.YAML()
+	dumper = YAML()
 	dumper.indent(mapping=2, sequence=3, offset=1)
 
 	output = StringList([
@@ -319,14 +325,14 @@ def make_pre_commit(repo_path: pathlib.Path, templates: Environment) -> List[str
 	managed_hooks = [
 			pyproject_parser,
 			pre_commit_hooks,
-			domdfcoding_hooks,
+			domdfcoding_hooks_custom,
 			flake8_dunder_all,
 			flake2lint,
 			pygrep_hooks,
 			pyupgrade,
 			lucas_c_hooks,
 			snippet_fmt,
-			formate,
+			formate_custom,
 			]
 
 	if not templates.globals["stubs_package"]:

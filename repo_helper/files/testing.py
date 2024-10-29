@@ -990,7 +990,6 @@ def make_formate_toml(repo_path: pathlib.Path, templates: Environment) -> List[s
 	formate_config["hooks"] = hooks
 	formate_config["config"] = config
 
-	formate_file = PathPlus(repo_path / "formate.toml")
 	dom_toml.dump(formate_config, formate_file, encoder=dom_toml.TomlEncoder)
 
 	return [formate_file.name, isort_file.name]
