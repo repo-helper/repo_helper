@@ -965,7 +965,7 @@ repo_helper==2020.12.18
         │   ├── Pygments>=2.2.0
         │   └── colorful>=0.4.0
         ├── typing-extensions>=3.7.4.3
-        └── yapf>=0.30.0
+        └── yapf<0.43.0,>=0.30.0
             ├── importlib-metadata>=6.6.0
             │   └── zipp>=3.20
             ├── platformdirs>=3.5.1

@@ -58,6 +58,6 @@ repo_helper==2020.12.18
 ├── typing-inspect>=0.6.0
 ├── urllib3<3,>=1.24.1
 ├── whey>=0.0.17
-├── yapf>=0.30.0
+├── yapf<0.43.0,>=0.30.0
 ├── yapf-isort>=0.5.2
 └── zipp>=3.20

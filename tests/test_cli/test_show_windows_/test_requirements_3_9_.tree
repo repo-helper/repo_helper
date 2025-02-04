@@ -25,10 +25,12 @@ repo_helper==2020.12.18
 │   │   ├── jsonschema-specifications>=2023.03.6
 │   │   │   └── referencing>=0.31.0
 │   │   │       ├── attrs>=22.2.0
-│   │   │       └── rpds-py>=0.7.0
+│   │   │       ├── rpds-py>=0.7.0
+│   │   │       └── typing-extensions>=4.4.0; python_version < "3.13"
 │   │   ├── referencing>=0.28.4
 │   │   │   ├── attrs>=22.2.0
-│   │   │   └── rpds-py>=0.7.0
+│   │   │   ├── rpds-py>=0.7.0
+│   │   │   └── typing-extensions>=4.4.0; python_version < "3.13"
 │   │   └── rpds-py>=0.7.1
 │   ├── ruamel.yaml>=0.16.12
 │   │   └── ruamel.yaml.clib>=0.2.7; platform_python_implementation == "CPython" and python_version < "3.13"
@@ -624,7 +626,7 @@ repo_helper==2020.12.18
         │   └── colorful>=0.4.0
         │       └── colorama; platform_system == "Windows"
         ├── typing-extensions>=3.7.4.3
-        └── yapf>=0.30.0
+        └── yapf<0.43.0,>=0.30.0
             ├── importlib-metadata>=6.6.0
             │   └── zipp>=3.20
             ├── platformdirs>=3.5.1
