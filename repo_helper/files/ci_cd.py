@@ -559,7 +559,7 @@ class ActionsManager:
 platform_ci_names = {
 		"Windows": "windows-2019",
 		"macOS": "macos-13",
-		"Linux": "ubuntu-20.04",
+		"Linux": "ubuntu-22.04",
 		}
 """
 Mapping of platform names to the GitHub Actions platform tags.
