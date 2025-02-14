@@ -60,6 +60,7 @@ known_third_party = [
     "lxml",
     "mkrecipe",
     "natsort",
+    "nh3",
     "packaging",
     "pre_commit",
     "pypi_json",
