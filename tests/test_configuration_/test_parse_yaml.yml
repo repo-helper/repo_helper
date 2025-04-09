@@ -15,6 +15,7 @@ conda_description: Update multiple configuration files, build scripts etc. from 
   single location.
 conda_extras:
 - all
+conda_name: repo_helper_demo
 console_scripts:
 - repo_helper = repo_helper.__main__:main
 - repo-helper = repo_helper.__main__:main

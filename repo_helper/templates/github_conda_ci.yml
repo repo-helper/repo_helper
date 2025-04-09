@@ -52,12 +52,12 @@ jobs:
 
       - name: "Search for package"
         run: |
-          $CONDA/bin/conda search -c file://$(pwd)/conda-bld {{ pypi_name.lower() }}
-          $CONDA/bin/conda search -c file://$(pwd)/conda-bld --override-channels {{ pypi_name.lower() }}
+          $CONDA/bin/conda search -c file://$(pwd)/conda-bld {{ conda_name.lower() }}
+          $CONDA/bin/conda search -c file://$(pwd)/conda-bld --override-channels {{ conda_name.lower() }}
 
       - name: "Install package"
         run: |
-          $CONDA/bin/conda install -c file://$(pwd)/conda-bld {{ pypi_name.lower() }}={{ version }}=py_1 -y || exit 1
+          $CONDA/bin/conda install -c file://$(pwd)/conda-bld {{ conda_name.lower() }}={{ version }}=py_1 -y || exit 1
 {% if enable_tests %}
       - name: "Run Tests"
         run: |

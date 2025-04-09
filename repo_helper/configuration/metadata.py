@@ -46,6 +46,7 @@ __all__ = [
 		"copyright_years",
 		"repo_name",
 		"pypi_name",
+		"conda_name",
 		"import_name",
 		"classifiers",
 		"keywords",
@@ -215,6 +216,24 @@ class pypi_name(ConfigVar):
 	.. code-block:: yaml
 
 		pypi_name: git-helper
+	"""
+
+	dtype = str
+	default = modname
+	category: str = "metadata"
+
+
+class conda_name(ConfigVar):
+	"""
+	The name of project on conda, if different to :conf:`modname`.
+
+	.. versionadded:: $VERSION
+
+	Example:
+
+	.. code-block:: yaml
+
+		conda_name: git-helper
 	"""
 
 	dtype = str

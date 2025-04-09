@@ -627,6 +627,7 @@ def rewrite_docs_index(repo_path: pathlib.Path, templates: Environment) -> List[
 			tests=templates.globals["enable_tests"] and not templates.globals["stubs_package"],
 			docs=templates.globals["enable_docs"],
 			pypi_name=templates.globals["pypi_name"],
+			conda_name=templates.globals["conda_name"],
 			docker_shields=templates.globals["docker_shields"],
 			docker_name=templates.globals["docker_name"],
 			platforms=templates.globals["platforms"],

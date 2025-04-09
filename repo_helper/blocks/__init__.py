@@ -304,6 +304,7 @@ class ShieldsBlock:
 	:param docs:
 	:param docs_url:
 	:param pypi_name: The name of the project on PyPI. Defaults to the value of ``repo_name`` if unset.
+	:param conda_name: The name of the project on conda. Defaults to the value of ``repo_name`` if unset.
 	:param unique_name: An optional unique name for the reST substitutions.
 	:param docker_shields: Whether to show shields for Docker. Default :py:obj:`False`.
 	:param docker_name: The name of the Docker image on DockerHub.
@@ -312,6 +313,8 @@ class ShieldsBlock:
 	:param primary_conda_channel: The Conda channel the package can be downloaded from.
 
 	.. versionadded:: 2020.12.11
+
+	.. versionadded:: $VERSION  Added ``conda_name`` option.
 	"""
 
 	#: This list controls which sections are included, and their order.
@@ -366,6 +369,7 @@ class ShieldsBlock:
 			docs: bool = True,
 			docs_url: str = "https://{}.readthedocs.io/en/latest/?badge=latest",
 			pypi_name: Optional[str] = None,
+			conda_name: Optional[str] = None,
 			unique_name: str = '',
 			docker_shields: bool = False,
 			docker_name: str = '',
@@ -385,6 +389,7 @@ class ShieldsBlock:
 		self.docs: bool = docs
 		self.docs_url: str = docs_url.format(normalize(self.repo_name))
 		self.pypi_name: str = pypi_name or repo_name
+		self.conda_name: str = conda_name or self.pypi_name
 		self.unique_name: str = str(unique_name)
 		self.docker_shields: bool = docker_shields
 		self.docker_name: str = str(docker_name)
@@ -534,9 +539,12 @@ class ShieldsBlock:
 
 		if self.conda:
 			sections["Anaconda"] = ["conda-version", "conda-platform"]
-			substitutions["conda-version"] = self.make_conda_version_shield(pypi_name, self.primary_conda_channel)
+			substitutions["conda-version"] = self.make_conda_version_shield(
+					self.conda_name,
+					self.primary_conda_channel,
+					)
 			substitutions["conda-platform"] = self.make_conda_platform_shield(
-					pypi_name, self.primary_conda_channel
+					self.conda_name, self.primary_conda_channel
 					)
 
 		if self.docker_shields:
