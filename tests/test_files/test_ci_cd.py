@@ -21,7 +21,6 @@
 #
 
 # stdlib
-from types import SimpleNamespace
 from typing import Any, Dict, List
 
 # 3rd party
@@ -32,7 +31,6 @@ from domdf_python_tools.paths import PathPlus
 # this package
 from repo_helper.configuration import get_tox_python_versions
 from repo_helper.files.ci_cd import (
-		ActionsManager,
 		ensure_bumpversion,
 		make_actions_deploy_conda,
 		make_conda_actions_ci,
@@ -512,69 +510,3 @@ def test_make_conda_actions_ci(
 	managed_files = make_conda_actions_ci(tmp_pathplus, demo_environment)
 	assert managed_files == [".github/workflows/conda_ci.yml"]
 	assert not (tmp_pathplus / managed_files[0]).is_file()
-
-
-@pytest.mark.parametrize(
-		"python_versions",
-		[
-				["3.6"],
-				["3.6", "3.7"],
-				["3.6", "3.7", "3.8"],
-				["3.6", "3.7", "3.8", "3.9-dev"],
-				["3.7", "3.8", "3.9-dev"],
-				["3.7", "3.8"],
-				["3.8"],
-				]
-		)
-def test_actions_manager_python_versions(
-		python_versions: List[str],
-		advanced_data_regression: AdvancedDataRegressionFixture,
-		):
-
-	py_versions = {k: {"experimental": True} for k in python_versions}
-
-	class FakeActionsManager:
-
-		templates = SimpleNamespace()
-		templates.globals = {
-				"python_versions": py_versions,
-				"third_party_version_matrix": {},
-				}
-
-		get_gh_actions_python_versions = ActionsManager.get_gh_actions_python_versions
-		get_gh_actions_matrix = ActionsManager.get_gh_actions_matrix
-
-	advanced_data_regression.check(FakeActionsManager().get_gh_actions_python_versions())  # type: ignore[misc]
-
-
-@pytest.mark.parametrize(
-		"python_versions",
-		[
-				["3.6"],
-				["3.6", "3.7"],
-				["3.6", "3.7", "3.8"],
-				["3.6", "3.7", "3.8", "3.9-dev"],
-				["3.7", "3.8", "3.9-dev"],
-				["3.7", "3.8"],
-				["3.8"],
-				]
-		)
-def test_actions_manager_python_versions_matrix(
-		python_versions: List[str],
-		advanced_data_regression: AdvancedDataRegressionFixture,
-		):
-
-	py_versions = {k: {"experimental": True} for k in python_versions}
-
-	class FakeActionsManager:
-
-		templates = SimpleNamespace()
-		templates.globals = {
-				"python_versions": py_versions,
-				"third_party_version_matrix": {"attrs": ["19.3", "20.1", "20.2", "latest"]},
-				}
-
-		get_gh_actions_python_versions = ActionsManager.get_gh_actions_python_versions
-		get_gh_actions_matrix = ActionsManager.get_gh_actions_matrix
-
-	advanced_data_regression.check(FakeActionsManager().get_gh_actions_python_versions())  # type: ignore[misc]

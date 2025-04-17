@@ -159,22 +159,7 @@ class ActionsManager:
 
 		self._code_file_filter = f"!({code_file_filter:|})"
 
-	def get_gh_actions_python_versions(self) -> Dict[str, str]:
-		"""
-		Prepares the mapping of Python versions to tox testenvs for use with GitHub Actions.
-
-		.. versionadded:: 2020.12.21
-		"""
-
-		gh_action_matrix = self.get_gh_actions_matrix()
-		version_mapping: Dict[str, str] = {}
-
-		for py_version, (testenvs, experimental) in gh_action_matrix.items():
-			version_mapping[str(py_version)] = testenvs
-
-		return version_mapping
-
-	def get_gh_actions_matrix(self) -> Dict[str, Tuple[str, bool]]:
+	def get_gh_actions_matrix(self) -> Dict[str, Tuple[str, Optional[str], bool]]:
 		"""
 		Determines the matrix of Python versions used in GitHub Actions.
 
