@@ -18,18 +18,20 @@ permissions:
 
 jobs:
   tests:
-    name: "macos-13 / Python ${{ matrix.config.python-version }}"
-    runs-on: "macos-13"
+    name: "macos-${{ matrix.config.os-ver }} / Python ${{ matrix.config.python-version }}"
+    runs-on: "macos-${{ matrix.config.os-ver }}"
     continue-on-error: ${{ matrix.config.experimental }}
     env:
-      USING_COVERAGE: '3.6,3.7'
+      USING_COVERAGE: '3.6,3.7,3.8,3.9'
 
     strategy:
       fail-fast: False
       matrix:
         config:
-          - {python-version: "3.6", testenvs: "py36,build", experimental: False}
-          - {python-version: "3.7", testenvs: "py37,build", experimental: False}
+          - {python-version: "3.6", os-ver: "13", testenvs: "py36,build", experimental: False}
+          - {python-version: "3.7", os-ver: "13", testenvs: "py37,build", experimental: False}
+          - {python-version: "3.8", os-ver: "14", testenvs: "py38,build", experimental: False}
+          - {python-version: "3.9", os-ver: "14", testenvs: "py39,build", experimental: False}
 
     steps:
       - name: Checkout 🛎️

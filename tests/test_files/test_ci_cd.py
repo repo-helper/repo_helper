@@ -89,6 +89,13 @@ def test_github_ci_case_2(
 
 	demo_environment.globals["travis_additional_requirements"] = ["isort", "black"]
 	demo_environment.globals["platforms"] = ["macOS"]
+	demo_environment.globals["python_versions"] = {
+			"3.6": {"experimental": False},
+			"3.7": {"experimental": False},
+			"3.8": {"experimental": False},
+			"3.9": {"experimental": False},
+			"3.9": {"experimental": False},
+			}
 	demo_environment.globals["github_ci_requirements"] = {"macOS": {"pre": [], "post": []}}
 
 	managed_files = make_github_ci(tmp_pathplus, demo_environment)

@@ -77,7 +77,7 @@ def demo_environment() -> Environment:
 			"github_ci_requirements": {"Linux": {"pre": [], "post": []}, "Windows": {"pre": [], "post": []}},
 			"travis_additional_requirements": [],
 			"conda_channels": ["conda-forge"],
-			"python_versions": ["3.6", "3.7"],
+			"python_versions": {"3.6": {"experimental": False}, "3.7": {"experimental": False}},
 			"enable_tests": true,
 			"enable_conda": true,
 			"enable_docs": true,

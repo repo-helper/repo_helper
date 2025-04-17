@@ -209,7 +209,7 @@ class ActionsManager:
 			else:
 				envs = [tox_py_version, "build"]
 
-			output[str(gh_py_version)] = (','.join(envs), metadata["experimental"])
+			output[str(gh_py_version)] = (','.join(envs), None, metadata["experimental"])
 
 		return output
 
@@ -262,6 +262,16 @@ class ActionsManager:
 			gh_actions_versions = self.get_gh_actions_matrix()
 			if "pypy-3.6" in gh_actions_versions:
 				gh_actions_versions.pop("pypy-3.6")
+
+			for version in gh_actions_versions:
+				if version in {"pypy-3.7", "3.7", "pypy-3.6", "3.6"}:
+					gh_actions_versions[version] = (
+							gh_actions_versions[version][0], "13", gh_actions_versions[version][2]
+							)
+				else:
+					gh_actions_versions[version] = (
+							gh_actions_versions[version][0], "14", gh_actions_versions[version][2]
+							)
 
 			ci_file.write_clean(
 					self.actions.render(
@@ -543,7 +553,7 @@ class ActionsManager:
 
 platform_ci_names = {
 		"Windows": "windows-2019",
-		"macOS": "macos-13",
+		"macOS": "macos-${{ matrix.config.os-ver }}",
 		"Linux": "ubuntu-22.04",
 		}
 """
