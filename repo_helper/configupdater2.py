@@ -305,7 +305,7 @@ class Space(Block):
 	Vertical space block of new lines.
 	"""
 
-	def __init__(self, container=None):
+	def __init__(self, container: Union[Container, List["Block"], None] = None):
 		super().__init__(container=container)
 
 	def __repr__(self) -> str:
@@ -319,7 +319,7 @@ class Section(Block, Container, MutableMapping):
 	:param name: name of the section.
 	"""
 
-	def __init__(self, name: str, container, **kwargs):
+	def __init__(self, name: str, container: Union[Container, List["Block"], None], **kwargs):
 		self._name: str = name
 		self._structure: List[Block] = []
 

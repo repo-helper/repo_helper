@@ -172,7 +172,7 @@ class ActionsManager:
 		tox_py_versions = get_tox_python_versions(config["python_versions"])
 		third_party_version_matrix = config["third_party_version_matrix"]
 
-		output: Dict[str, Tuple[str, bool]] = {}
+		output: Dict[str, Tuple[str, Optional[str], bool]] = {}
 
 		for (py_version, metadata), gh_py_version, tox_py_version in zip(
 			python_versions.items(),
@@ -226,6 +226,7 @@ class ActionsManager:
 			gh_actions_versions["pypy-3.6"] = (
 					gh_actions_versions["pypy-3.6"][0].replace(",build", ''),
 					gh_actions_versions["pypy-3.6"][1],
+					gh_actions_versions["pypy-3.6"][2],
 					)
 
 		if "pypy-3.9" in gh_actions_versions:
