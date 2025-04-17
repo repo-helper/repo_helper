@@ -246,7 +246,7 @@ def make_rtfd(repo_path: pathlib.Path, templates: Environment) -> List[str]:
 			"formats": ["pdf", "htmlzip"],
 			"python": {"install": install_config},
 			"build": {
-					"os": "ubuntu-20.04",
+					"os": "ubuntu-22.04",
 					"tools": {"python": "3.9"},
 					"jobs": {
 							"post_create_environment": [post_create_command],
