@@ -301,6 +301,12 @@ class ActionsManager:
 
 		if platform_name in self.templates.globals["platforms"]:
 
+			gh_actions_versions = self.get_gh_actions_matrix()
+			if "pypy-3.6" in gh_actions_versions:
+				gh_actions_versions.pop("pypy-3.6")
+			if "3.6" in gh_actions_versions:
+				gh_actions_versions.pop("3.6")
+
 			conda_pip_dependencies = ["mkrecipe"]
 
 			pyproject_file = PathPlus(self.repo_path / "pyproject.toml")
@@ -315,7 +321,7 @@ class ActionsManager:
 							ci_platform=platform_ci_names[platform_name],
 							ci_name=platform_name,
 							dependency_lines=self.get_linux_ci_requirements(),
-							gh_actions_versions=self.get_gh_actions_matrix(),
+							gh_actions_versions=gh_actions_versions,
 							code_file_filter=self._code_file_filter,
 							run_on_tags="    tags:\n      - '*'",
 							conda_pip_dependencies=conda_pip_dependencies,
