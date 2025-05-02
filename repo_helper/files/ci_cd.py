@@ -204,10 +204,11 @@ class ActionsManager:
 
 					envs.append(f"{tox_py_version}{matrix_testenv_string}")
 
-				envs.append("build")
-
 			else:
-				envs = [tox_py_version, "build"]
+				envs = [tox_py_version]
+
+			if not (py_version in {"3.6", "pypy3.6", "3.7", "pypy3.7"} and config["use_flit"]):
+				envs.append("build")
 
 			output[str(gh_py_version)] = (','.join(envs), None, metadata["experimental"])
 
