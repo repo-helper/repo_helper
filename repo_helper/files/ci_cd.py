@@ -207,7 +207,7 @@ class ActionsManager:
 			else:
 				envs = [tox_py_version]
 
-			if not (py_version in {"3.6", "pypy3.6", "3.7", "pypy3.7"} and config["use_flit"]):
+			if not (py_version in {"3.6", "pypy36", "3.7", "pypy37"} and config["use_flit"]):
 				envs.append("build")
 
 			output[str(gh_py_version)] = (','.join(envs), None, metadata["experimental"])
