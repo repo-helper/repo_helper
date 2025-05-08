@@ -73,11 +73,6 @@ jobs:
         if: steps.setup-python.outcome == 'success'
         run: python -m tox -e "${{ matrix.config.testenvs }}" -s false
 
-      - name: (Debug) show file structure
-        id: show
-        run: ls -hal | grep .coverage
-        continue-on-error: true
-
       - name: "Upload Coverage 🚀"
         uses: actions/upload-artifact@v4
         if: ${{ always() && steps.setup-python.outcome == 'success' }}
