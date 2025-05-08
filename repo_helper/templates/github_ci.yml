@@ -70,7 +70,8 @@ jobs:
         if: ${{ brace("always() && steps.setup-python.outcome == 'success'") }}
         with:
           name: "coverage-${{ brace('matrix.config.python-version')}}"
-          path: .coverage{% endif %}
+          path: .coverage
+          include-hidden-files: true{% endif %}
 {% if ci_name == "Linux" %}{% if enable_tests and not stubs_package %}
 
   Coverage:
@@ -113,6 +114,7 @@ jobs:
         with:
           name: "combined-coverage"
           path: .coverage
+          include-hidden-files: true
 
       - name: "Upload Combined Coverage to Coveralls"
         if: ${{ brace("steps.show.outcome != 'failure'") }}
@@ -198,6 +200,7 @@ jobs:
           $CONDA/bin/conda config --set always_yes yes --set changeps1 no
           $CONDA/bin/conda update -n base conda
           $CONDA/bin/conda info -a
+          $CONDA/bin/conda install conda-forge::py-lief=0.14.1
           {% for channel in conda_channels %}$CONDA/bin/conda config --add channels {{ channel }}
           {% endfor %}
           $CONDA/bin/conda config --remove channels defaults
