@@ -91,24 +91,52 @@ python_versions:
   '3.10':
     experimental: false
     matrix_exclude: {}
+    platforms:
+    - Windows
+    - macOS
+    - Linux
   3.11-dev:
     experimental: true
     matrix_exclude: {}
+    platforms:
+    - Windows
+    - macOS
+    - Linux
   3.12-dev:
     experimental: true
     matrix_exclude: {}
+    platforms:
+    - Windows
+    - macOS
+    - Linux
   '3.6':
     experimental: false
     matrix_exclude: {}
+    platforms:
+    - Windows
+    - macOS
+    - Linux
   '3.7':
     experimental: false
     matrix_exclude: {}
+    platforms:
+    - Windows
+    - macOS
+    - Linux
   '3.8':
     experimental: false
     matrix_exclude: {}
+    platforms:
+    - Windows
+    - macOS
+    - Linux
   '3.9':
     experimental: false
     matrix_exclude: {}
+    platforms:
+    - Windows
+    - macOS
+    - Linux
 repo_name: repo_helper_demo
 requires_python: null
 rtfd_author: Dominic Davis-Foster

@@ -38,6 +38,7 @@ from domdf_python_tools.stringlist import DelimitedList, StringList
 # this package
 from repo_helper.configupdater2 import ConfigUpdater
 from repo_helper.configuration import get_tox_python_versions
+from repo_helper.configuration.packaging import platforms
 from repo_helper.files import management
 from repo_helper.files.packaging import DefaultDict
 from repo_helper.templates import Environment
@@ -159,7 +160,7 @@ class ActionsManager:
 
 		self._code_file_filter = f"!({code_file_filter:|})"
 
-	def get_gh_actions_matrix(self) -> Dict[str, Tuple[str, Optional[str], bool]]:
+	def get_gh_actions_matrix(self) -> Dict[str, Tuple[str, Optional[str], Dict[str, Any]]]:
 		"""
 		Determines the matrix of Python versions used in GitHub Actions.
 
@@ -172,7 +173,7 @@ class ActionsManager:
 		tox_py_versions = get_tox_python_versions(config["python_versions"])
 		third_party_version_matrix = config["third_party_version_matrix"]
 
-		output: Dict[str, Tuple[str, Optional[str], bool]] = {}
+		output: Dict[str, Tuple[str, Optional[str], Dict[str, Any]]] = {}
 
 		for (py_version, metadata), gh_py_version, tox_py_version in zip(
 			python_versions.items(),
@@ -210,7 +211,8 @@ class ActionsManager:
 			if not (py_version in {"3.6", "pypy36", "3.7", "pypy37"} and config["use_flit"]):
 				envs.append("build")
 
-			output[str(gh_py_version)] = (','.join(envs), None, metadata["experimental"])
+			metadata.setdefault("platforms", platforms.default)
+			output[str(gh_py_version)] = (','.join(envs), None, metadata)
 
 		return output
 
@@ -268,11 +270,15 @@ class ActionsManager:
 			for version in gh_actions_versions:
 				if version in {"pypy-3.7", "3.7", "pypy-3.6", "3.6"}:
 					gh_actions_versions[version] = (
-							gh_actions_versions[version][0], "13", gh_actions_versions[version][2]
+							gh_actions_versions[version][0],
+							"13",
+							gh_actions_versions[version][2],
 							)
 				else:
 					gh_actions_versions[version] = (
-							gh_actions_versions[version][0], "14", gh_actions_versions[version][2]
+							gh_actions_versions[version][0],
+							"14",
+							gh_actions_versions[version][2],
 							)
 
 			ci_file.write_clean(

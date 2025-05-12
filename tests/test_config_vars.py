@@ -602,43 +602,82 @@ class Test_python_deploy_version(OptionalStringTest):
 class Test_python_versions(DictTest):
 	config_var = python_versions
 	test_value = {"3.6": {"experimental": True}, "3.7": {}, "pypy3": {"option": "Value"}}
-	default_value = {"3.8": {"experimental": False, "matrix_exclude": {}}}
+	default_value = {
+			"3.8": {
+					"experimental": False,
+					"matrix_exclude": {},
+					"platforms": ["Windows", "macOS", "Linux"],
+					}
+			}
 
 	def test_success(self):
 		value = ["3.6", 3.7, "pypy37", "pypy38", "pypy310"]
 		assert self.config_var.get({self.config_var.__name__: value}) == {
-				"3.6": {"experimental": False, "matrix_exclude": {}},
-				"3.7": {"experimental": False, "matrix_exclude": {}},
-				"pypy37": {"experimental": False, "matrix_exclude": {}},
-				"pypy38": {"experimental": False, "matrix_exclude": {}},
-				"pypy310": {"experimental": True, "matrix_exclude": {}},
+				"3.6": {"experimental": False, "matrix_exclude": {}, "platforms": ["Windows", "macOS", "Linux"]},
+				"3.7": {"experimental": False, "matrix_exclude": {}, "platforms": ["Windows", "macOS", "Linux"]},
+				"pypy37": {
+						"experimental": False,
+						"matrix_exclude": {},
+						"platforms": ["Windows", "macOS", "Linux"],
+						},
+				"pypy38": {
+						"experimental": False,
+						"matrix_exclude": {},
+						"platforms": ["Windows", "macOS", "Linux"],
+						},
+				"pypy310": {
+						"experimental": True,
+						"matrix_exclude": {},
+						"platforms": ["Windows", "macOS", "Linux"],
+						},
 				}
 
 		value2 = {
-				"3.6": {"experimental": True, "matrix_exclude": {}},
-				"3.7": {"experimental": False, "matrix_exclude": {}},
-				"pypy3": {"option": "Value", "experimental": False, "matrix_exclude": {}}
+				"3.6": {"experimental": True, "matrix_exclude": {}, "platforms": ["Windows", "macOS", "Linux"]},
+				"3.7": {"experimental": False, "matrix_exclude": {}, "platforms": ["Windows", "macOS", "Linux"]},
+				"pypy3": {
+						"option": "Value",
+						"experimental": False,
+						"matrix_exclude": {},
+						"platforms": ["Windows", "macOS", "Linux"],
+						}
 				}
 		assert self.config_var.get({self.config_var.__name__: self.test_value}) == value2
 		assert self.config_var.get({self.config_var.__name__: value2}) == value2
 
 		assert python_versions.get({"python_deploy_version": 3.8}) == {
-				"3.8": {"experimental": False, "matrix_exclude": {}},
+				"3.8": {"experimental": False, "matrix_exclude": {}, "platforms": ["Windows", "macOS", "Linux"]},
 				}
 		assert python_versions.get({"python_deploy_version": "3.8"}) == {
-				"3.8": {"experimental": False, "matrix_exclude": {}},
+				"3.8": {"experimental": False, "matrix_exclude": {}, "platforms": ["Windows", "macOS", "Linux"]},
 				}
 
 		assert self.config_var.get({self.config_var.__name__: ["3.6", 3.7, "pypy3"]}) == {
-				"3.6": {"experimental": False, "matrix_exclude": {}},
-				"3.7": {"experimental": False, "matrix_exclude": {}},
-				"pypy3": {"experimental": False, "matrix_exclude": {}},
+				"3.6": {"experimental": False, "matrix_exclude": {}, "platforms": ["Windows", "macOS", "Linux"]},
+				"3.7": {"experimental": False, "matrix_exclude": {}, "platforms": ["Windows", "macOS", "Linux"]},
+				"pypy3": {"experimental": False, "matrix_exclude": {}, "platforms": ["Windows", "macOS", "Linux"]},
 				}
 		assert self.config_var.get({self.config_var.__name__: ["3.6", "3.7", "pypy3"]}) == {
-				"3.6": {"experimental": False, "matrix_exclude": {}},
-				"3.7": {"experimental": False, "matrix_exclude": {}},
-				"pypy3": {"experimental": False, "matrix_exclude": {}},
+				"3.6": {"experimental": False, "matrix_exclude": {}, "platforms": ["Windows", "macOS", "Linux"]},
+				"3.7": {"experimental": False, "matrix_exclude": {}, "platforms": ["Windows", "macOS", "Linux"]},
+				"pypy3": {"experimental": False, "matrix_exclude": {}, "platforms": ["Windows", "macOS", "Linux"]},
 				}
+
+		assert self.config_var.get({
+				self.config_var.__name__: {"3.6": {}, "3.7": None, "pypy3": {"platforms": ["macOS", "Linux"]}}
+				}) == {
+						"3.6": {
+								"experimental": False,
+								"matrix_exclude": {},
+								"platforms": ["Windows", "macOS", "Linux"]
+								},
+						"3.7": {
+								"experimental": False,
+								"matrix_exclude": {},
+								"platforms": ["Windows", "macOS", "Linux"]
+								},
+						"pypy3": {"experimental": False, "matrix_exclude": {}, "platforms": ["macOS", "Linux"]},
+						}
 
 		assert self.config_var.get({self.config_var.__name__: {}}) == {}
 		assert self.config_var.get(self.different_key_value) == self.default_value
@@ -646,7 +685,9 @@ class Test_python_versions(DictTest):
 		assert self.config_var.get() == self.default_value
 		assert self.config_var.get({}) == self.default_value
 
-		expected_3_6 = {"3.6": {"experimental": False, "matrix_exclude": {}}}
+		expected_3_6 = {
+				"3.6": {"experimental": False, "matrix_exclude": {}, "platforms": ["Windows", "macOS", "Linux"]}
+				}
 		assert self.config_var.get({**self.different_key_value, "python_versions": [3.6]}) == expected_3_6
 
 	def test_error_list_int(self):

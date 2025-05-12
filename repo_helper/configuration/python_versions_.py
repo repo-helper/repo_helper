@@ -148,8 +148,12 @@ class python_versions(ConfigVar):
 	def validator(cls, value: Mapping[str, Any]) -> Dict[str, Dict[str, Any]]:  # noqa: D102
 		output = {}
 
+		# this package
+		from repo_helper.configuration.packaging import platforms
+
 		for version, metadata in natsorted((str(k), v) for k, v in value.items() if k):
 			metadata.setdefault("experimental", cls._is_experimental(version))
+			metadata.setdefault("platforms", platforms.default)
 			metadata.setdefault("matrix_exclude", {})
 
 			output[version] = metadata
