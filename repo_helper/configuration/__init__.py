@@ -381,8 +381,9 @@ class RepoHelperParser(Parser):
 		if Version.from_str(parsed_config_vars["python_deploy_version"]) < smallest_py_version:
 			parsed_config_vars["python_deploy_version"] = min_py_version
 
-		# Tox
-		if (repo_path / parsed_config_vars["import_name"].replace('.', '/') / "py.typed").is_file():
+		package_parent_dir = repo_path / parsed_config_vars["source_dir"]
+		package_dir = package_parent_dir / parsed_config_vars["import_name"].replace('.', '/')
+		if (package_dir / "py.typed").is_file():
 			parsed_config_vars["classifiers"].append("Typing :: Typed")
 
 		parsed_config_vars["classifiers"] = natsorted(set(parsed_config_vars["classifiers"]))
