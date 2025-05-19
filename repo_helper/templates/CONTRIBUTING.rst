@@ -28,9 +28,9 @@ Automated tests
 -------------------
 
 Tests are run with ``tox`` and ``pytest``.
-To run tests for a specific Python version, such as Python 3.6:
+To run tests for a specific Python version, such as Python 3.10:
 
-{{ bash_block("tox -e py36") }}
+{{ bash_block("tox -e py310") }}
 
 To run tests for all Python versions, simply run:
 
