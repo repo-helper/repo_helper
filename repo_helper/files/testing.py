@@ -531,7 +531,7 @@ class ToxConfig(IniConfigurator):
 				"git+https://github.com/domdfcoding/flake8-rst-docstrings.git",
 				"git+https://github.com/python-formate/flake8-unused-arguments.git@magic-methods",
 				"git+https://github.com/python-formate/flake8-missing-annotations.git",
-				"git+https://github.com/domdfcoding/pydocstyle.git",
+				"git+https://github.com/domdfcoding/pydocstyle.git@stub-functions",
 				"pygments>=2.7.1",
 				"importlib_metadata<4.5.0; python_version<'3.8'"
 				])
