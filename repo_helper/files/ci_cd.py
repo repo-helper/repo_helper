@@ -566,7 +566,7 @@ class ActionsManager:
 
 
 platform_ci_names = {
-		"Windows": "windows-2019",
+		"Windows": "windows-2022",
 		"macOS": "macos-${{ matrix.config.os-ver }}",
 		"Linux": "ubuntu-22.04",
 		}
