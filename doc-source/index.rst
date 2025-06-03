@@ -111,7 +111,7 @@ This project is in an early stage, and some things might not work correctly or b
 		:alt: GitHub top language
 
 	.. |commits-since| github-shield::
-		:commits-since: v2022.4.4
+		:commits-since: v2025.6.3
 		:alt: GitHub commits since tagged version
 
 	.. |commits-latest| github-shield::
