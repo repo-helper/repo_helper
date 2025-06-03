@@ -53,6 +53,10 @@
       },
       "description": "A list of extras (see :conf:`extras_require`) to include as requirements in the Conda package."
     },
+    "conda_name": {
+      "type": "string",
+      "description": "The name of project on conda, if different to :conf:`modname`."
+    },
     "console_scripts": {
       "type": "array",
       "items": {
