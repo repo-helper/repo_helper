@@ -102,8 +102,8 @@ python_versions:
     - Windows
     - macOS
     - Linux
-  3.12-dev:
-    experimental: true
+  '3.12':
+    experimental: false
     matrix_exclude: {}
     platforms:
     - Windows

@@ -400,24 +400,27 @@ class ToxConfig(IniConfigurator):
 	def testenv_py313_dev(self) -> None:  # noqa: D102
 		pass
 
-	def testenv_py312_dev(self) -> None:
-		"""
-		``[testenv:py312-dev]``.
-		"""
-
+	def _get_third_party_envs_list(self) -> List[str]:
 		third_party_envs = []
 
 		for third_party_library in self["third_party_version_matrix"]:
 			third_party_versions = self["third_party_version_matrix"][third_party_library]
 			third_party_envs.append(f"{third_party_library}{{{','.join(third_party_versions)}}}")
-			# third_party_envs.append(f"testenv:py312-dev-{third_party_library}{{{','.join(third_party_versions)}}}")
-			# third_party_envs.append(f"testenv:py312-{third_party_library}{{{','.join(third_party_versions)}}}")
+
+		return third_party_envs
+
+	def testenv_py312_dev(self) -> None:
+		"""
+		``[testenv:py312-dev]``.
+		"""
+
+		third_party_envs = self._get_third_party_envs_list()
 
 		for fixup_version in ["3.12-dev", "3.12", "3.13", "3.13-dev"]:
-			if fixup_version in self["python_versions"]:
+			if fixup_version in self["python_versions"] and "fixups" not in self["tox_unmanaged"]:
 				setenv = self.get_setenv(False, False)
-				if fixup_version.startswith("3.13"):
-					setenv.append("UNSAFE_PYO3_SKIP_VERSION_CHECK=1")
+				# if fixup_version.startswith("3.13"):
+				# 	setenv.append("UNSAFE_PYO3_SKIP_VERSION_CHECK=1")
 
 				env_name = f"testenv:py{fixup_version.replace('.', '')}"
 				if env_name in self._ini:
@@ -433,7 +436,8 @@ class ToxConfig(IniConfigurator):
 			else:
 				self._ini.remove_section(f"testenv:py{fixup_version.replace('.', '')}")
 				for env in third_party_envs:
-					self._ini.remove_section(env)
+					env_name = f"testenv:py{fixup_version.replace('.', '')}-{env}"
+					self._ini.remove_section(env_name)
 
 	def testenv__package(self) -> None:
 		"""
@@ -745,6 +749,12 @@ class ToxConfig(IniConfigurator):
 		if ini_file.is_file():
 			existing_config = ConfigUpdater()
 			existing_config.read(str(ini_file))
+
+			if "fixups" in self["tox_unmanaged"]:
+				for env in self._get_third_party_envs_list():
+					for fixup_version in ["3.12-dev", "3.12", "3.13", "3.13-dev"]:
+						env_name = f"testenv:py{fixup_version.replace('.', '')}-{env}"
+						existing_config.remove_section(env_name)
 
 			for section in existing_config.sections_blocks():
 				if section.name.startswith("testenv:py312-") and section.name in self._ini.sections():

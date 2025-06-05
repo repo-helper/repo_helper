@@ -126,6 +126,10 @@ class python_versions(ConfigVar):
 	rtype = Dict[str, Dict[str, Any]]
 	default = _default_python_versions
 	category: str = "python versions"
+	_de_dev_map = {
+			"3.13-dev": "3.13",
+			"3.12-dev": "3.12",
+			}
 
 	@staticmethod
 	def _is_experimental(version: str) -> bool:
@@ -152,6 +156,7 @@ class python_versions(ConfigVar):
 		from repo_helper.configuration.packaging import platforms
 
 		for version, metadata in natsorted((str(k), v) for k, v in value.items() if k):
+			version = cls._de_dev_map.get(version, version)
 			metadata.setdefault("experimental", cls._is_experimental(version))
 			metadata.setdefault("platforms", platforms.default)
 			metadata.setdefault("matrix_exclude", {})
