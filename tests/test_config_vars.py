@@ -583,8 +583,8 @@ class Test_platforms:
 
 class Test_python_deploy_version(OptionalStringTest):
 	config_var = python_deploy_version
-	test_value = "3.9"
-	default_value = "3.8"
+	test_value = "3.10"
+	default_value = "3.9"
 
 	@property
 	def wrong_values(self) -> List[Dict[str, Any]]:  # noqa: D102
@@ -603,7 +603,7 @@ class Test_python_versions(DictTest):
 	config_var = python_versions
 	test_value = {"3.6": {"experimental": True}, "3.7": {}, "pypy3": {"option": "Value"}}
 	default_value = {
-			"3.8": {
+			"3.9": {
 					"experimental": False,
 					"matrix_exclude": {},
 					"platforms": ["Windows", "macOS", "Linux"],

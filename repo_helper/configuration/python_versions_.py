@@ -48,7 +48,7 @@ class python_deploy_version(ConfigVar):
 
 	dtype = Union[str, float]
 	rtype = str
-	default: float = 3.8
+	default: float = 3.9
 	category: str = "python versions"
 
 
