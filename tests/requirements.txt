@@ -20,3 +20,4 @@ pytest-regressions>=2.0.1
 pytest-rerunfailures>=9.1.1
 pytest-timeout>=1.4.2
 readme-renderer>=26.0
+ruamel.yaml<0.18.12
