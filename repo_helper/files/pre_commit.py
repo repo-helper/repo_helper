@@ -37,6 +37,7 @@ import attr
 from apeye.url import URL
 from domdf_python_tools.paths import PathPlus
 from domdf_python_tools.stringlist import StringList
+from packaging.version import Version
 from ruamel.yaml import YAML
 from typing_extensions import Literal, TypedDict
 
@@ -193,12 +194,6 @@ pygrep_hooks = Repo(
 				],
 		)
 
-pyupgrade = Repo(
-		repo=make_github_url("asottile", "pyupgrade"),
-		rev="v2.12.0",
-		hooks=[{"id": "pyupgrade", "args": ["--py36-plus", "--keep-runtime-typing"]}]
-		)
-
 lucas_c_hooks = Repo(
 		repo=make_github_url("Lucas-C", "pre-commit-hooks"),
 		rev="v1.5.1",
@@ -298,6 +293,27 @@ def make_pre_commit(repo_path: pathlib.Path, templates: Environment) -> List[str
 			repo=make_github_url("python-coincidence", "dep_checker"),
 			rev="v0.8.0",
 			hooks=[{"id": "dep_checker", "args": dep_checker_args}]
+			)
+
+	min_py_version = Version(templates.globals["min_py_version"])
+
+	if min_py_version >= Version("3.11"):
+		pyupgrade_plus_arg = "--py311-plus"
+	elif min_py_version >= Version("3.10"):
+		pyupgrade_plus_arg = "--py310-plus"
+	elif min_py_version >= Version("3.9"):
+		pyupgrade_plus_arg = "--py39-plus"
+	elif min_py_version >= Version("3.8"):
+		pyupgrade_plus_arg = "--py38-plus"
+	elif min_py_version >= Version("3.7"):
+		pyupgrade_plus_arg = "--py37-plus"
+	else:
+		pyupgrade_plus_arg = "--py36-plus"
+
+	pyupgrade = Repo(
+			repo=make_github_url("asottile", "pyupgrade"),
+			rev="v3.3.0",
+			hooks=[{"id": "pyupgrade", "args": [pyupgrade_plus_arg, "--keep-runtime-typing"]}]
 			)
 
 	pre_commit_file = PathPlus(repo_path / ".pre-commit-config.yaml")
