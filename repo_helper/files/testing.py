@@ -509,13 +509,16 @@ class ToxConfig(IniConfigurator):
 				'cryptography<40; implementation_name == "pypy" and python_version <= "3.7"',
 				*self["tox_build_requirements"],
 				])
-		self._ini["testenv:build"]["commands"] = indent_join([
+		commands = [
 				'python -m build --sdist --wheel "{toxinidir}"',
 				# python setup.py {posargs} sdist bdist_wheel
 				# "twine check dist/*",
 				"twine check dist/*.tar.gz dist/*.whl",  # source
-				"check-wheel-contents dist/",
-				])
+				]
+		if not self["meson_no_py"]:
+			commands.append("check-wheel-contents dist/")
+
+		self._ini["testenv:build"]["commands"] = indent_join(commands)
 
 	def testenv_lint(self) -> None:
 		"""
@@ -732,6 +735,10 @@ class ToxConfig(IniConfigurator):
 		"""
 		``[check-wheel-contents]``.
 		"""
+
+		if self["meson_no_py"]:
+			self._ini.remove_section("check-wheel-contents")
+			return
 
 		self._ini["check-wheel-contents"]["ignore"] = "W002"
 
