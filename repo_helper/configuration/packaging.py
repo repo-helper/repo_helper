@@ -363,7 +363,7 @@ class use_maturin(ConfigVar):
 	Whether to use `maturin <https://maturin.rs/>`_ to build distributions,
 	rather than ``setuptools.build_meta``.
 
-	.. versionadded:: $VERSION
+	.. versionadded:: 2025.6.3
 
 	.. note:: Support for maturin is provisional and experimental.
 	"""  # noqa: D400
@@ -406,7 +406,7 @@ class use_hatch(ConfigVar):
 	Whether to use `hatch <https://hatch.pypa.io/latest/>`_ to build distributions,
 	rather than ``setuptools.build_meta``.
 
-	.. versionadded:: $VERSION
+	.. versionadded:: 2025.6.3
 
 	.. note:: Support for hatch is provisional and experimental.
 	"""  # noqa: D400

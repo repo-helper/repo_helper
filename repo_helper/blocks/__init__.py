@@ -314,7 +314,7 @@ class ShieldsBlock:
 
 	.. versionadded:: 2020.12.11
 
-	.. versionadded:: $VERSION  Added ``conda_name`` option.
+	.. versionadded:: $2025.6.3  Added ``conda_name`` option.
 	"""
 
 	#: This list controls which sections are included, and their order.

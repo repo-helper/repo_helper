@@ -172,7 +172,7 @@ class on_conda_forge(ConfigVar):
 
 		on_conda_forge: True
 
-	.. versionadded:: $VERSION
+	.. versionadded:: 2025.6.3
 	"""
 
 	dtype = bool

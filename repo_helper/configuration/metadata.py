@@ -227,7 +227,7 @@ class conda_name(ConfigVar):
 	"""
 	The name of project on conda, if different to :conf:`modname`.
 
-	.. versionadded:: $VERSION
+	.. versionadded:: 2025.6.3
 
 	Example:
 
