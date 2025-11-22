@@ -68,6 +68,8 @@ repo_helper==2020.12.18
 │   └── urllib3>=1.24.1
 ├── first>=2.0.2
 ├── isort>=5.5.2
+│   └── importlib-metadata>=4.6.0; python_version < "3.10"
+│       └── zipp>=3.20
 ├── jinja2>=2.11.3
 │   └── MarkupSafe>=2.0
 ├── mkrecipe>=0.3.0
@@ -614,6 +616,8 @@ repo_helper==2020.12.18
         │   ├── natsort>=7.0.1
         │   └── typing-extensions>=3.7.4.1
         ├── isort>=5.5.2
+        │   └── importlib-metadata>=4.6.0; python_version < "3.10"
+        │       └── zipp>=3.20
         ├── prettyprinter>=0.18.0
         │   ├── Pygments>=2.2.0
         │   └── colorful>=0.4.0

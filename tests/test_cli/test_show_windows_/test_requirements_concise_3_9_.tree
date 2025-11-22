@@ -27,6 +27,7 @@ repo_helper==2020.12.18
 ├── handy-archives>=0.2.0
 ├── idna<4,>=2.5
 ├── importlib-metadata>=6.6.0
+├── importlib-metadata>=4.6.0; python_version < "3.10"
 ├── isort>=5.5.2
 ├── jinja2>=2.11.3
 ├── jsonschema>=3.2.0
