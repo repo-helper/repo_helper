@@ -719,6 +719,7 @@ def make_github_octocheese(repo_path: pathlib.Path, templates: Environment) -> L
 	return [file.relative_to(repo_path).as_posix()]
 
 
+# TODO: remove if meson_no_py or other similar options
 @management.register("flake8_action")
 def make_github_flake8(repo_path: pathlib.Path, templates: Environment) -> List[str]:
 	"""
@@ -733,6 +734,7 @@ def make_github_flake8(repo_path: pathlib.Path, templates: Environment) -> List[
 	return [manager.make_flake8().relative_to(repo_path).as_posix()]
 
 
+# TODO: remove if meson_no_py or other similar options
 @management.register("mypy_action")
 def make_github_mypy(repo_path: pathlib.Path, templates: Environment) -> List[str]:
 	"""

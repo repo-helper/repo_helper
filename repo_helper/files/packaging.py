@@ -222,7 +222,7 @@ def make_pyproject(repo_path: pathlib.Path, templates: Environment) -> List[str]
 	else:
 		existing_dependencies = None
 
-	existing_project_table = data["project"]
+	existing_project_table = data.get("project", {})
 	data["project"] = {}
 	data["project"]["name"] = templates.globals["pypi_name"]
 	data["project"]["version"] = templates.globals["version"]

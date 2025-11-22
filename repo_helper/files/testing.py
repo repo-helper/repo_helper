@@ -461,7 +461,7 @@ class ToxConfig(IniConfigurator):
 		"""
 
 		self._ini["testenv:.package"]["setenv"] = indent_join(self.get_setenv(False, False))
-		self._ini["testenv:.package"]["basepython"] = "python{python_deploy_version}".format(**self._globals)
+		# self._ini["testenv:.package"]["basepython"] = "python{python_deploy_version}".format(**self._globals)
 
 	def testenv_docs(self) -> None:
 		"""
@@ -473,7 +473,8 @@ class ToxConfig(IniConfigurator):
 			self._ini["testenv:docs"]["setenv"] = indent_join(envvars)
 			self._ini["testenv:docs"]["passenv"] = "SPHINX_BUILDER"
 
-			self._ini["testenv:docs"]["basepython"] = "python{python_deploy_version}".format(**self._globals)
+			basepython = f"python{max(float(self._globals['python_deploy_version']), 3.8)}"
+			self._ini["testenv:docs"]["basepython"] = basepython
 			self._ini["testenv:docs"]["changedir"] = f"{{toxinidir}}/{self['docs_dir']}"
 
 			if self["tox_testenv_extras"]:
