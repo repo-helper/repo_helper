@@ -159,7 +159,7 @@ class ToxConfig(IniConfigurator):
 		Compile the list of source files.
 		"""
 
-		source_files = []
+		source_files: List[str] = []
 
 		if self["meson_no_py"]:
 			return source_files
@@ -316,7 +316,6 @@ class ToxConfig(IniConfigurator):
 		self._ini["envlists"]["test"] = tox_envs
 
 		if self.get_source_files():
-			qa_env = []
 			if self.get_mypy_commands():
 				self._ini["envlists"]["qa"] = ["mypy", "lint"]
 			else:
