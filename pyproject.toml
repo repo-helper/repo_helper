@@ -152,7 +152,7 @@ additional-files = [
 ]
 
 [tool.mypy]
-python_version = "3.7"
+python_version = "3.9"
 namespace_packages = true
 check_untyped_defs = true
 warn_unused_ignores = true

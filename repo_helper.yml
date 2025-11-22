@@ -12,7 +12,7 @@ license: 'LGPLv3+'
 short_desc: 'A tool to manage configuration files, build scripts etc. across multiple projects.'
 docs_url: https://docs.repo-helper.uk
 
-python_deploy_version: 3.7
+python_deploy_version: 3.9
 min_coverage: 84
 tox_testenv_extras: all
 pre_commit_exclude: "^repo_helper/templates/.*\\.(_py|yml)$"
