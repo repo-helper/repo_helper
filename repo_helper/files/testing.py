@@ -161,9 +161,6 @@ class ToxConfig(IniConfigurator):
 
 		source_files: List[str] = []
 
-		if self["meson_no_py"]:
-			return source_files
-
 		if self._globals["py_modules"]:
 
 			for file in self._globals["py_modules"]:
@@ -176,7 +173,7 @@ class ToxConfig(IniConfigurator):
 					)
 			source_files.append(directory)
 
-		else:
+		elif not self["meson_no_py"]:
 			directory = posixpath.join(
 					self._globals["source_dir"],
 					self._globals["import_name"].replace('.', '/'),
@@ -1147,6 +1144,6 @@ def make_justfile(repo_path: pathlib.Path, templates: Environment) -> List[str]:
 	"""
 
 	file = PathPlus(repo_path) / "justfile"
-	enable_qa = not templates.globals["meson_no_py"]  # TODO: broader check
+	enable_qa = not (templates.globals["meson_no_py"] and not templates.globals["enable_tests"])  # TODO: broader check
 	file.write_clean(templates.get_template("justfile.t").render(enable_qa=enable_qa))
 	return [file.name]

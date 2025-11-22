@@ -731,7 +731,8 @@ def make_github_flake8(repo_path: pathlib.Path, templates: Environment) -> List[
 	manager = ActionsManager(repo_path, templates)
 	filename: pathlib.Path = manager.make_flake8().relative_to(repo_path)
 
-	if templates.globals["meson_no_py"]:
+	# TODO: more robust conditon
+	if templates.globals["meson_no_py"] and not templates.globals["enable_tests"]:
 		if filename.is_file():
 			filename.unlink()
 
@@ -753,7 +754,8 @@ def make_github_mypy(repo_path: pathlib.Path, templates: Environment) -> List[st
 	manager = ActionsManager(repo_path, templates)
 	filename: pathlib.Path = manager.make_mypy().relative_to(repo_path)
 
-	if templates.globals["meson_no_py"]:
+	# TODO: more robust conditon
+	if templates.globals["meson_no_py"] and not templates.globals["enable_tests"]:
 		if filename.is_file():
 			filename.unlink()
 
