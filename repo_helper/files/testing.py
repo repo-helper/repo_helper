@@ -1144,6 +1144,6 @@ def make_justfile(repo_path: pathlib.Path, templates: Environment) -> List[str]:
 	"""
 
 	file = PathPlus(repo_path) / "justfile"
-	enable_qa = not (templates.globals["meson_no_py"] and not templates.globals["enable_tests"])  # TODO: broader check
-	file.write_clean(templates.get_template("justfile.t").render(enable_qa=enable_qa))
+	disable_qa = templates.globals["meson_no_py"] and not templates.globals["enable_tests"]  # TODO: broader check
+	file.write_clean(templates.get_template("justfile.t").render(enable_qa=not disable_qa))
 	return [file.name]
