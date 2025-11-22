@@ -222,6 +222,7 @@ def make_pyproject(repo_path: pathlib.Path, templates: Environment) -> List[str]
 	else:
 		existing_dependencies = None
 
+	existing_project_table = data["project"]
 	data["project"] = {}
 	data["project"]["name"] = templates.globals["pypi_name"]
 	data["project"]["version"] = templates.globals["version"]
@@ -260,7 +261,18 @@ def make_pyproject(repo_path: pathlib.Path, templates: Environment) -> List[str]
 
 	data["project"]["dynamic"] = dynamic
 	data["project"]["license"] = {"file": "LICENSE"}
-	data["project"]["authors"] = [{"name": templates.globals["author"], "email": templates.globals["email"]}]
+
+	existing_authors: List[Dict[str, str]] = existing_project_table.get("authors", {})
+	new_authors = [{"name": templates.globals["author"], "email": templates.globals["email"]}]
+	all_new_names = {a["name"] for a in new_authors}
+	for author in existing_authors:
+		if author.get("name") not in all_new_names:
+			new_authors.append(author)
+
+	data["project"]["authors"] = new_authors
+
+	if "maintainers" in existing_project_table:
+		data["project"]["maintainers"] = existing_project_table["maintainers"]
 
 	_enabled_backends = get_keys(templates.globals, "use_flit", "use_maturin", "use_hatch")
 	if not any(_enabled_backends) and "dependencies" in data["project"]:
