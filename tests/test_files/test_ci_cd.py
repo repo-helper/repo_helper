@@ -321,6 +321,7 @@ def test_make_github_mypy_extra_install_only_linux(
 	advanced_file_regression.check_file(tmp_pathplus / ".github/workflows/mypy.yml")
 
 
+# TODO: meson_no_py
 @pytest.mark.parametrize("py_versions", [["3.6", "3.7", "3.8"], ["3.6", "3.7"]])
 @boolean_option("enable_docs", "docs")
 @pytest.mark.parametrize(

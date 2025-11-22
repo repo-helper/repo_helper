@@ -138,6 +138,7 @@ from repo_helper.configuration.packaging import (
 		entry_points,
 		extras_require,
 		manifest_additional,
+		meson_no_py,
 		platforms,
 		py_modules,
 		setup_pre,
@@ -267,6 +268,7 @@ __all__ = [
 		"use_flit",
 		"use_maturin",
 		"use_hatch",
+		"meson_no_py",
 		"github_ci_requirements",
 		]
 

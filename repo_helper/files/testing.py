@@ -161,6 +161,9 @@ class ToxConfig(IniConfigurator):
 
 		source_files = []
 
+		if self["meson_no_py"]:
+			return source_files
+
 		if self._globals["py_modules"]:
 
 			for file in self._globals["py_modules"]:
@@ -220,7 +223,9 @@ class ToxConfig(IniConfigurator):
 		elif self["stubs_package"]:
 			commands.append(f"stubtest {self['import_name']} {{posargs}}")
 		else:
-			commands.append(f"mypy {' '.join(self.get_source_files())} {{posargs}}")
+			source_files = self.get_source_files()
+			if source_files:
+				commands.append(f"mypy {' '.join(source_files)} {{posargs}}")
 
 		return commands
 
@@ -274,7 +279,11 @@ class ToxConfig(IniConfigurator):
 		else:
 			tox_envs = get_tox_python_versions(self["python_versions"])
 
-		self._ini["tox"]["envlist"] = [*tox_envs, "mypy", "build"]
+		if self.get_mypy_commands():
+			tox_envs.append("mypy")
+		tox_envs.append("build")
+
+		self._ini["tox"]["envlist"] = tox_envs
 		self._ini["tox"]["skip_missing_interpreters"] = True
 		self._ini["tox"]["isolated_build"] = True
 
@@ -305,7 +314,14 @@ class ToxConfig(IniConfigurator):
 			cov_envlist = [f"py{self['python_deploy_version']}".replace('.', ''), "coverage"]
 
 		self._ini["envlists"]["test"] = tox_envs
-		self._ini["envlists"]["qa"] = ["mypy", "lint"]
+
+		if self.get_source_files():
+			qa_env = []
+			if self.get_mypy_commands():
+				self._ini["envlists"]["qa"] = ["mypy", "lint"]
+			else:
+				self._ini["envlists"]["qa"] = ["lint"]
+
 		if self["enable_tests"]:
 			self._ini["envlists"]["cov"] = cov_envlist
 
@@ -445,6 +461,7 @@ class ToxConfig(IniConfigurator):
 		"""
 
 		self._ini["testenv:.package"]["setenv"] = indent_join(self.get_setenv(False, False))
+		self._ini["testenv:.package"]["basepython"] = "python{python_deploy_version}".format(**self._globals)
 
 	def testenv_docs(self) -> None:
 		"""
@@ -456,7 +473,7 @@ class ToxConfig(IniConfigurator):
 			self._ini["testenv:docs"]["setenv"] = indent_join(envvars)
 			self._ini["testenv:docs"]["passenv"] = "SPHINX_BUILDER"
 
-			self._ini["testenv:docs"]["basepython"] = "python3.8"
+			self._ini["testenv:docs"]["basepython"] = "python{python_deploy_version}".format(**self._globals)
 			self._ini["testenv:docs"]["changedir"] = f"{{toxinidir}}/{self['docs_dir']}"
 
 			if self["tox_testenv_extras"]:
@@ -540,8 +557,13 @@ class ToxConfig(IniConfigurator):
 				"pygments>=2.7.1",
 				"importlib_metadata<4.5.0; python_version<'3.8'"
 				])
-		cmd = f"python3 -m flake8_rst_docstrings_sphinx {' '.join(self.get_source_files())} --allow-toolbox {{posargs}}"
-		self._ini["testenv:lint"]["commands"] = cmd
+
+		source_files = self.get_source_files()
+		if source_files:
+			cmd = f"python3 -m flake8_rst_docstrings_sphinx {' '.join(source_files)} --allow-toolbox {{posargs}}"
+			self._ini["testenv:lint"]["commands"] = cmd
+		else:
+			self._ini.remove_section("testenv:lint")
 
 	def testenv_perflint(self) -> None:
 		"""
@@ -598,8 +620,12 @@ class ToxConfig(IniConfigurator):
 		if self["tox_testenv_extras"]:
 			self._ini["testenv:pyup"]["extras"] = self["tox_testenv_extras"]
 
-		commands = f"pyup_dirs {' '.join(self.get_source_files())} --py36-plus --recursive"
-		self._ini["testenv:pyup"]["commands"] = commands
+		source_files = self.get_source_files()
+		if source_files:
+			commands = f"pyup_dirs {' '.join(source_files)} --py36-plus --recursive"
+			self._ini["testenv:pyup"]["commands"] = commands
+		else:
+			self._ini.remove_section("testenv:pyup")
 
 	def testenv_coverage(self) -> None:
 		"""
@@ -1114,5 +1140,6 @@ def make_justfile(repo_path: pathlib.Path, templates: Environment) -> List[str]:
 	"""
 
 	file = PathPlus(repo_path) / "justfile"
-	file.write_clean(templates.get_template("justfile.t").render())
+	enable_qa = not templates.globals["meson_no_py"]  # TODO: broader check
+	file.write_clean(templates.get_template("justfile.t").render(enable_qa=enable_qa))
 	return [file.name]

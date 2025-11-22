@@ -45,6 +45,7 @@ __all__ = [
 		"use_flit",
 		"use_maturin",
 		"use_hatch",
+		"meson_no_py",
 		]
 
 
@@ -256,7 +257,7 @@ class platforms(ConfigVar):
 	# 	return [x.lower() for x in value]
 
 
-# TODO: error if multiple of use_whey, use_flit or use_hatch set
+# TODO: error if multiple of use_whey, use_flit, use_hatch, use_maturin, meson_no_py
 
 
 class use_whey(ConfigVar):
@@ -293,6 +294,7 @@ class use_whey(ConfigVar):
 				use_flit,
 				use_maturin,
 				use_hatch,
+				meson_no_py,
 				)
 
 		for key in disallowed_keys:
@@ -407,6 +409,49 @@ class use_hatch(ConfigVar):
 	.. versionadded:: $VERSION
 
 	.. note:: Support for hatch is provisional and experimental.
+	"""  # noqa: D400
+
+	dtype = bool
+	default = False
+	category: str = "packaging"
+
+	@classmethod
+	def validate(cls, raw_config_vars: Optional[Dict[str, Any]] = None) -> Any:  # noqa: D102
+
+		# this package
+		from repo_helper.configuration import desktopfile
+		from repo_helper.configuration.other import exclude_files
+
+		excluded_files = exclude_files.get(raw_config_vars)
+
+		disallowed_keys = (
+				additional_setup_args,
+				setup_pre,
+				py_modules,
+				desktopfile,
+				)
+
+		for key in disallowed_keys:
+			if key.get(raw_config_vars):
+				return False
+
+		# Excluded files that the backend is incompatible with
+		disallowed_files = {"setup", "setup_cfg", "pyproject"}
+		for file in disallowed_files:
+			if file in excluded_files:
+				return False
+
+		return super().validate(raw_config_vars)
+
+
+class meson_no_py(ConfigVar):
+	r"""
+	Whether to use `meson-python <https://mesonbuild.com/meson-python/>`_ to build a pure-C/C++ library (no Python),
+	rather than ``setuptools.build_meta``.
+
+	.. versionadded:: $VERSION
+
+	.. note:: Support for meson is provisional and experimental.
 	"""  # noqa: D400
 
 	dtype = bool

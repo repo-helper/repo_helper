@@ -351,7 +351,7 @@ def make_pre_commit(repo_path: pathlib.Path, templates: Environment) -> List[str
 			formate_custom,
 			]
 
-	if not templates.globals["stubs_package"]:
+	if not templates.globals["stubs_package"] and not templates.globals["meson_no_py"]:
 		managed_hooks.append(dep_checker)
 
 	managed_hooks_urls = [str(hook.repo) for hook in managed_hooks]

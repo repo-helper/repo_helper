@@ -786,7 +786,7 @@ def ensure_bumpversion(repo_path: pathlib.Path, templates: Environment) -> List[
 	if not templates.globals["desktopfile"]:
 		old_sections.append(f"setup.py")
 
-	if any(get_keys(templates.globals, "use_whey", "use_flit", "use_maturin", "use_hatch")):
+	if any(get_keys(templates.globals, "use_whey", "use_flit", "use_maturin", "use_hatch", "meson_no_py")):
 		old_sections.append("bumpversion:file:setup.cfg")
 
 	for section in old_sections:
@@ -849,7 +849,7 @@ def get_bumpversion_filenames(templates: Environment) -> Iterable[str]:
 
 	yield from ["pyproject.toml", "repo_helper.yml", "README.rst"]
 
-	if not any(get_keys(templates.globals, "use_whey", "use_flit", "use_maturin", "use_hatch")):
+	if not any(get_keys(templates.globals, "use_whey", "use_flit", "use_maturin", "use_hatch", "meson_no_py")):
 		yield "setup.cfg"
 
 	if templates.globals["enable_docs"]:
@@ -871,7 +871,7 @@ def get_init_filename(templates: Environment) -> Optional[str]:
 	if templates.globals["py_modules"]:
 		for modname in templates.globals["py_modules"]:
 			return f"{templates.globals['source_dir']}{modname}.py"
-	elif not templates.globals["stubs_package"]:
+	elif not templates.globals["stubs_package"] and not templates.globals["meson_no_py"]:
 		source_dir = posixpath.join(
 				templates.globals["source_dir"],
 				templates.globals["import_name"].replace('.', '/'),

@@ -159,6 +159,7 @@ def typed() -> None:
 			rh.templates.globals["use_flit"],
 			rh.templates.globals["use_maturin"],
 			rh.templates.globals["use_hatch"],
+			rh.templates.globals["meson_no_py"],
 			)):
 		content = setup_cfg.read_text()
 

@@ -83,6 +83,9 @@ class CondaRecipeMaker(MaryBerry):
 		elif config["use_hatch"]:
 			config["requires"].append("hatchling")
 
+		elif config["meson_no_py"]:
+			config["requires"].append("meson-python")
+
 		url = "https://github.com/{username}/{repo_name}".format_map(config)
 		config["urls"] = {
 				"Homepage": url,
