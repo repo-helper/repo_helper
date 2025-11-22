@@ -231,6 +231,13 @@
       },
       "description": "A list of additional entries for ``MANIFEST.in``."
     },
+    "meson_no_py": {
+      "type": [
+        "boolean",
+        "string"
+      ],
+      "description": "Whether to use `meson-python <https://mesonbuild.com/meson-python/>`_ to build a pure-C/C++ library (no Python), rather than ``setuptools.build_meta``."
+    },
     "min_coverage": {
       "type": [
         "string",
