@@ -259,28 +259,13 @@ def make_pyproject(repo_path: pathlib.Path, templates: Environment) -> List[str]
 	if existing_dependencies is not None:
 		data["project"]["dependencies"] = existing_dependencies
 
-	data["project"]["dynamic"] = dynamic
-	data["project"]["license"] = {"file": "LICENSE"}
-
-	existing_authors: List[Dict[str, str]] = existing_project_table.get("authors", {})
-	new_authors = [{"name": templates.globals["author"], "email": templates.globals["email"]}]
-	all_new_names = {a["name"] for a in new_authors}
-	for author in existing_authors:
-		if author.get("name") not in all_new_names:
-			new_authors.append(author)
-
-	data["project"]["authors"] = new_authors
-
-	if "maintainers" in existing_project_table:
-		data["project"]["maintainers"] = existing_project_table["maintainers"]
-
 	_enabled_backends = get_keys(templates.globals, "use_flit", "use_maturin", "use_hatch")
 	if not any(_enabled_backends) and "dependencies" in data["project"]:
 		del data["project"]["dependencies"]
 
 	if templates.globals["use_hatch"]:
 		if "dependencies" in data["project"]:
-			data["project"]["dynamic"] = []
+			dynamic = []
 			parsed_requirements, comments, invalid_lines = read_requirements(
 				repo_path / "requirements.txt",
 				include_invalid=True,
@@ -289,7 +274,7 @@ def make_pyproject(repo_path: pathlib.Path, templates: Environment) -> List[str]
 				raise NotImplementedError(f"Unsupported requirement type(s): {invalid_lines}")
 			data["project"]["dependencies"] = list(map(str, sorted(parsed_requirements)))
 		else:
-			data["project"]["dynamic"] = ["dependencies"]
+			dynamic = ["dependencies"]
 
 		hatch_build = data["tool"].setdefault("hatch", {}).setdefault("build", {})
 		hatch_build.setdefault("sdist", {})
@@ -312,7 +297,7 @@ def make_pyproject(repo_path: pathlib.Path, templates: Environment) -> List[str]
 			hatch_metadata["hooks"]["requirements_txt"] = {"files": ["requirements.txt"]}
 
 	if not any(get_keys(templates.globals, "use_whey", "use_hatch")):
-		data["project"]["dynamic"] = []
+		dynamic = []
 
 		if templates.globals["use_flit"] or templates.globals["use_maturin"] or templates.globals["meson_no_py"]:
 			parsed_requirements, comments, invalid_lines = read_requirements(
@@ -323,7 +308,7 @@ def make_pyproject(repo_path: pathlib.Path, templates: Environment) -> List[str]
 				raise NotImplementedError(f"Unsupported requirement type(s): {invalid_lines}")
 			data["project"]["dependencies"] = sorted(parsed_requirements)
 		else:
-			data["project"]["dynamic"].append("dependencies")
+			dynamic.append("dependencies")
 
 			data["tool"].setdefault("setuptools", {})
 			data["tool"]["setuptools"]["zip-safe"] = False
@@ -333,6 +318,21 @@ def make_pyproject(repo_path: pathlib.Path, templates: Environment) -> List[str]
 					"macOS",
 					"Linux",
 					]
+
+	data["project"]["dynamic"] = dynamic
+	data["project"]["license"] = {"file": "LICENSE"}
+
+	existing_authors: List[Dict[str, str]] = existing_project_table.get("authors", {})
+	new_authors = [{"name": templates.globals["author"], "email": templates.globals["email"]}]
+	all_new_names = {a["name"] for a in new_authors}
+	for author in existing_authors:
+		if author.get("name") not in all_new_names:
+			new_authors.append(author)
+
+	data["project"]["authors"] = new_authors
+
+	if "maintainers" in existing_project_table:
+		data["project"]["maintainers"] = existing_project_table["maintainers"]
 
 	url = "https://github.com/{username}/{repo_name}".format_map(templates.globals)
 	data["project"]["urls"] = {
