@@ -719,7 +719,6 @@ def make_github_octocheese(repo_path: pathlib.Path, templates: Environment) -> L
 	return [file.relative_to(repo_path).as_posix()]
 
 
-# TODO: remove if meson_no_py or other similar options
 @management.register("flake8_action")
 def make_github_flake8(repo_path: pathlib.Path, templates: Environment) -> List[str]:
 	"""
@@ -730,11 +729,15 @@ def make_github_flake8(repo_path: pathlib.Path, templates: Environment) -> List[
 	"""
 
 	manager = ActionsManager(repo_path, templates)
+	filename: pathlib.Path = manager.make_flake8().relative_to(repo_path)
 
-	return [manager.make_flake8().relative_to(repo_path).as_posix()]
+	if templates.globals["meson_no_py"]:
+		if filename.is_file():
+			filename.unlink()
+
+	return [filename.as_posix()]
 
 
-# TODO: remove if meson_no_py or other similar options
 @management.register("mypy_action")
 def make_github_mypy(repo_path: pathlib.Path, templates: Environment) -> List[str]:
 	"""
@@ -748,8 +751,13 @@ def make_github_mypy(repo_path: pathlib.Path, templates: Environment) -> List[st
 	# https://mypy.readthedocs.io/en/stable/command_line.html#cmdoption-mypy-python-version
 
 	manager = ActionsManager(repo_path, templates)
+	filename: pathlib.Path = manager.make_mypy().relative_to(repo_path)
 
-	return [manager.make_mypy().relative_to(repo_path).as_posix()]
+	if templates.globals["meson_no_py"]:
+		if filename.is_file():
+			filename.unlink()
+
+	return [filename.as_posix()]
 
 
 @management.register("bumpversion")
