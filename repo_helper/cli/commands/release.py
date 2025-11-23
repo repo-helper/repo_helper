@@ -125,7 +125,7 @@ def resolve_command(self, ctx: click.Context, args: List[str]) -> Tuple[str, Com
 	return cmd_name, cmd, args[1:]
 
 
-release.resolve_command = MethodType(resolve_command, release)  # type: ignore[assignment]
+release.resolve_command = MethodType(resolve_command, release)  # type: ignore[method-assign]
 
 release_command = partial(release.command, context_settings=CONTEXT_SETTINGS)
 

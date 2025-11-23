@@ -5,7 +5,7 @@ from typing import Iterator
 import pytest
 import requests
 from _pytest.fixtures import FixtureRequest
-from betamax import Betamax  # type: ignore[import]
+from betamax import Betamax  # type: ignore[import-untyped]
 from coincidence.regressions import AdvancedFileRegressionFixture
 from consolekit.testing import CliRunner, Result
 from domdf_python_tools.paths import PathPlus, in_directory

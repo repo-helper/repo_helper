@@ -351,6 +351,8 @@ class Section(Block, Container, MutableMapping):
 		if not isinstance(self.last_item, Comment):
 			comment = Comment(self._structure)
 			self._structure.append(comment)
+
+		assert isinstance(self.last_item, Block)
 		self.last_item.add_line(line)
 		return self
 
@@ -366,6 +368,8 @@ class Section(Block, Container, MutableMapping):
 		if not isinstance(self.last_item, Space):
 			space = Space(self._structure)
 			self._structure.append(space)
+
+		assert isinstance(self.last_item, Block)
 		self.last_item.add_line(line)
 		return self
 
@@ -861,6 +865,7 @@ class ConfigUpdater(Container[Block], MutableMapping):
 							and cursect[optname] is not None
 							):
 						cursect[optname].append('')  # newlines added at join
+						assert isinstance(self.last_item.last_item, Block)
 						self.last_item.last_item.add_line(line)  # HOOK
 				else:
 					# empty line marks end of value
@@ -874,9 +879,11 @@ class ConfigUpdater(Container[Block], MutableMapping):
 
 			if (cursect is not None and optname and cur_indent_level > indent_level):
 				cursect[optname].append(value)
+				assert isinstance(self.last_item.last_item, Block)
 				self.last_item.last_item.add_line(line)  # HOOK
 			elif (cursect is not None and optname and line[0] in {';', '#'}):
 				cursect[optname].append(value)
+				assert isinstance(self.last_item.last_item, Block)
 				self.last_item.last_item.add_line(line)  # HOOK
 			# a section header or option header?
 			else:

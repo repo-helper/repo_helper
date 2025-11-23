@@ -24,7 +24,7 @@
 from typing import Any, Dict
 
 # 3rd party
-import lorem  # type: ignore[import]
+import lorem  # type: ignore[import-untyped]
 import pytest
 from coincidence.regressions import AdvancedFileRegressionFixture
 
