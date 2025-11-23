@@ -469,8 +469,8 @@ class ToxConfig(IniConfigurator):
 			self._ini["testenv:docs"]["setenv"] = indent_join(envvars)
 			self._ini["testenv:docs"]["passenv"] = "SPHINX_BUILDER"
 
-			basepython = f"python{max(float(self._globals['python_deploy_version']), 3.8)}"
-			self._ini["testenv:docs"]["basepython"] = basepython
+			basepython = max(Version(self._globals["python_deploy_version"]), Version("3.8"))
+			self._ini["testenv:docs"]["basepython"] = f"python{basepython}"
 			self._ini["testenv:docs"]["changedir"] = f"{{toxinidir}}/{self['docs_dir']}"
 
 			if self["tox_testenv_extras"]:
