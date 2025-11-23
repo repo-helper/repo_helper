@@ -1,0 +1,50 @@
+# This file is managed by 'repo_helper'. Don't edit it directly.
+---
+name: Safety
+
+on:
+  push:
+    branches-ignore:
+      - 'repo-helper-update'
+      - 'pre-commit-ci-update-config'
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  Run:
+    name: "Safety"
+    runs-on: "ubuntu-22.04"
+
+    steps:
+      - name: Checkout 🛎️
+        uses: "actions/checkout@v2"
+
+      - name: Check for changed files
+        uses: dorny/paths-filter@v2
+        id: changes
+        with:
+          list-files: "json"
+          filters: |
+            code:
+              - 'requirements.txt'
+
+      - name: Setup Python 🐍
+        if: steps.changes.outputs.code == 'true'
+        uses: "actions/setup-python@v2"
+        with:
+          python-version: "3.8"
+
+      - name: Install dependencies 🔧
+        if: steps.changes.outputs.code == 'true'
+        run: |
+          python -VV
+          python -m site
+          python -m pip install --upgrade pip setuptools wheel
+          python -m pip install git+https://github.com/domdfcoding/safety@lower
+
+      - name: "Run Safety"
+        if: steps.changes.outputs.code == 'true'
+        # 47833: Click mktemp/mkstemp issue involving the pager. Code is bypassed by a patch in repo_helper.cli
+        run: "python -m safety check -r requirements.txt -i 47833 --full-report"
