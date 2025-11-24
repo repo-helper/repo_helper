@@ -880,6 +880,9 @@ def get_bumpversion_filenames(templates: Environment) -> Iterable[str]:
 
 
 def get_init_filename(templates: Environment) -> Optional[str]:
+	if templates.globals["meson_no_py"]:
+		return None
+
 	if templates.globals["py_modules"]:
 		for modname in templates.globals["py_modules"]:
 			return f"{templates.globals['source_dir']}{modname}.py"
