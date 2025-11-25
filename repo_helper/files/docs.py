@@ -635,6 +635,7 @@ def rewrite_docs_index(repo_path: pathlib.Path, templates: Environment) -> List[
 			platforms=templates.globals["platforms"],
 			on_pypi=templates.globals["on_pypi"],
 			primary_conda_channel=primary_conda_channel,
+			linters=not templates.globals["meson_no_py"] or templates.globals["enable_tests"],
 			)
 
 	sb.set_docs_mode()

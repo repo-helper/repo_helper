@@ -311,10 +311,12 @@ class ShieldsBlock:
 	:param platforms: List of supported platforms.
 	:param on_pypi:
 	:param primary_conda_channel: The Conda channel the package can be downloaded from.
+	:param linters: Whether to show badges for linters (mypy and flake8).
 
 	.. versionadded:: 2020.12.11
 
-	.. versionadded:: $2025.6.3  Added ``conda_name`` option.
+	.. versionadded:: 2025.6.3  Added ``conda_name`` option.
+	.. versionadded:: $VERSION  Added ``linters`` option.
 	"""
 
 	#: This list controls which sections are included, and their order.
@@ -376,6 +378,7 @@ class ShieldsBlock:
 			platforms: Optional[Iterable[str]] = None,
 			on_pypi: bool = True,
 			primary_conda_channel: Optional[str] = None,
+			linters: bool = True,
 			):
 
 		if unique_name and not unique_name.startswith('_'):
@@ -396,6 +399,7 @@ class ShieldsBlock:
 		self.platforms: Iterable[str] = set(platforms or ())
 		self.on_pypi: bool = on_pypi
 		self.primary_conda_channel: str = primary_conda_channel or self.username
+		self.linters: bool = linters
 
 		self.set_readme_mode()
 
@@ -486,7 +490,12 @@ class ShieldsBlock:
 		substitutions["license"] = self.make_license_shield(repo_name, username)
 		substitutions["language"] = self.make_language_shield(repo_name, username)
 
-		sections["QA"] = ["codefactor", "actions_flake8", "actions_mypy"]
+		# TODO: hide if no flake8/mypy workflow
+		if self.linters:
+			sections["QA"] = ["codefactor", "actions_flake8", "actions_mypy"]
+		else:
+			sections["QA"] = ["codefactor"]
+
 		substitutions["codefactor"] = self.make_codefactor_shield(repo_name, username)
 		substitutions["actions_flake8"] = self.make_actions_shield(repo_name, username, "Flake8", "Flake8 Status")
 		substitutions["actions_mypy"] = self.make_actions_shield(repo_name, username, "mypy", "mypy status")
