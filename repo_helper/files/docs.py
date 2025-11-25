@@ -42,6 +42,7 @@ from domdf_python_tools.paths import PathPlus
 from domdf_python_tools.stringlist import DelimitedList, StringList
 from domdf_python_tools.typing import PathLike
 from domdf_python_tools.utils import enquote_value
+from packaging.version import Version
 from shippinglabel import normalize
 from shippinglabel.requirements import (
 		ComparableRequirement,
@@ -236,6 +237,7 @@ def make_rtfd(repo_path: pathlib.Path, templates: Environment) -> List[str]:
 			]
 	post_install_command = "pip install " + ' '.join(pinned_sphinxcontrib_deps)
 
+	basepython = max(Version(templates.globals["python_deploy_version"]), Version("3.9"))
 	# Formats: Optionally build your docs in additional formats such as PDF and ePub
 	config = {
 			"version": 2,
@@ -247,7 +249,7 @@ def make_rtfd(repo_path: pathlib.Path, templates: Environment) -> List[str]:
 			"python": {"install": install_config},
 			"build": {
 					"os": "ubuntu-22.04",
-					"tools": {"python": "3.9"},
+					"tools": {"python": str(basepython)},
 					"jobs": {
 							"post_create_environment": [post_create_command],
 							"post_install": [post_install_command],
