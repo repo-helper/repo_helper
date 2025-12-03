@@ -26,6 +26,7 @@ Manage configuration files for continuous integration / continuous deployment.
 # stdlib
 import pathlib
 import posixpath
+import warnings
 from itertools import filterfalse
 from textwrap import indent
 from typing import Any, Dict, Iterable, Iterator, List, Optional, Tuple
@@ -691,7 +692,18 @@ def make_github_docs_test(repo_path: pathlib.Path, templates: Environment) -> Li
 		else:
 			build_command = "tox -e docs -- "
 
-		file.write_clean(templates.get_template(file.name).render(build_command=build_command))
+		python_version: str = templates.globals["python_deploy_version"]
+		if python_version == "3.8":
+			branch = "sphinx-3.3.1-py38"
+		elif python_version == "3.9":
+			branch = "sphinx-3.3.1-py39"
+		elif python_version == "3.10":
+			branch = "sphinx-3.3.1-py310"
+		else:
+			warnings.warn(f"Currently unsupported Python version ({python_version}) for docs action.")
+			branch = "sphinx-3.3.1"
+
+		file.write_clean(templates.get_template(file.name).render(build_command=build_command, branch=branch))
 
 	else:
 		file.unlink(missing_ok=True)

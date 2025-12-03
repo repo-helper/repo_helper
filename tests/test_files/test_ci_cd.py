@@ -217,6 +217,7 @@ def test_make_github_docs_test(
 		):
 	demo_environment.globals["docs_fail_on_warning"] = fail_on_warning
 	demo_environment.globals["enable_tests"] = enable_tests
+	assert demo_environment.globals["python_deploy_version"] == "3.8"
 
 	assert make_github_docs_test(tmp_pathplus, demo_environment) == [".github/workflows/docs_test_action.yml"]
 	advanced_file_regression.check_file(tmp_pathplus / ".github/workflows/docs_test_action.yml")

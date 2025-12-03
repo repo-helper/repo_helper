@@ -87,7 +87,7 @@ primary_conda_channel: domdfcoding
 pure_python: true
 py_modules: []
 pypi_name: repo_helper_demo
-python_deploy_version: '3.7'
+python_deploy_version: '3.10'
 python_versions:
   '3.10':
     experimental: false
