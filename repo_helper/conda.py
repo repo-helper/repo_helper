@@ -78,7 +78,7 @@ class CondaRecipeMaker(MaryBerry):
 			config["requires"].append("flit_core>=3.2,<4")
 
 		elif config["use_maturin"]:
-			config["requires"].append("maturin<0.13,>=0.12.0")
+			config["requires"].append("maturin<2.0,>=1.10")
 
 		elif config["use_hatch"]:
 			config["requires"].append("hatchling")

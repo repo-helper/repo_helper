@@ -165,7 +165,7 @@ def make_pyproject(repo_path: pathlib.Path, templates: Environment) -> List[str]
 			"flit-core<4,>=3.2",
 			"hatchling",
 			"hatch-requirements-txt",
-			"maturin<0.13,>=0.12.0",
+			"maturin<2.0,>=1.10",
 			"meson-python",
 			*templates.globals["tox_build_requirements"],
 			*data["build-system"].get("requires", [])
@@ -190,8 +190,8 @@ def make_pyproject(repo_path: pathlib.Path, templates: Environment) -> List[str]
 
 	if templates.globals["use_maturin"]:
 		build_backend = "maturin"
-	elif "maturin<0.13,>=0.12.0" in build_requirements:
-		build_requirements.remove("maturin<0.13,>=0.12.0")  # type: ignore[arg-type]
+	elif "maturin<2.0,>=1.10" in build_requirements:
+		build_requirements.remove("maturin<2.0,>=1.10")  # type: ignore[arg-type]
 
 	if templates.globals["use_hatch"]:
 		build_backend = "hatchling.build"
