@@ -799,7 +799,10 @@ def ensure_bumpversion(repo_path: pathlib.Path, templates: Environment) -> List[
 	bv.read(str(bumpversion_file))
 
 	old_sections = ["bumpversion:file:git_helper.yml", "bumpversion:file:__pkginfo__.py"]
-	required_sections = {f"bumpversion:file:{filename}" for filename in get_bumpversion_filenames(templates)}
+	required_sections = {
+			f"bumpversion:file:{filename}"
+			for filename in get_bumpversion_filenames(repo_path, templates)
+			}
 
 	if not templates.globals["enable_docs"]:
 		old_sections.append(f"bumpversion:file:{templates.globals['docs_dir']}/index.rst")
@@ -823,7 +826,7 @@ def ensure_bumpversion(repo_path: pathlib.Path, templates: Environment) -> List[
 		if section not in bv.sections():
 			bv.add_section(section)
 
-	init_filename = get_init_filename(templates)
+	init_filename = get_init_filename(PathPlus(repo_path), templates)
 	if init_filename is not None:
 		init_section = bv[f"bumpversion:file:{init_filename}"]
 		if "search" not in init_section:
@@ -862,7 +865,7 @@ def ensure_bumpversion(repo_path: pathlib.Path, templates: Environment) -> List[
 	return [bumpversion_file.name]
 
 
-def get_bumpversion_filenames(templates: Environment) -> Iterable[str]:
+def get_bumpversion_filenames(repo_path: pathlib.Path, templates: Environment) -> Iterable[str]:
 	"""
 	Returns an iterable of filenames to have the version number bumped in.
 
@@ -885,24 +888,28 @@ def get_bumpversion_filenames(templates: Environment) -> Iterable[str]:
 	if templates.globals["desktopfile"]:
 		yield "setup.py"
 
-	init_filename = get_init_filename(templates)
+	init_filename = get_init_filename(repo_path, templates)
 
 	if init_filename is not None:
 		yield init_filename
 
 
-def get_init_filename(templates: Environment) -> Optional[str]:
+def get_init_filename(repo_path: pathlib.Path, templates: Environment) -> Optional[str]:
 	if templates.globals["meson_no_py"]:
+		return None
+
+	module_dir = posixpath.join(
+			templates.globals["source_dir"],
+			templates.globals["import_name"].replace('.', '/'),
+			)
+
+	if templates.globals["use_maturin"] and not (repo_path / module_dir / "__init__.py").is_file():
 		return None
 
 	if templates.globals["py_modules"]:
 		for modname in templates.globals["py_modules"]:
 			return f"{templates.globals['source_dir']}{modname}.py"
 	elif not templates.globals["stubs_package"] and not templates.globals["meson_no_py"]:
-		source_dir = posixpath.join(
-				templates.globals["source_dir"],
-				templates.globals["import_name"].replace('.', '/'),
-				)
-		return f"{source_dir}/__init__.py"
+		return f"{module_dir}/__init__.py"
 
 	return None

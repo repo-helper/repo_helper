@@ -258,7 +258,7 @@ class Bumper:
 		# populate with the sections which are managed by repo_helper
 		config: Dict[str, BumpversionFileConfig] = {
 				filename: default()
-				for filename in get_bumpversion_filenames(self.repo.templates)
+				for filename in get_bumpversion_filenames(self.repo.target_repo, self.repo.templates)
 				}
 
 		if self.repo.templates.globals["enable_docs"]:

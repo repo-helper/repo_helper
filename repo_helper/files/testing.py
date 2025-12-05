@@ -174,11 +174,16 @@ class ToxConfig(IniConfigurator):
 			source_files.append(directory)
 
 		elif not self["meson_no_py"]:
-			directory = posixpath.join(
-					self._globals["source_dir"],
-					self._globals["import_name"].replace('.', '/'),
-					)
-			source_files.append(directory)
+			if not self["use_maturin"] or self.base_path.joinpath(
+					self["source_dir"],
+					self["import_name"].replace('.', '/'),
+					"__init__.py",
+					).is_file():
+				directory = posixpath.join(
+						self["source_dir"],
+						self["import_name"].replace('.', '/'),
+						)
+				source_files.append(directory)
 
 		if self._globals["enable_tests"]:
 			source_files.append(self._globals["tests_dir"])

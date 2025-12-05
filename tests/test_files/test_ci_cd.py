@@ -349,6 +349,8 @@ def test_ensure_bumpversion(
 	demo_environment.globals["version"] = "1.2.3"
 	demo_environment.globals["enable_docs"] = enable_docs
 	demo_environment.globals.update(other_opts)
+	tmp_pathplus.joinpath("hello_world").maybe_make(parents=True)
+	tmp_pathplus.joinpath("hello_world", "__init__.py").touch()
 	assert ensure_bumpversion(tmp_pathplus, demo_environment) == [".bumpversion.cfg"]
 	advanced_file_regression.check_file(tmp_pathplus / ".bumpversion.cfg")
 
