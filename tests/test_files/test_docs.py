@@ -128,8 +128,10 @@ def test_ensure_doc_requirements(tmp_pathplus: PathPlus, demo_environment: Envir
 	assert (tmp_pathplus / managed_files[0]).read_lines() == [
 			"alabaster>=0.7.12",
 			"default-values>=0.6.0",
+			"docutils<0.22",
 			"extras-require>=0.5.0",
 			"html-section>=0.3.0",
+			"roman>=4.0",
 			"seed-intersphinx-mapping>=1.2.2",
 			"sphinx>=3.0.3",
 			"sphinx-copybutton>=0.2.12",
@@ -158,9 +160,11 @@ def test_ensure_doc_requirements(tmp_pathplus: PathPlus, demo_environment: Envir
 	assert (tmp_pathplus / managed_files[0]).read_lines() == [
 			"alabaster>=0.7.12",
 			"default-values>=0.6.0",
+			"docutils<0.22",
 			"extras-require>=0.5.0",
 			"html-section>=0.3.0",
 			"lorem>=0.1.1",
+			"roman>=4.0",
 			"seed-intersphinx-mapping>=1.2.2",
 			"sphinx>=3.0.3",
 			"sphinx-copybutton>=0.2.12",

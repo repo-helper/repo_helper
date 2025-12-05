@@ -99,6 +99,8 @@ class DocRequirementsManager(RequirementsManager):
 			ComparableRequirement("sphinxcontrib-jsmath==1.0.1"),
 			ComparableRequirement("sphinxcontrib-qthelp==1.0.3"),
 			ComparableRequirement("sphinxcontrib-serializinghtml==1.1.5"),
+			ComparableRequirement("roman>=4.0"),
+			ComparableRequirement("docutils<0.22"),
 			}
 
 	def __init__(self, repo_path: PathLike, templates: Environment):
