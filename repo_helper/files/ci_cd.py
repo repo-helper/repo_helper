@@ -233,8 +233,20 @@ class ActionsManager:
 					gh_actions_versions["pypy-3.6"][2],
 					)
 
+		if "pypy-3.8" in gh_actions_versions:
+			gh_actions_versions["pypy-3.8"] = (
+					gh_actions_versions["pypy-3.8"][0].replace(",build", ''),
+					gh_actions_versions["pypy-3.8"][1],
+					gh_actions_versions["pypy-3.8"][2],
+					)
+
 		if "pypy-3.9" in gh_actions_versions:
-			gh_actions_versions["pypy-3.9-v7.3.15"] = gh_actions_versions.pop("pypy-3.9")
+			pypy39 = gh_actions_versions.pop("pypy-3.9")
+			gh_actions_versions["pypy-3.9-v7.3.15"] = (
+					pypy39[0].replace(",build", ''),
+					pypy39[1],
+					pypy39[2],
+					)
 		if "pypy-3.10" in gh_actions_versions:
 			gh_actions_versions["pypy-3.10-v7.3.15"] = gh_actions_versions.pop("pypy-3.10")
 
