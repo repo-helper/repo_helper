@@ -284,7 +284,7 @@ class ActionsManager:
 				if version in {"pypy-3.7", "3.7", "pypy-3.6", "3.6"}:
 					gh_actions_versions[version] = (
 							gh_actions_versions[version][0],
-							"13",
+							"15-intel",
 							gh_actions_versions[version][2],
 							)
 				else:
