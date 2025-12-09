@@ -30,22 +30,24 @@ from typing import Dict, List, Optional, Union
 from configconfig.configvar import ConfigVar
 from configconfig.utils import RawConfigVarsType, optional_getter
 from configconfig.validator import Validator
+from domdf_python_tools.utils import strtobool
 
 __all__ = [
-		"enable_tests",
-		"tox_requirements",
-		"tox_build_requirements",
-		"tox_testenv_extras",
-		"tests_dir",
-		"mypy_deps",
-		"mypy_plugins",
+		"checkout_submodules",
 		"enable_devmode",
-		"mypy_version",
-		"tox_unmanaged",
-		"min_coverage",
-		"github_ci_requirements",
+		"enable_tests",
 		"extra_lint_paths",
 		"extra_testenv_commands",
+		"github_ci_requirements",
+		"min_coverage",
+		"mypy_deps",
+		"mypy_plugins",
+		"mypy_version",
+		"tests_dir",
+		"tox_build_requirements",
+		"tox_requirements",
+		"tox_testenv_extras",
+		"tox_unmanaged"
 		]
 
 
@@ -287,6 +289,30 @@ class tox_unmanaged(ConfigVar):
 
 class _Validator(Validator):
 
+	_dtypes = {
+			str: "str",
+			int: "int",
+			float: "float",
+			bool: "bool_str",
+			}
+
+	def visit_bool_str(self, raw_config_vars: RawConfigVarsType) -> str:
+		"""
+		Used to validate and convert values that can be :class:`bool` or :class:`str`.
+
+		:param raw_config_vars:
+		"""
+
+		obj = optional_getter(raw_config_vars, self.config_var, self.config_var.required)
+
+		if isinstance(obj, bool):
+			return self.config_var.rtype(strtobool(obj))
+		else:
+			if not isinstance(obj, (bool, str)):
+				raise ValueError(f"'{self.config_var.__name__}' must be a boolean or string") from None
+
+			return obj
+
 	def visit_dict(self, raw_config_vars: RawConfigVarsType) -> Dict:
 		"""
 		Used to validate and convert :class:`dict` values.
@@ -355,5 +381,33 @@ class github_ci_requirements(ConfigVar):
 		for platform in parsed_config.values():
 			platform.setdefault("pre", [])
 			platform.setdefault("post", [])
+
+		return parsed_config
+
+
+class checkout_submodules(ConfigVar):
+	"""
+	Whether to checkout git submodules (recursively) when cloning the repository in CI pipelines,
+
+	.. versionadded:: $VERSION
+	"""
+
+	dtype = bool
+	default = False
+	category: str = "testing"
+
+	@classmethod
+	def validate(
+			cls,
+			raw_config_vars: Optional[RawConfigVarsType] = None
+			) -> Dict[str, Dict[str, List[str]]]:  # noqa: D102
+
+		if raw_config_vars is None:
+			raw_config_vars = {}
+
+		if cls.rtype is None:
+			cls.rtype = cls.dtype
+
+		parsed_config: Dict[str, Dict[str, List[str]]] = _Validator(cls).validate(raw_config_vars)
 
 		return parsed_config

@@ -4,6 +4,7 @@ additional_requirements_files: []
 additional_setup_args: {}
 assignee: domdfcoding
 author: Dominic Davis-Foster
+checkout_submodules: false
 classifiers:
 - 'Development Status :: 4 - Beta'
 - 'Intended Audience :: Developers'

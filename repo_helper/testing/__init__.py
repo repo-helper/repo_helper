@@ -184,6 +184,7 @@ def demo_environment() -> Environment:
 					use_maturin=False,
 					use_hatch=False,
 					meson_no_py=False,
+					checkout_submodules=False,
 					docs_fail_on_warning=False,
 					brace=brace,
 					third_party_version_matrix={},

@@ -15,7 +15,9 @@ jobs:
 
     steps:
       - name: Checkout 🛎️
-        uses: "actions/checkout@v4"
+        uses: "actions/checkout@v4"{% if checkout_submodules %}
+        with:
+          submodules: {{ checkout_submodules }}{% endif %}
 
       - name: Setup RustPython 🦀 🐍
         run: |

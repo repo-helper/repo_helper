@@ -154,6 +154,7 @@ from repo_helper.configuration.python_versions_ import (
 		third_party_version_matrix
 		)
 from repo_helper.configuration.testing import (
+		checkout_submodules,
 		enable_devmode,
 		enable_tests,
 		extra_lint_paths,
@@ -269,6 +270,7 @@ __all__ = [
 		"use_maturin",
 		"use_hatch",
 		"meson_no_py",
+		"checkout_submodules",
 		"github_ci_requirements",
 		]
 

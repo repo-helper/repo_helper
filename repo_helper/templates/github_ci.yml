@@ -38,7 +38,9 @@ jobs:
 
     steps:
       - name: Checkout 🛎️
-        uses: "actions/checkout@v4"
+        uses: "actions/checkout@v4"{% if checkout_submodules %}
+        with:
+          submodules: {{ checkout_submodules }}{% endif %}
 
       - name: Check for changed files
         if: startsWith(github.ref, 'refs/tags/') != true
@@ -131,7 +133,9 @@ jobs:
     steps:
       - name: Checkout 🛎️
         uses: "actions/checkout@v4"
-        if: startsWith(github.ref, 'refs/tags/')
+        if: startsWith(github.ref, 'refs/tags/'){% if checkout_submodules %}
+        with:
+          submodules: {{ checkout_submodules }}{% endif %}
 
       - name: Setup Python 🐍
         uses: "actions/setup-python@v5"
@@ -175,7 +179,9 @@ jobs:
     if: startsWith(github.ref, 'refs/tags/') || (startsWith(github.event.head_commit.message, 'Bump version') != true)
     steps:
       - name: Checkout 🛎️
-        uses: "actions/checkout@v4"
+        uses: "actions/checkout@v4"{% if checkout_submodules %}
+        with:
+          submodules: {{ checkout_submodules }}{% endif %}
 
       - name: Setup Python 🐍
         uses: "actions/setup-python@v5"
