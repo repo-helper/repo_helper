@@ -287,6 +287,12 @@ class ActionsManager:
 							"15-intel",
 							gh_actions_versions[version][2],
 							)
+				elif version == "pypy-3.9":
+					gh_actions_versions[version] = (
+							gh_actions_versions[version][0].replace(",build", ''),
+							"14",
+							gh_actions_versions[version][2],
+							)
 				else:
 					gh_actions_versions[version] = (
 							gh_actions_versions[version][0],
@@ -325,6 +331,12 @@ class ActionsManager:
 				gh_actions_versions.pop("pypy-3.6")
 			if "3.6" in gh_actions_versions:
 				gh_actions_versions.pop("3.6")
+			if "pypy-3.9" in gh_actions_versions:
+				gh_actions_versions["pypy-3.9"] = (
+						gh_actions_versions["pypy-3.9"][0].replace(",build", ''),
+						gh_actions_versions["pypy-3.9"][1],
+						gh_actions_versions["pypy-3.9"][2],
+						)
 
 			conda_pip_dependencies = ["mkrecipe"]
 
