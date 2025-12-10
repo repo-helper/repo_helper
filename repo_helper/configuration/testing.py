@@ -308,7 +308,7 @@ class _Validator(Validator):
 		if isinstance(obj, bool):
 			return self.config_var.rtype(strtobool(obj))
 		else:
-			if not isinstance(obj, (bool, str)):
+			if not isinstance(obj, str):
 				raise ValueError(f"'{self.config_var.__name__}' must be a boolean or string") from None
 
 			return obj
@@ -387,7 +387,7 @@ class github_ci_requirements(ConfigVar):
 
 class checkout_submodules(ConfigVar):
 	"""
-	Whether to checkout git submodules (recursively) when cloning the repository in CI pipelines,
+	Whether to checkout git submodules (recursively) when cloning the repository in CI pipelines.
 
 	.. versionadded:: $VERSION
 	"""
@@ -397,10 +397,10 @@ class checkout_submodules(ConfigVar):
 	category: str = "testing"
 
 	@classmethod
-	def validate(
+	def validate(  # noqa: D102
 			cls,
 			raw_config_vars: Optional[RawConfigVarsType] = None
-			) -> Dict[str, Dict[str, List[str]]]:  # noqa: D102
+			) -> Dict[str, Dict[str, List[str]]]:
 
 		if raw_config_vars is None:
 			raw_config_vars = {}
