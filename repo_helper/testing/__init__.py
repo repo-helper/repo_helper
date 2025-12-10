@@ -231,6 +231,7 @@ def temp_empty_repo(tmp_pathplus: PathPlus, monkeypatch) -> Repo:
 
 	repo_dir.maybe_make(parents=True)
 	repo: Repo = Repo.init(repo_dir)
+	assert isinstance(repo.path, pathlib.Path)
 	return repo
 
 
