@@ -470,7 +470,7 @@ repo_helper==2020.12.18
 │   ├── domdf-python-tools>=2.7.0
 │   │   ├── natsort>=7.0.1
 │   │   └── typing-extensions>=3.7.4.1
-│   ├── dulwich!=0.20.7,!=0.20.8,!=0.20.9,>=0.20.5
+│   ├── dulwich!=0.20.7,!=0.20.8,!=0.20.9,<0.26.0,>=0.20.5
 │   │   ├── certifi
 │   │   └── urllib3>=1.24.1
 │   ├── filelock>=3.0.12
