@@ -73,7 +73,6 @@ known_third_party = [
     "pytest_regressions",
     "pytest_rerunfailures",
     "pytest_timeout",
-    "pyyaml",
     "readme_renderer",
     "requests",
     "requirements_parser",
