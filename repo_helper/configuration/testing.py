@@ -398,8 +398,7 @@ class checkout_submodules(ConfigVar):
 
 	@classmethod
 	def validate(  # noqa: D102
-			cls,
-			raw_config_vars: Optional[RawConfigVarsType] = None
+			cls, raw_config_vars: Optional[RawConfigVarsType] = None
 			) -> Dict[str, Dict[str, List[str]]]:
 
 		if raw_config_vars is None:
