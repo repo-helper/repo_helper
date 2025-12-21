@@ -166,6 +166,8 @@ repo_helper==2020.12.18
 │   │   │   │   └── zipp>=3.1.0; python_version < "3.10"
 │   │   │   ├── natsort>=7.0.1
 │   │   │   └── typing-extensions>=3.7.4.1
+│   │   ├── license-expression>=30.0.0
+│   │   │   └── boolean.py>=4.0
 │   │   ├── natsort>=7.1.1
 │   │   ├── packaging>=20.9
 │   │   ├── shippinglabel>=1.0.0
@@ -471,6 +473,8 @@ repo_helper==2020.12.18
 │       │   │   │   └── zipp>=3.1.0; python_version < "3.10"
 │       │   │   ├── natsort>=7.0.1
 │       │   │   └── typing-extensions>=3.7.4.1
+│       │   ├── license-expression>=30.0.0
+│       │   │   └── boolean.py>=4.0
 │       │   ├── natsort>=7.1.1
 │       │   ├── packaging>=20.9
 │       │   ├── shippinglabel>=1.0.0
@@ -591,6 +595,8 @@ repo_helper==2020.12.18
 │   │   │   └── zipp>=3.1.0; python_version < "3.10"
 │   │   ├── natsort>=7.0.1
 │   │   └── typing-extensions>=3.7.4.1
+│   ├── license-expression>=30.0.0
+│   │   └── boolean.py>=4.0
 │   ├── natsort>=7.1.1
 │   ├── packaging>=20.9
 │   ├── shippinglabel>=1.0.0
@@ -823,6 +829,8 @@ repo_helper==2020.12.18
 │   │   │   │   └── zipp>=3.1.0; python_version < "3.10"
 │   │   │   ├── natsort>=7.0.1
 │   │   │   └── typing-extensions>=3.7.4.1
+│   │   ├── license-expression>=30.0.0
+│   │   │   └── boolean.py>=4.0
 │   │   ├── natsort>=7.1.1
 │   │   ├── packaging>=20.9
 │   │   ├── shippinglabel>=1.0.0
