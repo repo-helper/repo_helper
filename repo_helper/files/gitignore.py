@@ -137,9 +137,6 @@ ignores.extend([
 # Jupyter Notebook
 ignores.extend((".ipynb_checkpoints", ))
 
-# pyenv
-ignores.extend((".python-version", ))
-
 # celery beat schedule file
 ignores.extend((
 		"celerybeat-schedule",
