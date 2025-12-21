@@ -553,6 +553,7 @@ class ToxConfig(IniConfigurator):
 				"flake8-sphinx-links>=0.0.4",
 				"flake8-strftime>=0.1.1",
 				"flake8-typing-imports>=1.10.0",
+				"flake8-params>=0.1.0",
 				"git+https://github.com/domdfcoding/restructuredtext-lint.git@fix-deprecations",  # Until merged and released upstream
 				"git+https://github.com/domdfcoding/flake8-rst-docstrings-sphinx.git",
 				"git+https://github.com/domdfcoding/flake8-rst-docstrings.git",

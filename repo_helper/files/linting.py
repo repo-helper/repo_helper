@@ -270,6 +270,13 @@ code_only_warning.extend((
 		"SLOT002",  # Define __slots__ for subclasses of collections.namedtuple
 		))
 
+# flake8-params
+code_only_warning.extend((
+		"PRM001",  # Docstring parameters in wrong order
+		"PRM002",  # Missing parameters in docstring
+		"PRM003",  # Extra parameters in docstring
+		))
+
 # flake8-pyi
 lint_warn_list.extend([
 		"Y001,"  # Names of TypeVars in stubs should start with _.
