@@ -111,8 +111,9 @@ def init_repo(repo_path: pathlib.Path, templates: Environment) -> List[str]:
 	else:
 		__init__ = init_repo_templates.get_template("generic._py")
 
-	__init__path = repo_path / templates.globals["import_name"] / "__init__.py"
-	__init__path.write_clean(__init__.render())
+	if not templates.globals["meson_no_py"]:
+		__init__path = repo_path / templates.globals["import_name"] / "__init__.py"
+		__init__path.write_clean(__init__.render())
 
 	# tests
 	if templates.globals["enable_tests"]:
