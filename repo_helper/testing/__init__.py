@@ -112,10 +112,11 @@ def demo_environment() -> Environment:
 			"requires_python": "3.6.1",
 			"third_party_version_matrix": {},
 			"use_whey": false,
-			"use_flit": false
-			"use_maturin": false
-			"use_hatch": false
-			"on_conda_forge": false
+			"use_flit": false,
+			"use_maturin": false,
+			"use_hatch": false,
+			"on_conda_forge": false,
+			"checkout_submodules": false,
 			"desktopfile": {}}
 			}
 

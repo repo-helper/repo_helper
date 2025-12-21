@@ -462,7 +462,7 @@ class ToxConfig(IniConfigurator):
 		"""
 
 		self._ini["testenv:.package"]["setenv"] = indent_join(self.get_setenv(False, False))
-		# self._ini["testenv:.package"]["basepython"] = "python{python_deploy_version}".format(**self._globals)
+		# self._ini["testenv:.package"]["basepython"] = f"python{max(float(self._globals['python_deploy_version']), 3.8)}"
 
 	def testenv_docs(self) -> None:
 		"""
