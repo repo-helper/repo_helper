@@ -89,4 +89,4 @@ jobs:
           user: __token__
           password: ${{ brace('secrets.PYPI_TOKEN') }}
           packages_dir: wheelhouse/
-          skip_existing: true
+          skip-existing: true
