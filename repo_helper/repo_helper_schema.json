@@ -33,7 +33,7 @@
         "boolean",
         "string"
       ],
-      "description": "Whether to checkout git submodules (recursively) when cloning the repository in CI pipelines,"
+      "description": "Whether to checkout git submodules (recursively) when cloning the repository in CI pipelines."
     },
     "classifiers": {
       "type": "array",
