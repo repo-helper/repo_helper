@@ -44,11 +44,11 @@ __all__ = [
 
 
 def github_bash_block(*commands: str) -> str:
-	"""
+	r"""
 	Formats the given commands in a reStructuredText bash
 	code block suitable for rendering on GitHub.
 
-	:param commands:
+	:param \*commands:
 	"""  # noqa: D400
 
 	if not commands:
@@ -67,12 +67,12 @@ def github_bash_block(*commands: str) -> str:
 
 
 def sphinx_bash_block(*commands: str) -> str:
-	"""
+	r"""
 	Formats the given commands in a
 	`sphinx-prompt <https://github.com/sbrunner/sphinx-prompt>`_
 	directive suitable for use in Sphinx documentation.
 
-	:param commands:
+	:param \*commands:
 	"""  # noqa: D400
 
 	if not commands:

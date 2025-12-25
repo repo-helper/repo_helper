@@ -508,10 +508,15 @@ class Section(Block, Container, MutableMapping):
 
 
 class Option(Block):
-	"""Option block holding a key/value pair.
+	"""
+	Option block holding a key/value pair.
 
 	:param key: The name of the key.
-	:param value: The stored value
+	:param value: The stored value.
+	:param container:
+	:param delimiter:
+	:param space_around_delimiters:
+	:param line:
 	"""
 
 	def __init__(

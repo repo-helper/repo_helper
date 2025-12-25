@@ -52,7 +52,7 @@ __all__ = ["init", "init_repo"]
 @commit_message_option(default="Initialised repository with 'repo_helper'.")
 @cli_command()
 @click.pass_context
-def init(ctx: click.Context, force: bool, commit: bool, message: str) -> None:
+def init(ctx: click.Context, force: bool, commit: bool, message: str) -> None:  # noqa: PRM002
 	"""
 	Initialise the repository with some boilerplate files.
 	"""

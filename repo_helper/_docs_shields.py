@@ -78,6 +78,7 @@ def make_docs_rtfd_shield(repo_name: str, target: str = '') -> str:
 	Create a shield for the ReadTheDocs documentation build status.
 
 	:param repo_name: The name of the repository.
+	:param target: Not used.
 
 	:return: The shield.
 	"""

@@ -85,7 +85,7 @@ suggest_command = partial(suggest.command, context_settings=CONTEXT_SETTINGS)
 		help="Indicates this project is a library for developers.",
 		)
 @suggest_command()
-def classifiers(
+def classifiers(  # noqa: PRM002
 		add: bool,
 		status: Optional[int] = None,
 		library: Optional[bool] = None,
@@ -212,7 +212,7 @@ def detect_languages(directory: pathlib.Path) -> Iterator[str]:
 @flag_option("-t", "--force-tty", help="Force repo-helper to treat stdout as a TTY")
 @flag_option("--add/--no-add", help="Add the classifiers to the 'repo_helper.yml' file.", default=None)
 @suggest_command()
-def stubs(
+def stubs(  # noqa: PRM002
 		add: Optional[bool] = None,
 		force_tty: bool = False,
 		no_pager: bool = False,

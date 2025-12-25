@@ -140,7 +140,7 @@ def rmdir(directory: pathlib.Path, quiet: bool = False) -> None:
 @flag_option("--rm-tox", help="Also remove the '.tox' directory")
 @flag_option("-v", "--verbose", help="Show verbose output.")
 @cli_command(cls=MarkdownHelpCommand)
-def broomstick(rm_tox: bool = False, verbose: bool = False) -> None:
+def broomstick(rm_tox: bool = False, verbose: bool = False) -> None:  # noqa: PRM002
 	r"""
 	Clean up build and test artefacts 🧹.
 

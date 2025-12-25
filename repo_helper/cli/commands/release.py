@@ -60,6 +60,8 @@ def release() -> None:
 def release_options(f: _C) -> _C:
 	"""
 	Decorator to add the options to the ``release`` subcommands.
+
+	:param f:
 	"""
 
 	commit_deco = commit_option(default=True)
@@ -132,7 +134,7 @@ release_command = partial(release.command, context_settings=CONTEXT_SETTINGS)
 
 @release_options
 @release_command()
-def major(commit: Optional[bool], message: str, force: bool) -> None:
+def major(commit: Optional[bool], message: str, force: bool) -> None:  # noqa: PRM002
 	"""
 	Bump to the next major version.
 	"""
@@ -146,7 +148,7 @@ def major(commit: Optional[bool], message: str, force: bool) -> None:
 
 @release_options
 @release_command()
-def minor(commit: Optional[bool], message: str, force: bool) -> None:
+def minor(commit: Optional[bool], message: str, force: bool) -> None:  # noqa: PRM002
 	"""
 	Bump to the next minor version.
 	"""
@@ -160,7 +162,7 @@ def minor(commit: Optional[bool], message: str, force: bool) -> None:
 
 @release_options
 @release_command()
-def patch(commit: Optional[bool], message: str, force: bool) -> None:
+def patch(commit: Optional[bool], message: str, force: bool) -> None:  # noqa: PRM002
 	"""
 	Bump to the next patch version.
 	"""
@@ -174,7 +176,7 @@ def patch(commit: Optional[bool], message: str, force: bool) -> None:
 
 @release_options
 @release_command()
-def today(commit: Optional[bool], message: str, force: bool) -> None:
+def today(commit: Optional[bool], message: str, force: bool) -> None:  # noqa: PRM002
 	"""
 	Bump to the calver version for today's date, such as 2020.12.25.
 	"""

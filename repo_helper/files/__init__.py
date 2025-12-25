@@ -43,7 +43,7 @@ __all__ = ["Management", "management", "is_registered", "Manager"]
 Manager = Callable[[pathlib.Path, Environment], List[str]]
 
 
-class Management(UserList[Tuple[Manager, str, Sequence[str]]]):
+class Management(UserList[Tuple[Manager, str, Sequence[str]]]):  # noqa: PRM002
 	"""
 	Class to store functions that manage files.
 

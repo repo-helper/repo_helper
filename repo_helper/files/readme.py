@@ -103,7 +103,7 @@ def rewrite_readme(repo_path: pathlib.Path, templates: Environment) -> List[str]
 	readme = readme_file.read_text(encoding="UTF-8")
 	readme = shields_regex.sub(str(shields_block), readme)
 	readme = installation_regex.sub(install_block + '\n', readme)
-	short_desc_block = create_short_desc_block(templates.globals["short_desc"], )
+	short_desc_block = create_short_desc_block(templates.globals["short_desc"])
 	readme = short_desc_regex.sub(short_desc_block, readme)
 
 	readme_file.write_clean(readme)

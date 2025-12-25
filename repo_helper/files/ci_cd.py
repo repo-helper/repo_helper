@@ -577,6 +577,8 @@ class ActionsManager:
 	def get_mypy_requirements(self, platform: str) -> List[str]:
 		"""
 		Returns the Python requirements to run tests for on the given platform.
+
+		:param platform:
 		"""
 
 		dependency_lines = StringList()
@@ -895,6 +897,7 @@ def get_bumpversion_filenames(repo_path: pathlib.Path, templates: Environment) -
 
 	.. versionadded:: 2021.3.8
 
+	:param repo_path:
 	:param templates:
 	"""
 

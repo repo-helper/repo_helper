@@ -428,7 +428,7 @@ def dump_schema() -> Dict[str, Any]:
 	return schema
 
 
-class YamlEditor(YAML):
+class YamlEditor(YAML):  # noqa: PRM002
 	"""
 	Class to read, dump and edit YAML files.
 

@@ -142,7 +142,7 @@ def test_github_ci_case_3(
 	assert (tmp_pathplus / managed_files[1]).is_file()
 
 	# This time the files should be removed
-	demo_environment.globals.update(dict(platforms=[], ))
+	demo_environment.globals.update(dict(platforms=[]))
 
 	assert (tmp_pathplus / managed_files[0]).is_file()
 	assert (tmp_pathplus / managed_files[1]).is_file()
