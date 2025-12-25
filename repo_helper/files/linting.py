@@ -260,7 +260,7 @@ code_only_warning = [
 
 # flake8_dunder_all
 code_only_warning.extend((
-		"DALL000 ",  # Module lacks __all__.
+		"DALL000",  # Module lacks __all__.
 		))
 
 # flake8_slots
@@ -307,6 +307,12 @@ lint_warn_list.extend([
 		"NQA005",  # "  # noqa: X000,X000  " has duplicate codes, remove X00
 		"NQA102",  # "  # noqa: X000  " has no matching violation
 		"NQA103",  # "  # noqa: X000,X001  " has unmatched code(s), remove X00
+		])
+
+# flake8-commas
+lint_warn_list.extend([
+		"C818",  # Trailing comma on bare tuple prohibited
+		"C819",  # Trailing comma prohibited
 		])
 
 
