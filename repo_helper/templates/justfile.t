@@ -13,7 +13,7 @@ incomplete-defs:
 	tox -e lint -- --select MAN
 
 commas:
-	tox -e lint -- --select C812 C813 C814 C815 C816
+	tox -e lint -- --select C812,C813,C814,C815,C816
 {% endif %}
 vdiff:
 	git diff $(repo-helper show version -q)..HEAD
