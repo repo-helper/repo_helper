@@ -85,7 +85,7 @@ ipython_config.py
 Pipfile.lock
 .pyre/
 Tokens
-rh.bat
-list_requirements.py
-pypi_reqs.py
+scripts/*
+pycharm/*
+css/*
 repodata.json

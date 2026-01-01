@@ -20,9 +20,9 @@ use_whey: true
 
 additional_ignore:
  - Tokens
- - rh.bat
- - list_requirements.py
- - pypi_reqs.py
+ - scripts/*
+ - pycharm/*
+ - css/*
  - repodata.json
 
 console_scripts:
