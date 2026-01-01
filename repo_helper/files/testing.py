@@ -545,7 +545,7 @@ class ToxConfig(IniConfigurator):
 				"flake8-dunder-all>=0.1.1",
 				"flake8-encodings>=0.1.0",
 				"flake8-github-actions>=0.1.0",
-				"flake8-noqa>=1.1.0,<=1.2.2",
+				"git+https://github.com/python-formate/flake8-noqa.git@v1.2.2-python-formate.0",
 				"flake8-pyi>=20.10.0,<=22.8.0",
 				"flake8-pytest-style>=1.3.0,<2",
 				"flake8-quotes>=3.3.0",
@@ -554,7 +554,7 @@ class ToxConfig(IniConfigurator):
 				"flake8-strftime>=0.1.1",
 				"flake8-typing-imports>=1.10.0",
 				"flake8-params>=0.1.0",
-				"flake8-commas>=2.1.0",
+				"git+https://github.com/python-formate/flake8-commas.git@2.1.0-python-formate.0",
 				"git+https://github.com/domdfcoding/restructuredtext-lint.git@fix-deprecations",  # Until merged and released upstream
 				"git+https://github.com/domdfcoding/flake8-rst-docstrings-sphinx.git",
 				"git+https://github.com/domdfcoding/flake8-rst-docstrings.git",
@@ -562,7 +562,7 @@ class ToxConfig(IniConfigurator):
 				"git+https://github.com/python-formate/flake8-missing-annotations.git",
 				"git+https://github.com/domdfcoding/pydocstyle.git@stub-functions",
 				"pygments>=2.7.1",
-				"importlib_metadata<4.5.0; python_version<'3.8'"
+				"importlib_metadata<4.5.0; python_version<'3.8'",
 				])
 
 		source_files = self.get_source_files()
