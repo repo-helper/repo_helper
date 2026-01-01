@@ -211,7 +211,7 @@ FAKE_DATE = datetime.date(2020, 7, 25)
 
 
 @pytest.fixture()
-def temp_empty_repo(tmp_pathplus: PathPlus, monkeypatch) -> Repo:  # noqa: PRM002
+def temp_empty_repo(tmp_pathplus: PathPlus, monkeypatch) -> Repo:
 	"""
 	Pytest fixture to return an empty git repository in a temporary location.
 
@@ -239,7 +239,7 @@ def temp_empty_repo(tmp_pathplus: PathPlus, monkeypatch) -> Repo:  # noqa: PRM00
 
 
 @pytest.fixture()
-def temp_repo(temp_empty_repo: Repo, example_config: str) -> Repo:  # noqa: PRM002
+def temp_repo(temp_empty_repo: Repo, example_config: str) -> Repo:
 	"""
 	Pytest fixture to return a git repository in a temporary location.
 
