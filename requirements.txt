@@ -1,6 +1,6 @@
 # In latest dulwich the config is a multi dict, which results in duplicate URL keys and broken config.
 # Caused by https://github.com/jelmer/dulwich/commit/d590a8da108c980a4dede1bf98420ac20fdc62d9
-# Layer ruamel.yaml files push some values to the next line, a change from earlier versions (causing unexpected diffs)
+# Later ruamel.yaml files push some values to the next line, a change from earlier versions (causing unexpected diffs)
 apeye>=1.0.0
 attrs>=20.3.0
 click==7.1.2
