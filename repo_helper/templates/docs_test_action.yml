@@ -31,7 +31,11 @@ jobs:
       - name: Install and Build 🔧
         uses: sphinx-toolbox/sphinx-action@{{ branch }}
         {% if enable_tests %}if: steps.changes.outputs.code == 'true'{% endif %}
-        with:
-          pre-build-command: python -m pip install tox
+        with:{% if docs_apt_packages %}
+          pre-build-command: |
+            python -m pip install tox
+            apt update
+            apt install {{' '.join(docs_apt_packages)}} -y{% else %}
+          pre-build-command: python -m pip install tox {% endif %}
           docs-folder: "{{ docs_dir }}/"
           build-command: "{{ build_command }}"

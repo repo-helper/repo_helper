@@ -24,6 +24,7 @@ copyright_years: '2020'
 desktopfile: {}
 docker_name: ''
 docker_shields: false
+docs_apt_packages: []
 docs_dir: doc-source
 docs_fail_on_warning: false
 docs_url: https://repo-helper-demo.readthedocs.io/en/latest

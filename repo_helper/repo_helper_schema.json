@@ -93,6 +93,13 @@
       ],
       "description": "Whether shields for docker container image size and build status should be shown."
     },
+    "docs_apt_packages": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "A list of apt packages to install before building the documentation."
+    },
     "docs_dir": {
       "type": "string",
       "description": "The directory containing the docs code of the project."

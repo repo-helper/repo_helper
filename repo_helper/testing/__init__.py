@@ -110,6 +110,7 @@ def demo_environment() -> Environment:
 			"on_pypi": true,
 			"docs_fail_on_warning": false,
 			"requires_python": "3.6.1",
+			"docs_apt_packages": [],
 			"third_party_version_matrix": {},
 			"use_whey": false,
 			"use_flit": false,
@@ -193,6 +194,7 @@ def demo_environment() -> Environment:
 							"3.6": "py36, mypy",
 							"3.7": "py37, build",
 							},
+					docs_apt_packages=[],
 					)
 			)
 

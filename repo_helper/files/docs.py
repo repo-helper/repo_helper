@@ -241,7 +241,7 @@ def make_rtfd(repo_path: pathlib.Path, templates: Environment) -> List[str]:
 
 	basepython = max(Version(templates.globals["python_deploy_version"]), Version("3.9"))
 	# Formats: Optionally build your docs in additional formats such as PDF and ePub
-	config = {
+	config: Dict[str, Any] = {
 			"version": 2,
 			"sphinx": {
 					"builder": "html",
@@ -258,6 +258,9 @@ def make_rtfd(repo_path: pathlib.Path, templates: Environment) -> List[str]:
 							}
 					}
 			}
+
+	if templates.globals["docs_apt_packages"]:
+		config["build"]["apt_packages"] = templates.globals["docs_apt_packages"]
 
 	# TODO: support user customisation of search rankings
 	# https://docs.readthedocs.io/en/stable/config-file/v2.html#search-ranking

@@ -48,6 +48,7 @@ __all__ = [
 		"standalone_contrib_guide",
 		"docs_url",
 		"docs_fail_on_warning",
+		"docs_apt_packages",
 		]
 
 
@@ -133,6 +134,23 @@ class extra_sphinx_extensions(ConfigVar):
 		  - "sphinxcontrib.httpdomain"
 
 	These must also be listed in ``doc-source/requirements.txt``.
+	"""
+
+	dtype = List[str]
+	default: List[str] = []
+	category: str = "documentation"
+
+
+class docs_apt_packages(ConfigVar):
+	"""
+	A list of apt packages to install before building the documentation.
+
+	Example:
+
+	.. code-block:: yaml
+
+		docs_apt_packages:
+		  - "libgirepository1.0-dev"
 	"""
 
 	dtype = List[str]

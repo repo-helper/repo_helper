@@ -81,6 +81,7 @@ from repo_helper.configuration.conda_anaconda import (
 		primary_conda_channel
 		)
 from repo_helper.configuration.documentation import (
+		docs_apt_packages,
 		docs_dir,
 		docs_fail_on_warning,
 		docs_url,
@@ -193,6 +194,7 @@ __all__ = [
 		"conda_description",
 		"console_scripts",
 		"copyright_years",
+		"docs_apt_packages",
 		"docker_name",
 		"docker_shields",
 		"docs_dir",
