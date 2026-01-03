@@ -27,21 +27,6 @@ lines_between_types = 0
 use_parentheses = true
 remove_redundant_aliases = true
 default_section = "THIRDPARTY"
-known_third_party = [
-    "black",
-    "coincidence",
-    "coverage",
-    "coverage_pyver_pragma",
-    "importlib_metadata",
-    "isort",
-    "pytest",
-    "pytest_cov",
-    "pytest_randomly",
-    "pytest_timeout",
-    "setuptools_rust",
-    "tox",
-    "wheel",
-]
 known_first_party = [ "hello_world",]
 
 [config]

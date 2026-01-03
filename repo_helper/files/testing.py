@@ -979,7 +979,7 @@ def make_formate_toml(repo_path: pathlib.Path, templates: Environment) -> List[s
 
 	isort_config = get_isort_config(repo_path, templates)
 	known_first_party.update(isort_config["known_first_party"])
-	known_third_party.update(isort_config["known_third_party"])
+	# known_third_party.update(isort_config["known_third_party"])
 
 	if formate_file.is_file():
 		formate_config = dom_toml.load(formate_file)
@@ -997,8 +997,8 @@ def make_formate_toml(repo_path: pathlib.Path, templates: Environment) -> List[s
 				if isinstance(existing_known_first_party, str):
 					existing_known_first_party = re.split(r"(\n|,\s*)", existing_known_first_party)
 				known_first_party.update(existing_known_first_party)
-			if "known_third_party" in isort["settings"]:
-				known_third_party.update(re.split(r"(\n|,\s*)", isort["settings"]["known_third_party"].value))
+			# if "known_third_party" in isort["settings"]:
+			# 	known_third_party.update(re.split(r"(\n|,\s*)", isort["settings"]["known_third_party"].value))
 
 	isort_file.unlink(missing_ok=True)
 
@@ -1010,7 +1010,7 @@ def make_formate_toml(repo_path: pathlib.Path, templates: Environment) -> List[s
 				known_first_party.add(existing_known_first_party)
 			else:
 				known_first_party.update(existing_known_first_party)
-			known_third_party.update(isort_kwargs.get("known_third_party", ()))
+			# known_third_party.update(isort_kwargs.get("known_third_party", ()))
 
 			for existing_key, value in isort_kwargs.items():
 				if existing_key not in isort_config:
@@ -1020,7 +1020,8 @@ def make_formate_toml(repo_path: pathlib.Path, templates: Environment) -> List[s
 		return normalize(name.strip()).replace('-', '_')
 
 	isort_config["known_first_party"] = sorted(set(filter(bool, map(normalise_underscore, known_first_party))))
-	isort_config["known_third_party"] = sorted(set(filter(bool, map(normalise_underscore, known_third_party))))
+	# isort_config["known_third_party"] = sorted(set(filter(bool, map(normalise_underscore, known_third_party))))
+	del isort_config["known_third_party"]
 
 	hooks = {
 			"dynamic_quotes": 10,
