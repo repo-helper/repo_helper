@@ -1097,7 +1097,6 @@ class TestsRequirementsManager(RequirementsManager):
 			ComparableRequirement("coverage>=5.1"),
 			ComparableRequirement("pytest>=6.0.0"),
 			ComparableRequirement("pytest-cov>=2.8.1"),
-			ComparableRequirement("importlib-metadata>=3.6.0"),
 			ComparableRequirement("pytest-randomly>=3.7.0"),
 			ComparableRequirement("pytest-timeout>=1.4.2"),
 			}
