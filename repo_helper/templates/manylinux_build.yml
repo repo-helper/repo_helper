@@ -12,13 +12,11 @@ on:
       - '*'
   pull_request:
 
-permissions:
-  actions: write
-  issues: write
-  contents: read
-
 jobs:
   build:
+    permissions:
+      actions: write
+      contents: read
     name: "manylinux-{{ tag }}"
     runs-on: "ubuntu-22.04"
 
@@ -34,10 +32,11 @@ jobs:
         with:
           submodules: {{ checkout_submodules }}{% endif %}
 
-      - name: Set up Python 🐍
+      - name: Setup Python 🐍
+        id: setup-python
         uses: "actions/setup-python@v5"
         with:
-          python-version: "${{ brace('matrix.config.python-version') }}"
+          python-version: "${{ brace('matrix.config.python-version')}}"
 
       - name: Install dependencies 🔧
         run: |

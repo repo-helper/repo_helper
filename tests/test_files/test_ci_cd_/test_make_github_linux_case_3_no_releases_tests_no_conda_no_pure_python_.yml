@@ -12,13 +12,11 @@ on:
       - '*'
   pull_request:
 
-permissions:
-  actions: write
-  issues: write
-  contents: read
-
 jobs:
   tests:
+    permissions:
+      actions: write
+      contents: read
     name: "ubuntu-22.04 / Python ${{ matrix.config.python-version }}"
     runs-on: "ubuntu-22.04"
     continue-on-error: ${{ matrix.config.experimental }}
@@ -68,7 +66,10 @@ jobs:
 
   Deploy:
     needs: tests
-
+    permissions:
+      actions: write
+      issues: write
+      contents: read
     runs-on: "ubuntu-22.04"
     steps:
       - name: Checkout 🛎️
@@ -113,6 +114,8 @@ jobs:
 
   Conda:
     needs: deploy
+    permissions:
+      contents: read
     runs-on: ubuntu-22.04
     if: startsWith(github.ref, 'refs/tags/') || (startsWith(github.event.head_commit.message, 'Bump version') != true)
     steps:

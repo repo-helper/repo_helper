@@ -11,13 +11,11 @@ on:
 {{ run_on_tags|default("") }}
   pull_request:
 
-permissions:
-  actions: write
-  issues: write
-  contents: read
-
 jobs:
   tests:
+    permissions:
+      actions: write
+      contents: read
     name: "{{ ci_platform }} / Python ${{ brace('matrix.config.python-version')}}"
     runs-on: "{{ ci_platform }}"
     continue-on-error: ${{ brace('matrix.config.experimental') }}
@@ -79,6 +77,9 @@ jobs:
 
   Coverage:
     needs: tests
+    permissions:
+      actions: write
+      contents: read
     runs-on: "{{ ci_platform }}"
     steps:
       - name: Checkout 🛎️
@@ -128,7 +129,10 @@ jobs:
 
   Deploy:
     needs: tests
-
+    permissions:
+      actions: write
+      issues: write
+      contents: read
     runs-on: "{{ ci_platform }}"
     steps:
       - name: Checkout 🛎️
@@ -175,6 +179,8 @@ jobs:
 {% if enable_conda %}
   Conda:
     needs: deploy
+    permissions:
+      contents: read
     runs-on: ubuntu-22.04
     if: startsWith(github.ref, 'refs/tags/') || (startsWith(github.event.head_commit.message, 'Bump version') != true)
     steps:

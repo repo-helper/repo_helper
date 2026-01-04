@@ -12,13 +12,11 @@ on:
       - '*'
   pull_request:
 
-permissions:
-  actions: write
-  issues: write
-  contents: read
-
 jobs:
   build:
+    permissions:
+      actions: write
+      contents: read
     name: "manylinux-${{ matrix.config.tag }}"
     runs-on: "ubuntu-22.04"
 
@@ -33,7 +31,8 @@ jobs:
       - name: Checkout 🛎️
         uses: "actions/checkout@v4"
 
-      - name: Set up Python 🐍
+      - name: Setup Python 🐍
+        id: setup-python
         uses: "actions/setup-python@v5"
         with:
           python-version: "${{ matrix.config.python-version }}"
