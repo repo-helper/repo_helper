@@ -395,14 +395,17 @@ def test_ensure_tests_requirements_extras(tmp_pathplus: PathPlus, demo_environme
 			]
 
 
+@boolean_option("use_maturin", "maturin")
 def test_make_pre_commit(
 		tmp_pathplus: PathPlus,
 		demo_environment: Environment,
 		advanced_file_regression: AdvancedFileRegressionFixture,
+		use_maturin: bool,
 		):
 	# TODO: permutations to cover all branches
 	demo_environment.globals["yapf_exclude"] = []
 	demo_environment.globals["pre_commit_exclude"] = "^$"
+	demo_environment.globals["use_maturin"] = use_maturin
 
 	(tmp_pathplus / ".pre-commit-config.yaml").touch()
 

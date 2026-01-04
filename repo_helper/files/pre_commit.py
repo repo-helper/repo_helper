@@ -234,6 +234,12 @@ formate = Repo(
 		hooks=[{"id": "formate", "exclude": r"^(doc-source/conf|__pkginfo__|setup)\.(_)?py$"}],
 		)
 
+rust = Repo(
+		repo=make_github_url("doublify", "pre-commit-rust"),
+		rev="v1.0",
+		hooks=[{"id": "fmt"}, {"id": "cargo-check"}],
+		)
+
 
 @management.register("pre-commit", ["enable_pre_commit"])
 def make_pre_commit(repo_path: pathlib.Path, templates: Environment) -> List[str]:
@@ -332,9 +338,13 @@ def make_pre_commit(repo_path: pathlib.Path, templates: Environment) -> List[str
 			'',
 			"ci:",
 			"  autoupdate_schedule: quarterly",
-			'',
-			"repos:",
 			])
+
+	if templates.globals["use_maturin"]:
+		output.append("  skip: [fmt, cargo-check]")
+
+	output.blankline()
+	output.append("repos:")
 
 	indent_re = re.compile("^ {3}")
 
@@ -359,6 +369,9 @@ def make_pre_commit(repo_path: pathlib.Path, templates: Environment) -> List[str
 					"__init__.py",
 					).is_file():
 				managed_hooks.append(dep_checker)
+
+			managed_hooks.append(rust)
+
 		else:
 			managed_hooks.append(dep_checker)
 
