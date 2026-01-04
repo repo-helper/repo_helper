@@ -60,7 +60,7 @@ class TestMakeTox:
 			enable_docs: bool = True,
 			enable_tests: bool = True,
 			enable_devmode: bool = True,
-			python_deploy_version: str = "3.6"
+			python_deploy_version: str = "3.6",
 			) -> None:
 		demo_environment.globals["min_coverage"] = min_coverage
 		demo_environment.globals["stubs_package"] = stubs_package
@@ -327,7 +327,8 @@ def test_make_formate_toml_case_3(
 	ensure_tests_requirements(tmp_pathplus, demo_environment)
 
 	(tmp_pathplus / "formate.toml").write_lines([
-			"[hooks.isort.kwargs]", 'known_third_party = ["awesome_package"]'
+			"[hooks.isort.kwargs]",
+			'known_third_party = ["awesome_package"]',
 			])
 
 	managed_files = make_formate_toml(tmp_pathplus, demo_environment)

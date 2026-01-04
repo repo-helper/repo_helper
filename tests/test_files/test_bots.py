@@ -67,7 +67,9 @@ def test_auto_assign_action(
 
 	managed_files = make_auto_assign_action(tmp_pathplus, demo_environment)
 	assert managed_files == [
-			".github/workflows/assign.yml", ".github/workflow/assign.yml", ".github/auto_assign.yml"
+			".github/workflows/assign.yml",
+			".github/workflow/assign.yml",
+			".github/auto_assign.yml",
 			]
 
 	advanced_file_regression.check_file(tmp_pathplus / managed_files[-1])

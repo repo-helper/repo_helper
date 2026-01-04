@@ -20,7 +20,7 @@ def do_test_release(
 		expected_version: str,
 		command: Command,
 		args: Optional[List[str]] = None,
-		force: bool = False
+		force: bool = False,
 		) -> None:
 	(temp_repo.path / ".bumpversion.cfg").write_lines([
 			"[bumpversion]",
@@ -81,7 +81,9 @@ def do_test_release(
 			assert not result.stderr
 
 		check_file_regression(
-				'\n'.join(result.stdout.splitlines()[:-1]), advanced_file_regression, extension="_stdout.txt"
+				'\n'.join(result.stdout.splitlines()[:-1]),
+				advanced_file_regression,
+				extension="_stdout.txt",
 				)
 
 		m = re.match("Committed as ([A-Za-z0-9]{40})", result.stdout.splitlines()[-1])

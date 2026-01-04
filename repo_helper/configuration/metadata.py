@@ -56,7 +56,7 @@ __all__ = [
 		"pure_python",
 		"on_pypi",
 		"stubs_package",
-		"assignee"
+		"assignee",
 		]
 
 
@@ -360,9 +360,8 @@ class classifiers(ConfigVar):
 
 		for classifier in data:
 			if not isinstance(classifier, str):
-				raise ValueError(
-						f"'classifiers' must be a List of {cls.dtype.__args__[0]}"  # type: ignore[attr-defined]
-						) from None
+				msg = f"'classifiers' must be a List of {cls.dtype.__args__[0]}"  # type: ignore[attr-defined]
+				raise ValueError(msg) from None
 
 		for classifier in data:
 			classifier_list.add(classifier)

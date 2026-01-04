@@ -552,7 +552,7 @@ license_file_lookup = dict([
 				),
 		(
 				"GNU Lesser General Public License v3 or later (LGPLv3+)",
-				(base_license_url / "lgpl.txt", "lgpl3_plus.py")
+				(base_license_url / "lgpl.txt", "lgpl3_plus.py"),
 				),
 		("GNU General Public License v3 (GPLv3)", (base_license_url / "gpl3.txt", "gpl3.py")),
 		("GNU General Public License v3 or later (GPLv3+)", (base_license_url / "gpl3.txt", "gpl3_plus.py")),
@@ -562,7 +562,7 @@ license_file_lookup = dict([
 				),
 		(
 				"GNU General Public License v2 or later (GPLv2+)",
-				(RequestsURL("https://www.gnu.org/licenses/old-licenses/gpl-2.0.txt"), "gpl2_plus.py")
+				(RequestsURL("https://www.gnu.org/licenses/old-licenses/gpl-2.0.txt"), "gpl2_plus.py"),
 				),
 		("MIT License", (base_license_url / "mit.txt", "mit.py")),
 		])

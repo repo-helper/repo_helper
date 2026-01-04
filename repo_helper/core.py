@@ -80,7 +80,7 @@ class RepoHelper:
 	def __init__(
 			self,
 			target_repo: PathLike,
-			managed_message: str = "This file is managed by 'repo_helper'. Don't edit it directly."
+			managed_message: str = "This file is managed by 'repo_helper'. Don't edit it directly.",
 			):
 		import_registered_functions()
 

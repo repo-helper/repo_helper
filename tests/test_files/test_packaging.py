@@ -265,14 +265,14 @@ def test_make_pyproject_whey_extras(
 						3.6: {"experimental": False},
 						3.7: {"experimental": False},
 						3.8: {"experimental": False},
-						"3.10": {"experimental": False}
+						"3.10": {"experimental": False},
 						},
 								id="complex_versions"),
 				pytest.param({
 						3.7: {"experimental": False},
 						"3.10": {"experimental": False},
 						3.8: {"experimental": False},
-						3.6: {"experimental": False}
+						3.6: {"experimental": False},
 						},
 								id="unordered_versions"),
 				pytest.param({

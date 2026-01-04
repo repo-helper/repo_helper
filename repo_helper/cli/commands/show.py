@@ -109,7 +109,7 @@ def log(
 		from_date: Optional[datetime] = None,
 		from_tag: Optional[str] = None,
 		colour: Optional[bool] = None,
-		no_pager: bool = False
+		no_pager: bool = False,
 		) -> int:
 	"""
 	Show git commit log.

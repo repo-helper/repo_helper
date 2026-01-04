@@ -553,7 +553,8 @@ class ShieldsBlock:
 					self.primary_conda_channel,
 					)
 			substitutions["conda-platform"] = self.make_conda_platform_shield(
-					self.conda_name, self.primary_conda_channel
+					self.conda_name,
+					self.primary_conda_channel,
 					)
 
 		if self.docker_shields:

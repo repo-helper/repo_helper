@@ -60,7 +60,7 @@ class _Version(Version):
 			pre: Optional[Iterable] = None,
 			post: Optional[Any] = None,
 			dev: Optional[Any] = None,
-			local: Optional[Any] = None
+			local: Optional[Any] = None,
 			) -> Version:
 
 		# Release segment

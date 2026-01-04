@@ -79,8 +79,8 @@ version_specific = pytest.mark.parametrize(
 						"3.11+",
 						marks=pytest.mark.skipif(
 								sys.version_info[:2] not in {(3, 11), (3, 11)},
-								reason="Output differs on Python 3.11&12"
-								)
+								reason="Output differs on Python 3.11&12",
+								),
 						),
 				pytest.param("3.13+", marks=min_version("3.13", "Output differs on Python 3.13")),
 				]
@@ -125,7 +125,9 @@ class TestShowRequirements:
 			with in_directory(directory):
 				runner = CliRunner()
 				result: Result = runner.invoke(
-						show.requirements, catch_exceptions=False, args=["--concise", "--no-venv"]
+						show.requirements,
+						catch_exceptions=False,
+						args=["--concise", "--no-venv"],
 						)
 
 			assert result.exit_code == 0
@@ -151,7 +153,9 @@ class TestShowRequirements:
 			with in_directory(directory):
 				runner = CliRunner()
 				result: Result = runner.invoke(
-						show.requirements, catch_exceptions=False, args=["--no-pager", "--no-venv"]
+						show.requirements,
+						catch_exceptions=False,
+						args=["--no-pager", "--no-venv"],
 						)
 
 			assert result.exit_code == 0

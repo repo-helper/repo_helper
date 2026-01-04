@@ -46,7 +46,7 @@ from repo_helper.blocks import (
 		"value",
 		[
 				".. start installation\n\n..end installation",
-				f".. start installation\n{lorem.paragraph()}\n..end installation"
+				f".. start installation\n{lorem.paragraph()}\n..end installation",
 				]
 		)
 def test_installation_regex(value: str):
@@ -95,7 +95,7 @@ def test_short_desc_regex(value: str):
 								docker_name='',
 								platforms=["Windows", "macOS", "Linux"],
 								),
-						id="case_1"
+						id="case_1",
 						),
 				pytest.param(
 						dict(
@@ -111,7 +111,7 @@ def test_short_desc_regex(value: str):
 								docker_name="DOCKER_NAME",
 								platforms=[],
 								),
-						id="case_2"
+						id="case_2",
 						),
 				pytest.param(
 						dict(
@@ -126,7 +126,7 @@ def test_short_desc_regex(value: str):
 								docker_name="DOCKER_NAME",
 								platforms=[],
 								),
-						id="case_3"
+						id="case_3",
 						),
 				]
 		)
@@ -147,7 +147,7 @@ def test_create_shields_block(advanced_file_regression: AdvancedFileRegressionFi
 								pypi_name="PYPI_NAME",
 								conda_channels=["conda-forge", "bioconda"],
 								),
-						id="case_1"
+						id="case_1",
 						),
 				pytest.param(
 						dict(
@@ -156,7 +156,7 @@ def test_create_shields_block(advanced_file_regression: AdvancedFileRegressionFi
 								conda=True,
 								conda_channels=["conda-forge", "bioconda"],
 								),
-						id="case_2"
+						id="case_2",
 						),
 				pytest.param(
 						dict(
@@ -165,7 +165,7 @@ def test_create_shields_block(advanced_file_regression: AdvancedFileRegressionFi
 								conda=False,
 								pypi_name="PYPI_NAME",
 								),
-						id="case_3"
+						id="case_3",
 						),
 				]
 		)
@@ -194,7 +194,7 @@ def test_create_docs_install_block(
 								pypi_name="PYPI_NAME",
 								conda_channels=["conda-forge", "bioconda"],
 								),
-						id="case_1"
+						id="case_1",
 						),
 				pytest.param(
 						dict(
@@ -203,11 +203,12 @@ def test_create_docs_install_block(
 								conda=True,
 								conda_channels=["conda-forge", "bioconda"],
 								),
-						id="case_2"
+						id="case_2",
 						),
 				pytest.param(dict(modname="hello_world", username="octocat", conda=False), id="case_3"),
 				pytest.param(
-						dict(modname="hello_world", username="octocat", conda=False, pypi=False), id="case_4"
+						dict(modname="hello_world", username="octocat", conda=False, pypi=False),
+						id="case_4",
 						),
 				]
 		)

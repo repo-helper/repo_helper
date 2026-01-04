@@ -972,7 +972,7 @@ def make_formate_toml(repo_path: pathlib.Path, templates: Environment) -> List[s
 	"""
 
 	known_first_party = set()
-	known_third_party = set()
+	# known_third_party = set()
 
 	isort_file = PathPlus(repo_path / ".isort.cfg")
 	formate_file = PathPlus(repo_path / "formate.toml")

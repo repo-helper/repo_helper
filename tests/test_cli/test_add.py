@@ -238,7 +238,9 @@ def test_add_typed_pyproject(
 				]
 		)
 def test_add_version(
-		tmp_pathplus: PathPlus, advanced_file_regression: AdvancedFileRegressionFixture, version: str
+		tmp_pathplus: PathPlus,
+		advanced_file_regression: AdvancedFileRegressionFixture,
+		version: str,
 		):
 	(tmp_pathplus / "repo_helper.yml").write_lines([
 			"modname: repo_helper",

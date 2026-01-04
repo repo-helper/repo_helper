@@ -62,7 +62,7 @@ class Management(UserList[Tuple[Manager, str, Sequence[str]]]):  # noqa: PRM002
 			exclude_name: str,
 			exclude_unless_true: Sequence[str] = (),
 			*,
-			name: Optional[str] = None
+			name: Optional[str] = None,
 			) -> Callable:
 		"""
 		Decorator to register a function.
@@ -90,9 +90,8 @@ class Management(UserList[Tuple[Manager, str, Sequence[str]]]):  # noqa: PRM002
 			signature = inspect.signature(function)
 
 			if list(signature.parameters.keys()) != ["repo_path", "templates"]:
-				raise SyntaxError(
-						"The decorated function must take only the following arguments: 'repo_path' and 'templates'"
-						)
+				msg = "The decorated function must take only the following arguments: 'repo_path' and 'templates'"
+				raise SyntaxError(msg)
 
 			self.append((function, exclude_name, exclude_unless_true))
 

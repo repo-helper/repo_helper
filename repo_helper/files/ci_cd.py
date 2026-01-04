@@ -670,7 +670,7 @@ def make_github_manylinux(repo_path: pathlib.Path, templates: Environment) -> Li
 				"python -m pip install --upgrade pip setuptools wheel",
 				"python -m pip install --upgrade tox~=3.0 virtualenv!=20.16.0",
 				# Virtualenv 20.16.0 ships broken version of pip (https://github.com/pypa/pip/issues/11294)
-				*templates.globals["github_ci_requirements"]["Linux"]["post"]
+				*templates.globals["github_ci_requirements"]["Linux"]["post"],
 				]
 
 		matrix_config = []

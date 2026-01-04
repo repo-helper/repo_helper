@@ -98,7 +98,7 @@ def test_make_docs_contributing(
 def test_make_issue_templates(
 		tmp_pathplus: PathPlus,
 		demo_environment: Environment,
-		advanced_file_regression: AdvancedFileRegressionFixture
+		advanced_file_regression: AdvancedFileRegressionFixture,
 		):
 	managed_files = make_issue_templates(tmp_pathplus, demo_environment)
 	assert managed_files == [".github/ISSUE_TEMPLATE/bug_report.md", ".github/ISSUE_TEMPLATE/feature_request.md"]

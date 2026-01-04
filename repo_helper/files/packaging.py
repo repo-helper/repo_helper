@@ -168,7 +168,7 @@ def make_pyproject(repo_path: pathlib.Path, templates: Environment) -> List[str]
 			"maturin<2.0,>=1.10",
 			"meson-python",
 			*templates.globals["tox_build_requirements"],
-			*data["build-system"].get("requires", [])
+			*data["build-system"].get("requires", []),
 			}
 
 	build_requirements = sorted(combine_requirements(ComparableRequirement(req) for req in build_requirements_))

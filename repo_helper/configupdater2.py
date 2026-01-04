@@ -678,7 +678,7 @@ class ConfigUpdater(Container[Block], MutableMapping):
 			comment_prefixes: Sequence[str] = ('#', ';'),
 			inline_comment_prefixes: Optional[Sequence[str]] = None,
 			strict: bool = True,
-			space_around_delimiters: bool = True
+			space_around_delimiters: bool = True,
 			):
 
 		self._filename: Optional[str] = None
@@ -979,7 +979,7 @@ class ConfigUpdater(Container[Block], MutableMapping):
 				allow_no_value=self._allow_no_value,
 				inline_comment_prefixes=self._inline_comment_prefixes,
 				strict=self._strict,
-				empty_lines_in_values=self._empty_lines_in_values
+				empty_lines_in_values=self._empty_lines_in_values,
 				)
 		args.update(kwargs)
 		parser = ConfigParser(**args)  # type: ignore[call-overload]

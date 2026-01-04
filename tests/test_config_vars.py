@@ -67,8 +67,8 @@ class Test_license(RequiredStringTest):
 	test_value = "GPLv3+"
 
 	def test_success(self):
-		assert self.config_var.get({self.config_var.__name__: self.test_value}
-									) == "GNU General Public License v3 or later (GPLv3+)"
+		expected = "GNU General Public License v3 or later (GPLv3+)"
+		assert self.config_var.get({self.config_var.__name__: self.test_value}) == expected
 
 
 class Test_short_desc(RequiredStringTest):
@@ -453,7 +453,7 @@ class Test_sphinx_conf_preamble(ListTest):
 			"import datetime",
 			"now = datetime.datetime.now()",
 			"strftime = now.strftime('%H:%M')",
-			"print(f'Starting building docs at {strftime}.')"
+			"print(f'Starting building docs at {strftime}.')",
 			]
 
 
@@ -462,7 +462,7 @@ class Test_sphinx_conf_epilogue(ListTest):
 	test_value = [
 			"time_taken = datetime.datetime.now() - now",
 			"strftime = time_taken.strftime('%H:%M')",
-			"print(f'Finished building docs at {strftime}.')"
+			"print(f'Finished building docs at {strftime}.')",
 			]
 
 
@@ -669,12 +669,12 @@ class Test_python_versions(DictTest):
 						"3.6": {
 								"experimental": False,
 								"matrix_exclude": {},
-								"platforms": ["Windows", "macOS", "Linux"]
+								"platforms": ["Windows", "macOS", "Linux"],
 								},
 						"3.7": {
 								"experimental": False,
 								"matrix_exclude": {},
-								"platforms": ["Windows", "macOS", "Linux"]
+								"platforms": ["Windows", "macOS", "Linux"],
 								},
 						"pypy3": {"experimental": False, "matrix_exclude": {}, "platforms": ["macOS", "Linux"]},
 						}

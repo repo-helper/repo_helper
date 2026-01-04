@@ -275,7 +275,7 @@ def make_rtfd(repo_path: pathlib.Path, templates: Environment) -> List[str]:
 			f"# {templates.globals['managed_message']}",
 			"# Read the Docs configuration file",
 			"---",
-			yaml_buf.getvalue()
+			yaml_buf.getvalue(),
 			])
 
 	return [file.relative_to(repo_path).as_posix()]

@@ -214,9 +214,8 @@ class python_versions(ConfigVar):
 			return buf
 
 		else:
-			raise ValueError(
-					f"'{cls.__name__}' must be a dictionary mapping strings to dictionaries, or a list of strings"
-					)
+			msg = f"'{cls.__name__}' must be a dictionary mapping strings to dictionaries, or a list of strings"
+			raise ValueError(msg)
 
 
 class third_party_version_matrix(ConfigVar):

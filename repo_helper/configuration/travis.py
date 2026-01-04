@@ -34,7 +34,7 @@ __all__ = [
 		"travis_ubuntu_version",
 		"travis_extra_install_pre",
 		"travis_extra_install_post",
-		"travis_additional_requirements"
+		"travis_additional_requirements",
 		]
 
 

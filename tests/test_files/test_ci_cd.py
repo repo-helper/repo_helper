@@ -313,7 +313,10 @@ def test_make_github_mypy_extra_install_only_linux(
 		):
 
 	demo_environment.globals["github_ci_requirements"] = {
-			"Linux": {"pre": ["sudo apt update"], "post": ["sudo apt install python3-gi"]}
+			"Linux": {
+					"pre": ["sudo apt update"],
+					"post": ["sudo apt install python3-gi"],
+					}
 			}
 	demo_environment.globals["platforms"] = ["Linux"]
 
@@ -474,7 +477,10 @@ def test_make_github_linux_case_4(
 	demo_environment.globals["platforms"] = ["Linux"]
 	demo_environment.globals["travis_ubuntu_version"] = "bionic"
 	demo_environment.globals["github_ci_requirements"] = {
-			"Linux": {"pre": ["sudo apt update"], "post": ["sudo apt install python3-gi"]}
+			"Linux": {
+					"pre": ["sudo apt update"],
+					"post": ["sudo apt install python3-gi"],
+					}
 			}
 	demo_environment.globals["travis_additional_requirements"] = ["isort", "black"]
 	demo_environment.globals["enable_tests"] = False

@@ -47,7 +47,7 @@ __all__ = [
 		"tox_build_requirements",
 		"tox_requirements",
 		"tox_testenv_extras",
-		"tox_unmanaged"
+		"tox_unmanaged",
 		]
 
 

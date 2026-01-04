@@ -126,7 +126,9 @@ def test_suggest_classifiers_add(
 	with in_directory(tmp_pathplus):
 		runner = CliRunner()
 		result: Result = runner.invoke(
-				suggest.classifiers, catch_exceptions=False, args=["-s", '4', "-l", "--add"]
+				suggest.classifiers,
+				catch_exceptions=False,
+				args=["-s", '4', "-l", "--add"],
 				)
 		assert result.exit_code == 0
 
@@ -158,7 +160,9 @@ def test_suggest_classifiers_add_existing(
 	with in_directory(tmp_pathplus):
 		runner = CliRunner()
 		result: Result = runner.invoke(
-				suggest.classifiers, catch_exceptions=False, args=["-s", '4', "-l", "--add"]
+				suggest.classifiers,
+				catch_exceptions=False,
+				args=["-s", '4', "-l", "--add"],
 				)
 		assert result.exit_code == 0
 

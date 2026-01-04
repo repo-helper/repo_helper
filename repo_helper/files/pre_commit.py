@@ -277,7 +277,7 @@ def make_pre_commit(repo_path: pathlib.Path, templates: Environment) -> List[str
 			rev="v0.5.0",
 			hooks=[{
 					"id": "ensure-dunder-all",
-					"files": fr"^{import_name}{'-stubs' if stubs_package else ''}/.*\.py$"
+					"files": fr"^{import_name}{'-stubs' if stubs_package else ''}/.*\.py$",
 					}]
 			)
 
@@ -298,7 +298,7 @@ def make_pre_commit(repo_path: pathlib.Path, templates: Environment) -> List[str
 	dep_checker = Repo(
 			repo=make_github_url("python-coincidence", "dep_checker"),
 			rev="v0.8.0",
-			hooks=[{"id": "dep_checker", "args": dep_checker_args}]
+			hooks=[{"id": "dep_checker", "args": dep_checker_args}],
 			)
 
 	min_py_version = Version(templates.globals["min_py_version"])
@@ -319,7 +319,7 @@ def make_pre_commit(repo_path: pathlib.Path, templates: Environment) -> List[str
 	pyupgrade = Repo(
 			repo=make_github_url("asottile", "pyupgrade"),
 			rev="v3.3.0",
-			hooks=[{"id": "pyupgrade", "args": [pyupgrade_plus_arg, "--keep-runtime-typing"]}]
+			hooks=[{"id": "pyupgrade", "args": [pyupgrade_plus_arg, "--keep-runtime-typing"]}],
 			)
 
 	pre_commit_file = PathPlus(repo_path / ".pre-commit-config.yaml")
