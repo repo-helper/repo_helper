@@ -167,7 +167,6 @@ pre_commit_hooks = Repo(
 				"check-added-large-files",
 				"check-ast",
 				"fix-byte-order-marker",
-				"check-byte-order-marker",
 				"check-case-conflict",
 				"check-executables-have-shebangs",
 				"check-json",
