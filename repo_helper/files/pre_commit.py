@@ -296,7 +296,7 @@ def make_pre_commit(repo_path: pathlib.Path, templates: Environment) -> List[str
 
 	dep_checker = Repo(
 			repo=make_github_url("python-coincidence", "dep_checker"),
-			rev="v0.8.0",
+			rev="v0.9.0",
 			hooks=[{"id": "dep_checker", "args": dep_checker_args}],
 			)
 
