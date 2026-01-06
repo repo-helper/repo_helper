@@ -1027,6 +1027,7 @@ def make_formate_toml(repo_path: pathlib.Path, templates: Environment) -> List[s
 			"dynamic_quotes": 10,
 			"collections-import-rewrite": 20,
 			"yapf": {"priority": 30, "kwargs": {"yapf_style": ".style.yapf"}},
+			"trailing_commas": {"priority": 21, "kwargs": {"format_ImportFrom": False}},
 			"reformat-generics": 40,
 			"isort": {"priority": 50, "kwargs": isort_config},
 			"noqa-reformat": 60,
