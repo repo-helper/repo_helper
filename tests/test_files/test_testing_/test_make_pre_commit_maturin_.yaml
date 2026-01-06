@@ -85,6 +85,8 @@ repos:
    hooks:
     - id: formate
       exclude: ^(doc-source/conf|__pkginfo__|setup)\.(_)?py$
+      additional_dependencies:
+       - formate-trailing-commas>=0.1.0
 
  - repo: https://github.com/doublify/pre-commit-rust
    rev: v1.0

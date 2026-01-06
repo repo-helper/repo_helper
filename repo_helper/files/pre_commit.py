@@ -282,7 +282,13 @@ def make_pre_commit(repo_path: pathlib.Path, templates: Environment) -> List[str
 
 	formate_excludes = fr"^({'|'.join([*templates.globals['yapf_exclude'], *non_source_files])})\.(_)?py$"
 
-	formate_custom = formate.replace_hooks(hooks=[{"id": "formate", "exclude": formate_excludes}])
+	formate_custom = formate.replace_hooks(
+			hooks=[{
+					"id": "formate",
+					"exclude": formate_excludes,
+					"additional_dependencies": ["formate-trailing-commas>=0.1.0"]
+					}]
+			)
 
 	dep_checker_args = [templates.globals["import_name"].replace('.', '/')]
 
