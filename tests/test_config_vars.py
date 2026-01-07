@@ -267,7 +267,7 @@ def test_repo_name():
 				({"repo_name": test_list_str}, "'repo_name' must be a <class 'str'>"),
 				({"username": "domdfcoding"}, "A value for 'modname' is required."),
 				({}, "A value for 'modname' is required."),
-				]
+				],
 		)
 def test_repo_name_errors(wrong_value: Dict[str, Any], match: str):
 	with pytest.raises(ValueError, match=match):
@@ -292,7 +292,7 @@ def test_pypi_name():
 				({"pypi_name": test_list_int}, "'pypi_name' must be a <class 'str'>"),
 				({"pypi_name": test_list_str}, "'pypi_name' must be a <class 'str'>"),
 				({}, "A value for 'modname' is required."),
-				]
+				],
 		)
 def test_pypi_name_errors(wrong_value: Dict[str, Any], match: str):
 	with pytest.raises(ValueError, match=match):
@@ -319,7 +319,7 @@ def test_import_name():
 				({"import_name": test_list_int}, "'import_name' must be a <class 'str'>"),
 				({"import_name": test_list_str}, "'import_name' must be a <class 'str'>"),
 				({}, "A value for 'modname' is required."),
-				]
+				],
 		)
 def test_import_name_errors(wrong_value: Dict[str, Any], match: str):
 	with pytest.raises(ValueError, match=match):
@@ -333,7 +333,7 @@ def test_import_name_errors(wrong_value: Dict[str, Any], match: str):
 				pytest.param({"classifiers": []}, id="empty"),
 				pytest.param({"username": "domdfcoding"}, id="not_given_1"),
 				pytest.param({}, id="not_given_2"),
-				]
+				],
 		)
 def test_classifiers(config_dict: Dict[str, Any], data_regression: DataRegressionFixture):
 	data_regression.check(classifiers.get(config_dict))
@@ -348,7 +348,7 @@ def test_classifiers(config_dict: Dict[str, Any], data_regression: DataRegressio
 				{"classifiers": 1234},
 				{"classifiers": True},
 				{"classifiers": test_list_int},
-				]
+				],
 		)
 def test_classifiers_errors(wrong_value: Dict[str, Any]):
 	with pytest.raises(ValueError, match="'classifiers' must be a List of <class 'str'>"):
@@ -565,27 +565,47 @@ class Test_platforms:
 	@pytest.mark.parametrize(
 			"wrong_value, match",
 			[
-					({"platforms": "a string"},
-						r"'platforms' must be a List of typing.*\.Literal\['Windows', 'macOS', 'Linux']"),
-					({"platforms": "Windows"},
-						r"'platforms' must be a List of typing.*\.Literal\['Windows', 'macOS', 'Linux']"),
-					({"platforms": "windows"},
-						r"'platforms' must be a List of typing.*\.Literal\['Windows', 'macOS', 'Linux']"),
-					({"platforms": "Linux"},
-						r"'platforms' must be a List of typing.*\.Literal\['Windows', 'macOS', 'Linux']"),
-					({"platforms": "linux"},
-						r"'platforms' must be a List of typing.*\.Literal\['Windows', 'macOS', 'Linux']"),
-					({"platforms": "macOS"},
-						r"'platforms' must be a List of typing.*\.Literal\['Windows', 'macOS', 'Linux']"),
-					({"platforms": "macos"},
-						r"'platforms' must be a List of typing.*\.Literal\['Windows', 'macOS', 'Linux']"),
-					({"platforms": 1234},
-						r"'platforms' must be a List of typing.*\.Literal\['Windows', 'macOS', 'Linux']"),
-					({"platforms": True},
-						r"'platforms' must be a List of typing.*\.Literal\['Windows', 'macOS', 'Linux']"),
-					({"platforms": test_list_int},
-						r"Elements of 'platforms' must be one of \('Windows', 'macOS', 'Linux'\)"),
-					]
+					(
+							{"platforms": "a string"},
+							r"'platforms' must be a List of typing.*\.Literal\['Windows', 'macOS', 'Linux']",
+							),
+					(
+							{"platforms": "Windows"},
+							r"'platforms' must be a List of typing.*\.Literal\['Windows', 'macOS', 'Linux']",
+							),
+					(
+							{"platforms": "windows"},
+							r"'platforms' must be a List of typing.*\.Literal\['Windows', 'macOS', 'Linux']",
+							),
+					(
+							{"platforms": "Linux"},
+							r"'platforms' must be a List of typing.*\.Literal\['Windows', 'macOS', 'Linux']",
+							),
+					(
+							{"platforms": "linux"},
+							r"'platforms' must be a List of typing.*\.Literal\['Windows', 'macOS', 'Linux']",
+							),
+					(
+							{"platforms": "macOS"},
+							r"'platforms' must be a List of typing.*\.Literal\['Windows', 'macOS', 'Linux']",
+							),
+					(
+							{"platforms": "macos"},
+							r"'platforms' must be a List of typing.*\.Literal\['Windows', 'macOS', 'Linux']",
+							),
+					(
+							{"platforms": 1234},
+							r"'platforms' must be a List of typing.*\.Literal\['Windows', 'macOS', 'Linux']",
+							),
+					(
+							{"platforms": True},
+							r"'platforms' must be a List of typing.*\.Literal\['Windows', 'macOS', 'Linux']",
+							),
+					(
+							{"platforms": test_list_int},
+							r"Elements of 'platforms' must be one of \('Windows', 'macOS', 'Linux'\)",
+							),
+					],
 			)
 	def test_errors(self, wrong_value: Dict[str, Any], match: str):
 		with pytest.raises(ValueError, match=match):

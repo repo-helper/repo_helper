@@ -77,10 +77,8 @@ def cli(ctx: Context, force: bool, commit: Optional[bool], message: str) -> None
 
 	else:
 		if message != "Updated files with 'repo_helper'.":
-			raise click.UsageError(
-					f"--message cannot be used before a command. "
-					f"Perhaps you meant 'repo_helper {ctx.invoked_subcommand} --message'?",
-					)
+			msg = f"--message cannot be used before a command. Perhaps you meant 'repo_helper {ctx.invoked_subcommand} --message'?"
+			raise click.UsageError(msg)
 
 
 cli_command = partial(cli.command, context_settings=CONTEXT_SETTINGS)

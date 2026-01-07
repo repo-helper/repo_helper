@@ -38,17 +38,21 @@ from repo_helper.utils import resource
 
 
 @pytest.mark.parametrize(
-		"py_version", [
+		"py_version",
+		[
 				pytest.param("3.6", marks=only_version("3.6")),
 				pytest.param("3.7", marks=min_version("3.7")),
-				]
+				],
 		)
-@pytest.mark.parametrize("filename", [
-		"input_a.rst",
-		"input_b.rst",
-		"input_c.rst",
-		"input_d.rst",
-		])
+@pytest.mark.parametrize(
+		"filename",
+		[
+				"input_a.rst",
+				"input_b.rst",
+				"input_c.rst",
+				"input_d.rst",
+				],
+		)
 @pytest.mark.usefixtures("fixed_date")
 def test_rewrite_readme(
 		tmp_pathplus: PathPlus,
@@ -81,17 +85,21 @@ def test_rewrite_readme(
 
 
 @pytest.mark.parametrize(
-		"py_version", [
+		"py_version",
+		[
 				pytest.param("3.6", marks=only_version("3.6")),
 				pytest.param("3.7", marks=min_version("3.7")),
-				]
+				],
 		)
-@pytest.mark.parametrize("filename", [
-		"input_a.rst",
-		"input_b.rst",
-		"input_c.rst",
-		"input_d.rst",
-		])
+@pytest.mark.parametrize(
+		"filename",
+		[
+				"input_a.rst",
+				"input_b.rst",
+				"input_c.rst",
+				"input_d.rst",
+				],
+		)
 @pytest.mark.usefixtures("fixed_date")
 def test_rewrite_readme_conda_forge(
 		tmp_pathplus: PathPlus,

@@ -260,15 +260,16 @@ def make_pre_commit(repo_path: pathlib.Path, templates: Environment) -> List[str
 
 	non_source_files = [posixpath.join(docs_dir, "conf"), "__pkginfo__", "setup"]
 
+	cdf_hook: Hook = {
+			"id": "check-docstring-first",
+			"exclude": fr"^({'|'.join(non_source_files)}|{templates.globals['tests_dir']}/.*)\.py$",
+			}
 	domdfcoding_hooks_custom = domdfcoding_hooks.replace_hooks(
 			hooks=[
 					{"id": "requirements-txt-sorter", "args": ["--allow-git"]},
-					{
-							"id": "check-docstring-first",
-							"exclude": fr"^({'|'.join(non_source_files)}|{templates.globals['tests_dir']}/.*)\.py$"
-							},
+					cdf_hook,
 					"bind-requirements",
-					]
+					],
 			)
 
 	flake8_dunder_all = Repo(

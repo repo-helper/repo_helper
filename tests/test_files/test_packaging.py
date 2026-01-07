@@ -36,10 +36,13 @@ from tests.test_files.test_testing import AdvancedFileRegressionFixture
 
 
 def boolean_option(name: str, id: str):  # noqa: A002,MAN002  # pylint: disable=redefined-builtin
-	return pytest.mark.parametrize(name, [
-			pytest.param(True, id=id),
-			pytest.param(False, id=f"no {id}"),
-			])
+	return pytest.mark.parametrize(
+			name,
+			[
+					pytest.param(True, id=id),
+					pytest.param(False, id=f"no {id}"),
+					],
+			)
 
 
 @boolean_option("stubs_package", "stubs")
@@ -51,7 +54,7 @@ def boolean_option(name: str, id: str):  # noqa: A002,MAN002  # pylint: disable=
 				pytest.param({"use_maturin": True}, id="backend_maturin"),
 				pytest.param({"use_hatch": True}, id="backend_hatch"),
 				pytest.param({}, id="backend_setuptools"),
-				]
+				],
 		)
 def test_make_manifest_case_1(
 		tmp_pathplus: PathPlus,
@@ -96,7 +99,7 @@ def test_make_manifest_case_2(
 				pytest.param({"use_maturin": True}, id="backend_maturin"),
 				pytest.param({"use_hatch": True}, id="backend_hatch"),
 				pytest.param({}, id="backend_setuptools"),
-				]
+				],
 		)
 def test_make_setup_case_1(
 		tmp_pathplus: PathPlus,
@@ -125,7 +128,7 @@ def test_make_setup_case_1(
 				pytest.param({"use_maturin": True}, id="backend_maturin"),
 				pytest.param({"use_hatch": True}, id="backend_hatch"),
 				pytest.param({}, id="backend_setuptools"),
-				]
+				],
 		)
 def test_make_setup_case_2(
 		tmp_pathplus: PathPlus,
@@ -144,7 +147,7 @@ def test_make_setup_case_2(
 					setup_pre=["import datetime", "print(datetime.datetime.now)"],
 					docs_dir="userguide",
 					tests_dir="testing",
-					)
+					),
 			)
 
 	managed_files = make_setup(tmp_pathplus, demo_environment)
@@ -164,7 +167,7 @@ def test_make_setup_case_2(
 				pytest.param({"use_maturin": True}, id="backend_maturin"),
 				pytest.param({"use_hatch": True}, id="backend_hatch"),
 				pytest.param({}, id="backend_setuptools"),
-				]
+				],
 		)
 @boolean_option("enable_tests", "tests")
 @boolean_option("enable_docs", "docs")
@@ -239,7 +242,7 @@ def test_make_pyproject_whey_extras(
 					"click==7.1.2",
 					"configconfig>=0.5.0",
 					"consolekit>=1.0.0",
-					]
+					],
 			}
 	demo_environment.globals["entry_points"] = {}
 	demo_environment.globals["tox_build_requirements"] = []
@@ -255,42 +258,50 @@ def test_make_pyproject_whey_extras(
 @pytest.mark.parametrize(
 		"python_versions",
 		[
-				pytest.param({
-						3.6: {"experimental": False},
-						3.7: {"experimental": False},
-						3.8: {"experimental": False},
-						},
-								id="simple_versions"),
-				pytest.param({
-						3.6: {"experimental": False},
-						3.7: {"experimental": False},
-						3.8: {"experimental": False},
-						"3.10": {"experimental": False},
-						},
-								id="complex_versions"),
-				pytest.param({
-						3.7: {"experimental": False},
-						"3.10": {"experimental": False},
-						3.8: {"experimental": False},
-						3.6: {"experimental": False},
-						},
-								id="unordered_versions"),
-				pytest.param({
-						3.6: {"experimental": False},
-						3.7: {"experimental": False},
-						3.8: {"experimental": False},
-						"pypy36": {"experimental": False},
-						"pypy3.7": {"experimental": True},
-						},
-								id="pypy_versions"),
-				]
+				pytest.param(
+						{
+								3.6: {"experimental": False},
+								3.7: {"experimental": False},
+								3.8: {"experimental": False},
+								},
+						id="simple_versions",
+						),
+				pytest.param(
+						{
+								3.6: {"experimental": False},
+								3.7: {"experimental": False},
+								3.8: {"experimental": False},
+								"3.10": {"experimental": False},
+								},
+						id="complex_versions",
+						),
+				pytest.param(
+						{
+								3.7: {"experimental": False},
+								"3.10": {"experimental": False},
+								3.8: {"experimental": False},
+								3.6: {"experimental": False},
+								},
+						id="unordered_versions",
+						),
+				pytest.param(
+						{
+								3.6: {"experimental": False},
+								3.7: {"experimental": False},
+								3.8: {"experimental": False},
+								"pypy36": {"experimental": False},
+								"pypy3.7": {"experimental": True},
+								},
+						id="pypy_versions",
+						),
+				],
 		)
 @pytest.mark.parametrize(
 		"classifiers",
 		[
 				pytest.param({"classifiers": ["Environment :: Console"]}, id="environment_console"),
 				pytest.param([], id="no_classifiers"),
-				]
+				],
 		)
 @pytest.mark.parametrize(
 		"other_opts",
@@ -300,14 +311,15 @@ def test_make_pyproject_whey_extras(
 				pytest.param({"use_maturin": True}, id="backend_maturin"),
 				pytest.param({"use_hatch": True}, id="backend_hatch"),
 				pytest.param({}, id="backend_setuptools"),
-				]
+				],
 		)
 @pytest.mark.parametrize("mypy_version", ["0.800", "0.910"])
 @pytest.mark.parametrize(
-		"entry_points", [
+		"entry_points",
+		[
 				pytest.param({"foo": "bar.baz:main"}, id="with_entry_points"),
 				pytest.param({}, id="no_entry_points"),
-				]
+				],
 		)
 def test_make_setup_cfg(
 		tmp_pathplus: PathPlus,
@@ -340,7 +352,7 @@ def test_make_setup_cfg(
 	assert managed_files == ["setup.cfg"]
 
 	if any(
-			get_keys(demo_environment.globals, "use_whey", "use_flit", "use_maturin", "use_hatch")
+			get_keys(demo_environment.globals, "use_whey", "use_flit", "use_maturin", "use_hatch"),
 			) and mypy_version == "0.910":
 		assert not (tmp_pathplus / managed_files[0]).is_file()
 	else:
@@ -368,8 +380,8 @@ def test_make_setup_cfg_existing(
 	[mypy]
 	namespace_packages=False
 	check_untyped_defs=False
-	"""
-					)
+	""",
+					),
 			)
 
 	demo_environment.globals["author"] = "Joe Bloggs"
@@ -391,10 +403,11 @@ def test_make_setup_cfg_existing(
 
 
 @pytest.mark.parametrize(
-		"extras_require", [
+		"extras_require",
+		[
 				pytest.param({}, id="without"),
 				pytest.param({"foo": ["bar", "baz"]}, id="with"),
-				]
+				],
 		)
 def test_make_pkginfo(
 		extras_require: Dict[str, List[str]],
