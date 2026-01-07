@@ -48,17 +48,18 @@ from repo_helper.templates import Environment
 				["sudo apt update", "sudo apt upgrade -y", "sudo reboot"],
 				["for i in 1 2 3 4 5", "> do", '>    echo "Welcome $i times"', "> done"],
 				[],
-				]
+				],
 		)
 def test_github_bash_block(advanced_file_regression: AdvancedFileRegressionFixture, commands: List[str]):
 	check_file_regression(github_bash_block(*commands), advanced_file_regression, extension=".rst")
 
 
 @pytest.mark.parametrize(
-		"py_version", [
+		"py_version",
+		[
 				pytest.param("3.6", marks=only_version("3.6")),
 				pytest.param("3.7", marks=min_version("3.7")),
-				]
+				],
 		)
 def test_make_contributing(
 		tmp_pathplus: PathPlus,

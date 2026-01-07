@@ -47,7 +47,7 @@ from repo_helper.blocks import (
 		[
 				".. start installation\n\n..end installation",
 				f".. start installation\n{lorem.paragraph()}\n..end installation",
-				]
+				],
 		)
 def test_installation_regex(value: str):
 	m = installation_regex.sub(value, "hello world")
@@ -55,7 +55,8 @@ def test_installation_regex(value: str):
 
 
 @pytest.mark.parametrize(
-		"value", [".. start links\n\n..end links", f".. start links\n{lorem.paragraph()}\n..end links"]
+		"value",
+		[".. start links\n\n..end links", f".. start links\n{lorem.paragraph()}\n..end links"],
 		)
 def test_links_regex(value: str):
 	m = links_regex.sub(value, "hello world")
@@ -63,7 +64,8 @@ def test_links_regex(value: str):
 
 
 @pytest.mark.parametrize(
-		"value", [".. start shields\n\n..end shields", f".. start shields\n{lorem.paragraph()}\n..end shields"]
+		"value",
+		[".. start shields\n\n..end shields", f".. start shields\n{lorem.paragraph()}\n..end shields"],
 		)
 def test_shields_regex(value: str):
 	m = shields_regex.sub(value, "hello world")
@@ -72,7 +74,7 @@ def test_shields_regex(value: str):
 
 @pytest.mark.parametrize(
 		"value",
-		[".. start short_desc\n\n..end short_desc", f".. start short_desc\n{lorem.paragraph()}\n..end short_desc"]
+		[".. start short_desc\n\n..end short_desc", f".. start short_desc\n{lorem.paragraph()}\n..end short_desc"],
 		)
 def test_short_desc_regex(value: str):
 	m = short_desc_regex.sub(value, "hello world")
@@ -128,7 +130,7 @@ def test_short_desc_regex(value: str):
 								),
 						id="case_3",
 						),
-				]
+				],
 		)
 @pytest.mark.usefixtures("fixed_date")
 def test_create_shields_block(advanced_file_regression: AdvancedFileRegressionFixture, kwargs: Dict[str, Any]):
@@ -167,7 +169,7 @@ def test_create_shields_block(advanced_file_regression: AdvancedFileRegressionFi
 								),
 						id="case_3",
 						),
-				]
+				],
 		)
 def test_create_docs_install_block(
 		advanced_file_regression: AdvancedFileRegressionFixture,
@@ -210,7 +212,7 @@ def test_create_docs_install_block(
 						dict(modname="hello_world", username="octocat", conda=False, pypi=False),
 						id="case_4",
 						),
-				]
+				],
 		)
 def test_create_readme_install_block(
 		advanced_file_regression: AdvancedFileRegressionFixture,

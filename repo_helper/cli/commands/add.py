@@ -115,7 +115,7 @@ def requirement(requirement: str, file: Optional[str] = None) -> int:
 		req_file=requirements_file,
 		include_invalid=True,
 		normalize_func=normalize_keep_dot,
-		)
+	)
 
 	requirements.add(req)
 

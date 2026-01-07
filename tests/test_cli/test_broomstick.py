@@ -23,7 +23,7 @@ def broomstick_tmpdir(tmp_pathplus: PathPlus) -> PathPlus:
 	**Do not** commit this to version control.
 
 	See [the docs](https://docs.pytest.org/en/stable/cache.html) for more information.
-	"""
+	""",
 			)
 
 	(tmp_pathplus / "my_package").mkdir()

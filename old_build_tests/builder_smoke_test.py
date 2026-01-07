@@ -57,7 +57,7 @@ def builder_smoke_test(
 		repository: str,
 		*,
 		actions: bool = False,
-		conda: bool = False
+		conda: bool = False,
 		) -> Tuple[int, float]:
 	"""
 	Tests that the given repository can be successfully built with repo-helper's experimental :pep:`517` backend.

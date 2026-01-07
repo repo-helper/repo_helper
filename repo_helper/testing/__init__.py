@@ -195,7 +195,7 @@ def demo_environment() -> Environment:
 							"3.7": "py37, build",
 							},
 					docs_apt_packages=[],
-					)
+					),
 			)
 
 	return templates

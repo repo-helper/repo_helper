@@ -91,12 +91,16 @@ class Test_rtfd_author:
 	@pytest.mark.parametrize(
 			"value, expects",
 			[
-					({"rtfd_author": "Dominic Davis-Foster and Joe Bloggs"
-						}, "Dominic Davis-Foster and Joe Bloggs"),
+					(
+							{"rtfd_author": "Dominic Davis-Foster and Joe Bloggs"},
+							"Dominic Davis-Foster and Joe Bloggs",
+							),
 					({"author": "Dom"}, "Dom"),
-					({"author": "Dom", "rtfd_author": "Dominic Davis-Foster and Joe Bloggs"},
-						"Dominic Davis-Foster and Joe Bloggs"),
-					]
+					(
+							{"author": "Dom", "rtfd_author": "Dominic Davis-Foster and Joe Bloggs"},
+							"Dominic Davis-Foster and Joe Bloggs",
+							),
+					],
 			)
 	def test_success(self, value: Dict[str, str], expects: str):
 		assert rtfd_author.get(value) == expects
@@ -114,7 +118,7 @@ class Test_rtfd_author:
 					({"rtfd_author": test_list_str}, "'rtfd_author' must be a <class 'str'>"),
 					({"modname": "repo_helper"}, "A value for 'author' is required."),
 					({}, "A value for 'author' is required."),
-					]
+					],
 			)
 	def test_errors(self, wrong_value: Dict[str, Any], match: str):
 		with pytest.raises(ValueError, match=match):
@@ -137,7 +141,7 @@ def test_modname():
 				({"modname": test_list_str}, "'modname' must be a <class 'str'>"),
 				({"username": "domdfcoding"}, "A value for 'modname' is required."),
 				({}, "A value for 'modname' is required."),
-				]
+				],
 		)
 def test_modname_errors(wrong_value: Dict[str, Any], match: str):
 	with pytest.raises(ValueError, match=match):
@@ -156,13 +160,17 @@ def test_version():
 		"wrong_value, match",
 		[
 				({"version": True}, "Invalid version: 'True'"),
-				({"version": test_list_int},
-					re.escape("'version' must be one of (<class 'str'>, <class 'float'>), not <class 'list'>")),
-				({"version": test_list_str},
-					re.escape("'version' must be one of (<class 'str'>, <class 'float'>), not <class 'list'>")),
+				(
+						{"version": test_list_int},
+						re.escape("'version' must be one of (<class 'str'>, <class 'float'>), not <class 'list'>"),
+						),
+				(
+						{"version": test_list_str},
+						re.escape("'version' must be one of (<class 'str'>, <class 'float'>), not <class 'list'>"),
+						),
 				({"username": "domdfcoding"}, "A value for 'version' is required."),
 				({}, "A value for 'version' is required."),
-				]
+				],
 		)
 def test_version_errors(wrong_value: Dict[str, Any], match: str):
 	with pytest.raises(ValueError, match=match):
@@ -182,12 +190,14 @@ class Test_conda_description:
 							{"short_desc": "This is a short description of my project."},
 							"This is a short description of my project.",
 							),
-					({
-							"short_desc": "A short description",
-							"conda_description": "This is a short description of my project.",
-							},
-						"This is a short description of my project."),
-					]
+					(
+							{
+									"short_desc": "A short description",
+									"conda_description": "This is a short description of my project.",
+									},
+							"This is a short description of my project.",
+							),
+					],
 			)
 	def test_success(self, value: Dict[str, str], expects: str):
 		assert conda_description.get(value) == expects
@@ -205,7 +215,7 @@ class Test_conda_description:
 					({"conda_description": test_list_str}, "'conda_description' must be a <class 'str'>"),
 					({"modname": "repo_helper"}, "A value for 'short_desc' is required."),
 					({}, "A value for 'short_desc' is required."),
-					]
+					],
 			)
 	def test_errors(self, wrong_value: Dict[str, Any], match: str):
 		with pytest.raises(ValueError, match=match):
@@ -492,7 +502,7 @@ class Test_py_modules(ListTest):
 		# check that the message matches
 		assert record[0].message.args == (  # type: ignore[union-attr]
 			"The 'py_modules' configuration value is deprecated. Please make your module into a package instead.",
-			)
+		)
 
 
 class Test_console_scripts(ListTest):
@@ -539,7 +549,8 @@ class Test_platforms:
 	def test_non_enum(self):
 		for non_enum in self.non_enum_values:
 			with pytest.raises(
-					ValueError, match=r"Elements of 'platforms' must be one of \('Windows', 'macOS', 'Linux'\)"
+					ValueError,
+					match=r"Elements of 'platforms' must be one of \('Windows', 'macOS', 'Linux'\)",
 					):
 				self.config_var.get({self.config_var.__name__: non_enum})
 
@@ -607,7 +618,7 @@ class Test_python_versions(DictTest):
 					"experimental": False,
 					"matrix_exclude": {},
 					"platforms": ["Windows", "macOS", "Linux"],
-					}
+					},
 			}
 
 	def test_success(self):
@@ -640,7 +651,7 @@ class Test_python_versions(DictTest):
 						"experimental": False,
 						"matrix_exclude": {},
 						"platforms": ["Windows", "macOS", "Linux"],
-						}
+						},
 				}
 		assert self.config_var.get({self.config_var.__name__: self.test_value}) == value2
 		assert self.config_var.get({self.config_var.__name__: value2}) == value2
@@ -664,7 +675,7 @@ class Test_python_versions(DictTest):
 				}
 
 		assert self.config_var.get({
-				self.config_var.__name__: {"3.6": {}, "3.7": None, "pypy3": {"platforms": ["macOS", "Linux"]}}
+				self.config_var.__name__: {"3.6": {}, "3.7": None, "pypy3": {"platforms": ["macOS", "Linux"]}},
 				}) == {
 						"3.6": {
 								"experimental": False,
@@ -686,7 +697,7 @@ class Test_python_versions(DictTest):
 		assert self.config_var.get({}) == self.default_value
 
 		expected_3_6 = {
-				"3.6": {"experimental": False, "matrix_exclude": {}, "platforms": ["Windows", "macOS", "Linux"]}
+				"3.6": {"experimental": False, "matrix_exclude": {}, "platforms": ["Windows", "macOS", "Linux"]},
 				}
 		assert self.config_var.get({**self.different_key_value, "python_versions": [3.6]}) == expected_3_6
 

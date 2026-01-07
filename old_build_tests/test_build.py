@@ -12,11 +12,12 @@ GITHUB_COM = URL("https://github.com")
 
 # @pypy_windows_dulwich
 @pytest.mark.parametrize(
-		"username, repository", [
+		"username, repository",
+		[
 				("domdfcoding", "sphinx-toolbox"),
 				("domdfcoding", "consolekit"),
 				("domdfcoding", "mathematical"),
-				]
+				],
 		)
 def test_build(username, repository, tmp_pathplus, monkeypatch):
 	# Monkeypatch dulwich so it doesn't try to use the global config.

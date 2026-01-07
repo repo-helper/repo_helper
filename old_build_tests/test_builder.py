@@ -95,7 +95,7 @@ def test_write_entry_points(builder, advanced_file_regression: AdvancedFileRegre
 				"LICENCE.rst",
 				"LICENSE.RST",
 				"LICENCE.RST",
-				]
+				],
 		)
 def test_copy_license(builder, filename):
 	(builder.repo_dir / filename).write_text("This is the license.")
@@ -112,7 +112,9 @@ def test_copy_license(builder, filename):
 
 
 def test_write_wheel(
-		builder, advanced_file_regression: AdvancedFileRegressionFixture, data_regression: DataRegressionFixture
+		builder,
+		advanced_file_regression: AdvancedFileRegressionFixture,
+		data_regression: DataRegressionFixture,
 		):
 	builder.write_wheel()
 	advanced_file_regression.check_file(builder.dist_info / "WHEEL")

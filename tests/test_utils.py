@@ -70,7 +70,7 @@ def test_pformat_tabs():
 			'tomato',
 			'cherry',
 			'blackcurrant',
-			]"""
+			]""",
 			)
 
 
@@ -89,7 +89,7 @@ def test_pformat_tabs():
 				("3.6", "3.7", "3.8", "3.9-dev", "pypy37", "pypy3.7"),
 				("3.6", "3.9-dev", "pypy3"),
 				("3.9-dev", "pypy3"),
-				]
+				],
 		)
 def test_get_version_classifiers(
 		python_versions: Tuple[str, ...],
@@ -99,10 +99,13 @@ def test_get_version_classifiers(
 
 
 @pytest.mark.parametrize("license_name", ["MIT", "MIT License", "GPLv3"])
-@pytest.mark.parametrize("copyright_years", [
-		pytest.param("2019-2021", id="str"),
-		pytest.param(2020, id="int"),
-		])
+@pytest.mark.parametrize(
+		"copyright_years",
+		[
+				pytest.param("2019-2021", id="str"),
+				pytest.param(2020, id="int"),
+				],
+		)
 def test_get_license_text(
 		license_name: str,
 		copyright_years: str,

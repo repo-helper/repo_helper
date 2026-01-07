@@ -180,7 +180,7 @@ class ActionsManager:
 			python_versions.items(),
 			set_gh_actions_versions(python_versions),
 			tox_py_versions,
-			):
+		):
 
 			envs = []
 
@@ -191,10 +191,10 @@ class ActionsManager:
 
 					if "matrix_exclude" in metadata:
 						third_party_exclude = list(
-								map(str, metadata["matrix_exclude"].get(third_party_library, []))
+								map(str, metadata["matrix_exclude"].get(third_party_library, [])),
 								)
 						third_party_versions = list(
-								filterfalse(third_party_exclude.__contains__, third_party_versions)
+								filterfalse(third_party_exclude.__contains__, third_party_versions),
 								)
 
 					if not third_party_versions:
@@ -260,7 +260,7 @@ class ActionsManager:
 							dependency_lines=self.get_windows_ci_requirements(),
 							gh_actions_versions=gh_actions_versions,
 							code_file_filter=self._code_file_filter,
-							)
+							),
 					)
 		elif ci_file.is_file():
 			ci_file.unlink()
@@ -309,7 +309,7 @@ class ActionsManager:
 							dependency_lines=self.get_macos_ci_requirements(),
 							gh_actions_versions=gh_actions_versions,
 							code_file_filter=self._code_file_filter,
-							)
+							),
 					)
 		elif ci_file.is_file():
 			ci_file.unlink()
@@ -356,7 +356,7 @@ class ActionsManager:
 							code_file_filter=self._code_file_filter,
 							run_on_tags="    tags:\n      - '*'",
 							conda_pip_dependencies=conda_pip_dependencies,
-							)
+							),
 					)
 		elif ci_file.is_file():
 			ci_file.unlink()
@@ -379,7 +379,7 @@ class ActionsManager:
 							ci_platform=platform_ci_names[platform_name],
 							dependency_lines=self.get_linux_ci_requirements(),
 							code_file_filter=self._code_file_filter,
-							)
+							),
 					)
 		elif ci_file.is_file():
 			ci_file.unlink()
@@ -459,7 +459,7 @@ class ActionsManager:
 						linux_platform=platform_ci_names["Linux"],
 						dependencies_block=indent(str(dependencies_block), "      "),
 						code_file_filter=self._code_file_filter,
-						)
+						),
 				)
 
 		return ci_file
@@ -637,7 +637,7 @@ def make_conda_actions_ci(repo_path: pathlib.Path, templates: Environment) -> Li
 			pip_dependencies.extend(data["build-system"]["requires"])
 
 		conda_ci_file.write_clean(
-				actions.render(no_dev_versions=no_pypy_versions, pip_dependencies=pip_dependencies)
+				actions.render(no_dev_versions=no_pypy_versions, pip_dependencies=pip_dependencies),
 				)
 
 	else:

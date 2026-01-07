@@ -255,8 +255,8 @@ def make_rtfd(repo_path: pathlib.Path, templates: Environment) -> List[str]:
 					"jobs": {
 							"post_create_environment": [post_create_command],
 							"post_install": [post_install_command],
-							}
-					}
+							},
+					},
 			}
 
 	if templates.globals["docs_apt_packages"]:
@@ -294,12 +294,12 @@ def make_docutils_conf(repo_path: pathlib.Path, templates: Environment) -> List[
 	file.parent.maybe_make(parents=True)
 
 	if not file.is_file():
-		file.write_text('\n'.join([
+		file.write_lines([
 				"[restructuredtext parser]",
 				"tab_width = 4",
 				'',
 				'',
-				]))
+				])
 
 	conf = ConfigUpdater()
 	conf.read(str(file))
@@ -696,7 +696,7 @@ def rewrite_docs_index(repo_path: pathlib.Path, templates: Environment) -> List[
 						'',
 						'',
 						".. start links",
-						])
+						]),
 				)
 
 	index_rst_file.write_clean(index_rst)

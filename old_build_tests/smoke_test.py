@@ -70,7 +70,7 @@ with TemporaryPathPlus() as tmpdir_p:
 		("domdfcoding", "webcolors-stubs"),
 		("domdfcoding", "pre-commit-hooks"),
 		("domdfcoding", "coverage_pyver_pragma"),
-		]:
+	]:
 
 		target_dir = tmpdir_p / f"{username}_{repository}"
 
@@ -80,7 +80,7 @@ with TemporaryPathPlus() as tmpdir_p:
 				username,
 				repository,
 				actions=is_running_on_actions(),
-				)
+			)
 
 			build_times.append(build_time)
 		except Exception as e:

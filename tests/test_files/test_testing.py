@@ -36,10 +36,13 @@ from repo_helper.templates import Environment
 
 
 def boolean_option(name: str, id: str):  # noqa: A002,MAN002  # pylint: disable=redefined-builtin
-	return pytest.mark.parametrize(name, [
-			pytest.param(True, id=id),
-			pytest.param(False, id=f"no {id}"),
-			])
+	return pytest.mark.parametrize(
+			name,
+			[
+					pytest.param(True, id=id),
+					pytest.param(False, id=f"no {id}"),
+					],
+			)
 
 
 class TestMakeTox:

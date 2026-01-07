@@ -195,12 +195,15 @@ def test_make_docutils_conf(
 	check_file_output(tmp_pathplus / managed_files[0], file_regression)
 
 
-@pytest.mark.parametrize("theme", [
-		"sphinx-rtd-theme",
-		"alabaster",
-		"domdf-sphinx-theme",
-		"furo",
-		])
+@pytest.mark.parametrize(
+		"theme",
+		[
+				"sphinx-rtd-theme",
+				"alabaster",
+				"domdf-sphinx-theme",
+				"furo",
+				],
+		)
 def test_make_conf(
 		tmp_pathplus: PathPlus,
 		demo_environment: Environment,
@@ -239,12 +242,15 @@ def test_remove_autodoc_augment_defaults(tmp_pathplus: PathPlus, demo_environmen
 	assert not (tmp_pathplus / "doc-source" / "autodoc_augment_defaults.py").is_file()
 
 
-@pytest.mark.parametrize("theme", [
-		"sphinx-rtd-theme",
-		"alabaster",
-		"domdf-sphinx-theme",
-		"furo",
-		])
+@pytest.mark.parametrize(
+		"theme",
+		[
+				"sphinx-rtd-theme",
+				"alabaster",
+				"domdf-sphinx-theme",
+				"furo",
+				],
+		)
 def test_copy_docs_styling(
 		tmp_pathplus: PathPlus,
 		demo_environment: Environment,
@@ -277,7 +283,7 @@ def test_copy_docs_styling(
 				"input_f.rst",
 				"input_g.rst",
 				"input_h.rst",
-				]
+				],
 		)
 @pytest.mark.usefixtures("fixed_date")
 def test_rewrite_docs_index(
@@ -318,7 +324,7 @@ def test_rewrite_docs_index(
 				"input_f.rst",
 				"input_g.rst",
 				"input_h.rst",
-				]
+				],
 		)
 @pytest.mark.usefixtures("fixed_date")
 def test_rewrite_docs_index_conda_forge(

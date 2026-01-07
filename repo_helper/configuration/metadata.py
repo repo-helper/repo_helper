@@ -319,7 +319,7 @@ class InvalidName(SyntaxError):
 	def __init__(self):
 		super().__init__(
 				"'import_name' must only contain contains letters, numbers, underscores and fullstops.\n"
-				"It cannot cannot start with a number, or contain any spaces."
+				"It cannot cannot start with a number, or contain any spaces.",
 				)
 
 

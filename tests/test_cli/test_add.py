@@ -32,13 +32,14 @@ def cassette(request: FixtureRequest, monkeypatch) -> Iterator[requests.Session]
 
 
 @pytest.mark.parametrize(
-		"requirement", [
+		"requirement",
+		[
 				"tox",
 				"tox==1.2.3",
 				"domdf_python_tools>=1.0.0",
 				"consolekit",
 				"coincidence",
-				]
+				],
 		)
 @pytest.mark.usefixtures("cassette")
 def test_add_requirement(
@@ -234,8 +235,8 @@ def test_add_typed_pyproject(
 				"pypy38",
 				"rustpython",
 				pytest.param(["3.6", "3.8"], id="multiple_1"),
-				pytest.param(["3.9", "rustpython"], id="multiple_2")
-				]
+				pytest.param(["3.9", "rustpython"], id="multiple_2"),
+				],
 		)
 def test_add_version(
 		tmp_pathplus: PathPlus,

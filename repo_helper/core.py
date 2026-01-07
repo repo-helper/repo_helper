@@ -90,7 +90,7 @@ class RepoHelper:
 		self.templates = Environment(  # nosec: B701
 			loader=jinja2.FileSystemLoader(str(template_dir)),
 			undefined=jinja2.StrictUndefined,
-			)
+		)
 		self.templates.globals["managed_message"] = managed_message
 		self.templates.globals["brace"] = brace
 
@@ -171,7 +171,7 @@ class RepoHelper:
 			init_repo_templates = Environment(  # nosec: B701
 				loader=jinja2.FileSystemLoader(str(init_repo_template_dir)),
 				undefined=jinja2.StrictUndefined,
-				)
+			)
 			init_repo_templates.globals.update(self.templates.globals)
 
 			all_managed_files.extend(enable_docs(self.target_repo, self.templates, init_repo_templates))

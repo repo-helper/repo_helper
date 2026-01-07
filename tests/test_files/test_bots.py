@@ -109,7 +109,7 @@ def test_artefact_cleaner(tmp_pathplus: PathPlus, demo_environment: Environment)
 		[
 				pytest.param([], id="nothing"),
 				pytest.param(["ignore_dir/*", "**/wildcard_dir/*", "*.jpg"], id="something"),
-				]
+				],
 		)
 def test_imgbot(
 		tmp_pathplus: PathPlus,

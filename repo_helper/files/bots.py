@@ -252,7 +252,7 @@ def make_automerge_action(repo_path: pathlib.Path, templates: Environment) -> Li
 					"check_suite": {"types": ["completed"]},
 					"status": {},
 					},
-			"jobs": {"automerge": {"runs-on": "ubuntu-latest", "steps": steps}}
+			"jobs": {"automerge": {"runs-on": "ubuntu-latest", "steps": steps}},
 			}
 
 	automerge_workflow.write_lines([

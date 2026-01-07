@@ -103,11 +103,10 @@ def parse_extras(raw_config_vars: Mapping[str, Any], repo_path: pathlib.Path) ->
 
 	for extra, requires in extras_require.items():
 		if isinstance(requires, str):
-			if (repo_path / requires).is_file():
+			requires_file = repo_path / requires
+			if requires_file.is_file():
 				# a path to the requirements file from the repo root
-				extras_require[extra] = parse_extra_requirements_file(
-						(repo_path / requires).read_text(encoding="UTF-8")
-						)
+				extras_require[extra] = parse_extra_requirements_file(requires_file.read_text(encoding="UTF-8"))
 				additional_requirements_files.add(requires)
 			else:
 				# A single requirement

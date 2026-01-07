@@ -179,7 +179,7 @@ pre_commit_hooks = Repo(
 				"trailing-whitespace",
 				"mixed-line-ending",
 				"end-of-file-fixer",
-				]
+				],
 		)
 
 pygrep_hooks = Repo(
@@ -224,7 +224,7 @@ domdfcoding_hooks = Repo(
 				{"id": "requirements-txt-sorter", "args": ["--allow-git"]},
 				{"id": "check-docstring-first", "exclude": fr"^(doc-source/conf|__pkginfo__|setup|tests/.*)\.py$"},
 				"bind-requirements",
-				]
+				],
 		)
 
 formate = Repo(
@@ -277,7 +277,7 @@ def make_pre_commit(repo_path: pathlib.Path, templates: Environment) -> List[str
 			hooks=[{
 					"id": "ensure-dunder-all",
 					"files": fr"^{import_name}{'-stubs' if stubs_package else ''}/.*\.py$",
-					}]
+					}],
 			)
 
 	formate_excludes = fr"^({'|'.join([*templates.globals['yapf_exclude'], *non_source_files])})\.(_)?py$"
@@ -286,8 +286,8 @@ def make_pre_commit(repo_path: pathlib.Path, templates: Environment) -> List[str
 			hooks=[{
 					"id": "formate",
 					"exclude": formate_excludes,
-					"additional_dependencies": ["formate-trailing-commas>=0.1.0"]
-					}]
+					"additional_dependencies": ["formate-trailing-commas>=0.1.0"],
+					}],
 			)
 
 	dep_checker_args = [templates.globals["import_name"].replace('.', '/')]

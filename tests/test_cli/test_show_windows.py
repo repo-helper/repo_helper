@@ -27,10 +27,10 @@ version_specific = pytest.mark.parametrize(
 						marks=pytest.mark.skipif(
 								sys.version_info[:2] not in {(3, 11), (3, 11)},
 								reason="Output differs on Python 3.11&12",
-								)
+								),
 						),
 				pytest.param("3.13+", marks=min_version("3.13", "Output differs on Python 3.13")),
-				]
+				],
 		)
 
 show_directories = [

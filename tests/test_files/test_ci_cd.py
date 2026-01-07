@@ -46,10 +46,13 @@ from repo_helper.templates import Environment
 
 
 def boolean_option(name: str, id: str):  # noqa: A002,MAN002  # pylint: disable=redefined-builtin
-	return pytest.mark.parametrize(name, [
-			pytest.param(True, id=id),
-			pytest.param(False, id=f"no {id}"),
-			])
+	return pytest.mark.parametrize(
+			name,
+			[
+					pytest.param(True, id=id),
+					pytest.param(False, id=f"no {id}"),
+					],
+			)
 
 
 def test_actions_deploy_conda(tmp_pathplus: PathPlus, demo_environment: Environment):
@@ -132,7 +135,8 @@ def test_github_ci_case_3(
 		):
 
 	demo_environment.globals["github_ci_requirements"] = {
-			"Windows": {"pre": [], "post": []}, "macOS": {"pre": [], "post": []}
+			"Windows": {"pre": [], "post": []},
+			"macOS": {"pre": [], "post": []},
 			}
 	demo_environment.globals["platforms"] = ["Windows", "macOS"]
 
@@ -261,7 +265,7 @@ def test_make_github_flake8(
 				pytest.param(["Windows", "macOS", "Linux"], id="all"),
 				pytest.param(["Linux"], id="linux"),
 				pytest.param(["macOS", "Linux"], id="unix"),
-				]
+				],
 		)
 def test_make_github_mypy(
 		tmp_pathplus: PathPlus,
@@ -277,16 +281,18 @@ def test_make_github_mypy(
 
 
 @pytest.mark.parametrize(
-		"extra_install_pre", [
+		"extra_install_pre",
+		[
 				pytest.param(["sudo apt update"], id="has_pre"),
 				pytest.param([], id="no_pre"),
-				]
+				],
 		)
 @pytest.mark.parametrize(
-		"extra_install_post", [
+		"extra_install_post",
+		[
 				pytest.param(["sudo apt install python3-gi"], id="has_post"),
 				pytest.param([], id="no_post"),
-				]
+				],
 		)
 def test_make_github_mypy_extra_install(
 		tmp_pathplus: PathPlus,
@@ -316,7 +322,7 @@ def test_make_github_mypy_extra_install_only_linux(
 			"Linux": {
 					"pre": ["sudo apt update"],
 					"post": ["sudo apt install python3-gi"],
-					}
+					},
 			}
 	demo_environment.globals["platforms"] = ["Linux"]
 
@@ -336,7 +342,7 @@ def test_make_github_mypy_extra_install_only_linux(
 				pytest.param({"use_maturin": True}, id="backend_maturin"),
 				pytest.param({"use_hatch": True}, id="backend_hatch"),
 				pytest.param({}, id="backend_setuptools"),
-				]
+				],
 		)
 @pytest.mark.parametrize("py_modules", [["hello_world.py"], []])
 def test_ensure_bumpversion(
@@ -420,7 +426,7 @@ def test_make_github_linux_case_2(
 	demo_environment.globals["platforms"] = ["Linux"]
 	demo_environment.globals["travis_ubuntu_version"] = "bionic"
 	demo_environment.globals["github_ci_requirements"] = {
-			"Linux": {"pre": ["sudo apt update"], "post": ["sudo apt install python3-gi"]}
+			"Linux": {"pre": ["sudo apt update"], "post": ["sudo apt install python3-gi"]},
 			}
 	demo_environment.globals["travis_additional_requirements"] = ["isort", "black"]
 	demo_environment.globals["enable_tests"] = False
@@ -480,7 +486,7 @@ def test_make_github_linux_case_4(
 			"Linux": {
 					"pre": ["sudo apt update"],
 					"post": ["sudo apt install python3-gi"],
-					}
+					},
 			}
 	demo_environment.globals["travis_additional_requirements"] = ["isort", "black"]
 	demo_environment.globals["enable_tests"] = False
@@ -497,7 +503,7 @@ def test_make_github_linux_case_4(
 			}
 
 	demo_environment.globals["tox_py_versions"] = get_tox_python_versions(
-			demo_environment.globals["python_versions"]
+			demo_environment.globals["python_versions"],
 			)
 
 	managed_files = make_github_ci(tmp_pathplus, demo_environment)

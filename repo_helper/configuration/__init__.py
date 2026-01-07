@@ -468,7 +468,7 @@ class YamlEditor(YAML):  # noqa: PRM002
 		*,
 		explicit_start: bool = True,
 		**kwargs,
-		) -> str:
+	) -> str:
 		original_exp_start = self.explicit_start
 
 		try:

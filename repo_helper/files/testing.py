@@ -243,13 +243,13 @@ class ToxConfig(IniConfigurator):
 			for (py_version, metadata), tox_py_version in zip(
 				python_versions.items(),
 				tox_py_versions,
-				):
+			):
 				third_party_versions = self["third_party_version_matrix"][third_party_library]
 
 				if "matrix_exclude" in metadata:
 					third_party_exclude = list(map(str, metadata["matrix_exclude"].get(third_party_library, [])))
 					third_party_versions = list(
-							filterfalse(third_party_exclude.__contains__, third_party_versions)
+							filterfalse(third_party_exclude.__contains__, third_party_versions),
 							)
 
 				if not third_party_versions:
@@ -394,7 +394,7 @@ class ToxConfig(IniConfigurator):
 
 		if self["enable_tests"]:
 			testenv_commands.append(
-					f"python -m pytest --cov={self['import_name']} -r aR {self['tests_dir']}/ {{posargs}}"
+					f"python -m pytest --cov={self['import_name']} -r aR {self['tests_dir']}/ {{posargs}}",
 					)
 			# TODO: for tox-isolation
 			# testenv_commands.append(
@@ -499,7 +499,7 @@ class ToxConfig(IniConfigurator):
 		"""
 
 		self._ini["testenv:build"]["setenv"] = indent_join(
-				(*self.get_setenv(setuptools_stdlib=False), "UNSAFE_PYO3_SKIP_VERSION_CHECK=1")
+				(*self.get_setenv(setuptools_stdlib=False), "UNSAFE_PYO3_SKIP_VERSION_CHECK=1"),
 				)
 		self._ini["testenv:build"]["skip_install"] = True
 		self._ini["testenv:build"]["changedir"] = "{toxinidir}"
@@ -812,7 +812,7 @@ class ToxConfig(IniConfigurator):
 						new_directives = self._ini["flake8"]["rst-directives"].value.splitlines()
 						combined_directives = set(map(str.strip, (*new_directives, *existing_directives)))
 						self._ini["flake8"]["rst-directives"] = indent_join(
-								sorted(filter(bool, combined_directives))
+								sorted(filter(bool, combined_directives)),
 								)
 
 					if "rst-roles" in section:
@@ -844,7 +844,7 @@ class ToxConfig(IniConfigurator):
 								]
 
 						combined_ignores_strings.extend(
-								sorted(filter(bool, (map(": ".join, combined_ignores.items()))))
+								sorted(filter(bool, (map(": ".join, combined_ignores.items())))),
 								)
 						self._ini["flake8"]["per-file-ignores"] = indent_join(combined_ignores_strings)
 				elif section.name == "pytest":

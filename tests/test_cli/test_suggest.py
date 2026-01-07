@@ -47,7 +47,7 @@ from repo_helper.cli.commands import suggest
 				("file.SH", "Unix Shell"),
 				("file.src.sh", "Unix Shell"),
 				("file.src.SH", "Unix Shell"),
-				]
+				],
 		)
 def test_suggest_classifiers_filetypes(tmp_pathplus: PathPlus, filename: str, language: str):
 	(tmp_pathplus / "repo_helper.yml").write_lines([
@@ -217,7 +217,7 @@ Error: Invalid value for '-s' / '--status': 0 is not in the valid range of 1 to 
 				pytest.param(["jupyter", "matplotlib>=3"], id="jupyter_matplotlib"),
 				pytest.param(["dash", "flask"], id="dash_flask"),
 				pytest.param(["pytest", "flake8"], id="pytest_flake8"),
-				]
+				],
 		)
 def test_suggest_classifiers_requirements(
 		tmp_pathplus: PathPlus,

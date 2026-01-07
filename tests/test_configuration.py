@@ -21,7 +21,7 @@ from repo_helper.configuration import get_tox_python_versions, parse_yaml
 				["3.7", "3.8", "3.11", "3.12-dev"],
 				["3.7", "3.8"],
 				["3.8"],
-				]
+				],
 		)
 def test_get_tox_python_versions(
 		advanced_data_regression: AdvancedDataRegressionFixture,

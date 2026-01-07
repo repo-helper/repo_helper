@@ -269,7 +269,7 @@ def make_pyproject(repo_path: pathlib.Path, templates: Environment) -> List[str]
 			parsed_requirements, comments, invalid_lines = read_requirements(
 				repo_path / "requirements.txt",
 				include_invalid=True,
-				)
+			)
 			if invalid_lines:
 				raise NotImplementedError(f"Unsupported requirement type(s): {invalid_lines}")
 			data["project"]["dependencies"] = list(map(str, sorted(parsed_requirements)))
@@ -303,7 +303,7 @@ def make_pyproject(repo_path: pathlib.Path, templates: Environment) -> List[str]
 			parsed_requirements, comments, invalid_lines = read_requirements(
 				repo_path / "requirements.txt",
 				include_invalid=True,
-				)
+			)
 			if invalid_lines:
 				raise NotImplementedError(f"Unsupported requirement type(s): {invalid_lines}")
 			data["project"]["dependencies"] = sorted(parsed_requirements)
@@ -666,8 +666,8 @@ class SetupCfgConfig(IniConfigurator):
 									"use_flit",
 									"use_maturin",
 									"use_hatch",
-									"meson_no_py"
-									)
+									"meson_no_py",
+									),
 							) or not self._ini["options.entry_points"].options()
 					):
 				self._ini.remove_section("options.entry_points")
