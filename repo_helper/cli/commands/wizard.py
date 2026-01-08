@@ -114,7 +114,7 @@ def wizard() -> None:
 	except KeyError:
 		default_email = os.getenv(
 				"GIT_AUTHOR_EMAIL",
-				default=os.getenv("GIT_COMMITTER_EMAIL", default=f"{author}@{socket.gethostname()}")
+				default=os.getenv("GIT_COMMITTER_EMAIL", default=f"{author}@{socket.gethostname()}"),
 				)
 
 	click.echo("\nThe email address of the author. This will be shown on PyPI, amongst other places.")
@@ -192,5 +192,5 @@ You may be able to configure your code editor to validate your configuration fil
 repo_helper can now be run with the 'repo_helper' command in the repository root.
 
 Be seeing you!
-"""
+""",
 			)

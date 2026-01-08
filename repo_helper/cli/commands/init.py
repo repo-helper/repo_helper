@@ -99,7 +99,7 @@ def init_repo(repo_path: pathlib.Path, templates: Environment) -> List[str]:
 	init_repo_templates = Environment(  # nosec: B701
 		loader=jinja2.FileSystemLoader(str(init_repo_template_dir)),
 		undefined=jinja2.StrictUndefined,
-		)
+	)
 	init_repo_templates.globals.update(templates.globals)
 
 	# package
@@ -140,7 +140,7 @@ def init_repo(repo_path: pathlib.Path, templates: Environment) -> List[str]:
 					copyright_years=datetime.datetime.today().year,
 					author=templates.globals["author"],
 					project_name=templates.globals["modname"],
-					)
+					),
 			)
 
 	# Touch requirements file

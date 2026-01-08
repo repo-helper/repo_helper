@@ -295,9 +295,9 @@ def stubs(  # noqa: PRM002
 		table.blankline(ensure_single=True)
 
 		if no_pager or len(table) <= shutil.get_terminal_size().lines:
-			click.echo('\n'.join(table))
+			click.echo(str(table))
 		else:
-			click.echo_via_pager('\n'.join(table))
+			click.echo_via_pager(str(table))
 
 		if add is None:
 			add = confirm("Do you want to add these to the 'stubs.txt' file?")

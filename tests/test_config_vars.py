@@ -162,18 +162,18 @@ def test_version():
 				({"version": True}, "Invalid version: 'True'"),
 				(
 						{"version": test_list_int},
-						re.escape("'version' must be one of (<class 'str'>, <class 'float'>), not <class 'list'>"),
+						"'version' must be one of (<class 'str'>, <class 'float'>), not <class 'list'>",
 						),
 				(
 						{"version": test_list_str},
-						re.escape("'version' must be one of (<class 'str'>, <class 'float'>), not <class 'list'>"),
+						"'version' must be one of (<class 'str'>, <class 'float'>), not <class 'list'>",
 						),
 				({"username": "domdfcoding"}, "A value for 'version' is required."),
 				({}, "A value for 'version' is required."),
 				],
 		)
 def test_version_errors(wrong_value: Dict[str, Any], match: str):
-	with pytest.raises(ValueError, match=match):
+	with pytest.raises(ValueError, match=re.escape(match)):
 		version.get(wrong_value)
 
 
@@ -233,18 +233,20 @@ def test_copyright_years():
 @pytest.mark.parametrize(
 		"wrong_value, match",
 		[
-				({"copyright_years": test_list_int},
-					re.
-					escape("'copyright_years' must be one of (<class 'str'>, <class 'int'>), not <class 'list'>")),
-				({"copyright_years": test_list_str},
-					re.
-					escape("'copyright_years' must be one of (<class 'str'>, <class 'int'>), not <class 'list'>")),
+				(
+						{"copyright_years": test_list_int},
+						"'copyright_years' must be one of (<class 'str'>, <class 'int'>), not <class 'list'>",
+						),
+				(
+						{"copyright_years": test_list_str},
+						"'copyright_years' must be one of (<class 'str'>, <class 'int'>), not <class 'list'>",
+						),
 				({"username": "domdfcoding"}, "A value for 'copyright_years' is required."),
 				({}, "A value for 'copyright_years' is required."),
-				]
+				],
 		)
 def test_copyright_years_errors(wrong_value: Dict[str, Any], match: str):
-	with pytest.raises(ValueError, match=match):
+	with pytest.raises(ValueError, match=re.escape(match)):
 		copyright_years.get(wrong_value)
 
 
