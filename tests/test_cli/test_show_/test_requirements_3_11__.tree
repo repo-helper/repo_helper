@@ -31,7 +31,7 @@ repo_helper==2020.12.18
 │   │   │   ├── attrs>=22.2.0
 │   │   │   ├── rpds-py>=0.7.0
 │   │   │   └── typing-extensions>=4.4.0; python_version < "3.13"
-│   │   └── rpds-py>=0.7.1
+│   │   └── rpds-py>=0.25.0
 │   ├── ruamel.yaml>=0.16.12
 │   │   └── ruamel.yaml.clib>=0.2.7; platform_python_implementation == "CPython" and python_version < "3.14"
 │   ├── typing-extensions>=3.7.4.3

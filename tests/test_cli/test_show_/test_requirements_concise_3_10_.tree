@@ -45,7 +45,7 @@ repo_helper==2020.12.18
 ├── pyproject-parser>=0.11.0
 ├── referencing>=0.31.0
 ├── requests>=2.27.1
-├── rpds-py>=0.7.1
+├── rpds-py>=0.25.0
 ├── ruamel-yaml-clib>=0.2.7; platform_python_implementation == "CPython" and python_version < "3.14"
 ├── ruamel.yaml<=0.18.12,>=0.17.4
 ├── shippinglabel>=1.7.1
