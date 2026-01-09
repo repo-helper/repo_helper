@@ -99,6 +99,7 @@ def classifiers(  # noqa: PRM002
 
 	# 3rd party
 	from consolekit.input import choice, confirm
+	from consolekit.utils import echo
 	from domdf_python_tools.paths import PathPlus
 	from natsort import natsorted
 	from shippinglabel.classifiers import classifiers_from_requirements
@@ -174,8 +175,7 @@ def classifiers(  # noqa: PRM002
 		for classifier in natsorted(suggested_classifiers):
 			click.echo(f" - {classifier}")
 	else:
-		for classifier in natsorted(suggested_classifiers):
-			click.echo(classifier)
+		echo(natsorted(suggested_classifiers))
 
 	if add is None:
 		add = confirm("Do you want to add these to the 'repo_helper.yml' file?")
@@ -222,7 +222,6 @@ def stubs(  # noqa: PRM002
 	"""
 
 	# stdlib
-	import shutil
 	import sys
 	from itertools import chain
 
@@ -234,7 +233,7 @@ def stubs(  # noqa: PRM002
 	from packaging.requirements import InvalidRequirement
 	from shippinglabel import normalize
 	from shippinglabel.requirements import combine_requirements, read_requirements
-
+	from consolekit.utils import echo, long_echo
 	# this package
 	from repo_helper.core import RepoHelper
 
@@ -294,10 +293,7 @@ def stubs(  # noqa: PRM002
 				])
 		table.blankline(ensure_single=True)
 
-		if no_pager or len(table) <= shutil.get_terminal_size().lines:
-			click.echo(str(table))
-		else:
-			click.echo_via_pager(str(table))
+		long_echo(table)
 
 		if add is None:
 			add = confirm("Do you want to add these to the 'stubs.txt' file?")
@@ -312,7 +308,6 @@ def stubs(  # noqa: PRM002
 					])
 
 	else:
-		for stub in suggestions.values():
-			click.echo(stub)
+		echo(suggestions.values())
 
 	sys.exit(0)

@@ -48,6 +48,7 @@ def wizard() -> None:
 	# 3rd party
 	from apeye.email_validator import EmailSyntaxError, validate_email
 	from consolekit.terminal_colours import Fore
+	from consolekit.utils import echo
 	from domdf_python_tools.paths import PathPlus
 	from dulwich.errors import NotGitRepository
 	from ruamel.yaml import scalarstring
@@ -141,10 +142,10 @@ def wizard() -> None:
 	copyright_years = prompt("Copyright years", default=str(datetime.datetime.today().year), type=str)
 
 	# ---------- license_ ----------
-	click.echo(
-			"""
-The SPDX identifier for the license this library is distributed under.
-Not all SPDX identifiers are allowed as not all map to PyPI Trove classifiers."""
+	echo(
+			'',
+			"The SPDX identifier for the license this library is distributed under."
+			"Not all SPDX identifiers are allowed as not all map to PyPI Trove classifiers.",
 			)
 	while True:
 		license_ = prompt("License")
@@ -180,17 +181,17 @@ Not all SPDX identifiers are allowed as not all map to PyPI Trove classifiers.""
 			"enable_conda: false",
 			])
 
-	click.echo(
-			f"""
-The options you provided have been written to the file {config_file}.
-You can configure additional options in that file.
-
-The schema for the Yaml file can be found at:
-	https://github.com/repo-helper/repo_helper/blob/master/repo_helper/repo_helper_schema.json
-You may be able to configure your code editor to validate your configuration file against that schema.
-
-repo_helper can now be run with the 'repo_helper' command in the repository root.
-
-Be seeing you!
-""",
+	echo(
+			'',
+			f"The options you provided have been written to the file {config_file}.",
+			"You can configure additional options in that file.",
+			'',
+			"The schema for the Yaml file can be found at:",
+			"\thttps://github.com/repo-helper/repo_helper/blob/master/repo_helper/repo_helper_schema.json",
+			"You may be able to configure your code editor to validate your configuration file against that schema.",
+			'',
+			"repo_helper can now be run with the 'repo_helper' command in the repository root.",
+			'',
+			"Be seeing you!",
+			'',
 			)

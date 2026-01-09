@@ -117,7 +117,7 @@ def log(
 
 	# 3rd party
 	from consolekit.terminal_colours import resolve_color_default
-	from consolekit.utils import abort
+	from consolekit.utils import abort, long_echo
 	from domdf_python_tools.paths import PathPlus
 	from southwark.log import Log
 	from southwark.repo import Repo
@@ -129,10 +129,7 @@ def log(
 	except ValueError as e:
 		raise abort(f"ERROR: {e}")
 
-	if no_pager:
-		click.echo(commit_log, color=resolve_color_default(colour))
-	else:
-		click.echo_via_pager(commit_log, color=resolve_color_default(colour))
+	long_echo(commit_log, use_pager=not no_pager, colour=resolve_color_default(colour))
 
 	return 0
 
@@ -160,7 +157,7 @@ def changelog(
 
 	# 3rd party
 	from consolekit.terminal_colours import resolve_color_default
-	from consolekit.utils import abort
+	from consolekit.utils import abort, long_echo
 	from domdf_python_tools.paths import PathPlus
 	from southwark.log import Log
 	from southwark.repo import Repo
@@ -181,10 +178,7 @@ def changelog(
 	except ValueError as e:
 		raise abort(f"ERROR: {e}")
 
-	if no_pager:
-		click.echo(commit_log, color=resolve_color_default(colour))
-	else:
-		click.echo_via_pager(commit_log, color=resolve_color_default(colour))
+	long_echo(commit_log, use_pager=not no_pager, colour=resolve_color_default(colour))
 
 
 @no_pager_option()
@@ -213,6 +207,7 @@ def requirements(
 	import shutil
 
 	# 3rd party
+	from consolekit.utils import long_echo
 	from domdf_python_tools.iterative import make_tree
 	from domdf_python_tools.paths import PathPlus, in_directory
 	from domdf_python_tools.stringlist import StringList
@@ -276,7 +271,4 @@ def requirements(
 			# Don't use pager if fewer lines that terminal height
 			no_pager = True
 
-		if no_pager:
-			click.echo(str(buf))
-		else:
-			click.echo_via_pager(str(buf))
+		long_echo(buf, use_pager=not no_pager)
