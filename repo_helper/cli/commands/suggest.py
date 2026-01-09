@@ -223,17 +223,19 @@ def stubs(  # noqa: PRM002
 
 	# stdlib
 	import sys
-	from itertools import chain
+	from typing import Sequence, Set
 
 	# 3rd party
 	import pypi_json
 	import tabulate
+	from consolekit.utils import echo, long_echo
 	from domdf_python_tools.paths import PathPlus
 	from domdf_python_tools.stringlist import StringList
+	from domdf_python_tools.typing import PathLike
 	from packaging.requirements import InvalidRequirement
 	from shippinglabel import normalize
-	from shippinglabel.requirements import combine_requirements, read_requirements
-	from consolekit.utils import echo, long_echo
+	from shippinglabel.requirements import ComparableRequirement, combine_requirements, read_requirements
+
 	# this package
 	from repo_helper.core import RepoHelper
 
@@ -248,9 +250,15 @@ def stubs(  # noqa: PRM002
 
 	requirements_files.extend((rh.target_repo / config["import_name"]).iterchildren("**/requirements.txt"))
 
-	all_requirements = set(
-			chain.from_iterable(read_requirements(file, include_invalid=True)[0] for file in requirements_files)
-			)
+	def get_requirements(requirements_files: Sequence[PathLike]) -> Set[ComparableRequirement]:
+
+		all_requirements: Set[ComparableRequirement] = set()
+		for file in requirements_files:
+			all_requirements.update(read_requirements(file, include_invalid=True)[0])
+
+		return all_requirements
+
+	all_requirements = get_requirements(requirements_files)
 
 	stubs_file = rh.target_repo / "stubs.txt"
 
