@@ -316,6 +316,6 @@ def stubs(  # noqa: PRM002
 					])
 
 	else:
-		echo(suggestions.values())
+		echo(list(suggestions.values()))
 
 	sys.exit(0)
