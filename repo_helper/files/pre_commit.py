@@ -229,7 +229,7 @@ domdfcoding_hooks = Repo(
 
 formate = Repo(
 		repo=make_github_url("python-formate", "formate"),
-		rev="v0.8.0",
+		rev="v0.9.0",
 		hooks=[{"id": "formate", "exclude": r"^(doc-source/conf|__pkginfo__|setup)\.(_)?py$"}],
 		)
 
@@ -287,7 +287,7 @@ def make_pre_commit(repo_path: pathlib.Path, templates: Environment) -> List[str
 			hooks=[{
 					"id": "formate",
 					"exclude": formate_excludes,
-					"additional_dependencies": ["formate-trailing-commas>=0.1.0"],
+					"additional_dependencies": ["formate-trailing-commas>=0.1.1"],
 					}],
 			)
 
