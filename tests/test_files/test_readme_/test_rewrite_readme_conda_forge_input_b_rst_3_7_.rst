@@ -104,7 +104,7 @@ repo_helper
 	:alt: Maintenance
 
 .. |pypi-downloads| image:: https://img.shields.io/pypi/dm/hello-world
-	:target: https://pypistats.org/packages/hello-world/
+	:target: https://pypistats.org/packages/hello-world
 	:alt: PyPI - Downloads
 
 .. end shields
