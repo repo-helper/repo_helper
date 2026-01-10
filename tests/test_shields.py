@@ -1121,13 +1121,13 @@ def test_make_maintained_shield():
 
 
 def test_make_typing_shield():
-	assert make_typing_shield() == f"""\
+	assert make_typing_shield() == """\
 .. image:: https://img.shields.io/badge/Typing-Typed-brightgreen
 	:alt: Typing :: Typed"""
 
 
 def test_make_pre_commit_shield():
-	assert make_pre_commit_shield() == f"""\
+	assert make_pre_commit_shield() == """\
 .. image:: https://img.shields.io/badge/pre--commit-enabled-brightgreen?logo=pre-commit&logoColor=white
 	:target: https://github.com/pre-commit/pre-commit
 	:alt: pre-commit"""
