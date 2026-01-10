@@ -554,6 +554,7 @@ class ToxConfig(IniConfigurator):
 				"flake8-strftime>=0.1.1",
 				"flake8-typing-imports>=1.10.0",
 				"flake8-params>=0.1.0",
+				"flake8-unused-fstrings>=2.0.0",
 				"git+https://github.com/python-formate/flake8-commas.git@4.0.0-python-formate.0",
 				"git+https://github.com/domdfcoding/restructuredtext-lint.git@fix-deprecations",  # Until merged and released upstream
 				"git+https://github.com/domdfcoding/flake8-rst-docstrings-sphinx.git",

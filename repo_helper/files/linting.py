@@ -115,7 +115,12 @@ lint_warn_list.extend((
 
 # flake8_sphinx_links
 lint_warn_list.extend((
-		"SXL001 ",  # Double backticked variable should be a link to Python documentation.
+		"SXL001",  # Double backticked variable should be a link to Python documentation.
+		))
+
+# flake8_unused_fstrings
+lint_warn_list.extend((
+		"NUF001",  # f-string without interpolation.
 		))
 
 # flake8_pytest
