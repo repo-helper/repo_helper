@@ -66,7 +66,7 @@
 	:alt: Maintenance
 
 .. |pypi-downloads_UNIQUE_NAME| image:: https://img.shields.io/pypi/dm/PYPI_NAME
-	:target: https://pypi.org/project/PYPI_NAME/
+	:target: https://pypistats.org/packages/PYPI_NAME/
 	:alt: PyPI - Downloads
 
 .. |docker_build_UNIQUE_NAME| image:: https://img.shields.io/docker/cloud/build/octocat/DOCKER_NAME?label=build&logo=docker

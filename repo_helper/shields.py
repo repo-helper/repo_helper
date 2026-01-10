@@ -230,7 +230,7 @@ def make_pypi_downloads_shield(pypi_name: str) -> str:
 
 	return f"""\
 .. image:: https://img.shields.io/pypi/dm/{ pypi_name }
-	:target: https://pypi.org/project/{ pypi_name }/
+	:target: https://pypistats.org/packages/{ pypi_name }/
 	:alt: PyPI - Downloads"""
 
 

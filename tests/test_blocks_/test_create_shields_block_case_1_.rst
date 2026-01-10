@@ -102,7 +102,7 @@
 	:alt: Maintenance
 
 .. |pypi-downloads| image:: https://img.shields.io/pypi/dm/PYPI_NAME
-	:target: https://pypi.org/project/PYPI_NAME/
+	:target: https://pypistats.org/packages/PYPI_NAME/
 	:alt: PyPI - Downloads
 
 .. end shields
