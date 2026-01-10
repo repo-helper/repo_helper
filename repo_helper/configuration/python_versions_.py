@@ -24,6 +24,7 @@ r"""
 #
 
 # stdlib
+import warnings
 from typing import Any, Dict, Iterable, List, Mapping, Optional, Sequence, Union
 
 # 3rd party
@@ -156,6 +157,10 @@ class python_versions(ConfigVar):
 		from repo_helper.configuration.packaging import platforms
 
 		for version, metadata in natsorted((str(k), v) for k, v in value.items() if k):
+			if version == "3.1":
+				msg = "Found Python 3.1 in python_versions. You probably wanted '3.10' (which has to be a string)."
+				warnings.warn(msg)
+
 			version = cls._de_dev_map.get(version, version)
 			metadata.setdefault("experimental", cls._is_experimental(version))
 			metadata.setdefault("platforms", platforms.default)
