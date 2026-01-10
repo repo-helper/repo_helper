@@ -222,7 +222,7 @@ domdfcoding_hooks = Repo(
 		rev="v0.4.0",
 		hooks=[
 				{"id": "requirements-txt-sorter", "args": ["--allow-git"]},
-				{"id": "check-docstring-first", "exclude": fr"^(doc-source/conf|__pkginfo__|setup|tests/.*)\.py$"},
+				{"id": "check-docstring-first", "exclude": r"^(doc-source/conf|__pkginfo__|setup|tests/.*)\.py$"},
 				"bind-requirements",
 				],
 		)

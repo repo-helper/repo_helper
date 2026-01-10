@@ -146,7 +146,7 @@ class ActionsManager:
 		if self.templates.globals["enable_docs"]:
 			code_file_filter.append(f"{templates.globals['docs_dir']}/**")
 		else:
-			code_file_filter.append(f"doc-source/**")
+			code_file_filter.append("doc-source/**")
 
 		code_file_filter.extend([
 				"CONTRIBUTING.rst",
@@ -834,10 +834,10 @@ def ensure_bumpversion(repo_path: pathlib.Path, templates: Environment) -> List[
 		old_sections.append(f"bumpversion:file:{templates.globals['docs_dir']}/index.rst")
 
 	if not templates.globals["enable_conda"]:
-		old_sections.append(f"bumpversion:file:.github/workflows/conda_ci.yml")
+		old_sections.append("bumpversion:file:.github/workflows/conda_ci.yml")
 
 	if not templates.globals["desktopfile"]:
-		old_sections.append(f"setup.py")
+		old_sections.append("setup.py")
 
 	if any(get_keys(templates.globals, "use_whey", "use_flit", "use_maturin", "use_hatch", "meson_no_py")):
 		old_sections.append("bumpversion:file:setup.cfg")

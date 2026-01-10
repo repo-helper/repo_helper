@@ -361,7 +361,7 @@ def make_docs_last_commit_shield(repo_name: str, username: str) -> str:  # pragm
 	:return: The shield.
 	"""
 
-	return f"""\
+	return """\
 .. github-shield::
 	:last-commit:
 	:alt: GitHub last commit"""
@@ -410,6 +410,6 @@ def make_docs_pre_commit_ci_shield(repo_name: str, username: str) -> str:  # pra
 	:return: The shield.
 	"""
 
-	return f"""\
+	return """\
 .. pre-commit-ci-shield::
 	:alt: pre-commit.ci status"""

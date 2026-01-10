@@ -78,7 +78,7 @@ def wizard() -> None:
 
 	# ---------- file exists warning ----------
 	if config_file.is_file():
-		click.echo(f"\nWoah! That file already exists. It will be overwritten if you continue!")
+		click.echo("\nWoah! That file already exists. It will be overwritten if you continue!")
 		if not confirm("Are you sure you want to continue?"):
 			raise click.Abort()
 

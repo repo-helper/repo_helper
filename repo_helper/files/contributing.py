@@ -54,7 +54,7 @@ def github_bash_block(*commands: str) -> str:
 	if not commands:
 		return ''
 
-	buf = f".. code-block:: bash"
+	buf = ".. code-block:: bash"
 	buf += "\n\n"
 
 	for command in commands:
@@ -78,7 +78,7 @@ def sphinx_bash_block(*commands: str) -> str:
 	if not commands:
 		return ''
 
-	buf = f".. prompt:: bash"
+	buf = ".. prompt:: bash"
 	buf += "\n\n"
 
 	for command in commands:

@@ -473,7 +473,7 @@ class ShieldsBlock:
 		if self.unique_name:
 			buf.append(f".. start shields {self.unique_name.lstrip('_')}")
 		else:
-			buf.append(f".. start shields")
+			buf.append(".. start shields")
 
 		buf.blankline(ensure_single=True)
 

@@ -444,7 +444,7 @@ def make_typing_shield() -> str:
 	:rtype: str
 	"""
 
-	return f"""\
+	return """\
 .. image:: https://img.shields.io/badge/Typing-Typed-brightgreen
 	:alt: Typing :: Typed"""
 
@@ -457,7 +457,7 @@ def make_pre_commit_shield() -> str:
 	:rtype: str
 	"""
 
-	return f"""\
+	return """\
 .. image:: https://img.shields.io/badge/pre--commit-enabled-brightgreen?logo=pre-commit&logoColor=white
 	:target: https://github.com/pre-commit/pre-commit
 	:alt: pre-commit"""
