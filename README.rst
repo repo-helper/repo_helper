@@ -116,7 +116,7 @@ Note: The autocommit functionality is currently broken on Windows, but works OK 
 	:alt: Maintenance
 
 .. |pypi-downloads| image:: https://img.shields.io/pypi/dm/repo_helper
-	:target: https://pypi.org/project/repo_helper/
+	:target: https://pypistats.org/packages/repo_helper
 	:alt: PyPI - Downloads
 
 .. end shields
