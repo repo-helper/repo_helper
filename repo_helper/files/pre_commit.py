@@ -309,6 +309,9 @@ def make_pre_commit(repo_path: pathlib.Path, templates: Environment) -> List[str
 
 	min_py_version = Version(templates.globals["min_py_version"])
 
+	if templates.globals["requires_python"]:
+		min_py_version = min(min_py_version, Version(templates.globals["requires_python"]))
+
 	if min_py_version >= Version("3.11"):
 		pyupgrade_plus_arg = "--py311-plus"
 	elif min_py_version >= Version("3.10"):
