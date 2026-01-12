@@ -1038,6 +1038,7 @@ def make_formate_toml(repo_path: pathlib.Path, templates: Environment) -> List[s
 			"noqa-reformat": 60,
 			"ellipsis-reformat": 70,
 			"squish_stubs": 80,
+			"newline_after_equals": 90,
 			}
 
 	config = {"indent": '\t', "line_length": 115}
