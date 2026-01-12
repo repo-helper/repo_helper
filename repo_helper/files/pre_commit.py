@@ -229,7 +229,7 @@ domdfcoding_hooks = Repo(
 
 formate = Repo(
 		repo=make_github_url("python-formate", "formate"),
-		rev="v1.0.0",
+		rev="v1.0.1",
 		hooks=[{"id": "formate", "exclude": r"^(doc-source/conf|__pkginfo__|setup)\.(_)?py$"}],
 		)
 
