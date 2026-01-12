@@ -537,7 +537,7 @@ class ToxConfig(IniConfigurator):
 		else:
 			self._ini["testenv:lint"]["skip_install"] = True
 
-		self._ini["testenv:lint"]["deps"] = indent_join([
+		deps = [
 				"flake8>=3.8.2,<5",
 				"flake8-2020>=1.6.0",
 				"flake8-builtins>=1.5.3",
@@ -563,8 +563,12 @@ class ToxConfig(IniConfigurator):
 				"git+https://github.com/python-formate/flake8-missing-annotations.git",
 				"git+https://github.com/domdfcoding/pydocstyle.git@stub-functions",
 				"pygments>=2.7.1",
-				"importlib_metadata<4.5.0; python_version<'3.8'",
-				])
+				]
+
+		if Version(self["python_deploy_version"]) < Version("3.8"):
+			deps.append("importlib_metadata<4.5.0; python_version<'3.8'")
+
+		self._ini["testenv:lint"]["deps"] = indent_join(deps)
 
 		source_files = self.get_source_files()
 		if source_files:
