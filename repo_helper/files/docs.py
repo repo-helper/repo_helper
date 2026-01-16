@@ -621,9 +621,11 @@ def rewrite_docs_index(repo_path: pathlib.Path, templates: Environment) -> List[
 	if templates.globals["on_conda_forge"]:
 		conda_channels = ["conda-forge"]
 		primary_conda_channel = "conda-forge"
+		conda_name = normalize(templates.globals["conda_name"])
 	else:
 		conda_channels = templates.globals["conda_channels"]
 		primary_conda_channel = templates.globals["primary_conda_channel"]
+		conda_name = templates.globals["conda_name"]
 
 	# Set up the blocks
 	sb = ShieldsBlock(
@@ -634,7 +636,7 @@ def rewrite_docs_index(repo_path: pathlib.Path, templates: Environment) -> List[
 			tests=templates.globals["enable_tests"] and not templates.globals["stubs_package"],
 			docs=templates.globals["enable_docs"],
 			pypi_name=templates.globals["pypi_name"],
-			conda_name=templates.globals["conda_name"],
+			conda_name=conda_name,
 			docker_shields=templates.globals["docker_shields"],
 			docker_name=templates.globals["docker_name"],
 			platforms=templates.globals["platforms"],

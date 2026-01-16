@@ -29,6 +29,7 @@ from typing import List
 
 # 3rd party
 from domdf_python_tools.paths import PathPlus
+from shippinglabel import normalize
 
 # this package
 from repo_helper.blocks import (
@@ -62,9 +63,11 @@ def rewrite_readme(repo_path: pathlib.Path, templates: Environment) -> List[str]
 	if templates.globals["on_conda_forge"]:
 		conda_channels = ["conda-forge"]
 		primary_conda_channel = "conda-forge"
+		conda_name = normalize(templates.globals["conda_name"])
 	else:
 		conda_channels = templates.globals["conda_channels"]
 		primary_conda_channel = templates.globals["primary_conda_channel"]
+		conda_name = templates.globals["conda_name"]
 
 	shields_block = ShieldsBlock(
 			username=templates.globals["username"],
@@ -74,7 +77,7 @@ def rewrite_readme(repo_path: pathlib.Path, templates: Environment) -> List[str]
 			tests=templates.globals["enable_tests"] and not templates.globals["stubs_package"],
 			docs=templates.globals["enable_docs"],
 			pypi_name=templates.globals["pypi_name"],
-			conda_name=templates.globals["conda_name"],
+			conda_name=conda_name,
 			docker_shields=templates.globals["docker_shields"],
 			docker_name=templates.globals["docker_name"],
 			platforms=templates.globals["platforms"],

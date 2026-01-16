@@ -6,7 +6,7 @@ To install with ``pip``:
 
 .. code-block:: bash
 
-	$ python -m pip install hello_world
+	$ python -m pip install hello-world
 
 To install with ``conda``:
 
@@ -21,6 +21,6 @@ To install with ``conda``:
 
 	.. code-block:: bash
 
-		$ conda install hello_world
+		$ conda install hello-world
 
 .. end installation

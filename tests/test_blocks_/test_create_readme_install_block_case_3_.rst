@@ -6,6 +6,6 @@ To install with ``pip``:
 
 .. code-block:: bash
 
-	$ python -m pip install hello_world
+	$ python -m pip install hello-world
 
 .. end installation

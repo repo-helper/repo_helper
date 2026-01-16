@@ -6,7 +6,7 @@ To install with ``pip``:
 
 .. code-block:: bash
 
-	$ python -m pip install PYPI_NAME
+	$ python -m pip install pypi-name
 
 To install with ``conda``:
 
@@ -21,6 +21,6 @@ To install with ``conda``:
 
 	.. code-block:: bash
 
-		$ conda install PYPI_NAME
+		$ conda install pypi-name
 
 .. end installation

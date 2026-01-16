@@ -32,7 +32,7 @@ from typing import Iterable, Optional, Sequence, Union
 from domdf_python_tools.paths import PathPlus
 from domdf_python_tools.stringlist import DelimitedList, StringList
 from jinja2 import BaseLoader, Environment, StrictUndefined, Template
-from shippinglabel import normalize
+from shippinglabel import normalize, normalize_keep_dot
 
 # this package
 from repo_helper._docs_shields import (
@@ -91,7 +91,6 @@ __all__ = [
 		"get_readme_installation_block_template",
 		"create_readme_install_block",
 		"create_short_desc_block",
-		"get_docs_installation_block_template",
 		"create_docs_install_block",
 		"get_docs_links_block_template",
 		"create_docs_links_block",
@@ -163,16 +162,6 @@ def get_docs_links_block_template() -> Template:
 	return template_from_file("docs_links_block_template.rst")
 
 
-@functools.lru_cache(1)
-def get_docs_installation_block_template() -> Template:
-	"""
-	Loads the docs_installation_block template from file
-	and returns a jinja2 :class:`jinja2.environment.Template` for it.
-	"""  # noqa: D400
-
-	return template_from_file("docs_installation_block_template.rst")
-
-
 def create_readme_install_block(
 		modname: str,
 		username: str,
@@ -199,6 +188,8 @@ def create_readme_install_block(
 
 	if not pypi_name:
 		pypi_name = modname
+
+	pypi_name = normalize_keep_dot(pypi_name)
 
 	if pypi:
 		return get_readme_installation_block_template().render(
@@ -257,19 +248,26 @@ def create_docs_install_block(
 	if not pypi_name:
 		pypi_name = repo_name
 
+	pypi_name = normalize_keep_dot(pypi_name)
+
 	conda_channels = DelimitedList(conda_channels or [])
 
-	block = StringList([".. start installation", '', f".. installation:: {pypi_name}"])
+	block = StringList([".. start installation", '', f".. installation:: {repo_name}"])
 
 	with block.with_indent_size(1):
 
 		if pypi:
 			block.append(":pypi:")
+			if pypi_name != repo_name:
+				block.append(f":pypi-name: {pypi_name}")
 
 		block.append(":github:")
 
 		if conda:
 			block.append(":anaconda:")
+			if pypi_name != repo_name:
+				block.append(f":conda-name: {pypi_name}")
+
 			block.append(f":conda-channels: {conda_channels:, }")
 
 	block.blankline()
