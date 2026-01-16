@@ -73,7 +73,7 @@ def rewrite_readme(repo_path: pathlib.Path, templates: Environment) -> List[str]
 			username=templates.globals["username"],
 			repo_name=templates.globals["repo_name"],
 			version=templates.globals["version"],
-			conda=templates.globals["enable_conda"],
+			conda=templates.globals["enable_conda"] or templates.globals["on_conda_forge"],
 			tests=templates.globals["enable_tests"] and not templates.globals["stubs_package"],
 			docs=templates.globals["enable_docs"],
 			pypi_name=templates.globals["pypi_name"],
@@ -91,7 +91,7 @@ def rewrite_readme(repo_path: pathlib.Path, templates: Environment) -> List[str]
 		install_block = create_readme_install_block(
 				templates.globals["modname"],
 				templates.globals["username"],
-				templates.globals["enable_conda"],
+				templates.globals["enable_conda"] or templates.globals["on_conda_forge"],
 				templates.globals["on_pypi"],
 				templates.globals["pypi_name"],
 				conda_channels,

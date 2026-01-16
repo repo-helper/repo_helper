@@ -46,6 +46,8 @@ class enable_conda(ConfigVar):
 	"""
 	Whether conda packages should be built and deployed.
 
+	If :conf:`enable_conda` if :py:obj:`True` the documentation regarding installing with conda (from the `conda-forge` channel) will be shown regardless.
+
 	Example:
 
 	.. code-block:: yaml
@@ -165,6 +167,8 @@ class on_conda_forge(ConfigVar):
 
 	If this flag is :py:obj:`True` the documentation will recommend installing from conda-forge
 	over the :conf:`primary_conda_channel`.
+
+	If :conf:`enable_conda` if :py:obj:`False` but this option is :py:obj:`True` the documentation regarding installing with conda will still be shown.
 
 	Example:
 
