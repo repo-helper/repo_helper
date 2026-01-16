@@ -179,6 +179,7 @@ def create_readme_install_block(
 	:param conda: Whether to show Anaconda installation instructions.
 	:param pypi: Whether to show PyPI installation instructions.
 	:param pypi_name: The name of the project on PyPI. Defaults to the value of ``repo_name`` if unset.
+	:param conda_name: The name of conda package for the project. Defaults to the value of ``repo_name`` if unset.
 	:param conda_channels: List of required Conda channels.
 
 	:return: The installation block created from the above settings.
@@ -243,6 +244,7 @@ def create_docs_install_block(
 	:param conda: Whether to show Anaconda installation instructions.
 	:param pypi: Whether to show PyPI installation instructions.
 	:param pypi_name: The name of the project on PyPI. Defaults to the value of ``repo_name`` if unset.
+	:param conda_name: The name of conda package for the project. Defaults to the value of ``repo_name`` if unset.
 	:param conda_channels: List of required Conda channels.
 
 	:return: The installation block created from the above settings.
