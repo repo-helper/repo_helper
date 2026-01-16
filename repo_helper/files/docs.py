@@ -669,6 +669,7 @@ def rewrite_docs_index(repo_path: pathlib.Path, templates: Environment) -> List[
 			templates.globals["enable_conda"] or templates.globals["on_conda_forge"],
 			templates.globals["on_pypi"],
 			templates.globals["pypi_name"],
+			conda_name,
 			conda_channels,
 			) + '\n'
 

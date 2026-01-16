@@ -21,6 +21,6 @@ To install with ``conda``:
 
 	.. code-block:: bash
 
-		$ conda install hello_world
+		$ conda install CONDA-NAME
 
 .. end installation

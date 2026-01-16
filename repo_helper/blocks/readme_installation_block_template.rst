@@ -20,10 +20,10 @@ To install with ``conda``:
 
 	.. code-block:: bash
 
-		$ conda install {{ pypi_name }}
+		$ conda install {{ conda_name }}
 {% else %}
 .. code-block:: bash
 
-	$ conda install -c {{ conda_channels[0] }} {{ pypi_name }}
+	$ conda install -c {{ conda_channels[0] }} {{ conda_name }}
 {% endif %}{% endif %}
 .. end installation

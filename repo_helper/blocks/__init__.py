@@ -168,6 +168,7 @@ def create_readme_install_block(
 		conda: bool = True,
 		pypi: bool = True,
 		pypi_name: Optional[str] = None,
+		conda_name: Optional[str] = None,
 		conda_channels: Optional[Sequence[str]] = None,
 		) -> str:
 	"""
@@ -191,12 +192,16 @@ def create_readme_install_block(
 
 	pypi_name = normalize_keep_dot(pypi_name)
 
+	if not conda_name:
+		conda_name = modname
+
 	if pypi:
 		return get_readme_installation_block_template().render(
 				modname=modname,
 				username=username,
 				conda=conda,
 				pypi_name=pypi_name,
+				conda_name=conda_name,
 				conda_channels=conda_channels,
 				)
 	else:
@@ -226,6 +231,7 @@ def create_docs_install_block(
 		conda: bool = True,
 		pypi: bool = True,
 		pypi_name: Optional[str] = None,
+		conda_name: Optional[str] = None,
 		conda_channels: Optional[Sequence[str]] = None,
 		) -> str:
 	"""
@@ -250,6 +256,9 @@ def create_docs_install_block(
 
 	pypi_name = normalize_keep_dot(pypi_name)
 
+	if not conda_name:
+		conda_name = repo_name
+
 	conda_channels = DelimitedList(conda_channels or [])
 
 	block = StringList([".. start installation", '', f".. installation:: {repo_name}"])
@@ -265,8 +274,8 @@ def create_docs_install_block(
 
 		if conda:
 			block.append(":anaconda:")
-			if pypi_name != repo_name:
-				block.append(f":conda-name: {pypi_name}")
+			if conda_name != repo_name:
+				block.append(f":conda-name: {conda_name}")
 
 			block.append(f":conda-channels: {conda_channels:, }")
 

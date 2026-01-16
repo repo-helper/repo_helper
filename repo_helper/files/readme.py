@@ -94,6 +94,7 @@ def rewrite_readme(repo_path: pathlib.Path, templates: Environment) -> List[str]
 				templates.globals["enable_conda"] or templates.globals["on_conda_forge"],
 				templates.globals["on_pypi"],
 				templates.globals["pypi_name"],
+				conda_name,
 				conda_channels,
 				)
 	else:
