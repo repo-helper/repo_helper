@@ -136,6 +136,7 @@ Installation
 
 .. installation:: repo_helper
 	:pypi:
+	:pypi-name: repo-helper
 	:github:
 	:anaconda:
 	:conda-channels: conda-forge, domdfcoding

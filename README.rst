@@ -132,7 +132,7 @@ To install with ``pip``:
 
 .. code-block:: bash
 
-	$ python -m pip install repo_helper
+	$ python -m pip install repo-helper
 
 To install with ``conda``:
 
