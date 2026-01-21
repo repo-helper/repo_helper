@@ -658,7 +658,7 @@ class ToxConfig(IniConfigurator):
 			self._ini["testenv:coverage"]["changedir"] = "{toxinidir}"
 
 			coverage_deps = ["coverage>=5"]
-			if self["pypi_name"] != "coverage_pyver_pragma":
+			if self["pypi_name"] != "coverage-pyver-pragma":
 				coverage_deps.append("coverage_pyver_pragma>=0.2.1")
 
 			self._ini["testenv:coverage"]["deps"] = indent_join(coverage_deps)
@@ -1114,7 +1114,7 @@ class TestsRequirementsManager(RequirementsManager):
 		super().__init__(repo_path)
 
 	def compile_target_requirements(self) -> None:
-		if self._globals["pypi_name"] != "coverage_pyver_pragma":
+		if self._globals["pypi_name"] != "coverage-pyver-pragma":
 			self.target_requirements.add(ComparableRequirement("coverage-pyver-pragma>=0.2.1"))
 		if self._globals["pypi_name"] != "coincidence":
 			self.target_requirements.add(ComparableRequirement("coincidence>=0.2.0"))
