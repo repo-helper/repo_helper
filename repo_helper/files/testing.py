@@ -530,7 +530,7 @@ class ToxConfig(IniConfigurator):
 		self._ini["testenv:lint"]["changedir"] = "{toxinidir}"
 		self._ini["testenv:lint"]["ignore_errors"] = True
 
-		if self["pypi_name"] in {"domdf_python_tools", "consolekit"}:
+		if self["pypi_name"] in {"domdf-python-tools", "consolekit"}:
 			self._ini["testenv:lint"]["skip_install"] = False
 		elif self["pypi_name"].startswith("flake8"):
 			self._ini["testenv:lint"]["skip_install"] = False
