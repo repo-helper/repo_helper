@@ -3,7 +3,7 @@ requires = [ "whey",]
 build-backend = "whey"
 
 [project]
-name = "repo_helper"
+name = "repo-helper"
 version = "2025.6.3"
 description = "A tool to manage configuration files, build scripts etc. across multiple projects."
 readme = "README.rst"
@@ -150,6 +150,7 @@ additional-files = [
     "include repo_helper/files/isort.cfg",
     "include repo_helper/repo_helper_schema.json",
 ]
+package = "repo_helper"
 
 [tool.mypy]
 python_version = "3.9"

@@ -73,20 +73,20 @@ Note: The autocommit functionality is currently broken on Windows, but works OK 
 	:target: https://www.codefactor.io/repository/github/repo-helper/repo_helper
 	:alt: CodeFactor Grade
 
-.. |pypi-version| image:: https://img.shields.io/pypi/v/repo_helper
-	:target: https://pypi.org/project/repo_helper/
+.. |pypi-version| image:: https://img.shields.io/pypi/v/repo-helper
+	:target: https://pypi.org/project/repo-helper/
 	:alt: PyPI - Package Version
 
-.. |supported-versions| image:: https://img.shields.io/pypi/pyversions/repo_helper?logo=python&logoColor=white
-	:target: https://pypi.org/project/repo_helper/
+.. |supported-versions| image:: https://img.shields.io/pypi/pyversions/repo-helper?logo=python&logoColor=white
+	:target: https://pypi.org/project/repo-helper/
 	:alt: PyPI - Supported Python Versions
 
-.. |supported-implementations| image:: https://img.shields.io/pypi/implementation/repo_helper
-	:target: https://pypi.org/project/repo_helper/
+.. |supported-implementations| image:: https://img.shields.io/pypi/implementation/repo-helper
+	:target: https://pypi.org/project/repo-helper/
 	:alt: PyPI - Supported Implementations
 
-.. |wheel| image:: https://img.shields.io/pypi/wheel/repo_helper
-	:target: https://pypi.org/project/repo_helper/
+.. |wheel| image:: https://img.shields.io/pypi/wheel/repo-helper
+	:target: https://pypi.org/project/repo-helper/
 	:alt: PyPI - Wheel
 
 .. |conda-version| image:: https://img.shields.io/conda/v/domdfcoding/repo_helper?logo=anaconda
@@ -115,8 +115,8 @@ Note: The autocommit functionality is currently broken on Windows, but works OK 
 .. |maintained| image:: https://img.shields.io/maintenance/yes/2026
 	:alt: Maintenance
 
-.. |pypi-downloads| image:: https://img.shields.io/pypi/dm/repo_helper
-	:target: https://pypistats.org/packages/repo_helper
+.. |pypi-downloads| image:: https://img.shields.io/pypi/dm/repo-helper
+	:target: https://pypistats.org/packages/repo-helper
 	:alt: PyPI - Downloads
 
 .. end shields
