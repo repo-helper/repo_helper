@@ -1,4 +1,4 @@
-repo_helper==2020.12.18
+repo-helper==2020.12.18
 ├── apeye>=1.2.0
 ├── apeye-core>=1.0.0
 ├── astatine>=0.3.1

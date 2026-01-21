@@ -278,8 +278,8 @@ def test_repo_name_errors(wrong_value: Dict[str, Any], match: str):
 
 def test_pypi_name():
 	assert pypi_name.get({"pypi_name": "repo_helper"}) == "repo_helper"
-	assert pypi_name.get({"modname": "repo_helper"}) == "repo_helper"
-	assert pypi_name.get({"modname": "the_modname"}) == "the_modname"
+	assert pypi_name.get({"modname": "repo_helper"}) == "repo-helper"
+	assert pypi_name.get({"modname": "the_modname"}) == "the-modname"
 	assert pypi_name.get({"modname": "the_modname", "pypi_name": "repo_helper"}) == "repo_helper"
 
 	with pytest.raises(ValueError, match="A value for 'modname' is required."):

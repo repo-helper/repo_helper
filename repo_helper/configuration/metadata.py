@@ -32,6 +32,7 @@ from configconfig.configvar import ConfigVar
 from configconfig.utils import optional_getter
 from natsort import natsorted
 from packaging.version import Version
+from shippinglabel import normalize_keep_dot
 from shippinglabel.classifiers import validate_classifiers
 
 # this package
@@ -221,6 +222,21 @@ class pypi_name(ConfigVar):
 	dtype = str
 	default = modname
 	category: str = "metadata"
+
+	@classmethod
+	def validate(cls, raw_config_vars: Optional[Dict[str, Any]] = None) -> Any:
+		"""
+		Validate the value obtained from the ``YAML`` file and coerce into the appropriate return type.
+
+		:param raw_config_vars: Dictionary to obtain the value from.
+
+		:rtype: See the ``rtype`` attribute.
+		"""
+
+		if not raw_config_vars or cls.__name__ not in raw_config_vars:
+			return normalize_keep_dot(cls.default.validate(raw_config_vars))
+		else:
+			return super().validate(raw_config_vars)
 
 
 class conda_name(ConfigVar):
