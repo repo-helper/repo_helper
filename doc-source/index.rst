@@ -75,22 +75,22 @@ This project is in an early stage, and some things might not work correctly or b
 		:alt: CodeFactor Grade
 
 	.. |pypi-version| pypi-shield::
-		:project: repo_helper
+		:project: repo-helper
 		:version:
 		:alt: PyPI - Package Version
 
 	.. |supported-versions| pypi-shield::
-		:project: repo_helper
+		:project: repo-helper
 		:py-versions:
 		:alt: PyPI - Supported Python Versions
 
 	.. |supported-implementations| pypi-shield::
-		:project: repo_helper
+		:project: repo-helper
 		:implementations:
 		:alt: PyPI - Supported Implementations
 
 	.. |wheel| pypi-shield::
-		:project: repo_helper
+		:project: repo-helper
 		:wheel:
 		:alt: PyPI - Wheel
 
@@ -122,7 +122,7 @@ This project is in an early stage, and some things might not work correctly or b
 		:alt: Maintenance
 
 	.. |pypi-downloads| pypi-shield::
-		:project: repo_helper
+		:project: repo-helper
 		:downloads: month
 		:alt: PyPI - Downloads
 

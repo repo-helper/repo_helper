@@ -14,7 +14,7 @@ jobs:
     steps:
       - uses: domdfcoding/octocheese@master
         with:
-          pypi_name: "repo_helper"
+          pypi_name: "repo-helper"
         env:
           GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
         if: startsWith(github.ref, 'refs/tags/') != true
