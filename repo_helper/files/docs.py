@@ -101,6 +101,7 @@ class DocRequirementsManager(RequirementsManager):
 			ComparableRequirement("sphinxcontrib-serializinghtml==1.1.5"),
 			ComparableRequirement("roman>=4.0"),
 			ComparableRequirement("docutils<0.22"),
+			ComparableRequirement("setuptools<81"),
 			}
 
 	def __init__(self, repo_path: PathLike, templates: Environment):
