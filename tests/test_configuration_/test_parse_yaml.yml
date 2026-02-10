@@ -37,6 +37,8 @@ enable_releases: true
 enable_tests: true
 entry_points: {}
 exclude_files: []
+extra_formate_deps: []
+extra_formate_types: []
 extra_lint_paths: []
 extra_sphinx_extensions:
 - configconfig.autoconfig

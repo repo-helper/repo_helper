@@ -986,10 +986,13 @@ def make_formate_toml(repo_path: pathlib.Path, templates: Environment) -> List[s
 	known_first_party.update(isort_config["known_first_party"])
 	# known_third_party.update(isort_config["known_third_party"])
 
+	formate_config: Dict[str, Any]
 	if formate_file.is_file():
 		formate_config = dom_toml.load(formate_file)
 	else:
 		formate_config = {}
+
+	formate_config.setdefault("hooks", {})
 
 	# Read the isort config file and get "known_third_party" from there
 	if isort_file.is_file():

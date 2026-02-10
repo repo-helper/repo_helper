@@ -118,6 +118,8 @@ def demo_environment() -> Environment:
 			"use_hatch": false,
 			"on_conda_forge": false,
 			"checkout_submodules": false,
+			"extra_formate_deps": [],
+			"extra_formate_types": [],
 			"desktopfile": {}}
 			}
 
@@ -195,6 +197,8 @@ def demo_environment() -> Environment:
 							"3.7": "py37, build",
 							},
 					docs_apt_packages=[],
+					extra_formate_deps=[],
+					extra_formate_types=[],
 					),
 			)
 

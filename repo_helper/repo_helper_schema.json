@@ -172,6 +172,20 @@
       },
       "description": "A list of files not to manage with `repo_helper`."
     },
+    "extra_formate_deps": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "A list of additional packages to install when running formate with pre-commit."
+    },
+    "extra_formate_types": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "A list of additional types for formate to format when run through pre-commit."
+    },
     "extra_lint_paths": {
       "type": "array",
       "items": {
