@@ -93,6 +93,9 @@ class Hook(_BaseHook, total=False):
 	#: Override the default file types to run on. See https://pre-commit.com/#filtering-files-with-types.
 	types: List[str]
 
+	#: Override the default file types to run on. See https://pre-commit.com/#filtering-files-with-types.
+	types_or: List[str]
+
 	#: File types to exclude.
 	exclude_types: List[str]
 
@@ -229,7 +232,7 @@ domdfcoding_hooks = Repo(
 
 formate = Repo(
 		repo=make_github_url("python-formate", "formate"),
-		rev="v1.1.2",
+		rev="v1.2.0",
 		hooks=[{"id": "formate", "exclude": r"^(doc-source/conf|__pkginfo__|setup)\.(_)?py$"}],
 		)
 
@@ -287,7 +290,11 @@ def make_pre_commit(repo_path: pathlib.Path, templates: Environment) -> List[str
 			hooks=[{
 					"id": "formate",
 					"exclude": formate_excludes,
-					"additional_dependencies": ["formate-trailing-commas>=0.1.1"],
+					"additional_dependencies": [
+							"formate-trailing-commas>=0.1.1",
+							*templates.globals["extra_formate_deps"],
+							],
+					"types_or": ["python", "pyi", *templates.globals["extra_formate_types"]],
 					}],
 			)
 

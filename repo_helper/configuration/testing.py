@@ -36,6 +36,8 @@ __all__ = [
 		"checkout_submodules",
 		"enable_devmode",
 		"enable_tests",
+		"extra_formate_deps",
+		"extra_formate_types",
 		"extra_lint_paths",
 		"extra_testenv_commands",
 		"github_ci_requirements",
@@ -411,3 +413,34 @@ class checkout_submodules(ConfigVar):
 		parsed_config: Dict[str, Dict[str, List[str]]] = _Validator(cls).validate(raw_config_vars)
 
 		return parsed_config
+
+
+class extra_formate_deps(ConfigVar):
+	"""
+	A list of additional packages to install when running formate with pre-commit.
+
+	.. code-block:: yaml
+
+		extra_formate_deps:
+		  - formate-js>=0.1.0
+	"""
+
+	dtype = List[str]
+	default: List[str] = []
+	category: str = "testing"
+
+
+class extra_formate_types(ConfigVar):
+	"""
+	A list of additional types for formate to format when run through pre-commit.
+
+	.. code-block:: yaml
+
+		extra_formate_types:
+		  - javascript
+		  - ts
+	"""
+
+	dtype = List[str]
+	default: List[str] = []
+	category: str = "testing"

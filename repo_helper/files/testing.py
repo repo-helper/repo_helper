@@ -1043,7 +1043,7 @@ def make_formate_toml(repo_path: pathlib.Path, templates: Environment) -> List[s
 
 	config = {"indent": '\t', "line_length": 115}
 
-	formate_config["hooks"] = hooks
+	formate_config["hooks"].update(hooks)
 	formate_config["config"] = config
 
 	dom_toml.dump(formate_config, formate_file, encoder=dom_toml.TomlEncoder)
