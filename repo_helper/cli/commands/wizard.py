@@ -26,6 +26,7 @@ Wizard 🧙‍ for creating a 'repo_helper.yml' file.
 # 3rd party
 import click
 from consolekit.input import confirm, prompt
+from shippinglabel import normalize_keep_dot
 
 # this package
 from repo_helper.cli import cli_command
@@ -86,7 +87,7 @@ def wizard() -> None:
 
 	# ---------- modname ----------
 	click.echo("\nThe name of the library/project.")
-	modname = prompt("Name")
+	modname = prompt("Name", default=normalize_keep_dot(PathPlus.cwd().name))
 
 	# ---------- name ----------
 	click.echo("\nThe name of the author.")
