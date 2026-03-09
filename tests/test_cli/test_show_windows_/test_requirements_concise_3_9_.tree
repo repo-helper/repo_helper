@@ -44,7 +44,7 @@ repo-helper==2020.12.18
 ├── platformdirs>=3.5.1
 ├── prettyprinter>=0.18.0
 ├── pygments>=2.2.0
-├── pypi-json>=0.2.1
+├── pypi-json>=0.5.0
 ├── pyproject-parser>=0.11.0
 ├── referencing>=0.31.0
 ├── requests>=2.27.1
