@@ -298,7 +298,7 @@ class ToxConfig(IniConfigurator):
 		if self["pypi_name"] != "tox-envlist":
 			tox_requires.add("tox-envlist>=0.2.1")
 
-		tox_requires.add("virtualenv!=20.16.0")
+		tox_requires.add("virtualenv!=20.16.0,<20.39")
 
 		self._ini["tox"]["requires"] = indent_join(sorted(tox_requires))
 		# self._ini["tox"]["toxworkdir"] = "{env:TOX_WORK_DIR:.tox}"
