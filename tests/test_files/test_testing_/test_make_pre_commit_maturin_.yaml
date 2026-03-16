@@ -61,8 +61,8 @@ repos:
     - id: rst-directive-colons
     - id: rst-inline-touching-normal
 
- - repo: https://github.com/asottile/pyupgrade
-   rev: v3.3.0
+ - repo: https://github.com/python-formate/pyupgrade
+   rev: 9bbf280
    hooks:
     - id: pyupgrade
       args:
