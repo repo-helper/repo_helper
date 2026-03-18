@@ -334,7 +334,7 @@ def make_pre_commit(repo_path: pathlib.Path, templates: Environment) -> List[str
 
 	pyupgrade = Repo(
 			repo=make_github_url("python-formate", "pyupgrade"),
-			rev="2e49872",
+			rev="bbe3007",
 			hooks=[{"id": "pyupgrade", "args": [pyupgrade_plus_arg, "--keep-runtime-typing"]}],
 			)
 

@@ -62,7 +62,7 @@ repos:
     - id: rst-inline-touching-normal
 
  - repo: https://github.com/python-formate/pyupgrade
-   rev: '2e49872'
+   rev: bbe3007
    hooks:
     - id: pyupgrade
       args:
