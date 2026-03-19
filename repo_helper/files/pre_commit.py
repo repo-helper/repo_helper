@@ -222,7 +222,7 @@ snippet_fmt = Repo(
 
 domdfcoding_hooks = Repo(
 		repo=make_github_url("domdfcoding", "pre-commit-hooks"),
-		rev="v0.6.0",
+		rev="v0.7.0",
 		hooks=[
 				{"id": "requirements-txt-sorter", "args": ["--allow-git"]},
 				{"id": "check-docstring-first", "exclude": r"^(doc-source/conf|__pkginfo__|setup|tests/.*)\.py$"},
@@ -262,16 +262,20 @@ def make_pre_commit(repo_path: pathlib.Path, templates: Environment) -> List[str
 	stubs_package = templates.globals["stubs_package"]
 
 	non_source_files = [posixpath.join(docs_dir, "conf"), "__pkginfo__", "setup"]
+	min_py_version = Version(templates.globals["min_py_version"])
 
 	cdf_hook: Hook = {
 			"id": "check-docstring-first",
 			"exclude": fr"^({'|'.join(non_source_files)}|{templates.globals['tests_dir']}/.*)\.py$",
 			}
+	bind_reqs_hook: Hook = {
+			"id": "bind-requirements", "args": ["--python-min", str(min_py_version)],
+			}
 	domdfcoding_hooks_custom = domdfcoding_hooks.replace_hooks(
 			hooks=[
 					{"id": "requirements-txt-sorter", "args": ["--allow-git"]},
 					cdf_hook,
-					"bind-requirements",
+					bind_reqs_hook,
 					],
 			)
 
@@ -314,7 +318,6 @@ def make_pre_commit(repo_path: pathlib.Path, templates: Environment) -> List[str
 			hooks=[{"id": "dep_checker", "args": dep_checker_args}],
 			)
 
-	min_py_version = Version(templates.globals["min_py_version"])
 
 	if templates.globals["requires_python"]:
 		min_py_version = min(min_py_version, Version(templates.globals["requires_python"]))
