@@ -1,10 +1,12 @@
 repo-helper==2020.12.18
+├── annotated-types>=0.6.0
 ├── apeye>=1.2.0
 ├── apeye-core>=1.0.0b2
 ├── astatine>=0.3.1
 ├── asttokens>=2.0.4
 ├── attr-utils>=0.5.5
 ├── attrs>=22.2.0
+├── beautifulsoup4~=4.5
 ├── boolean-py>=4.0
 ├── certifi>=2017.4.17
 ├── charset-normalizer<4,>=2
@@ -33,6 +35,7 @@ repo-helper==2020.12.18
 ├── jsonschema>=3.2.0
 ├── jsonschema-specifications>=2023.03.6
 ├── license-expression>=30.0.0
+├── mailbits~=0.2
 ├── markupsafe>=2.0
 ├── mistletoe>=0.7.2
 ├── mkrecipe>=0.3.0
@@ -43,11 +46,14 @@ repo-helper==2020.12.18
 ├── pkgutil-resolve-name>=1.3.10; python_version < "3.9"
 ├── platformdirs>=3.5.1
 ├── prettyprinter>=0.18.0
+├── pydantic~=2.0
+├── pydantic-core==2.27.2
 ├── pygments>=2.2.0
 ├── pypi-json>=0.5.0
+├── pypi-simple>=1.5.0
 ├── pyproject-parser>=0.11.0
 ├── referencing>=0.31.0
-├── requests>=2.27.1
+├── requests>=2.27.1,~=2.20
 ├── rpds-py>=0.7.1
 ├── ruamel-yaml-clib>=0.2.7; platform_python_implementation == "CPython" and python_version < "3.14"
 ├── ruamel.yaml<=0.18.12,>=0.17.4
@@ -55,13 +61,15 @@ repo-helper==2020.12.18
 ├── shippinglabel-conda>=0.1.0
 ├── shippinglabel-pypi>=0.1.0
 ├── six
+├── soupsieve>=1.6.1
 ├── southwark>=0.7.1
 ├── tabulate>=0.8.8
 ├── tokenize-rt>=5.0.0
 ├── tomli>=2.0.1
 ├── tomli>=1.2.3; python_version < "3.11"
 ├── toolz>=0.11.1
-├── typing-extensions!=3.10.0.1,!=4.7.0,>=4.0.0
+├── typing-extensions>=4.0.0; python_version < "3.9"
+├── typing-extensions!=3.10.0.1,!=4.7.0,>=4.12.2
 ├── typing-inspect>=0.6.0
 ├── urllib3<3,>=1.24.1
 ├── whey>=0.0.17
