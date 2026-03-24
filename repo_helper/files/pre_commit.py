@@ -269,7 +269,8 @@ def make_pre_commit(repo_path: pathlib.Path, templates: Environment) -> List[str
 			"exclude": fr"^({'|'.join(non_source_files)}|{templates.globals['tests_dir']}/.*)\.py$",
 			}
 	bind_reqs_hook: Hook = {
-			"id": "bind-requirements", "args": ["--python-min", str(min_py_version)],
+			"id": "bind-requirements",
+			"args": ["--python-min", str(min_py_version)],
 			}
 	domdfcoding_hooks_custom = domdfcoding_hooks.replace_hooks(
 			hooks=[
@@ -317,7 +318,6 @@ def make_pre_commit(repo_path: pathlib.Path, templates: Environment) -> List[str
 			rev="v0.9.0",
 			hooks=[{"id": "dep_checker", "args": dep_checker_args}],
 			)
-
 
 	if templates.globals["requires_python"]:
 		min_py_version = min(min_py_version, Version(templates.globals["requires_python"]))
