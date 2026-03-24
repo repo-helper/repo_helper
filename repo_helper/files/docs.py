@@ -65,7 +65,7 @@ from repo_helper.blocks import (
 from repo_helper.configupdater2 import ConfigUpdater
 from repo_helper.files import management
 from repo_helper.templates import Environment, init_repo_template_dir, template_dir
-from repo_helper.utils import license_lookup, pformat_tabs, reformat_file, resource
+from repo_helper.utils import pformat_tabs, reformat_file, resource
 
 __all__ = [
 		"ensure_doc_requirements",
@@ -658,7 +658,7 @@ def rewrite_docs_index(repo_path: pathlib.Path, templates: Environment) -> List[
 
 	shields_block = str(shield_block_list)
 
-	if templates.globals["license"] == "GNU General Public License v2 (GPLv2)":
+	if templates.globals["license"] == "GPLv2":
 		source = f"https://img.shields.io/github/license/{templates.globals['username']}/{templates.globals['repo_name']}"
 		shields_block.replace(source, "https://img.shields.io/badge/license-GPLv2-orange")
 
@@ -776,7 +776,6 @@ def make_docs_license_rst(repo_path: pathlib.Path, templates: Environment) -> Li
 	docs_license_rst = docs_dir / "license.rst"
 
 	license_key = templates.globals["license"]
-	license_key = {v: k for k, v in license_lookup.items()}.get(license_key, license_key)
 
 	source_template = templates.get_template(docs_license_rst.name)
 	docs_license_rst.write_clean(source_template.render(license_key=license_key))

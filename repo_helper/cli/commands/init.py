@@ -42,7 +42,7 @@ from southwark.click import commit_message_option, commit_option
 from repo_helper.cli import cli_command
 from repo_helper.cli.utils import run_repo_helper
 from repo_helper.templates import Environment, init_repo_template_dir
-from repo_helper.utils import get_license_text
+from repo_helper.utils import get_license_text, license_lookup
 
 __all__ = ["init", "init_repo"]
 
@@ -105,7 +105,7 @@ def init_repo(repo_path: pathlib.Path, templates: Environment) -> List[str]:
 	# package
 	(repo_path / templates.globals["import_name"]).maybe_make()
 
-	repo_license = templates.globals["license"]
+	repo_license = license_lookup.get(templates.globals["license"], templates.globals["license"])
 	if repo_license in license_init_file_lookup:
 		__init__ = init_repo_templates.get_template(f"{license_init_file_lookup[repo_license]}._py")
 	else:
@@ -113,7 +113,7 @@ def init_repo(repo_path: pathlib.Path, templates: Environment) -> List[str]:
 
 	if not templates.globals["meson_no_py"]:
 		__init__path = repo_path / templates.globals["import_name"] / "__init__.py"
-		__init__path.write_clean(__init__.render())
+		__init__path.write_clean(__init__.render(license=repo_license))
 
 	# tests
 	if templates.globals["enable_tests"]:

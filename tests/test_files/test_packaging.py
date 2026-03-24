@@ -185,7 +185,7 @@ def test_make_pyproject(
 	demo_environment.globals["rtfd_author"] = "Joe Bloggs"
 	demo_environment.globals["email"] = "j.bloggs@example.com"
 	demo_environment.globals["version"] = "2020.1.1"
-	demo_environment.globals["license"] = "MIT License"
+	demo_environment.globals["license"] = "MIT"
 	demo_environment.globals["keywords"] = ["awesome", "python", "project"]
 	demo_environment.globals["classifiers"] = []
 	demo_environment.globals["console_scripts"] = []
@@ -226,7 +226,7 @@ def test_make_pyproject_whey_extras(
 	demo_environment.globals["rtfd_author"] = "Joe Bloggs"
 	demo_environment.globals["email"] = "j.bloggs@example.com"
 	demo_environment.globals["version"] = "2020.1.1"
-	demo_environment.globals["license"] = "MIT License"
+	demo_environment.globals["license"] = "MIT"
 	demo_environment.globals["keywords"] = ["awesome", "python", "project"]
 	demo_environment.globals["classifiers"] = []
 	demo_environment.globals["console_scripts"] = []
@@ -336,7 +336,7 @@ def test_make_setup_cfg(
 	demo_environment.globals["author"] = "Joe Bloggs"
 	demo_environment.globals["version"] = "1.2.3"
 	demo_environment.globals["email"] = "j.bloggs@example.com"
-	demo_environment.globals["license"] = "MIT License"
+	demo_environment.globals["license"] = "MIT"
 	demo_environment.globals["keywords"] = ["awesome", "python", "project"]
 	demo_environment.globals["classifiers"] = classifiers
 	demo_environment.globals["python_versions"] = python_versions
@@ -387,7 +387,7 @@ def test_make_setup_cfg_existing(
 	demo_environment.globals["author"] = "Joe Bloggs"
 	demo_environment.globals["version"] = "1.2.3"
 	demo_environment.globals["email"] = "j.bloggs@example.com"
-	demo_environment.globals["license"] = "MIT License"
+	demo_environment.globals["license"] = "MIT"
 	demo_environment.globals["keywords"] = ["awesome", "python", "project"]
 	demo_environment.globals["classifiers"] = []
 	demo_environment.globals["console_scripts"] = []
@@ -419,7 +419,7 @@ def test_make_pkginfo(
 
 	demo_environment.globals["author"] = "Joe Bloggs"
 	demo_environment.globals["email"] = "j.bloggs@example.com"
-	demo_environment.globals["license"] = "MIT License"
+	demo_environment.globals["license"] = "MIT"
 	demo_environment.globals["extras_require"] = extras_require
 	demo_environment.globals["copyright_years"] = 2020
 	demo_environment.globals["version"] = "1.2.3"

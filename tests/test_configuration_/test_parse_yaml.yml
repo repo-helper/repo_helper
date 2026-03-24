@@ -66,7 +66,7 @@ import_name: repo_helper_demo
 intersphinx_mapping:
 - '''jinja2'': (''https://jinja.palletsprojects.com/en/2.11.x/'', None)'
 keywords: []
-license: GNU Lesser General Public License v3 or later (LGPLv3+)
+license: LGPLv3+
 manifest_additional:
 - recursive-include repo_helper/templates *
 - recursive-include repo_helper/init_repo_files *

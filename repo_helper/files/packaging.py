@@ -409,9 +409,7 @@ def make_pyproject(repo_path: pathlib.Path, templates: Environment) -> List[str]
 	data["tool"]["whey"]["python-implementations"] = sorted(python_implementations)
 
 	data["tool"]["whey"]["platforms"] = templates.globals["platforms"]
-
-	license_ = templates.globals["license"]
-	data["tool"]["whey"]["license-key"] = {v: k for k, v in license_lookup.items()}.get(license_, license_)
+	data["tool"]["whey"]["license-key"] = templates.globals["license"]
 
 	if templates.globals["use_whey"] and templates.globals["source_dir"]:
 		raise NotImplementedError("Whey does not support custom source directories")
@@ -565,7 +563,7 @@ class SetupCfgConfig(IniConfigurator):
 		self._ini["metadata"]["version"] = self["version"]
 		self._ini["metadata"]["author"] = self["author"]
 		self._ini["metadata"]["author_email"] = self["email"]
-		self._ini["metadata"]["license"] = self["license"]
+		self._ini["metadata"]["license"] = license_lookup.get(self["license"], self["license"])
 		self._ini["metadata"]["keywords"] = self["keywords"]
 		self._ini["metadata"]["long_description"] = "file: README.rst"
 		self._ini["metadata"]["long_description_content_type"] = "text/x-rst"
@@ -721,8 +719,8 @@ def _get_classifiers(__globals: Dict[str, Any]) -> List[str]:
 
 	classifiers = set(the_globals["classifiers"])
 
-	if the_globals["license"] in license_lookup.values():
-		classifiers.add(f"License :: OSI Approved :: {the_globals['license']}")
+	if the_globals["license"] in license_lookup:
+		classifiers.add(f"License :: OSI Approved :: {license_lookup[the_globals['license']]}")
 
 	for c in get_version_classifiers(the_globals["python_versions"]):
 		classifiers.add(c)

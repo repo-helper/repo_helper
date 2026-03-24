@@ -67,8 +67,10 @@ class Test_license(RequiredStringTest):
 	test_value = "GPLv3+"
 
 	def test_success(self):
-		expected = "GNU General Public License v3 or later (GPLv3+)"
-		assert self.config_var.get({self.config_var.__name__: self.test_value}) == expected
+		assert self.config_var.get({self.config_var.__name__: self.test_value}) == self.test_value
+		assert self.config_var.get({
+				self.config_var.__name__: "GNU General Public License v3 or later (GPLv3+)",
+				}) == self.test_value
 
 
 class Test_short_desc(RequiredStringTest):

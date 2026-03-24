@@ -106,7 +106,7 @@ def test_make_docs_license_rst(
 		demo_environment: Environment,
 		advanced_file_regression: AdvancedFileRegressionFixture,
 		):
-	demo_environment.globals["license"] = "MIT License"
+	demo_environment.globals["license"] = "MIT"
 
 	(tmp_pathplus / "doc-source").mkdir()
 

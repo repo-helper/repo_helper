@@ -28,7 +28,7 @@ def test_init_repo(
 	demo_environment.globals["copyright_years"] = "2020-2021"
 	demo_environment.globals["author"] = "Joe Bloggs"
 	demo_environment.globals["email"] = "j.bloggs@example.com"
-	demo_environment.globals["license"] = "MIT License"
+	demo_environment.globals["license"] = "MIT"
 	demo_environment.globals["version"] = "1.2.3"
 	demo_environment.globals["enable_docs"] = True
 	demo_environment.globals["docker_shields"] = False

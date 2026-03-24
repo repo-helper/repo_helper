@@ -36,7 +36,7 @@ from shippinglabel import normalize_keep_dot
 from shippinglabel.classifiers import validate_classifiers
 
 # this package
-from repo_helper.utils import license_lookup
+from repo_helper.utils import _reverse_license_lookup
 
 __all__ = [
 		"author",
@@ -425,10 +425,10 @@ class license(ConfigVar):  # noqa  # pylint: disable=redefined-builtin
 
 	@classmethod
 	def validator(cls, value: str) -> str:  # noqa: D102
-		value = value.replace(' ', '')
+		# value = value.replace(' ', '')
 
-		if value in license_lookup:
-			value = license_lookup[value]
+		if value in _reverse_license_lookup:
+			value = _reverse_license_lookup[value]
 
 		return value
 

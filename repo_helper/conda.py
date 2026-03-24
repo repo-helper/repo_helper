@@ -33,7 +33,6 @@ from domdf_python_tools.typing import PathLike
 from mkrecipe import MaryBerry
 from shippinglabel.requirements import read_requirements
 from shippinglabel_conda import compile_requirements, validate_requirements
-from whey.config.whey import license_lookup
 
 # this package
 from repo_helper.configuration import parse_yaml
@@ -104,8 +103,7 @@ class CondaRecipeMaker(MaryBerry):
 		if config["import_name"] != config["pypi_name"] and config["stubs_package"]:
 			config["package"] = "{import_name}-stubs".format_map(config)
 
-		license_ = config["license"]
-		config["license-key"] = {v: k for k, v in license_lookup.items()}.get(license_, license_)
+		config["license-key"] = config["license"]
 
 		if config["requires_python"] is None:
 			if config["min_py_version"] in {"3.6", 3.6}:
