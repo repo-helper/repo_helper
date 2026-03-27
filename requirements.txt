@@ -24,5 +24,4 @@ shippinglabel-conda>=0.1.0
 southwark>=0.7.1
 tabulate>=0.8.8
 typing-extensions>=3.7.4.3
-whey>=0.0.17
 yapf-isort>=0.5.2
