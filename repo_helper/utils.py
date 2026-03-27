@@ -243,7 +243,7 @@ license_lookup = {
 		"Public Domain": "Public Domain",
 		}
 
-_reverse_license_lookup = {v: k for k, v in reversed(license_lookup.items())}
+_reverse_license_lookup = {v: k for k, v in reversed(list(license_lookup.items()))}
 
 
 def reformat_file(filename: PathLike, yapf_style: str, isort_config_file: str) -> int:
