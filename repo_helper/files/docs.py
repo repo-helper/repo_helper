@@ -763,6 +763,24 @@ def make_docs_source_rst(repo_path: pathlib.Path, templates: Environment) -> Lis
 			]
 
 
+_docs_license_lookup = {
+		"GPLv2": "GPL-2.0",
+		"GPL-2.0-only": "GPL-2.0",
+		"GPLv2+": "GPL-2.0",
+		"GPL-2.0-or-later": "GPL-2.0",
+		"GPLv3": "GPL-3.0",
+		"GPL-3.0-only": "GPL-3.0",
+		"GPLv3+": "GPL-3.0",
+		"GPL-3.0-or-later": "GPL-3.0",
+		"LGPLv2": "LGPL-2.1",
+		"LGPLv2+": "LGPL-2.1",
+		"LGPLv3": "LGPL-3.0",
+		"LGPL-3.0-only": "LGPL-3.0",
+		"LGPLv3+": "LGPL-3.0",
+		"LGPL-3.0-or-later": "LGPL-3.0",
+		}
+
+
 @management.register("license_rst", ["enable_docs"])
 def make_docs_license_rst(repo_path: pathlib.Path, templates: Environment) -> List[str]:
 	"""
@@ -776,6 +794,7 @@ def make_docs_license_rst(repo_path: pathlib.Path, templates: Environment) -> Li
 	docs_license_rst = docs_dir / "license.rst"
 
 	license_key = templates.globals["license"]
+	license_key = _docs_license_lookup.get(license_key, license_key)
 
 	source_template = templates.get_template(docs_license_rst.name)
 	docs_license_rst.write_clean(source_template.render(license_key=license_key))
