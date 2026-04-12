@@ -348,6 +348,7 @@ class ToxConfig(IniConfigurator):
 		"""
 
 		self._ini["testenv"]["setenv"] = indent_join(self.get_setenv(False))
+		self._ini["testenv"]["download"] = True
 
 		if self["enable_tests"]:
 
@@ -441,13 +442,11 @@ class ToxConfig(IniConfigurator):
 
 				env_name = f"testenv:py{fixup_version.replace('.', '')}"
 				if env_name in self._ini:
-					self._ini[env_name]["download"] = True
 					self._ini[env_name]["setenv"] = indent_join(setenv)
 
 				for env in third_party_envs:
 					env_name = f"testenv:py{fixup_version.replace('.', '')}-{env}"
 					self._ini.add_section(env_name)
-					self._ini[env_name]["download"] = True
 					self._ini[env_name]["setenv"] = indent_join(setenv)
 
 			else:
