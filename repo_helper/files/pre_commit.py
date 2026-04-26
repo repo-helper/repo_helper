@@ -173,7 +173,6 @@ pre_commit_hooks = Repo(
 				"check-case-conflict",
 				"check-executables-have-shebangs",
 				"check-json",
-				"check-toml",
 				"check-yaml",
 				"check-merge-conflict",
 				"check-symlinks",
@@ -182,6 +181,15 @@ pre_commit_hooks = Repo(
 				"trailing-whitespace",
 				"mixed-line-ending",
 				"end-of-file-fixer",
+				],
+		)
+
+taplo_hooks = Repo(
+		repo=make_github_url("domdfcoding", "taplo-pre-commit"),
+		rev="v0.10.0",
+		hooks=[
+				"taplo-lint",
+				# TODO: option to run taplo-format hook (but skip pyproject.toml and repo-helper managed files)
 				],
 		)
 
@@ -370,6 +378,7 @@ def make_pre_commit(repo_path: pathlib.Path, templates: Environment) -> List[str
 	managed_hooks = [
 			pyproject_parser,
 			pre_commit_hooks,
+			taplo_hooks,
 			domdfcoding_hooks_custom,
 			flake8_dunder_all,
 			flake2lint,
