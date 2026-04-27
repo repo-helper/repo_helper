@@ -188,8 +188,9 @@ taplo_hooks = Repo(
 		repo=make_github_url("domdfcoding", "taplo-pre-commit"),
 		rev="v0.10.0",
 		hooks=[
-				"taplo-lint",
+				{"id": "taplo-lint", "args": []},
 				# TODO: option to run taplo-format hook (but skip pyproject.toml and repo-helper managed files)
+				# TODO: add taplo-lint with schemas set up to justfile
 				],
 		)
 
