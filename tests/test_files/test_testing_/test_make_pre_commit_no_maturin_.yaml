@@ -5,6 +5,7 @@ exclude: ^$
 
 ci:
   autoupdate_schedule: quarterly
+  skip: [taplo-lint]
 
 repos:
  - repo: https://github.com/repo-helper/pyproject-parser

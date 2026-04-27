@@ -368,9 +368,15 @@ def make_pre_commit(repo_path: pathlib.Path, templates: Environment) -> List[str
 			"  autoupdate_schedule: quarterly",
 			])
 
-	if templates.globals["use_maturin"]:
-		output.append("  skip: [fmt, cargo-check]")
+	skips = [
+			"taplo-lint",  # TODO: prebuild and host somewhere (or take over and update PyPI taplo package)
+			# TODO: option for extra skips
+			]
 
+	if templates.globals["use_maturin"]:
+		skips.extend(["fmt", "cargo-check"])
+
+	output.append(f"  skip: [{', '.join(skips)}]")
 	output.blankline()
 	output.append("repos:")
 
