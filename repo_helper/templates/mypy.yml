@@ -24,7 +24,7 @@ jobs:
 
     steps:
       - name: Checkout 🛎️
-        uses: "actions/checkout@v4"{% if checkout_submodules %}
+        uses: "actions/checkout@v6"{% if checkout_submodules %}
         with:
           submodules: {{ checkout_submodules }}{% endif %}
 
@@ -39,7 +39,7 @@ jobs:
 
       - name: Setup Python 🐍
         if: steps.changes.outputs.code == 'true'
-        uses: "actions/setup-python@v5"
+        uses: "actions/setup-python@v6"
         with:
           python-version: "{{ python_deploy_version }}"
 {{ dependencies_block }}
