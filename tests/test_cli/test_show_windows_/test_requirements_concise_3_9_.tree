@@ -16,7 +16,7 @@ repo-helper==2020.12.18
 ├── colorful>=0.4.0
 ├── configconfig>=0.5.0
 ├── consolekit>=1.12.0
-├── cssutils>=2.2.0
+├── cssutils<=2.11.0,>=2.2.0
 ├── deprecation>=2.1.0
 ├── deprecation-alias>=0.1.1
 ├── dict2css>=0.2.0
@@ -40,14 +40,13 @@ repo-helper==2020.12.18
 ├── markupsafe>=2.0
 ├── mistletoe>=0.7.2
 ├── mkrecipe>=0.3.0
-├── more-itertools
 ├── mypy-extensions>=0.3.0
 ├── natsort>=7.1.1
 ├── packaging>=21.3
 ├── platformdirs>=3.5.1
 ├── prettyprinter>=0.18.0
 ├── pydantic~=2.0
-├── pydantic-core==2.41.5
+├── pydantic-core==2.46.4
 ├── pygments>=2.2.0
 ├── pypi-json>=0.5.0
 ├── pypi-simple>=1.5.0
