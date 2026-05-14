@@ -24,7 +24,7 @@ jobs:
           submodules: {{ checkout_submodules }}{% endif %}
 
       - name: Check for changed files
-        uses: dorny/paths-filter@v2
+        uses: dorny/paths-filter@v4
         id: changes
         with:
           list-files: "json"
