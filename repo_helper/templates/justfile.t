@@ -23,3 +23,6 @@ bare-ignore:
 
 lint: {% if enable_qa %}unused-imports incomplete-defs{% endif %} bare-ignore
 	{% if enable_qa %}tox -n qa{% endif %}
+
+uncomm:
+  git status -uall --ignored

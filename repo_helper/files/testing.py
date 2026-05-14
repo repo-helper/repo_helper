@@ -36,7 +36,7 @@ from typing import Any, Dict, List, Tuple
 # 3rd party
 import dom_toml
 from domdf_python_tools.paths import PathPlus
-from domdf_python_tools.stringlist import DelimitedList
+from domdf_python_tools.stringlist import DelimitedList, StringList
 from domdf_python_tools.typing import PathLike
 from packaging.version import Version
 from shippinglabel import normalize
@@ -1161,5 +1161,26 @@ def make_justfile(repo_path: pathlib.Path, templates: Environment) -> List[str]:
 
 	file = PathPlus(repo_path) / "justfile"
 	disable_qa = templates.globals["meson_no_py"] and not templates.globals["enable_tests"]  # TODO: broader check
-	file.write_clean(templates.get_template("justfile.t").render(enable_qa=not disable_qa))
+
+	custom_command_comment = "# Custom commands can be added below this comment"
+
+	# TODO: handle overriding lint command (which seems to be the one that's changed most)
+
+	if file.exists():
+		existing_contents = file.read_text()
+	else:
+		existing_contents = ''
+
+	new_contents = StringList(templates.get_template("justfile.t").render(enable_qa=not disable_qa))
+	new_contents.blankline(ensure_single=True)
+	new_contents.append(custom_command_comment)
+
+	if custom_command_comment in existing_contents:
+		custom_commands = existing_contents.split(custom_command_comment)[1].strip()
+		new_contents.blankline()
+		new_contents.append(custom_commands)
+		new_contents.blankline(ensure_single=True)
+
+	file.write_lines(new_contents)
+
 	return [file.name]
