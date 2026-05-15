@@ -534,7 +534,7 @@ def get_furo_theming() -> Dict[str, Mapping]:
 
 	style: Dict[str, Mapping] = {
 			"div.highlight": {"-moz-tab-size": 4, "tab-size": 4},
-			".field-list dt, dl.simple dt": {"margin-top": ".5rem"},
+			".field-list dt, dl.simple dt": {"margin-top": "0.5rem"},
 			"div.versionchanged ul, div.versionremoved ul": {"margin-left": "20px", "margin-top": 0},
 			}
 

@@ -68,7 +68,7 @@ div.body {
 }
 
 div.body p, ol > li, div.body td {
-	hyphens: None;
+	hyphens: none;
 }
 
 img, div.figure {
@@ -88,7 +88,7 @@ ol > li > p {
 }
 
 div.body code.descclassname {
-	display: None;
+	display: none;
 }
 
 .wy-table-responsive table td {
