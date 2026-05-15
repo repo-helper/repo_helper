@@ -104,7 +104,7 @@ repo_helper
 	:alt: Maintenance
 
 .. |pypi-downloads| image:: https://img.shields.io/pypi/dm/hello-world
-	:target: https://pypi.org/project/hello-world/
+	:target: https://pypistats.org/packages/hello-world
 	:alt: PyPI - Downloads
 
 .. end shields
@@ -124,16 +124,8 @@ To install with ``pip``:
 
 To install with ``conda``:
 
-	* First add the required channels
+.. code-block:: bash
 
-	.. code-block:: bash
-
-		$ conda config --add channels https://conda.anaconda.org/conda-forge
-
-	* Then install
-
-	.. code-block:: bash
-
-		$ conda install hello-world
+	$ conda install -c conda-forge hello-world
 
 .. end installation

@@ -38,13 +38,6 @@ from repo_helper.utils import resource
 
 
 @pytest.mark.parametrize(
-		"py_version",
-		[
-				pytest.param("3.6", marks=only_version("3.6")),
-				pytest.param("3.7", marks=min_version("3.7")),
-				],
-		)
-@pytest.mark.parametrize(
 		"filename",
 		[
 				"input_a.rst",
@@ -59,7 +52,6 @@ def test_rewrite_readme(
 		demo_environment: Environment,
 		advanced_file_regression: AdvancedFileRegressionFixture,
 		filename: str,
-		py_version: str,
 		):
 	demo_environment.globals["version"] = "1.2.3"
 	demo_environment.globals["enable_docs"] = True
@@ -85,13 +77,6 @@ def test_rewrite_readme(
 
 
 @pytest.mark.parametrize(
-		"py_version",
-		[
-				pytest.param("3.6", marks=only_version("3.6")),
-				pytest.param("3.7", marks=min_version("3.7")),
-				],
-		)
-@pytest.mark.parametrize(
 		"filename",
 		[
 				"input_a.rst",
@@ -106,7 +91,6 @@ def test_rewrite_readme_conda_forge(
 		demo_environment: Environment,
 		advanced_file_regression: AdvancedFileRegressionFixture,
 		filename: str,
-		py_version: str,
 		):
 	demo_environment.globals["version"] = "1.2.3"
 	demo_environment.globals["enable_docs"] = True
