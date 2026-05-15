@@ -50,39 +50,8 @@ from repo_helper.files.ci_cd import get_bumpversion_filenames
 
 __all__ = ["Bumper", "BumpversionFileConfig"]
 
-
-class _Version(Version):
-
-	@classmethod
-	def from_parts(
-			cls,
-			release: Iterable,
-			pre: Optional[Iterable] = None,
-			post: Optional[Any] = None,
-			dev: Optional[Any] = None,
-			local: Optional[Any] = None,
-			) -> Version:
-
-		# Release segment
-		parts = ['.'.join(str(x) for x in release)]
-
-		# Pre-release
-		if pre is not None:
-			parts.append(''.join(str(x) for x in pre))
-
-		# Post-release
-		if post is not None:
-			parts.append(f".post{post}")
-
-		# Development release
-		if dev is not None:
-			parts.append(f".dev{dev}")
-
-		# Local version segment
-		if local is not None:
-			parts.append(f"+{local}")
-
-		return cls(''.join(parts))
+def version_from_parts(release: Iterable) -> Version:
+	return Version('.'.join(str(x) for x in release))
 
 
 class BumpversionFileConfig(TypedDict):
@@ -133,7 +102,7 @@ class Bumper:
 		:param message: The commit message.
 		"""
 
-		new_version = _Version.from_parts((self.current_version.major + 1, 0, 0))
+		new_version = version_from_parts((self.current_version.major + 1, 0, 0))
 		self.bump(new_version, commit, message)
 
 	def minor(self, commit: Optional[bool], message: str) -> None:
@@ -144,7 +113,7 @@ class Bumper:
 		:param message: The commit message.
 		"""
 
-		new_version = _Version.from_parts((self.current_version.major, self.current_version.minor + 1, 0))
+		new_version = version_from_parts((self.current_version.major, self.current_version.minor + 1, 0))
 		self.bump(new_version, commit, message)
 
 	def patch(self, commit: Optional[bool], message: str) -> None:
@@ -155,7 +124,7 @@ class Bumper:
 		:param message: The commit message.
 		"""
 
-		new_version = _Version.from_parts((
+		new_version = version_from_parts((
 				self.current_version.major,
 				self.current_version.minor,
 				self.current_version.micro + 1,
@@ -173,7 +142,7 @@ class Bumper:
 		"""
 
 		today = date.today()
-		new_version = _Version.from_parts((today.year, today.month, today.day))
+		new_version = version_from_parts((today.year, today.month, today.day))
 		self.bump(new_version, commit, message)
 
 	def bump(self, new_version: Version, commit: Optional[bool], message: str) -> None:
