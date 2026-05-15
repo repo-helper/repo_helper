@@ -50,6 +50,7 @@ from repo_helper.files.ci_cd import get_bumpversion_filenames
 
 __all__ = ["Bumper", "BumpversionFileConfig"]
 
+
 def version_from_parts(release: Iterable) -> Version:
 	return Version('.'.join(str(x) for x in release))
 
