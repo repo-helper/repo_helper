@@ -28,7 +28,7 @@ Functions for making tagged releases.
 # stdlib
 import os
 from datetime import date
-from typing import Any, Dict, Iterable, Optional
+from typing import Dict, Iterable, Optional
 
 # 3rd party
 import click
