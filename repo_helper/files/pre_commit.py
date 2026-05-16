@@ -30,7 +30,7 @@ import posixpath
 import re
 from io import StringIO
 from textwrap import indent
-from typing import Iterable, List, MutableMapping, Union
+from typing import Iterable, List, Literal, MutableMapping, Union
 
 # 3rd party
 import attr
@@ -39,7 +39,7 @@ from domdf_python_tools.paths import PathPlus
 from domdf_python_tools.stringlist import StringList
 from packaging.version import Version
 from ruamel.yaml import YAML
-from typing_extensions import Literal, TypedDict
+from typing_extensions import TypedDict
 
 # this package
 from repo_helper.files import management
@@ -53,7 +53,7 @@ GITHUB_COM: URL = URL("https://github.com")
 yaml_safe_loader = YAML(typ="safe", pure=True)
 
 
-@functools.lru_cache()
+@functools.lru_cache
 def make_github_url(username: str, repository: str) -> URL:
 	"""
 	Construct a URL to a GitHub repository from a username and repository name.

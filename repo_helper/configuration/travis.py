@@ -24,11 +24,10 @@ r"""
 #
 
 # stdlib
-from typing import List
+from typing import List, Literal
 
 # 3rd party
 from configconfig.configvar import ConfigVar
-from typing_extensions import Literal
 
 __all__ = [
 		"travis_ubuntu_version",

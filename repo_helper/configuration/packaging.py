@@ -25,11 +25,10 @@ r"""
 
 # stdlib
 import warnings
-from typing import Any, Dict, List, Optional
+from typing import Any, Dict, List, Literal, Optional
 
 # 3rd party
 from configconfig.configvar import ConfigVar
-from typing_extensions import Literal
 
 __all__ = [
 		"manifest_additional",
