@@ -24,11 +24,10 @@ r"""
 #
 
 # stdlib
-from typing import Any, Dict, List, Optional
+from typing import Any, Dict, List, Literal, Optional
 
 # 3rd party
 from configconfig.configvar import ConfigVar
-from typing_extensions import Literal
 
 # this package
 from repo_helper.configuration.metadata import author
