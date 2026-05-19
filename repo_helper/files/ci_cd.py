@@ -213,6 +213,7 @@ class ActionsManager:
 				envs.append("build")
 
 			metadata.setdefault("platforms", platforms.default)
+			metadata["platforms"] = metadata["platforms"] or []  # Replaces None
 			output[str(gh_py_version)] = (','.join(envs), None, metadata)
 
 		return output

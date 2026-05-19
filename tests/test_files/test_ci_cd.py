@@ -158,6 +158,30 @@ def test_github_ci_case_3(
 	assert not (tmp_pathplus / managed_files[1]).is_file()
 
 
+def test_github_ci_case_4(
+		tmp_pathplus: PathPlus,
+		demo_environment: Environment,
+		advanced_file_regression: AdvancedFileRegressionFixture,
+		advanced_data_regression: AdvancedDataRegressionFixture,
+		):
+
+	demo_environment.globals["github_ci_requirements"] = {"macOS": {"pre": [], "post": []}}
+	demo_environment.globals["platforms"] = ["macOS"]
+	demo_environment.globals["python_versions"] = {
+			"3.6": {"experimental": False, "platforms": None},
+			"3.7": {"experimental": False, "platforms": []},
+			"3.8": {"experimental": False, "platforms": ["Linux"]},
+			"3.9": {"experimental": False, "platforms": ["macOS"]},
+			"3.10": {"experimental": False},
+			}
+
+	managed_files = make_github_ci(tmp_pathplus, demo_environment)
+	advanced_data_regression.check(managed_files, basename="github_ci_managed_files")
+	assert not (tmp_pathplus / managed_files[0]).is_file()
+	assert (tmp_pathplus / managed_files[1]).is_file()
+	advanced_file_regression.check_file(tmp_pathplus / managed_files[1])
+
+
 def test_remove_copy_pypi_2_github(tmp_pathplus: PathPlus, demo_environment: Environment):
 	(tmp_pathplus / ".ci").mkdir()
 	(tmp_pathplus / ".ci" / "copy_pypi_2_github.py").touch()
