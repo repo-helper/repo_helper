@@ -225,7 +225,7 @@ pyproject_parser = Repo(
 
 snippet_fmt = Repo(
 		repo=make_github_url("python-formate", "snippet-fmt"),
-		rev="v0.1.5",
+		rev="v0.2.0",
 		hooks=["snippet-fmt"],
 		)
 
@@ -312,6 +312,16 @@ def make_pre_commit(repo_path: pathlib.Path, templates: Environment) -> List[str
 					}],
 			)
 
+	snippet_fmt_custom = snippet_fmt.replace_hooks(
+			hooks=[{
+					"id": "snippet-fmt",
+					"additional_dependencies": [
+							"formate-trailing-commas>=0.1.1",
+							*templates.globals["extra_formate_deps"],
+							],
+					}],
+			)
+
 	dep_checker_args = [templates.globals["import_name"].replace('.', '/')]
 
 	if templates.globals["source_dir"]:
@@ -392,7 +402,7 @@ def make_pre_commit(repo_path: pathlib.Path, templates: Environment) -> List[str
 			pygrep_hooks,
 			pyupgrade,
 			lucas_c_hooks,
-			snippet_fmt,
+			snippet_fmt_custom,
 			formate_custom,
 			]
 
