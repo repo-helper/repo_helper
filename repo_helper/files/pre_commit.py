@@ -314,7 +314,8 @@ def make_pre_commit(repo_path: pathlib.Path, templates: Environment) -> List[str
 
 	snippet_fmt_custom = snippet_fmt.replace_hooks(
 			hooks=[{
-					"id": "snippet-fmt",
+					"id":
+							"snippet-fmt",
 					"additional_dependencies": [
 							"formate-trailing-commas>=0.1.1",
 							*templates.globals["extra_formate_deps"],

@@ -71,7 +71,6 @@ def builder_smoke_test(
 	:returns: A tuple comprising:
 		* A return code for the build process.
 		* The build duration.
-
 	"""
 
 	ret = 0
