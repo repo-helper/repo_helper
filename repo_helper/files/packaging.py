@@ -469,10 +469,12 @@ def make_pyproject(repo_path: pathlib.Path, templates: Environment) -> List[str]
 	data["tool"]["snippet-fmt"].setdefault("languages", {})
 	data["tool"]["snippet-fmt"].setdefault("directives", ["code-block"])
 
-	data["tool"]["snippet-fmt"]["languages"]["python"] = {"reformat": True}
-	data["tool"]["snippet-fmt"]["languages"]["TOML"] = {"reformat": True}
-	data["tool"]["snippet-fmt"]["languages"]["ini"] = {}
-	data["tool"]["snippet-fmt"]["languages"]["json"] = {}
+	sf_lag_table: dict = data["tool"]["snippet-fmt"]["languages"]
+	for lang in ["python", "TOML", "ini", "json"]:
+		sf_lag_table.setdefault(lang, {})
+
+	sf_lag_table["python"]["reformat"] = True
+	sf_lag_table["TOML"]["reformat"] = True
 
 	if not data["tool"]:
 		del data["tool"]
