@@ -312,13 +312,14 @@ def make_pre_commit(repo_path: pathlib.Path, templates: Environment) -> List[str
 					}],
 			)
 
+	snippet_fmt_dependencies = [
+			"formate-trailing-commas>=0.1.1",
+			*templates.globals["extra_formate_deps"],
+			]
 	snippet_fmt_custom = snippet_fmt.replace_hooks(
 			hooks=[{
 					"id": "snippet-fmt",
-					"additional_dependencies": [
-							"formate-trailing-commas>=0.1.1",
-							*templates.globals["extra_formate_deps"],
-							],
+					"additional_dependencies": snippet_fmt_dependencies,
 					}],
 			)
 
@@ -435,7 +436,7 @@ def make_pre_commit(repo_path: pathlib.Path, templates: Environment) -> List[str
 	raw_yaml = pre_commit_file.read_text()
 
 	if custom_hooks_comment in raw_yaml:
-		custom_hooks_yaml = pre_commit_file.read_text().split(custom_hooks_comment)[1]
+		custom_hooks_yaml = raw_yaml.split(custom_hooks_comment)[1]
 
 		custom_hooks = []
 		local_hooks = []
