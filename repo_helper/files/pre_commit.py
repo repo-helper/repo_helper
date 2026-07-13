@@ -231,7 +231,7 @@ snippet_fmt = Repo(
 
 domdfcoding_hooks = Repo(
 		repo=make_github_url("domdfcoding", "pre-commit-hooks"),
-		rev="v0.7.0",
+		rev="v0.8.0",
 		hooks=[
 				{"id": "requirements-txt-sorter", "args": ["--allow-git"]},
 				{"id": "check-docstring-first", "exclude": r"^(doc-source/conf|__pkginfo__|setup|tests/.*)\.py$"},
