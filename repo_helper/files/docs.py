@@ -845,6 +845,7 @@ def make_sphinx_config_dict(templates: Environment) -> Dict[str, Any]:
 	# "sphinx_gitstamp",
 
 	# data["sphinxemoji_style"] = "twemoji"
+	data["sphinxemoji_source"] = "https://cdn.jsdelivr.net/npm/twemoji@14.0.2/dist/twemoji.min.js"
 	data["gitstamp_fmt"] = "%d %b %Y"
 	data["templates_path"] = ["_templates"]
 	data["html_static_path"] = ["_static"]
