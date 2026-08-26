@@ -41,10 +41,6 @@ repo-helper==2020.12.18
 ├── consolekit>=1.12.0
 │   ├── click>=7.1.2
 │   ├── colorama>=0.4.3; python_version < "3.10" and platform_system == "Windows"
-│   ├── deprecation-alias>=0.1.1
-│   │   ├── deprecation>=2.1.0
-│   │   │   └── packaging
-│   │   └── packaging>=20.4
 │   ├── domdf-python-tools>=3.8.0
 │   │   ├── natsort>=7.0.1
 │   │   └── typing-extensions>=3.7.4.1
@@ -78,10 +74,6 @@ repo-helper==2020.12.18
 │   ├── consolekit>=1.2.0
 │   │   ├── click>=7.1.2
 │   │   ├── colorama>=0.4.3; python_version < "3.10" and platform_system == "Windows"
-│   │   ├── deprecation-alias>=0.1.1
-│   │   │   ├── deprecation>=2.1.0
-│   │   │   │   └── packaging
-│   │   │   └── packaging>=20.4
 │   │   ├── domdf-python-tools>=3.8.0
 │   │   │   ├── natsort>=7.0.1
 │   │   │   └── typing-extensions>=3.7.4.1
@@ -286,10 +278,6 @@ repo-helper==2020.12.18
 │       ├── consolekit>=1.4.1
 │       │   ├── click>=7.1.2
 │       │   ├── colorama>=0.4.3; python_version < "3.10" and platform_system == "Windows"
-│       │   ├── deprecation-alias>=0.1.1
-│       │   │   ├── deprecation>=2.1.0
-│       │   │   │   └── packaging
-│       │   │   └── packaging>=20.4
 │       │   ├── domdf-python-tools>=3.8.0
 │       │   │   ├── natsort>=7.0.1
 │       │   │   └── typing-extensions>=3.7.4.1
@@ -489,10 +477,6 @@ repo-helper==2020.12.18
 │   ├── consolekit>=0.1.2
 │   │   ├── click>=7.1.2
 │   │   ├── colorama>=0.4.3; python_version < "3.10" and platform_system == "Windows"
-│   │   ├── deprecation-alias>=0.1.1
-│   │   │   ├── deprecation>=2.1.0
-│   │   │   │   └── packaging
-│   │   │   └── packaging>=20.4
 │   │   ├── domdf-python-tools>=3.8.0
 │   │   │   ├── natsort>=7.0.1
 │   │   │   └── typing-extensions>=3.7.4.1
@@ -513,10 +497,6 @@ repo-helper==2020.12.18
     ├── consolekit>=0.3.0
     │   ├── click>=7.1.2
     │   ├── colorama>=0.4.3; python_version < "3.10" and platform_system == "Windows"
-    │   ├── deprecation-alias>=0.1.1
-    │   │   ├── deprecation>=2.1.0
-    │   │   │   └── packaging
-    │   │   └── packaging>=20.4
     │   ├── domdf-python-tools>=3.8.0
     │   │   ├── natsort>=7.0.1
     │   │   └── typing-extensions>=3.7.4.1
@@ -546,10 +526,6 @@ repo-helper==2020.12.18
         ├── consolekit>=1.0.0
         │   ├── click>=7.1.2
         │   ├── colorama>=0.4.3; python_version < "3.10" and platform_system == "Windows"
-        │   ├── deprecation-alias>=0.1.1
-        │   │   ├── deprecation>=2.1.0
-        │   │   │   └── packaging
-        │   │   └── packaging>=20.4
         │   ├── domdf-python-tools>=3.8.0
         │   │   ├── natsort>=7.0.1
         │   │   └── typing-extensions>=3.7.4.1
