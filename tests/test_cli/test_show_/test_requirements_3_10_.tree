@@ -40,10 +40,6 @@ repo-helper==2020.12.18
 │       └── typing-extensions>=3.7.4
 ├── consolekit>=1.12.0
 │   ├── click>=7.1.2
-│   ├── deprecation-alias>=0.1.1
-│   │   ├── deprecation>=2.1.0
-│   │   │   └── packaging
-│   │   └── packaging>=20.4
 │   ├── domdf-python-tools>=3.8.0
 │   │   ├── natsort>=7.0.1
 │   │   └── typing-extensions>=3.7.4.1
@@ -74,10 +70,6 @@ repo-helper==2020.12.18
 │   ├── click>=7.1.2
 │   ├── consolekit>=1.2.0
 │   │   ├── click>=7.1.2
-│   │   ├── deprecation-alias>=0.1.1
-│   │   │   ├── deprecation>=2.1.0
-│   │   │   │   └── packaging
-│   │   │   └── packaging>=20.4
 │   │   ├── domdf-python-tools>=3.8.0
 │   │   │   ├── natsort>=7.0.1
 │   │   │   └── typing-extensions>=3.7.4.1
@@ -230,7 +222,7 @@ repo-helper==2020.12.18
 │   │   │   │   │   └── typing-extensions>=4.14.1
 │   │   │   │   ├── typing-extensions>=4.14.1
 │   │   │   │   └── typing-inspection>=0.4.2
-│   │   │   │       └── typing-extensions>=4.12.0
+│   │   │   │       └── typing-extensions>=4.15.0
 │   │   │   └── requests~=2.20
 │   │   │       ├── certifi>=2023.5.7
 │   │   │       ├── charset_normalizer<4,>=2
@@ -281,10 +273,6 @@ repo-helper==2020.12.18
 │       ├── click>=7.1.2
 │       ├── consolekit>=1.4.1
 │       │   ├── click>=7.1.2
-│       │   ├── deprecation-alias>=0.1.1
-│       │   │   ├── deprecation>=2.1.0
-│       │   │   │   └── packaging
-│       │   │   └── packaging>=20.4
 │       │   ├── domdf-python-tools>=3.8.0
 │       │   │   ├── natsort>=7.0.1
 │       │   │   └── typing-extensions>=3.7.4.1
@@ -483,10 +471,6 @@ repo-helper==2020.12.18
 │   ├── click>=7.1.2
 │   ├── consolekit>=0.1.2
 │   │   ├── click>=7.1.2
-│   │   ├── deprecation-alias>=0.1.1
-│   │   │   ├── deprecation>=2.1.0
-│   │   │   │   └── packaging
-│   │   │   └── packaging>=20.4
 │   │   ├── domdf-python-tools>=3.8.0
 │   │   │   ├── natsort>=7.0.1
 │   │   │   └── typing-extensions>=3.7.4.1
@@ -506,10 +490,6 @@ repo-helper==2020.12.18
     ├── click>=7.1.2
     ├── consolekit>=0.3.0
     │   ├── click>=7.1.2
-    │   ├── deprecation-alias>=0.1.1
-    │   │   ├── deprecation>=2.1.0
-    │   │   │   └── packaging
-    │   │   └── packaging>=20.4
     │   ├── domdf-python-tools>=3.8.0
     │   │   ├── natsort>=7.0.1
     │   │   └── typing-extensions>=3.7.4.1
@@ -538,10 +518,6 @@ repo-helper==2020.12.18
         ├── click>=7.1.2
         ├── consolekit>=1.0.0
         │   ├── click>=7.1.2
-        │   ├── deprecation-alias>=0.1.1
-        │   │   ├── deprecation>=2.1.0
-        │   │   │   └── packaging
-        │   │   └── packaging>=20.4
         │   ├── domdf-python-tools>=3.8.0
         │   │   ├── natsort>=7.0.1
         │   │   └── typing-extensions>=3.7.4.1
