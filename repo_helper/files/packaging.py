@@ -162,7 +162,7 @@ def make_pyproject(repo_path: pathlib.Path, templates: Environment) -> List[str]
 			"wheel>=0.34.2",
 			"whey",
 			"repo-helper",
-			"flit-core<4,>=3.2",
+			"flit-core<5,>=3.2",
 			"hatchling",
 			"hatch-requirements-txt",
 			"maturin<2.0,>=1.10",
@@ -185,8 +185,8 @@ def make_pyproject(repo_path: pathlib.Path, templates: Environment) -> List[str]
 
 	if templates.globals["use_flit"]:
 		build_backend = "flit_core.buildapi"
-	elif "flit-core<4,>=3.2" in build_requirements:
-		build_requirements.remove("flit-core<4,>=3.2")  # type: ignore[arg-type]
+	elif "flit-core<5,>=3.2" in build_requirements:
+		build_requirements.remove("flit-core<5,>=3.2")  # type: ignore[arg-type]
 
 	if templates.globals["use_maturin"]:
 		build_backend = "maturin"
