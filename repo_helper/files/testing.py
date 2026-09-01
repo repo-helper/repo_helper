@@ -810,6 +810,8 @@ class ToxConfig(IniConfigurator):
 
 				if section.name not in self.managed_sections:
 					self._ini.add_section(section)
+				elif section.name == "testenv" and "passenv" in section:
+					self._ini["testenv"]["passenv"] = section["passenv"].value
 				elif section.name == "coverage:report" and "omit" in section:
 					self._ini["coverage:report"]["omit"] = section["omit"].value
 				elif section.name == "flake8":
