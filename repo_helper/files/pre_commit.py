@@ -30,7 +30,7 @@ import posixpath
 import re
 from io import StringIO
 from textwrap import indent
-from typing import Iterable, List, Literal, MutableMapping, Union
+from typing import Iterable, List, Literal, MutableMapping, Optional, Union
 
 # 3rd party
 import attr
@@ -339,21 +339,10 @@ def make_pre_commit(repo_path: pathlib.Path, templates: Environment) -> List[str
 			hooks=[{"id": "dep_checker", "args": dep_checker_args}],
 			)
 
-	if templates.globals["requires_python"]:
-		min_py_version = min(min_py_version, Version(templates.globals["requires_python"]))
-
-	if min_py_version >= Version("3.11"):
-		pyupgrade_plus_arg = "--py311-plus"
-	elif min_py_version >= Version("3.10"):
-		pyupgrade_plus_arg = "--py310-plus"
-	elif min_py_version >= Version("3.9"):
-		pyupgrade_plus_arg = "--py39-plus"
-	elif min_py_version >= Version("3.8"):
-		pyupgrade_plus_arg = "--py38-plus"
-	elif min_py_version >= Version("3.7"):
-		pyupgrade_plus_arg = "--py37-plus"
-	else:
-		pyupgrade_plus_arg = "--py36-plus"
+	pyupgrade_plus_arg = get_pyupgrade_min_version_arg(
+			templates.globals["min_py_version"],
+			templates.globals["requires_python"],
+			)
 
 	pyupgrade = Repo(
 			repo=make_github_url("python-formate", "pyupgrade"),
@@ -463,3 +452,22 @@ def make_pre_commit(repo_path: pathlib.Path, templates: Environment) -> List[str
 	pre_commit_file.write_lines(output)
 
 	return [pre_commit_file.name]
+
+def get_pyupgrade_min_version_arg(__min_py_version: Union[str, float], requires_python: Optional[str]):
+	min_py_version = Version(__min_py_version)
+
+	if requires_python:
+		min_py_version = min(min_py_version, Version(requires_python))
+
+	if min_py_version >= Version("3.11"):
+		return "--py311-plus"
+	elif min_py_version >= Version("3.10"):
+		return "--py310-plus"
+	elif min_py_version >= Version("3.9"):
+		return "--py39-plus"
+	elif min_py_version >= Version("3.8"):
+		return "--py38-plus"
+	elif min_py_version >= Version("3.7"):
+		return "--py37-plus"
+	else:
+		return "--py36-plus"

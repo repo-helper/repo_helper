@@ -52,6 +52,7 @@ from repo_helper.configupdater2 import ConfigUpdater
 from repo_helper.configuration import get_tox_python_versions
 from repo_helper.files import management
 from repo_helper.files.linting import code_only_warning, lint_warn_list
+from repo_helper.files.pre_commit import get_pyupgrade_min_version_arg
 from repo_helper.templates import Environment
 from repo_helper.utils import IniConfigurator, indent_join
 
@@ -633,7 +634,8 @@ class ToxConfig(IniConfigurator):
 
 		source_files = self.get_source_files()
 		if source_files:
-			commands = f"pyup_dirs {' '.join(source_files)} --py36-plus --recursive"
+			pyupgrade_plus_arg = get_pyupgrade_min_version_arg(self["min_py_version"], self["requires_python"])
+			commands = f"pyup_dirs {' '.join(source_files)} {pyupgrade_plus_arg} --recursive"
 			self._ini["testenv:pyup"]["commands"] = commands
 		else:
 			self._ini.remove_section("testenv:pyup")
