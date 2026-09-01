@@ -524,7 +524,7 @@ class Test_sphinx_html_theme(EnumTest):
 	test_value = "alabaster"
 	# default_value = "sphinx_rtd_theme"
 	default_value = "domdf-sphinx-theme"
-	non_enum_values = ["sphinx-typo3-theme", "a string"]
+	non_enum_values = ["a string"]
 
 
 class Test_travis_ubuntu_version(EnumTest):

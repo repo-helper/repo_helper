@@ -111,7 +111,8 @@ class sphinx_html_theme(ConfigVar):
 		"repo-helper-sphinx-theme",
 		"domdf_sphinx_theme",
 		"domdf-sphinx-theme",
-		"furo"
+		"furo",
+		"sphinx-typo3-theme"
 		]
 	default = "domdf-sphinx-theme"
 	category: str = "documentation"

@@ -423,7 +423,8 @@
         "repo-helper-sphinx-theme",
         "domdf_sphinx_theme",
         "domdf-sphinx-theme",
-        "furo"
+        "furo",
+        "sphinx-typo3-theme"
       ],
       "description": "The HTML theme to use for Sphinx."
     },
