@@ -34,13 +34,13 @@ repo-helper==2020.12.18
 ├── markupsafe>=2.0
 ├── mistletoe>=0.7.2
 ├── mkrecipe>=0.3.0
-├── mypy-extensions>=0.3.0
+├── mypy-extensions>=1.1.0
 ├── natsort>=7.1.1
 ├── packaging>=21.3
 ├── platformdirs>=3.5.1
 ├── prettyprinter>=0.18.0
 ├── pydantic~=2.0
-├── pydantic-core==2.46.4
+├── pydantic-core==2.46.5
 ├── pygments>=2.2.0
 ├── pypi-json>=0.5.0
 ├── pypi-simple>=1.5.0
