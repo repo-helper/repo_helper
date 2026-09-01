@@ -1032,7 +1032,8 @@ def make_formate_toml(repo_path: pathlib.Path, templates: Environment) -> List[s
 
 	isort_config["known_first_party"] = sorted(set(filter(bool, map(normalise_underscore, known_first_party))))
 	# isort_config["known_third_party"] = sorted(set(filter(bool, map(normalise_underscore, known_third_party))))
-	del isort_config["known_third_party"]
+	if "known_third_party" in isort_config:
+		del isort_config["known_third_party"]
 
 	hooks = {
 			"dynamic_quotes": 10,
@@ -1084,22 +1085,22 @@ def get_isort_config(repo_path: pathlib.Path, templates: Environment) -> Dict[st
 	isort["remove_redundant_aliases"] = True
 	isort["default_section"] = "THIRDPARTY"
 
-	if templates.globals["enable_tests"]:
-		test_requirements = read_requirements(
-				repo_path / templates.globals["tests_dir"] / "requirements.txt",
-				include_invalid=True,
-				)[0]
-	else:
-		test_requirements = set()
+	# if templates.globals["enable_tests"]:
+	# 	test_requirements = read_requirements(
+	# 			repo_path / templates.globals["tests_dir"] / "requirements.txt",
+	# 			include_invalid=True,
+	# 			)[0]
+	# else:
+	# 	test_requirements = set()
 
-	main_requirements = read_requirements(repo_path / "requirements.txt")[0]
+	# main_requirements = read_requirements(repo_path / "requirements.txt")[0]
 
-	all_requirements = set(map(normalize, map(attrgetter("name"), (*test_requirements, *main_requirements))))
-	all_requirements.discard(templates.globals["import_name"])
-	all_requirements.discard("iniconfig")
+	# all_requirements = set(map(normalize, map(attrgetter("name"), (*test_requirements, *main_requirements))))
+	# all_requirements.discard(templates.globals["import_name"])
+	# all_requirements.discard("iniconfig")
 
-	known_third_party = [req.replace('-', '_') for req in sorted(all_requirements)]
-	isort["known_third_party"] = known_third_party
+	# known_third_party = [req.replace('-', '_') for req in sorted(all_requirements)]
+	# isort["known_third_party"] = known_third_party
 	isort["known_first_party"] = [templates.globals["import_name"]]
 
 	return isort
