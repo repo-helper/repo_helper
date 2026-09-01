@@ -270,6 +270,17 @@ def make_pre_commit(repo_path: pathlib.Path, templates: Environment) -> List[str
 	import_name = templates.globals["import_name"]
 	stubs_package = templates.globals["stubs_package"]
 
+	pkg_dir = import_name.replace('.', '/')
+
+	if not templates.globals["stubs_package"] and not templates.globals["meson_no_py"]:
+		if templates.globals["use_maturin"]:
+			if repo_path.joinpath(
+					templates.globals["source_dir"],
+					pkg_dir,
+					"__init__.py",
+					).is_file():
+				pkg_dir = posixpath.join(templates.globals["source_dir"], pkg_dir)
+
 	non_source_files = [posixpath.join(docs_dir, "conf"), "__pkginfo__", "setup"]
 	min_py_version = Version(templates.globals["min_py_version"])
 
@@ -294,7 +305,7 @@ def make_pre_commit(repo_path: pathlib.Path, templates: Environment) -> List[str
 			rev="v0.5.0",
 			hooks=[{
 					"id": "ensure-dunder-all",
-					"files": fr"^{import_name}{'-stubs' if stubs_package else ''}/.*\.py$",
+					"files": fr"^{pkg_dir}{'-stubs' if stubs_package else ''}/.*\.py$",
 					}],
 			)
 
@@ -323,7 +334,7 @@ def make_pre_commit(repo_path: pathlib.Path, templates: Environment) -> List[str
 					}],
 			)
 
-	dep_checker_args = [templates.globals["import_name"].replace('.', '/')]
+	dep_checker_args = [import_name.replace('.', '/')]
 
 	if templates.globals["source_dir"]:
 		dep_checker_args.extend((
@@ -398,11 +409,7 @@ def make_pre_commit(repo_path: pathlib.Path, templates: Environment) -> List[str
 
 	if not templates.globals["stubs_package"] and not templates.globals["meson_no_py"]:
 		if templates.globals["use_maturin"]:
-			if repo_path.joinpath(
-					templates.globals["source_dir"],
-					templates.globals["import_name"].replace('.', '/'),
-					"__init__.py",
-					).is_file():
+			if repo_path.joinpath(pkg_dir, "__init__.py").is_file():
 				managed_hooks.append(dep_checker)
 
 			managed_hooks.append(rust)
@@ -452,6 +459,7 @@ def make_pre_commit(repo_path: pathlib.Path, templates: Environment) -> List[str
 	pre_commit_file.write_lines(output)
 
 	return [pre_commit_file.name]
+
 
 def get_pyupgrade_min_version_arg(__min_py_version: Union[str, float], requires_python: Optional[str]):
 	min_py_version = Version(__min_py_version)
