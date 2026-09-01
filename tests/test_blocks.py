@@ -169,6 +169,17 @@ def test_create_shields_block(advanced_file_regression: AdvancedFileRegressionFi
 								),
 						id="case_3",
 						),
+				pytest.param(
+						dict(
+								repo_name="REPO_NAME",
+								username="octocat",
+								conda=True,
+								pypi_name="PYPI_NAME",
+								conda_name="CONDA-NAME",
+								conda_channels=["conda-forge", "bioconda"],
+								),
+						id="case_4",
+						),
 				],
 		)
 def test_create_docs_install_block(
@@ -211,6 +222,17 @@ def test_create_docs_install_block(
 				pytest.param(
 						dict(modname="hello_world", username="octocat", conda=False, pypi=False),
 						id="case_4",
+						),
+				pytest.param(
+						dict(
+								modname="hello_world",
+								username="octocat",
+								conda=True,
+								pypi_name="PYPI_NAME",
+								conda_name="CONDA-NAME",
+								conda_channels=["conda-forge", "bioconda"],
+								),
+						id="case_5",
 						),
 				],
 		)
