@@ -30,7 +30,6 @@ import posixpath
 import re
 import warnings
 from itertools import filterfalse
-from operator import attrgetter
 from typing import Any, Dict, List, Tuple
 
 # 3rd party

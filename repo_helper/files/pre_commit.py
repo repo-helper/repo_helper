@@ -461,7 +461,7 @@ def make_pre_commit(repo_path: pathlib.Path, templates: Environment) -> List[str
 	return [pre_commit_file.name]
 
 
-def get_pyupgrade_min_version_arg(__min_py_version: Union[str, float], requires_python: Optional[str]):
+def get_pyupgrade_min_version_arg(__min_py_version: str, requires_python: Optional[str]) -> str:
 	min_py_version = Version(__min_py_version)
 
 	if requires_python:
