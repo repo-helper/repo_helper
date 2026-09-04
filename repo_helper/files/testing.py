@@ -91,6 +91,10 @@ class ToxConfig(IniConfigurator):
 			"envlists",
 			"testenv",
 			"testenv:.package",
+			"testenv:py315-dev",
+			"testenv:py315",
+			"testenv:py314-dev",
+			"testenv:py314",
 			"testenv:py313-dev",
 			"testenv:py313",
 			"testenv:py312-dev",
@@ -418,6 +422,18 @@ class ToxConfig(IniConfigurator):
 	def testenv_py313_dev(self) -> None:  # noqa: D102
 		pass
 
+	def testenv_py314(self) -> None:  # noqa: D102
+		pass
+
+	def testenv_py314_dev(self) -> None:  # noqa: D102
+		pass
+
+	def testenv_py315(self) -> None:  # noqa: D102
+		pass
+
+	def testenv_py315_dev(self) -> None:  # noqa: D102
+		pass
+
 	def _get_third_party_envs_list(self) -> List[str]:
 		third_party_envs = []
 
@@ -434,7 +450,8 @@ class ToxConfig(IniConfigurator):
 
 		third_party_envs = self._get_third_party_envs_list()
 
-		for fixup_version in ["3.12-dev", "3.12", "3.13", "3.13-dev"]:
+		# TODO: merge all together into one testenv
+		for fixup_version in ["3.12-dev", "3.12", "3.13", "3.13-dev", "3.14", "3.14-dev", "3.15", "3.15-dev"]:
 			if fixup_version in self["python_versions"] and "fixups" not in self["tox_unmanaged"]:
 				setenv = self.get_setenv(False, False)
 				# if fixup_version.startswith("3.13"):
@@ -795,7 +812,16 @@ class ToxConfig(IniConfigurator):
 
 			if "fixups" in self["tox_unmanaged"]:
 				for env in self._get_third_party_envs_list():
-					for fixup_version in ["3.12-dev", "3.12", "3.13", "3.13-dev"]:
+					for fixup_version in [
+							"3.12-dev",
+							"3.12",
+							"3.13",
+							"3.13-dev",
+							"3.14",
+							"3.14-dev",
+							"3.15",
+							"3.15-dev",
+							]:
 						env_name = f"testenv:py{fixup_version.replace('.', '')}-{env}"
 						existing_config.remove_section(env_name)
 
