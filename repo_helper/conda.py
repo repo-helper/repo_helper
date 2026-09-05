@@ -74,8 +74,7 @@ class CondaRecipeMaker(MaryBerry):
 			config["requires"].append("whey")
 
 		elif config["use_flit"]:
-			config["requires"].append('flit_core>=3.2,<4; python_version < "3.10"')
-			config["requires"].append('flit_core>=3.2,<5; python_version >= "3.10"')
+			config["requires"].append("flit_core>=3.2,<5")
 
 		elif config["use_maturin"]:
 			config["requires"].append("maturin<2.0,>=1.10")
