@@ -156,6 +156,8 @@ def make_pyproject(repo_path: pathlib.Path, templates: Environment) -> List[str]
 	data.set_default("tool", {})
 
 	build_backend = "setuptools.build_meta"
+	old_flit_core_dep = "flit-core<4,>=3.2"
+	existing_build_requirements = {r for r in data["build-system"].get("requires", []) if r != old_flit_core_dep}
 
 	build_requirements_ = {
 			"setuptools!=61.*,<=67.1.0,>=40.6.0",
@@ -169,7 +171,7 @@ def make_pyproject(repo_path: pathlib.Path, templates: Environment) -> List[str]
 			"maturin<2.0,>=1.10",
 			"meson-python",
 			*templates.globals["tox_build_requirements"],
-			*data["build-system"].get("requires", []),
+			*existing_build_requirements,
 			}
 
 	build_requirements = sorted(combine_requirements(ComparableRequirement(req) for req in build_requirements_))
@@ -191,8 +193,6 @@ def make_pyproject(repo_path: pathlib.Path, templates: Environment) -> List[str]
 			build_requirements.remove('flit-core<5,>=3.2; python_version >= "3.10"')  # type: ignore[arg-type]
 		if 'flit-core<4,>=3.2; python_version < "3.10"' in build_requirements:
 			build_requirements.remove('flit-core<4,>=3.2; python_version < "3.10"')  # type: ignore[arg-type]
-		if "flit-core<4,>=3.2" in build_requirements:
-			build_requirements.remove("flit-core<4,>=3.2")  # type: ignore[arg-type]
 
 	if templates.globals["use_maturin"]:
 		build_backend = "maturin"
