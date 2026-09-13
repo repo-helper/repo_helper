@@ -191,6 +191,8 @@ def make_pyproject(repo_path: pathlib.Path, templates: Environment) -> List[str]
 			build_requirements.remove('flit-core<5,>=3.2; python_version >= "3.10"')  # type: ignore[arg-type]
 		if 'flit-core<4,>=3.2; python_version < "3.10"' in build_requirements:
 			build_requirements.remove('flit-core<4,>=3.2; python_version < "3.10"')  # type: ignore[arg-type]
+		if "flit-core<4,>=3.2" in build_requirements:
+			build_requirements.remove("flit-core<4,>=3.2")  # type: ignore[arg-type]
 
 	if templates.globals["use_maturin"]:
 		build_backend = "maturin"
