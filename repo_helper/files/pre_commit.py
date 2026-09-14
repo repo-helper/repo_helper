@@ -225,7 +225,7 @@ pyproject_parser = Repo(
 
 snippet_fmt = Repo(
 		repo=make_github_url("python-formate", "snippet-fmt"),
-		rev="v0.3.1",
+		rev="v0.3.2",
 		hooks=["snippet-fmt"],
 		)
 
