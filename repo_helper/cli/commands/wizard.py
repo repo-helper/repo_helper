@@ -145,7 +145,7 @@ def wizard() -> None:
 	# ---------- license_ ----------
 	echo(
 			'',
-			"The SPDX identifier for the license this library is distributed under."
+			"The SPDX identifier for the license this library is distributed under. "
 			"Not all SPDX identifiers are allowed as not all map to PyPI Trove classifiers.",
 			)
 	while True:
