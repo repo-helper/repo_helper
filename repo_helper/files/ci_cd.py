@@ -296,13 +296,13 @@ class ActionsManager:
 				elif version == "pypy-3.9":
 					gh_actions_versions[version] = (
 							gh_actions_versions[version][0].replace(",build", ''),
-							"14",
+							"26",
 							gh_actions_versions[version][2],
 							)
 				else:
 					gh_actions_versions[version] = (
 							gh_actions_versions[version][0],
-							"14",
+							"26",
 							gh_actions_versions[version][2],
 							)
 
